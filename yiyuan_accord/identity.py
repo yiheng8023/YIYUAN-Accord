@@ -575,6 +575,16 @@ def _historical_markdown_text(root, text, repository, matches_identity, checked)
                         pass
         return "[verified historical citation]" if checked[url] else match.group(0)
 
+    def replace_line(line):
+        nonlocal citation_end, bracket_depth
+        citation_end, bracket_depth = 0, 0
+        return link.sub(replace, line)
+
+    citation_end, bracket_depth = 0, 0
+    return _plain_markdown_text(text, replace_line)
+
+
+def _plain_markdown_text(text, transform):
     lines, fence, inline_ticks, html_end = [], None, None, None
     for line in text.splitlines(keepends=True):
         marker = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line.rstrip("\r\n"))
@@ -608,10 +618,87 @@ def _historical_markdown_text(root, text, repository, matches_identity, checked)
             if (not was_inline and inline_ticks is None
                     and not re.match(r"^(?: {4}|\t| {0,3}#)", line)
                     and not any(character in line for character in "`\\<>")):
-                citation_end, bracket_depth = 0, 0
-                line = link.sub(replace, line)
+                line = transform(line)
         lines.append(line)
     return "".join(lines)
+
+
+def external_product_references_errors(references):
+    """Validate bounded citation metadata, never host enablement or source trust."""
+    if not isinstance(references, (list, tuple)) or len(references) > 16:
+        return ["external product references must be a bounded list"]
+    seen = set()
+    for row in references:
+        if (not isinstance(row, dict) or set(row) != {"id", "name", "sources"}
+                or not isinstance(row.get("id"), str)
+                or not re.fullmatch(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*", row["id"])
+                or len(row["id"]) > 100 or row["id"] in seen
+                or not isinstance(row.get("name"), str) or not 1 <= len(row["name"]) <= 256
+                or row["name"] != row["name"].strip()
+                or not re.fullmatch(r"[A-Z][A-Za-z0-9]*(?:[ ._-][A-Za-z0-9]+)*", row["name"])
+                or re.match(r"(?:python[0-9.]*|py|import|from|node|npm|pip[0-9]*|bash|sh|pwsh|powershell|cmd|exec|eval)(?:\s|$)",
+                            row["name"], re.IGNORECASE)
+                or not isinstance(row.get("sources"), list) or not 1 <= len(row["sources"]) <= 4):
+            return ["external product reference identity is invalid"]
+        seen.add(row["id"])
+        for url in row["sources"]:
+            if not isinstance(url, str) or len(url) > 1024:
+                return ["external product reference URL is invalid"]
+            try:
+                parsed = urlsplit(url)
+                valid = (parsed.scheme == "https" and parsed.hostname and parsed.port is None
+                         and not parsed.username and not parsed.password and not parsed.query
+                         and not parsed.fragment and not any(c.isspace() for c in url)
+                         and not any(c in url for c in '`<>\\%'))
+            except ValueError:
+                valid = False
+            if not valid:
+                return ["external product reference URL is invalid"]
+    return []
+
+
+def _external_module_reference_text(text, locator, references):
+    names = {r[key] for r in references for key in ("id", "name")}
+    urls = {url for r in references for url in r["sources"]}
+    tokens = re.compile("|".join(
+        r"(?<![\w/\\.-])" + re.escape(name) + r"(?![\w/\\-]|\.[^\s),;!?])"
+        for name in sorted(names, key=len, reverse=True)))
+    links = re.compile(r"(?<!!)\[([^\[\]\r\n]{1,256})\]\((https://[^\s()<>]+)\)")
+    url_tokens = re.compile(r"(https?://\S+)")
+
+    def prose(value):
+        # Whole URL values and complete Markdown destinations only. Never trim
+        # legal URI characters to manufacture a match with a declared source.
+        if value in urls:
+            return "[external reference]"
+        value = links.sub(lambda match: '[' + match[1] + ']([external reference])'
+                          if match[2] in urls else match[0], value)
+        pieces = url_tokens.split(value)
+        # Keep unknown URLs intact. Normalize prose boundaries before discounting
+        # names, so full-width path separators/extensions retain the old guard.
+        return "".join(part if index % 2 else tokens.sub(
+            "[external reference]", normalize("NFKC", part)) for index, part in enumerate(pieces))
+
+    if Path(locator).suffix.casefold() == ".md":
+        return _plain_markdown_text(text, prose)
+    if locator == "product/development.json":
+        try:
+            document = _strict_json_object(text)
+            if document.get("cycle", {}).get("futureAdaptationCandidates") != list(references):
+                raise ValueError("reference declaration changed")
+            for section, field in (("authority", "basis"), ("cycle", "scopeRule"),
+                                   ("changeBoundary", "rule"), ("nextBoundary", "work")):
+                value = document.get(section, {}).get(field)
+                if isinstance(value, str):
+                    document[section][field] = prose(value)
+            # Only these validated descriptive records, never execution/config fields.
+            document["cycle"]["futureAdaptationCandidates"] = [
+                {"id": prose(row["id"]), "name": prose(row["name"]),
+                 "sources": [prose(url) for url in row["sources"]]} for row in references]
+            return json.dumps(document, ensure_ascii=False)
+        except (ValueError, TypeError, AttributeError) as error:
+            raise _IdentityScanUnknown("external reference context is invalid") from error
+    return text
 
 
 def active_tree_errors(
@@ -622,6 +709,7 @@ def active_tree_errors(
     digest_bound_binary_assets=None,
     *,
     historical_repository=None,
+    external_product_references=(),
 ):
     locators = list(locators)
     locator_set = set(locators)
@@ -686,6 +774,9 @@ def active_tree_errors(
         or re.fullmatch(r"https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", historical_repository) is None
     ):
         return sorted(errors + ["historical citation repository is invalid"])
+    reference_errors = external_product_references_errors(external_product_references)
+    if reference_errors:
+        return sorted(errors + reference_errors)
     checked_citations = {}
     exact_tokens = tuple(
         normalize("NFKC", value).casefold() for value in (product_id, title)
@@ -696,6 +787,15 @@ def active_tree_errors(
     def matches_identity(text):
         return (any(matcher.search(text) for matcher in exact_matchers)
                 or bool(module_token.search(text)))
+
+    for row in external_product_references:
+        if (any(matcher.search(_folded_visible_text(value))
+                for matcher in exact_matchers for value in (row["id"], row["name"], *row["sources"]))
+                or any(_folded_visible_text(row[key]) == _folded_visible_text(module)
+                       for key in ("id", "name"))
+                or historical_repository and any(url.startswith(historical_repository)
+                                                  for url in row["sources"])):
+            return sorted(errors + ["external reference cannot exempt the retired product"])
 
     for locator in locators:
         if locator in symlinks:
@@ -753,9 +853,13 @@ def active_tree_errors(
                     text, module, exact_tokens
                 )
             else:
+                module_text = (_external_module_reference_text(text, locator, external_product_references)
+                               if external_product_references else text)
+                module_folded = _folded_visible_text(module_text)
                 identity_present = (
-                    any(matcher.search(folded_text) for matcher in exact_matchers)
-                    or bool(module_token.search(folded_text))
+                    any(matcher.search(folded_text) or matcher.search(module_folded)
+                        for matcher in exact_matchers)
+                    or bool(module_token.search(module_folded))
                 )
         except _IdentityScanUnknown:
             errors.append(f"active tree identity scan is indeterminate: {locator}")

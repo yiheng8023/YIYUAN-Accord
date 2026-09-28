@@ -6713,6 +6713,7 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
             {item["repositoryLocator"] for item in historical if "repositoryLocator" in item},
             program["complexityBudget"].get("digestBoundBinaryAssets"),
             historical_repository=identity["repository"],
+            external_product_references=contract.get("cycle", {}).get("futureAdaptationCandidates", []),
         ))
         for field in ("maxProductCodeAndTestBytes", "maxTrackedFiles", "maxPrimaryInstructionBytes"):
             program["complexityBudget"]["targets"][field] = development["complexityBudget"][field]

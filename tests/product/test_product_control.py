@@ -4770,6 +4770,87 @@ class ProductControlTests(unittest.TestCase):
                     'test markers',
                 )
 
+    def test_external_product_references_do_not_activate_retired_identity(self):
+        module = RETIRED['authority']['executableVerifier'].split()[3]
+        name = 'Vendor ' + module
+        url = 'https://vendor.example/' + module + '/'
+        reference = {'id': 'vendor-agent', 'name': name, 'sources': [url]}
+        rows = [reference]
+        base = {'cycle': {'futureAdaptationCandidates': rows}}
+        safe = [
+            ('note.md', f'Candidate: {name}; [official]({url}).\n'),
+            ('note.md', f'| {name} | [official]({url}) |\n'),
+            ('product/development.json', json.dumps({**base, 'authority': {'basis': name}})),
+        ]
+        unsafe = [
+            ('note.md', f'{name}\npython -B -m {module} verify\n'),
+            ('note.md', f'`{name}`\n'),
+            ('note.md', f'```text\n{name}\n```\n'),
+            ('note.md', f'<!-- {name} -->\n'),
+            ('note.md', f'{name}\nhttps://vendor.example.invalid/{module}/\n'),
+            ('note.md', f'{name}\n{url}different\n'),
+            ('note.md', f'[source](x{url})\n'),
+            ('note.md', f"[source]({url}'other)\n"),
+            ('note.md', f'[source]({url}(other))\n'),
+            ('note.md', name+'.exe\n'),
+            ('note.md', name+'\uff0epy\n'),
+            ('note.md', '\uff0f'+name+'\n'),
+            ('note.md', f'{name}\n./{module}/runner\n'),
+            ('note.md', f'{name}\nRetired Product\n'),
+            ('sample.py', f'value = {name!r}\nimport {module}\n'),
+            ('sample.sh', f'echo {name!r}\n'),
+            ('product/development.json', json.dumps({**base, 'module': module})),
+            ('product/development.json', json.dumps({**base, 'command': name})),
+            ('product/development.json', json.dumps({**base, 'path': './'+module})),
+            ('product/development.json', json.dumps({**base, 'module': module}).replace(module, module.replace('m', r'\u006d'))),
+            ('product/development.json', '{"authority":'),
+            (module+'/note.md', f'{name}\n'),
+        ]
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for expected, cases in ((False, safe), (True, unsafe)):
+                for locator, body in cases:
+                    with self.subTest(locator=locator, body=body):
+                        file = root/locator
+                        file.parent.mkdir(parents=True, exist_ok=True)
+                        file.write_text(body, encoding='utf-8')
+                        with patch(IBG, side_effect=_retired_history()):
+                            errors = active_tree_errors(root, [locator], '0'*40,
+                                external_product_references=rows)
+                        self.assertEqual(bool(errors), expected, errors)
+
+    def test_external_references_cannot_hide_encoded_retired_product(self):
+        retired_id = RETIRED['productId']
+        encoded = r'\u' + format(ord(retired_id[0]), '04x') + retired_id[1:]
+        for in_reference in (False, True):
+            row = {'id': 'vendor-agent', 'name': 'Vendor Agent',
+                   'sources': ['https://vendor.example/'+(retired_id if in_reference else 'agent')]}
+            doc = {'cycle': {'futureAdaptationCandidates': [row]}}
+            if not in_reference:
+                doc['module'] = retired_id
+            with self.subTest(in_reference=in_reference), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                (root/'product').mkdir()
+                (root/'product/development.json').write_text(
+                    json.dumps(doc).replace(retired_id, encoded), encoding='utf-8')
+                with patch(IBG, side_effect=_retired_history()):
+                    errors = active_tree_errors(root, ['product/development.json'], '0'*40,
+                                                external_product_references=[row])
+                self.assertTrue(errors)
+
+    def test_external_product_reference_declarations_cannot_whitelist_commands(self):
+        from yiyuan_accord.identity import external_product_references_errors
+        module = RETIRED['authority']['executableVerifier'].split()[3]
+        row = {'id': 'vendor-agent', 'name': 'Vendor Agent', 'sources': ['https://vendor.example/']}
+        invalid = [None, {}, [row, row], [{**row, 'name': 'python -m '+module}],
+                   [{**row, 'name': 'Python '+module}], [{**row, 'name': 'Import '+module}],
+                   [{**row, 'name': 'Vendor\n'+module}], [{**row, 'sources': ['http://vendor.example/']}],
+                   [{**row, 'sources': ['https://vendor.example/?command='+module]}]]
+        for rows in invalid:
+            with self.subTest(rows=rows):
+                self.assertTrue(external_product_references_errors(rows))
+        self.assertEqual(external_product_references_errors([row]), [])
+
     def test_identity_decoding_and_file_io_fail_closed(self):
         historical = 'Retired Product and retired-product'
         malformed = (b'\xff\xfeX', b'\xfe\xffX', b'\xff\xfe\x00\x00X', b'\x00\x00\xfe\xffX')

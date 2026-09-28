@@ -905,7 +905,9 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertEqual(self.contract["predecessorSnapshot"], old["predecessorSnapshot"])
         self.assertEqual({p["id"] for p in self.contract["delivery"]["hostProjections"]}, {"codex"})
         self.assertEqual({p["id"] for p in old["delivery"]["hostProjections"]}, {"codex", "claude-code"})
-        self.assertEqual(self.contract["cycle"]["claudeAdaptation"], "cancelled-by-user")
+        self.assertEqual(self.contract["cycle"]["claudeAdaptation"], "candidate-for-v3.4")
+        self.assertEqual(self.contract["cycle"]["futureAdaptationVersion"], "3.4")
+        self.assertEqual(self.contract["cycle"]["existingHosts"], ["codex"])
 
     def test_development_cannot_borrow_publication_or_expand_hosts(self):
         for section, field, value in (
@@ -913,6 +915,9 @@ class SuccessorDevelopmentTests(unittest.TestCase):
                 ("cycle", "priorityHosts", ["codex"]),
                 ("cycle", "claudeAdaptation", "automatically-enabled"),
                 ("cycle", "claudeAdaptation", "next-version-not-in-v3.3-distribution"),
+                ("cycle", "claudeAdaptation", "cancelled-by-user"),
+                ("cycle", "futureAdaptationVersion", "3.3"),
+                ("cycle", "futureAdaptationCandidates", []),
                 ("cycle", "existingHosts", ["codex", "claude-code", "new-host"]),
                 ("cycle", "versionState", "final-candidate-not-publication-proof"),
                 ("claimCeiling", "functionalCompletion", True),

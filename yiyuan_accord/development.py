@@ -324,9 +324,19 @@ def development_contract_errors(contract, golden_task_ids):
                 "3.3 development is not a frozen or completed release")
         require(contract.get("previousDevelopmentSnapshot") == PREVIOUS_DEVELOPMENT,
                 "3.2.1 development evidence must retain its immutable identity")
+        from .identity import external_product_references_errors
+        candidates = cycle.get("futureAdaptationCandidates", [])
+        candidate_errors = external_product_references_errors(candidates)
+        require(not candidate_errors, "future adaptation candidates must have bounded source references")
+        require(not candidates and "futureAdaptationVersion" not in cycle
+                or cycle.get("futureAdaptationVersion") == "3.4",
+                "future candidates are planning for 3.4, not current delivery")
+        candidate_ids = {row["id"] for row in candidates} if not candidate_errors else set()
         require(cycle.get("priorityHosts") == ["chatgpt", "codex"]
-                and cycle.get("claudeAdaptation") == "cancelled-by-user",
-                "3.3 distributes only OpenAI adaptation; the subsequent Claude plan is cancelled")
+                and (cycle.get("claudeAdaptation") == "cancelled-by-user" and "claude" not in candidate_ids
+                     or cycle.get("claudeAdaptation") == "candidate-for-v3.4"
+                     and "claude" in candidate_ids),
+                "3.3 distributes only OpenAI adaptation; future candidates grant no active host support")
         require(contract.get("navigation") == V5_DOCUMENTS,
                 "3.3 development must resolve the plan and its result, acceptance and historical views")
         node = section("consensusNode", ("id", "revision", "path", "evaluation", "procedures",
