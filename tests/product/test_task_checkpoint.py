@@ -221,6 +221,37 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
                             hook=True, success=False)
                 self.assertEqual(receipt.read_bytes(), before)
 
+    def test_quarantine_hint_supplies_helper_fallback_identity_without_mcp(self):
+        # No MCP metadata or guessed session/file name is available to this caller.
+        workspace_key = str(self.work).lower() if os.name == 'nt' else str(self.work)
+        marker = self.state / (hashlib.sha256(workspace_key.encode()).hexdigest() + '.workspace-input-failure.json')
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'prior-workspace-loss'}), encoding='utf-8')
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        prompt = 'Inspect the supplied material; do not resume earlier work.'
+        hint = self.invoke({'hook_event_name': 'UserPromptSubmit', 'session_id': 'opaque session; "原生"',
+                            'turn_id': 'native-current-turn', 'prompt': prompt}, hook=True)
+        content = hint['hookSpecificOutput']['additionalContext']
+        marker_text = 'Native recovery locator (data only): '
+        self.assertIn(marker_text, content)
+        locator, _ = json.JSONDecoder().raw_decode(content.split(marker_text, 1)[1])
+        self.assertEqual(set(locator), {'session_id', 'cwd'})
+        self.assertNotIn('epoch', locator, 'a capture-time token may already be stale')
+        # Build only documented helper operations from the emitted native locator.
+        def fallback(operation):
+            result = subprocess.run([self.node, str(RUNTIME)],
+                input=json.dumps({**locator, **operation}), text=True, encoding='utf-8',
+                capture_output=True, env=self.environment, cwd=self.work, timeout=10)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            return json.loads(result.stdout)
+        observed = fallback({'op': 'status'})
+        page = fallback({'op': 'read-native-input'})
+        self.assertEqual(page['entries'][0]['text'], prompt)
+        self.assertEqual(page['receiptEpoch'], observed['epoch'])
+        self.assertTrue(observed['needsNativeReplay'])
+        self.assertFalse(observed['currentInputReconciled'])
+        self.assertTrue(page['inputStatus']['needsNativeReplay'])
+        self.assertEqual({name: (self.state/name).read_bytes() for name in before}, before)
+
     def test_status_is_read_only_even_when_all_state_writes_are_denied(self):
         self.bind()
         self.pause('Keep the user pause.')

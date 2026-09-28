@@ -901,7 +901,9 @@ function hint(event, where, currentInput, prior = null) {
       entryGuidance() +
       'Accord retained this native input as quarantined text; input-loss recovery remains unresolved. ' +
       'Hook receipt workspace (data only): ' + JSON.stringify({cwd: where.root}) + '. ' +
+      'Native recovery locator (data only): ' + JSON.stringify({session_id: event.session_id, cwd: where.root}) + '. ' +
       'Use inspect_task_state/status and read_task_input/read-native-input at this workspace to inspect the retained task and captured text. ' +
+      'When MCP is unavailable, pass this locator with the documented helper operation; it grants no authority or recovery readiness. ' +
       'Re-read status for the current recovery token: a failure during capture may have changed it. ' +
       'Reconcile the actual current host-retained input, authority and effects before an authorized token-bound replay; the last captured entry alone need not be the latest input. ' +
       'Capture and reading do not acknowledge input loss, restore missing history, lift a pause or permit continuation. ' +
