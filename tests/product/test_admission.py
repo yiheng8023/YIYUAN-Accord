@@ -1041,13 +1041,22 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report["progress"], {
             "scope": "acceptance-evidence-coverage-not-effort-or-implementation-completion",
             "requirementsTotal": 8, "requirementsComplete": 0,
-            "coverageTotal": 17, "coverageDefined": 11, "coverageVerified": 0,
+            "coverageTotal": 17, "coverageDefined": 13, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
-            "coverageUnbound": 6, "coverageDefinedButUnverified": 11,
-            "coverageWithoutCases": 0, "coverageWithCaseBindingGaps": 0,
+            "coverageUnbound": 4, "coverageDefinedButUnverified": 13,
+            "coverageWithoutCases": 2, "coverageWithCaseBindingGaps": 2,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
-        self.assertEqual(report['caseBindingGaps'], {})
+        self.assertEqual(set(report['caseBindingGaps']),
+                         {'v33-dynamic-model-routing', 'v33-autonomous-continuity'})
+        for scope_id in report['caseBindingGaps']:
+            gap = report['caseBindingGaps'][scope_id]['function']
+            self.assertEqual(gap['caseIds'], [])
+            self.assertTrue(gap['missingDimensions']['duties'])
+        self.assertIn('v33-autonomous-continuity',
+                      report['acceptanceRequirements']['A05']['missingScopes']['function'])
+        self.assertIn('v33-dynamic-model-routing',
+                      report['acceptanceRequirements']['A02']['missingScopes']['function'])
 
     def without_correction_and_user_environment_cases(self):
         contract = copy.deepcopy(self.contract)
@@ -1060,10 +1069,11 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def test_diagnostic_retains_unplanned_scope_and_scenario_gaps(self):
         report = self.assess(self.without_correction_and_user_environment_cases())
         self.assertEqual(report['errors'], [])
-        self.assertEqual(report['progress']['coverageWithoutCases'], 1)
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 2)
+        self.assertEqual(report['progress']['coverageWithoutCases'], 3)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 4)
         gaps = report['caseBindingGaps']
-        self.assertEqual(set(gaps), {'v33-systemic-correction', 'v33-codex-cli-ordinary-delivery'})
+        self.assertEqual(set(gaps), {'v33-systemic-correction', 'v33-codex-cli-ordinary-delivery',
+                                    'v33-dynamic-model-routing', 'v33-autonomous-continuity'})
         correction = gaps['v33-systemic-correction']['function']
         self.assertEqual(correction['caseIds'], [])
         self.assertTrue(correction['missingDimensions']['duties'])
@@ -1080,7 +1090,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         report = self.assess(contract)
         self.assertEqual(report['errors'], [])
         self.assertNotIn('v33-codex-cli-ordinary-delivery', report['caseBindingGaps'])
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 1)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 3)
         self.assertEqual(report['progress']['coverageVerified'], 0)
         self.assertEqual(report['acceptedCases'], [])
         self.assertFalse(report['candidateEligible'])

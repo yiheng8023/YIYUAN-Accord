@@ -5376,6 +5376,102 @@
           ],
           "id": "v33-environment-adaptation",
           "rule": "In the same ordinary task, reconcile changed execution capacity through an existing interface, continue within current authority, and preserve unrelated user environment and truthful delivery. Other component, trust and entry differences retain their separate required coverage."
+        },
+        {
+          "host": "codex",
+          "entry": "cx-desktop",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "claims": [
+            "function"
+          ],
+          "id": "v33-dynamic-model-routing",
+          "duties": [
+            "goal-authority-correction",
+            "environment-and-self-exposure",
+            "research-learning-and-reuse",
+            "relations-routing-and-form",
+            "execution-configuration-and-code",
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "verification-and-value"
+          ],
+          "scenarios": [
+            "native-sufficient",
+            "default-host-without-extra-extensions",
+            "effective-user-environment",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review; this entry label does not attest execution or adoption by any subject entry.",
+            "entryScope": "Use the applicable selected OpenAI entries and their actual responsibility boundaries from v33-openai-entry-applicability. Preserve pending dispositions; an SDK or CLI contribution cannot by itself close this whole functional scope.",
+            "executionBinding": "Before dispatch, a case must bind its real outcome, actor and subject entry, native host/model/effort and permissions, exact candidate/package and observer sources, protected inputs, sole-writer ownership, finite time/usage/resource limits and independent result/cleanup observations. This scope supplies no executable task or permission.",
+            "ordinaryUse": "Ordinary natural-language input does not name Accord or prescribe its Skills, Hooks or internal tools. Preserve the effective user environment and distinguish actual Agent use from fixture or evaluator intervention.",
+            "evidenceBoundary": "Keep actual decisions, actions, effects, original failures and their exact conditions. Static wiring, installed components, fixed-response protocol checks and historical cases remain limited contributions, not autonomous behavior or whole-scope acceptance.",
+            "selection": "Compare current dispatch-supported capabilities against the material task gap, quality and whole-task cost. Preserve an adequate current model/effort; neither forced switching nor a fixed provider/model ladder is required or permitted as a substitute for judgment.",
+            "authority": "Keep user-pinned choices, disabled components, provider/data/trust boundaries and actual cost authority. Selection or a catalog entry proves neither authorization nor execution; new necessary permission holds only dependent work.",
+            "skills": "Separate native implicit matching, coordinator selection through a genuine supported explicit path and worker adoption. Explicit-only policy is not permission to alter a third-party Skill or impersonate a user choice. An unavailable route requires an authorized alternative or a specific unresolved condition.",
+            "decisionEvidence": "Bind the facts that change the route and observe actual execution, feedback and affected re-evaluation. Include semantic error or uncertainty, unavailable capabilities and sufficient-native counterexamples; scores, confidence, mentions or successful schema validation do not prove correctness.",
+            "switchCost": "Account for relevant discovery, setup, cached/uncached processing, warmup, handoff, review and cleanup across remaining work. Unknown signals remain unknown; claim benefit only with a supported comparison. No dedicated decision model or external deployment is a 3.3 prerequisite."
+          },
+          "rule": "Project the existing A02 adaptive capability duties, including Skills and model/effort allocation, without inventing parent-model hot switching. Cases must collectively cover the applicable decisions and counterexamples, confirm execution and consequences, and preserve whole-task quality and authority. Scope definition alone is not an accepted case or functional completion."
+        },
+        {
+          "host": "codex",
+          "entry": "cx-desktop",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "claims": [
+            "function"
+          ],
+          "id": "v33-autonomous-continuity",
+          "duties": [
+            "goal-authority-correction",
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "recovery-and-rollback",
+            "context-and-task-continuity",
+            "resources-and-cleanup",
+            "verification-and-value"
+          ],
+          "scenarios": [
+            "native-sufficient",
+            "effective-user-environment",
+            "mid-task-user-steering",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review; this entry label does not attest execution or adoption by any subject entry.",
+            "entryScope": "Use the applicable selected OpenAI entries and their actual responsibility boundaries from v33-openai-entry-applicability. Preserve pending dispositions; an SDK or CLI contribution cannot by itself close this whole functional scope.",
+            "executionBinding": "Before dispatch, a case must bind its real outcome, actor and subject entry, native host/model/effort and permissions, exact candidate/package and observer sources, protected inputs, sole-writer ownership, finite time/usage/resource limits and independent result/cleanup observations. This scope supplies no executable task or permission.",
+            "ordinaryUse": "Ordinary natural-language input does not name Accord or prescribe its Skills, Hooks or internal tools. Preserve the effective user environment and distinguish actual Agent use from fixture or evaluator intervention.",
+            "evidenceBoundary": "Keep actual decisions, actions, effects, original failures and their exact conditions. Static wiring, installed components, fixed-response protocol checks and historical cases remain limited contributions, not autonomous behavior or whole-scope acceptance.",
+            "timing": "Observe unprompted recognition of a material continuity risk and a justified healthy-continue, supported-compaction or necessary-transfer decision before recovery capacity is exhausted. Use fresh host signals and sourced work/reserve estimates; unknown counters do not justify guessed percentages or unbounded waiting.",
+            "inheritance": "The denominator is required goal, current authority and decisions, pauses, valid results with sources, unfinished duties and material risks. Reconcile current input and effects; allow targeted multi-round repair. Full-history copying, matching epochs, receipts or a verbal acknowledgement are not takeover.",
+            "ownership": "Before releasing source recovery, independently establish the destination identity, sufficient state, one writer for each shared effect and actual safe continuation or required pause. Rebind checkout, paths, permissions and host conditions; maintain source recovery on rejection or ambiguity. A supported durable recovery route may replace a live source process.",
+            "failureRecovery": "Cover applicable pre-dispatch, in-flight and effect-without-acknowledgement windows with a real authorized recovery actor. Inspect effects before retry, preserve unknowns and prevent duplicate dispatch or dual writers. Normal restoration is not proof of power-loss, disk-failure or remote-effect recovery.",
+            "modeAndBoundary": "Continue ordinary work without implicitly enabling Plan or Goal. Preserve user-selected modes, budgets and pauses when they apply. Handoff does not authorize archive/delete, new host access or cost, nor does canContinue establish permission. Bind applicable local/cross-host directions separately without requiring an exhaustive cross-product.",
+            "resultAndCost": "Observe actual remaining work, safe hold or rollback and attributable resource post-state. Record required-state loss, repeated work, latency/usage and user rescue. Deliberately prescribed migration, evaluator completion and an SDK-only mechanism check cannot establish autonomous whole-scope behavior."
+          },
+          "rule": "Project the existing A05 whole continuity responsibility across applicable entries, including healthy continuation, same-task recovery and necessary fresh takeover. Keep valid sub-scope evidence without replacing autonomous detection, real continuation, single-writer transfer or failure recovery. Definition and implementation availability do not constitute a passed case."
         }
       ],
       "cases": [
