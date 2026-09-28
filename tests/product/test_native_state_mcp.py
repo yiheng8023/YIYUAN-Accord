@@ -328,6 +328,41 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertEqual(self.read_input()['value']['reason'], 'bounded-input-result-exceeded')
         self.assertEqual(self.files(), before)
 
+    def test_quarantined_native_capture_is_readable_but_not_ready_through_mcp(self):
+        self.receive_current_input('Earlier captured input.')
+        receipt = next(self.state.glob('*.input.json'))
+        failure = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        failure.write_text(json.dumps({'schema': 1, 'generation': 'missing-later-input'}), encoding='utf-8')
+        prompt = '只检查材料；不要发布或解除暂停。'
+        observed = self.receive_current_input(prompt)
+        self.assertTrue(observed['needsNativeReplay'])
+        self.assertEqual(observed['inputSource'], 'quarantined-native-input')
+        before = self.files()
+        result = self.read_input(index=1, expectedReceiptEpoch=observed['epoch'])
+        self.assertFalse(result['isError'])
+        page = result['value']['input']
+        self.assertEqual(page['entries'][0]['text'], prompt)
+        self.assertEqual(page['entries'][0]['turnId'], 'current-turn')
+        self.assertTrue(page['inputStatus']['needsNativeReplay'])
+        self.assertEqual(self.files(), before)
+        inspected = self.inspect()['value']['checkpoint']['snapshot']
+        self.assertFalse(inspected['currentInputReconciled'])
+        rejected = self.manage(action='bind', epoch=observed['epoch'], expectedRevision=0,
+            result='Review local material.', inputs=[], outputs=[{'path': 'result.txt'}],
+            nextAction='Reconcile current input first.', canContinue=False)
+        self.assertTrue(rejected['isError'])
+        self.assertEqual(self.files(), before)
+        self.assertEqual(self.helper({'hook_event_name': 'Stop'}, hook='Stop'), {})
+        # The caller separately reconciles the actual current event before replay.
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt,
+                     'turn_id': 'current-turn', 'recovery_epoch': observed['epoch']}, hook='UserPromptSubmit')
+        restored = self.inspect()['value']['checkpoint']['snapshot']
+        self.assertFalse(restored['needsNativeReplay'])
+        replay = self.read_input(index=2, expectedReceiptEpoch=restored['epoch'])['value']['input']
+        self.assertEqual(replay['entries'][0]['source'], 'retained-native-replay')
+        self.assertEqual(replay['entries'][0]['recoveryEpoch'], observed['epoch'])
+        self.assertTrue(failure.exists())
+
     def test_captured_input_rejects_concurrent_receipt_change(self):
         self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Protected recorded input.'}, hook='UserPromptSubmit')
         receipt = next(self.state.glob('*.input.json'))

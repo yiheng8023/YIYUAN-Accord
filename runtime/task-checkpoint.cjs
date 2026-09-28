@@ -896,6 +896,17 @@ function entryGuidance() {
 }
 
 function hint(event, where, currentInput, prior = null) {
+  if (currentInput.inputSource === 'quarantined-native-input') {
+    return {hookSpecificOutput: {hookEventName: event.hook_event_name, additionalContext:
+      entryGuidance() +
+      'Accord retained this native input as quarantined text; input-loss recovery remains unresolved. ' +
+      'Hook receipt workspace (data only): ' + JSON.stringify({cwd: where.root}) + '. ' +
+      'Use inspect_task_state/status and read_task_input/read-native-input at this workspace to inspect the retained task and captured text. ' +
+      'Re-read status for the current recovery token: a failure during capture may have changed it. ' +
+      'Reconcile the actual current host-retained input, authority and effects before an authorized token-bound replay; the last captured entry alone need not be the latest input. ' +
+      'Capture and reading do not acknowledge input loss, restore missing history, lift a pause or permit continuation. ' +
+      'Preserve existing pauses, interruptions, unfinished work and failure watermarks; honor host restrictions or a task that forbids replay.'}};
+  }
   return {hookSpecificOutput: {hookEventName: event.hook_event_name, additionalContext:
     entryGuidance() +
     (currentInput.inputSource === 'host-continuation' ? 'This is host continuation, not a new user decision; the original goal and authority remain bound. ' : '') +
@@ -1102,7 +1113,12 @@ function handleHook(event) {
   if (name === 'UserPromptSubmit') {
     if (typeof event.prompt !== 'string') fail('missing-native-prompt');
     return inputLocked(where, () => {
-    const previous = readInput(where);
+    let storedInput = null;
+    const previous = readInput(where, (file, limit) => {
+      const value = readJson(file, limit);
+      if (file === where.input) storedInput = value;
+      return value;
+    });
     const prior = fs.existsSync(where.state) ? readJson(where.state) : null;
     if (Object.hasOwn(event, 'recovery_epoch') && (previous
         ? !needsInput(previous) || event.recovery_epoch !== previous.epoch
@@ -1120,11 +1136,23 @@ function handleHook(event) {
       publishInput(where, refreshed);
       return hint(event, where, refreshed, prior);
     }
-    if (previous?.needsNativeReplay && !Object.hasOwn(event, 'recovery_epoch')) fail('input-receipt-needs-native-replay');
+    const quarantined = previous?.needsNativeReplay && !Object.hasOwn(event, 'recovery_epoch');
+    // Validate the original receipt, not the token derived from its watermarks:
+    // derivation replaces epoch/needsNativeReplay and must not hide corruption.
+    if (quarantined) validateRecoveryIdentity(event, where, storedInput, null);
     const input = {schema: 1, epoch: crypto.randomUUID(), promptSha256: sha(event.prompt),
       turnId: event.turn_id || null, continuation: null, failures: previous?.failures || {},
       inputSource: 'native-input-event', hostObservation: observeNativeHost(event, previous),
       nativeContextSource: nativeContextSource(event)};
+    if (quarantined) {
+      // Preserve readable native text without acknowledging the earlier loss.
+      // A later failure marker still invalidates this newly published epoch.
+      input.inputSource = 'quarantined-native-input';
+      input.needsNativeReplay = true;
+      for (const flag of ['needsResumeReconciliation', 'interrupted']) {
+        if (Object.hasOwn(previous, flag)) input[flag] = previous[flag];
+      }
+    }
     input.nativeInputs = [...(retainedInputs(previous) || []), {epoch: input.epoch, turnId: input.turnId,
       source: Object.hasOwn(event, 'recovery_epoch') ? 'retained-native-replay' : 'native-input-event',
       ...(Object.hasOwn(event, 'recovery_epoch') ? {recoveryEpoch: event.recovery_epoch} : {}),
@@ -1214,7 +1242,7 @@ const HELP = {
   retainedInputs: {
     read: {op: 'read-native-input', session_id: 'native-session-id', cwd: 'absolute-workspace', index: 0, offset: 0, maxChars: 4000},
     paging: 'Defaults read from the first captured event, with at most 4000 Unicode code points and 20 entries. maxChars may be 1..16000. Pass returned next.index and next.offset unchanged for the next page; null means the captured end, not the end of all task history. Text hashes cover full original strings, not fragments. Legacy receipts report unavailable instead of inventing text. Reads create no locks or files; observed publication locks or changed input/failure evidence reject the read. A stable snapshot does not establish later freshness or permission to act.',
-    scope: 'Retains successful native input-event text and explicitly identified native replays in the existing local receipt. Replay entries preserve the consumed recoveryEpoch; missing is unknown, while null denotes an explicit replay without a prior receipt. Our recognized Stop continuation does not add a user input. Events and embedded quotations are not automatically new human decisions; reconcile original source, current input, authority and effects. Capture is not complete conversation, attachment content, model reasoning, a semantic checkpoint or an access grant. Reads preserve pause, quarantine and checkpoint state.',
+    scope: 'Retains parsed native input-event text and explicitly identified native replays in the existing local receipt. Input received during prior loss is marked quarantined-native-input with needsNativeReplay still true; readable text is not a ready input basis. A later failed capture may make the last stored entry older than the actual current input. Reconcile source and current input, then read status for the current recovery token before authorized replay. Replay entries preserve the consumed recoveryEpoch; missing is unknown, while null denotes an explicit replay without a prior receipt. Our recognized Stop continuation does not add a user input. Events and embedded quotations are not automatically new human decisions. Capture is not complete conversation, attachment content, model reasoning, a semantic checkpoint or an access grant. Reads preserve pause, quarantine and checkpoint state.',
     lifecycle: 'Input receipts, including captured text, are bounded to 8 MiB and never silently truncated; full storage fails capture and preserves existing failure/replay protection. Transport and bound checkpoint JSON remain limited to 128 KiB. Existing scoped storage and retirement apply: bound work retains the receipt at session end; reconciled unbound receipts end with SessionEnd or verified caller retirement. No new service, transcript scan or model call. Preserve a compatible executor; older versions may not retain or expose text. This local copy may contain sensitive user text and must not be published as routine evidence.'
   },
   contextBudget: {

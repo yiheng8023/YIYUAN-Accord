@@ -99,6 +99,128 @@ class TaskCheckpointTests(unittest.TestCase):
         self.assertEqual(marker.read_bytes(), marker_bytes)
         self.assertNotIn('private-failure', json.dumps(recovered))
 
+    def test_quarantined_new_session_retains_input_without_clearing_shared_loss(self):
+        self.bind()
+        self.pause()
+        prior_files = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        workspace_key = str(self.work).lower() if os.name == 'nt' else str(self.work)
+        marker = self.state / (hashlib.sha256(workspace_key.encode()).hexdigest() + '.workspace-input-failure.json')
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'earlier-unidentified-loss'}), encoding='utf-8')
+        marker_bytes = marker.read_bytes()
+        existing = self.status()
+        prompt = '当前只核对材料，先不要发布。 Preserve this full native input. 🧭'
+        hint = self.invoke({'hook_event_name': 'UserPromptSubmit', 'session_id': 'fresh-session',
+                            'turn_id': 'fresh-turn', 'prompt': prompt}, hook=True)
+        current = self.invoke({'op': 'status', 'session_id': 'fresh-session'})
+        self.assertTrue(current['inputReceipt']['present'])
+        self.assertEqual(current['inputSource'], 'quarantined-native-input')
+        self.assertTrue(current['needsNativeReplay'])
+        self.assertFalse(current['currentInputReconciled'])
+        self.assertEqual(current['mode'], 'unbound')
+        page = self.invoke({'op': 'read-native-input', 'session_id': 'fresh-session'})
+        self.assertTrue(page['inputStatus']['needsNativeReplay'])
+        self.assertEqual(page['entries'][0]['text'], prompt)
+        self.assertEqual(page['entries'][0]['promptSha256'], hashlib.sha256(prompt.encode()).hexdigest())
+        self.assertEqual(page['entries'][0]['source'], 'native-input-event')
+        self.assertIn('quarantin', hint['hookSpecificOutput']['additionalContext'].lower())
+        self.assertIn('recovery token', hint['hookSpecificOutput']['additionalContext'])
+        self.assertEqual(self.invoke({'hook_event_name': 'Stop', 'session_id': 'fresh-session'}, hook=True), {})
+        self.assertIn('native-replay', self.invoke({'op': 'bind', 'session_id': 'fresh-session',
+            'epoch': current['epoch'], 'expectedRevision': 0}, success=False))
+        self.assertEqual({name: (self.state/name).read_bytes() for name in prior_files}, prior_files)
+        self.assertEqual(marker.read_bytes(), marker_bytes)
+        self.assertEqual(self.status()['epoch'], existing['epoch'])
+        self.invoke({'hook_event_name': 'UserPromptSubmit', 'session_id': 'fresh-session',
+                     'turn_id': 'fresh-turn', 'prompt': prompt, 'recovery_epoch': current['epoch']}, hook=True)
+        replayed = self.invoke({'op': 'read-native-input', 'session_id': 'fresh-session'})
+        self.assertFalse(replayed['inputStatus']['needsNativeReplay'])
+        self.assertEqual([x['text'] for x in replayed['entries']], [prompt, prompt])
+        self.assertEqual(replayed['entries'][1]['source'], 'retained-native-replay')
+        self.assertEqual(replayed['entries'][1]['recoveryEpoch'], current['epoch'])
+        self.assertTrue(self.status()['needsNativeReplay'])
+        self.assertEqual(self.status()['mode'], 'paused')
+
+    def test_quarantined_capture_preserves_pause_and_interruption_flags(self):
+        self.bind()
+        self.pause()
+        self.event('SessionStart', source='resume')
+        self.event('Interrupt')
+        receipt = next(self.state.glob('*.input.json'))
+        marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'lost-native-input'}), encoding='utf-8')
+        before = self.status()
+        state_file = next(self.state.glob('*.state.json'))
+        checkpoint_bytes = state_file.read_bytes()
+        marker_bytes = marker.read_bytes()
+        self.event('UserPromptSubmit', prompt='Explain progress only; keep the pause.', turn_id='new-turn')
+        current = self.status()
+        flags = self.invoke({'op': 'read-native-input'})['inputStatus']
+        for name in ('needsNativeReplay', 'needsResumeReconciliation', 'interrupted'):
+            self.assertTrue(flags[name])
+        self.assertFalse(current['hostObservationCurrent'])
+        self.assertFalse(current['nativeContextSourceAvailable'])
+        self.assertEqual(current['mode'], 'paused')
+        self.assertEqual(state_file.read_bytes(), checkpoint_bytes)
+        self.assertEqual(marker.read_bytes(), marker_bytes)
+        self.assertNotEqual(current['epoch'], before['epoch'])
+        self.assertIn('native-replay-conflict', self.invoke({'hook_event_name': 'UserPromptSubmit',
+            'prompt': 'Earlier retained text', 'recovery_epoch': before['epoch']}, hook=True, success=False))
+        self.assertEqual(self.status()['epoch'], current['epoch'])
+        self.assertEqual(self.event('Stop'), {})
+
+    def test_failure_during_quarantined_capture_obsoletes_the_capture_epoch(self):
+        receipt = next(self.state.glob('*.input.json'))
+        marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'initial-loss'}), encoding='utf-8')
+        previous = self.status()
+        script = r'''
+const fs=require('node:fs'), helper=require(process.argv[1]);
+const event=JSON.parse(process.argv[2]), marker=process.argv[3], rename=fs.renameSync;
+let injected=false;
+fs.renameSync=function(from,to) {
+  if (!injected && to.endsWith('.input.json')) {
+    injected=true;
+    fs.writeFileSync(marker,JSON.stringify({schema:1,generation:'newer-concurrent-loss'}));
+  }
+  return rename.call(this,from,to);
+};
+process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
+'''
+        event = {'hook_event_name': 'UserPromptSubmit', 'session_id': 'test-session',
+                 'cwd': str(self.work), 'prompt': 'Retain this, but later loss remains unknown.'}
+        result = subprocess.run([self.node, '-e', script, str(RUNTIME), json.dumps(event), str(marker)],
+            env=self.environment, cwd=self.work, text=True, encoding='utf-8', capture_output=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(json.loads(result.stdout)['injected'])
+        captured = json.loads(receipt.read_text(encoding='utf-8'))
+        current = self.status()
+        self.assertNotEqual(current['epoch'], captured['epoch'])
+        self.assertTrue(current['needsNativeReplay'])
+        self.assertEqual(self.invoke({'op': 'read-native-input'})['entries'][-1]['text'], event['prompt'])
+        for token in (previous['epoch'], captured['epoch']):
+            self.assertIn('native-replay-conflict', self.invoke({'hook_event_name': 'UserPromptSubmit',
+                'prompt': event['prompt'], 'recovery_epoch': token}, hook=True, success=False))
+            self.assertEqual(self.status()['epoch'], current['epoch'])
+        self.assertEqual(self.event('Stop'), {})
+
+    def test_quarantined_capture_keeps_invalid_retained_evidence(self):
+        receipt = next(self.state.glob('*.input.json'))
+        marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'initial-loss'}), encoding='utf-8')
+        original = json.loads(receipt.read_text(encoding='utf-8'))
+        for field, value in [('schema', 9), ('epoch', 42), ('epoch', None),
+                             ('needsNativeReplay', 'unknown'), ('interrupted', 'unknown'),
+                             ('nativeInputs', [{'prompt': 'not-bound'}])]:
+            with self.subTest(field=field):
+                altered = {**original, field: value}
+                if field == 'epoch' and value is None:
+                    del altered[field]
+                receipt.write_text(json.dumps(altered), encoding='utf-8')
+                before = receipt.read_bytes()
+                self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Do not repair my old evidence.'},
+                            hook=True, success=False)
+                self.assertEqual(receipt.read_bytes(), before)
+
     def test_status_is_read_only_even_when_all_state_writes_are_denied(self):
         self.bind()
         self.pause('Keep the user pause.')
@@ -697,6 +819,11 @@ class TaskCheckpointTests(unittest.TestCase):
         self.invoke({'op': 'recover-lock', 'lock': 'input'})
         self.assertTrue(self.status()['needsNativeReplay'])
         self.assertEqual(self.status()['recoveryInputs']['count'], 69)
+        # The recovery-only capture path keeps the same bound and old bytes.
+        quarantined_before = path.read_bytes()
+        self.assertIn('oversize-state-object', self.invoke({'hook_event_name': 'UserPromptSubmit',
+                      'prompt': prompt}, hook=True, success=False))
+        self.assertEqual(path.read_bytes(), quarantined_before)
 
     def test_unbound_input_retirement_removes_text_without_touching_other_sessions(self):
         self.event('UserPromptSubmit', session_id='other-session', prompt='Other task data.')
@@ -1879,9 +2006,13 @@ process.kill(process.pid, 'SIGKILL');
         self.assertTrue(self.status()['needsNativeReplay'])
         self.event('SessionStart', source='resume')
         self.assertTrue(self.status()['needsNativeReplay'])
-        self.assertIn('input-receipt-needs-native-replay', self.invoke({
+        captured = self.invoke({
             'hook_event_name':'UserPromptSubmit','prompt':'A new input cannot silently clear lost input.'},
-            hook=True, success=False))
+            hook=True)
+        self.assertIn('quarantin', captured['hookSpecificOutput']['additionalContext'].lower())
+        self.assertTrue(self.status()['needsNativeReplay'])
+        self.assertTrue(self.status()['needsResumeReconciliation'])
+        self.assertFalse(self.status()['currentInputReconciled'])
         self.assertEqual(self.event('Stop'), {})
 
     def test_resume_preserves_pause_and_other_sessions(self):
@@ -2391,11 +2522,13 @@ catch(e){process.stdout.write(e.message);}
         self.assertEqual(self.event('Stop'), {})
         self.assertIn('replay', self.invoke({'op': 'bind', 'epoch': current['epoch'],
                       'expectedRevision': current['revision']}, success=False))
-        # A later real input that cannot be captured must obsolete the earlier
-        # recovery token; a rejected stale replay must not obsolete the new one.
+        # A later native input advances the recovery token while remaining
+        # quarantined; rejecting stale replay must not obsolete the new token.
         self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Still paused; new correction.'},
-                    hook=True, success=False)
+                    hook=True)
         later = self.status()
+        self.assertTrue(later['needsNativeReplay'])
+        self.assertEqual(later['inputSource'], 'quarantined-native-input')
         self.assertNotEqual(later['epoch'], current['epoch'])
         self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Stop; do not write.',
                      'recovery_epoch': current['epoch']}, hook=True, success=False)
