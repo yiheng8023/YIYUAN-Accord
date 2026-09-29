@@ -1215,7 +1215,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         report = self.assess(contract)
         self.assertEqual(report['errors'], [])
         self.assertNotIn('v33-codex-cli-ordinary-delivery', report['caseBindingGaps'])
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 7)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 9)
+        for scope in ('v33-resource-pressure-and-exit', 'v33-environment-adaptation'):
+            self.assertEqual(report['caseBindingGaps'][scope]['function']['caseIds'], [])
         self.assertEqual(report['progress']['coverageVerified'], 0)
         self.assertEqual(report['acceptedCases'], [])
         self.assertFalse(report['candidateEligible'])
