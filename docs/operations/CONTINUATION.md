@@ -23,9 +23,13 @@
 
 ## 最近核实的状态
 
-2026-09-29开始下一项必要普通交付的前瞻绑定：候选整体审查保持c57→4c的20个改动文件，另列同一提交12份必要依赖/标准原件，原diff摘要不变。由现装23808和现有CLI0.158.0/gpt-6-sol-high完成一次只读审查，交付review.md/json；原生目录已确认该派发档位，主线程固定选择不改。复用既有CLI prepare/composition及observe/recheck，新增ordinary与有限native-sufficient allocation两个case；14活动case、17必要scope，五范围仍无case，dynamic范围仍缺情境/职责绑定，共六范围有绑定缺口。尚无本例执行或新准入，不把准备选型/设置当行为证明，也不代验explicit-only正向选择、自主交接或A项完成。
+2026-09-29已按用户本次独立授权完成一次候选审查：执行subject为889cbf8a、episode2201b22f4b9341cf8deb55fab566302d；业务源固定c57→4c的20个改动文件及12份依赖/标准Git原件。CLI0.158.0/gpt-6-sol/high/default与现装23808实际运行434.504秒，总tokens1713837、未缓存输入123539、输出14746，均在原限额内；只发一次输入，没有加预算、重试或追加提示。实际历史显示按任务选择单独审查、拒绝冲突委派、核原件/Hash及调用链，并交付review.md/json。此为有限native-sufficient方法与贡献证据，不代验explicit-only正向采用、主模型切换、自主交接或完整A项。
 
-业务源用Git对象及SHA绑定，避免把含历史身份的整段diff复制到活动定义；没有修改扫描器、源材料或判据。独立准备审查指出只列改动文件会阻断关键依赖追踪，已补supportingFiles并同步双层fixture哈希。15项准入/文件观察及42项契约检查、配置恢复3方法7子例通过，verify/host-check通过。源码/调用者准备在accord-candidate-review-20260929-01；新自有workspace的原生信任登记/精确恢复仍需对应明确权限，03更新授权已消费且不能借用。取得权限后只运行此一次有界案例，实际结果与独立复查另核；不新增框架、不重放旧案求绿。
+两个核心发现成立，但原Markdown把F01的采样失败错误扩到job-not-empty路径，该分支实际使用已有after；JSON没有该扩展。独立四轴复核中product、implementation、standards通过，specification保留此局部失败。原observe/recheck正式结果为两case均consequence-mismatch、不准入；原报告不改，不把Root后续修复追认为worker成功。已结束的两个实例移入带精确声明快照/Hash的历史处置，活动case回到12、17必要scope不变、六范围无活动case，完整验收仍未成；不因这次有限错误推成模型不适用，也不凭有效方法宣称独立增益。
+
+Root已分别修复F01和F02：强制清理前各诊断字段独立读取，单项失败保留其它可得证据及原兼容错误字段，时限/清理路径/放行标准保持；历史离线夹具一次读取固定旧Git原件，缺历史明确报开发验证前提不足，并在CONTRIBUTING说明完整Git历史要求。39项生命周期/资源回归及4项准入/缺口回归通过。此次仅开发观察器、测试和记录变化，分发包仍23808，不需再次本机更新；这些修复不是新增行为准入。
+
+本案7个所属执行/目录/读取域自然退出，资源终态为0且读取器停止；没有新增workspace信任登记或配置内容写入，恢复检查为无操作。两输入、两报告、原生历史及89份保护材料已核留存；仅自有workspace/temp/state回收。一次授权已消费，原件与执行入口保留供追溯，禁止重放。原件在accord-candidate-review-20260929-01，正式结论见admission-final.json、ROOT-DISPOSITION.md及reviewer-originals.json。执行基点889cbf8a的[CI36541218827](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36541218827)已按完整SHA和11个job核成功，责任闭合；本批修复按新提交另核CI。
 
 2026-09-29本机更新03已完成并独立核验：现装23808、固定e85f6676，当前Root的SessionStart/resume与UserPromptSubmit入口来自新版路径，metadata-bound MCP已响应且无replay/resume标志。成功attempt为20260929T072806Z-95d70f24；现装24文件与保留旧包24文件均匹配各自Git原件。唯一Hook信任写入经原生user层版本CAS，只将SessionStart首匹配器增加fork对应的trusted_hash更新；前后RPC身份匹配，6可信Hook/5启用Skill准确指向新包。只替换已批准ref与该Hash即可逐字节重建执行后配置，证明当时无关配置保持；重开后的额外SKY_CUA_NATIVE_PIPE_DIRECTORY变化保留，不归因更新或回写。9个执行域均自然exit0/无force/活动0，读取器停止。当前两个MCP worker在更新后创建，relative cwd未独立读取，不扩写为全部消费者或其它入口已采用。
 

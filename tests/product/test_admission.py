@@ -1081,23 +1081,17 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 17, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 0, "coverageDefinedButUnverified": 17,
-            "coverageWithoutCases": 5, "coverageWithCaseBindingGaps": 6,
+            "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 6,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
         self.assertEqual(set(report['caseBindingGaps']),
                          {'v33-dynamic-model-routing', 'v33-autonomous-continuity',
                           'v33-codex-entry-coverage', 'v33-system-integration',
                           'v33-codex-lifecycle', 'v33-system-impact-assessment'})
-        for scope_id, claims in report['caseBindingGaps'].items():
+        for claims in report['caseBindingGaps'].values():
             for gap in claims.values():
-                self.assertEqual(gap['caseIds'], ['v33-dynamic-review-allocation-01']
-                                 if scope_id == 'v33-dynamic-model-routing' else [])
+                self.assertEqual(gap['caseIds'], [])
                 self.assertTrue(gap['missingDimensions']['duties'])
-        # One native-sufficient review is a partial declaration, not completion
-        # of Skill selection, changed capability, or the whole A02 scope.
-        allocation = report['caseBindingGaps']['v33-dynamic-model-routing']['function']
-        self.assertEqual(set(allocation['missingDimensions']['scenarios']),
-                         {'default-host-without-extra-extensions', 'capability-loss'})
         self.assertTrue(report['caseBindingGaps']['v33-system-integration']['function']['jointCaseMissing'])
         self.assertEqual(report['acceptanceRequirements']['A08']['blockedBy'],
                          ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07'])
@@ -1118,10 +1112,33 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                                     and 'effective-user-environment' in c['scenarios'])]
         return contract
 
+    def test_partial_allocation_case_keeps_uncovered_duties_and_scenarios_open(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract['acceptance']['admission']
+        scope = next(row for row in policy['scopes'] if row['id'] == 'v33-dynamic-model-routing')
+        case = copy.deepcopy(policy['cases'][0])
+        case.pop('packageFiles', None)
+        case.update(id='partial-allocation-fixture', scope=scope['id'], host=scope['host'], entry=scope['entry'],
+                    claims=['function'], conditions=copy.deepcopy(scope['conditions']),
+                    duties=[scope['duties'][0]], qualityAxes=[scope['qualityAxes'][0]],
+                    scenarios=['native-sufficient'])
+        policy['cases'].append(case)
+        report = self.assess(contract)
+        self.assertEqual(report['errors'], [])
+        gap = report['caseBindingGaps'][scope['id']]['function']
+        self.assertEqual(gap['caseIds'], [case['id']])
+        self.assertTrue(gap['missingDimensions']['duties'])
+        self.assertIn('capability-loss', gap['missingDimensions']['scenarios'])
+        self.assertIn('default-host-without-extra-extensions', gap['missingDimensions']['scenarios'])
+        self.assertEqual(report['progress']['coverageWithoutCases'], 5)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 6)
+        self.assertEqual(report['acceptedCases'], [])
+        self.assertFalse(report['functionalCompletion'])
+
     def test_diagnostic_retains_unplanned_scope_and_scenario_gaps(self):
         report = self.assess(self.without_correction_and_user_environment_cases())
         self.assertEqual(report['errors'], [])
-        self.assertEqual(report['progress']['coverageWithoutCases'], 6)
+        self.assertEqual(report['progress']['coverageWithoutCases'], 7)
         self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 8)
         gaps = report['caseBindingGaps']
         self.assertEqual(set(gaps), {'v33-systemic-correction', 'v33-codex-cli-ordinary-delivery',

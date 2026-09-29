@@ -1159,13 +1159,19 @@ class _App:
         def force_owned(reason, before=None):
             nonlocal forced
             observed = {"reason": reason, "observedAt": time.time()}
-            try:
-                observed["rootExitCode"] = self.process.poll()
-                observed["before"] = self.job.sample() if before is None else before
-                observed["readerStopped"] = not self.reader.is_alive()
-            except Exception as error:
-                # Missing diagnostic evidence must not suppress owned cleanup.
-                observed["observationError"] = {"type": type(error).__name__, "message": str(error)[:1024]}
+            for field, read in (
+                ("rootExitCode", lambda: self.process.poll()),
+                ("before", lambda: self.job.sample() if before is None else before),
+                ("readerStopped", lambda: not self.reader.is_alive()),
+            ):
+                try:
+                    observed[field] = read()
+                except Exception as error:
+                    # Each available field survives another diagnostic's failure.
+                    # Keep the old first-error field for existing readers.
+                    detail = {"type": type(error).__name__, "message": str(error)[:1024]}
+                    observed.setdefault("observationError", detail)
+                    observed.setdefault("observationErrors", {})[field] = detail
             force_observations.append(observed)
             forced = True
             self.job.terminate()

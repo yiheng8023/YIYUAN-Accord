@@ -16,7 +16,37 @@ import textwrap
 from scripts import observe_codex_lifecycle as lifecycle
 
 
+def legacy_close_helper_sources(root):
+    """Read the closed fixture's pinned sources, or identify an unmet prerequisite."""
+    import subprocess
+    revision = 'da70842705d333e619669bc64c2b1f79c87dd346'
+    sources = {}
+    try:
+        for name in ('observe_codex_lifecycle', 'observe_codex_entry', 'codex_rpc', 'inspect_native_resources'):
+            relative = 'scripts/' + name + '.py'
+            sources[relative] = subprocess.check_output(
+                ['git', 'show', revision + ':' + relative], cwd=root,
+                stderr=subprocess.PIPE, timeout=30)
+    except subprocess.CalledProcessError as error:
+        raise RuntimeError(
+            'Historical fixture sources are unavailable. Product validation needs '
+            'the pinned Git history (including ' + revision + '); use a full clone '
+            'or complete/repair its history. Candidate behavior was not tested by this probe.'
+        ) from error
+    return sources
+
+
 class CodexLifecycleTests(unittest.TestCase):
+    def test_legacy_fixture_missing_history_reports_prerequisite_without_native_execution(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            subprocess.run(['git', 'init', '--quiet', str(root)], check=True, timeout=30)
+            with patch.object(lifecycle, '_App') as native:
+                with self.assertRaisesRegex(RuntimeError, 'pinned Git history.*Candidate behavior was not tested'):
+                    legacy_close_helper_sources(root)
+                native.assert_not_called()
+
     def legacy_native_config_preflight_close(self):
         """An opt-in native compatibility observation, never a Cloud replay."""
         binary = Path(os.environ['ACCORD_LEGACY_CLOSE_BINARY']).resolve(strict=True)
@@ -140,7 +170,7 @@ class CodexLifecycleTests(unittest.TestCase):
         # This closed compatibility probe intentionally pins its original helper
         # bytes. Its offline interruption test must use that immutable subject,
         # not require every later observer change to match the historical hash.
-        frozen_revision = 'da70842705d333e619669bc64c2b1f79c87dd346'
+        frozen_sources = legacy_close_helper_sources(lifecycle.ROOT)
         for phase in ('initialize', 'close', 'config-read', 'forced-release'):
             with self.subTest(phase=phase), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
@@ -149,12 +179,10 @@ class CodexLifecycleTests(unittest.TestCase):
                 evidence = root / 'evidence'
                 evidence.mkdir()
                 frozen_helpers = root / 'frozen-helpers'
-                for name in ('observe_codex_lifecycle', 'observe_codex_entry', 'codex_rpc', 'inspect_native_resources'):
-                    relative = 'scripts/' + name + '.py'
+                for relative, source in frozen_sources.items():
                     target = frozen_helpers / relative
                     target.parent.mkdir(parents=True, exist_ok=True)
-                    target.write_bytes(subprocess.check_output(
-                        ['git', 'show', frozen_revision + ':' + relative], cwd=lifecycle.ROOT))
+                    target.write_bytes(source)
                 (evidence / 'release.json').write_text(json.dumps({
                     'binarySha256': hashlib.sha256(binary.read_bytes()).hexdigest()}))
 
@@ -1008,14 +1036,18 @@ class CodexLifecycleTests(unittest.TestCase):
 
     def test_root_timeout_diagnostics_do_not_suppress_owned_cleanup(self):
         import subprocess
-        for fail_sample in (False, True):
-            with self.subTest(fail_sample=fail_sample), tempfile.TemporaryDirectory() as temporary:
+        for failures in (set(), {'before'}, {'rootExitCode'}, {'readerStopped'},
+                         {'rootExitCode', 'before', 'readerStopped'}):
+            with self.subTest(failures=failures), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
                 manifest = {'limits': {'recoverySeconds': 2}, 'resourceController': 'windows-job-object'}
                 class Process:
                     returncode = None
                     stdin, stdout = io.BytesIO(), io.BytesIO()
-                    def poll(self): return self.returncode
+                    def poll(self):
+                        if 'rootExitCode' in failures and self.returncode is None:
+                            raise OSError('fixture root diagnostic unavailable')
+                        return self.returncode
                     def wait(self, timeout=None):
                         if self.returncode is None:
                             raise subprocess.TimeoutExpired('fixture-root', timeout)
@@ -1026,7 +1058,7 @@ class CodexLifecycleTests(unittest.TestCase):
                     terminated = False
                     def sample(self):
                         self.samples += 1
-                        if fail_sample and self.samples == 1:
+                        if 'before' in failures and self.samples == 1:
                             raise OSError('fixture diagnostic unavailable')
                         return {'activeProcesses': 0 if self.terminated else 1}
                     def terminate(self):
@@ -1035,7 +1067,10 @@ class CodexLifecycleTests(unittest.TestCase):
                     def close(self): self.closed = True
                 class Reader:
                     def join(self, timeout): pass
-                    def is_alive(self): return not job.terminated
+                    def is_alive(self):
+                        if 'readerStopped' in failures and not job.terminated:
+                            raise OSError('fixture reader diagnostic unavailable')
+                        return not job.terminated
                 process, job = Process(), Job()
                 app = lifecycle._App.__new__(lifecycle._App)
                 app.manifest, app.root, app.process, app.job = manifest, root, process, job
@@ -1044,12 +1079,15 @@ class CodexLifecycleTests(unittest.TestCase):
                 record = app.close()
                 observation = record['forceObservations'][0]
                 self.assertEqual(observation['reason'], 'root-wait-timeout')
-                self.assertIsNone(observation['rootExitCode'])
-                if fail_sample:
+                if failures:
                     self.assertEqual(observation['observationError']['type'], 'OSError')
-                    self.assertNotIn('before', observation)
-                else:
-                    self.assertEqual(observation['before']['activeProcesses'], 1)
+                    self.assertEqual(set(observation['observationErrors']), failures)
+                for field, expected in (('rootExitCode', None), ('before', {'activeProcesses': 1}),
+                                        ('readerStopped', False)):
+                    if field in failures:
+                        self.assertNotIn(field, observation)
+                    else:
+                        self.assertEqual(observation[field], expected)
                 self.assertTrue(job.terminated and job.closed)
                 self.assertEqual(record['exitCode'], 124)
                 self.assertTrue(record['forced'])

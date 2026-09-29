@@ -4474,6 +4474,41 @@
       ],
       "purpose": "One real update-guidance delivery and subsequent correction contributes to both ordinary effective-user-environment and systemic correction, with distinct predicates and the same episode.",
       "limits": "No prior source or failure is relabelled. All 17 required scopes, quality floors and entry selection remain; case definitions supply no behavior evidence. Actual model dispatch awaits the explicitly bounded temporary trust/recovery authorization named in the case."
+    },
+    {
+      "id": "native-candidate-review-and-disposition-20260929",
+      "observedAt": "2026-09-29",
+      "scope": "ended-ordinary-review-and-native-allocation-contribution-not-case-admission",
+      "executedRevision": "889cbf8a90da8fee2534975c32fd44ef2a4be96d",
+      "episodeId": "2201b22f4b9341cf8deb55fab566302d",
+      "declarations": [
+        {
+          "caseId": "v33-codex-cli-candidate-review-02",
+          "scopeId": "v33-codex-cli-ordinary-delivery",
+          "declarationSnapshot": "889cbf8a90da8fee2534975c32fd44ef2a4be96d:product/development.json",
+          "caseObjectSha256": "3dcfbcd7fe186a38f9eb89bf2a404f3f583fef8082cecd008b8dffde31a3384f"
+        },
+        {
+          "caseId": "v33-dynamic-review-allocation-01",
+          "scopeId": "v33-dynamic-model-routing",
+          "declarationSnapshot": "889cbf8a90da8fee2534975c32fd44ef2a4be96d:product/development.json",
+          "caseObjectSha256": "0c39b041d9642305b40d0d7d3239de7b3b73bd8cb6b851e700c312267f80c4db"
+        }
+      ],
+      "evidence": "accord-candidate-review-20260929-01/admission-final.json and reviewer-originals.json",
+      "boundedObservedFacts": {
+        "entry": "Codex CLI0.158.0 / gpt-6-sol-high / default, installed23808; Root/worker identities separately verified",
+        "delivery": "One source-bound review of c57 to 4c, twenty changed and twelve supporting Git originals. Two reports and two protected inputs were independently re-read; original sources unchanged.",
+        "method": "Actual selection of a sufficient single-reader path, rejection of conflicting delegation, immutable-source/hash/call-chain checks and specific findings are visible in the native history. No positive explicit-only Skill adoption or main-model switching is claimed.",
+        "quality": "Both finding cores are useful and source-supported. The original Markdown incorrectly includes job-not-empty as a sampling-failure trigger; that branch supplies an existing sample. JSON does not make this extension. Product utility passed; independent specification review failed locally.",
+        "resources": "434.504 seconds;1713837 native total/123539 uncached input/14746 output tokens within original limits. Seven owned execution/directory/read domains naturally exited. No workspace trust registration or config content write occurred;89 retained files verified, task-owned workspace/temp/state removed, native history retained."
+      },
+      "outcome": "failed-not-admitted",
+      "rejection": "Both cases retain consequence-mismatch and the specification review remains fail. Native methods and bounded utility do not establish an unqualified allocation or perfectly correct original report.",
+      "disposition": "closed-execution-retained-as-history-not-current-required-instance",
+      "preserved": "Original prompts, fixture, candidate, definitions, limits, authority, report error and all raw receipts retain their original identities. No additional worker input, budget extension, same-instance retry or evaluator repair credited to the worker.",
+      "currentEffect": "Only the two ended instances leave active admission. The other twelve active cases, all seventeen necessary scopes and F/A, quality, scenario and authority floors remain. Six scopes have no active case; the required ordinary and allocation outcomes remain unaccepted.",
+      "followup": "Root separately corrects pre-force diagnostic field retention and the pinned-history test prerequisite. These source fixes are not a rewrite of the original review or case outcome."
     }
   ],
   "environmentControl": {
@@ -7198,269 +7233,6 @@
               "noUnresolvedTaskResource": true
             }
           }
-        },
-        {
-          "id": "v33-codex-cli-candidate-review-02",
-          "scope": "v33-codex-cli-ordinary-delivery",
-          "host": "codex",
-          "entry": "cx-cli",
-          "duties": [
-            "goal-authority-correction",
-            "execution-configuration-and-code",
-            "resources-and-cleanup",
-            "verification-and-value"
-          ],
-          "qualityAxes": [
-            "compliance-and-safety",
-            "functional-coverage",
-            "normal-entry-integration",
-            "recovery-and-lifecycle",
-            "evidence-integrity"
-          ],
-          "scenarios": [
-            "effective-user-environment"
-          ],
-          "claims": [
-            "function"
-          ],
-          "conditions": {
-            "collaborationMode": "default",
-            "goalModeActive": false,
-            "ephemeral": false,
-            "permissionPolicy": "workspace-write/never; business task is read-only except its two named reports",
-            "userConfig": "Existing effective user environment retained. Host/project/memory/Skill guidance may inform method; exact bound Git blobs and fixture supply business facts. No shared reset or third-party Skill edits.",
-            "userConfigBaselineSha256": "e8a379581c1bb490b97089712ad55998307d3b6f8ee60ac83ddb01b613df60c4",
-            "extensions": "Existing complete 23808 marketplace installation, six trusted enabled Hooks and five enabled Skills; current Root adoption is separately observed. No new install or Hook trust in this episode.",
-            "reviewSource": "Exact c57a4082595a6f0277f4513631be6e1a787f7f5c to 4c1c7c7fbd393deb60e58e7585a2b04075bea10c twenty-file diff. Later documentation/local-adoption observations do not rewrite this fixed review subject.",
-            "input": "One prospectively selected maintainer review input in the fixture; not an independently issued end-user quote. It does not name Accord or a Skill or prescribe internal tools.",
-            "businessSources": "Frozen review-brief.md and source-map.json plus their exact listed changed/supporting Git originals and hash-bound diff. Method context cannot add undocumented business facts. Preserve the inputs and source checkout.",
-            "executionOwner": "Existing CLI runner and native readers own bounded dispatch/resources. Root owns integration and independent evaluation; evaluator corrections are not credited to the original worker.",
-            "nativeBootstrapEffects": "Dispatch requires explicit bounded authority for any native registration of this task-owned workspace and exact recovery. Prepared sources, existing development permission and old update grants do not grant new trust.",
-            "limits": "One review episode, whole work900 seconds, turn600, recovery20 and the declared cumulative token caps; no added prompt, fallback model, budget extension or same-instance retry.",
-            "callerSourceSha256": "0ea3d9671461b436f1b72c19cfdcabb0223ce4d7b3b673e3a314ab5da9b902d1",
-            "configurationRecoverySourceSha256": "48ab939d789fa1e7a07c728c2d0dd6f3ee2d11fbd24418dcc23773450c04d798",
-            "codexVersion": "0.158.0",
-            "entryProtocol": "exec-resume",
-            "model": "gpt-6-sol",
-            "reasoning": "high",
-            "windowsSandbox": "elevated",
-            "execution": {
-              "entryProtocol": "exec-resume",
-              "hookMode": "installed-plugin",
-              "model": "gpt-6-sol",
-              "reasoning": "high",
-              "windowsSandbox": "elevated",
-              "timeoutSeconds": 900,
-              "turnTimeoutSeconds": 600,
-              "recoveryTimeoutSeconds": 20,
-              "caseSha256": "34b8f9a34bdfc06f3c46676334d38478680605ef75a10c1a44c12f4f0054727e",
-              "host": "codex",
-              "entry": "cx-cli",
-              "codexVersion": "0.158.0",
-              "usageCaps": {
-                "totalTokens": 2500000,
-                "uncachedInputTokens": 250000,
-                "outputTokens": 16000
-              },
-              "usageScope": "One new persisted CLI review, cumulative native reported usage; coordinator/reviewer overhead is recorded separately or unknown, never omitted from benefit claims.",
-              "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/candidate-review-v3.3.json"
-            }
-          },
-          "oracle": "Independently review the two reports against exact immutable source/callers and declared requirements, not issue counts or self-reported success. Match actual native input, settings, modes/Goal, preserved data and process/config post-state. Zero findings may be correct; unsupported findings or generic next steps fail. Keep unknowns and original errors. This one ordinary review does not close recovery, autonomous continuity or whole-entry/product acceptance.",
-          "oracleFiles": [
-            "docs/operations/PLAN-v3.3.md",
-            "docs/operations/ACCEPTANCE-v3.3.md",
-            "product/cases/candidate-review-v3.3.json",
-            "scripts/inspect_coordination.py",
-            "scripts/observe_codex_entry.py",
-            "scripts/observe_codex_lifecycle.py",
-            "scripts/codex_rpc.py",
-            "scripts/codex_events.py",
-            "scripts/inspect_native_resources.py",
-            "runtime/task-checkpoint.cjs",
-            "yiyuan_accord/admission.py",
-            "yiyuan_accord/identity.py",
-            "yiyuan_accord/guardrails.py",
-            "yiyuan_accord/reviews.py"
-          ],
-          "maxAgeSeconds": 86400,
-          "expected": {
-            "effect": {
-              "allRequiredArtifactsDelivered": true,
-              "findingsAndJsonAgree": true,
-              "findingsIndependentlySupportedOrCorrectlyAbsent": true,
-              "specificNextActionsAndLimits": true
-            },
-            "authority": {
-              "ordinaryInputMatched": true,
-              "protectedInputsAndSourceUnchanged": true,
-              "methodAndBusinessSourcesSeparated": true,
-              "noEvaluatorRescueCredited": true,
-              "noOutOfScopeEffects": true,
-              "unrequestedModeActivation": false
-            },
-            "poststate": {
-              "deliveryRechecked": true,
-              "finalAnswerMatchesArtifacts": true,
-              "nativeConfigurationAndThreadVerified": true,
-              "noUnresolvedBusinessDuty": true,
-              "completedWithoutPlanOrGoalMode": true
-            },
-            "cleanup": {
-              "ownedProcesses": 0,
-              "sharedConfigurationPreservedOrExactlyRecovered": true,
-              "userTaskNotArchivedOrDeleted": true,
-              "unownedResourcesPreserved": true,
-              "ownedTemporaryResidueAccounted": true
-            }
-          }
-        },
-        {
-          "id": "v33-dynamic-review-allocation-01",
-          "scope": "v33-dynamic-model-routing",
-          "host": "codex",
-          "entry": "cx-desktop",
-          "duties": [
-            "goal-authority-correction",
-            "research-learning-and-reuse",
-            "relations-routing-and-form",
-            "execution-configuration-and-code",
-            "premise-and-consistency",
-            "verification-and-value"
-          ],
-          "qualityAxes": [
-            "compliance-and-safety",
-            "functional-coverage",
-            "normal-entry-integration",
-            "evidence-integrity",
-            "user-burden-and-interference",
-            "maintainability-and-resource-cost"
-          ],
-          "scenarios": [
-            "native-sufficient",
-            "effective-user-environment",
-            "task-exposure-and-reuse"
-          ],
-          "claims": [
-            "function"
-          ],
-          "conditions": {
-            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review; this entry label does not attest execution or adoption by any subject entry.",
-            "entryScope": "Use the applicable selected OpenAI entries and their actual responsibility boundaries from v33-openai-entry-applicability. Preserve pending dispositions; an SDK or CLI contribution cannot by itself close this whole functional scope.",
-            "executionBinding": "Before dispatch, a case must bind its real outcome, actor and subject entry, native host/model/effort and permissions, exact candidate/package and observer sources, protected inputs, sole-writer ownership, finite time/usage/resource limits and independent result/cleanup observations. This scope supplies no executable task or permission.",
-            "ordinaryUse": "Ordinary natural-language input does not name Accord or prescribe its Skills, Hooks or internal tools. Preserve the effective user environment and distinguish actual Agent use from fixture or evaluator intervention.",
-            "evidenceBoundary": "Keep actual decisions, actions, effects, original failures and their exact conditions. Static wiring, installed components, fixed-response protocol checks and historical cases remain limited contributions, not autonomous behavior or whole-scope acceptance.",
-            "selection": "Compare current dispatch-supported capabilities against the material task gap, quality and whole-task cost. Preserve an adequate current model/effort; neither forced switching nor a fixed provider/model ladder is required or permitted as a substitute for judgment.",
-            "authority": "Keep user-pinned choices, disabled components, provider/data/trust boundaries and actual cost authority. Selection or a catalog entry proves neither authorization nor execution; new necessary permission holds only dependent work.",
-            "skills": "Separate native implicit matching, coordinator selection through a genuine supported explicit path and worker adoption. Explicit-only policy is not permission to alter a third-party Skill or impersonate a user choice. An unavailable route requires an authorized alternative or a specific unresolved condition.",
-            "decisionEvidence": "Bind the facts that change the route and observe actual execution, feedback and affected re-evaluation. Include semantic error or uncertainty, unavailable capabilities and sufficient-native counterexamples; scores, confidence, mentions or successful schema validation do not prove correctness.",
-            "switchCost": "Account for relevant discovery, setup, cached/uncached processing, warmup, handoff, review and cleanup across remaining work. Unknown signals remain unknown; claim benefit only with a supported comparison. No dedicated decision model or external deployment is a 3.3 prerequisite.",
-            "collaborationMode": "default",
-            "goalModeActive": false,
-            "ephemeral": false,
-            "permissionPolicy": "workspace-write/never; business task is read-only except its two named reports",
-            "userConfig": "Existing effective user environment retained. Host/project/memory/Skill guidance may inform method; exact bound Git blobs and fixture supply business facts. No shared reset or third-party Skill edits.",
-            "userConfigBaselineSha256": "e8a379581c1bb490b97089712ad55998307d3b6f8ee60ac83ddb01b613df60c4",
-            "extensions": "Existing complete 23808 marketplace installation, six trusted enabled Hooks and five enabled Skills; current Root adoption is separately observed. No new install or Hook trust in this episode.",
-            "reviewSource": "Exact c57a4082595a6f0277f4513631be6e1a787f7f5c to 4c1c7c7fbd393deb60e58e7585a2b04075bea10c twenty-file diff. Later documentation/local-adoption observations do not rewrite this fixed review subject.",
-            "input": "One prospectively selected maintainer review input in the fixture; not an independently issued end-user quote. It does not name Accord or a Skill or prescribe internal tools.",
-            "businessSources": "Frozen review-brief.md and source-map.json plus their exact listed changed/supporting Git originals and hash-bound diff. Method context cannot add undocumented business facts. Preserve the inputs and source checkout.",
-            "executionOwner": "Existing CLI runner and native readers own bounded dispatch/resources. Root owns integration and independent evaluation; evaluator corrections are not credited to the original worker.",
-            "nativeBootstrapEffects": "Dispatch requires explicit bounded authority for any native registration of this task-owned workspace and exact recovery. Prepared sources, existing development permission and old update grants do not grant new trust.",
-            "limits": "One review episode, whole work900 seconds, turn600, recovery20 and the declared cumulative token caps; no added prompt, fallback model, budget extension or same-instance retry.",
-            "callerSourceSha256": "0ea3d9671461b436f1b72c19cfdcabb0223ce4d7b3b673e3a314ab5da9b902d1",
-            "configurationRecoverySourceSha256": "48ab939d789fa1e7a07c728c2d0dd6f3ee2d11fbd24418dcc23773450c04d798",
-            "execution": {
-              "host": "codex",
-              "entry": "cx-desktop",
-              "coordinator": {
-                "role": "existing task owner and source/evidence coordinator; sole worker writes the review artifacts",
-                "threadId": "01a0d6a8-d302-7081-ab25-b1b4281dd924",
-                "model": "gpt-6-astra",
-                "nativeHostVersion": "0.158.0-alpha.2.1",
-                "permissionMode": "default",
-                "reasoningPolicy": "Preserve the user-selected parent setting; this case does not infer an unobserved effort or test main-model switching.",
-                "packageVersion": "3.3.0-dev.1+codex.20260929023808",
-                "packageSourceRef": "e85f6676a42cf55c34d15a5f89e6011c867d3786",
-                "identityRule": "Verify current native metadata and independent local-adoption receipts; this declaration is not authentication, adoption proof or authority."
-              },
-              "worker": {
-                "entryProtocol": "exec-resume",
-                "hookMode": "installed-plugin",
-                "model": "gpt-6-sol",
-                "reasoning": "high",
-                "windowsSandbox": "elevated",
-                "timeoutSeconds": 900,
-                "turnTimeoutSeconds": 600,
-                "recoveryTimeoutSeconds": 20,
-                "caseSha256": "34b8f9a34bdfc06f3c46676334d38478680605ef75a10c1a44c12f4f0054727e",
-                "host": "codex",
-                "entry": "cx-cli",
-                "codexVersion": "0.158.0",
-                "usageCaps": {
-                  "totalTokens": 2500000,
-                  "uncachedInputTokens": 250000,
-                  "outputTokens": 16000
-                },
-                "usageScope": "One new persisted CLI review, cumulative native reported usage; coordinator/reviewer overhead is recorded separately or unknown, never omitted from benefit claims.",
-                "runner": "scripts/observe_codex_entry.py",
-                "caseFile": "product/cases/candidate-review-v3.3.json"
-              },
-              "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/candidate-review-v3.3.json",
-              "caseSha256": "34b8f9a34bdfc06f3c46676334d38478680605ef75a10c1a44c12f4f0054727e"
-            },
-            "contribution": "Current effective-environment native-sufficient review allocation and consequences only. No claim of positive explicit-only Skill adoption, default-without-extensions, capability-loss recovery, autonomous transfer, main-model automation or whole-scope coverage.",
-            "selectionBasis": "The twenty-file cross-mechanism review benefits from an independent source reader. Existing CLI and installed guidance are usable; native model/list confirms gpt-6-sol/high. Keep the parent model pinned. Do not force a third-party workflow whose prerequisites conflict with this bounded independent review. Record actual worker choices and their consequences, including uncertainty, not merely the prepared dispatch settings.",
-            "costBoundary": "Record worker native cumulative usage, wall time and resource post-state; coordinator/evaluator overhead is separate and may be unknown. No measured speed/cost or incremental-value benefit is claimed."
-          },
-          "oracle": "Bind this coordinator case and its actual cx-cli worker to the same prepared manifest, fixture and episode. Independently establish live actor/permission/adoption evidence, native dispatch and actual method choices that lead to the source-checked deliverable. A prepared model choice or a Skill mention is not behavioral evidence; missing consequential choice evidence leaves this contribution unaccepted. Preserve explicit-only/disabled Skill policies and do not claim the missing selection or continuity scenarios. Native sufficiency is allowed and successful whole-scope completion is not inferred.",
-          "oracleFiles": [
-            "docs/operations/PLAN-v3.3.md",
-            "docs/operations/ACCEPTANCE-v3.3.md",
-            "product/cases/candidate-review-v3.3.json",
-            "scripts/inspect_coordination.py",
-            "scripts/observe_codex_entry.py",
-            "scripts/observe_codex_lifecycle.py",
-            "scripts/codex_rpc.py",
-            "scripts/codex_events.py",
-            "scripts/inspect_native_resources.py",
-            "runtime/task-checkpoint.cjs",
-            "yiyuan_accord/admission.py",
-            "yiyuan_accord/identity.py",
-            "yiyuan_accord/guardrails.py",
-            "yiyuan_accord/reviews.py"
-          ],
-          "maxAgeSeconds": 86400,
-          "expected": {
-            "effect": {
-              "nativeAllocationAddressesBoundNeed": true,
-              "actualMethodChoicesHaveSourceCheckedConsequences": true,
-              "nativeReportedWorkerSettingsMatch": true,
-              "sufficientNativeRouteWithoutForcedExpansion": true,
-              "unknownsAndLimitsPreserved": true
-            },
-            "authority": {
-              "parentPinnedChoicePreserved": true,
-              "coordinatorAndWorkerIdentitiesNotRelabelled": true,
-              "thirdPartySkillSourcesAndPoliciesUnchanged": true,
-              "noNewCapabilityAuthorityInferred": true
-            },
-            "poststate": {
-              "sameEpisodeAndFixtureIndependentlyCorrelated": true,
-              "deliveredReviewSupportsAllocationConclusion": true,
-              "actualCostsReportedWithoutUnsupportedBenefit": true,
-              "uncoveredScenariosRemainOpen": true
-            },
-            "cleanup": {
-              "ownedProcesses": 0,
-              "sharedConfigurationPreservedOrExactlyRecovered": true,
-              "userTaskNotArchivedOrDeleted": true,
-              "unownedResourcesPreserved": true,
-              "ownedTemporaryResidueAccounted": true
-            }
-          }
         }
       ]
     },
@@ -7638,7 +7410,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "Follow N33-20260909 r34. Own suitable Skill choice under user delegation using actual supported host paths, preserving upstream sources and genuine selection provenance. Default explicit-only metadata is not a blanket ban on authorized coordination, and protocol loading alone is not ordinary autonomous selection.  Reuse the completed controlled finalize-receipt native-composition evidence: Windows and hosted Linux/macOS records independently verify reconciliation, finalization, target writer ownership and settled revision 19. Preserve the original failed fixture and all model/autonomous-timing/crash-recovery limits; this completed sub-scope is not a pending prerequisite or a reason to replay it before ordinary continuity. Align task-specific effort visibility and third-party Skill invocation boundaries within existing W02/W06/W08 and A02/A06/A08; static inventory and policy alignment do not establish adoption or acceptance.  For 3.3, internalize applicable public decision-model designs through existing host models, supported tools and necessary Accord components. Defer dedicated third-party decision-model provider integration and user deployment support to later versions; do not schedule more such trials or shadow integrations in the 3.3 workstream. Preserve ordinary ecosystem reuse and user-selected components; introduce no model-training program, model-hosting service or generic decision-engine project. Reduce unnecessary third-party dependencies without making self-authored implementation the default or rejecting mature capabilities. No separate evaluation-model account, fixed provider ladder, new training requirement or zero-resource-cost claim is introduced. Reconcile the source-checked external reports within existing W03-W08 duties: preserve state and shared invalidation evidence. Read-only status diagnostics now reuse the existing optimistic snapshot boundary, reject observed concurrent publication, changed sources and incompatible identity, and identify malformed/unreadable evidence without repair or erasure. Continue actual damaged-state recovery, input-size and lock-identity work where needed; status diagnostics are not recovery completion or ordinary-host acceptance. Never remove shared watermarks blindly or unlock from a TTL. Existing package-byte checks and required acceptance stay in place. Retain the historical Jev private trial, classifier-dev source reference and bounded Laya public-demo observations as research with their original limits. They are not current integration targets, proof of superior in-house performance or a release gate. Access delays do not block independent ready work; raw account, credential and restricted benchmark material stays private. Align the confirmed whole-task upstream, context-selected Skill details and bounded bootstrap/evolution duties. Supply the upstream through Accord-owned components and supported host connections without requiring changes to user AGENTS.md. Preserve per-input goal, authority, pause and unfinished-duty interpretation, simple direct handling and complex adaptive composition; do not lock Skill or other component counts or treat a fixed invocation sequence as coverage. Keep perception and continuity decisions independent of optional detailed Skill selection; supported host events and native mechanisms should carry sufficient responsibilities. All seventeen necessary scopes now have definitions; five have no active cases, the declared native-sufficient allocation case remains partial, and all complete acceptance requirements remain open. Definitions are not passed observations. Do not continue treating the closed definition gap as a prerequisite; bind real outcomes and current execution conditions for the remaining case and evidence gaps. Four OpenAI entries are selected for development and seven remain pending; selectionFinal is false, so no final entry-set or parent admission is claimed. Reuse the completed public SDK lifecycle/scoped-exposure episodes within their original package and condition bounds, the cc3243ea CLI two-turn delivery and installed VS Code ordinary delivery within their actual limits, and the resolved marketplace/Hook/environment-name corrections. All complete A01-A08 requirements remain open. First close the reliable upstream-to-ordinary-delivery path on an execution entry whose necessary conditions can be established: current exact package and real entry participation, task-appropriate detail/capability use, execution feedback and correction, verified delivery and needed continuity. The brief entry is now the shared Hook guidance source, with four independently discoverable specialist Skills; transcript connection and recovery cues already exist; validate their adoption rather than treating them as unimplemented or equating injection with behavior. Keep time-bound shared installation, source projection and installed-candidate evidence distinct. Account for user, host and later-component changes across shared dependencies. Compose capabilities temporarily within existing interfaces and authority, then release task-local bindings and resources without retiring user-owned components or unfinished recovery responsibilities. In parallel, resolve independent entry differences, lifecycle/resource mechanisms, CI and existing evidence readback, then integrate at the real dependency boundary. Keep autonomous handoff in scope within continuous useful work. Close the entire loop with recoverable task and effect state, conditional transitions and a live authorized recovery trigger. Reuse host persistence and scoped Accord checkpoints; disconnection does not establish whether an effect occurred. Reconcile unknown effects, current authority, pauses and writer ownership before retry, compensation, completion or source release. State-machine semantics are necessary, but a single custom engine or fixed SOP is not prescribed. Stop repeating bounded hot-reload demonstrations after their mechanism evidence is closed; remaining host-upgrade differences must not displace the mainline. Bind missing behavioral scopes to actual work and complete system integration and impact gaps. Several related duties may share one sufficient episode; do not mechanically schedule a new model experiment per scope or replay completed small chains. Correct actual defects and preserve valid partial outcomes and original failures. Finish exact-candidate, documentation, independent review, hosted checks and publication closeout only after necessary acceptance. Maintain Plan/Goal independence and explicit activation authority. Use public standard CI by validation need; account quota pressure does not reduce acceptance or authorize new costs. Keep the 3.4 Claude, Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity candidates and plugin-eval comparison research out of 3.3 execution and release gates. Prepare truthful post-3.3 comparison materials on the actual supported host; Plugin eval is only one component of communication materials and cannot establish full Accord capability or value; Claude eval results cannot qualify Codex behavior. Reassess future candidates before promising support or starting installation, paid evaluation or publication.",
+    "work": "Follow N33-20260909 r34. Own suitable Skill choice under user delegation using actual supported host paths, preserving upstream sources and genuine selection provenance. Default explicit-only metadata is not a blanket ban on authorized coordination, and protocol loading alone is not ordinary autonomous selection.  Reuse the completed controlled finalize-receipt native-composition evidence: Windows and hosted Linux/macOS records independently verify reconciliation, finalization, target writer ownership and settled revision 19. Preserve the original failed fixture and all model/autonomous-timing/crash-recovery limits; this completed sub-scope is not a pending prerequisite or a reason to replay it before ordinary continuity. Align task-specific effort visibility and third-party Skill invocation boundaries within existing W02/W06/W08 and A02/A06/A08; static inventory and policy alignment do not establish adoption or acceptance.  For 3.3, internalize applicable public decision-model designs through existing host models, supported tools and necessary Accord components. Defer dedicated third-party decision-model provider integration and user deployment support to later versions; do not schedule more such trials or shadow integrations in the 3.3 workstream. Preserve ordinary ecosystem reuse and user-selected components; introduce no model-training program, model-hosting service or generic decision-engine project. Reduce unnecessary third-party dependencies without making self-authored implementation the default or rejecting mature capabilities. No separate evaluation-model account, fixed provider ladder, new training requirement or zero-resource-cost claim is introduced. Reconcile the source-checked external reports within existing W03-W08 duties: preserve state and shared invalidation evidence. Read-only status diagnostics now reuse the existing optimistic snapshot boundary, reject observed concurrent publication, changed sources and incompatible identity, and identify malformed/unreadable evidence without repair or erasure. Continue actual damaged-state recovery, input-size and lock-identity work where needed; status diagnostics are not recovery completion or ordinary-host acceptance. Never remove shared watermarks blindly or unlock from a TTL. Existing package-byte checks and required acceptance stay in place. Retain the historical Jev private trial, classifier-dev source reference and bounded Laya public-demo observations as research with their original limits. They are not current integration targets, proof of superior in-house performance or a release gate. Access delays do not block independent ready work; raw account, credential and restricted benchmark material stays private. Align the confirmed whole-task upstream, context-selected Skill details and bounded bootstrap/evolution duties. Supply the upstream through Accord-owned components and supported host connections without requiring changes to user AGENTS.md. Preserve per-input goal, authority, pause and unfinished-duty interpretation, simple direct handling and complex adaptive composition; do not lock Skill or other component counts or treat a fixed invocation sequence as coverage. Keep perception and continuity decisions independent of optional detailed Skill selection; supported host events and native mechanisms should carry sufficient responsibilities. All seventeen necessary scopes now have definitions; six have no active cases after the ended candidate-review instances were retained as history. Their useful methods and local report defect remain source-bound; all complete acceptance requirements remain open. Definitions are not passed observations. Do not continue treating the closed definition gap as a prerequisite; bind real outcomes and current execution conditions for the remaining case and evidence gaps. Four OpenAI entries are selected for development and seven remain pending; selectionFinal is false, so no final entry-set or parent admission is claimed. Reuse the completed public SDK lifecycle/scoped-exposure episodes within their original package and condition bounds, the cc3243ea CLI two-turn delivery and installed VS Code ordinary delivery within their actual limits, and the resolved marketplace/Hook/environment-name corrections. All complete A01-A08 requirements remain open. First close the reliable upstream-to-ordinary-delivery path on an execution entry whose necessary conditions can be established: current exact package and real entry participation, task-appropriate detail/capability use, execution feedback and correction, verified delivery and needed continuity. The brief entry is now the shared Hook guidance source, with four independently discoverable specialist Skills; transcript connection and recovery cues already exist; validate their adoption rather than treating them as unimplemented or equating injection with behavior. Keep time-bound shared installation, source projection and installed-candidate evidence distinct. Account for user, host and later-component changes across shared dependencies. Compose capabilities temporarily within existing interfaces and authority, then release task-local bindings and resources without retiring user-owned components or unfinished recovery responsibilities. In parallel, resolve independent entry differences, lifecycle/resource mechanisms, CI and existing evidence readback, then integrate at the real dependency boundary. Keep autonomous handoff in scope within continuous useful work. Close the entire loop with recoverable task and effect state, conditional transitions and a live authorized recovery trigger. Reuse host persistence and scoped Accord checkpoints; disconnection does not establish whether an effect occurred. Reconcile unknown effects, current authority, pauses and writer ownership before retry, compensation, completion or source release. State-machine semantics are necessary, but a single custom engine or fixed SOP is not prescribed. Stop repeating bounded hot-reload demonstrations after their mechanism evidence is closed; remaining host-upgrade differences must not displace the mainline. Bind missing behavioral scopes to actual work and complete system integration and impact gaps. Several related duties may share one sufficient episode; do not mechanically schedule a new model experiment per scope or replay completed small chains. Correct actual defects and preserve valid partial outcomes and original failures. Finish exact-candidate, documentation, independent review, hosted checks and publication closeout only after necessary acceptance. Maintain Plan/Goal independence and explicit activation authority. Use public standard CI by validation need; account quota pressure does not reduce acceptance or authorize new costs. Keep the 3.4 Claude, Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity candidates and plugin-eval comparison research out of 3.3 execution and release gates. Prepare truthful post-3.3 comparison materials on the actual supported host; Plugin eval is only one component of communication materials and cannot establish full Accord capability or value; Claude eval results cannot qualify Codex behavior. Reassess future candidates before promising support or starting installation, paid evaluation or publication.",
     "requires": "On 2026-09-19 the user resumed work, authorizing a bounded Jev trial followed by alignment of verified external conclusions and applicable trial findings, then continued development. On 2026-09-20 the user obtained direct access and authorized the prepared private synthetic trial, which completed. The Jev results remain private. On 2026-09-22 the user decided that 3.3 should internalize applicable ideas using host capabilities and Accord components, while deferring dedicated third-party decision-model integration to future versions. This supersedes the earlier optional-provider trial/integration next step for 3.3, retains prior evidence and does not restrict ordinary ecosystem reuse, add training or hosting, or reduce acceptance. Recheck live repository, CI, authority and environment conditions; carry independent authorized work forward without treating access restrictions as product failure or acceptance. The trial does not authorize automatic top-up, payment-card enrollment or a mandatory paid dependency. Resume authorized development and integration in the bound main checkout, outside Goal mode, using isolated worktrees for independent writers. Complete and publish 3.3.0 after all necessary acceptance and exact-candidate checks, as requested on 2026-09-14; readiness remains false. Preserve user IDE/cloud/development conversations and immutable historical identity, and retire unneeded task-owned resources. New accounts, trust, data, meaningful cost and unrelated shared or external writes retain their separate boundaries. Prefer official and existing reliable sources before experiments; the plan and latest user decisions own authority. The user has no Mac/Xcode or JetBrains installation and does not intend to purchase them for this project. Use existing environments, official sources and standard hosted Linux/macOS CI for feasible shared work. Keep instance-specific unknowns explicit without turning them into procurement requirements or blocking independent ready work; new installation, accounts or paid resources require their actual authority."
   },
   "claimCeiling": {

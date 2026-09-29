@@ -61,7 +61,15 @@ do not change settings to manufacture a pass. Additional host adaptation remains
 
 ## Verification and publication
 
-Run current development and package admission from the repository root:
+Run current development and package admission from a Git checkout with the
+repository's full history. Source archives alone are not a validation checkout:
+identity, evidence and historical compatibility fixtures read pinned Git objects.
+For an existing shallow clone, fetch the missing history from the configured
+trusted origin before validation. The history readers fail with an unmet-source
+prerequisite rather than substituting current helpers. The product-suite CI
+matrix uses `fetch-depth: 0`.
+
+Run these commands from the repository root:
 
 ~~~powershell
 python -B -m yiyuan_accord verify-development --root . --json
