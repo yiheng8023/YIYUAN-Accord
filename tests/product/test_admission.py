@@ -1049,7 +1049,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
-        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {'A07'})
+        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, set())
         # Historical executions do not supply replacement correction or
         # installed-environment evidence, even when a component worked.
         self.assertNotIn("v33-systemic-correction-02", report["acceptedCases"])
@@ -1063,13 +1063,13 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertIn("v33-openai-entry-applicability",
                       report["acceptanceRequirements"]["A02"]["missingScopes"]["function"])
         self.assertNotIn("claude-code", report["productCoverage"])
-        self.assertEqual(report["progress"]["coverageVerified"], 8)
-        self.assertEqual(report["progress"]["requirementsComplete"], 1)
-        # The explicit adaptation case is now covered by this synthetic observer;
-        # SDK sub-scopes still cannot discharge selected-entry lifecycle parents.
+        self.assertEqual(report["progress"]["coverageVerified"], 6)
+        self.assertEqual(report["progress"]["requirementsComplete"], 0)
+        # Ended resource/adaptation instances are historical; SDK sub-scopes
+        # cannot discharge either their missing cases or lifecycle parents.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
         self.assertIn("v33-codex-lifecycle", missing["package-lifecycle"])
-        self.assertNotIn("v33-environment-adaptation", missing["function"])
+        self.assertIn("v33-environment-adaptation", missing["function"])
         self.assertNotIn("v33-codex-sdk-lifecycle", missing["package-lifecycle"])
 
         self.assertNotIn("v33-codex-sdk-scoped-exposure", missing["function"])
@@ -1086,13 +1086,14 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 17, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 0, "coverageDefinedButUnverified": 17,
-            "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 6,
+            "coverageWithoutCases": 8, "coverageWithCaseBindingGaps": 8,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
         self.assertEqual(set(report['caseBindingGaps']),
                          {'v33-dynamic-model-routing', 'v33-autonomous-continuity',
                           'v33-codex-entry-coverage', 'v33-system-integration',
-                          'v33-codex-lifecycle', 'v33-system-impact-assessment'})
+                          'v33-codex-lifecycle', 'v33-system-impact-assessment',
+                          'v33-resource-pressure-and-exit', 'v33-environment-adaptation'})
         for claims in report['caseBindingGaps'].values():
             for gap in claims.values():
                 self.assertEqual(gap['caseIds'], [])
@@ -1117,6 +1118,53 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                                     and 'effective-user-environment' in c['scenarios'])]
         return contract
 
+    def test_ended_resource_cases_keep_their_exact_history_and_scope_floors(self):
+        historical = json.loads(subprocess.check_output([
+            'git', '-C', str(self.root), 'show',
+            '916ff322680ea5f0df6ee45b1fe326ec286a1603:product/development.json'], timeout=30))
+        record = next(r for r in self.contract['developmentObservations']
+                      if r['id'] == 'resource-environment-ended-instance-disposition-20260930')
+        policy = self.contract['acceptance']['admission']
+        self.assertEqual(record['outcome'], 'not-admitted')
+        self.assertEqual(record['originalLimits']['wholeWorkSeconds'], 600)
+        self.assertEqual(record['originalLimits']['workerMemoryMiB'], [160, 96])
+        for declaration in record['declarations']:
+            with self.subTest(case=declaration['caseId']):
+                self.assertNotIn(declaration['caseId'], {r['id'] for r in policy['cases']})
+                old = next(r for r in historical['acceptance']['admission']['cases']
+                           if r['id'] == declaration['caseId'])
+                digest = hashlib.sha256(json.dumps(old, sort_keys=True, separators=(',', ':'),
+                                                   ensure_ascii=False).encode()).hexdigest()
+                self.assertEqual(digest, declaration['caseObjectSha256'])
+                scope = next(r for r in policy['scopes'] if r['id'] == old['scope'])
+                prior = next(r for r in historical['acceptance']['admission']['scopes'] if r['id'] == old['scope'])
+                self.assertEqual({k:v for k,v in scope.items() if k != 'conditions'},
+                                 {k:v for k,v in prior.items() if k != 'conditions'})
+                self.assertEqual(scope['conditions']['limits'], {
+                    'wholeWorkSeconds': 600, 'recoverySeconds': 20,
+                    'workerInvocationSeconds': 45, 'workerRecoverySeconds': 10,
+                    'usageCaps': {'totalTokens': 2500000, 'uncachedInputTokens': 200000, 'outputTokens': 14000}})
+
+    def test_resource_scope_allows_fresh_prebinding_without_replaying_ended_case(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        contract = copy.deepcopy(self.contract)
+        policy = contract['acceptance']['admission']
+        scope = next(r for r in policy['scopes'] if r['id'] == 'v33-environment-adaptation')
+        case = {k: copy.deepcopy(scope[k]) for k in
+                ('host', 'entry', 'duties', 'qualityAxes', 'scenarios', 'claims', 'conditions')}
+        case.update(id='new-resource-route-fixture', scope=scope['id'], oracle='Synthetic declaration only.',
+                    oracleFiles=['docs/operations/ACCEPTANCE-v3.3.md', 'docs/operations/PLAN-v3.3.md'], maxAgeSeconds=86400,
+                    expected=copy.deepcopy(policy['cases'][0]['expected']))
+        case['conditions'].update(codexVersion='0.158.0', model='gpt-6-sol', reasoning='high',
+                                  input='Distinct prospective input, no execution.', ordinaryUserInputs=2)
+        policy['cases'].append(case)
+        self.assertEqual(admission_contract_errors(contract), [])
+        report = self.assess(contract)
+        self.assertEqual(report['acceptedCases'], [])
+        self.assertFalse(report['functionalCompletion'])
+        case['conditions']['limits']['wholeWorkSeconds'] += 1
+        self.assertTrue(admission_contract_errors(contract))
+
     def test_partial_allocation_case_keeps_uncovered_duties_and_scenarios_open(self):
         contract = copy.deepcopy(self.contract)
         policy = contract['acceptance']['admission']
@@ -1135,21 +1183,22 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertTrue(gap['missingDimensions']['duties'])
         self.assertIn('capability-loss', gap['missingDimensions']['scenarios'])
         self.assertIn('default-host-without-extra-extensions', gap['missingDimensions']['scenarios'])
-        self.assertEqual(report['progress']['coverageWithoutCases'], 5)
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 6)
+        self.assertEqual(report['progress']['coverageWithoutCases'], 7)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 8)
         self.assertEqual(report['acceptedCases'], [])
         self.assertFalse(report['functionalCompletion'])
 
     def test_diagnostic_retains_unplanned_scope_and_scenario_gaps(self):
         report = self.assess(self.without_correction_and_user_environment_cases())
         self.assertEqual(report['errors'], [])
-        self.assertEqual(report['progress']['coverageWithoutCases'], 7)
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 8)
+        self.assertEqual(report['progress']['coverageWithoutCases'], 9)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 10)
         gaps = report['caseBindingGaps']
         self.assertEqual(set(gaps), {'v33-systemic-correction', 'v33-codex-cli-ordinary-delivery',
                                     'v33-dynamic-model-routing', 'v33-autonomous-continuity',
                                     'v33-codex-entry-coverage', 'v33-system-integration',
-                                    'v33-codex-lifecycle', 'v33-system-impact-assessment'})
+                                    'v33-codex-lifecycle', 'v33-system-impact-assessment',
+                                    'v33-resource-pressure-and-exit', 'v33-environment-adaptation'})
         correction = gaps['v33-systemic-correction']['function']
         self.assertEqual(correction['caseIds'], [])
         self.assertTrue(correction['missingDimensions']['duties'])

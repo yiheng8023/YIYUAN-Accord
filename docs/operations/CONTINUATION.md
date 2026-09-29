@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-09-29 · N33-20260909 / r34。以实时Git、当前原生输入及受影响资源为准。
+更新：2026-09-30 · N33-20260909 / r34。以实时Git、当前原生输入及受影响资源为准。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识和路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)与[机器投影](../../product/development.json)分别展开结果、判据和验证投影。本页保留当前责任；完整旧记录见末尾不可变入口。
 
 ## 本次交接
@@ -23,7 +23,7 @@
 
 ## 最近核实的状态
 
-源码分发包与本机现装均为 `3.3.0-dev.1+codex.20260929100847`，固定包来源e147e7fec1bc596d4f3b13e7ba92ce427056cd75，24文件/SHA `90e5a84e90100f80de504b11186dc14b4f423a75ff084ee2bf88ee1d796d440b`。本轮模式处置基点为97c2c493、当时main/origin干净0/0；本次不改包或再次安装，后续提交以Git为准。
+源码分发包与本机现装均为 `3.3.0-dev.1+codex.20260929100847`，固定包来源e147e7fec1bc596d4f3b13e7ba92ce427056cd75，24文件/SHA `90e5a84e90100f80de504b11186dc14b4f423a75ff084ee2bf88ee1d796d440b`。本轮结束实例处置基点为e9202496、当时main/origin干净0/0；本次不改包或再次安装，后续提交以Git为准。
 
 **更新04已有安装及当前Root采用证据，原发现关闭失败保留。** 用户从客户端外运行attempt `20260929T131455Z-c2faa25b`：update exit0、discover exit1。新旧各24文件匹配e147/e85原件；执行时配置仅Accord ref变化，Hook信任不变，其它插件记录保持。原RPC返回新路径6个可信启用Hook、5个启用Skill。
 
@@ -33,11 +33,11 @@ discover失败在自然退出判据：root已exit0，原宽限期后仍有4个�
 
 **最近必要代码和原生分支已核。** e147修复SDK交接queued后源请求无人处理，以及失败请求身份被原proposal覆盖；原时限、权限、quiescence和目标接管条件保持。190项本地回归通过。e21新增真实CLI0.158.0固定localhost回归，观察queued→同source/turn context回复→目标创建，完成两次交接；12项离线检查和独立回读通过。旧10响应材料仍按冻结来源核验，新11场景不能回退旧判据；旧原件未改、没有旧任务或冷恢复重跑。此为控制协议证据，0真实模型调用，不代验自主语义择时。
 
-e147的[CI36554746611](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36554746611)及e21的[CI36559848540](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36559848540)均按完整SHA/11job核成功；更早已闭CI保持原件，不再轮询。7ec/dd8a/97c只是接续记录，按既有工序skip ci，不称新增矩阵。本轮模式准入修复须正常运行CI，按最终提交核验终态；不借旧CI代验，也不因后续用户聊天取消在途检查。
+e920的[CI36589586568](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36589586568)已于9月30日按完整SHA核对11/11成功；模式准入修复的托管检查闭合。e147、e21及更早已闭CI保持原件，不再轮询。7ec/dd8a/97c只是接续记录，按既有工序skip ci，不称新增矩阵。本轮结束实例与父范围绑定修订正常运行CI，按最终提交核验终态；不借旧CI代验，也不因后续用户聊天取消在途检查。
 
 ### 到正式发布的进度评估（2026-09-28）
 
-此口径继续适用，状态更新至9月29日：当前处于普通功能组合及必要验收收敛，核心机制和多平台局部证据可复用，完整A01–A08尚未收官。没有稳定的剩余工作量权重，不编总百分比；完整A项未完成不表示工程实现为零。17必要scope均已定义、12活动case；6项历史准入仅属原版本/条件，不能拼作当前整版通过。`functionalCompletion=false`、`candidateEligible=false`保持。
+此口径继续适用，状态更新至9月30日：当前处于普通功能组合及必要验收收敛，核心机制和多平台局部证据可复用，完整A01–A08尚未收官。没有稳定的剩余工作量权重，不编总百分比；完整A项未完成不表示工程实现为零。17必要scope均已定义、10活动case；两条已结束失败实例转历史不代表功能减少或通过增加。6项历史准入仅属原版本/条件，不能拼作当前整版通过。`functionalCompletion=false`、`candidateEligible=false`保持。
 
 ## 本批完成与实际未完项
 
@@ -49,7 +49,9 @@ e147的[CI36554746611](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/
 | W06/W07 环境/资源/生命周期 | 精确安装、恢复备份、资源控制和新旧暴露已有实际观察 | 环境变化/压力后继续、受影响消费者及完整资源后态；04的自然发现退出失败不得抹去 |
 | W08 整合/影响/发布 | 验收映射、缺口诊断和发布工作稿已有 | 同一episode的完整系统组合、充分独立影响判断、精确候选与发布后态；A08依赖A01–A07，不能以平均值或散案抵销短板 |
 
-六个无活动case范围仍是dynamic-model-routing、autonomous-continuity、codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment；缺案例/职责/情境继续显示缺口，不为填数制造业务。
+八个无活动case范围为dynamic-model-routing、autonomous-continuity、codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation；缺案例/职责/情境继续显示缺口，不为填数制造业务。
+
+9月30日纠正结束实例滞留：9月21日两条资源/环境案例在916ff322已完成执行且判为not-admitted，数据交付和自然退出的局部成果保持，但原报告遗漏清理拒绝及恢复；9月23日另案仍需parent修订，不能追认原案。两旧case已按既定规则转历史，旧定义/原件/限额完整保留；父范围改为逐案前绑实际版本、模型、输入和轮次，保留原600+20秒、worker45+10秒及用量上限、SDK/Windows/权限、无救场与模式边界。否则旧失败必须转绿、旧执行条件又限制新任务，会形成无效重复；准入器和17项必要职责不改。
 
 以下负面证据仍影响路线，详情查原件，不重复展开或重跑：
 
