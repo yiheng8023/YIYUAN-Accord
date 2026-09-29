@@ -23,6 +23,10 @@
 
 ## 最近核实的状态
 
+2026-09-29上一批e21ef717的[CI36559848540](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36559848540)已按完整SHA及11job核全部成功，原件accord-native-source-pump-20260929-01/ci-final.json保留，不再轮询。SDK queued-source分支已闭合，不继续重复该固定协议；下一必要普通交付为精简接续稿，原文91803字节、旧状态较多。业务TASK与六份e21 Git原件映射已在accord-continuation-brief-20260929-01准备，输出候选稿及责任保留映射；尚未派发模型或新增准入case，正式当前状态/角色/预算在实际执行前绑定，原文和历史不删除。
+
+为后续同候选实际采用，04本机更新方案已准备并独立只读复核：现装29023808/e85→29100847/固定e147，目标CI36554746611已11/11。两侧24文件逐项核Git；只变manifest版本、codex-session运行时及其接口说明，Hook声明相同、不增改信任。34项离线准备/启动/权限/消费者检查通过；原生目录确认5Skill/6可信启用Hook、2查询域自然退出、配置未变，13执行文件冻结。旧updater PID已不存在，初次准备在方案发布前停止；现按实时路径/参数/PID/创建时刻/Hash绑定0.159.0 binary updater，执行CLI仍0.158.0，不推成主代理宿主升级。只绑定updater、没有可关闭的daemon；未知消费者阻止更新。方案在accord-local-adoption-20260929-04/PROPOSAL.md，授权仍not-granted、安装未派发，旧一次许可不继承。实际更新须用户关闭客户端后从外部启动；安装后还须核配置、原件、加载与资源，不把准备算采用。
+
 2026-09-29为上述SDK source收尾修复补齐真实CLI协议回归：沿已有双交接夹具，在首个queued回复后加入同source/turn的context查询，保持165秒总期限及原转移/资源条件。现有本机CLI0.158.0实际完成3个私有持久线程、6个turn、2次handoff/adopt、11次固定localhost响应、5次工具调用；原始发送记录确认为queued回复→context回复→目标创建，独立核对call ID、provider追加历史及输出一致。0真实模型调用，Job自然exit0/no-force/活动0、reader及HTTP线程停止，共享配置前后Hash相同。133份原件/历史/SQLite/执行源保留，仅两个空temp/state目录回收；首次收尾误把含目录的清单要求完全相等，删除后仅state/temp缺项且其余均未改，已只读对账纠正，未追加删除或native执行。原件accord-native-source-pump-20260929-01。
 
 独立复核发现并修复新夹具对旧10响应材料的误拒：当前检查在结果前选择10/11序列，并匹配Hash已核的冻结Python常量；11场景失败不回退10。用本次原冻结检查器证实旧原件被误拒，修复后旧10及新11分别只读通过，明确sourceContextAfterQueued=false/true；旧全输入保持、旧任务未重跑，也未新增冷恢复实例。12项相关离线检查与verify通过，原始回执及兼容性独立复核无剩余阻断。包仍29100847/90e5a84e，现装仍29023808；本次只改既有测试/检查器和接续，未安装、授信或改第三方Skill。此为修复分支的原生协议证据，不代验模型自主择时、Cloud、GUI或完整A05。e147e7fe的[CI36554746611](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36554746611)已按完整SHA及11job核全部成功，ci-final.json保留在accord-source-handoff-pump-20260929-01；本批测试变更按新SHA另核。
