@@ -457,6 +457,34 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
         self.assertEqual(result.returncode, 0, result.stderr)
         return json.loads(result.stdout)['hookSpecificOutput']['additionalContext']
 
+    def test_fork_entry_guidance_preserves_paused_state_and_marks_inheritance(self):
+        self.bind()
+        self.pause()
+        self.event('Interrupt')
+        receipt = next(self.state.glob('*.input.json'))
+        marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        marker.write_text(json.dumps({'schema':1, 'generation':'unreconciled-source'}), encoding='utf-8')
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        context = self.startup_guidance('fork')
+        self.assertIn('Coordinate the current task', context)
+        self.assertIn('"source":"fork"', context)
+        self.assertIn('inherited history is not restored task state', context)
+        self.assertIn('do not adopt or retire parent task evidence', context)
+        self.assertIn('confirm-takeover-and-single-writer-before-source-allocation-release', context)
+        self.assertIn('receipt-is-not-takeover', context)
+        self.assertEqual({p.name:p.read_bytes() for p in self.state.iterdir()}, before)
+        current = self.status()
+        self.assertEqual(current['mode'], 'paused')
+        self.assertTrue(current['needsNativeReplay'])
+
+    def test_packaged_fork_start_matches_guidance_only(self):
+        hooks = json.loads((RUNTIME.parents[1]/'plugins/yiyuan-accord-codex/hooks/hooks.json').read_text('utf-8'))
+        groups = hooks['hooks']['SessionStart']
+        self.assertRegex('fork', groups[0]['matcher'])
+        self.assertIn('accord-hook.cjs', groups[0]['hooks'][0]['command'])
+        for group in groups[1:]:
+            self.assertNotRegex('fork', group['matcher'])
+
     def test_startup_guidance_survives_state_path_that_is_a_file(self):
         blocked = self.root / 'blocked-state'
         blocked.write_bytes(b'protected original')

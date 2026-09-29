@@ -23,6 +23,10 @@
 
 ## 最近核实的状态
 
+2026-09-29补齐原生根分支入口：固定Codex0.158.0的[事件源码](https://github.com/openai/codex/blob/rust-v0.158.0/codex-rs/hooks/src/events/session_start.rs#L24)实际发出SessionStart/fork，原包匹配器和入口校验均漏掉该值，两个红例已确认。现在指导Hook接收fork，明确继承历史不代表状态恢复、新授权或写者转移；状态Hook仍只接resume/compact，不新增收据、不清水印、不采纳或退休父状态。19项入口/包/历史兼容检查、verify/host-check及独立复核通过；候选29023808、24文件/a58a06e4，现装仍28143558。本次仅补真实接线，不把源码/模拟输入检查称为宿主实际派发、子代理覆盖或A05验收。原件accord-session-start-boundary-20260929-01；四份官方源文件逐项匹配固定Git树blob。后续实际采用须核变化后声明的信任和调用者，不复用旧安装授权，也不根据此发现改判旧IDE失败原因。
+
+上批超长输入修复的[CI36508329268](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36508329268)已按完整bd384dbcb86e9830ec0438681c8c5f2ac4d304cb及全部11job核completed/success，托管责任闭合，原件accord-large-input-recovery-20260929-01/ci-final.json。此结果不代替新的fork候选检查；原功能和安装边界保持。
+
 2026-09-29超长原文恢复断点已在源码修复：公开具名UserPromptSubmit入口原先把普通输入和token重放都限制在128KiB，导致较长原文无法进入恢复；两个实际CLI红例已复现。现在该具名入口接受至多8MiB JSON，其它命令仍128KiB，收据总容量仍8MiB且计入既有历史/元数据；分块累计UTF-8字节，不截断文本。暂停、旧token拒绝、失败水印和锁处理保持。197项状态/MCP回归及2项新增原生UTF-8/精确上下限检查通过，独立审查无所查阻断，verify/host-check通过。新源码候选29012920、24文件/8be424a1；现装仍28143558，不重新使用已消耗安装权限。原件accord-large-input-recovery-20260929-01保留红/绿、边界、组合回归与审查来源；这是实际缺口修复，不增加案例或A05/整版通过，候选托管检查及受影响实际采用仍须各自核验。
 
 2026-09-29新的02本机更新已完成并核验：成功尝试20260928T231947Z-1ca90f3d于本地07:20结束，固定c57/143558的现装24文件及独立旧包24文件均核Git原始字节；登记启用，原RPC同ID证新路径5Skill/6trustedHook，五条CLI命令及发现域均exit0/no-force/active0，reader停止。当前Root的新入口Hook与身份绑定MCP调用正常，原生输入存在、无replay/resume标志；相对路径MCP worker的cwd未独立读取，不扩为全部消费者采用或正式验收。07:38截图对应后一次重复启动在旧登记检查中被阻止，未再次安装；原失败保留。本次单次授权已消耗，原执行源归档，启动入口已改为完成提示，实际再运行确认不新增attempt、不改配置，无需用户再次更新或重启。94份受保护文件保持、仅空自有workspace清除；独立旧包、配置、候选及全部记录保留。执行后配置派生副本摘要精确匹配原poststate，更新时仅Accord ref改变；当前另有node_repl环境管道字段差异，保留现值、未推断改写者。原件：accord-local-adoption-20260928-02/{ACTUAL-ADOPTION.md,root-adoption-readback.json,current-native-state-readback.json,completion.json}。本机采用闭合后回到原3.3普通功能组合主线，完整验收与发布资格仍未成立。

@@ -1067,6 +1067,17 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         self.assertTrue(any("caller-selected observer" in error for error in report["errors"]))
         self.assertFalse(report["repositoryCandidateReady"])
 
+    def test_current_startup_guidance_requires_exact_fork_matcher(self):
+        locator = "plugins/yiyuan-accord-codex/hooks/hooks.json"
+        original = json.loads((self.root / locator).read_text(encoding="utf-8"))
+        for matcher in ("startup|resume|clear|compact", ".*"):
+            with self.subTest(matcher=matcher):
+                hooks = copy.deepcopy(original)
+                hooks["hooks"]["SessionStart"][0]["matcher"] = matcher
+                with self.changed(locator, json.dumps(hooks).encode()):
+                    self.assertTrue(any("activation mechanism contract" in error
+                                        for error in self.report()["errors"]))
+
     def test_current_context_reentry_requires_the_compact_matcher(self):
         locator = "plugins/yiyuan-accord-codex/hooks/hooks.json"
         hooks = json.loads((self.root / locator).read_text(encoding="utf-8"))

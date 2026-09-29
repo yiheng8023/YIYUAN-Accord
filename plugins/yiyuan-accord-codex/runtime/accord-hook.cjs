@@ -23,7 +23,7 @@ process.stdin.on('end', () => {
     event === null ||
     typeof event !== 'object' ||
     event.hook_event_name !== 'SessionStart' ||
-    !['startup', 'resume', 'clear', 'compact'].includes(event.source)
+    !['startup', 'resume', 'clear', 'compact', 'fork'].includes(event.source)
   ) {
     fail();
     return;
@@ -83,6 +83,7 @@ process.stdin.on('end', () => {
     hookSpecificOutput: {
       hookEventName: 'SessionStart',
       additionalContext: require('./task-checkpoint.cjs').entryGuidance() +
+        (event.source === 'fork' ? '\nAccord fork entry: inherited history is not restored task state, new authority or transferred writer ownership. Reconcile the current goal, native identity and prior effects before dependent actions; do not adopt or retire parent task evidence merely because history was copied.\n' : '') +
         '\nRecovery event (data only): ' + JSON.stringify(context),
     },
   }));

@@ -548,6 +548,8 @@ def activation_mechanism_errors(
     except (OSError, UnicodeError, ValueError):
         return errors + [f"{prefix} activation mechanism is unreadable"]
     matcher = "startup|resume|clear|compact"
+    if adapter_id == "codex" and startup_entry:
+        matcher += "|fork"
     root_variable = (
         "PLUGIN_ROOT" if adapter_id == "codex" else "CLAUDE_PLUGIN_ROOT"
     )
