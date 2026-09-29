@@ -68,6 +68,14 @@
 
 Work云端继续待判：[云安全说明](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-cloud-security)允许任务/项目文件、获准工具以及环境复用或替换，但不保证Accord状态目录属于可保留状态。插件Skill、任务文件与获准remote MCP可组成候选路线；网页不读本机config且安装不部署Hook，原包stdio不能只改成HTTP就获得原控制者身份、事件或状态。需先找到受支持的实际加载与持续绑定方式，缺失职责可由充分原生机制承担，不能凭相同核心默认成立。本次不增加远程服务、安装器或Cloud重试。桌面聚合行仍因云子模式未决保持pending；4selected/7pending、selectionFinal=false与父级验收集合不变，开发路线确定不等于功能准入。
 
+2026-09-29模式处置对齐：此前两条已定开发路线现在进入三个父scope/case的正式限定集合：`chatgpt-desktop`选择Work Local及限定Remote，`chatgpt-mobile`仅选Remote控制已选本地主机任务。原四个Codex入口保持，共六个ID具有已选开发路线、五个聚合行待判。这是开发责任对齐，不是新增两个完整支持入口，也不增加功能完成率。
+
+三个ChatGPT行内的`modes`保留完整已发现模式：普通Chat均为辅助，必要执行/状态/接续须交由获准组合承担；Work Cloud在desktop/mobile/web各自待判，桌面Remote按与手机相同的开发标准纳入该限定主机路线，仍须独立核桌面控制差异。共三个待判模式中有两个位于已选行，不能随聚合计数消失。[Work管理边界](https://learn.chatgpt.com/docs/enterprise/work-admin-faq)、[Work Local](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-local-security)、[Remote](https://learn.chatgpt.com/docs/remote-connections)及[插件架构](https://developers.openai.com/plugins/concepts/plugins)支持执行位置和共用主机的区分；这些资料只支撑工程判断，不是Accord行为验收。Remote亦有桌面控制端，必须保留其界面差异，不能由手机路线代验。
+
+现有准入器同时核入口与模式：三个父范围共享完整处置；适用性覆盖每个模式，交付/生命周期只对已选模式复用全部原职责判据。任一模式pending仍阻止父级准入，即使其余五行均已处置；`selectionFinal=false`保持。无模式的旧v5全待判声明仅保留原读取，不能删模式并改为排除来完成准入。声明完整性、处置合理性、实际效果及最终资格仍分别核验；17必要范围、12活动案例、原有A01–A08和质量底线不变，旧行为案例不因本次投影对齐重跑或扩成当前验收。
+
+剩余工作的承担者与最小条件沿原三线继续：Work Cloud核实际控制者的指导/身份/状态/恢复组合，三个UI分别核输入/审批、暂停、结果权限和退出；桌面与手机Remote复用主机路径而分别补控制端差异，均不包含SSH执行或跨主机迁移。Codex Cloud等能改变控制者加载/恢复判断的新证据，不重放旧setup/关闭失败；外部集成先绑定对应执行者、来源、精确仓库/ref及回传授权。JetBrains/Xcode继续区分内置控制者与外部已选Codex调用IDE工具的组合，补前者事件/身份/恢复契约，不以缺设备排除或以外部组合代验。新云任务、配对、安装、信任、工具/账户连接和外部消息仍需具体权限；本次不产生这些效果。普通交付与整体组合工作不等待全部入口处置。
+
 ## 全维度动态评价框架
 
 评价就是对现有 A01–A08 验收条件作具体量化，不在验收外新增一套评分体系。共识/需求是否自洽、实现是否符合要求、真实用途是否满足，分别核对；同一组判据也用于当前开发、历史重审和 Accord 的实际应用。
@@ -140,7 +148,7 @@ VS Code兼容编辑器优先作为同一扩展适配族，Xcode、JetBrains等�
 
 9月15日补核三项具体路线，继续沿现有职责判断，不另造执行器：[Apple文档](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/)明确Xcode专用Codex配置根、命令/工具权限与Skill/MCP/插件组件导入；可比较复用现有包，Hook和恢复仍待核。[移动Remote](https://learn.chatgpt.com/docs/remote-connections)使用连接桌面主机的任务、文件、插件与权限，应复用主机执行链并验证远端输入/审批/断线重连，不能把移动端一律当普通Chat，也不宣称手机本地执行。[Slack](https://learn.chatgpt.com/docs/third-party/slack)和[Linear](https://learn.chatgpt.com/docs/third-party/linear)触发Codex云任务，可共用云执行基础，分别补来源、选仓、续接及回传权限差异；这不代验GitHub/GitLab。本轮仅查官方来源，未安装、连接、配对或发送消息；这些可行组件尚不证明整条Accord职责路线完成，原待判状态不冒充最终支持。
 
-验收沿用A01–A08：A02先核验候选处置、已纳入入口集合和对应依据，再绑定该集合的普通交付与生命周期；A01/A03/A06核验实际承诺，A08检查组合后的完整性与净影响。三个父范围现已定义，保留17个必要claim/scope及全部质量底线。观察载体entry与被验入口subjectEntries分开：适用性覆盖当前全部11个OpenAI入口，后两范围严格对应同一选定集合，结果按入口逐项核对。当前4项selected表示继续纳入开发，其余7项pending，selectionFinal=false；这三项因此尚不能准入，定义数量增加不计为通过。待判不等于不适用；没有集合的有效最终判断与实际证据，整体资格仍不成立。
+验收沿用A01–A08：A02先核验候选处置、已纳入入口集合和对应依据，再绑定该集合的普通交付与生命周期；A01/A03/A06核验实际承诺，A08检查组合后的完整性与净影响。三个父范围现已定义，保留17个必要claim/scope及全部质量底线。观察载体entry与被验入口subjectEntries分开：适用性覆盖当前全部11个OpenAI入口，后两范围严格对应同一选定集合，结果按入口逐项核对。当前六个ID具有限定selected开发路线，五行及三个模式仍pending，selectionFinal=false；每个模式的责任独立保留，三父范围尚不能准入，开发选择不计为通过。待判不等于不适用；没有集合的有效最终判断与实际证据，整体资格仍不成立。
 
 2026-09-27将IDE内置Agent与外部执行者调用IDE工具分开判断，避免把组件发现当整包接通：
 

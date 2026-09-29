@@ -5125,16 +5125,58 @@
             "selectionFinal": false,
             "entryDispositions": {
               "chatgpt-desktop": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
+                "status": "selected",
+                "basis": "限定纳入开发：Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-local": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同机Hook/Skill、stdio状态MCP和原生线程分担职责；下一真实交付核实际Hook cwd、当前采用、暂停/续作与退出。旧projectless与repo查询错位不算正确联读。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "官方已说明受支持桌面与手机同样可控制连接主机，采用同一限定本地主机既有任务路线；分别核实际账户/配对、版本可用性、输入/审批、暂停/撤权、断连后未知效果及退出。不包含SSH执行或跨主机迁移，不把未实测等同于路线不可开发。"
+                  }
+                }
               },
               "chatgpt-mobile": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
+                "status": "selected",
+                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同一主机任务的输入、审批和结果访问；仍需核实际账户/配对、获准主机与包、暂停/撤权、断连后的同一任务及未知效果。不可达不等于执行停止或重派发许可。"
+                  }
+                }
               },
               "chatgpt-web": {
                 "status": "pending",
-                "basis": "待判（托管Work）：可用插件Skill、任务/项目文件及获准remote MCP为候选组合；网页不读取本机Codex配置，安装不部署Hook脚本。原包stdio与Hook回执依赖实际执行环境，远程工具不能自动获得同一控制者身份/事件或持久状态。先解决该组合绑定与恢复责任，再验实际效果，不新增服务绕过缺口。"
+                "basis": "待判：普通Chat辅助；托管Work候选由插件Skill、任务文件和获准remote MCP组成，但实际控制者的指导/身份/事件、状态和恢复绑定仍缺充分支持路径。与桌面/手机Work Cloud共用执行基础时分别核各UI差异；web不替其它前端验收。本机配置或安装不能代验托管采用，不新增服务绕过缺口。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  }
+                }
               },
               "cx-cli": {
                 "status": "selected",
@@ -5169,17 +5211,19 @@
                 "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
-            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "sourceBasis": "Current PLAN-v3.3 and dated entrySurfaces sources, including the 2026-09-29 mode reconciliation of official Work Local, Work admin, Remote and plugin architecture documentation. Mode dispositions are bounded engineering judgments, not official Accord support claims. Preserve original observations and failures; compare feasible native, packaged and approved tool compositions.",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
           },
-          "rule": "Bind every current OpenAI entry and relevant mode. Judge user value, feasible responsibility composition, authority/data/state boundaries, recovery and burden. Unknown is not inapplicable; missing local Hooks or devices alone cannot exclude an entry. A selected development set is not a finalized support claim. Pending decisions or selectionFinal=false prevent parent acceptance."
+          "rule": "Bind every current OpenAI entry and relevant mode. Judge user value, feasible responsibility composition, authority/data/state boundaries, recovery and burden. Unknown is not inapplicable; missing local Hooks or devices alone cannot exclude an entry. A selected development set is not a finalized support claim. Pending decisions or selectionFinal=false prevent parent acceptance. Final selection must resolve pending modes as well as entry rows; a selected row covers only its selected modes. Auxiliary Chat must retain its execution/state handoff duties. Every relevant UI difference and shared responsibility transfer needs independent source review; clearing the other entry rows alone is insufficient."
         },
         {
           "id": "v33-admitted-entry-delivery",
           "host": "codex",
           "entry": "cx-desktop",
           "subjectEntries": [
+            "chatgpt-desktop",
+            "chatgpt-mobile",
             "cx-cli",
             "cx-desktop",
             "cx-sdk",
@@ -5215,16 +5259,58 @@
             "selectionFinal": false,
             "entryDispositions": {
               "chatgpt-desktop": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
+                "status": "selected",
+                "basis": "限定纳入开发：Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-local": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同机Hook/Skill、stdio状态MCP和原生线程分担职责；下一真实交付核实际Hook cwd、当前采用、暂停/续作与退出。旧projectless与repo查询错位不算正确联读。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "官方已说明受支持桌面与手机同样可控制连接主机，采用同一限定本地主机既有任务路线；分别核实际账户/配对、版本可用性、输入/审批、暂停/撤权、断连后未知效果及退出。不包含SSH执行或跨主机迁移，不把未实测等同于路线不可开发。"
+                  }
+                }
               },
               "chatgpt-mobile": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
+                "status": "selected",
+                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同一主机任务的输入、审批和结果访问；仍需核实际账户/配对、获准主机与包、暂停/撤权、断连后的同一任务及未知效果。不可达不等于执行停止或重派发许可。"
+                  }
+                }
               },
               "chatgpt-web": {
                 "status": "pending",
-                "basis": "待判（托管Work）：可用插件Skill、任务/项目文件及获准remote MCP为候选组合；网页不读取本机Codex配置，安装不部署Hook脚本。原包stdio与Hook回执依赖实际执行环境，远程工具不能自动获得同一控制者身份/事件或持久状态。先解决该组合绑定与恢复责任，再验实际效果，不新增服务绕过缺口。"
+                "basis": "待判：普通Chat辅助；托管Work候选由插件Skill、任务文件和获准remote MCP组成，但实际控制者的指导/身份/事件、状态和恢复绑定仍缺充分支持路径。与桌面/手机Work Cloud共用执行基础时分别核各UI差异；web不替其它前端验收。本机配置或安装不能代验托管采用，不新增服务绕过缺口。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  }
+                }
               },
               "cx-cli": {
                 "status": "selected",
@@ -5259,17 +5345,19 @@
                 "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
-            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "sourceBasis": "Current PLAN-v3.3 and dated entrySurfaces sources, including the 2026-09-29 mode reconciliation of official Work Local, Work admin, Remote and plugin architecture documentation. Mode dispositions are bounded engineering judgments, not official Accord support claims. Preserve original observations and failures; compare feasible native, packaged and approved tool compositions.",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
           },
-          "rule": "Review delivered effects for exactly the finalized selected set. Reuse CLI business semantics and SDK protocol facts where applicable; each GUI/IDE still needs current loading, instruction/event participation, permissions, steering and result-path evidence. The observing carrier cannot stand in for target entries. Pending decisions or selectionFinal=false prevent parent acceptance."
+          "rule": "Review delivered effects for exactly the finalized selected set. Reuse CLI business semantics and SDK protocol facts where applicable; each GUI/IDE still needs current loading, instruction/event participation, permissions, steering and result-path evidence. The observing carrier cannot stand in for target entries. Pending decisions or selectionFinal=false prevent parent acceptance. Final selection must resolve pending modes as well as entry rows; a selected row covers only its selected modes. Auxiliary Chat must retain its execution/state handoff duties. Every relevant UI difference and shared responsibility transfer needs independent source review; clearing the other entry rows alone is insufficient."
         },
         {
           "id": "v33-admitted-entry-lifecycle",
           "host": "codex",
           "entry": "cx-desktop",
           "subjectEntries": [
+            "chatgpt-desktop",
+            "chatgpt-mobile",
             "cx-cli",
             "cx-desktop",
             "cx-sdk",
@@ -5304,16 +5392,58 @@
             "selectionFinal": false,
             "entryDispositions": {
               "chatgpt-desktop": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
+                "status": "selected",
+                "basis": "限定纳入开发：Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-local": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同机Hook/Skill、stdio状态MCP和原生线程分担职责；下一真实交付核实际Hook cwd、当前采用、暂停/续作与退出。旧projectless与repo查询错位不算正确联读。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "官方已说明受支持桌面与手机同样可控制连接主机，采用同一限定本地主机既有任务路线；分别核实际账户/配对、版本可用性、输入/审批、暂停/撤权、断连后未知效果及退出。不包含SSH执行或跨主机迁移，不把未实测等同于路线不可开发。"
+                  }
+                }
               },
               "chatgpt-mobile": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
+                "status": "selected",
+                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同一主机任务的输入、审批和结果访问；仍需核实际账户/配对、获准主机与包、暂停/撤权、断连后的同一任务及未知效果。不可达不等于执行停止或重派发许可。"
+                  }
+                }
               },
               "chatgpt-web": {
                 "status": "pending",
-                "basis": "待判（托管Work）：可用插件Skill、任务/项目文件及获准remote MCP为候选组合；网页不读取本机Codex配置，安装不部署Hook脚本。原包stdio与Hook回执依赖实际执行环境，远程工具不能自动获得同一控制者身份/事件或持久状态。先解决该组合绑定与恢复责任，再验实际效果，不新增服务绕过缺口。"
+                "basis": "待判：普通Chat辅助；托管Work候选由插件Skill、任务文件和获准remote MCP组成，但实际控制者的指导/身份/事件、状态和恢复绑定仍缺充分支持路径。与桌面/手机Work Cloud共用执行基础时分别核各UI差异；web不替其它前端验收。本机配置或安装不能代验托管采用，不新增服务绕过缺口。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  }
+                }
               },
               "cx-cli": {
                 "status": "selected",
@@ -5348,11 +5478,11 @@
                 "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
-            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "sourceBasis": "Current PLAN-v3.3 and dated entrySurfaces sources, including the 2026-09-29 mode reconciliation of official Work Local, Work admin, Remote and plugin architecture documentation. Mode dispositions are bounded engineering judgments, not official Accord support claims. Preserve original observations and failures; compare feasible native, packaged and approved tool compositions.",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
           },
-          "rule": "Review loading/install, update and rejected replacement, disable/uninstall, interruption/recovery and owned exit for the same finalized selected set. Reuse backend lifecycle facts with exact entry-difference binding. Cache bytes, enablement, actual task participation and retained context are separate; SDK child cases alone cannot close this parent. Pending decisions or selectionFinal=false prevent parent acceptance."
+          "rule": "Review loading/install, update and rejected replacement, disable/uninstall, interruption/recovery and owned exit for the same finalized selected set. Reuse backend lifecycle facts with exact entry-difference binding. Cache bytes, enablement, actual task participation and retained context are separate; SDK child cases alone cannot close this parent. Pending decisions or selectionFinal=false prevent parent acceptance. Final selection must resolve pending modes as well as entry rows; a selected row covers only its selected modes. Auxiliary Chat must retain its execution/state handoff duties. Every relevant UI difference and shared responsibility transfer needs independent source review; clearing the other entry rows alone is insufficient."
         },
         {
           "host": "codex",
@@ -6357,16 +6487,58 @@
             "selectionFinal": false,
             "entryDispositions": {
               "chatgpt-desktop": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
+                "status": "selected",
+                "basis": "限定纳入开发：Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-local": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同机Hook/Skill、stdio状态MCP和原生线程分担职责；下一真实交付核实际Hook cwd、当前采用、暂停/续作与退出。旧projectless与repo查询错位不算正确联读。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "官方已说明受支持桌面与手机同样可控制连接主机，采用同一限定本地主机既有任务路线；分别核实际账户/配对、版本可用性、输入/审批、暂停/撤权、断连后未知效果及退出。不包含SSH执行或跨主机迁移，不把未实测等同于路线不可开发。"
+                  }
+                }
               },
               "chatgpt-mobile": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
+                "status": "selected",
+                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同一主机任务的输入、审批和结果访问；仍需核实际账户/配对、获准主机与包、暂停/撤权、断连后的同一任务及未知效果。不可达不等于执行停止或重派发许可。"
+                  }
+                }
               },
               "chatgpt-web": {
                 "status": "pending",
-                "basis": "待判（托管Work）：可用插件Skill、任务/项目文件及获准remote MCP为候选组合；网页不读取本机Codex配置，安装不部署Hook脚本。原包stdio与Hook回执依赖实际执行环境，远程工具不能自动获得同一控制者身份/事件或持久状态。先解决该组合绑定与恢复责任，再验实际效果，不新增服务绕过缺口。"
+                "basis": "待判：普通Chat辅助；托管Work候选由插件Skill、任务文件和获准remote MCP组成，但实际控制者的指导/身份/事件、状态和恢复绑定仍缺充分支持路径。与桌面/手机Work Cloud共用执行基础时分别核各UI差异；web不替其它前端验收。本机配置或安装不能代验托管采用，不新增服务绕过缺口。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  }
+                }
               },
               "cx-cli": {
                 "status": "selected",
@@ -6401,12 +6573,12 @@
                 "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
-            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "sourceBasis": "Current PLAN-v3.3 and dated entrySurfaces sources, including the 2026-09-29 mode reconciliation of official Work Local, Work admin, Remote and plugin architecture documentation. Mode dispositions are bounded engineering judgments, not official Accord support claims. Preserve original observations and failures; compare feasible native, packaged and approved tool compositions.",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
           },
           "scope": "v33-openai-entry-applicability",
-          "oracle": "Bind every current OpenAI entry and relevant mode. Judge user value, feasible responsibility composition, authority/data/state boundaries, recovery and burden. Unknown is not inapplicable; missing local Hooks or devices alone cannot exclude an entry. A selected development set is not a finalized support claim. Freeze the definition before observation. Independently inspect per-entry source identities, current conditions and raw effect records; expected predicates are never observations. Actual sources and independent review must justify every fact. Missing/conflicting evidence remains open, historical failures stay unchanged, and a documented path does not require a repeated business-model experiment.",
+          "oracle": "Bind every current OpenAI entry and relevant mode. Judge user value, feasible responsibility composition, authority/data/state boundaries, recovery and burden. Unknown is not inapplicable; missing local Hooks or devices alone cannot exclude an entry. A selected development set is not a finalized support claim. Freeze the definition before observation. Independently inspect per-entry source identities, current conditions and raw effect records; expected predicates are never observations. Actual sources and independent review must justify every fact. Missing/conflicting evidence remains open, historical failures stay unchanged, and a documented path does not require a repeated business-model experiment. Final selection must resolve pending modes as well as entry rows; a selected row covers only its selected modes. Auxiliary Chat must retain its execution/state handoff duties. Every relevant UI difference and shared responsibility transfer needs independent source review; clearing the other entry rows alone is insufficient.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md"
@@ -6418,17 +6590,77 @@
                 "chatgpt-desktop": {
                   "decisionSupported": true,
                   "necessaryResponsibilitiesAccounted": true,
-                  "alternativesCompared": true
+                  "alternativesCompared": true,
+                  "modes": {
+                    "chat": {
+                      "decisionSupported": true,
+                      "necessaryResponsibilitiesAccounted": true,
+                      "alternativesCompared": true,
+                      "boundedModeVerified": true
+                    },
+                    "work-local": {
+                      "decisionSupported": true,
+                      "necessaryResponsibilitiesAccounted": true,
+                      "alternativesCompared": true,
+                      "boundedModeVerified": true
+                    },
+                    "work-cloud": {
+                      "decisionSupported": true,
+                      "necessaryResponsibilitiesAccounted": true,
+                      "alternativesCompared": true,
+                      "boundedModeVerified": true
+                    },
+                    "remote": {
+                      "decisionSupported": true,
+                      "necessaryResponsibilitiesAccounted": true,
+                      "alternativesCompared": true,
+                      "boundedModeVerified": true
+                    }
+                  }
                 },
                 "chatgpt-mobile": {
                   "decisionSupported": true,
                   "necessaryResponsibilitiesAccounted": true,
-                  "alternativesCompared": true
+                  "alternativesCompared": true,
+                  "modes": {
+                    "chat": {
+                      "decisionSupported": true,
+                      "necessaryResponsibilitiesAccounted": true,
+                      "alternativesCompared": true,
+                      "boundedModeVerified": true
+                    },
+                    "work-cloud": {
+                      "decisionSupported": true,
+                      "necessaryResponsibilitiesAccounted": true,
+                      "alternativesCompared": true,
+                      "boundedModeVerified": true
+                    },
+                    "remote": {
+                      "decisionSupported": true,
+                      "necessaryResponsibilitiesAccounted": true,
+                      "alternativesCompared": true,
+                      "boundedModeVerified": true
+                    }
+                  }
                 },
                 "chatgpt-web": {
                   "decisionSupported": true,
                   "necessaryResponsibilitiesAccounted": true,
-                  "alternativesCompared": true
+                  "alternativesCompared": true,
+                  "modes": {
+                    "chat": {
+                      "decisionSupported": true,
+                      "necessaryResponsibilitiesAccounted": true,
+                      "alternativesCompared": true,
+                      "boundedModeVerified": true
+                    },
+                    "work-cloud": {
+                      "decisionSupported": true,
+                      "necessaryResponsibilitiesAccounted": true,
+                      "alternativesCompared": true,
+                      "boundedModeVerified": true
+                    }
+                  }
                 },
                 "cx-cli": {
                   "decisionSupported": true,
@@ -6481,7 +6713,8 @@
               "selectionFinal": true,
               "pendingEntries": 0,
               "sourceAndCurrentConditionsRechecked": true,
-              "evidenceLimitsPreserved": true
+              "evidenceLimitsPreserved": true,
+              "pendingModes": 0
             },
             "cleanup": {
               "unrelatedStateUnchanged": true,
@@ -6494,6 +6727,8 @@
           "host": "codex",
           "entry": "cx-desktop",
           "subjectEntries": [
+            "chatgpt-desktop",
+            "chatgpt-mobile",
             "cx-cli",
             "cx-desktop",
             "cx-sdk",
@@ -6529,16 +6764,58 @@
             "selectionFinal": false,
             "entryDispositions": {
               "chatgpt-desktop": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
+                "status": "selected",
+                "basis": "限定纳入开发：Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-local": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同机Hook/Skill、stdio状态MCP和原生线程分担职责；下一真实交付核实际Hook cwd、当前采用、暂停/续作与退出。旧projectless与repo查询错位不算正确联读。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "官方已说明受支持桌面与手机同样可控制连接主机，采用同一限定本地主机既有任务路线；分别核实际账户/配对、版本可用性、输入/审批、暂停/撤权、断连后未知效果及退出。不包含SSH执行或跨主机迁移，不把未实测等同于路线不可开发。"
+                  }
+                }
               },
               "chatgpt-mobile": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
+                "status": "selected",
+                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同一主机任务的输入、审批和结果访问；仍需核实际账户/配对、获准主机与包、暂停/撤权、断连后的同一任务及未知效果。不可达不等于执行停止或重派发许可。"
+                  }
+                }
               },
               "chatgpt-web": {
                 "status": "pending",
-                "basis": "待判（托管Work）：可用插件Skill、任务/项目文件及获准remote MCP为候选组合；网页不读取本机Codex配置，安装不部署Hook脚本。原包stdio与Hook回执依赖实际执行环境，远程工具不能自动获得同一控制者身份/事件或持久状态。先解决该组合绑定与恢复责任，再验实际效果，不新增服务绕过缺口。"
+                "basis": "待判：普通Chat辅助；托管Work候选由插件Skill、任务文件和获准remote MCP组成，但实际控制者的指导/身份/事件、状态和恢复绑定仍缺充分支持路径。与桌面/手机Work Cloud共用执行基础时分别核各UI差异；web不替其它前端验收。本机配置或安装不能代验托管采用，不新增服务绕过缺口。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  }
+                }
               },
               "cx-cli": {
                 "status": "selected",
@@ -6573,12 +6850,12 @@
                 "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
-            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "sourceBasis": "Current PLAN-v3.3 and dated entrySurfaces sources, including the 2026-09-29 mode reconciliation of official Work Local, Work admin, Remote and plugin architecture documentation. Mode dispositions are bounded engineering judgments, not official Accord support claims. Preserve original observations and failures; compare feasible native, packaged and approved tool compositions.",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
           },
           "scope": "v33-admitted-entry-delivery",
-          "oracle": "Review delivered effects for exactly the finalized selected set. Reuse CLI business semantics and SDK protocol facts where applicable; each GUI/IDE still needs current loading, instruction/event participation, permissions, steering and result-path evidence. The observing carrier cannot stand in for target entries. Freeze the definition before observation. Independently inspect per-entry source identities, current conditions and raw effect records; expected predicates are never observations. Actual sources and independent review must justify every fact. Missing/conflicting evidence remains open, historical failures stay unchanged, and a documented path does not require a repeated business-model experiment.",
+          "oracle": "Review delivered effects for exactly the finalized selected set. Reuse CLI business semantics and SDK protocol facts where applicable; each GUI/IDE still needs current loading, instruction/event participation, permissions, steering and result-path evidence. The observing carrier cannot stand in for target entries. Freeze the definition before observation. Independently inspect per-entry source identities, current conditions and raw effect records; expected predicates are never observations. Actual sources and independent review must justify every fact. Missing/conflicting evidence remains open, historical failures stay unchanged, and a documented path does not require a repeated business-model experiment. Final selection must resolve pending modes as well as entry rows; a selected row covers only its selected modes. Auxiliary Chat must retain its execution/state handoff duties. Every relevant UI difference and shared responsibility transfer needs independent source review; clearing the other entry rows alone is insufficient.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md"
@@ -6587,6 +6864,43 @@
           "expected": {
             "effect": {
               "entryDelivery": {
+                "chatgpt-desktop": {
+                  "boundResponsibilitiesDelivered": true,
+                  "entryDifferencesVerified": true,
+                  "reusedEvidenceApplicable": true,
+                  "unfinishedResponsibilitiesAccounted": true,
+                  "modes": {
+                    "work-local": {
+                      "boundResponsibilitiesDelivered": true,
+                      "entryDifferencesVerified": true,
+                      "reusedEvidenceApplicable": true,
+                      "unfinishedResponsibilitiesAccounted": true,
+                      "boundedModeVerified": true
+                    },
+                    "remote": {
+                      "boundResponsibilitiesDelivered": true,
+                      "entryDifferencesVerified": true,
+                      "reusedEvidenceApplicable": true,
+                      "unfinishedResponsibilitiesAccounted": true,
+                      "boundedModeVerified": true
+                    }
+                  }
+                },
+                "chatgpt-mobile": {
+                  "boundResponsibilitiesDelivered": true,
+                  "entryDifferencesVerified": true,
+                  "reusedEvidenceApplicable": true,
+                  "unfinishedResponsibilitiesAccounted": true,
+                  "modes": {
+                    "remote": {
+                      "boundResponsibilitiesDelivered": true,
+                      "entryDifferencesVerified": true,
+                      "reusedEvidenceApplicable": true,
+                      "unfinishedResponsibilitiesAccounted": true,
+                      "boundedModeVerified": true
+                    }
+                  }
+                },
                 "cx-cli": {
                   "boundResponsibilitiesDelivered": true,
                   "entryDifferencesVerified": true,
@@ -6622,7 +6936,8 @@
               "selectionFinal": true,
               "pendingEntries": 0,
               "sourceAndCurrentConditionsRechecked": true,
-              "evidenceLimitsPreserved": true
+              "evidenceLimitsPreserved": true,
+              "pendingModes": 0
             },
             "cleanup": {
               "unrelatedStateUnchanged": true,
@@ -6635,6 +6950,8 @@
           "host": "codex",
           "entry": "cx-desktop",
           "subjectEntries": [
+            "chatgpt-desktop",
+            "chatgpt-mobile",
             "cx-cli",
             "cx-desktop",
             "cx-sdk",
@@ -6669,16 +6986,58 @@
             "selectionFinal": false,
             "entryDispositions": {
               "chatgpt-desktop": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Work本地复用现包路线已有一次真实入口指导和状态MCP调用；原生thread/session/turn与实际cwd输入回执已独立对账。诊断prompt指定repo而实际projectless cwd不同，原查询缺回执保留；不当作正确cwd的MCP联读成功。必要普通交付、续作/退出及Work云仍待验，普通Chat辅助，局部采用不等于聚合入口通过。"
+                "status": "selected",
+                "basis": "限定纳入开发：Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-local": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同机Hook/Skill、stdio状态MCP和原生线程分担职责；下一真实交付核实际Hook cwd、当前采用、暂停/续作与退出。旧projectless与repo查询错位不算正确联读。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "官方已说明受支持桌面与手机同样可控制连接主机，采用同一限定本地主机既有任务路线；分别核实际账户/配对、版本可用性、输入/审批、暂停/撤权、断连后未知效果及退出。不包含SSH执行或跨主机迁移，不把未实测等同于路线不可开发。"
+                  }
+                }
               },
               "chatgpt-mobile": {
-                "status": "pending",
-                "basis": "待判（分模式汇总）：Remote子模式已确定复用已纳入开发的Codex Desktop本地项目任务，详见PLAN的2026-09-27模式判断；普通Chat辅助、Work云仍待判。具体配对、输入/审批、断连后的同一任务及效果对账、回传权限仍须实际核验；不把远程不可达视为执行停止或重派发许可。"
+                "status": "selected",
+                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  },
+                  "remote": {
+                    "status": "selected",
+                    "basis": "PLAN已定的复用路线：同一主机任务的输入、审批和结果访问；仍需核实际账户/配对、获准主机与包、暂停/撤权、断连后的同一任务及未知效果。不可达不等于执行停止或重派发许可。"
+                  }
+                }
               },
               "chatgpt-web": {
                 "status": "pending",
-                "basis": "待判（托管Work）：可用插件Skill、任务/项目文件及获准remote MCP为候选组合；网页不读取本机Codex配置，安装不部署Hook脚本。原包stdio与Hook回执依赖实际执行环境，远程工具不能自动获得同一控制者身份/事件或持久状态。先解决该组合绑定与恢复责任，再验实际效果，不新增服务绕过缺口。"
+                "basis": "待判：普通Chat辅助；托管Work候选由插件Skill、任务文件和获准remote MCP组成，但实际控制者的指导/身份/事件、状态和恢复绑定仍缺充分支持路径。与桌面/手机Work Cloud共用执行基础时分别核各UI差异；web不替其它前端验收。本机配置或安装不能代验托管采用，不新增服务绕过缺口。",
+                "modes": {
+                  "chat": {
+                    "status": "auxiliary",
+                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                  },
+                  "work-cloud": {
+                    "status": "pending",
+                    "basis": "托管Work的实际指导、身份/事件、状态与恢复组合仍待判；跨UI共用执行基础可复用，但本前端的输入/审批、暂停、结果权限及退出差异须分别核，不能由web实例代验。"
+                  }
+                }
               },
               "cx-cli": {
                 "status": "selected",
@@ -6713,12 +7072,12 @@
                 "basis": "待判（IDE内置）：专用配置根与组件导入尚未建立同一控制者的Hook/原生身份/转录和恢复契约。外部Codex接mcpbridge确定为复用现包的独立组合路线，须绑定获准Xcode及项目；不代验内置集成或借macOS CI通过。"
               }
             },
-            "sourceBasis": "Current PLAN-v3.3 decision and dated entrySurfaces rows. Distinguish official sources, actual observations and interpretations; compare native, packaged and approved tool compositions before excluding entries.",
+            "sourceBasis": "Current PLAN-v3.3 and dated entrySurfaces sources, including the 2026-09-29 mode reconciliation of official Work Local, Work admin, Remote and plugin architecture documentation. Mode dispositions are bounded engineering judgments, not official Accord support claims. Preserve original observations and failures; compare feasible native, packaged and approved tool compositions.",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "Read-only review and existing bounded development authority; this case grants no account, installation, enablement, cloud task, new access, publication or mode activation."
           },
           "scope": "v33-admitted-entry-lifecycle",
-          "oracle": "Review loading/install, update and rejected replacement, disable/uninstall, interruption/recovery and owned exit for the same finalized selected set. Reuse backend lifecycle facts with exact entry-difference binding. Cache bytes, enablement, actual task participation and retained context are separate; SDK child cases alone cannot close this parent. Freeze the definition before observation. Independently inspect per-entry source identities, current conditions and raw effect records; expected predicates are never observations. Actual sources and independent review must justify every fact. Missing/conflicting evidence remains open, historical failures stay unchanged, and a documented path does not require a repeated business-model experiment.",
+          "oracle": "Review loading/install, update and rejected replacement, disable/uninstall, interruption/recovery and owned exit for the same finalized selected set. Reuse backend lifecycle facts with exact entry-difference binding. Cache bytes, enablement, actual task participation and retained context are separate; SDK child cases alone cannot close this parent. Freeze the definition before observation. Independently inspect per-entry source identities, current conditions and raw effect records; expected predicates are never observations. Actual sources and independent review must justify every fact. Missing/conflicting evidence remains open, historical failures stay unchanged, and a documented path does not require a repeated business-model experiment. Final selection must resolve pending modes as well as entry rows; a selected row covers only its selected modes. Auxiliary Chat must retain its execution/state handoff duties. Every relevant UI difference and shared responsibility transfer needs independent source review; clearing the other entry rows alone is insufficient.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md"
@@ -6727,6 +7086,48 @@
           "expected": {
             "effect": {
               "entryLifecycle": {
+                "chatgpt-desktop": {
+                  "loadAndSelectionVerified": true,
+                  "updateFailureRecoveryVerified": true,
+                  "pauseAndStatePreserved": true,
+                  "disableUninstallAndExitVerified": true,
+                  "sharedResourcesPreserved": true,
+                  "modes": {
+                    "work-local": {
+                      "loadAndSelectionVerified": true,
+                      "updateFailureRecoveryVerified": true,
+                      "pauseAndStatePreserved": true,
+                      "disableUninstallAndExitVerified": true,
+                      "sharedResourcesPreserved": true,
+                      "boundedModeVerified": true
+                    },
+                    "remote": {
+                      "loadAndSelectionVerified": true,
+                      "updateFailureRecoveryVerified": true,
+                      "pauseAndStatePreserved": true,
+                      "disableUninstallAndExitVerified": true,
+                      "sharedResourcesPreserved": true,
+                      "boundedModeVerified": true
+                    }
+                  }
+                },
+                "chatgpt-mobile": {
+                  "loadAndSelectionVerified": true,
+                  "updateFailureRecoveryVerified": true,
+                  "pauseAndStatePreserved": true,
+                  "disableUninstallAndExitVerified": true,
+                  "sharedResourcesPreserved": true,
+                  "modes": {
+                    "remote": {
+                      "loadAndSelectionVerified": true,
+                      "updateFailureRecoveryVerified": true,
+                      "pauseAndStatePreserved": true,
+                      "disableUninstallAndExitVerified": true,
+                      "sharedResourcesPreserved": true,
+                      "boundedModeVerified": true
+                    }
+                  }
+                },
                 "cx-cli": {
                   "loadAndSelectionVerified": true,
                   "updateFailureRecoveryVerified": true,
@@ -6766,7 +7167,8 @@
               "selectionFinal": true,
               "pendingEntries": 0,
               "sourceAndCurrentConditionsRechecked": true,
-              "evidenceLimitsPreserved": true
+              "evidenceLimitsPreserved": true,
+              "pendingModes": 0
             },
             "cleanup": {
               "unrelatedStateUnchanged": true,
@@ -7410,7 +7812,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "Follow N33-20260909 r34. Own suitable Skill choice under user delegation using actual supported host paths, preserving upstream sources and genuine selection provenance. Default explicit-only metadata is not a blanket ban on authorized coordination, and protocol loading alone is not ordinary autonomous selection.  Reuse the completed controlled finalize-receipt native-composition evidence: Windows and hosted Linux/macOS records independently verify reconciliation, finalization, target writer ownership and settled revision 19. Preserve the original failed fixture and all model/autonomous-timing/crash-recovery limits; this completed sub-scope is not a pending prerequisite or a reason to replay it before ordinary continuity. Align task-specific effort visibility and third-party Skill invocation boundaries within existing W02/W06/W08 and A02/A06/A08; static inventory and policy alignment do not establish adoption or acceptance.  For 3.3, internalize applicable public decision-model designs through existing host models, supported tools and necessary Accord components. Defer dedicated third-party decision-model provider integration and user deployment support to later versions; do not schedule more such trials or shadow integrations in the 3.3 workstream. Preserve ordinary ecosystem reuse and user-selected components; introduce no model-training program, model-hosting service or generic decision-engine project. Reduce unnecessary third-party dependencies without making self-authored implementation the default or rejecting mature capabilities. No separate evaluation-model account, fixed provider ladder, new training requirement or zero-resource-cost claim is introduced. Reconcile the source-checked external reports within existing W03-W08 duties: preserve state and shared invalidation evidence. Read-only status diagnostics now reuse the existing optimistic snapshot boundary, reject observed concurrent publication, changed sources and incompatible identity, and identify malformed/unreadable evidence without repair or erasure. Continue actual damaged-state recovery, input-size and lock-identity work where needed; status diagnostics are not recovery completion or ordinary-host acceptance. Never remove shared watermarks blindly or unlock from a TTL. Existing package-byte checks and required acceptance stay in place. Retain the historical Jev private trial, classifier-dev source reference and bounded Laya public-demo observations as research with their original limits. They are not current integration targets, proof of superior in-house performance or a release gate. Access delays do not block independent ready work; raw account, credential and restricted benchmark material stays private. Align the confirmed whole-task upstream, context-selected Skill details and bounded bootstrap/evolution duties. Supply the upstream through Accord-owned components and supported host connections without requiring changes to user AGENTS.md. Preserve per-input goal, authority, pause and unfinished-duty interpretation, simple direct handling and complex adaptive composition; do not lock Skill or other component counts or treat a fixed invocation sequence as coverage. Keep perception and continuity decisions independent of optional detailed Skill selection; supported host events and native mechanisms should carry sufficient responsibilities. All seventeen necessary scopes now have definitions; six have no active cases after the ended candidate-review instances were retained as history. Their useful methods and local report defect remain source-bound; all complete acceptance requirements remain open. Definitions are not passed observations. Do not continue treating the closed definition gap as a prerequisite; bind real outcomes and current execution conditions for the remaining case and evidence gaps. Four OpenAI entries are selected for development and seven remain pending; selectionFinal is false, so no final entry-set or parent admission is claimed. Reuse the completed public SDK lifecycle/scoped-exposure episodes within their original package and condition bounds, the cc3243ea CLI two-turn delivery and installed VS Code ordinary delivery within their actual limits, and the resolved marketplace/Hook/environment-name corrections. All complete A01-A08 requirements remain open. First close the reliable upstream-to-ordinary-delivery path on an execution entry whose necessary conditions can be established: current exact package and real entry participation, task-appropriate detail/capability use, execution feedback and correction, verified delivery and needed continuity. The brief entry is now the shared Hook guidance source, with four independently discoverable specialist Skills; transcript connection and recovery cues already exist; validate their adoption rather than treating them as unimplemented or equating injection with behavior. Keep time-bound shared installation, source projection and installed-candidate evidence distinct. Account for user, host and later-component changes across shared dependencies. Compose capabilities temporarily within existing interfaces and authority, then release task-local bindings and resources without retiring user-owned components or unfinished recovery responsibilities. In parallel, resolve independent entry differences, lifecycle/resource mechanisms, CI and existing evidence readback, then integrate at the real dependency boundary. Keep autonomous handoff in scope within continuous useful work. Close the entire loop with recoverable task and effect state, conditional transitions and a live authorized recovery trigger. Reuse host persistence and scoped Accord checkpoints; disconnection does not establish whether an effect occurred. Reconcile unknown effects, current authority, pauses and writer ownership before retry, compensation, completion or source release. State-machine semantics are necessary, but a single custom engine or fixed SOP is not prescribed. Stop repeating bounded hot-reload demonstrations after their mechanism evidence is closed; remaining host-upgrade differences must not displace the mainline. Bind missing behavioral scopes to actual work and complete system integration and impact gaps. Several related duties may share one sufficient episode; do not mechanically schedule a new model experiment per scope or replay completed small chains. Correct actual defects and preserve valid partial outcomes and original failures. Finish exact-candidate, documentation, independent review, hosted checks and publication closeout only after necessary acceptance. Maintain Plan/Goal independence and explicit activation authority. Use public standard CI by validation need; account quota pressure does not reduce acceptance or authorize new costs. Keep the 3.4 Claude, Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity candidates and plugin-eval comparison research out of 3.3 execution and release gates. Prepare truthful post-3.3 comparison materials on the actual supported host; Plugin eval is only one component of communication materials and cannot establish full Accord capability or value; Claude eval results cannot qualify Codex behavior. Reassess future candidates before promising support or starting installation, paid evaluation or publication.",
+    "work": "Follow N33-20260909 r34. Own suitable Skill choice under user delegation using actual supported host paths, preserving upstream sources and genuine selection provenance. Default explicit-only metadata is not a blanket ban on authorized coordination, and protocol loading alone is not ordinary autonomous selection.  Reuse the completed controlled finalize-receipt native-composition evidence: Windows and hosted Linux/macOS records independently verify reconciliation, finalization, target writer ownership and settled revision 19. Preserve the original failed fixture and all model/autonomous-timing/crash-recovery limits; this completed sub-scope is not a pending prerequisite or a reason to replay it before ordinary continuity. Align task-specific effort visibility and third-party Skill invocation boundaries within existing W02/W06/W08 and A02/A06/A08; static inventory and policy alignment do not establish adoption or acceptance.  For 3.3, internalize applicable public decision-model designs through existing host models, supported tools and necessary Accord components. Defer dedicated third-party decision-model provider integration and user deployment support to later versions; do not schedule more such trials or shadow integrations in the 3.3 workstream. Preserve ordinary ecosystem reuse and user-selected components; introduce no model-training program, model-hosting service or generic decision-engine project. Reduce unnecessary third-party dependencies without making self-authored implementation the default or rejecting mature capabilities. No separate evaluation-model account, fixed provider ladder, new training requirement or zero-resource-cost claim is introduced. Reconcile the source-checked external reports within existing W03-W08 duties: preserve state and shared invalidation evidence. Read-only status diagnostics now reuse the existing optimistic snapshot boundary, reject observed concurrent publication, changed sources and incompatible identity, and identify malformed/unreadable evidence without repair or erasure. Continue actual damaged-state recovery, input-size and lock-identity work where needed; status diagnostics are not recovery completion or ordinary-host acceptance. Never remove shared watermarks blindly or unlock from a TTL. Existing package-byte checks and required acceptance stay in place. Retain the historical Jev private trial, classifier-dev source reference and bounded Laya public-demo observations as research with their original limits. They are not current integration targets, proof of superior in-house performance or a release gate. Access delays do not block independent ready work; raw account, credential and restricted benchmark material stays private. Align the confirmed whole-task upstream, context-selected Skill details and bounded bootstrap/evolution duties. Supply the upstream through Accord-owned components and supported host connections without requiring changes to user AGENTS.md. Preserve per-input goal, authority, pause and unfinished-duty interpretation, simple direct handling and complex adaptive composition; do not lock Skill or other component counts or treat a fixed invocation sequence as coverage. Keep perception and continuity decisions independent of optional detailed Skill selection; supported host events and native mechanisms should carry sufficient responsibilities. All seventeen necessary scopes now have definitions; six have no active cases after the ended candidate-review instances were retained as history. Their useful methods and local report defect remain source-bound; all complete acceptance requirements remain open. Definitions are not passed observations. Do not continue treating the closed definition gap as a prerequisite; bind real outcomes and current execution conditions for the remaining case and evidence gaps. Six OpenAI entry IDs have bounded selected development routes, five rows remain pending, and selected rows retain pending modes. Desktop Work Local and desktop/mobile Remote to an already selected local host are bounded development routes; hosted Work across all three UIs remains pending. Remote control does not include SSH execution or cross-host migration, and each control UI retains its own acceptance duties. Ordinary Chat is auxiliary with explicit transfer duties. selectionFinal is false; neither row counts nor resolved rows alone can finalize the mode set or admit parent cases. Reuse the completed public SDK lifecycle/scoped-exposure episodes within their original package and condition bounds, the cc3243ea CLI two-turn delivery and installed VS Code ordinary delivery within their actual limits, and the resolved marketplace/Hook/environment-name corrections. All complete A01-A08 requirements remain open. First close the reliable upstream-to-ordinary-delivery path on an execution entry whose necessary conditions can be established: current exact package and real entry participation, task-appropriate detail/capability use, execution feedback and correction, verified delivery and needed continuity. The brief entry is now the shared Hook guidance source, with four independently discoverable specialist Skills; transcript connection and recovery cues already exist; validate their adoption rather than treating them as unimplemented or equating injection with behavior. Keep time-bound shared installation, source projection and installed-candidate evidence distinct. Account for user, host and later-component changes across shared dependencies. Compose capabilities temporarily within existing interfaces and authority, then release task-local bindings and resources without retiring user-owned components or unfinished recovery responsibilities. In parallel, resolve independent entry differences, lifecycle/resource mechanisms, CI and existing evidence readback, then integrate at the real dependency boundary. Keep autonomous handoff in scope within continuous useful work. Close the entire loop with recoverable task and effect state, conditional transitions and a live authorized recovery trigger. Reuse host persistence and scoped Accord checkpoints; disconnection does not establish whether an effect occurred. Reconcile unknown effects, current authority, pauses and writer ownership before retry, compensation, completion or source release. State-machine semantics are necessary, but a single custom engine or fixed SOP is not prescribed. Stop repeating bounded hot-reload demonstrations after their mechanism evidence is closed; remaining host-upgrade differences must not displace the mainline. Bind missing behavioral scopes to actual work and complete system integration and impact gaps. Several related duties may share one sufficient episode; do not mechanically schedule a new model experiment per scope or replay completed small chains. Correct actual defects and preserve valid partial outcomes and original failures. Finish exact-candidate, documentation, independent review, hosted checks and publication closeout only after necessary acceptance. Maintain Plan/Goal independence and explicit activation authority. Use public standard CI by validation need; account quota pressure does not reduce acceptance or authorize new costs. Keep the 3.4 Claude, Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity candidates and plugin-eval comparison research out of 3.3 execution and release gates. Prepare truthful post-3.3 comparison materials on the actual supported host; Plugin eval is only one component of communication materials and cannot establish full Accord capability or value; Claude eval results cannot qualify Codex behavior. Reassess future candidates before promising support or starting installation, paid evaluation or publication.",
     "requires": "On 2026-09-19 the user resumed work, authorizing a bounded Jev trial followed by alignment of verified external conclusions and applicable trial findings, then continued development. On 2026-09-20 the user obtained direct access and authorized the prepared private synthetic trial, which completed. The Jev results remain private. On 2026-09-22 the user decided that 3.3 should internalize applicable ideas using host capabilities and Accord components, while deferring dedicated third-party decision-model integration to future versions. This supersedes the earlier optional-provider trial/integration next step for 3.3, retains prior evidence and does not restrict ordinary ecosystem reuse, add training or hosting, or reduce acceptance. Recheck live repository, CI, authority and environment conditions; carry independent authorized work forward without treating access restrictions as product failure or acceptance. The trial does not authorize automatic top-up, payment-card enrollment or a mandatory paid dependency. Resume authorized development and integration in the bound main checkout, outside Goal mode, using isolated worktrees for independent writers. Complete and publish 3.3.0 after all necessary acceptance and exact-candidate checks, as requested on 2026-09-14; readiness remains false. Preserve user IDE/cloud/development conversations and immutable historical identity, and retire unneeded task-owned resources. New accounts, trust, data, meaningful cost and unrelated shared or external writes retain their separate boundaries. Prefer official and existing reliable sources before experiments; the plan and latest user decisions own authority. The user has no Mac/Xcode or JetBrains installation and does not intend to purchase them for this project. Use existing environments, official sources and standard hosted Linux/macOS CI for feasible shared work. Keep instance-specific unknowns explicit without turning them into procurement requirements or blocking independent ready work; new installation, accounts or paid resources require their actual authority."
   },
   "claimCeiling": {

@@ -32,6 +32,11 @@ _ENTRY_PARENT_SCOPES = {
     "v33-admitted-entry-lifecycle": "entryLifecycle",
 }
 _ENTRY_DISPOSITIONS = {"selected", "pending", "deferred", "inapplicable"}
+_ENTRY_MODES = {
+    "chatgpt-desktop": {"chat", "work-local", "work-cloud", "remote"},
+    "chatgpt-mobile": {"chat", "work-cloud", "remote"},
+    "chatgpt-web": {"chat", "work-cloud"},
+}
 _TRUST = ("Conditional on the caller's authenticated, independent, bounded read-only observer "
           "and review provenance; callable shape and this verifier do not authenticate external facts.")
 _CURRENT_REVIEW_FILES = {"docs/operations/ACCEPTANCE-v3.3.md", "docs/operations/PLAN-v3.3.md"}
@@ -130,6 +135,36 @@ def _sparse_package_files(contract, case):
     return sorted(files)
 
 
+def _entry_modes(dispositions):
+    """Keep unresolved modes visible when selecting a mixed OpenAI entry.
+
+    Earlier v5 policies with all mixed entries pending retain their original form.
+    This catalog constrains declarations, not host availability or support.
+    """
+    if (not any("modes" in row for row in dispositions.values())
+            and all(row["status"] == "pending" for key, row in dispositions.items() if key in _ENTRY_MODES)):
+        return {}
+    modes = {}
+    for key, row in dispositions.items():
+        if key not in _ENTRY_MODES:
+            if "modes" in row:
+                raise ValueError("entry modes require a declared catalog")
+            continue
+        values = row.get("modes")
+        if (not isinstance(values, dict) or set(values) != _ENTRY_MODES[key]
+                or any(not isinstance(value, dict) or set(value) != {"status", "basis"}
+                       or value.get("status") not in _ENTRY_DISPOSITIONS | {"auxiliary"}
+                       or not _text(value.get("basis")) for value in values.values())):
+            raise ValueError("mixed entry selection must disposition every known mode")
+        selected = any(value["status"] == "selected" for value in values.values())
+        pending = any(value["status"] == "pending" for value in values.values())
+        if ((row["status"] == "selected") != selected
+                or (not selected and (row["status"] == "pending") != pending)):
+            raise ValueError("entry status must account for its selected and pending modes")
+        modes[key] = values
+    return modes
+
+
 def _entry_selection(policy, entries):
     """Validate and return the current v5 multi-entry parent selection."""
     scopes = {row["id"]: row for row in policy["scopes"] if isinstance(row, dict) and _text(row.get("id"))}
@@ -146,10 +181,11 @@ def _entry_selection(policy, entries):
     dispositions = conditions.get("entryDispositions")
     final = conditions.get("selectionFinal")
     if (not isinstance(dispositions, dict) or set(dispositions) != candidates or type(final) is not bool
-            or any(not isinstance(row, dict) or set(row) != {"status", "basis"}
+            or any(not isinstance(row, dict) or set(row) not in ({"status", "basis"}, {"status", "basis", "modes"})
                    or row.get("status") not in _ENTRY_DISPOSITIONS or not _text(row.get("basis"))
                    for row in dispositions.values())):
         raise ValueError("entry dispositions must bind every candidate, status and basis")
+    modes = _entry_modes(dispositions)
     selected = {key for key, row in dispositions.items() if row["status"] == "selected"}
     if not selected:
         raise ValueError("entry selection cannot be empty")
@@ -168,9 +204,25 @@ def _entry_selection(policy, entries):
                 or set(expected) != set(case["subjectEntries"])
                 or any(not isinstance(value, dict) or not value for value in expected.values())):
             raise ValueError("entry parent case must bind per-entry expected effects")
+        for key, values in modes.items():
+            required = {mode for mode, value in values.items()
+                        if case["scope"] == "v33-openai-entry-applicability" or value["status"] == "selected"}
+            if not required:
+                continue
+            effects = expected.get(key, {}).get("modes")
+            predicates = {name: value for name, value in expected[key].items() if name != "modes"}
+            if (not isinstance(effects, dict) or set(effects) != required
+                    or not predicates or any(not isinstance(value, dict)
+                        or any(name not in value or _json(value[name]) != _json(predicate)
+                               for name, predicate in predicates.items()) for value in effects.values())):
+                raise ValueError("entry parent case must bind per-mode expected effects")
     pending = any(row["status"] == "pending" for row in dispositions.values())
-    return {"final": final and not pending, "scopeIds": set(_ENTRY_PARENT_SCOPES),
-            "caseIds": {row["id"] for row in cases}, "selected": selected}
+    pending_modes = {key: sorted(mode for mode, value in values.items() if value["status"] == "pending")
+                     for key, values in modes.items()}
+    return {"final": final and not pending and not any(pending_modes.values()),
+            "scopeIds": set(_ENTRY_PARENT_SCOPES), "caseIds": {row["id"] for row in cases}, "selected": selected,
+            "selectedModes": {key: sorted(mode for mode, value in values.items() if value["status"] == "selected")
+                              for key, values in modes.items()}, "pendingModes": pending_modes}
 
 
 def admission_contract_errors(contract):
@@ -759,7 +811,9 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             reject_case(key, "entry-selection-pending")
     if entry_selection is not None:
         report["entrySelection"] = {"final": entry_selection["final"],
-                                    "selected": sorted(entry_selection["selected"])}
+                                    "selected": sorted(entry_selection["selected"]),
+                                    "selectedModes": entry_selection["selectedModes"],
+                                    "pendingModes": entry_selection["pendingModes"]}
     report["acceptedCases"] = sorted(admitted)
     report["packageReuse"] = {key: package_reuse[key] for key in sorted(admitted & set(package_reuse))}
     bound = {claim: {key for key in ids if key in scopes and claim in scopes[key]["claims"]}

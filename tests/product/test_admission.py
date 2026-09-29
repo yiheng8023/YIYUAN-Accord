@@ -1035,7 +1035,12 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report["acceptedCases"], sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]
                                                           if case["scope"] not in parent_scopes))
         self.assertEqual(report["entrySelection"], {
-            "final": False, "selected": ["cx-cli", "cx-desktop", "cx-sdk", "cx-vscode"]})
+            "final": False,
+            "selected": ["chatgpt-desktop", "chatgpt-mobile", "cx-cli", "cx-desktop", "cx-sdk", "cx-vscode"],
+            "selectedModes": {"chatgpt-desktop": ["remote", "work-local"],
+                              "chatgpt-mobile": ["remote"], "chatgpt-web": []},
+            "pendingModes": {"chatgpt-desktop": ["work-cloud"], "chatgpt-mobile": ["work-cloud"],
+                             "chatgpt-web": ["work-cloud"]}})
         applicability = report["openCoverage"]["v33-openai-entry-applicability"]
         self.assertEqual(applicability["entry"], "cx-desktop")
         self.assertEqual(set(applicability["subjectEntries"]), {
@@ -1237,6 +1242,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     for disposition in row["conditions"]["entryDispositions"].values():
                         if disposition["status"] == "pending":
                             disposition["status"] = "deferred"
+                        for mode in disposition.get("modes", {}).values():
+                            if mode["status"] == "pending":
+                                mode["status"] = "deferred"
             with self.subTest(selectionFinal=selection_final, clearPending=clear_pending), self.history():
                 self.commit(contract)
                 report = self.assess(contract, self.observer)
@@ -1258,6 +1266,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             for disposition in row["conditions"]["entryDispositions"].values():
                 if disposition["status"] == "pending":
                     disposition["status"] = "deferred"
+                for mode in disposition.get("modes", {}).values():
+                    if mode["status"] == "pending":
+                        mode["status"] = "deferred"
         with self.history():
             self.commit(contract)
             report = self.assess(contract, self.observer)
@@ -1265,6 +1276,86 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report["errors"], [])
         self.assertTrue(report["entrySelection"]["final"])
         self.assertTrue(parent_cases <= set(report["acceptedCases"]))
+
+    def test_selected_entry_pending_mode_still_blocks_all_parent_admission(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract["acceptance"]["admission"]
+        for row in [*policy["scopes"], *policy["cases"]]:
+            if "entryDispositions" not in row["conditions"]:
+                continue
+            row["conditions"]["selectionFinal"] = True
+            for key, disposition in row["conditions"]["entryDispositions"].items():
+                if disposition["status"] == "pending":
+                    disposition["status"] = "deferred"
+                for mode, value in disposition.get("modes", {}).items():
+                    if value["status"] == "pending" and (key, mode) != ("chatgpt-desktop", "work-cloud"):
+                        value["status"] = "deferred"
+        with self.history():
+            self.commit(contract)
+            report = self.assess(contract, self.observer)
+        self.assertEqual(report["errors"], [])
+        self.assertFalse(report["entrySelection"]["final"])
+        self.assertEqual(report["entrySelection"]["pendingModes"]["chatgpt-desktop"], ["work-cloud"])
+        self.assertEqual(report["entrySelection"]["selectedModes"]["chatgpt-desktop"], ["remote", "work-local"])
+        self.assertFalse({"v33-openai-entry-applicability-01", "v33-admitted-entry-delivery-01",
+                          "v33-admitted-entry-lifecycle-01"} & set(report["acceptedCases"]))
+
+    def test_mode_declarations_reject_omission_drift_and_weakened_effects(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        for kind in ("missing-mode", "unknown-mode", "no-modes", "foreign-modes", "empty-basis",
+                     "row-selected-without-mode", "mode-selected-without-row", "parent-drift",
+                     "missing-effect", "extra-effect", "weakened-effect"):
+            contract = copy.deepcopy(self.contract)
+            policy = contract["acceptance"]["admission"]
+            for row in [*policy["scopes"], *policy["cases"]]:
+                if "entryDispositions" not in row["conditions"]:
+                    continue
+                dispositions = row["conditions"]["entryDispositions"]
+                desktop = dispositions["chatgpt-desktop"]
+                if kind == "missing-mode": desktop["modes"].pop("remote")
+                if kind == "unknown-mode": desktop["modes"]["invented"] = copy.deepcopy(desktop["modes"]["chat"])
+                if kind == "no-modes":
+                    for value in dispositions.values(): value.pop("modes", None)
+                if kind == "foreign-modes": dispositions["cx-cli"]["modes"] = copy.deepcopy(desktop["modes"])
+                if kind == "empty-basis": desktop["modes"]["work-local"]["basis"] = " "
+                if kind == "row-selected-without-mode": desktop["modes"]["work-local"]["status"] = "deferred"
+                if kind == "mode-selected-without-row": desktop["status"] = "pending"
+            scope = next(row for row in policy["scopes"] if row["id"] == "v33-admitted-entry-delivery")
+            case = next(row for row in policy["cases"] if row["scope"] == scope["id"])
+            modes = case["expected"]["effect"]["entryDelivery"]["chatgpt-desktop"]["modes"]
+            if kind == "parent-drift": scope["conditions"]["entryDispositions"]["chatgpt-desktop"]["modes"]["remote"]["basis"] += " Changed."
+            if kind == "missing-effect": modes.clear()
+            if kind == "extra-effect": modes["work-cloud"] = copy.deepcopy(modes["work-local"])
+            if kind == "weakened-effect": modes["work-local"] = {"boundedModeVerified": True}
+            with self.subTest(kind=kind):
+                self.assertTrue(admission_contract_errors(contract))
+
+    def test_legacy_pending_modes_remain_readable_but_cannot_finalize_by_deletion(self):
+        from yiyuan_accord.admission import admission_contract_errors, _entry_selection
+        contract = copy.deepcopy(self.contract)
+        policy = contract["acceptance"]["admission"]
+        for row in [*policy["scopes"], *policy["cases"]]:
+            if "entryDispositions" not in row["conditions"]:
+                continue
+            for value in row["conditions"]["entryDispositions"].values():
+                if value.pop("modes", None) is not None:
+                    value["status"] = "pending"
+            if "applicability" not in row.get("scope", row["id"]):
+                row["subjectEntries"] = [key for key in row["subjectEntries"] if not key.startswith("chatgpt-")]
+            if "expected" in row:
+                for effects in row["expected"]["effect"].values():
+                    for key in list(effects):
+                        effects[key].pop("modes", None)
+                        if key not in row["subjectEntries"]: effects.pop(key)
+        entries = {row["id"]: row["host"] for row in contract["capabilityMap"]["entrySurfaces"]["rows"]}
+        self.assertEqual(admission_contract_errors(contract), [])
+        self.assertFalse(_entry_selection(policy, entries)["final"])
+        for row in [*policy["scopes"], *policy["cases"]]:
+            if "entryDispositions" in row["conditions"]:
+                row["conditions"]["selectionFinal"] = True
+                for value in row["conditions"]["entryDispositions"].values():
+                    if value["status"] == "pending": value["status"] = "deferred"
+        self.assertTrue(admission_contract_errors(contract))
 
     def test_subject_entry_semantics_are_bound_without_changing_old_case_identity(self):
         from yiyuan_accord.admission import _definition, _reuse_definition
@@ -1588,6 +1679,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             for disposition in row["conditions"]["entryDispositions"].values():
                 if disposition["status"] == "pending":
                     disposition["status"] = "deferred"
+                for mode in disposition.get("modes", {}).values():
+                    if mode["status"] == "pending":
+                        mode["status"] = "deferred"
         policy["cases"], policy["scopes"] = [], []
         for claim, scope_ids in policy["requiredCoverage"].items():
             for scope_id in scope_ids:
