@@ -107,6 +107,14 @@ session identity is shared by descendants: when native session and thread IDs
 differ, the reader holds checkpoint lookup instead of adopting ancestor state.
 This adds a host-owned process lifetime, not a separate storage engine or remote
 service. Installation, actual tool use and resource release remain separate checks.
+If the full state observation exceeds the MCP response bound, the tool preserves
+input, pause and recovery gates and explicitly marks omitted contract/inspection
+details. `checkpointSource` identifies the saved file and the digest captured in
+the same checked read. Verify that digest over the bytes actually parsed, recover
+the full contract, and recheck current input, revision, digest and recovery flags
+before dependent effects. The saved file contains baselines and predicates, not
+the omitted current business-file observations; inspect those files separately
+when needed. This fallback neither empties unresolved duties nor raises the bound.
 The separate `manage_task_state` tool reuses `bind`, `pause` and `retire` in that
 same runtime and storage. It accepts only their declared fields, caller-observed
 epoch/revision and workspace; native root identity and `nativeTurnId` come from

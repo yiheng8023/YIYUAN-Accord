@@ -494,6 +494,59 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertEqual(saved['revision'], 1)
         self.assertEqual(saved['checkpoint']['result'], 'Retain the bounded contract')
 
+        # A successful write must remain inspectable through the same MCP entry.
+        before = self.files()
+        observed = self.inspect()
+        self.assertFalse(observed['isError'], observed)
+        self.assertEqual(self.files(), before)
+        projected = observed['value']['checkpoint']['snapshot']
+        self.assertEqual(projected['epoch'], saved['epoch'])
+        self.assertEqual(projected['revision'], saved['revision'])
+        self.assertEqual(projected['checkpoint']['epoch'], saved['checkpoint']['epoch'])
+        self.assertEqual(projected['checkpoint']['details'], 'omitted-bounded-result')
+        self.assertEqual(projected['inspection']['status'], 'incomplete')
+        self.assertIn('Do not replace omitted details', observed['value']['detailRead'])
+        locator = projected['checkpointSource']
+        stored_bytes = Path(locator['path']).read_bytes()
+        self.assertEqual(hashlib.sha256(stored_bytes).hexdigest(), locator['sha256'])
+        stored = json.loads(stored_bytes)
+        self.assertEqual(stored['outputs'], outputs)
+        self.assertEqual(stored['unresolved'], unresolved)
+        self.assertLess(len(json.dumps(observed['value'], ensure_ascii=False).encode()), 128 * 1024)
+
+        paused = self.manage(action='pause', epoch=saved['epoch'], expectedRevision=saved['revision'],
+                             reason='The user paused this unfinished task.')
+        self.assertFalse(paused['isError'], paused)
+        self.helper({'hook_event_name': 'SessionStart', 'source': 'resume'}, hook='SessionStart')
+        resumed_basis = self.helper({'op': 'status'})
+        before = self.files()
+        self.params['arguments']['includeContext'] = True
+        resumed = self.inspect()
+        self.assertFalse(resumed['isError'], resumed)
+        self.assertEqual(self.files(), before)
+        projected = resumed['value']['checkpoint']['snapshot']
+        for key in ('epoch', 'revision', 'mode', 'currentInputReconciled', 'needsNativeReplay',
+                    'needsResumeReconciliation', 'inputReceipt', 'inputSource', 'checkpointSource'):
+            self.assertEqual(projected[key], resumed_basis[key])
+        self.assertEqual(projected['mode'], 'paused')
+        self.assertTrue(projected['needsResumeReconciliation'])
+        self.assertFalse(projected['currentInputReconciled'])
+        self.assertFalse(resumed['value']['context']['sourceReleaseAllowed'])
+        self.assertNotEqual(projected['checkpointSource']['sha256'], locator['sha256'])
+        current_bytes = Path(projected['checkpointSource']['path']).read_bytes()
+        self.assertEqual(hashlib.sha256(current_bytes).hexdigest(), projected['checkpointSource']['sha256'])
+        self.assertEqual(json.loads(current_bytes)['reason'], 'The user paused this unfinished task.')
+
+        # A locator is useful only for the validated source; corrupting that
+        # same large file must not fall through to a successful summary.
+        Path(projected['checkpointSource']['path']).write_bytes(current_bytes[:-1])
+        before = self.files()
+        rejected = self.inspect()
+        self.assertEqual(rejected['value']['checkpoint']['state'], 'unavailable')
+        self.assertEqual(rejected['value']['checkpoint']['reason'], 'state-inspection-unavailable')
+        self.assertNotIn('detailRead', rejected['value'])
+        self.assertEqual(self.files(), before)
+
     def test_manage_rejects_stale_epoch_revision_and_native_turn_without_rebinding(self):
         (self.work / 'source.txt').write_text('protected input', encoding='utf-8')
         first = self.receive_current_input('Create report version one.')

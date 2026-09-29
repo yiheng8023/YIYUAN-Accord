@@ -47,7 +47,7 @@ const CONTEXT_ASSESSMENT = Object.freeze({
 });
 const TOOL = Object.freeze({
   name: 'inspect_task_state',
-  description: 'Read saved Accord task state; request includeContext for bounded native context observations, or contextAssessment to assess one sourced work span against a prior observation. Current host identity comes from call metadata, separately from recorded session metadata. A fit is advice only; no permission, completion, takeover or handoff control is established.',
+  description: 'Read saved Accord task state; request includeContext for bounded native context observations, or contextAssessment to assess one sourced work span against a prior observation. Oversized details return a checked checkpoint file locator and digest; read and verify that full contract before dependent actions. Current host identity comes from call metadata, separately from recorded session metadata. A fit is advice only; no permission, completion, takeover or handoff control is established.',
   inputSchema: {type: 'object', properties: {cwd: {type: 'string', minLength: 1, maxLength: 4096,
     description: 'Absolute existing workspace directory. Reconcile the cwd in the native Hook receipt or recovery locators: it keys task state and is the base for checkpoint file references, which may differ from the directory containing business files. Caller-selected scope, not host-attested current cwd; do not silently substitute another scope.'},
     includeContext: {type: 'boolean', description: 'Also read current Hook-bound context counters. Defaults to false; missing or stale evidence remains unknown.'},
@@ -235,6 +235,29 @@ function inspectNativeState(params) {
     }
   }
   if (Buffer.byteLength(JSON.stringify(value)) > MAX_RESULT) {
+    const snapshot = value.checkpoint.snapshot;
+    const saved = snapshot?.checkpoint;
+    const locator = snapshot?.checkpointSource;
+    if (saved && locator && typeof locator.path === 'string' && path.isAbsolute(locator.path)
+        && /^[a-f0-9]{64}$/.test(locator.sha256)) {
+      // Preserve all input/recovery gates. This is a partial observation, never
+      // an empty contract or permission to drop omitted outcomes and conditions.
+      value.checkpoint = {...value.checkpoint, snapshot: {...snapshot,
+        checkpoint: {epoch: saved.epoch, canContinue: saved.canContinue,
+          details: 'omitted-bounded-result'},
+        inspection: snapshot.inspection ? {
+          status: snapshot.inspection.status,
+          ...(own(snapshot.inspection, 'error') ? {error: snapshot.inspection.error} : {}),
+          details: 'omitted-bounded-result',
+        } : null,
+      }};
+      value.detailRead = 'Read checkpointSource.path and verify SHA-256 over the same bytes you parse for the full saved contract. '
+        + 'The file contains saved input baselines and output predicates, not current per-file inspection results or new authority. '
+        + 'Independently inspect business files when those current results are needed. Before dependent effects, '
+        + 'reconcile the current input and re-inspect epoch, revision, checkpointSource.sha256, pause and recovery flags; '
+        + 'a changed or unavailable source remains unresolved. Do not replace omitted details with empty values.';
+      if (Buffer.byteLength(JSON.stringify(value)) <= MAX_RESULT) return {isError: false, value};
+    }
     return {isError: true, value: unavailable('bounded-state-result-exceeded')};
   }
   return {isError: false, value};

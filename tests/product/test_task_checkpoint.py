@@ -311,17 +311,19 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
     def test_status_rejects_state_changed_while_inspecting_outputs(self):
         self.bind()
         self.write_outputs()
+        revision = self.status()['revision']
         checkpoint = next(self.state.glob('*.state.json'))
         self.preload = self.root / 'change-during-inspection.cjs'
         self.preload.write_text("const fs=require('node:fs'),read=fs.readFileSync;let changed=false;"
             "fs.readFileSync=(p,...a)=>{const value=read(p,...a);"
             "if(!changed&&String(p).endsWith('summary.json')){changed=true;"
             f"const file={json.dumps(str(checkpoint))};const state=JSON.parse(read(file,'utf8'));"
-            "state.revision++;state.mode='paused';state.reason='Later user pause.';"
+            "state.mode='paused';state.reason='Later user pause.';"
             "fs.writeFileSync(file,JSON.stringify(state));}return value;};", encoding='utf-8')
         self.assertIn('recovery-source-changed', self.invoke({'op': 'status'}, success=False))
         del self.preload
         self.assertEqual(self.status()['mode'], 'paused')
+        self.assertEqual(self.status()['revision'], revision)
 
     def test_status_preserves_active_recovery_gate_and_reads_no_claimed_state(self):
         self.bind()

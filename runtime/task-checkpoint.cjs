@@ -754,7 +754,7 @@ function operate(request) {
       () => inputRecovery ? locked(where, recover) : recover());
   }
   if (!where) fail('native-user-input-receipt-missing');
-  if (request.op === 'status') return recoveryBasis(where, ({input: currentInput, state: prior, inputHash}) => {
+  if (request.op === 'status') return recoveryBasis(where, ({input: currentInput, state: prior, inputHash, stateHash}) => {
     validateRecoveryIdentity(request, where, currentInput, prior);
     if (!currentInput) fail('native-user-input-receipt-missing');
     const captured = retainedInputs(currentInput);
@@ -774,6 +774,9 @@ function operate(request) {
       needsNativeReplay: currentInput.needsNativeReplay === true,
       needsResumeReconciliation: currentInput.needsResumeReconciliation === true,
       mode: prior?.mode || 'unbound', currentInputReconciled: !needsInput(currentInput) && prior?.epoch === currentInput.epoch,
+      // The locator and digest come from the same checked read as the projection.
+      // Consumers may read the full contract without treating a later file as it.
+      checkpointSource: prior ? {path: where.state, sha256: stateHash} : null,
       checkpoint: prior ? {epoch: prior.epoch, result: prior.result, inputs: prior.inputs, outputs: prior.outputs,
         nextAction: prior.nextAction, canContinue: prior.canContinue, unresolved: savedUnresolved(prior),
         inputRevisions: (prior.inputRevisions || []).map((item) => Object.fromEntries(
