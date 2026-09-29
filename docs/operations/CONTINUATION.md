@@ -1,292 +1,84 @@
 # 当前接续
 
-更新：2026-09-29 · N33-20260909 / r34。
-以实时Git、当前原生输入和受影响资源为准；本页只保留接续必需状态。
-[计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识与路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)和[机器投影](../../product/development.json)分别展开结果、判据和验证投影。
+更新：2026-09-29 · N33-20260909 / r34。以实时Git、当前原生输入及受影响资源为准。
+[计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识和路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)与[机器投影](../../product/development.json)分别展开结果、判据和验证投影。本页保留当前责任；完整旧记录见末尾不可变入口。
 
 ## 本次交接
 
-9月25日用户明确要求从“主线程22”交接到同项目、沿用当前检出的全新上下文任务，旧任务保留。“主线程23”（01a0d6a8-d302-7081-ab25-b1b4281dd924）已只读核对目标、授权、已验范围与未完项，以及干净的main、HEAD/本地与远端main均为13d4537515a5a5f2faaff96c0f4a31c4871c7688、0/0。源任务01a09602-a44d-79f2-8ad6-d104863ca7d1确认推送后未再修改仓库，并明确转交原检出的业务写入责任；主线程23已确认接管，源任务不再并行写入，保留历史。
+“主线程23”（01a0d6a8-d302-7081-ab25-b1b4281dd924）已承接主线程22转交的原main检出 `C:\Projects\YIYUAN-Accord`，Root承担集成与共享业务写入；旧任务保留，不并行写入。恢复时先核Git、当前用户决定、原生输入/状态及已发生效果，再续做。
 
-用户已纠正：自动压缩只是线程过长，要求继续并加快进度。停止追加压缩原因调查，不把阈值未知作为确认门槛。接管时输入回执缺失、其后恢复以及较早的unbound/rev5观察均保持原时点身份。当前本线程已建立未完检查点；每次使用都依据最新原生回执核对epoch、revision、输入及恢复标志，不把旧修订号或输入计数固定为现状。canContinue=false只表示不请求额外Stop自动续轮，不取消项目或自动启用Goal。当前目标与授权连续有效，继续普通交付主线。
+自动压缩无需用户确认；普通“继续”或插话不取消原任务，也不自动启用Goal。已有检查点保留未完责任；每次以实际Hook workspace和metadata-bound查询的epoch/revision/恢复标志为准，不硬编码旧修订。`canContinue=false`只是不申请额外Stop续轮。缺失或隔离输入按原生回执/令牌恢复，不删除水印或重放未知效果。保持足够的验证与恢复余量；计数未知时缩小工作段，不猜压缩阈值。
 
 ## 目标与有效边界
 
-- 在原main检出完成3.3必要功能、质量与验收后发布3.3.0；已有条件发布授权，不重复询问，也不降低底线。用户允许按需开发、提交、推送与必要验证。
-- 2026-09-28用户明确进度只计算到3.3正式发布，发布后部署、传播、市场与治理不计；较早取消Claude后续适配的决定，现调整为3.4可能适配候选，新增Pi、DeepSeek Harness、Z.ai ZCode及Google Antigravity候选，其它计划保持；不承诺全部候选必交付，不扩大3.3范围。允许按实际负面影响和债务清理旧包、数据与链路，先核当前消费者、归属及必要恢复/取证用途，再执行并核后态。
-- 本版交付适用OpenAI入口，设计保持供应商中立，不缩成只支持CLI。具体入口按真实价值、可行职责和证据决定；没有Mac/Xcode/JetBrains不要求用户采购，也不冒充这些实例已验。
-- 复用宿主、官方、本地及成熟外部能力；3.3内化Jev/Laya等适用思路，专用第三方决策模型接入后置，不重启旁路试验或模型托管工程。
-- 原生压缩、范围级委派、fresh转移按需要组合；不强制每次交接都新建顶层任务，不为取证膨胀上下文。独立评估者事后修订不能追认为原执行者自主成功；未来协作系统可事先包含主代理、worker和内部核验。
-- 不擅自更换用户选定的主模型/推理，不自动启用Plan/Goal；Max/Ultra是本机用户开放的选项，不是默认规格。保护用户组件、第三方Skill源文件及管理器归属，不要求修改用户AGENTS.md。
-- 云环境、IDE及开发任务历史保留；归档/删除另需明确授权。上次云端临时接入、启动前试验及新获准的一次只读诊断均已结束，不能用“继续”重放；本次诊断没有安装、信任或设置修改授权。
-- 只在真实缺口或新证据要求时重查、补实现或试验。相关变更形成完整工作段后推送；纯观察/接续更新不重跑全矩阵。标准公开仓库CI按需要使用。
+- 在原检出完成3.3必要功能、质量及完整验收后，按既有条件授权发布3.3.0；必要开发、提交、推送和验证已授权，不重复询问同一权限。当前仍不具备发布资格。
+- 进度只算到正式发布后态；部署、传播、市场及后续治理不计入。本版交付适用OpenAI入口，设计保持供应商中立；不缩成仅CLI，也不把未验实例称为支持。
+- 3.4的Claude、Pi、DeepSeek Harness、Z.ai ZCode、Google Antigravity仅为可能候选，其它后续计划保持。Plugin Eval仅适合作为传播对照的一部分，不完整证明价值，也不是当前执行许可。
+- 3.3内化适用的Jev/Laya等思路，专用第三方决策模型接入后置；不重启模型托管或旁路服务工程。保持用户固定的主模型/推理及其实际模式，不擅自切换或启用Plan/Goal。
+- 开发用的大窗口、已装扩展或特殊账号条件不成为默认用户的隐含前提；效率和增益须有支持性比较，未知成本不算收益。
+- 保护第三方Skill源文件、策略与管理归属；原生隐式匹配、协调者通过真实显式路径代选、实际采用与结果分别取证。可复用现有权限与健康能力，不要求用户研究工具或逐步催促。
+- 所有旧单次Cloud执行及本机更新01–04授权均已消费；未授予新的Cloud任务、安装、信任、账户/数据、重要费用或无关外写。真正跨新边界时先备齐可审查方案，只问必要决定。
+- 用户允许按实际负面影响清理旧包、数据和链路，但先核消费者、归属及恢复/取证用途。任务资源可以按归属收尾，原件不因任务结束变成垃圾；用户线程归档/删除另需明确授权。
+- 不为取证要求采购Mac或JetBrains。复用当前环境、官方来源及标准托管Linux/macOS检查；保留实例差异和未知，不拿“不在本机”当作不兼容。
 
 ## 最近核实的状态
 
-2026-09-29用户已明确授权04本机更新：29023808/e85→29100847/固定e147，无Hook信任变更，旧包/配置独立保留并核实际采用。已将当前原生决策与proposal摘要83e5d1175bee811b279e531803ac057ba8d3793155b77e42379020164a6fb518绑定，来源与当前登记/包/CI重新核过；安装尚未派发。待用户先关闭Codex及相关IDE/CLI，再从客户端外的桌面入口启动；不要再次从本对话启动会随客户端结束的窗口，也不重问同一更新权限。完成后回本线程核日志、配置、加载与资源，不能仅凭“已更新”或启动器成功提升正式验收。04授权和执行状态以其plan/authorization及原始attempt记录为准，原准备期not-granted观察不再代表当前许可。
+源码分发包与本机现装均为 `3.3.0-dev.1+codex.20260929100847`，固定包来源e147e7fec1bc596d4f3b13e7ba92ce427056cd75，24文件/SHA `90e5a84e90100f80de504b11186dc14b4f423a75ff084ee2bf88ee1d796d440b`。本页整理前main/origin为dd8a510c、干净0/0；后续提交以Git为准。
 
-2026-09-29上一批e21ef717的[CI36559848540](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36559848540)已按完整SHA及11job核全部成功，原件accord-native-source-pump-20260929-01/ci-final.json保留，不再轮询。SDK queued-source分支已闭合，不继续重复该固定协议；下一必要普通交付为精简接续稿，原文91803字节、旧状态较多。业务TASK与六份e21 Git原件映射已在accord-continuation-brief-20260929-01准备，输出候选稿及责任保留映射；尚未派发模型或新增准入case，正式当前状态/角色/预算在实际执行前绑定，原文和历史不删除。
+**更新04已有安装及当前Root采用证据，原发现关闭失败保留。** 用户从客户端外运行attempt `20260929T131455Z-c2faa25b`：update exit0、discover exit1。新旧各24文件匹配e147/e85原件；执行时配置仅Accord ref变化，Hook信任不变，其它插件记录保持。原RPC返回新路径6个可信启用Hook、5个启用Skill。
 
-为后续同候选实际采用，04本机更新方案已准备并独立只读复核：现装29023808/e85→29100847/固定e147，目标CI36554746611已11/11。两侧24文件逐项核Git；只变manifest版本、codex-session运行时及其接口说明，Hook声明相同、不增改信任。34项离线准备/启动/权限/消费者检查通过；原生目录确认5Skill/6可信启用Hook、2查询域自然退出、配置未变，13执行文件冻结。旧updater PID已不存在，初次准备在方案发布前停止；现按实时路径/参数/PID/创建时刻/Hash绑定0.159.0 binary updater，执行CLI仍0.158.0，不推成主代理宿主升级。只绑定updater、没有可关闭的daemon；未知消费者阻止更新。方案在accord-local-adoption-20260929-04/PROPOSAL.md，授权仍not-granted、安装未派发，旧一次许可不继承。实际更新须用户关闭客户端后从外部启动；安装后还须核配置、原件、加载与资源，不把准备算采用。
+discover失败在自然退出判据：root已exit0，原宽限期后仍有4个所属子进程、reader未停，随后强制清理令Job归零、reader停止。具体子进程身份和未退出原因未知，不归因产品缺陷、火绒或用户操作。8份准备/执行资源回执最终Job0，其中7自然、1强制；不改判原 `discover-failed`，不重跑求绿。当前Root收到新版入口且MCP按本thread/turn响应，无replay/resume标志；新MCP进程在安装后创建，但相对cwd未独立读取，不扩为所有消费者已刷新。
 
-2026-09-29为上述SDK source收尾修复补齐真实CLI协议回归：沿已有双交接夹具，在首个queued回复后加入同source/turn的context查询，保持165秒总期限及原转移/资源条件。现有本机CLI0.158.0实际完成3个私有持久线程、6个turn、2次handoff/adopt、11次固定localhost响应、5次工具调用；原始发送记录确认为queued回复→context回复→目标创建，独立核对call ID、provider追加历史及输出一致。0真实模型调用，Job自然exit0/no-force/活动0、reader及HTTP线程停止，共享配置前后Hash相同。133份原件/历史/SQLite/执行源保留，仅两个空temp/state目录回收；首次收尾误把含目录的清单要求完全相等，删除后仅state/temp缺项且其余均未改，已只读对账纠正，未追加删除或native执行。原件accord-native-source-pump-20260929-01。
+04许可已消费，旧包/配置、13份原执行源、全部attempt和失败日志保持；任务桌面入口及空workspace已回收，Start-update.cmd只显示说明，实跑不新增attempt或改配置。重开后的额外node_repl管道字段变化保留，不归因安装或覆盖。下一步无需再次安装，详见 `accord-local-adoption-20260929-04/ACTUAL-ADOPTION.md`。
 
-独立复核发现并修复新夹具对旧10响应材料的误拒：当前检查在结果前选择10/11序列，并匹配Hash已核的冻结Python常量；11场景失败不回退10。用本次原冻结检查器证实旧原件被误拒，修复后旧10及新11分别只读通过，明确sourceContextAfterQueued=false/true；旧全输入保持、旧任务未重跑，也未新增冷恢复实例。12项相关离线检查与verify通过，原始回执及兼容性独立复核无剩余阻断。包仍29100847/90e5a84e，现装仍29023808；本次只改既有测试/检查器和接续，未安装、授信或改第三方Skill。此为修复分支的原生协议证据，不代验模型自主择时、Cloud、GUI或完整A05。e147e7fe的[CI36554746611](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36554746611)已按完整SHA及11job核全部成功，ci-final.json保留在accord-source-handoff-pump-20260929-01；本批测试变更按新SHA另核。
+**最近必要代码和原生分支已核。** e147修复SDK交接queued后源请求无人处理，以及失败请求身份被原proposal覆盖；原时限、权限、quiescence和目标接管条件保持。190项本地回归通过。e21新增真实CLI0.158.0固定localhost回归，观察queued→同source/turn context回复→目标创建，完成两次交接；12项离线检查和独立回读通过。旧10响应材料仍按冻结来源核验，新11场景不能回退旧判据；旧原件未改、没有旧任务或冷恢复重跑。此为控制协议证据，0真实模型调用，不代验自主语义择时。
 
-2026-09-29补通SDK交接收尾中的实际请求断点：原source收到queued后，session只等proposal/turn通知，未继续处理同source/turn排队或随后到达的context/owner请求；三个离线真实connection/SQLite/core组合反例均等到原时限失败。现在原respond确认成功后，session复用已有请求循环同步处理source收尾，owner明确收到handoff-source阶段，仍自行核当前权限；上下文只读、嵌套proposal拒绝、其它thread请求隔离，原时限、quiescence及目标接管条件保持。另一个红例证明owner失败会被外层错误覆盖成原proposal请求，现保留真正未答请求身份，继续锁失败且不重试。101项会话/交接/连接回归通过，独立只读复核未见所查阻断。原件accord-source-handoff-pump-20260929-01保留两组红例、绿例、关联回归和原始审查；这是必要协议功能修复，不代验真实模型自主择时、GUI采用或A05整体。
-
-本批源码候选29100847、24文件/SHA90e5a84e90100f80de504b11186dc14b4f423a75ff084ee2bf88ee1d796d440b；现装仍29023808/ref e85，未改本机插件、信任或第三方Skill。初次包摘要误用未含manifest三项资产的21文件集合，已在提交前按声明与实际24文件一致性及独立摘要纠正，初次记录保留；不改准入或包检查器。89项开发契约/分发检查及verify/host-check亦通过，完整功能与候选资格仍false。上一批c91624e7的[CI36549338177](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36549338177)已按完整SHA/11job核全部成功，终态原件在accord-candidate-review-20260929-01/followup-ci-final.json；本批修复按新SHA另核，不借旧结果代验。
-
-开发容量按实际必要增量校准：code/test从c916的2988175增至2994989字节，原3150000上限剩155011，低于未变的5%预留157500。依现有按价值组织开发、规模不替代功能的原则，本阶段容量改3200000，保留5%（160000）及205011余量；文件/主指令上限、全部功能质量/场景、实例预算和验收谓词不变。原检查失败及较早分配理由保留，不为体量删除此次必要反例。
-
-2026-09-29已按用户本次独立授权完成一次候选审查：执行subject为889cbf8a、episode2201b22f4b9341cf8deb55fab566302d；业务源固定c57→4c的20个改动文件及12份依赖/标准Git原件。CLI0.158.0/gpt-6-sol/high/default与现装23808实际运行434.504秒，总tokens1713837、未缓存输入123539、输出14746，均在原限额内；只发一次输入，没有加预算、重试或追加提示。实际历史显示按任务选择单独审查、拒绝冲突委派、核原件/Hash及调用链，并交付review.md/json。此为有限native-sufficient方法与贡献证据，不代验explicit-only正向采用、主模型切换、自主交接或完整A项。
-
-两个核心发现成立，但原Markdown把F01的采样失败错误扩到job-not-empty路径，该分支实际使用已有after；JSON没有该扩展。独立四轴复核中product、implementation、standards通过，specification保留此局部失败。原observe/recheck正式结果为两case均consequence-mismatch、不准入；原报告不改，不把Root后续修复追认为worker成功。已结束的两个实例移入带精确声明快照/Hash的历史处置，活动case回到12、17必要scope不变、六范围无活动case，完整验收仍未成；不因这次有限错误推成模型不适用，也不凭有效方法宣称独立增益。
-
-Root已分别修复F01和F02：强制清理前各诊断字段独立读取，单项失败保留其它可得证据及原兼容错误字段，时限/清理路径/放行标准保持；历史离线夹具一次读取固定旧Git原件，缺历史明确报开发验证前提不足，并在CONTRIBUTING说明完整Git历史要求。39项生命周期/资源回归及4项准入/缺口回归通过。此次仅开发观察器、测试和记录变化，分发包仍23808，不需再次本机更新；这些修复不是新增行为准入。
-
-本案7个所属执行/目录/读取域自然退出，资源终态为0且读取器停止；没有新增workspace信任登记或配置内容写入，恢复检查为无操作。两输入、两报告、原生历史及89份保护材料已核留存；仅自有workspace/temp/state回收。一次授权已消费，原件与执行入口保留供追溯，禁止重放。原件在accord-candidate-review-20260929-01，正式结论见admission-final.json、ROOT-DISPOSITION.md及reviewer-originals.json。执行基点889cbf8a的[CI36541218827](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36541218827)已按完整SHA和11个job核成功，责任闭合；本批修复按新提交另核CI。
-
-2026-09-29本机更新03已完成并独立核验：现装23808、固定e85f6676，当前Root的SessionStart/resume与UserPromptSubmit入口来自新版路径，metadata-bound MCP已响应且无replay/resume标志。成功attempt为20260929T072806Z-95d70f24；现装24文件与保留旧包24文件均匹配各自Git原件。唯一Hook信任写入经原生user层版本CAS，只将SessionStart首匹配器增加fork对应的trusted_hash更新；前后RPC身份匹配，6可信Hook/5启用Skill准确指向新包。只替换已批准ref与该Hash即可逐字节重建执行后配置，证明当时无关配置保持；重开后的额外SKY_CUA_NATIVE_PIPE_DIRECTORY变化保留，不归因更新或回写。9个执行域均自然exit0/无force/活动0，读取器停止。当前两个MCP worker在更新后创建，relative cwd未独立读取，不扩写为全部消费者或其它入口已采用。
-
-首次从Codex打开的窗口随客户端退出，原attempt保留在等待阶段；核实未派发后，将失效锁留存，改为用户先退出客户端再从桌面启动。此启动方式错误已纠正，不再把另开窗口当成已脱离宿主生命周期。03原单次授权现已消费，Start-update.cmd已退为完成提示，实际再执行exit0/无新attempt/配置不变；任务自建桌面快捷方式及空workspace已按归属核对后回收，130份保护文件保持。旧包、配置、两次attempt、原执行代码及恢复材料均留在accord-local-adoption-20260929-03，结论见ACTUAL-ADOPTION.md、root-adoption-readback.json和completion.json。下面较早的“现装143558”保留其原观察时点，不再作为当前安装状态。此次安装不代验Skills自主协调、决策内化、完整连续性或A01–A08。
-
-4c1c7c7fbd393deb60e58e7585a2b04075bea10c的[CI36530039291](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36530039291)已完整11/11成功，精确SHA及各job回读原件在accord-composition-binding-20260929-01/ci-final.json；不再轮询。下一项候选整体审查输入已冻结为03目录内review-case-draft.json：c57到4c的20份原件和组合影响，产出可直接处理的问题清单与结构化报告。尚须在实际执行前绑定正式case、当前角色/条件及独立观察；草稿和安装不计准入，不重复旧Goal审查或fork/退出诊断。
-
-2026-09-29补接普通CLI与上层组合案例的前瞻绑定：独立源码核对确认现有准入schema可在conditions.execution保留协调者声明和真实worker，无须修改case/scope/执行入口相等规则。原Python prepare API现接受可选composition={case, execution}，由实际准备参数生成worker及runner/fixture身份，拒绝调用者覆盖；原CLI admissionBinding另行保留。准备前后、首次运行和每轮均重核，任一绑定变化不派发；准备后失配保留失败凭据和材料，不发布可运行manifest。协调者身份、活态权限和实际包采用仍由外层独立核对，不能从CLI包一致推断Root已更新。完整入口104项、新组合与原单入口准入2项、Python3.10六项均通过；独立复核发现的新测试误挪原脏检出检查已修正并定向复验，原失败记录保留。verify/host-check通过。原件accord-composition-binding-20260929-01；此为既有执行器接线，不是新模型执行、Skill自主选择或任何scope准入，12活动case及六个无case范围不变。源码包仍23808，共享现装仍143558，无安装/信任或第三方Skill变更。
-
-退出观测提交e85f6676a42cf55c34d15a5f89e6011c867d3786的[CI36525599736](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36525599736)已按完整SHA与11个job核completed/success，原件accord-native-fork-entry-20260929-01/ci-final.json；该批责任闭合，不重复轮询。
-
-2026-09-29原生0.158调用链已有实际机制证据：复用原生命周期组件，在自有隔离HOME/状态/工作目录和两个固定loopback响应下运行23808整包，实际thread/fork指导进入后续请求，父暂停checkpoint/输入字节保持，子任务取得独立回执且没有继承checkpoint。首次根exit0但观察器调用了强制清理，最终Job0/reader停止，因此原案不计全部通过；无force前快照，原因未知。独立MCP单任务、双ready及无Hook分支对照自然退出；唯一带退出观测、仍用原时限的组合诊断也自然退出，不能据后次成功改判首次。已停止重复该场景，所有自有进程域及HTTP夹具关闭、共享保护文件未变，原始回执和4个原执行helper源保留在accord-native-fork-entry-20260929-01，当前判断见inspection.json/RESULTS.md。通用退出记录现保留强制前原因、root状态、Job快照及reader状态，采样失败仍完成所属清理；38项生命周期/资源回归通过，时限与判据不变。历史0.144探针的离线中断测试已改用其固定旧helper原件，未变更旧真实探针门槛或重放。此为固定响应机制与观测补强，不代验自主择时、GUI采用、完整A05/A07或系统价值。
-
-fork源码[CI36513963132](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36513963132)已按完整da70842705d333e619669bc64c2b1f79c87dd346及全部11job核completed/success，原件accord-session-start-boundary-20260929-01/ci-final.json，责任闭合不重复。现装仍28143558；23808只在上述任务私有环境使用，共享安装和信任未改变。
-
-2026-09-29补齐原生根分支入口：固定Codex0.158.0的[事件源码](https://github.com/openai/codex/blob/rust-v0.158.0/codex-rs/hooks/src/events/session_start.rs#L24)实际发出SessionStart/fork，原包匹配器和入口校验均漏掉该值，两个红例已确认。现在指导Hook接收fork，明确继承历史不代表状态恢复、新授权或写者转移；状态Hook仍只接resume/compact，不新增收据、不清水印、不采纳或退休父状态。19项入口/包/历史兼容检查、verify/host-check及独立复核通过；候选29023808、24文件/a58a06e4，现装仍28143558。本次仅补真实接线，不把源码/模拟输入检查称为宿主实际派发、子代理覆盖或A05验收。原件accord-session-start-boundary-20260929-01；四份官方源文件逐项匹配固定Git树blob。后续实际采用须核变化后声明的信任和调用者，不复用旧安装授权，也不根据此发现改判旧IDE失败原因。
-
-上批超长输入修复的[CI36508329268](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36508329268)已按完整bd384dbcb86e9830ec0438681c8c5f2ac4d304cb及全部11job核completed/success，托管责任闭合，原件accord-large-input-recovery-20260929-01/ci-final.json。此结果不代替新的fork候选检查；原功能和安装边界保持。
-
-2026-09-29超长原文恢复断点已在源码修复：公开具名UserPromptSubmit入口原先把普通输入和token重放都限制在128KiB，导致较长原文无法进入恢复；两个实际CLI红例已复现。现在该具名入口接受至多8MiB JSON，其它命令仍128KiB，收据总容量仍8MiB且计入既有历史/元数据；分块累计UTF-8字节，不截断文本。暂停、旧token拒绝、失败水印和锁处理保持。197项状态/MCP回归及2项新增原生UTF-8/精确上下限检查通过，独立审查无所查阻断，verify/host-check通过。新源码候选29012920、24文件/8be424a1；现装仍28143558，不重新使用已消耗安装权限。原件accord-large-input-recovery-20260929-01保留红/绿、边界、组合回归与审查来源；这是实际缺口修复，不增加案例或A05/整版通过，候选托管检查及受影响实际采用仍须各自核验。
-
-2026-09-29新的02本机更新已完成并核验：成功尝试20260928T231947Z-1ca90f3d于本地07:20结束，固定c57/143558的现装24文件及独立旧包24文件均核Git原始字节；登记启用，原RPC同ID证新路径5Skill/6trustedHook，五条CLI命令及发现域均exit0/no-force/active0，reader停止。当前Root的新入口Hook与身份绑定MCP调用正常，原生输入存在、无replay/resume标志；相对路径MCP worker的cwd未独立读取，不扩为全部消费者采用或正式验收。07:38截图对应后一次重复启动在旧登记检查中被阻止，未再次安装；原失败保留。本次单次授权已消耗，原执行源归档，启动入口已改为完成提示，实际再运行确认不新增attempt、不改配置，无需用户再次更新或重启。94份受保护文件保持、仅空自有workspace清除；独立旧包、配置、候选及全部记录保留。执行后配置派生副本摘要精确匹配原poststate，更新时仅Accord ref改变；当前另有node_repl环境管道字段差异，保留现值、未推断改写者。原件：accord-local-adoption-20260928-02/{ACTUAL-ADOPTION.md,root-adoption-readback.json,current-native-state-readback.json,completion.json}。本机采用闭合后回到原3.3普通功能组合主线，完整验收与发布资格仍未成立。
-
-2026-09-28新的02更新首次尝试在安装前被消费者检查阻止：Codex CLI 0.158.0的受管理daemon及二进制updater在窗口关闭后仍运行。未产生before/poststate安装回执、新缓存或登记变更；现装28065830的24文件仍匹配。官方只读连接查询到daemon无已加载任务，代理自然退出且配置未变。已补执行前重新核空任务、无恢复快照、精确进程/二进制身份及其它客户端退出，再由官方命令关闭空daemon；仅精确识别的二进制updater不按插件消费者阻断。未知进程、忙任务、配置变化及关闭失败均停止安装；原固定c57/143558的一次更新授权、旧失败和原冻结方案保留，不重问同一更新权限。33项离线检查通过，实际关闭/安装及新入口采用仍须完成；准备检查不计功能验收。原件：accord-local-adoption-20260928-02/DAEMON-REPAIR.md。
-
-2026-09-28用户确认新的02本机更新方案，目标仍为已核CI11/11的c57a4082/143558，授权不扩展到其它操作；安装尚未执行，须在客户端退出后由已准备的一次性入口完成并独立核采用。同时将Google Antigravity补入后续3.4候选，连同Claude、Pi、DeepSeek Harness、Z.ai ZCode共五项，均不代表适配完成、安装授权或3.4必交付。3.3范围、原包字节、验收和条件发布保持。
-
-2026-09-28最新计划微调：r33将Claude、Pi、DeepSeek Harness和Z.ai ZCode列为3.4可能适配候选，保留其它后续事项；此前取消及旧Claude链路退役仍属历史，不恢复失效代码。官方已确认Claude Code plugin eval可运行有/无插件对照、重复评分及生成报告，研究见[核实记录](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md)。作为后续评估工具及传播素材的一部分，不能完整证明Accord能力和价值，也不能代验Codex、完整长期协作或3.3正式验收；3.3发布后对照素材先基于本版实际支持入口准备，不等待Claude适配，不新增3.3发布门槛。本轮完成资料/计划调整，并修正旧身份检查器把外部产品名称及官方链接误判为旧模块的边界：仅对明确登记的说明性引用消歧，代码、命令、模块字段、路径及旧完整身份仍检查，相关反例和历史引用回归通过。未执行eval、安装、授信、模型请求或对外发布。
-
-2026-09-28剩余定义集中对齐：已按原A02/A04/A06/A08补齐入口能力覆盖、系统组合、整体生命周期与净影响评估四项scope。17项必要范围现均有定义，六项仍无案例/无证据，原12case保持；这只关闭机器投影缺口，不代表功能通过。入口能力盘点与适用性处置/实际交付分开；系统组合要求同一episode完整覆盖且A08仍受A01–A07阻塞；生命周期保持真实采用、旧新消费者及失效后可用恢复者；净影响不强制正增益或更便宜，也不允许严重退化被抵销。独立观察者与被验执行者身份必须实证，不能重标旧CLI/SDK结果。下一步聚焦六项缺少案例及其它范围的实际证据，不再把定义缺口当作等待新模型任务的理由；原包、权限、预算、历史与发布底线保持。原件：accord-remaining-scopes-20260928-01。
-
-2026-09-28自主连续性依赖复核：修后SDK调用者与原19+13项回执一致，创建、恢复、正常拒绝交接及持久写者机制可复用；未发现必须新增runtime的前置断点，旧300秒失败和32项无模型检查不代验自主行为。此前A02动态能力分配/A05自主连续性的文字判据未进入scope定义，现按既有判据补齐两项机器投影；涵盖Skills协调、固定主模型与完整成本、健康继续/压缩/必要迁移、真实续做、单写者及失败恢复。观察载体标签不代替被验入口，两范围保持无case/未验；17必要范围、原12case、全部A项、授权、包身份和发布条件不变。下一步须在真实必要工作前绑定具体成果、宿主/包/模型、权限、预算与核验来源；不把轻量修订串成SDK演示，不重放旧案或补空case。原件：accord-continuity-scope-20260928-01。
-
-隔离定位修复6a1ebeeb的[CI36387359995](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36387359995)已按完整SHA和全部11job回读成功，核验责任闭合，原件accord-recovery-locator-20260928-01/ci-final.json。
-
-隔离提示的命令行恢复定位已补齐：MCP不可用时，可从原生Hook提示取得数据用途的session_id/cwd，通过既有helper读取status与捕获原文；提示不携带可能陈旧的恢复令牌。新增回归先失败后通过，含空格、引号和Unicode的会话ID实际完成两次helper读取，既有隔离/暂停/水印/MCP相关7项回归通过；读取仍不解除隔离或授予重放权限。原件：accord-recovery-locator-20260928-01。此前隔离捕获提交8d392f47的[CI36376220974](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36376220974)已按完整SHA和全部11项成功结果闭合；不再轮询。此处是源码路径修复，完整普通行为与验收仍沿原缺口推进。
-
-隔离输入保留修复（2026-09-28源码）：已确认旧失效标记会使后续已解析普通输入也无法进入捕获读取。新路径在原输入锁与容量边界内保留quarantined-native-input，维持needsNativeReplay、暂停/中断/resume及检查点未协调；读取不解除隔离，实际当前输入仍须以最新status令牌显式重放。后发水印继续废止旧令牌，校验同次读取的原始回执，避免派生值掩盖坏epoch/flag；坏原件、写入失败和容量限制保持。150项checkpoint及38项MCP局部链回归通过，独立复核无阻断；这是源码与隔离机制验证，不是普通宿主或完整验收。源码候选另绑定，本机已装28065830及其采用闭环不重做，现场水印/旧IDE/Cloud未动。原件：accord-quarantined-input-20260928-01。
-
-2026-09-28本机采用已完成并独立回读：用户在原许可下关闭客户端后运行修正版一次性入口，28065830的24文件逐字节匹配固定5ef062e9，旧包恢复副本24文件匹配f8ecac46。原始RPC确认5个启用Skill、6个启用且可信Hook来自新路径；5条原生命令及1次发现共6个进程域自然退出、无强停、域内活动0。当前主线程已收到新包入口及工作目录提示，MCP目录含新提示且实际调用成功，原检查点与未完责任保留；新worker在更新结束后创建，但精确cwd未独立读取，不外推全部消费者或其它入口。5ef062e9的[CI36357297098](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36357297098)已按完整SHA/11job成功闭合，不重复轮询。
-
-首次操作后的旧包读回、旧配置摘要阻断和早期日志缺失保留原身份，不能倒推首次具体错误；准备器修正及19+3检查、独立复核见[前一记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/1f2a6bf85844a945a6b565c3bb69f03c21f5ba9a/docs/operations/CONTINUATION.md)。当前配置出现的唯一后续语义变化是原生电脑控制管道目录，最新值保持；经原安装后摘要核对的派生副本证明安装时除Accord登记外与执行前配置相同，该副本不冒称新找到的原件。原配置、旧包和运行证据保留，空自有workspace已清理、79份受保护文件Hash未变。本次许可已消耗，不再运行该一次性更新器；旧preflight对孤立相对路径Node的覆盖局限须保留，未来不原样盲复用。私有原件：accord-local-adoption-20260928-01/ACTUAL-ADOPTION.md、root-adoption-readback.json、closeout.json。
-
-能力指导中的窄语义判断、必要状态、事实查询、未知/置信/正确性分离和反馈分工已随此包实际部署；第三方Skill的原生隐式匹配与协调者代选仍分开验证，不修改第三方源文件。用户提醒只作防漏项，继续既有入口与连续性普通工作组合，不另开同类试验。本次安装和同线程恢复不提升A01–A08、functionalCompletion或candidateEligible，也不证明普遍行为或发布通过。
-
-| 项目 | 已核事实与限制 |
-|---|---|
-| 仓库 | `main`的日常开发与记录持续推进，当前HEAD/上游及工作区以实时Git核对。最新文稿两案准入绑定48d4dbeb，较早五阶段普通两案绑定60219fff，SDK基础机制两案绑定029a1c58；这些是各自执行/准入对象，不是永久当前HEAD，不能机械合并其验收效力。 |
-| 源与本机安装 | 源码候选为3.3.0-dev.1+codex.20260928143558（24文件、SHA d1001cfcc28a75777094650ba4cdc3817c1cd712d79ffbca9111ea1de274e045）；本机现装保持3.3.0-dev.1+codex.20260928065830（24文件、SHA bfc40cf018bad0b6abbc91a17aa23ddb08770c5317fbd83772387d49f98e3e05），市场固定5ef062e9且启用。新源码未安装。已独立核安装Git原始字节、新进程5Skill/6可信Hook、旧包恢复副本和6个执行域退出；当前线程新Hook/MCP参与已观察。旧27100450及更早安装记录保持各自时点和证据范围，不能外推全部消费者、普通行为或完整生命周期验收。 |
-| 托管检查 | 最新声明/文稿执行候选48d4dbeb的[CI36299563573](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36299563573)已按精确headSha及全部11个job回读成功，核验责任闭合。运行时修复f8ecac46的[CI36287689800](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36287689800)已按精确headSha及全部job核对，11/11成功；包括Windows/Linux/macOS回归与Linux/macOS原生生命周期。此批托管责任闭合，未重放旧失败运行。 测试收尾修复80ad291e的[CI36098771613](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36098771613)已完成，11/11成功，包括原失败的Windows/Python3.14；精确headSha及各job结论已回读，未重放旧失败运行。原96abd156的[CI36092865977](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36092865977)保留10/11及复制exe清理WinError32失败，占用者未知。更早b49dd36a的[CI36085796964](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36085796964)11/11及四份artifact独立回读保持原范围。新CI成功不代替普通行为或正式验收。 |
-| 已接通机制 | 输入/状态/MCP、原生压缩恢复、上下文评估、SDK源事件循环、提议/接管/多轮转移、settled目标恢复已有实现与各自局部证据。新普通source恢复扩展同一restore接口，25会话+87开发契约及互斥反例通过；普通source分支已有Windows及Linux/macOS固定响应原生证据，见下；完整自主行为仍未验。原生固定组合与正常退出恢复不等于自主择时或全部异常恢复。首次创建ACK完全丢失仍须owner对账，不能按最近任务猜身份或重放创建；普通source恢复仅用于已确认身份与绑定。 |
-| 根任务状态 | 本线程已有未完检查点；回放需求、输入覆盖、修订号及宿主条件按每次实际原生读取核对。此前unbound、10条输入、rev5和旧宿主版本都是历史观察，不再作为当前值使用。检查点、Goal及协作模式分别判断；canContinue=false不等于项目暂停/取消或隐式Goal，完整Goal与模式状态不能从检查点推断。 |
-| 云环境 | 最近一次获准的启动前接入任务已在setup的native-resource-close检查处停止，实际Agent采用核对未到达；targetMutationDispatched=false仅指尚未派发脚本目标写入，不代表容器零效果。上次已核验setup恢复automatic，universal、Agent网络off及缓存开启保持；原容器资源后态仍未知。该次授权已消费，原任务/日志保留，不重放或追加输入。更早只读诊断的目录/配置/控制者观察保持原时点身份，不能代替实际装载；新Cloud动作须另有具体依据与授权。 |
-| 正式验收 | 17必要scope均已有定义，活动case仍12；动态能力分配、自主连续性、入口能力覆盖、系统组合、整体生命周期及净影响评估六个范围尚无case，caseBindingGaps明确保留六项缺口，定义不等于通过。48d4dbeb上的普通CLI有效用户环境文稿交付与systemic-correction两案已实际准入，保留精确候选与条件。4个OpenAI入口纳入开发、7个待判，selectionFinal=false；A01–A08及functionalCompletion/candidateEligible仍未完成。 |
-| 进度口径 | 截止3.3正式发布及公共对象核验；后续部署、传播、市场及治理不计。先前50–65%功能/20–30%发布就绪缺少稳定分母，不能作为可比较总进度。按现有工作包的实际成果、剩余断点和关键路径评估，正式A01–A08事实另列。3.4候选调整不改变当前17范围或3.3进度分母。 |
-
-735a5919范围/债务对齐的[CI36343293965](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36343293965)已按精确SHA和11个job读回成功。其后退役当前runtime及包内副本未注册的Claude PostToolBatch分支；源码包更新为28040031，仅manifest与accord-hook两文件改变，SessionStart及状态/MCP实现保持。8项不支持事件/无写入、启动、暂停与压缩恢复回归、verify及host-check通过；该源码检查时本机仍27100450，未进行安装或刷新；后续28065830采用见当前状态，托管结果见下文。原233529候选和原准入保留原条件，旧UPDATE-PREPARATION不能直接用于此新候选。
-
-**当前IDE核对已结束**：用户指定[核对 Accord IDE 入口状态](codex://threads/01a0e4dd-45c9-7a82-97f3-2d7bc0e9ae1a)为v2对象；实际cwd正确，原生vscode/codex_vscode、CLI0.155.0-alpha.16.3、Sol/xhigh/default，74.323秒completed。原生developer上下文在首个工具前包含27100450入口；唯一一次状态MCP的thread/turn/hostVersion均与会话对应。返回present=false、revision0、needsNativeReplay=true及两级失败水印，没有工具调用错误；这证明有限入口/工具参与，不证明输入恢复或完整IDE支持。官方支持边界、4selected/7pending、预期结果和selectionFinal=false保持。
-
-原准备稿未保护Windows路径的Markdown转义，实际收到的路径少了.tmp前的分隔符，变成C:/Projects/YIYUAN-Accord.tmp/ide-entry-readonly-20260928-01/diagnostic.json。用户说明首轮误发后删除，指定v2重发；首轮文件已在该路径写出，v2按存在性守卫停止且未覆盖。工作区选择正确，首轮文件不能算v2成品。Root只从原生历史抽取v2回执，原文件保持；首轮日志曾读到、随后已不在原归档或活动路径，不恢复或重构已删除对话。实际输入与准备稿的字节差异保留，不再发送v3或重跑。
-
-现场共享workspace水印来自9月12日，v2会话水印在v2本轮开始附近生成；未找到该次Hook首错回执。隔离合成检查确认旧workspace水印可阻止后来session捕获首条普通输入，同时保留其它会话隔离；这只是可产生该形态的机制，不冒充现场根因。诊断主动禁止replay，因此尚未验证正常任务的自主恢复。不得删水印或以缺文件/mtime猜测新会话来求通过。完整回读、现场定位与合成结果在accord-entry-current-20260928-01/ide-native-readback.json及watermark-mechanism.json。
-
-同次只读核对现装27100450的24文件/ee962ced摘要、Git市场f8ecac46/启用状态及独立恢复副本均匹配；配置当前摘要804f0d138c0b539bd7a7b8068c0f0601c29196f0b878aa2102b7b7d15f0a84cd与旧21b7记录不同，期间两次读取稳定，未追查或覆盖无关变化。当时28040031未单独安装，后续采用28065830的结果见当前状态。官方本地插件说明要求更新后重启、CLI新会话采用，未提供活动轮次及后置Hook可安全热切换的保证；不能据此省去健康执行者、结束旧回调和新鲜恢复材料。共享更新/Cloud的新执行权限仍须对应具体动作，旧单次授权不复用。
-
-fcf88bdf源码候选的CI36346771569与562ee280记录/判定对齐的CI36349275184，现已分别按完整SHA及全部11个job回读success；这两项责任闭合，不再轮询。
+e147的[CI36554746611](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36554746611)及e21的[CI36559848540](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36559848540)均按完整SHA/11job核成功；更早已闭CI保持原件，不再轮询。7ec/dd8a只是接续记录，按既有工序skip ci，不称新增矩阵。当前没有待回读的CI。
 
 ### 到正式发布的进度评估（2026-09-28）
 
-目前处于普通功能组合与必要验收收敛阶段：核心机制已有较充分实现和多平台局部证据，普通协调、暂停恢复、文稿交付/纠偏以及SDK生命周期/暴露已有三组共六项按各自版本准入的结果。它们是可复用成果，但尚不能合并成整版验收。当前材料没有稳定的剩余工作量权重，不再给一个无法复算的总百分比；0/8完整A项同样不表示工程实现为零。
-
-| 现有工作包 | 已有成果 | 发布前剩余结果 |
-|---|---|---|
-| W01/W03/W04 普通交付、推进与纠偏 | 五阶段协调/暂停恢复、两轮文稿交付与系统纠偏分别已有实际准入 | 覆盖适用入口及完整职责，沿真实工作消除剩余调用断点 |
-| W02 入口与能力 | OpenAI适配、专用Skill和受控显式选择路径已有实现；Work本地已有有限参与观察 | 完成7个pending的有据处置及最终入口集合，核自主选择与实际采用 |
-| W05 连续性 | 原生压缩恢复、状态/MCP、SDK接管/转移/恢复已接通并有局部证据 | 必要真实工作中的自主择时、业务接续、未知效果与失败回退 |
-| W06/W07 环境、生命周期与资源 | 精确安装/恢复、受控生命周期/暴露及多种进程退出已有证据 | 普通环境变化、压力后续做、受影响整包和完整资源后态 |
-| W08 组合、影响与发布 | 准入/缺项检查及发布工作稿已准备 | 同一episode的系统组合、充分独立影响判断、精确候选与正式发布 |
-
-关键路径收敛为三段：①并行推进入口最终处置与真实普通工作组合，按已定义范围前瞻绑定必要真实案例与可执行的当前条件；②闭合连续性、环境/资源及A08的系统组合与影响判断，补有影响的差异；③精确整包、独立/托管核验和发布，随S5输出完成A08剩余条件。复用已完成的局部结果，不按scope或IDE品牌逐个另造试验；后续事项不拖入本版。云端当前仍有资源释放及实际采用缺口，只有新的具体权限才能执行新的云端动作；已有授权内的本地工作继续。
-
-本次发现并清除了机器工序里的3.2.1、纸面3.3和两宿主旧约束，取消Claude后续适配并退役三份失效观察器/专属测试（75,724字节、22项测试）。其原件由a02bf37b的同名路径追溯，历史观察不改写；正在使用的Codex缓存、必要恢复材料及仍被消费的历史核心保持。清理带来的体量减少不计为功能验收完成。
-
-上批收尾时限修复6e804da4的[CI36339020049](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36339020049)已按完整SHA和全部11个job核对成功，责任闭合。本轮发现测试克隆覆盖未同步已删文件，会复活旧链；已用共享夹具同步文件及索引删除并核源目录保护。88项开发契约回归、准入绑定定向检查和产品verify通过，两份独立审查未见剩余阻断；17范围、完整acceptance、发布条件和候选包摘要不变。当前这批的托管检查另按实际提交核对，不借用上批通过结果。
-
-2026-09-27，Work路线候选9211ca60的[CI36326406900](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36326406900)已按精确headSha和全部11项job回读成功，核验责任闭合；后续纯观察记录不据此冒充该候选以外的功能验收。前序入口模式记录a7c6d8b0的[CI36321744769](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36321744769)同样已11/11成功，无需重复轮询。
+此口径继续适用，状态更新至9月29日：当前处于普通功能组合及必要验收收敛，核心机制和多平台局部证据可复用，完整A01–A08尚未收官。没有稳定的剩余工作量权重，不编总百分比；完整A项未完成不表示工程实现为零。17必要scope均已定义、12活动case；6项历史准入仅属原版本/条件，不能拼作当前整版通过。`functionalCompletion=false`、`candidateEligible=false`保持。
 
 ## 本批完成与实际未完项
 
-cb359d42的[CI36330545111](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36330545111)已按精确headSha与全部11个job回读成功，托管责任闭合；该观察时本机仍27100450，新包未安装；后续采用见当前状态。随后公开0.144.0-alpha.4的定向Linux检查已完成：[CI36334881373](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36334881373)绑定cd2157c8，缺失/空配置两条件均完成原读取前缀及自然退出；27份artifact与ZIP摘要、四份进程/组退出回执及配置不变已独立核对。该机械支线闭合，不再换平台重复探测。
+| 工作范围 | 可复用的有效成果 | 仍须完成或保留的边界 |
+|---|---|---|
+| W01/W03/W04 普通交付与纠偏 | 60219fff五阶段协调/暂停恢复、48d4dbeb文稿交付/真实反馈纠偏，共4个历史case准入 | 当前适用入口和完整职责；内部修订可事先成为协作流程，事后评估者修复不能追认原worker成功 |
+| W02 入口/能力/决策 | 当前4个selected、7个pending；原生匹配和受控显式代选已有局部调用记录 | 完成入口最终处置与必要实际采用；explicit-only正向业务结果、默认环境/能力变化及完整动态分配仍未闭合；不强制胜任主模型热切换 |
+| W05 连续性 | 原生压缩恢复、输入隔离/分页、MCP状态、SDK提议/继续源/接管/恢复及受控失ACK有实现和三平台局部证据；029a1c58有2个历史SDK机制case准入 | 真实工作中的自主择时、足够继承、实际续做、单写者、未知效果对账和失败回退；GUI没有连接不代表所有入口无连续性，健康任务不强制迁移 |
+| W06/W07 环境/资源/生命周期 | 精确安装、恢复备份、资源控制和新旧暴露已有实际观察 | 环境变化/压力后继续、受影响消费者及完整资源后态；04的自然发现退出失败不得抹去 |
+| W08 整合/影响/发布 | 验收映射、缺口诊断和发布工作稿已有 | 同一episode的完整系统组合、充分独立影响判断、精确候选与发布后态；A08依赖A01–A07，不能以平均值或散案抵销短板 |
 
-随后用户批准的一次只读Cloud诊断已执行并结束：[执行只读运行期诊断](https://chatgpt.com/codex/cloud/tasks/task_e_6ab952faf8cc832bb968dbee906a7c99)在4e44e52a完成两次config/read，报告当前CLI摘要与上述公开件相同、config.toml前后摘要不变；根进程exit0且reader停止，但forced=true、group=alive、recordReleased=false。Root交叉读取界面执行日志和最终摘要；原RPC/resource仍在Cloud私有目录，未独立取回，组成员性质及旧setup根因未知。单次权限已用完，无追加输入、重试或清理。由此定位并用本地假时钟单独重现helper缺口：根已退出时首次组等待耗尽回收预算，终止后仅剩立即采样。三处调用已改为共享原优雅截止点，为终止后观察保留原总预算；这不证明本次Cloud必由该缺口引起。原自然退出判据、旧案例/源码绑定及未完验收保持，详见[诊断与修复](PROCEDURE-v3.3.md#cloud运行期关闭诊断与回收时限修复2026-09-28)。
+六个无活动case范围仍是dynamic-model-routing、autonomous-continuity、codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment；缺案例/职责/情境继续显示缺口，不为填数制造业务。
 
-源码候选233529仅补足状态目录的可发现性：输入Hook把真实绑定cwd作为JSON数据给出，MCP三工具的共用参数说明提示核对Hook/恢复定位，并说明该目录也是checkpoint文件相对路径的基准。正文中的业务目录不自动替代它，显式其它目录查询也不被重定向；状态键、身份守卫、输入/暂停和compact定位均未改。这针对本次Work提示词暴露的误用风险，不把原案改判为捕获故障或行为成功。本机未更新，新的模型行为与完整恢复仍未验。
+以下负面证据仍影响路线，详情查原件，不重复展开或重跑：
 
-JetBrains/Xcode的接入判断已区分内置Agent和外部Codex调用IDE工具：外部路线确定复用现有执行链，无需另造IDE执行器；内置两行继续待判，关键缺口缩到具体控制者的入口/新输入、原生身份及状态/恢复契约。Skill导入、IDE聊天规则和MCP可连接各自只证明相应通道；不借外部路线或macOS CI代验内置。后续据明确接口补实际断点，不要求用户采购/安装，也不再重复查已有组件目录。详见PLAN入口路线表，来源与审查在accord-ide-routes-20260927-01。
-
-Work本地子模式复用现包路线已有真实初步采用：用户发送的唯一只读任务01a0e34c-7118-7621-a149-4142d960438f已完成，原生历史确认入口指导、UserPromptSubmit及一次状态MCP调用；同轮thread/session/turn和实际cwd输入回执已对账。Root诊断提示词错误固定repo cwd，实际projectless对话在生成目录，原查询因此查到另一键；原missing回执与报告保留，不将事后文件对账冒充正确cwd的MCP联读。下一真实Work任务应区分Hook绑定cwd与业务目录，再验必要交付、续作及退出，不重跑本次诊断。Work云端加载/绑定与状态存续仍待判；整体4selected/7pending及完整验收未完。原件见私有accord-work-entry-composition-20260927-01的work-local-readback与root-readback，未安装、授信或改runtime。当前工具已能识别和只读跟进该Work本地任务；其kind=codex不能单独用来否定Work入口。
-
-CI无需阻塞这些独立工作。当前工作流对push/manual按提交SHA保留运行，只有PR替换检查设置cancel-in-progress；正常对话不取消CI，也不因等待检查要求用户反复输入“继续”。新运行的最终回读责任持续保留，必要失败回归和发布仍受各自门槛约束。
-
-**当前完整安装的两项普通案例已正式准入**：60219ffff83524523d373517d6ad4bbb851d2ff9预先绑定CLI0.157.0/Sol-medium/default、202615完整安装包和原五条输入；原600秒总限额及token上限未变。一次同任务五阶段在323.81秒内完成：同意及侧问后交付四文件，明确暂停与未决“继续”均保留五文件，取得新决定后同步修正四成果至B厅/8人/360元并说明减少300元；原输入及通用材料Hash/mtime保持。
-
-两位独立评估者完成product/specification/implementation/standards四轴复核；原生五轮输入、回答、完整入口加载、实际模式/模型和逐轮Goal读取均核对。既有assess_development_evidence的observe/recheck已返回acceptedCases=[v33-goal-authority-correction-01, v33-paused-work-recovery-01]、errors=[]、caseRejections={}，这两个声明范围的职责/质量/场景缺项为空。首次汇总因审查时间带毫秒、不符合canonical UTC格式被拒；按原始时点截至秒后仅重做只读复查，初始拒绝与原消息保留，未重跑场景或改变审查结论。
-
-五轮后Goal均为null，仅代表读取时点；实际历史无Plan/Goal激活。5个CLI Job和19个目录/读取进程自然退出，配置字节一致；Root回收经副本核对的工作区及空temp/state，143份episode证据字节保持、原生任务/历史保留。这是调用方资源收尾，不计为Agent自主清理。宿主注入通用Idea-Driven AGENTS，既有记忆与其它Skill仍有效，不归因于Accord单独收益、不外推自主fresh交接或完整入口。原件accord-current-cadence-20260926-01；旧声明、旧实例及失败保持原身份。
-
-本次57项完整admission回归通过，静态verify/verify-development通过。该精确执行候选的[CI36191959588](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36191959588)已于9月27日按headSha及全部job回读，11/11成功，期间后续对话与记录提交未取消它。17必要范围、7项入口待判、6个未绑定范围及A01–A08整项0/8保持；功能整体验收与发布资格仍未完成。当前两案已闭合，后续转向未验连续性、入口与整体影响，不重复同一五阶段。
-
-**既有SDK机制的前瞻准入连接**：独立源码/离线复核确认source完成后的writer/token回查、失败/未知效果保留、交接期间状态更正及恢复门槛已有实现，未发现须另加runtime的依据；真实调用方的自主判断与语义接管仍待实际工作证明。当前Desktop0.158.0-alpha.2.1及独立CLI0.157.1含实验字段的原生schema均未提供resume补注册dynamicTools，不据宽泛文档猜测已有GUI任务可接入。
-
-本批已完成Windows基础生命周期与作用域暴露两案。复用现有公开runner和bind_evidence_execution，从一次手动CI的实际manifest绑定两案及不可变候选，再在run前重建执行条件并核对完整case集合、manifest Hash与绑定全等；原Windows/0.154、七原生进程/六命令/四固定响应记录及全部业务判据保持。原validate的POSIX hot-reload不改也不冒充两案。独立审查发现的缺绑定真空放行和失败目录漏上传均已修正；真实workflow段的一条正例及七条拒绝反例、29项lifecycle回归、actionlint和静态检查通过。只新增一个手动CI调用文件及其精确维护额度，没有新产品runtime、观察器或夹具。
-
-唯一[托管运行36255885596](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36255885596)绑定029a1c584139e3f54b59ed396c4d6b112fbc3335，全部步骤成功。95份下载原件与API摘要一致的ZIP逐字节核对；七initialize实际报告0.154.0/Windows，24包文件和四执行源码均匹配Git原字节。四份响应中的第三份是预绑中断的in_progress/peer-closed，不报四轮全部完成。暂停、失效输入、同线程恢复且“继续”不解除暂停、坏包拒绝/原件保持、健康重试、卸载及未完状态保留，以及Skill路径禁用/新进程恢复/清空均得到原生和状态原件支持。SessionEnd仅是控制器与源码/保留状态共同支持的启停对照，没有原生事件通知或单独即时树快照，不扩张该观察层次。
-
-两位独立评估者完成四轴复核；既有observe/recheck返回acceptedCases=[v33-codex-sdk-lifecycle-01, v33-codex-sdk-scoped-exposure-01]、errors=[]、caseRejections={}。十三进程均无强停且Job后态为0；五自有根、loopback及保留材料核对后上传，再完成精确job CLI路径清理。共享文件保护明确限于AGENTS.md及所列源/状态，不能泛化为整机；此为受控无模型机制准入，不代验普通Agent自主交接、Skill自主选型、GUI/云端或A01–A08整项。先前普通两案保留各自候选/条件，不机械叠加为当前完整覆盖。原件accord-continuity-interface-20260927-01，本实例不重放；029a1c58的标准[CI36255868953](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36255868953)现已按完整headSha及全部11个job回读成功；此前待核记录闭合，不再轮询。该结果仍限于原候选与原条件。
-
-**本批CI跨平台夹具修复**：efc84337的[CI36157692681](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36157692681)出现Linux失败；已回读Python3.11原始日志，唯一断言为新增“Popen后失败”测试实际未调用Popen。WSL/Linux同案稳定复现：模拟WindowsJob却遗漏CREATE_NO_WINDOW，参数求值先失败，随后模拟的close异常掩盖原因。仅补测试常量并断言启动参数及attach_and_resume实际调用；Linux同案先红后绿，Windows/Python3.10与3.14均通过。加入现有CI前置检查后13项本地通过，actionlint通过；产品代码与验收判据保持，新提交需按自身SHA核对托管结果，原失败不改标。本机WSL未提供可用Node，扩展全入口套件因此不能作为Linux全套通过证据；跨平台完整检查由配置Node的托管矩阵承担。
-
-修正提交77ac713c2ea50f5aa31f8a2bff96d10512eea532的[CI36159820207](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36159820207)已按精确headSha及全部job回读，11/11成功；九组OS/Python前置检查及完整矩阵通过，原失败保持。
-
-**已完成子范围的接续纠偏**：机器投影nextBoundary仍残留“优先完成中断的finalize-receipt组合”提示，与已完成的原件和既有工序冲突。本次只读回看Windows02及Linux/macOS托管三份原件，均确认既有受控失ACK收尾、目标writer及settled revision19；详见[原范围](PROCEDURE-v3.3.md#配额中断后的收尾组合验证2026-09-23)。已纠正这一陈旧下一步，不重跑原生试验。固定响应、原夹具失败和非一般crash恢复边界保持；自主择时、语义接管及完整A05仍未由此通过。
-
-同次只读核对0.157.0原生schema：thread/start没有调用方创建ID，thread/list提供目录/标题等筛选但没有按创建请求ID认领的接口；首次ACK完全丢失时仍须保留unknown，不能按近邻任务猜测或复制同一试验。VS Code现装扩展26.908.40401及捆绑后端0.154.0-alpha.6.2仍与历史观察版本一致；检查时没有Code/该扩展后端进程，不能将CLI0.157.0或已更新的共享包代验为IDE当前采用。未启动IDE任务、修改配置或重开云端；所缺的是实际入口参与证据。独立入口审查确认七个pending尚无可据现有材料整项关闭的条目；已定的普通Chat辅助、移动Remote复用主机、外部触发复用云执行器模式保留，不因未测试或缺设备删除必要职责。
-
-**IDE用户说明审查已完成并形成主仓修订**：用户已发送普通请求；原生任务01a0da16-2606-7d30-985c-e8b2ae23b4fb、轮次01a0da16-62aa-72a0-bd63-7c3d1876fd8f完成，交付review.md和8项claims.json。准备后实际扩展变为26.917.62051、后端0.155.0-alpha.16.3；当前观察按实际Luna/max/default及on-request/danger-full-access保留，不能沿用准备时的旧版本。202615完整入口正文两次位于首个工具前（仅四个相对链接展开），Agent随后读取核验Skill；六份冻结原件Hash/mtime及24包文件保持。实际输入比准备文本多Markdown转义和末尾换行，不称逐字匹配。共享配置改为Luna/max并增加本工作区信任，原生执行中未见Agent写配置命令；记录差异而不推断写入者、不盲目恢复用户选择。
-
-独立复核确认两份审查结果相互一致；将开篇能力语气和模型/推理决定边界定为非阻断清晰度改进，已在主仓中英README及LAUNCH正文/结构字段落实。报告的Node24、排期/提交两项仅为限定材料中的未知：主线程另核同一workflow Git blob及77ac713c实际job中的Node24.21.0，保留正确CI表述；“未排期、未提交”改为明确的发布准备工作稿身份。原报告与输入不改写。实际IDE参与和文案成果不升级为全部Hook/MCP、自主交接、完整IDE生命周期或正式A01–A08通过；未独立读取该任务最终Goal，IDE/后端由用户界面持有，不能称已退出。原件、原生历史、输入回执、配置前后态及独立复核在accord-ide-copy-review-20260926-01，窗口和保留材料不重复派发、不归档或删除任务。
-
-**原生显式Skill协调已实际执行，整案未准入**：root按用户委托代选现装explicit-only retro，原生CLI0.157.0/gpt-6-sol/high/default在首个工具前加载完整Skill正文，并读取writing-for-agents依赖、交付report.md。第三方源/策略未改；不是worker隐式匹配或自主选型。独立核实12份冻结业务源及报告：事实、问题排序和未完边界成立，但下一工作段仍是泛化流程，未给具体任务/成果，正式observe/recheck因此保留consequence-mismatch、acceptedCases为空。原报告不补写求绿；该结束实例按既有规则转历史，原10活动案、17必要范围和底线保持，有效用户环境的合格贡献仍缺。六域自然退出，四输入字节/mtime、配置和Skill文件集保持；所属workspace/temp/state及空父目录已回收，原生任务/历史和报告保留。此前多行prompt准备失败发生在Agent前，原件未改；两行UTF-8字节修复、94项入口回归和独立复核已闭合。详细范围见[记录](PROCEDURE-v3.3.md#原生显式skill协调与复盘结果2026-09-25)；原件accord-ordinary-retro-20260925-01。
-
-**源会话可以正常拒绝不必要交接**：真实connection/SQLite调用链复现了planResolver无法表达“留在当前任务继续”，原路径报SERVER_REQUEST_FAILED并锁会话。现复用严格原生提议校验，允许owner明确返回continue-source及理由/依据；答复前后核对持有的writer scope，不创建transfer或占用交接次数，同轮业务及后续轮次可以继续，后来有必要的提议仍可交接。畸形输入、owner异常/未知、归属变化及发送失败继续锁住，不把暂停/撤权变成续行。五项新增检查先红后绿，完整会话/交接/连接96项和Python3.10五项通过，verify、verify-development、host-check及独立复核通过。只支持SDK反馈路径，不代验模型择时、普通入口采用或完整A05；[CI36135273441](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36135273441)已按精确f2ad9285及各job回读，11/11成功；新202615包也已原生更新，普通行为仍需下述实际工作核验。
-
-**多行prompt修复的托管检查已闭合**：[CI36143582663](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36143582663)绑定精确e74c4a4fcfc0a18b06c0ed39ecc8a20629b2a765，已回读11/11成功；原失败及各轮证据保持原范围。
-
-**真实SDK源任务已交付代码，主线程完成接管核验**：现装202615包通过任务内持有的0.157.0 App Server连接与SQLite完成一轮实际开发；root按既有委托选择原生implement Skill，第三方源/策略未改。worker修正入口内部预检失败误记为native-execution，原生完整入口套件100项通过；root纠正一个测试未命中内部复查的问题，Python3.10与3.14各7项通过，独立源码审查无阻断。模型主动查询一次上下文，实际响应为unknown，未提出交接；不能算自主转移或整个SDK生命周期通过。worker已完成，但root审查超过私有调用者240秒答复期限，调用者保留失败；原生exit0、外层exit1、无强制终止、所属Job进程0。原worker补丁与root修正后补丁分别保留，无第二轮或重放。原件accord-sdk-owner-integration-20260925-01；详细边界见[记录](PROCEDURE-v3.3.md#真实sdk源开发与预检诊断修复2026-09-25)。
-
-上述任务内调用者的收尾断点已在新副本修复，原实例不重放：accord-sdk-owner-closeout-20260927-01保留原55文件Hash、实际旧代码红例与新14项无模型检查。原生轮次及必要adopt成功后持久化身份/scope/回执与待集成审查责任，执行最终读回并关闭，不再把外部审查当240秒原生请求等待，也不自动派发下一轮；已消费答复及时清除等待状态。最终result/status仍明确review=pending，连接退出不代验业务结果；活动原生请求未答、读回失败及异常退出保持失败/未知。独立只读复核无阻断，owner SHA2aed0ffbae280e1ed2ba3aa492abec259fdd5438cd1641fcf66693a191809ab3。红/两版绿共29个fake Job自然退出/活动0，116个准确自有工作/缓存/状态/空HOME路径已回收，578份检查材料保持，原55文件未变。没有真实模型派发、配置更改或产品runtime新增；这修复实际SDK消费者的完成/退出边界，不证明普通GUI自动迁移或自主择时。后续实际工作仍须绑定当前条件及既有恢复接口。
-
-**该调用者的显式恢复分支已接通并完成本地验证**：新副本accord-sdk-owner-resume-20260927-01复用既有restoreCodexSourceSession及原记录器，恢复与新建互斥，不以最新token替代旧依据或失败后新建。恢复失败显式保留error.session与RPC来源；成功快照先落盘，再核当前权限并执行一条新输入，审查待办及完成后退出保持。独立复核发现恢复后的目标创建误入源确认，已补红例并用明确restoring来源标志修正；目标仍归原核心核验。最终13项恢复检查及原14项关闭回归通过，同一假源100→105累计用量不重复相加。已知源的正向恢复、旧token/身份/数据库/核验/回执/落盘/后来暂停等负向路径有本地证据；目标探针仅验拦截路由，不是完整transfer/adopt或语义接管。owner SHA92f092000a3d1a2a0cf6b27a0bdcec8812478c198825b68cbd874efb06a35f0d；独立最终复核无阻断。62个检查Job无强停/活动0，224个准确自有临时路径回收，1232份本批材料及前稿597份原件Hash保持。未改产品runtime/安装包/第三方Skill或共享配置，未执行真实模型/Cloud、旧实例或新的正式准入。后续在真正必要的SDK业务任务中绑定当前条件验证实际恢复；普通GUI控制、自主择时与完整A05仍未闭合。
-
-**随后一次真实SDK源试用未完成，恢复未派发**：accord-sdk-continuation-delivery-20260927-01原件绑定d7225671、现装27100450及CLI0.157.1/Sol-medium。源原生创建、设置及上下文工具连接已有真实回执，但Root两次派发答复等待56.130秒和124.562秒；其中附加了不成立的“首轮前转录必须落盘”假设，核实后纠正。原300秒总限额及30秒收尾预留未扩展，原生业务实际观察窗仅85.905秒，最终TURN_ACTIVITY_FAILED，历史记录turn_aborted/interrupted；没有review.md、完成终态或最后Goal读回。不能写成模型跑满240秒、SDK恢复失败或新验收通过。原生exit0/外层exit1、所属Job活动0，未重试/重放/恢复或更换模型。当前摘要的过时信息由Root另行修订，不归为worker交付。
-
-原result.usage=null保持；真实流6条用量事件证明最新已观察累计294271、未缓存63563、输出2868，中断尾部仍可能未报。私有调用者原来只在run正常返回后登记线程，失败时丢失该汇总；独立caller-repair副本改在请求绑定的turn/start有效ACK后登记，完成/结果仅汇总已确认线程，原始流和保守总量守卫保持。19项调用者/用量/关闭与13项恢复检查通过，独立复核发现的混入未确认线程用量也已先红后绿修正，SHA7e2e54413b85923afcfb2c26f04c483faae4af948768b4ca74b4272b9579e756。原真实实例、代码和result未改；92个无模型检查Job退出，345个准确临时路径已回收，1906份材料及源输入状态/历史/SQLite保留。后续先备齐机械核验并核对剩余工作时间；首轮前依原生创建回执，恢复前才核持久历史。不再把轻量修订串成复杂SDK演示，不为取证扩额或重复此案；实际恢复留给确需接续的开发任务。
-
-**本批托管检查已闭合**：dc63f904的[CI36128555843](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36128555843)完整11/11成功，精确headSha与各job已回读；包括活动案例处置后的九个OS/Python组合及两个原生生命周期job。14aada0c的前次11/11保持原范围。仅说明相应提交的托管检查通过，不代替普通行为、云采用或正式准入。
-
-**一次只读云端诊断已结束**：用户明确授权后，新任务[执行只读环境诊断](https://chatgpt.com/codex/cloud/tasks/task_e_6ab65d086c20832bac6668dfc63a03b1)进入Agent阶段。首轮自己的进程祖先PID3450报告HOME=/root、CODEX_HOME=/opt/codex，候选config.toml存在但仅做了accord子串检查；独立执行文件报告0.144.0-alpha.4。后续仅补角色字段时PID4641出现app-server及-c；首轮过滤未包含-c，不能把空列表解释成没有配置覆盖，两个PID也不能合并成同一快照。配置实际加载、覆盖内容、模型控制者及刷新路径仍未知，本案不支撑安装。完整计数、命令来源、后态及限制见[历史记录](PROCEDURE-v3.3.md#只读云端配置来源诊断2026-09-25)；私有原件accord-cloud-controller-provenance-20260925-01，临时环境页已关闭，任务及结果页保留，不追加第四条探针。
-
-**活动案例与历史责任分开**：两个不可重放的失败实例已从admission.cases转入developmentObservations的不可变定义/执行引用，活动案例12→10。准入器未改；requiredCoverage、F/A、职责、质量、场景及条件未降低，systemic-correction的当前正例和ordinary的有效用户环境贡献仍缺，functionalCompletion/candidateEligible保持false。保留空范围与缺场景的拒绝反例，历史材料没有删除或重标通过。
-
-**Goal读回测试的Windows临时目录别名修复**：36118841418的Windows/Python3.14在Goal正例的observed断言失败。以GetShortPathNameW建立同一自有临时目录的真实8.3别名后，原测试稳定复现unknown及cli-source-unavailable:ValueError；在生成全部回执前统一解析临时根目录后，Python3.14与3.10的相同复现均通过。仅修夹具并增加失败原因显示，产品路径/身份守卫未改。该轻量用例加入已有CI路径前置检查，11项前置用例及actionlint通过，独立审查未见阻断；原运行最终为7/11，Windows与macOS四项均为同一正例失败。修正提交14aada0c的[CI36123114636](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36123114636)已在全部九个OS/Python组合通过该前置检查；完整矩阵现已11/11成功，精确headSha和各job均已回读。按SHA保留CI策略不变。
-
-**CI责任续接与漏项修复**：0a6f925c已将push/manual按提交SHA分组并保留运行，PR仍按引用替换旧候选；矩阵与测试步骤未减。原5eb0e698托管Linux失败是新增案例后测试仍写11，而实际为12；已修为12，原失败单测、完整57项准入回归及actionlint通过，独立复核无阻断。新[CI36118841418](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36118841418)已运行，推送后旧36115837538仍运行，未被新候选取消；两者结果各按自身SHA核对，不把旧失败升格。
-
-**第三方Skill与交接接线核实**：Matt源文件、调用策略与CC Switch管理归属未改。当前0.157.0原生目录列出implement/to-spec/wayfinder等已启用但显式调用的项；已有受控source会话run接受原生Skill输入，交接续做纯Text也可在名称唯一且无同名连接器冲突时通过准确$名称选择，无需为这组条件扩runtime。当前V2子代理消息是InterAgentCommunication，不能借用UserInput选择结论；实际采用须在对应目标轮次观察。SDK机械交接至首轮续做已完整，后续由既有adoptTarget承接；普通入口的真实调用者、模型自主择时和组合结果仍是未完项。目录/源码核实不是新的模型行为通过，不重做已闭合固定协议演示。
-
-**普通CLI的Goal原生读回与真实审查**：b8f115c8接通持久轮次后的thread/read与thread/goal/get，7b1a66c7预绑一次本次必要的独立代码审查；旧CLI案01条件保持，范围仅合并共同条件，旧案仍独立必需。92项入口回归、98项开发/观察器回归、Python3.10两项反例及静态检查通过。真实115917已安装入口在0.157.0/gpt-6-sol/high/default下交付review.md；当前轮入口指导、配置、持久线程和Goal原始双回执均独立核对，Goal为空只限完成后的读取时点。原生累计1566864 tokens、未缓存输入110418、输出11454，均在原定限额内；不由此推算费用或上下文占用。
-
-审查准确发现“无当前完成回执的恢复阶段仍可标Goal observed”，已作为修复输入；wrapper未提供turn_context属于旧路径覆盖限制，不是本安装入口的新失败。模型还读取了个人MEMORY.md和现装Skill，超出本案预绑来源清单；正式observe/recheck保留consequence-mismatch、acceptedCases为空。既有宿主指导可能解释额外读取，尚不据此断定插件运行时故障或广义越权；不事后放宽原案，后续须先对齐实际宿主指导与业务来源边界。报告价值不能抵销该案例范围不匹配。
-
-原件、三输入、完整原生历史和报告均保留，共享配置字节未变；CLI、四次目录查询及Goal读取六个所属进程域全部自然退出0、活动进程0。工作目录、临时缓存、空状态目录及本次创建的空.tmp父目录已回收，原生任务不归档。收尾只读回查另发现新Goal侧记录未被retained比较器识别，四份保留文件字节一致却报native-receipt-mismatch；两处均已最小修复：未完成轮次不启动Goal读取，独立Goal侧文件与阶段/线程分别核对；93项入口回归、Python3.10两项反例及verify/host-check通过，独立复核未见新阻断。对本案原件的新版本只读回查为verified，全部保护原件Hash不变；原mismatch、准入拒绝及历史评审保持原身份，不重跑模型求绿。后续集成提交14aada0c及dc63f904的托管矩阵均已11/11通过，原失败不改标。原件导航accord-ordinary-integration-20260925-01。
-
-**Windows复制运行时测试收尾**：80ad291e已修复两个复制Node执行测试的进程归属、退出和精确文件有界清理，保留持续失败及异常链。真实Win32共享锁复现先红后绿；90项入口回归、Python3.10六项定向检查、静态检查及该提交CI11/11通过，独立复核未见阻断。早期本地负向夹具的暂停进程与三处临时目录已按精确归属回收；原托管锁占用者仍未知。过程、反例修正和恢复限制见[历史记录](PROCEDURE-v3.3.md#windows复制运行时的测试退出与清理2026-09-25)及accord-ci-cleanup-20260925-01。产品runtime、115917包、业务限额及验收判据未改，本次测试修复已闭合。
-
-**普通入口状态诊断纠偏**：实际接管中发现status把“无存储回执、仅有失效水印”的合成隔离状态标为旧回执。沿原稳定快照增加inputReceipt.present及failureWatermarkScopes，缺文件明确标为missing-stored-input-receipt；水印范围只说明标记保留，已承认的标记仍列出，不证明当前消息丢失或回放权限。两项新增回归先红后绿，184项状态/MCP检查及verify、verify-development、host-check通过，独立源码审查未见阻断。新源码只读检查当前真实任务得到缺文件/工作区水印，epoch及needsNativeReplay不变、水印字节未改；不改回放/暂停/绑定/水印语义。源码与安装身份分开，宿主采用、托管检查及完整普通交付不由这些本地结果代验，正式scope与A01–A08未升格。
-
-**普通source原生恢复**：复用既有测试入口增加source-start/source-restore，固定localhost响应，模型调用0。本机0.156.1确认原创建ACK、持久工具、原件及旧controller退出后，同一任务完成第二轮；scope token轮换、旧依据恢复实测拒绝、无新thread/transfer。首次独立回读因误计历史工具回执而失败，原件保留；按本轮追加输入修正后，新隔离副本通过。两阶段及原失败实例的进程自然退出、Job活动进程0，9个临时profile/state/temp目录已回收，保留文件仍可只读复核。测试准备shadow变量与claim前副本Hash/相对路径问题也在独立审查中修正。原件导航accord-native-source-restore-20260925-01；Linux/macOS原CI及四份保留episode独立回读均通过，每份13个源码Hash与b49dd36a一致；POSIX退出证据限于所属进程组，不扩张为全系统进程证明。97项开发/原生离线检查、另一个Python3.10的10项检查及actionlint通过，独立审查未见剩余阻断。产品runtime和安装包未改，A05及正式验收未升格。
-
-**CI测试准备修复**：0839eb87的[CI36072048902](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36072048902)已结束，9/11成功；两个Windows任务共四个子用例在接管/恢复被测条件之前的交接阶段报RECORDER_COMMIT_UNKNOWN，原日志深层原因被折叠。本地给真实SQLite提交回调加入4.2秒延迟，在两类夹具均复现DEADLINE_EXCEEDED；仅调整这些准备阶段的有限预算，接管反例改在交接成功后注入，保留产品及专门超时反例。Python3.10/3.14各27项会话测试通过，修复后8064aac6托管11/11成功。仅测试与接续变化，包、基线、计划、机器投影和行为验收判据不变。
-
-**保留与回读修复**：已复现业务文件inspection.json被内部记录覆盖，以及工作区回收后默认检查报FileNotFound。新manifest前瞻声明stage-files-v1和阶段ID，业务副本与记录分目录，复制前后校验Hash；显式`inspect --retained`核对原生回执、inspection/history、阶段链及副本一致性，不执行冻结代码或重建工作区。86项完整入口回归通过、独立复核无阻断；旧发布02的120份原件逐字节未变，两阶段保留记录均匹配，原caseComplete仍false。仅保留字节核对，业务/原mtime/安装/清理与正式准入未新增。原件导航accord-retained-inspection-20260925-01。公有observer源码已变，私有cloud repair仍绑定旧helper Hash，不能直接执行；实际需要时先复核并重绑，不生成新云端试验。
-
-**云启动原案**：用户批准一次临时setup、一个接入任务及最多一次清理续作。投递脚本网页回读Hash一致，任务[Verify native task access status](https://chatgpt.com/codex/cloud/tasks/task_e_6ab59bee8ac0832b8c4455c7279289ba)在环境准备32秒后退出，stdout只有RuntimeError，尚未进入受测Agent阶段。没有重试/清理续作，也没有归档/删除任务。临时setup已清空并保存为自动，环境其余前态核对保持。失败页没有原容器读取入口，因此具体失败断言、安装/信任及资源后态保留未知；不能声称原容器完整回滚。
-
-恢复后另一个官方诊断容器观察到：启动期默认配置位置/root/.codex没有config.toml，已知CLI文件存在但PATH无codex，Node24.15.0路径可见，原试验包目录不存在。这不是原失败容器，只能说明启动期前提必须单独核对。原脚本已经使用绝对CLI路径，PATH现象不能单独解释失败。
-
-**本地准备工具修复**：保留as-run原件并复现外层错误处理丢失诊断字段。修复稿在独立repair目录，要求显式目标CODEX_HOME及来源定位，允许已存在目录内尚无config.toml；原生子进程与回滚共用绑定，不改变父环境。固定守卫条件、失败阶段和目标写入的未知边界可公开，原生异常内容留私有。正常收尾保留原失败阶段，收尾失败另标。17项离线检查通过，独立审查提出的两处阶段误标已修正；没有调用Codex/App Server或云端试验，没有生成新setup包。原文件校验后移至单一as-run副本，重复启动文件和测试临时目录已清理。修复不是原云失败根因证明、原容器恢复或产品功能验收。
-
-**普通交付未完**：发布准备02原案失败保持。首轮结构通过但说明误读来源并转嫁核验责任；第二轮累计输出10428超过预绑10000，被观察器终止，清单未修完。Root在独立路径校正的草案已并入LAUNCH，这是评估者修订，不是原案自主成功。既有observe/recheck返回consequence-mismatch、acceptedCases为空；不抬原预算或重放求绿。资源/环境批处理原案漏记后续问题也仍不准入；有效数据与已验子事实保留。
+- 候选审查889cbf8a一次执行有两个有效发现，但原Markdown错扩F01触发路径、JSON未作该扩展。两case正式 `consequence-mismatch`，保留specification失败；Root后续源码修复不归为原worker成功。两结束实例已转历史，其余case和17范围不变。
+- 旧SDK首案worker已交付代码、Root完成修订集成，但调用者等待审查超时；后一接续案受Root等待及不成立的首轮落盘前提影响，业务未完成、restore未派发。后续调用者收尾/显式恢复/用量归属修复已有离线证据，未借机重放旧案。复用既有调用者，不为轻量文档串复杂SDK演示。
+- IDE以用户指定v2线程01a0e4dd-45c9-7a82-97f3-2d7bc0e9ae1a为准。旧27100450入口/MCP参与有证据，但input absent/revision0/水印需重放；当时只读授权禁止replay，不能说正常恢复失败。误发首线程由用户删除，不恢复；错误路径文件、v2成品及Root派生读回不能混为一物。Work本地的实际projectless cwd与Root查询repo不同，不能称已正确联读。
+- Cloud旧任务均结束、单次许可均消费。外层setup恢复不证明容器零效果或已回滚；实际控制者加载/刷新及部分容器资源后态仍未知。最新只读诊断两次config/read已完成，但旧CLI0.144.0-alpha.4关闭为root0/forcedtrue/groupalive/recordReleasedfalse，原RPC与进程后态未独立取回；不能猜live/zombie/时序或总根因。本地修复/模拟及同版本CI只证各自条件。
+- 用户确认Stop Hook只出现过一次问题，并给过后续自然完成截图；不把持续故障或等待首次成功列为阻塞。原异常只显示exit1，具体原因未知；不倒签为其它已修缺陷。
 
 ## 下一实际动作与工序
 
-1. **普通调用者采用与组合**是主要缺口。SDK接口和固定协议已实现，本批普通source恢复的三平台验证已闭合，不继续复制相同夹具。普通插件主线应检验宿主Agent、入口指导、必要状态与真实工作结果的组合；新增App Server调用者或启动器不是所有入口的共同前提，只有具体fresh路径确需时再判断。为下一项确有必要的真实工作事先绑定主代理、worker、内部核验与独立评估者、实际包/条件及observe/recheck；发现调用断点再做最小接线，不制造业务任务填计数。
-   当前可复用CLI prepare的组合绑定，不再把cx-desktop观察者与cx-cli执行者不能同名当作schema缺陷，也不修改原CLI入口来套上层scope。先为实际交付提交完整case/执行条件，再在同一manifest连接协调者与worker；实际采用、权限和贡献边界分别取证。03已将本机更新到23808，源包与实际采用分别核实，授权已消费；下一次共享更新或新信任仍须具体方案和相应权限。不为此重复已闭合fork/退出小场景。
-   接管后的独立源码核对确认，现有bind_evidence_execution、调用方observe/recheck和独立reviewBundle已有连接入口，尚未发现须另建通用调用器的依据。80ad291e的托管修复已闭合，不重复该夹具；115917已原生安装并独立回读，新输入自然捕获也已确认。真实普通审查已交付并找出有效源码问题，原案读取范围不匹配保持不准入；两处观察器修正已以5eb0e698推送；[精确CI36115837538](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36115837538)的已完成Linux检查暴露同一漏改断言：当前案例数12，测试仍为11。已按实际定义纠正，并改为push/manual按SHA保留运行、PR按引用替换；后续集成提交dc63f904的CI36128555843已按精确headSha回读，11/11成功。两项结束实例的当前适用性处置已完成：发布准备02和普通审查01已转为版本化历史，旧定义、预算、原件、失败和未完风险均保留；原CLI01暂留。17项必要范围及完整职责/质量/场景不变，无当前案例或缺有效环境贡献仍不能通过。下一步围绕确有必要的普通交付和纠偏工作，前瞻绑定可执行的当前实例；先核对宿主必需指导与业务数据边界，避免不可满足的测试前提，不制造业务填计数或另造观察器。
-2. **云端接入与停止后的本地修复**：运行期PID3450的环境和配置候选使/opt/codex成为有来源的候选；另一时点PID4641的app-server/-c不能合并为同一控制者快照。现有证据不能保证实际Agent加载或刷新，但不应要求先证明未来采用才允许本地准备。沿现有修复稿形成独立的有条件方案：重绑202615精确包及当前helper，准备结果仅报awaiting-agent/unverified；实际采用留给未来获准任务首轮真实回执。没有新增云端探针或重放旧案，也不以Agents API的远程harness架构代验Codex Cloud。
+本轮文稿由Root直接维护并独立复核；原TASK/源映射只作准备记录，未执行其中的SDK业务或建立新case。本次维护不计新行为准入，不增加审批关卡。
 
-   独立审查同时发现，原rollback只核准备进程退出，不能证明实际Cloud消费者/MCP/待触发Hook已释放。新副本的公开卸载入口在任何目标访问或原生调用前返回rollback-deferred，旧主体仅作代码参考且未放入setup包。18项离线检查、打包字节和语法已通过。具体方案在accord-cloud-preload-20260927-01/PROPOSAL.md：一次临时setup、一个新接入任务、外层恢复setup前态；若消费者释放无法核实，保留容器内候选/注册/信任/本任务Hook运行记录/恢复材料，不追加同任务卸载、不杀宿主或删除历史。主动核对只读不等于Hook全程零写；市场/插件写入无跨进程CAS，不与已知配置写者并发，漂移后保留未知效果而非盲重试。
-
-   用户随后明确“授权”，本次已执行且结束：实时核对同一环境前态，保存setup并独立回读，再只提交一个[核对 Accord 插件状态](https://chatgpt.com/codex/cloud/tasks/task_e_6ab867c52264832bb91d46d78bcb35bb)任务；界面计数12→13。setup与prompt均仅比批准文本多一个末尾LF，实际字节分别保留，内嵌脚本未变。任务在setup阶段报告PreparationError / native-resource-close / native app process release unobserved，targetMutationDispatched=false；实际Agent采用核对未到达。false仅指尚未派发本脚本的目标市场/插件/Hook写入，不能称容器零写入。该收尾谓词包含多个条件，不能猜成超时、强停、仍存活或特定根因，也不能倒推此前全部预检通过。
-
-   外层已恢复并重新读回自动setup、空手动/维护脚本；universal、网络关闭、缓存开启设置保持。设置复原不等于容器回滚，未取回原容器资源回执，准备sidecar及临时运行效果后态仍未验证。未追加输入、重试、rollback、归档或删除；任务/可见日志与本地原件保留，独立复核支持上述限定结论。此一次新授权已用完，不重放或把未进入Agent当作云端不支持；后续真实云动作须有新的具体依据与授权。原失败、原repair和全部验收边界保持。
-   后续本地诊断已重现准备器的信息丢失：不同退出/强停/读取线程/进程组条件被折叠成同一错误，finally再关闭还可能覆盖首次异常。仅在diagnostic-repair独立副本修复，公开经类型和白名单约束的关闭字段、前序阶段/异常类型，并保留首次完整诊断；中断、目标效果未知语义、退出判据及原生控制不变。13项针对性回归与原18项离线检查通过，独立复核发现的重复关闭、阶段名和alive枚举遗漏均修正。33份原材料Hash保持，测试目录已回收，红/绿日志与评审保留。未改投递原件、生成新setup或执行云端；这只补诊断能力，原Cloud根因、资源后态及Agent采用缺口保持，不能以本地测试代验或重放。
-3. **连续性和资源剩余结果**：复用原生压缩、已有SDK和旧机制有效证据，完成必要自主择时/交权、目标真实续做、未知效果对账与失败回退，连同环境变化、压力后续做和退出后态。不把source连接缺失推广为所有入口不可用，也不强制健康任务迁移。
-4. **正式准入和发布**：补未绑定的entry-coverage、dynamic-model-routing、autonomous-continuity、system-integration、codex-lifecycle、system-impact-assessment六scope；这不意味着各造一套试验。A08的完整组合仍须同一episode，不能拼散案冒充；必要验收、独立审查和精确候选条件满足后依既有授权发布。
-
-本轮两处普通连续性源码缺陷已修复：输入流error/提前close现会保留输入丢失隔离；会话执行器只透传自己实际锁定的异常，外部同类异常不能绕过run/恢复/settle失败处理。七项新增反例、181项checkpoint/session及42项MCP回归通过，独立复核无阻断；原有正常EOF、非Hook只读查询、settle前重试及未知效果边界保持。见[本轮记录](PROCEDURE-v3.3.md#普通连续性失败路径修复2026-09-27)。这是已消除的功能断点，不代验完整自主交接；新源码候选f8ecac46的CI36287689800已11/11通过，既有行为证据仍绑定原版本。用户明确允许本机更新后，20260927100450已原生安装并核验。首次安装后的旧缓存并存检查过严而停止，已先恢复原版本/配置并核验；按既有预加载设计与回归纠正该工程门槛后，在同一授权范围内完成更新。原旧包及恢复材料在独立备份中逐字节保持；18份所属进程域均自然退出/活动0，两处空工作目录已回收，失败与恢复原件保留于accord-shared-plugin-update-20260927-01。未变更第三方Skill、主模型、模式或Cloud；当前状态可访问不等于全部既有消费者刷新。
-
-**后续Stop已观察完成，原单次异常保留**：用户最新说明该问题只出现过一次，并提供新的真实Hook统计截图：4次运行、0阻止、0未成功，UserPromptSubmit、两次SessionStart及Stop均已完成。当前已有后续自然Stop成功的界面证据，不再把持续Stop故障或等待首次正常后态列为推进阻塞。原失败仅显示`hook exited with code 1`，未提供命令路径/stderr，具体原因仍未知；旧helper缺失对照与三个新版隔离回归不倒签为原事件诊断。截图不证明全部消费者或未来每次调用的状态。原件及本次截图/用户反馈保留于accord-stop-update-diagnosis-20260927-01。此前发现的更新工序边界保持：长驻MCP预加载可存活，后置Hook仍需可执行路径；先确认旧根绑定的在途轮次和后置Hook结束，再由不依赖旧根的获准执行者在宿主支持的安全时机替换，未知则保留准备。无需永久缓存并存，不重装或重放求绿；未改运行时、Skill、验收或共享配置。
-
-**收尾依赖核对已落地**：未发现必须先整项验收才允许开发的结构性循环，未改17范围或8项底线。修正PLAN仍将已完成的受控失ACK组合列为“下一步”的陈旧语句；原三平台局部证据复用，不重跑。校验器新增纯诊断caseBindingGaps，按活动case区分无案例、职责/质量轴/场景缺口和A08缺完整组合case；既有observe/recheck、准入及候选条件不变，23项当前准入回归通过。七个pending依据在三scope/三case共六份投影同步细化为具体可行条件，按本地/远程主机、托管执行、交互/控制/触发聚合作业；Work本地/云端与Remote主机复用各有边界，独立IDE保留集成差异。selected集合不变，未把未验证改成通过或排除，也未安排七个独立模型试验。独立复核无阻断；该批7ae3bac5的CI36294719722已按精确SHA及全部11个job读回成功，核验责任闭合。
-
-**Remote限定子模式的开发路线已落定**：按本轮官方来源与独立只读审查，复用已纳入开发的Codex Desktop本地项目任务；输入/审批和回传由Remote控制面接入，实际执行与接续责任仍在主机。普通Chat辅助、Work云待判分别保持，所以mobile整行仍pending，4selected/7pending及完整父scope门槛未变；六份父scope/case basis已同步。实际配对/主机状态、暂停撤权、断连后同一任务及效果核对、回传权限仍须取证；不可达不作重派发理由。另将Slack已知的环境回退/首仓库默认分支及回复范围纳入具体核验点，不代验其它前端。没有新连接、配对、云任务、外部消息或模型试运行；详见PLAN的模式判断。
-
-**更新说明同段两案已实际准入**：用户明确确认后，48d4dbeb78a3f37d4479609969abfcac057e6589/tree d7725dafed5e210087436ed175010c8e2f7b2ac5上只执行一次episode a44e6953d8684b83916175466ba1abab。当前CLI0.157.1/Sol-medium/default与现装27100450完成两轮：先交付中英文更新/恢复草稿及JSON，再依据后来真实Stop反馈同步修订三份成品；六原件Hash/mtime保持。345.51秒，累计665934总/61514未缓存输入/13060输出，均在预绑上限内。两位全新上下文评估者完成四轴只读复核，原生输入、实际模型/模式、两次Goal=null、完整入口及工具轨迹相符；既有observe/recheck接受v33-codex-cli-update-guidance-01与v33-systemic-correction-03，errors=[]、caseRejections={}。
-
-真实有效环境包含既有AGENTS、记忆和Skills，模型实际查询过MEMORY.md并按需读两项Accord指导；成品业务主张均由密封输入与第二消息支持，不是无记忆对照或Accord独立收益证明。第一轮一次手抄预期Hash错误在同轮核对后纠正，失败原回执保留，无额外救援提示或重跑。文稿成稿时原Stop原因与真实恢复仍未知，独立隔离检查、安装及文稿通过均不能抵销；后续用户截图已补充自然Stop完成事实，冻结的原两阶段成品保持其时点身份，不回写新事实。
-
-Root先核对2个CLI Job及9个目录/Goal/预检进程全部自然退出、三个读取器已停，再调用已批准的恢复器；本次未产生临时信任登记，配置始终与原备份字节一致，没有实际恢复写入。三个自有workspace/temp/state路径回收前验证归属、无reparse与成品副本一致，73份episode证据Hash保持；原生任务/历史和恢复原件保留。这是调用方收尾。两语README已由Root提炼整合通用安全更新时间、备份边界及普通用户无需承担内部协调；模型原件未改，未更新本机插件、第三方Skill、主模型、模式或Cloud。
-
-该段不再作为下一待执行案例。后续沿计划的三条工作线推进已定义范围的实际案例、入口及自主连续性，不靠重放本例增加覆盖。48d4dbeb的CI36299563573已按精确SHA和全部11个job回读成功，该核验责任闭合；functionalCompletion/candidateEligible仍为false。
+1. 下一必要工作段聚焦**现有7个pending入口的可执行处置**：沿当前PLAN的Work本地/云端、Remote及其它前端共享执行基础，给出每项的责任承担者、已有直接依据、剩余关键差异、最小验证与权限条件。输出可审查处置建议并同步真正受影响的父scope/case；完成条件是每项有据、有后续责任，不把未知改为支持或不适用。涉及实质版本取舍才请用户决定，不要求采购或七套独立模型试验。
+2. 普通交付主线不等待七项入口全部处置：同时选择确有需要的普通交付，把真实主代理/worker/内部核验/独立评估及当前包、入口、权限、输入、预算与observe/recheck在执行前绑定。既有CLI组合接口、SDK owner/recorder/恢复路径按需要复用；无断点不建新框架。对真实需要的连续性、环境变化和效果恢复取证，缺控制连接的路径单独保留，不扩大成全入口禁用。
+3. 必要整体验收与精确候选条件成立后依既有授权发布3.3.0；发布后传播/部署另行处理。相关修改形成工作段再推送，纯状态记录不重跑全矩阵。CI按不可变SHA保留，普通对话不取消有效运行；Agent承担终态核验，不让用户等CI才能交流。
 
 ## 原件与历史导航
 
-私有原件默认位于本机`.codex/backups`，以下目录有保留/一次性执行边界：
+本机原件在 `.codex/backups/`；这些目录是证据/恢复入口，不是待重复执行的命令：
 
-| 目录 | 内容与限制 |
+| 目录 | 定位 |
 |---|---|
-| accord-upgrade-guidance-20260927-01 | 48d4dbeb精确前绑与用户批准、一次两轮原生文稿交付/反馈纠偏、两个阶段三成品及六原件、49份执行来源、独立四轴评审、正式两case准入及11进程域后态。配置未变，三自有路径已回收，73份episode证据和原生历史保留；不重放，不代验原根线程Stop恢复或完整发布资格。 |
-| accord-shared-plugin-update-20260927-01 | 用户明确批准的20260927100450本机更新、首个过严缓存门槛停止及已核验原生恢复、纠正后的精确安装/新发现、原旧包与新包备份、18域后态和未完状态回读。原件保持，非普通自主交接验收。 |
-| accord-cloud-preload-20260927-01 | 获准后唯一task_e_6ab867c52264832bb91d46d78bcb35bb、实际setup/prompt字节、原始停止日志、前后设置及截图、execution-result.json。setup在准备进程收尾检查处停止，目标写入尚未派发，Agent未到达；setup已恢复，容器资源后态未知。授权已消耗，不重放、不运行rollback。 |
-| accord-continuity-interface-20260927-01 | 当前宿主schema只读对照；029a1c58唯一Windows基础CI36255885596、95份原件、ZIP来源Hash、独立四轴复核及两SDK案例正式observe/recheck。受控无模型，不是自主Agent验收；实例已结束，不重放。 |
-| accord-current-cadence-20260926-01 | 60219fff当前完整安装的五阶段普通协调与暂停恢复、原生Goal时点、业务原件、两case准入及资源后态；保持原候选/条件，不重跑或无据归因于Accord单独效果。 |
-| accord-ordinary-retro-20260925-01 | e74c4a4f的真实原生retro/依赖采用、原报告及独立语义核对；admission-final.json保留下一工作段不具体的拒绝，30份绑定原件、六域退出和回收后态。episode是Agent前失败，episode-fixed是唯一实际Agent执行，均不重放。 |
-| accord-shared-plugin-update-20260925-24 | 202615精确原生更新、24文件Git字节独立核对、5CLI与1发现域自然退出，配置/旧包恢复材料及现装retro/依赖/模型目录；空工作区已回收。 |
-| accord-cloud-controller-provenance-20260925-01 | 一次获准只读云端诊断：一个任务URL、三输入、两轮命令；进程/配置候选与后续app-server/-c观察、前后设置、界面计数及解释纠正。实际装载未知，原案不重放。 |
-| accord-ordinary-integration-20260925-01 | 7b1a66c7预绑的真实普通CLI审查、64个原生事件、Goal双回执、报告与完整保留输入；读取范围不匹配的原准入拒绝、两名独立评审和六域退出/清理。原案不重放。 |
-| accord-shared-plugin-update-20260925-23 | 115917精确原生更新、24文件Git字节核对、0.157.0新发现与自然退出；旧包和配置备份保留。 |
-| accord-native-goal-readback-20260925-01 | 当前既有任务的原生只读Goal/身份回查及模型目录；无模型调用或新任务，不代验新CLI阶段调用链。 |
-| accord-native-input-recovery-20260925-23 | 当前原生用户消息、恢复请求、helper前后态及真实MCP回读；仅当前输入从宿主历史恢复，旧输入、自动捕获及自动压缩阈值不由此证明。 |
-| accord-ci-cleanup-20260925-01 | CI36092865977原失败日志、真实Win32共享锁复现、早期负向夹具的精确进程恢复和三处临时目录后态。只验证本地修复及所属资源，原托管锁占用者未知。 |
-| accord-native-source-restore-20260925-01 | Windows普通source两阶段、初次回读误判及新副本复验；hosted保存b49dd36a的Linux/macOS原始artifact与只读复核，临时运行环境已回收。 |
-| accord-retained-inspection-20260925-01 | 86项入口回归、只读代码复核与旧发布02的retained回读；120原件未变，旧案仍失败。 |
-| accord-cloud-startup-20260925-01 | execution.json为原失败及环境恢复；as-run保存实际投递源；repair保存17项本地修复与边界。旧试验不可重放。 |
-| accord-readiness-review-20260925-01 | 粗估及独立源码复核、编辑页403解除；unbound不是缺陷的纠正。不计功能通过。 |
-| accord-shared-plugin-update-20260925-01 | 162230精确原生安装、5CLI+1发现域自然释放、配置和旧包恢复备份；空工作目录已回收。 |
-| accord-source-resume-20260925-01 | 已确认普通source恢复代码、离线检查及精确提交包回读。没有新的真实source恢复观察。 |
-| accord-release-copy-20260924-01 | 发布02两轮原失败、来源/输出快照、11域后态、Root校正稿和准入拒绝；workspace/temp及输入回执已按协议回收，native任务保留。 |
-| accord-cloud-route-20260923-01 | 六Hook门槛失败、另获准四Hook注册/信任成功但原任务未采用、原生回滚和官方源码复核。两次旧试验均结束。 |
-| accord-installed-cadence-20260920-01 | 旧包/旧条件五轮正确行为；不可改时间、改原定义或借给当前整项准入。 |
+| accord-local-adoption-20260929-04 | 当前安装、原discover失败、Root/独立读回、消费授权与收尾；ACTUAL-ADOPTION.md、completion.json |
+| accord-source-handoff-pump-20260929-01 / accord-native-source-pump-20260929-01 | SDK源码修复的红/绿与190回归、新原生分支/旧材料兼容/清理对账及精确CI |
+| accord-candidate-review-20260929-01 | 一次审查原文、原生历史、四轴评审、正式不准入和Root后续修复；不重放 |
+| accord-current-cadence-20260926-01 / accord-upgrade-guidance-20260927-01 / accord-continuity-interface-20260927-01 | 6个历史准入的各自身份、条件、原件和限制 |
+| accord-sdk-owner-integration-20260925-01 / accord-sdk-continuation-delivery-20260927-01 / accord-sdk-owner-resume-20260927-01 | 首次代码已交付但调用者等审查超时；后次业务未完成；独立调用者修复及尚未被真实业务代验的恢复能力 |
+| accord-entry-current-20260928-01 / accord-cloud-preload-20260927-01 / accord-legacy-stdio-close-20260928-01 | IDE/Work差异、Cloud原执行/设置恢复、旧关闭观察和本地有界修复；无新执行许可 |
+| accord-continuation-brief-20260929-01 | 本次Root维护的源快照、责任映射和路线处置；无新行为case |
 
-所有其它旧通过、失败、来源、收尾局限及更细索引保留在[a74351dc完整接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/a74351dc9cf559244cb552dd15db925701c22e6b/docs/operations/CONTINUATION.md)和[历史试验记录](PROCEDURE-v3.3.md)。本次只缩短重复接续叙述，没有删除原始证据、降低验收或改写历史。
+完整旧接续和更细目录/CI索引保留在[整理前dd8a510c原文](https://github.com/yiheng8023/YIYUAN-Accord/blob/dd8a510ce65033d170da52b28511c50ae2c9717f/docs/operations/CONTINUATION.md)、更早[a74351dc接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/a74351dc9cf559244cb552dd15db925701c22e6b/docs/operations/CONTINUATION.md)及[历史试验记录](PROCEDURE-v3.3.md)。历史通过、失败、用户决定、取证与恢复材料均保留原身份；本页不改写旧结论，它们是否适用于后来候选仍按实际依赖核验。验收标准保持。
