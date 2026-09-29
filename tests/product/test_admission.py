@@ -912,6 +912,43 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             finally:
                 dirty.unlink()
 
+    def test_composed_execution_keeps_observer_and_worker_separate_and_rejects_drift(self):
+        from yiyuan_accord.admission import bind_evidence_execution
+        with self.history():
+            contract, child, worker, files = self.execution_fixture()
+            scope = next(row for row in contract["acceptance"]["admission"]["scopes"]
+                         if row["id"] == "v33-dynamic-model-routing")
+            parent = copy.deepcopy(child)
+            parent.update({key: copy.deepcopy(scope[key]) for key in
+                           ("host", "entry", "duties", "qualityAxes", "scenarios", "claims")})
+            parent.update(id="synthetic-composition", scope=scope["id"])
+            execution = {"host": scope["host"], "entry": scope["entry"],
+                         "coordinator": {"role": "observer", "sourceRef": "synthetic-only"},
+                         "worker": worker, **{key: worker[key] for key in ("runner", "caseFile", "caseSha256")}}
+            parent["conditions"] = {**copy.deepcopy(scope["conditions"]), "execution": copy.deepcopy(execution)}
+            contract["acceptance"]["admission"]["cases"].append(parent)
+            self.commit(contract)
+            bound = bind_evidence_execution(self.root, parent["id"], execution, files)
+            self.assertEqual(bound["execution"]["entry"], "cx-desktop")
+            self.assertEqual(bound["execution"]["worker"]["entry"], "cx-cli")
+            self.assertFalse({"facts", "acceptedCases", "observedAt"} & bound.keys())
+            for key, value in (("entry", "cx-desktop"), ("model", "other-model"),
+                               ("windowsSandbox", "unelevated"), ("caseSha256", "f" * 64),
+                               ("recoveryTimeoutSeconds", 99), ("usageCaps", {"outputTokens": 99999})):
+                with self.subTest(key=key), self.assertRaisesRegex(ValueError, "prebound case conditions"):
+                    changed = copy.deepcopy(execution)
+                    changed["worker"][key] = value
+                    bind_evidence_execution(self.root, parent["id"], changed, files)
+            with self.assertRaisesRegex(ValueError, "package differs"):
+                bind_evidence_execution(self.root, parent["id"], execution, {**files, "foreign.txt": "0" * 64})
+            dirty = self.root / "uncommitted-execution.txt"
+            dirty.write_text("no dispatch")
+            try:
+                with self.assertRaisesRegex(ValueError, "clean committed"):
+                    bind_evidence_execution(self.root, parent["id"], execution, files)
+            finally:
+                dirty.unlink()
+
     def test_execution_prebinding_rejects_conflicting_or_uncommitted_fixture_identity(self):
         from yiyuan_accord.admission import bind_evidence_execution
         with self.history():

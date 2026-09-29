@@ -274,7 +274,8 @@ class EntryTests(unittest.TestCase):
         shutil.copytree(SCRIPT.parents[1] / "plugins/yiyuan-accord-codex", package)
         (package / ".mcp.json").unlink()
 
-    def prepared_persistent(self, root, case_path=None, *, native_hooks=False, installed=False, admission_case=None):
+    def prepared_persistent(self, root, case_path=None, *, native_hooks=False, installed=False, admission_case=None,
+                            composition=None):
         package = (root / "home/plugins/cache/yiyuan-accord/yiyuan-accord-codex" / PACKAGE_VERSION
                    if installed else root / "package")
         if native_hooks:
@@ -304,8 +305,96 @@ class EntryTests(unittest.TestCase):
             return next(cli_results)
         with patch.object(entry.subprocess, "run", side_effect=prepared_calls), \
                 patch.object(entry, "_native_inventory", return_value=json.loads(self.installed_listing().stdout)):
-            entry.prepare(args, persistent_case=entry.load_persistent_case(case_path))
+            entry.prepare(args, persistent_case=entry.load_persistent_case(case_path), composition=composition)
         return entry.load_manifest(args.evidence)
+
+    def composition_request(self):
+        return {"case": "composition-case", "execution": {
+            "host": "codex", "entry": "cx-desktop",
+            "coordinator": {"role": "observer", "sourceRef": "offline-fixture-not-host-evidence"}}}
+
+    def test_composition_preparation_rejects_before_fixture_or_inventory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}), \
+                    patch.object(entry, "_composition_binding", side_effect=ValueError("composition mismatch")), \
+                    patch.object(entry, "_native_inventory") as inventory, \
+                    patch.object(entry.subprocess, "Popen") as process:
+                with self.assertRaisesRegex(ValueError, "composition mismatch"):
+                    self.prepared_persistent(root, installed=True, composition=self.composition_request())
+                inventory.assert_not_called()
+                process.assert_not_called()
+            self.assertFalse((root / "evidence").exists())
+            self.assertFalse((root / "work").exists())
+
+    def test_composition_worker_is_derived_without_relabelling_native_entry(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}):
+                manifest = self.prepared_persistent(root, installed=True)
+            manifest["nativeVersion"] = "codex-cli 0.158.0"
+            request = self.composition_request()
+            before = json.dumps(request, sort_keys=True)
+            with patch("yiyuan_accord.admission.bind_evidence_execution", return_value={}) as bind:
+                entry._composition_binding(manifest, request)
+                project, case_id, execution, package_files = bind.call_args.args
+                self.assertEqual((project, case_id), (SCRIPT.parents[1], request["case"]))
+                self.assertEqual(execution["entry"], "cx-desktop")
+                worker = execution["worker"]
+                self.assertEqual(worker["entry"], "cx-cli")
+                self.assertEqual(worker["codexVersion"], "0.158.0")
+                self.assertEqual(execution["caseSha256"], manifest["caseSha256"])
+                self.assertEqual(execution["caseFile"], worker["caseFile"])
+                self.assertEqual(package_files, manifest["installedPlugin"]["packageFiles"])
+                self.assertEqual(json.dumps(request, sort_keys=True), before)
+                for key, value in (("model", "different-model"), ("windowsSandbox", "unelevated"),
+                                   ("recoveryTimeoutSeconds", 99), ("caseSha256", "f" * 64)):
+                    with self.subTest(key=key):
+                        entry._composition_binding({**manifest, key: value}, request)
+                        self.assertEqual(bind.call_args.args[2]["worker"][key], value)
+                for key in ("worker", "runner", "caseFile", "caseSha256"):
+                    with self.subTest(reserved=key), self.assertRaises(ValueError):
+                        entry._composition_binding(manifest, {**request, "execution": {
+                            **request["execution"], key: "caller-cannot-override-worker"}})
+
+    def test_composition_binding_rechecked_before_run_and_each_stage(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            binding = {"case": "composition-case", "subject": {"revision": "frozen"}}
+            with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}), \
+                    patch.object(entry, "_composition_binding", return_value=binding) as bind:
+                request = self.composition_request()
+                manifest = self.prepared_persistent(root, installed=True, composition=request)
+                self.assertEqual(bind.call_count, 2)
+                self.assertEqual(manifest["compositionBinding"], binding)
+                self.assertEqual(manifest["composition"], request)
+                bind.return_value = {**binding, "subject": {"revision": "changed"}}
+                with patch.object(entry, "_native_inventory", return_value=json.loads(self.installed_listing().stdout)), \
+                        patch.object(entry.subprocess, "Popen") as process:
+                    for action in (lambda: entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"])),
+                                   lambda: entry._verify_native_stage(manifest, 0, None)):
+                        with self.assertRaisesRegex(ValueError, "composition binding changed"):
+                            action()
+                    process.assert_not_called()
+                self.assertFalse((root / "evidence/run-started.json").exists())
+
+    def test_composition_prepare_drift_retains_failure_without_run_manifest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            with patch.dict(os.environ, {"CODEX_HOME": str(root / "home")}), \
+                    patch.object(entry, "_composition_binding", side_effect=[
+                        {"case": "composition-case"}, ValueError("private-external-detail")]), \
+                    patch.object(entry, "_entry_guide", return_value="Accord task entry: fixture"), \
+                    patch.object(entry.subprocess, "Popen") as process:
+                with self.assertRaises(ValueError):
+                    self.prepared_persistent(root, installed=True, composition=self.composition_request())
+                process.assert_not_called()
+            receipt = json.loads((root / "evidence/preparation-failed.json").read_text())
+            self.assertFalse(receipt["modelCalled"])
+            self.assertNotIn("private-external-detail", json.dumps(receipt))
+            self.assertFalse((root / "evidence/manifest.json").exists())
+            self.assertFalse((root / "evidence/run-started.json").exists())
+            self.assertTrue((root / "work/keep.txt").is_file())
 
     def test_admission_preparation_rejects_before_fixture_writes_or_dispatch(self):
         with tempfile.TemporaryDirectory() as tmp:

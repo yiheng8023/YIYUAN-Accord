@@ -16,6 +16,12 @@ user configuration without injecting hooks or bypassing trust. Bind the native
 inventory and installed bytes, then independently require actual entry delivery.
 Optional --admission-case checks a committed case's conditions.execution against
 the prepared run and exact package before dispatch. It creates no admission facts.
+The Python prepare API also accepts composition={case, execution} for a bound
+coordinator case. Supply the coordinator's own sourced execution declaration;
+this runner derives the nested worker and shared fixture identity itself. Both
+bindings are rechecked before dispatch and every stage. Coordinator identity,
+authority, adoption and live conditions still need independent observation;
+this bridge authenticates none of them and supplies no permission or verdict.
 Persistent run --observe-native-goal reads Goal after each completed CLI stage on
 the same persisted thread. Admission-bound runs request this read automatically.
 The reader uses a separate owned App Server process for thread/read and
@@ -449,14 +455,15 @@ def _verify_prepared_sources(manifest, *, inventory_label="run-preflight"):
         bound = manifest["admissionBinding"]
         if _admission_binding(manifest, bound["case"]) != bound:
             raise ValueError("prepared admission binding changed")
+    if "composition" in manifest or "compositionBinding" in manifest:
+        if ("composition" not in manifest or "compositionBinding" not in manifest
+                or _composition_binding(manifest, manifest["composition"]) != manifest["compositionBinding"]):
+            raise ValueError("prepared composition binding changed")
     return installed_observation
 
 
-def _admission_binding(manifest, case_id):
+def _execution_settings(manifest):
     project = Path(__file__).resolve().parents[1]
-    if str(project) not in sys.path:
-        sys.path.insert(0, str(project))
-    from yiyuan_accord.admission import bind_evidence_execution
     version = manifest["nativeVersion"]
     match = re.fullmatch(r"codex-cli ([0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?)", version)
     if not match:
@@ -468,7 +475,36 @@ def _admission_binding(manifest, case_id):
                      usageCaps=manifest["limits"]["usageCaps"], usageScope=manifest["limits"]["usageScope"],
                      runner=Path(manifest["runner"]).relative_to(project).as_posix(),
                      caseFile=Path(manifest["case"]).relative_to(project).as_posix())
+    return execution
+
+
+def _bind_execution(manifest, case_id, execution):
+    project = Path(__file__).resolve().parents[1]
+    if str(project) not in sys.path:
+        sys.path.insert(0, str(project))
+    from yiyuan_accord.admission import bind_evidence_execution
     return bind_evidence_execution(project, case_id, execution, _package_hashes(manifest["package"]))
+
+
+def _admission_binding(manifest, case_id):
+    return _bind_execution(manifest, case_id, _execution_settings(manifest))
+
+
+def _composition_binding(manifest, request):
+    # These are caller declarations, not host observations or copied expected
+    # conditions. The existing admission core checks the committed whole object.
+    derived = {"runner", "caseFile", "caseSha256", "worker"}
+    if (not isinstance(request, dict) or set(request) != {"case", "execution"}
+            or not isinstance(request["case"], str) or not request["case"].strip()
+            or not isinstance(request["execution"], dict)
+            or not {"host", "entry", "coordinator"} <= request["execution"].keys()
+            or not isinstance(request["execution"]["coordinator"], dict)
+            or not request["execution"]["coordinator"] or derived & request["execution"].keys()):
+        raise ValueError("composition must bind its coordinator and leave worker identity to the runner")
+    worker = _execution_settings(manifest)
+    execution = {**request["execution"], "worker": worker,
+                 **{key: worker[key] for key in derived - {"worker"}}}
+    return _bind_execution(manifest, request["case"], execution)
 
 
 def _verify_native_stage(manifest, stage, thread_id):
@@ -565,7 +601,7 @@ def load_persistent_case(path):
     return path, raw, case
 
 
-def prepare(args, *, app_server_case=None, persistent_case=None):
+def prepare(args, *, app_server_case=None, persistent_case=None, composition=None):
     """Prepare CLI execution, or explicitly bind a caller-owned App Server case.
 
     App Server lifecycle/dispatch remains caller-owned; preparing its fixtures
@@ -577,8 +613,14 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     installed_id = getattr(args, "installed_plugin", None)
     direct_hooks = native_hooks or installed_id is not None
     admission_case = getattr(args, "admission_case", None)
-    if admission_case is not None and (persistent_case is None or not direct_hooks):
+    if (admission_case is not None or composition is not None) and (persistent_case is None or not direct_hooks):
         raise ValueError("admission binding requires a persistent native Hook or installed-plugin case")
+    if composition is not None:
+        # Detach the caller's mutable object before native preparation begins.
+        raw_composition = json.dumps(composition, ensure_ascii=False, allow_nan=False)
+        if len(raw_composition.encode("utf-8")) > 1_000_000:
+            raise ValueError("composition declaration exceeds the evidence size limit")
+        composition = json.loads(raw_composition)
     if native_hooks and installed_id is not None:
         raise ValueError("source projection and installed plugin are mutually exclusive")
     if direct_hooks and persistent_case is None:
@@ -665,18 +707,22 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
     if version.returncode:
         raise ValueError("native version probe failed")
     native_version = version.stdout.decode("utf-8", "strict").strip()
-    admission_binding = None
-    if admission_case is not None:
+    admission_binding = composition_binding = None
+    if admission_case is not None or composition is not None:
         # Reject incompatible candidates before creating fixtures or querying
         # the installed inventory. Help/version probes above call no model.
-        admission_binding = _admission_binding({
+        binding_manifest = {
             "package": str(package), "runner": str(paths["runner"]), "case": str(case_path),
             "nativeVersion": native_version, "entryProtocol": protocol,
             "hookMode": "installed-plugin" if installed_id is not None else "native-package-hooks",
             "model": args.model, "reasoning": args.reasoning, "windowsSandbox": args.windows_sandbox,
             "timeoutSeconds": args.timeout, "turnTimeoutSeconds": turn_timeout,
             "recoveryTimeoutSeconds": recovery_timeout, "caseSha256": hashlib.sha256(case_bytes).hexdigest(),
-            "limits": {"usageCaps": usage_caps, "usageScope": case["limits"]["usageScope"]}}, admission_case)
+            "limits": {"usageCaps": usage_caps, "usageScope": case["limits"]["usageScope"]}}
+        if admission_case is not None:
+            admission_binding = _admission_binding(binding_manifest, admission_case)
+        if composition is not None:
+            composition_binding = _composition_binding(binding_manifest, composition)
     entry_guide = _entry_guide(paths["node"], paths["runtime"]) if direct_hooks else None
     evidence.mkdir()
     workspace.mkdir()
@@ -762,11 +808,16 @@ def prepare(args, *, app_server_case=None, persistent_case=None):
         manifest["entryProtocol"] = "app-server"
         manifest["tracePath"] = "native/stdout.jsonl"
         manifest["executionOwner"] = "caller-owned native App Server; no CLI run command"
-    if admission_case is not None:
-        manifest["admissionBinding"] = admission_binding
+    if admission_case is not None or composition is not None:
+        if admission_case is not None:
+            manifest["admissionBinding"] = admission_binding
+        if composition is not None:
+            manifest.update(composition=composition, compositionBinding=composition_binding)
         try:
-            if _admission_binding(manifest, admission_case) != admission_binding:
+            if admission_case is not None and _admission_binding(manifest, admission_case) != admission_binding:
                 raise ValueError("admission subject changed while preparing the observation")
+            if composition is not None and _composition_binding(manifest, composition) != composition_binding:
+                raise ValueError("composition subject changed while preparing the observation")
         except (OSError, ValueError, subprocess.SubprocessError):
             # Retain any model-free inventory receipts for caller-owned recovery;
             # do not leave an apparently runnable manifest or erase evidence.
@@ -2240,7 +2291,8 @@ def run_persistent(args):
             stages.append(observed)
             phase = "native-receipt-retention"
             save(evidence / f"native-receipt-{stage + 1}.json", native)
-            if getattr(args, "observe_native_goal", False) or manifest.get("admissionBinding") is not None:
+            if (getattr(args, "observe_native_goal", False) or manifest.get("admissionBinding") is not None
+                    or manifest.get("compositionBinding") is not None):
                 phase = "native-goal-readback"
                 goal_observation = _native_goal_readback(
                     manifest, native, stage=stage + 1, env=env, deadline=deadline)

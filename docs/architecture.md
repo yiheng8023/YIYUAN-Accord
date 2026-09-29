@@ -674,6 +674,25 @@ accepted case. Existing exploration mode remains available. Old cases lacking
 the structured execution binding are rejected by this opt-in, never backfilled
 from their historical results; formal observe/recheck and review are still needed.
 
+For a coordinator-owned composition, the same Python `prepare` API accepts an
+optional `composition={"case": case_id, "execution": coordinator_execution}`.
+The caller supplies the coordinator's `host`, `entry`, a nonempty `coordinator`
+source/role declaration and any other prospectively bound conditions. It cannot
+supply `worker`, `runner`, `caseFile` or `caseSha256`: the preparer derives the
+worker's actual CLI settings and shared fixture identity. The committed parent
+case must match this complete object. Its observer entry can therefore remain
+`cx-desktop` while `execution.worker.entry` remains `cx-cli`. The optional native
+`admissionBinding` is retained separately, alongside `compositionBinding` in the
+same episode manifest; neither replaces the other. Both undergo the existing
+preparation and per-stage checks, and either binding requests the post-stage
+native Goal readback. This Python-only seam does not dispatch an SDK session.
+Coordinator declarations are caller evidence: this runner does not authenticate
+the coordinator, monitor its live permissions or prove its package adoption.
+The outer owner must check those facts before dependent work; a worker's matching
+package cannot prove that an older coordinator installation adopted it. Independent
+observe/recheck must correlate actual actor identities, the manifest, shared
+fixture, native records and consequences before admitting any composed result.
+
 The persistent CLI observer retains each returned native receipt before business
 inspection. If a later preflight, inspection or retention step fails, it preserves
 the known thread identity and partial execution result before propagating the
