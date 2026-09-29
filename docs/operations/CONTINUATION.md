@@ -23,6 +23,10 @@
 
 ## 最近核实的状态
 
+2026-09-29开始下一项必要普通交付的前瞻绑定：候选整体审查保持c57→4c的20个改动文件，另列同一提交12份必要依赖/标准原件，原diff摘要不变。由现装23808和现有CLI0.158.0/gpt-6-sol-high完成一次只读审查，交付review.md/json；原生目录已确认该派发档位，主线程固定选择不改。复用既有CLI prepare/composition及observe/recheck，新增ordinary与有限native-sufficient allocation两个case；14活动case、17必要scope，五范围仍无case，dynamic范围仍缺情境/职责绑定，共六范围有绑定缺口。尚无本例执行或新准入，不把准备选型/设置当行为证明，也不代验explicit-only正向选择、自主交接或A项完成。
+
+业务源用Git对象及SHA绑定，避免把含历史身份的整段diff复制到活动定义；没有修改扫描器、源材料或判据。独立准备审查指出只列改动文件会阻断关键依赖追踪，已补supportingFiles并同步双层fixture哈希。15项准入/文件观察及42项契约检查、配置恢复3方法7子例通过，verify/host-check通过。源码/调用者准备在accord-candidate-review-20260929-01；新自有workspace的原生信任登记/精确恢复仍需对应明确权限，03更新授权已消费且不能借用。取得权限后只运行此一次有界案例，实际结果与独立复查另核；不新增框架、不重放旧案求绿。
+
 2026-09-29本机更新03已完成并独立核验：现装23808、固定e85f6676，当前Root的SessionStart/resume与UserPromptSubmit入口来自新版路径，metadata-bound MCP已响应且无replay/resume标志。成功attempt为20260929T072806Z-95d70f24；现装24文件与保留旧包24文件均匹配各自Git原件。唯一Hook信任写入经原生user层版本CAS，只将SessionStart首匹配器增加fork对应的trusted_hash更新；前后RPC身份匹配，6可信Hook/5启用Skill准确指向新包。只替换已批准ref与该Hash即可逐字节重建执行后配置，证明当时无关配置保持；重开后的额外SKY_CUA_NATIVE_PIPE_DIRECTORY变化保留，不归因更新或回写。9个执行域均自然exit0/无force/活动0，读取器停止。当前两个MCP worker在更新后创建，relative cwd未独立读取，不扩写为全部消费者或其它入口已采用。
 
 首次从Codex打开的窗口随客户端退出，原attempt保留在等待阶段；核实未派发后，将失效锁留存，改为用户先退出客户端再从桌面启动。此启动方式错误已纠正，不再把另开窗口当成已脱离宿主生命周期。03原单次授权现已消费，Start-update.cmd已退为完成提示，实际再执行exit0/无新attempt/配置不变；任务自建桌面快捷方式及空workspace已按归属核对后回收，130份保护文件保持。旧包、配置、两次attempt、原执行代码及恢复材料均留在accord-local-adoption-20260929-03，结论见ACTUAL-ADOPTION.md、root-adoption-readback.json和completion.json。下面较早的“现装143558”保留其原观察时点，不再作为当前安装状态。此次安装不代验Skills自主协调、决策内化、完整连续性或A01–A08。
