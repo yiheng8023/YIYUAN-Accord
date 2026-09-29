@@ -370,7 +370,7 @@ function createSession(options, restoreMode = false) {
     return value;
   }
 
-  async function pumpHandoffTerminal(threadId, turnId, deadline) {
+  async function pumpHandoffTerminal(threadId, turnId, deadline, phase = 'handoff-target') {
     for (;;) {
       ensureBindings();
       const activity = await Reflect.apply(bound.receive, undefined,
@@ -378,7 +378,7 @@ function createSession(options, restoreMode = false) {
       ensureBindings();
       if (activity?.type === 'terminal') return immutable(activity.terminal);
       if (activity?.type !== 'request' || !plainObject(activity.request)) {
-        throw new Error('connection returned invalid handoff target activity');
+        throw new Error('connection returned invalid handoff activity');
       }
       const nativeRequest = immutable(activity.request);
       state = {...state, pendingRequest: nativeRequest};
@@ -391,11 +391,11 @@ function createSession(options, restoreMode = false) {
           nativeRequest.params?.namespace == null) {
         const payload = immutable({schema: 'yiyuan-accord-nested-handoff-reply/v1',
           code: 'TRANSFER_IN_PROGRESS', accepted: false,
-          message: 'The current transfer must be adopted and settled before this target can request another handoff.'});
+          message: 'The current transfer must be adopted and settled before another handoff can be requested.'});
         await Reflect.apply(bound.respond, undefined, [nativeRequest, {result: {success: false,
           contentItems: [{type: 'inputText', text: JSON.stringify(payload)}]}}, deadline]);
       } else {
-        const ownerContext = {threadId, turnId, scopeRef, deadline, phase: 'handoff-target'};
+        const ownerContext = {threadId, turnId, scopeRef, deadline, phase};
         const body = requestBody(await callOwner(bound.ownerRequest,
           [nativeRequest, ownerContext], deadline, 'ownerRequest'));
         await Reflect.apply(bound.respond, undefined, [nativeRequest, body, deadline]);
@@ -607,7 +607,27 @@ function createSession(options, restoreMode = false) {
               budget.wallDeadlineMs);
             const current = deadline => callOwner(bound.current, [{nativeRequest, sourceThreadId,
               turnId, scopeRef, deadline}], Math.min(deadline, budget.monotonicDeadline), 'current');
-            const channel = Reflect.apply(bound.proposalChannel, undefined, [nativeRequest, current]);
+            const nativeChannel = Reflect.apply(bound.proposalChannel, undefined, [nativeRequest, current]);
+            if (!plainObject(nativeChannel) ||
+                Object.keys(nativeChannel).sort().join('|') !== 'current|respond|subscribe' ||
+                ['subscribe', 'respond', 'current'].some(key => typeof nativeChannel[key] !== 'function')) {
+              throw new TypeError('proposal channel requires subscribe, respond and current callbacks');
+            }
+            const respond = nativeChannel.respond;
+            const respondAndPump = async (response, deadline) => {
+              await Reflect.apply(respond, undefined, [response, deadline]);
+              // A queued reply does not finish the source turn. Its other
+              // requests still need their owner while the core observes the
+              // original tool/terminal receipts. No second receiver is started.
+              await pumpHandoffTerminal(sourceThreadId, turnId, deadline, 'handoff-source');
+            };
+            const channel = {
+              // Keep the core's callback-identity checks sensitive to changes
+              // in the borrowed channel, including during source completion.
+              get subscribe() { return nativeChannel.subscribe; },
+              get current() { return nativeChannel.current; },
+              get respond() { return nativeChannel.respond === respond ? respondAndPump : nativeChannel.respond; },
+            };
             state = {...state, phase: 'handoff-running', transferCount: 1};
             const handoff = await runHandoffProposal(plan, {
               transport: handoffTransport, recorder: handoffRecorder, verify: bound.verify,
@@ -646,7 +666,7 @@ function createSession(options, restoreMode = false) {
         } catch (error) {
           if (lockedFailures.has(error)) throw error;
           return lockFailure('SERVER_REQUEST_FAILED', 'source server request was not safely completed', error,
-            {phase: state.phase, nativeRequest});
+            {phase: state.phase, nativeRequest: state.pendingRequest || nativeRequest});
         }
       }
     } catch (error) {

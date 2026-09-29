@@ -23,6 +23,12 @@
 
 ## 最近核实的状态
 
+2026-09-29补通SDK交接收尾中的实际请求断点：原source收到queued后，session只等proposal/turn通知，未继续处理同source/turn排队或随后到达的context/owner请求；三个离线真实connection/SQLite/core组合反例均等到原时限失败。现在原respond确认成功后，session复用已有请求循环同步处理source收尾，owner明确收到handoff-source阶段，仍自行核当前权限；上下文只读、嵌套proposal拒绝、其它thread请求隔离，原时限、quiescence及目标接管条件保持。另一个红例证明owner失败会被外层错误覆盖成原proposal请求，现保留真正未答请求身份，继续锁失败且不重试。101项会话/交接/连接回归通过，独立只读复核未见所查阻断。原件accord-source-handoff-pump-20260929-01保留两组红例、绿例、关联回归和原始审查；这是必要协议功能修复，不代验真实模型自主择时、GUI采用或A05整体。
+
+本批源码候选29100847、24文件/SHA90e5a84e90100f80de504b11186dc14b4f423a75ff084ee2bf88ee1d796d440b；现装仍29023808/ref e85，未改本机插件、信任或第三方Skill。初次包摘要误用未含manifest三项资产的21文件集合，已在提交前按声明与实际24文件一致性及独立摘要纠正，初次记录保留；不改准入或包检查器。89项开发契约/分发检查及verify/host-check亦通过，完整功能与候选资格仍false。上一批c91624e7的[CI36549338177](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36549338177)已按完整SHA/11job核全部成功，终态原件在accord-candidate-review-20260929-01/followup-ci-final.json；本批修复按新SHA另核，不借旧结果代验。
+
+开发容量按实际必要增量校准：code/test从c916的2988175增至2994989字节，原3150000上限剩155011，低于未变的5%预留157500。依现有按价值组织开发、规模不替代功能的原则，本阶段容量改3200000，保留5%（160000）及205011余量；文件/主指令上限、全部功能质量/场景、实例预算和验收谓词不变。原检查失败及较早分配理由保留，不为体量删除此次必要反例。
+
 2026-09-29已按用户本次独立授权完成一次候选审查：执行subject为889cbf8a、episode2201b22f4b9341cf8deb55fab566302d；业务源固定c57→4c的20个改动文件及12份依赖/标准Git原件。CLI0.158.0/gpt-6-sol/high/default与现装23808实际运行434.504秒，总tokens1713837、未缓存输入123539、输出14746，均在原限额内；只发一次输入，没有加预算、重试或追加提示。实际历史显示按任务选择单独审查、拒绝冲突委派、核原件/Hash及调用链，并交付review.md/json。此为有限native-sufficient方法与贡献证据，不代验explicit-only正向采用、主模型切换、自主交接或完整A项。
 
 两个核心发现成立，但原Markdown把F01的采样失败错误扩到job-not-empty路径，该分支实际使用已有after；JSON没有该扩展。独立四轴复核中product、implementation、standards通过，specification保留此局部失败。原observe/recheck正式结果为两case均consequence-mismatch、不准入；原报告不改，不把Root后续修复追认为worker成功。已结束的两个实例移入带精确声明快照/Hash的历史处置，活动case回到12、17必要scope不变、六范围无活动case，完整验收仍未成；不因这次有限错误推成模型不适用，也不凭有效方法宣称独立增益。

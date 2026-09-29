@@ -112,6 +112,13 @@ the owner's asynchronous work or permit replay. Threadless requests stay with
 their existing owner unless `ownUnscopedRequests: true` explicitly assigns them
 to this session. The borrowed connection remains the sole protocol reader.
 
+After the queued proposal reply, the session still handles requests from that
+source turn until its terminal receipt. Owner callbacks receive phase
+`handoff-source`; queued status adds no permission for source writes. Context
+queries use the existing read-only route, and another proposal receives
+`TRANSFER_IN_PROGRESS`. A failed request retains its own identity for recovery.
+The original deadline and quiescence checks still precede target creation.
+
 Completed ordinary turns can continue through the same session. Concurrent runs,
 failed sessions and writes after a successful transfer are rejected. Read
 `session.snapshot()` and the thrown error's state/RPC reference to reconcile an

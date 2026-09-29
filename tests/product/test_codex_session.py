@@ -38,14 +38,19 @@ function handle(frame) {
   sent.push(frame);
   if (!frame.method) {
     serverResponses.push(frame);
-    if (mode === 'decline-send-loss' && frame.id === 102)
+    if (['decline-send-loss', 'handoff-source-send-loss'].includes(mode) && frame.id === 102)
       throw new Error('decline response send outcome is unknown');
     if (frame.id === 100) queueMicrotask(() => serverRequest(101, 'approval/request', {
       threadId:'source-1', turnId:'source-turn-1', reason:'fixture-owner-decision'}));
-    if (frame.id === 101) queueMicrotask(() => serverRequest(102, 'item/tool/call', {
-      threadId:'source-1', turnId:'source-turn-1', callId:'handoff-call',
-      tool:'accord_request_handoff', namespace:null,
-      arguments:{reason:'Move the fixed task to a fresh carrier.'}}));
+    if (frame.id === 101) queueMicrotask(() => {
+      serverRequest(102, 'item/tool/call', {
+        threadId:'source-1', turnId:'source-turn-1', callId:'handoff-call',
+        tool:'accord_request_handoff', namespace:null,
+        arguments:{reason:'Move the fixed task to a fresh carrier.'}});
+      if (['handoff-source-queued', 'handoff-source-send-loss'].includes(mode)) serverRequest(105, 'item/tool/call', {
+        threadId:'source-1', turnId:'source-turn-1', callId:'queued-context',
+        tool:'accord_inspect_context', namespace:null, arguments:{maxAgeMs:30000}});
+    });
     if (frame.id === 102 && frame.result?.success === false) {
       queueMicrotask(() => mode === 'decline-then-transfer'
         ? serverRequest(103, 'item/tool/call', {threadId:'source-1', turnId:'source-turn-1',
@@ -54,13 +59,24 @@ function handle(frame) {
         : serverRequest(104, 'owner/work', {threadId:'source-1', turnId:'source-turn-1'}));
       return;
     }
-    if (frame.id === 104) queueMicrotask(() => emit({method:'turn/completed',
+    if (frame.id === 104 || frame.id === 105) queueMicrotask(() => emit({method:'turn/completed',
       params:{threadId:'source-1', turn:{id:'source-turn-1', status:'completed', items:[]}}}));
     if (frame.id === 102 || frame.id === 103) queueMicrotask(() => {
       emit({method:'item/completed', params:{threadId:'source-1', turnId:'source-turn-1',
         item:{type:'dynamicToolCall', id:frame.id === 103 ? 'later-handoff-call' : 'handoff-call', tool:'accord_request_handoff',
           namespace:null, status:'completed', success:true,
           contentItems:frame.result.contentItems}}});
+      if (mode === 'handoff-source-queued') return;
+      if (mode.startsWith('handoff-source-')) serverRequest(106, 'approval/request', {
+        threadId:'unrelated-source', turnId:'other-turn', reason:'not-owned'});
+      if (mode === 'handoff-source-context') return serverRequest(105, 'item/tool/call', {
+        threadId:'source-1', turnId:'source-turn-1', callId:'late-context',
+        tool:'accord_inspect_context', namespace:null, arguments:{maxAgeMs:30000}});
+      if (['handoff-source-owner', 'handoff-source-owner-failure'].includes(mode)) return serverRequest(105, 'approval/request', {
+        threadId:'source-1', turnId:'source-turn-1', reason:'late-owner-decision'});
+      if (mode === 'handoff-source-nested') return serverRequest(105, 'item/tool/call', {
+        threadId:'source-1', turnId:'source-turn-1', callId:'late-handoff',
+        tool:'accord_request_handoff', namespace:null, arguments:{reason:'Must not start a second transfer.'}});
       emit({method:'turn/completed', params:{threadId:'source-1',
         turn:{id:'source-turn-1', status:'completed', items:[]}}});
     });
@@ -208,7 +224,7 @@ const sessionRecorder = wrappedRecorder ? {
   },
 } : recorder;
 if(mode==='no-claim-recorder')delete sessionRecorder.claimScope;
-const planCalls = [], ownerCalls = [], currentCalls = [], verifyCalls = [];
+const planCalls = [], ownerCalls = [], ownerPhases = [], currentCalls = [], verifyCalls = [];
 let adoptionVerifyCalls = 0;
 const session = createCodexSourceSession({connection, recorder:sessionRecorder, scopeRef:'fixture-scope',
   ownUnscopedRequests:mode === 'proposal-unscoped',
@@ -259,8 +275,11 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
     return {scopeRef:'fixture-scope', authorityRef:'authority-1', stateRef:'state-1',
       writerThreadId:context.sourceThreadId};
   },
-  ownerRequest(request) {
+  ownerRequest(request, context) {
     ownerCalls.push(request);
+    ownerPhases.push(context.phase || 'ordinary');
+    if (mode === 'handoff-source-owner-failure' && request.id === 105)
+      throw new Error('current source authority cannot be established');
     if (mode === 'owner-reentrant') return session.run({input:'nested turn', deadlineMs:Date.now()+1000});
     return {result:{decision:'denied-by-owner'}};
   },
@@ -328,6 +347,7 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
     result.snapshot = session.snapshot(); result.sent = sent; result.starts = starts;
     result.serverResponses = serverResponses; result.planCalls = planCalls.length;
     result.ownerCalls = ownerCalls.length; result.currentCalls = currentCalls.length;
+    result.ownerPhases = ownerPhases;
     result.verifyCalls = verifyCalls; result.recordReads = recordReads;
     result.settleCalls = settleCalls;
     if (mode.startsWith('decline') || mode.startsWith('resolver-') || mode.startsWith('proposal-') || mode.startsWith('adopt-'))
@@ -541,6 +561,43 @@ class CodexSourceSessionTests(unittest.TestCase):
         self.assertEqual(methods.count("thread/unsubscribe"), 1)
         self.assertNotIn("thread/archive", methods)
         self.assertNotIn("thread/delete", methods)
+
+    def test_handoff_pumps_queued_and_late_source_requests_before_target_creation(self):
+        for mode in ('handoff-source-queued', 'handoff-source-context', 'handoff-source-owner',
+                     'handoff-source-nested'):
+            with self.subTest(mode=mode):
+                result = self.run_case(mode)
+                self.assertNotIn('error', result)
+                self.assertEqual(result['first']['status'], 'transferred')
+                replies = {frame['id']: frame for frame in result['serverResponses']}
+                if mode == 'handoff-source-owner':
+                    self.assertEqual(replies[105]['result'], {'decision': 'denied-by-owner'})
+                    self.assertEqual(result['ownerCalls'], 2)
+                    self.assertEqual(result['ownerPhases'], ['ordinary', 'handoff-source'])
+                elif mode == 'handoff-source-nested':
+                    self.assertFalse(replies[105]['result']['success'])
+                    self.assertEqual(json.loads(replies[105]['result']['contentItems'][0]['text'])['code'],
+                                     'TRANSFER_IN_PROGRESS')
+                    self.assertEqual(result['planCalls'], 1)
+                else:
+                    self.assertTrue(replies[105]['result']['success'])
+                    self.assertEqual(result['ownerCalls'], 1)
+                reply_index = next(i for i, frame in enumerate(result['sent']) if frame.get('id') == 105)
+                starts = [i for i, frame in enumerate(result['sent']) if frame.get('method') == 'thread/start']
+                self.assertEqual(len(starts), 2)
+                self.assertLess(reply_index, starts[1])
+                self.assertEqual(result['second'], 'SOURCE_TRANSFERRED')
+                self.assertNotIn(106, replies)
+
+    def test_source_pump_failure_retains_exact_request_without_target_or_replay(self):
+        for mode, pending in (('handoff-source-send-loss', 102), ('handoff-source-owner-failure', 105)):
+            with self.subTest(mode=mode):
+                result = self.run_case(mode)
+                self.assertEqual(result['snapshot']['status'], 'failed')
+                self.assertEqual(result['snapshot']['pendingRequest']['id'], pending)
+                self.assertEqual(len(result['starts']), 1)
+                self.assertEqual(result['second'], 'SESSION_FAILED')
+                self.assertNotIn(105, {frame['id'] for frame in result['serverResponses']})
 
     def test_declined_handoff_finishes_work_and_keeps_the_same_source_usable(self):
         result = self.run_case("decline")
