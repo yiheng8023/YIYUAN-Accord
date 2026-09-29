@@ -1154,6 +1154,22 @@ class _App:
             return self._close_record
         manifest = self.manifest if manifest is None else manifest
         forced = False
+        force_observations = []
+
+        def force_owned(reason, before=None):
+            nonlocal forced
+            observed = {"reason": reason, "observedAt": time.time()}
+            try:
+                observed["rootExitCode"] = self.process.poll()
+                observed["before"] = self.job.sample() if before is None else before
+                observed["readerStopped"] = not self.reader.is_alive()
+            except Exception as error:
+                # Missing diagnostic evidence must not suppress owned cleanup.
+                observed["observationError"] = {"type": type(error).__name__, "message": str(error)[:1024]}
+            force_observations.append(observed)
+            forced = True
+            self.job.terminate()
+
         try:
             self.process.stdin.close()
             recovery_deadline = time.monotonic() + manifest["limits"]["recoverySeconds"]
@@ -1162,14 +1178,12 @@ class _App:
             # An owned listener has no EOF exit contract: its caller requests stop.
             graceful_deadline = recovery_deadline - manifest["limits"]["recoverySeconds"] / 2
             if stop_owned and self.process.poll() is None:
-                forced = True
-                self.job.terminate()
+                force_owned("owned-listener-stop")
             try:
                 wait_until = recovery_deadline if stop_owned else graceful_deadline
                 self.process.wait(timeout=max(0.001, wait_until - time.monotonic()))
             except subprocess.TimeoutExpired:
-                forced = True
-                self.job.terminate()
+                force_owned("root-wait-timeout")
                 try:
                     self.process.wait(timeout=max(0.001, recovery_deadline - time.monotonic()))
                 except subprocess.TimeoutExpired:
@@ -1178,12 +1192,13 @@ class _App:
             # share the graceful deadline, reserving recovery after termination.
             after = _wait_job(self.job, recovery_deadline if forced else graceful_deadline)
             if not _released(after):
-                forced = True
-                self.job.terminate()
+                force_owned("job-not-empty", after)
                 after = _wait_job(self.job, recovery_deadline)
             self.reader.join(timeout=max(0, recovery_deadline - time.monotonic()))
             record = _resource_record(manifest, self.process, forced, after)
             record["readerStopped"] = not self.reader.is_alive()
+            if force_observations:
+                record["forceObservations"] = force_observations
             if self.hot_arguments is not None:
                 record["arguments"] = self.hot_arguments
             if _replacement_binding(manifest) is not None:

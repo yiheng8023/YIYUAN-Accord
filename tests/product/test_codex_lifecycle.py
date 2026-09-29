@@ -136,6 +136,11 @@ class CodexLifecycleTests(unittest.TestCase):
         self.assertTrue(all(row['accepted'] for row in rows), json.dumps(rows, indent=2))
 
     def test_legacy_close_probe_preserves_interruptions_without_successful_row(self):
+        import subprocess
+        # This closed compatibility probe intentionally pins its original helper
+        # bytes. Its offline interruption test must use that immutable subject,
+        # not require every later observer change to match the historical hash.
+        frozen_revision = 'da70842705d333e619669bc64c2b1f79c87dd346'
         for phase in ('initialize', 'close', 'config-read', 'forced-release'):
             with self.subTest(phase=phase), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
@@ -143,6 +148,13 @@ class CodexLifecycleTests(unittest.TestCase):
                 binary.write_bytes(b'no executable is started by this test')
                 evidence = root / 'evidence'
                 evidence.mkdir()
+                frozen_helpers = root / 'frozen-helpers'
+                for name in ('observe_codex_lifecycle', 'observe_codex_entry', 'codex_rpc', 'inspect_native_resources'):
+                    relative = 'scripts/' + name + '.py'
+                    target = frozen_helpers / relative
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(subprocess.check_output(
+                        ['git', 'show', frozen_revision + ':' + relative], cwd=lifecycle.ROOT))
                 (evidence / 'release.json').write_text(json.dumps({
                     'binarySha256': hashlib.sha256(binary.read_bytes()).hexdigest()}))
 
@@ -176,6 +188,7 @@ class CodexLifecycleTests(unittest.TestCase):
                 with patch.dict(os.environ, {'ACCORD_LEGACY_CLOSE_BINARY': str(binary),
                                              'ACCORD_LEGACY_CLOSE_EVIDENCE': str(evidence)}), \
                         patch.object(lifecycle, '_App', App), \
+                        patch.object(lifecycle, 'ROOT', frozen_helpers), \
                         patch.object(lifecycle, '_codex_version', return_value='codex-cli 0.144.0-alpha.4'), \
                         patch.object(lifecycle, '_record_released', return_value=True), \
                         patch.object(Path, 'exists', exists), \
@@ -984,6 +997,64 @@ class CodexLifecycleTests(unittest.TestCase):
                     if caller == 'app':
                         self.assertTrue(record['readerStopped'])
                         self.assertEqual(app.close(), record)
+                        if disposition == 'natural':
+                            self.assertNotIn('forceObservations', record)
+                        else:
+                            before_force = record['forceObservations'][0]
+                            self.assertEqual(before_force['reason'], 'job-not-empty')
+                            self.assertEqual(before_force['rootExitCode'], 0)
+                            self.assertEqual(before_force['before']['processGroupState'],
+                                             'unobservable' if disposition == 'unobservable' else 'alive')
+
+    def test_root_timeout_diagnostics_do_not_suppress_owned_cleanup(self):
+        import subprocess
+        for fail_sample in (False, True):
+            with self.subTest(fail_sample=fail_sample), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                manifest = {'limits': {'recoverySeconds': 2}, 'resourceController': 'windows-job-object'}
+                class Process:
+                    returncode = None
+                    stdin, stdout = io.BytesIO(), io.BytesIO()
+                    def poll(self): return self.returncode
+                    def wait(self, timeout=None):
+                        if self.returncode is None:
+                            raise subprocess.TimeoutExpired('fixture-root', timeout)
+                        return self.returncode
+                class Job:
+                    closed = False
+                    samples = 0
+                    terminated = False
+                    def sample(self):
+                        self.samples += 1
+                        if fail_sample and self.samples == 1:
+                            raise OSError('fixture diagnostic unavailable')
+                        return {'activeProcesses': 0 if self.terminated else 1}
+                    def terminate(self):
+                        self.terminated = True
+                        process.returncode = 124
+                    def close(self): self.closed = True
+                class Reader:
+                    def join(self, timeout): pass
+                    def is_alive(self): return not job.terminated
+                process, job = Process(), Job()
+                app = lifecycle._App.__new__(lifecycle._App)
+                app.manifest, app.root, app.process, app.job = manifest, root, process, job
+                app.reader, app.stderr, app.stdout = Reader(), io.BytesIO(), io.BytesIO()
+                app._closed, app._close_record, app.hot_arguments = False, None, None
+                record = app.close()
+                observation = record['forceObservations'][0]
+                self.assertEqual(observation['reason'], 'root-wait-timeout')
+                self.assertIsNone(observation['rootExitCode'])
+                if fail_sample:
+                    self.assertEqual(observation['observationError']['type'], 'OSError')
+                    self.assertNotIn('before', observation)
+                else:
+                    self.assertEqual(observation['before']['activeProcesses'], 1)
+                self.assertTrue(job.terminated and job.closed)
+                self.assertEqual(record['exitCode'], 124)
+                self.assertTrue(record['forced'])
+                self.assertTrue(record['readerStopped'])
+                self.assertTrue(lifecycle._record_released(record, manifest))
 
     def test_prepare_rejects_nested_evidence_and_run_rejects_changed_owned_home(self):
         with tempfile.TemporaryDirectory() as tmp:

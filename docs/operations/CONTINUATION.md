@@ -23,6 +23,10 @@
 
 ## 最近核实的状态
 
+2026-09-29原生0.158调用链已有实际机制证据：复用原生命周期组件，在自有隔离HOME/状态/工作目录和两个固定loopback响应下运行23808整包，实际thread/fork指导进入后续请求，父暂停checkpoint/输入字节保持，子任务取得独立回执且没有继承checkpoint。首次根exit0但观察器调用了强制清理，最终Job0/reader停止，因此原案不计全部通过；无force前快照，原因未知。独立MCP单任务、双ready及无Hook分支对照自然退出；唯一带退出观测、仍用原时限的组合诊断也自然退出，不能据后次成功改判首次。已停止重复该场景，所有自有进程域及HTTP夹具关闭、共享保护文件未变，原始回执和4个原执行helper源保留在accord-native-fork-entry-20260929-01，当前判断见inspection.json/RESULTS.md。通用退出记录现保留强制前原因、root状态、Job快照及reader状态，采样失败仍完成所属清理；38项生命周期/资源回归通过，时限与判据不变。历史0.144探针的离线中断测试已改用其固定旧helper原件，未变更旧真实探针门槛或重放。此为固定响应机制与观测补强，不代验自主择时、GUI采用、完整A05/A07或系统价值。
+
+fork源码[CI36513963132](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36513963132)已按完整da70842705d333e619669bc64c2b1f79c87dd346及全部11job核completed/success，原件accord-session-start-boundary-20260929-01/ci-final.json，责任闭合不重复。现装仍28143558；23808只在上述任务私有环境使用，共享安装和信任未改变。
+
 2026-09-29补齐原生根分支入口：固定Codex0.158.0的[事件源码](https://github.com/openai/codex/blob/rust-v0.158.0/codex-rs/hooks/src/events/session_start.rs#L24)实际发出SessionStart/fork，原包匹配器和入口校验均漏掉该值，两个红例已确认。现在指导Hook接收fork，明确继承历史不代表状态恢复、新授权或写者转移；状态Hook仍只接resume/compact，不新增收据、不清水印、不采纳或退休父状态。19项入口/包/历史兼容检查、verify/host-check及独立复核通过；候选29023808、24文件/a58a06e4，现装仍28143558。本次仅补真实接线，不把源码/模拟输入检查称为宿主实际派发、子代理覆盖或A05验收。原件accord-session-start-boundary-20260929-01；四份官方源文件逐项匹配固定Git树blob。后续实际采用须核变化后声明的信任和调用者，不复用旧安装授权，也不根据此发现改判旧IDE失败原因。
 
 上批超长输入修复的[CI36508329268](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36508329268)已按完整bd384dbcb86e9830ec0438681c8c5f2ac4d304cb及全部11job核completed/success，托管责任闭合，原件accord-large-input-recovery-20260929-01/ci-final.json。此结果不代替新的fork候选检查；原功能和安装边界保持。
