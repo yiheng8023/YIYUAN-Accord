@@ -85,6 +85,9 @@ def setUpModule():
 TC = unittest.TestCase
 # CI deadlock guard; not the three-second product Hook timeout.
 HOOK_PROCESS_TIMEOUT_SECONDS = 60
+# CI guard for the interpreter plus the complete frozen GT-20 script, not a
+# product deadline. Keep it independent of the Hook process guard above.
+GT20_PROCESS_TIMEOUT_SECONDS = 30
 (C, A, P, G) = ('product/constitution.json', 'product/acceptance.json', 'product/program.json', 'evals/golden-tasks.json')
 RP = 'representative' 'BehaviorPolicy'
 (CS, AT, PS, FM, RG, PL) = ('closeoutSnapshot', 'acceptanceTransition',
@@ -2901,10 +2904,32 @@ class ProductControlTests(unittest.TestCase):
         powershell = shutil.which('pwsh')
         self.ann(powershell, 'GT-20 runner requires PowerShell 7')
         with tempfile.TemporaryDirectory(prefix='accord-gt20-ownership-') as base:
+            wrapper = Path(base) / 'invoke-collision.ps1'
+            wrapper.write_text(r'''
+param([string]$Runner, [string]$RepositoryRoot, [string]$CandidateRevision,
+      [string]$TaskRoot, [string]$EvidenceOutput)
+$ErrorActionPreference = 'Stop'
+[Console]::Error.WriteLine('ACCORD_GT20_PROCESS_READY')
+try {
+  & $Runner -RepositoryRoot $RepositoryRoot -CandidateRevision $CandidateRevision -TaskRoot $TaskRoot -EvidenceOutput $EvidenceOutput
+  exit 0
+} catch {
+  $receipt = [ordered]@{
+    phase = 'runner-rejected'
+    errorId = $_.FullyQualifiedErrorId
+    category = [string]$_.CategoryInfo.Category
+    target = [string]$_.TargetObject
+  }
+  [Console]::Out.WriteLine('ACCORD_GT20_REJECTION:' + ($receipt | ConvertTo-Json -Compress))
+  exit 1
+}
+''', encoding='utf-8')
             temporary = Path(tempfile.gettempdir())
             token = Path(base).name.lower().replace('_', '-')
             task = temporary / f'yiyuan-accord-gt20-formal-{token}'
             evidence = temporary / f'yiyuan-accord-gt20-formal-evidence-{token}.json'
+            self.ae(task.resolve().parent, temporary.resolve())
+            self.ae(evidence.resolve().parent, temporary.resolve())
             self.addCleanup(shutil.rmtree, task, True)
             self.addCleanup(evidence.unlink, True)
             markers = (
@@ -2912,19 +2937,44 @@ class ProductControlTests(unittest.TestCase):
                 (evidence, 'preserve evidence marker'),
             )
             for index, (marker, content) in enumerate(markers):
-                if index:
-                    shutil.rmtree(task)
-                marker.parent.mkdir(exist_ok=True)
-                marker.write_text(content, encoding='utf-8')
-                result = subprocess.run([
-                    powershell, '-NoProfile', '-File', str(ROOT / GT20_RUNNER),
-                    '-RepositoryRoot', str(ROOT),
-                    '-CandidateRevision', '0' * 40,
-                    '-TaskRoot', str(task), '-EvidenceOutput', str(evidence),
-                ], text=True, encoding='utf-8', errors='replace',
-                    capture_output=True, timeout=30)
-                self.ane(result.returncode, 0)
-                self.ae(marker.read_text(encoding='utf-8'), content)
+                with self.subTest(collision='EvidenceOutput' if index else 'TaskRoot'):
+                    if index:
+                        shutil.rmtree(task)
+                    marker.parent.mkdir(exist_ok=True)
+                    marker.write_text(content, encoding='utf-8')
+                    try:
+                        result = subprocess.run([
+                            powershell, '-NoProfile', '-NonInteractive', '-File', str(wrapper),
+                            '-Runner', str(ROOT / GT20_RUNNER), '-RepositoryRoot', str(ROOT),
+                            '-CandidateRevision', '0' * 40,
+                            '-TaskRoot', str(task), '-EvidenceOutput', str(evidence),
+                        ], text=True, encoding='utf-8', errors='replace', capture_output=True,
+                            timeout=GT20_PROCESS_TIMEOUT_SECONDS)
+                    except subprocess.TimeoutExpired as error:
+                        # READY proves only wrapper entry, not the internal
+                        # stage reached. Preserve bounded partial output.
+                        self.fail(f'GT-20 interpreter/runner timed out after {error.timeout}s; '
+                                  f'stdout={(error.stdout or b"")[-4000:]!r}; '
+                                  f'stderr={(error.stderr or b"")[-4000:]!r}')
+                    self.ae(result.returncode, 1, result.stderr)
+                    self.ai('ACCORD_GT20_PROCESS_READY', result.stderr)
+                    prefix = 'ACCORD_GT20_REJECTION:'
+                    receipts = [json.loads(line[len(prefix):]) for line in result.stdout.splitlines()
+                                if line.startswith(prefix)]
+                    self.ae(len(receipts), 1, result.stdout)
+                    receipt = receipts[0]
+                    self.ae(receipt['phase'], 'runner-rejected')
+                    if index:
+                        self.ae(receipt['errorId'], 'EvidenceOutput must not already exist.')
+                        self.ae(receipt['category'], 'OperationStopped')
+                        self.af(task.exists())
+                    else:
+                        self.ae(receipt['errorId'], 'DirectoryExist,Microsoft.PowerShell.Commands.NewItemCommand')
+                        self.ae(receipt['category'], 'ResourceExists')
+                        self.ae(Path(receipt['target']), task)
+                        self.ae(set(task.iterdir()), {marker})
+                        self.af(evidence.exists())
+                    self.ae(marker.read_text(encoding='utf-8'), content)
 
     def test_projection_evidence_rejects_drift_and_relocation(self):
         current = host_check(ROOT, 'codex')['details']
