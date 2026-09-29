@@ -2568,6 +2568,101 @@ catch(e){process.stdout.write(e.message);}
         self.assertFalse(self.status()['needsNativeReplay'])
         self.assertEqual(self.event('Stop'), {})
 
+    def test_large_native_input_replay_preserves_original_text_pause_and_token(self):
+        self.bind()
+        self.pause()
+        receipt = next(self.state.glob('*.input.json'))
+        marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'retained-large-input-loss'}), encoding='utf-8')
+        current = self.status()
+        prompt = '保留原文，不恢复执行。🧭\n' * 7000
+        self.assertGreater(len(prompt.encode('utf-8')), 128 * 1024)
+        self.event('UserPromptSubmit', prompt=prompt, recovery_epoch=current['epoch'])
+        captured = json.loads(receipt.read_text(encoding='utf-8'))['nativeInputs'][-1]
+        self.assertEqual(captured['prompt'], prompt)
+        self.assertEqual(captured['promptSha256'], hashlib.sha256(prompt.encode('utf-8')).hexdigest())
+        self.assertEqual(captured['source'], 'retained-native-replay')
+        self.assertEqual(captured['recoveryEpoch'], current['epoch'])
+        restored = self.status()
+        self.assertFalse(restored['needsNativeReplay'])
+        self.assertEqual(restored['mode'], 'paused')
+        self.assertFalse(restored['currentInputReconciled'])
+        before = receipt.read_bytes()
+        self.assertIn('native-replay-conflict', self.invoke({
+            'hook_event_name': 'UserPromptSubmit', 'prompt': prompt,
+            'recovery_epoch': current['epoch']}, hook=True, success=False))
+        self.assertEqual(receipt.read_bytes(), before)
+        self.assertEqual(self.event('Stop'), {})
+
+    def test_large_ordinary_input_is_captured_without_expanding_other_command_limits(self):
+        prompt = 'Ordinary source material: ' + 'x' * 140000
+        self.event('UserPromptSubmit', prompt=prompt)
+        current = self.status()
+        self.assertFalse(current['needsNativeReplay'])
+        receipt = next(self.state.glob('*.input.json'))
+        self.assertEqual(json.loads(receipt.read_text('utf-8'))['nativeInputs'][-1]['prompt'], prompt)
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.assertIn('oversize-native-input', self.invoke({'op':'status', 'padding':prompt}, success=False))
+        self.assertIn('oversize-native-input', self.invoke({
+            'hook_event_name':'Stop', 'padding':prompt}, hook=True, success=False))
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+
+    def test_large_raw_utf8_input_remains_exact_through_piped_transport(self):
+        prompt = '原文🧭\n' * 30000
+        request = {'session_id':'test-session', 'cwd':str(self.work),
+                   'hook_event_name':'UserPromptSubmit', 'prompt':prompt}
+        raw = json.dumps(request, ensure_ascii=False).encode('utf-8')
+        self.assertGreater(len(raw), 128 * 1024)
+        process = subprocess.Popen([self.node, str(RUNTIME), '--hook', 'UserPromptSubmit'],
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            env=self.environment, cwd=self.work)
+        self.addCleanup(lambda: process.kill() if process.poll() is None else None)
+        try:
+            # Write boundaries can split UTF-8 code points. Node's stream decoder
+            # must preserve them regardless of how the pipe coalesces writes.
+            for offset in range(0, len(raw), 997):
+                process.stdin.write(raw[offset:offset+997])
+                process.stdin.flush()
+            process.stdin.close()
+            process.stdin = None
+            _, stderr = process.communicate(timeout=10)
+            self.assertEqual(process.returncode, 0, stderr.decode('utf-8'))
+        finally:
+            if process.poll() is None:
+                process.kill()
+                process.communicate(timeout=10)
+        receipt = json.loads(next(self.state.glob('*.input.json')).read_text('utf-8'))
+        self.assertEqual(receipt['nativeInputs'][-1]['prompt'], prompt)
+        self.assertEqual(receipt['nativeInputs'][-1]['promptSha256'], hashlib.sha256(prompt.encode()).hexdigest())
+
+    def test_named_input_transport_byte_limit_and_other_route_exclusions(self):
+        def invoke_raw(request, args, size):
+            request = {'session_id':'test-session', 'cwd':str(self.work), **request, 'padding':''}
+            request['padding'] = 'x' * (size - len(json.dumps(request).encode()))
+            raw = json.dumps(request).encode()
+            self.assertEqual(len(raw), size)
+            return subprocess.run([self.node, str(RUNTIME), *args], input=raw,
+                capture_output=True, env=self.environment, cwd=self.work, timeout=10)
+
+        request = {'hook_event_name':'UserPromptSubmit', 'prompt':'Exact bounded input.'}
+        allowed = invoke_raw(request, ['--hook','UserPromptSubmit'], 8 * 1024 * 1024)
+        self.assertEqual(allowed.returncode, 0, allowed.stderr)
+        receipt = next(self.state.glob('*.input.json'))
+        before = receipt.read_bytes()
+        rejected = invoke_raw(request, ['--hook','UserPromptSubmit'], 8 * 1024 * 1024 + 1)
+        self.assertNotEqual(rejected.returncode, 0)
+        self.assertIn(b'oversize-native-input', rejected.stderr)
+        self.assertEqual(receipt.read_bytes(), before)
+        self.assertTrue(self.status()['needsNativeReplay'])
+        status = invoke_raw({'op':'status'}, [], 128 * 1024)
+        self.assertEqual(status.returncode, 0, status.stderr)
+        for args, payload in (([], {'op':'status'}), (['--hook'], request),
+                              (['--hook','UserPromptSubmit','--context-signals'], request)):
+            with self.subTest(args=args):
+                result = invoke_raw(payload, args, 128 * 1024 + 1)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(b'oversize-native-input', result.stderr)
+
     def test_unidentified_oversize_input_requires_each_workspace_session_to_replay(self):
         self.bind()
         other_work = self.root / 'unrelated-work'
@@ -2576,7 +2671,7 @@ catch(e){process.stdout.write(e.message);}
                      'prompt': 'Unrelated workspace task.'}, hook=True)
         self.invoke({'hook_event_name': 'UserPromptSubmit', 'session_id': 'second-session',
                      'prompt': 'Separate task.'}, hook=True)
-        self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Stop. ' + 'x' * 140000},
+        self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Stop. ' + 'x' * (8 * 1024 * 1024)},
                     hook=True, success=False)
         first = self.status()
         second = self.invoke({'op': 'status', 'session_id': 'second-session'})
@@ -2597,7 +2692,7 @@ catch(e){process.stdout.write(e.message);}
     def test_missing_receipt_failure_has_a_recovery_token_and_new_interrupt_invalidates_it(self):
         input_path = next(self.state.glob('*.input.json'))
         input_path.unlink()  # The native receipt was never created in this scenario.
-        self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Stop. ' + 'x' * 140000},
+        self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Stop. ' + 'x' * (8 * 1024 * 1024)},
                     hook=True, success=False)
         before = self.status()
         self.assertTrue(before['needsNativeReplay'])

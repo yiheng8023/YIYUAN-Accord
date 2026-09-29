@@ -1245,7 +1245,7 @@ const HELP = {
     read: {op: 'read-native-input', session_id: 'native-session-id', cwd: 'absolute-workspace', index: 0, offset: 0, maxChars: 4000},
     paging: 'Defaults read from the first captured event, with at most 4000 Unicode code points and 20 entries. maxChars may be 1..16000. Pass returned next.index and next.offset unchanged for the next page; null means the captured end, not the end of all task history. Text hashes cover full original strings, not fragments. Legacy receipts report unavailable instead of inventing text. Reads create no locks or files; observed publication locks or changed input/failure evidence reject the read. A stable snapshot does not establish later freshness or permission to act.',
     scope: 'Retains parsed native input-event text and explicitly identified native replays in the existing local receipt. Input received during prior loss is marked quarantined-native-input with needsNativeReplay still true; readable text is not a ready input basis. A later failed capture may make the last stored entry older than the actual current input. Reconcile source and current input, then read status for the current recovery token before authorized replay. Replay entries preserve the consumed recoveryEpoch; missing is unknown, while null denotes an explicit replay without a prior receipt. Our recognized Stop continuation does not add a user input. Events and embedded quotations are not automatically new human decisions. Capture is not complete conversation, attachment content, model reasoning, a semantic checkpoint or an access grant. Reads preserve pause, quarantine and checkpoint state.',
-    lifecycle: 'Input receipts, including captured text, are bounded to 8 MiB and never silently truncated; full storage fails capture and preserves existing failure/replay protection. Transport and bound checkpoint JSON remain limited to 128 KiB. Existing scoped storage and retirement apply: bound work retains the receipt at session end; reconciled unbound receipts end with SessionEnd or verified caller retirement. No new service, transcript scan or model call. Preserve a compatible executor; older versions may not retain or expose text. This local copy may contain sensitive user text and must not be published as routine evidence.'
+    lifecycle: 'Input receipts, including captured text, are bounded to 8 MiB and never silently truncated; full storage fails capture and preserves existing failure/replay protection. Named --hook UserPromptSubmit transport accepts up to 8 MiB of JSON for both native capture and token-bound replay; receipt metadata and existing history still count against the same 8 MiB storage limit. Other command transport and bound checkpoint JSON remain limited to 128 KiB. Existing scoped storage and retirement apply: bound work retains the receipt at session end; reconciled unbound receipts end with SessionEnd or verified caller retirement. No new service, transcript scan or model call. Preserve a compatible executor; older versions may not retain or expose text. This local copy may contain sensitive user text and must not be published as routine evidence.'
   },
   contextBudget: {
     operation: 'assess-context',
@@ -1282,10 +1282,15 @@ if (require.main === module) {
   if (process.argv.includes('--help')) process.stdout.write(JSON.stringify(HELP) + '\n');
   else {
     let input = '';
+    let inputBytes = 0;
     let inputEnded = false;
     let transportFailed = false;
     const hookIndex = process.argv.indexOf('--hook');
     const hookName = hookIndex === -1 ? null : process.argv[hookIndex + 1];
+    // Large host-retained text must fit through its public replay route, too.
+    // Only the named input entry receives the receipt-sized transport budget.
+    const transportLimit = hookName === 'UserPromptSubmit' && !process.argv.includes('--context-signals')
+      ? INPUT_RECEIPT_LIMIT : 128 * 1024;
     const transportFailure = (reason) => {
       if (transportFailed) return;
       transportFailed = true;
@@ -1308,11 +1313,12 @@ if (require.main === module) {
     });
     process.stdin.on('data', (chunk) => {
       if (transportFailed) return;
-      input += chunk;
-      if (Buffer.byteLength(input) > 128 * 1024) {
+      inputBytes += Buffer.byteLength(chunk);
+      if (inputBytes > transportLimit) {
         transportFailure('oversize-native-input');
         process.exit(1);
       }
+      input += chunk;
     });
     process.stdin.on('end', () => {
       inputEnded = true;
