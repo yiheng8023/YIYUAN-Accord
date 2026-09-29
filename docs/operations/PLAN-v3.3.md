@@ -76,6 +76,14 @@ Work云端继续待判：[云安全说明](https://learn.chatgpt.com/docs/enterp
 
 剩余工作的承担者与最小条件沿原三线继续：Work Cloud核实际控制者的指导/身份/状态/恢复组合，三个UI分别核输入/审批、暂停、结果权限和退出；桌面与手机Remote复用主机路径而分别补控制端差异，均不包含SSH执行或跨主机迁移。Codex Cloud等能改变控制者加载/恢复判断的新证据，不重放旧setup/关闭失败；外部集成先绑定对应执行者、来源、精确仓库/ref及回传授权。JetBrains/Xcode继续区分内置控制者与外部已选Codex调用IDE工具的组合，补前者事件/身份/恢复契约，不以缺设备排除或以外部组合代验。新云任务、配对、安装、信任、工具/账户连接和外部消息仍需具体权限；本次不产生这些效果。普通交付与整体组合工作不等待全部入口处置。
 
+2026-09-30云协调边界核对：已选Work Local只指**任务协调与工具执行均由本地宿主承接**的local-only Work；这是协调位置的限定，不表示模型推理或全部数据留在设备。Work Cloud访问本机工具仍属云协调组合，不能并入这条已选路线。[官方Work说明](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-overview)限定sync只影响启用后新建的适用任务；设备不可达时可在下一轮改用云执行，不能在当前轮中途切换，旧任务不因此升级或合并历史。本地数据/工具/执行策略不自动随之转云，须重新核实际条件与未完效果。
+
+[具体接入说明](https://learn.chatgpt.com/docs/enterprise/cloud-local-access#check-hooks-and-network-compatibility)与[Agent Security](https://learn.chatgpt.com/docs/enterprise/agent-security#hooks-in-local-computer-access-with-work-cloud)明确：在其云协调模式中，本地配置、插件和命令Hook不受支持，即使工具在本机执行。管理员MCP Hook仅是managed policy与remote hooks启用、Work Cloud具有local access时的条件路径，配置在Global requirements.toml；个人账户或无local access的Work Cloud不使用这些enterprise hooks。不能把该路径说成当前账号可用，也不能据此解释旧Codex Cloud容器失败或排除全部Work Cloud。
+
+[MCP Hook契约](https://learn.chatgpt.com/docs/hooks#mcp-tool-hooks)还要求已有连接，不负责启动或重连；SessionStart可能早于server就绪，SessionEnd不支持MCP Hook。回调错误、超时、缺server/tool或异常响应不保证操作被阻止，支持的显式拒绝与实际效果须分别核验。因此下一有效证据是**适用账号/策略下，同一云协调器的入口事件、任务身份、状态/恢复及退出承担者**；不能把Hook失败当作未执行证明或安全重试依据。完整事件与内部子代理覆盖也不得由局部回调推出。
+
+这些事实收准工程路线：停止以本机补脚本、安装/授信/reload或stdio调用成功证明云协调器采用插件Hook；后续比较受支持的原生职责替代与条件性管理员路径，先核最小契约和实际权限。三个UI的work-cloud仍pending、6个限定开发ID/5个待判行及selectionFinal=false保持；不新增入口ID、运行时、服务、配置或任务。一般[插件打包说明](https://developers.openai.com/plugins/build/plugins#bundled-mcp-servers-and-lifecycle-hooks)须结合具体协调模式阅读，不以“包括Work”覆盖其限制。纯云、云协调访问本机、local-only Work、Remote控制已有本地主机及旧Codex Cloud分别保留来源和责任，不互相代验。
+
 ## 全维度动态评价框架
 
 评价就是对现有 A01–A08 验收条件作具体量化，不在验收外新增一套评分体系。共识/需求是否自洽、实现是否符合要求、真实用途是否满足，分别核对；同一组判据也用于当前开发、历史重审和 Accord 的实际应用。

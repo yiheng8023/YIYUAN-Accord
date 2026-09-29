@@ -2924,7 +2924,11 @@ try {
   exit 1
 }
 ''', encoding='utf-8')
-            temporary = Path(tempfile.gettempdir())
+            # Exercise an equivalent noncanonical spelling on every Windows
+            # host; PowerShell may likewise expand CI's RUNNER~1 temp alias.
+            alias_child = Path(base) / 'alias-child'
+            alias_child.mkdir()
+            temporary = alias_child / '..'
             token = Path(base).name.lower().replace('_', '-')
             task = temporary / f'yiyuan-accord-gt20-formal-{token}'
             evidence = temporary / f'yiyuan-accord-gt20-formal-evidence-{token}.json'
@@ -2949,6 +2953,7 @@ try {
                             '-CandidateRevision', '0' * 40,
                             '-TaskRoot', str(task), '-EvidenceOutput', str(evidence),
                         ], text=True, encoding='utf-8', errors='replace', capture_output=True,
+                            env={**os.environ, 'TEMP': str(temporary), 'TMP': str(temporary)},
                             timeout=GT20_PROCESS_TIMEOUT_SECONDS)
                     except subprocess.TimeoutExpired as error:
                         # READY proves only wrapper entry, not the internal
@@ -2971,7 +2976,7 @@ try {
                     else:
                         self.ae(receipt['errorId'], 'DirectoryExist,Microsoft.PowerShell.Commands.NewItemCommand')
                         self.ae(receipt['category'], 'ResourceExists')
-                        self.ae(Path(receipt['target']), task)
+                        self.at(Path(receipt['target']).samefile(task))
                         self.ae(set(task.iterdir()), {marker})
                         self.af(evidence.exists())
                     self.ae(marker.read_text(encoding='utf-8'), content)
