@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import os
@@ -29,7 +30,7 @@ from tests.product.test_carrier_handoff import proposal_fixture_item
 
 
 SCHEMA = "accord-codex-session-native-evidence/v1"
-PROVIDER_REQUESTS = 10
+PROVIDER_REQUESTS = 11
 COLD_PROVIDER_REQUESTS = 2
 SOURCE_PROVIDER_REQUESTS = 2
 SOURCE_FILES = (
@@ -47,12 +48,13 @@ SOURCE_FILES = (
     "runtime/task-checkpoint.cjs",
     "runtime/codex-context.cjs",
 )
-TOOL_SEQUENCE = {
-    1: "accord_request_handoff",
-    3: "accord_inspect_context",
-    4: "accord_request_handoff",
-    7: "accord_request_handoff",
+HOT_TOOL_SEQUENCES = {
+    10: {1: "accord_request_handoff", 3: "accord_inspect_context",
+         4: "accord_request_handoff", 7: "accord_request_handoff"},
+    11: {1: "accord_request_handoff", 2: "accord_inspect_context",
+         4: "accord_inspect_context", 5: "accord_request_handoff", 8: "accord_request_handoff"},
 }
+TOOL_SEQUENCE = HOT_TOOL_SEQUENCES[PROVIDER_REQUESTS]
 TURN_COUNTS = (1, 3, 2)
 
 
@@ -239,6 +241,53 @@ def _rpc_id(value):
     if type(value) not in (str, int):
         raise ValueError("native RPC id is not a string or integer")
     return (type(value).__name__, value)
+
+
+def _bound_hot_sequence(manifest, snapshot):
+    # Select the original fixture before checking results; never fall back to
+    # the old scenario because the new source-context check failed.
+    count = manifest.get("providerRequests")
+    if type(count) is not int or count not in HOT_TOOL_SEQUENCES:
+        raise ValueError("unknown native hot fixture sequence")
+    source = read_regular(snapshot / "tests/product/test_codex_session_native.py", 1024 * 1024)
+    tree = ast.parse(source.decode("utf-8"))
+    values = [ast.literal_eval(node.value) for node in tree.body if isinstance(node, ast.Assign)
+              and any(isinstance(target, ast.Name) and target.id == "PROVIDER_REQUESTS"
+                      for target in node.targets)]
+    if len(values) != 1 or type(values[0]) is not int or values[0] != count:
+        raise ValueError("native hot fixture sequence differs from frozen source")
+    return count, HOT_TOOL_SEQUENCES[count]
+
+
+def _inspect_queued_source_context(provider_rows, proposal, context, transfer_id):
+    """Bind the new source query to the queued reply and its own provider result."""
+    expected = (proposal, context)
+    results = []
+    for index, request in enumerate(expected):
+        prior = provider_rows[index].get("request", {}).get("input", [])
+        later = provider_rows[index + 1].get("request", {}).get("input", [])
+        if later[:len(prior)] != prior:
+            raise ValueError("queued source provider history differs")
+        added = later[len(prior):]
+        calls = [item for item in added if _provider_tool(item) == request["params"]["tool"]]
+        outputs = [item for item in added if item.get("type") in
+                   {"function_call_output", "custom_tool_call_output"}]
+        if (len(calls) != 1 or len(outputs) != 1
+                or calls[0].get("call_id") != request["params"].get("callId")
+                or outputs[0].get("call_id") != request["params"].get("callId")):
+            raise ValueError("queued source tool result identity differs")
+        results.append(json.loads(outputs[0].get("output", "")))
+    queued, observed = results
+    if not isinstance(queued, dict) or not isinstance(observed, dict):
+        raise ValueError("queued source results are not structured objects")
+    if (queued.get("status") != "queued" or queued.get("transferId") != transfer_id
+            or queued.get("takeoverStarted") is not False or queued.get("sourceWriterRetained") is not True):
+        raise ValueError("source context did not follow the queued proposal")
+    conditions = observed.get("observation", {}).get("conditions", {})
+    if (observed.get("schema") != "yiyuan-accord-native-context-reply/v1"
+            or any(context["params"].get(key) != proposal["params"].get(key)
+                   or conditions.get(key) != context["params"].get(key) for key in ("threadId", "turnId"))):
+        raise ValueError("queued source context belongs to another thread or turn")
 
 
 def _open_retained_ledger(path):
@@ -966,7 +1015,8 @@ def inspect_evidence(value):
     if mode != "hot":
         raise ValueError("unknown native session evidence mode")
     if (manifest.get("schema") != SCHEMA or not isinstance(manifest.get("evidence"), str)
-            or manifest.get("providerRequests") != PROVIDER_REQUESTS
+            or type(manifest.get("providerRequests")) is not int
+            or manifest["providerRequests"] not in HOT_TOOL_SEQUENCES
             or envelope.get("schema") != "accord-codex-session-native-envelope/v1"
             or envelope.get("success") is not True or envelope.get("failure") is not None):
         raise ValueError("native session evidence identity or result differs")
@@ -992,6 +1042,7 @@ def inspect_evidence(value):
     for name, expected in manifest["sourceHashes"].items():
         if _sha(snapshot / name) != expected:
             raise ValueError("frozen execution source differs: " + name)
+    provider_count, tool_sequence = _bound_hot_sequence(manifest, snapshot)
     if (post.get("sourceHashesAfter") != manifest["sourceHashes"]
             or post.get("keepSha256After") != manifest["keepSha256Before"]
             or post.get("sharedConfigAfter") != manifest["sharedConfigBefore"]
@@ -1038,7 +1089,7 @@ def inspect_evidence(value):
         ("prepare", "quiesced", "target-created", "accepted", "continue", "continued", "release", "adopt-target")]
     plans = result.get("plans")
     if (result.get("verifyStages") != expected_stages or result.get("ownerRequests") != []
-            or result.get("providerRequestsExpected") != PROVIDER_REQUESTS
+            or result.get("providerRequestsExpected") != provider_count
             or result.get("keepSha256") != manifest["keepSha256Before"]
             or result.get("claimLimit") != "Fixed localhost provider and evidence-based test verifier only; no model judgment, shared Desktop control, cold recovery or product acceptance."
             or not isinstance(plans, list) or len(plans) != 2):
@@ -1128,7 +1179,7 @@ def inspect_evidence(value):
         if thread_id not in histories or raw_history != histories[thread_id]:
             raise ValueError("retained native history is not the exact raw RPC result")
     tool_requests = [row for row in received if row.get("method") == "item/tool/call"]
-    if len(tool_requests) != 4:
+    if len(tool_requests) != len(tool_sequence):
         raise ValueError("native dynamic tool request count differs")
     tool_by_id = {_rpc_id(row["id"]): row for row in tool_requests}
     reply_rows = [row for row in requests if "method" not in row and "id" in row]
@@ -1138,9 +1189,16 @@ def inspect_evidence(value):
         raise ValueError("native dynamic tool response set differs")
     context_rows = [row for row in tool_requests if row.get("params", {}).get("tool") == "accord_inspect_context"]
     proposal_rows = [row for row in tool_requests if row.get("params", {}).get("tool") == "accord_request_handoff"]
-    if len(context_rows) != 1 or len(proposal_rows) != 3:
+    expected_contexts = sum(tool == "accord_inspect_context" for tool in tool_sequence.values())
+    if len(context_rows) != expected_contexts or len(proposal_rows) != 3:
         raise ValueError("native context/proposal request sequence differs")
-    context_request = context_rows[0]
+    context_request = context_rows[-1]
+    source_context, source_proposal = context_rows[0], proposal_rows[0]
+    if provider_count == 11 and (source_context.get("params", {}).get("threadId") != ordered_ids[0]
+            or source_context.get("params", {}).get("turnId") != result["first"].get("turnId")
+            or source_proposal.get("params", {}).get("threadId") != ordered_ids[0]
+            or replies[_rpc_id(source_context["id"])].get("result", {}).get("success") is not True):
+        raise ValueError("queued source context native request/reply differs")
     nested = [row for row in proposal_rows if row.get("params", {}).get("threadId") == ordered_ids[1]
               and row.get("params", {}).get("turnId") != result["second"].get("turnId")]
     if (context_request.get("params", {}).get("threadId") != ordered_ids[1]
@@ -1153,18 +1211,20 @@ def inspect_evidence(value):
 
     provider_rows = _json_lines(root / "retained/provider-requests.jsonl")
     responses = [_read_json(root / f"retained/provider-response-{ordinal}.json")
-                 for ordinal in range(1, PROVIDER_REQUESTS + 1)]
-    if (len(provider_rows) != PROVIDER_REQUESTS
+                 for ordinal in range(1, provider_count + 1)]
+    if (len(provider_rows) != provider_count
             or any(row.get("ordinal") != ordinal for ordinal, row in enumerate(provider_rows, 1))
-            or post.get("providerRequests") != PROVIDER_REQUESTS
+            or post.get("providerRequests") != provider_count
             or post.get("credentialsObserved") is not False
             or any(row.get("ordinal") != ordinal or row.get("transportStatus") != "completed"
                    for ordinal, row in enumerate(responses, 1))):
         raise ValueError("fixed localhost provider receipts differ")
     observed_tools = {ordinal: _provider_tool(row["response"]["output"][0])
                       for ordinal, row in enumerate(responses, 1) if _provider_tool(row["response"]["output"][0])}
-    if observed_tools != TOOL_SEQUENCE:
+    if observed_tools != tool_sequence:
         raise ValueError("fixed provider tool sequence differs")
+    if provider_count == 11:
+        _inspect_queued_source_context(provider_rows, source_proposal, source_context, "native-transfer-1")
 
     database = _open_retained_ledger(root / "retained/carrier.sqlite")
     try:
@@ -1186,7 +1246,8 @@ def inspect_evidence(value):
                 or state.get("source", {}).get("threadId") != ordered_ids[ordinal - 1]
                 or state.get("target", {}).get("threadId") != ordered_ids[ordinal]):
             raise ValueError("durable transfer ledger differs")
-    return {"valid": True, "providerRequests": PROVIDER_REQUESTS,
+    return {"valid": True, "providerRequests": provider_count,
+            "sourceContextAfterQueued": provider_count == 11,
             "threadIds": thread_ids, "transfers": 2,
             "claimLimit": "Read-only artifact inspection; execution-time external identities rely on retained before/after receipts."}
 
@@ -1341,6 +1402,57 @@ def native_integration(codex_value, evidence_value, restore_from=None,
 
 
 class CodexSessionNativeOfflineTests(unittest.TestCase):
+    def test_hot_sequence_is_bound_to_original_source_without_downgrade(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "tests/product/test_codex_session_native.py"
+            source.parent.mkdir(parents=True)
+            for count in (10, 11):
+                source.write_text(f"PROVIDER_REQUESTS = {count}\nraise RuntimeError('never execute')\n")
+                observed, sequence = _bound_hot_sequence({"providerRequests": count}, root)
+                self.assertEqual(observed, count)
+                self.assertEqual(2 in sequence, count == 11)
+            with self.assertRaisesRegex(ValueError, "differs from frozen source"):
+                _bound_hot_sequence({"providerRequests": 10}, root)
+            for invalid in (True, 9, 12, "11"):
+                with self.subTest(invalid=invalid), self.assertRaisesRegex(ValueError, "unknown"):
+                    _bound_hot_sequence({"providerRequests": invalid}, root)
+
+    def test_queued_source_context_requires_native_call_and_turn_correlation(self):
+        proposal = {"params": {"threadId": "source", "turnId": "turn", "callId": "proposal",
+                               "tool": "accord_request_handoff"}}
+        context = {"params": {**proposal["params"], "callId": "context", "tool": "accord_inspect_context"}}
+        queued = {"status": "queued", "transferId": "transfer", "takeoverStarted": False,
+                  "sourceWriterRetained": True}
+        observed = {"schema": "yiyuan-accord-native-context-reply/v1",
+                    "observation": {"conditions": {"threadId": "source", "turnId": "turn"}}}
+        def pair(request, result):
+            return [{"type": "function_call", "name": request["params"]["tool"],
+                     "call_id": request["params"]["callId"]},
+                    {"type": "function_call_output", "call_id": request["params"]["callId"],
+                     "output": json.dumps(result)}]
+        prior = [{"type": "message", "content": "protected input"}]
+        second = prior + pair(proposal, queued)
+        third = second + pair(context, observed)
+        rows = [{"request": {"input": items}} for items in (prior, second, third)]
+        _inspect_queued_source_context(rows, proposal, context, "transfer")
+        for change in ("call", "queued", "turn", "history"):
+            with self.subTest(change=change):
+                changed = json.loads(json.dumps(rows))
+                if change == "call": changed[2]["request"]["input"][-1]["call_id"] = "foreign"
+                if change == "queued":
+                    changed[1]["request"]["input"][-1]["output"] = '{}'
+                    changed[2]["request"]["input"][len(second)-1]["output"] = '{}'
+                if change == "turn":
+                    altered = json.loads(json.dumps(observed))
+                    altered["observation"]["conditions"]["turnId"] = "other-turn"
+                    changed[2]["request"]["input"][-1]["output"] = json.dumps(altered)
+                if change == "history": changed[2]["request"]["input"][0]["content"] = "changed"
+                expected_error = {"call": "result identity", "queued": "did not follow",
+                                  "turn": "another thread or turn", "history": "history differs"}[change]
+                with self.assertRaisesRegex(ValueError, expected_error):
+                    _inspect_queued_source_context(changed, proposal, context, "transfer")
+
     def test_resumed_context_check_distinguishes_prior_and_current_tool_pairs(self):
         call = {"type": "function_call", "name": "accord_inspect_context", "call_id": "same-id"}
         def output(turn):
@@ -1444,12 +1556,13 @@ class CodexSessionNativeOfflineTests(unittest.TestCase):
         direct = {"tools": [{"type": "function", "name": "accord_request_handoff"}]}
         self.assertEqual(fixed_provider_item(direct, 1)["type"], "function_call")
         context = {"tools": [{"type": "function", "name": "accord_inspect_context"}]}
-        self.assertEqual(fixed_provider_item(context, 3)["name"], "accord_inspect_context")
+        for ordinal in (2, 4):
+            self.assertEqual(fixed_provider_item(context, ordinal)["name"], "accord_inspect_context")
         wrapper = {"input": [{"type": "additional_tools", "tools": [{"type": "namespace",
             "name": "functions", "tools": [{"name": "exec",
                 "description": "accord_request_handoff accord_inspect_context"}]}]}]}
-        self.assertEqual(fixed_provider_item(wrapper, 4)["type"], "custom_tool_call")
-        self.assertIsNone(fixed_provider_item({}, 2))
+        self.assertEqual(fixed_provider_item(wrapper, 5)["type"], "custom_tool_call")
+        self.assertIsNone(fixed_provider_item({}, 3))
 
     def test_cold_provider_uses_one_context_call_then_final(self):
         direct = {"tools": [{"type": "function", "name": "accord_inspect_context"}]}

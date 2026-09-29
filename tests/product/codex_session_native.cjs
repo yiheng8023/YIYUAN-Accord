@@ -813,7 +813,7 @@ async function run(rawConfig) {
         return {error: {code: -32601, message: 'fixed native fixture has no owner handler for this request'}};
       }});
 
-    const first = await session.run({input: 'Submit one handoff proposal, then finish this source turn.', deadlineMs: wall()});
+    const first = await session.run({input: 'Submit one handoff proposal, inspect source context once after its queued reply, then finish this source turn without writes.', deadlineMs: wall()});
     const adoptedFirst = await session.adoptTarget({deadlineMs: wall()});
     const second = await session.run({input: 'Submit one new handoff proposal, then finish this adopted source turn.', deadlineMs: wall()});
     const adoptedSecond = await session.adoptTarget({deadlineMs: wall()});
@@ -840,7 +840,7 @@ async function run(rawConfig) {
       identities: {node: {path: config.identities.node.path, sha256: sha256(process.execPath),
         version: process.version}, codex: {path: config.argv[0], sha256: sha256(config.argv[0]),
         version: config.binding.hostVersion}},
-      keepSha256: sha256(config.keepPath), providerRequestsExpected: 10,
+      keepSha256: sha256(config.keepPath), providerRequestsExpected: 11,
       claimLimit: 'Fixed localhost provider and evidence-based test verifier only; no model judgment, shared Desktop control, cold recovery or product acceptance.'};
     }
   } catch (error) {
