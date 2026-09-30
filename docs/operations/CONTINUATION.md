@@ -65,6 +65,8 @@ b8fcaf4d..1db9e726增量已完成独立来源及共识审查，未发现实质�
 
 修正在独立caller-readiness-repair副本：Root先审准确任务、权限、输入和预算，窄守卫仅即时核pre-dispatch/source-created的当前receipt epoch/revision、暂停/恢复、请求身份与原件/调用器/SDK/helper/计划Hash及真实设置，发布与消费前重核；未知、变化、过期、restore/custom recorder及非字符串输入保持，不自动批准plan/verify/未知请求或恢复。另向执行者说明真实caller-owned期限及用量边界，不冒充Goal、窗口或权限。15项测试/70检查通过；原askOwner回调缝位在控制桩中等待外部响应直到时限，新版在精准预审条件内返回。独立代码复核的计划漂移、native input强转两处遗漏已修复并补反例，最终无具体阻断。该私有机制修复尚未被后续原生业务采用；不改源SDK/包、主模型/模式/第三方Skill或全版准入。原件、初始准备目录错误与确认未派发后的修正、失败后态及两次审查都在同目录保留。
 
+后续accord-readiness-livecheck-20260930-01已用真实Root的只读status helper与已审owner回调前段核对：当前已reconciled receipt/revision匹配时约1.8秒返回，旧input epoch及旧revision均保持拒绝，Root输入/检查点原始字节Hash不变。没有启动App Server、模型或新线程；这补上实际Root状态适配，仍不代验完整原生业务采用、source-created端到端或A01–A08。任务进程已退出，实际观察及原请求留result.json和独立目录；下一必要业务沿原预算与新条件前瞻绑定。
+
 ## 本批完成与实际未完项
 
 | 工作范围 | 可复用的有效成果 | 仍须完成或保留的边界 |
