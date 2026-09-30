@@ -27,7 +27,7 @@
 
 **更新05已安装并由当前Root采用，原目录关闭失败保留。** attempt `20260930T032442Z-d04a96e5`为update0/discover1；新cache/candidate及两份旧包备份各24文件与对应Git blob一致。执行后配置SHA可由原before仅替换Accord ref精确重建，Hook声明/信任及其它19插件登记保持。重启后的model、tui模型提示和node_repl本机管道字段另有变化，保留当前环境，不归因安装或回写旧配置。
 
-目录RPC只有initialize/initialized/hooks-list/skills-list，返回6可信Hook/5Skill；root0之后4个所属子进程与reader未自然退出，forced收尾后Job0/reader停止。具体子进程身份和原因未取得，不改判`discover-failed`、不重跑或扩限。当前Root新Hook路径、MCP新增checkpointSource和新版工具描述、当前thread/turn/输入回执已核，普通新输入无replay/resume要求；桌面后端0.159.0、当前模型gpt-6.1-sol与独立CLI0.159.2分别绑定。05许可已消费，13份冻结执行源/plan/auth/快捷方式原件保留，仅Hash匹配桌面入口回收；确认无启动器写者后将Start-update.cmd改为说明，实跑0且无新attempt/配置变化。详见accord-local-adoption-20260930-01/ACTUAL-ADOPTION.md、ACTUAL-INSTALLATION.json及completion.json。
+目录RPC只有initialize/initialized/hooks-list/skills-list，返回6可信Hook/5Skill；root0之后4个所属子进程与reader未自然退出，forced收尾后Job0/reader停止。具体子进程身份和原因未取得，不改判`discover-failed`、不重跑或扩限。该次Root新Hook路径、MCP新增checkpointSource和新版工具描述、thread/turn/输入回执已核，普通新输入无replay/resume要求；当时桌面后端0.159.0、模型gpt-6.1-sol与独立CLI0.159.2分别绑定。本轮恢复后的原生metadata已回报桌面后端0.159.2，Accord包保持；不据此重开用户搁置的闪窗诊断。05许可已消费，13份冻结执行源/plan/auth/快捷方式原件保留，仅Hash匹配桌面入口回收；确认无启动器写者后将Start-update.cmd改为说明，实跑0且无新attempt/配置变化。详见accord-local-adoption-20260930-01/ACTUAL-ADOPTION.md、ACTUAL-INSTALLATION.json及completion.json。
 
 用户确认两次短暂终端窗口发生于Codex重启后。官方0.159.2已有后台/Hook/执行启动的Windows闪窗修复，当前桌面更新器报告26.928.20755/prod/up_to_date；启动进程与时点吻合但未取得两次可见窗口的精确PID，不归因用户、火绒或Accord包，也不与目录关闭失败合并根因。取证及官方补丁见accord-terminal-flash-20260930-01/FINDINGS.md。未修改客户端、安全软件、发布通道或其它共享启动配置。
 
@@ -60,6 +60,10 @@ bec8c2416579c2cd8140cf77c3663a69e1630656的[CI36628339588](https://github.com/yi
 25a5e90d的[CI36668637160](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36668637160)已按完整SHA核对11/11成功，DevDay研究与实际采用记录的源码检查闭合。随后四个有界目录只读样本均root0/非forced/Job0/reader停止、配置保持；旧model、pipe单项和调用者标记对照均未复现原残留，不据此改判旧失败或认定根因。原调用者环境与当前宿主环境存在差异，不能互相代验；取证在accord-directory-exit-trace-20260930-01/SUMMARY.md结束，不继续组合探测。用户明确暂搁未再复现且未见副作用的闪窗，仅保留原记录，主目标继续。
 
 b8fcaf4d..1db9e726增量已完成独立来源及共识审查，未发现实质漏项或越权；10份官方原文Hash与下载清单相符，机器投影只增加该研究文件的允许路径，其余字段保持。Root另澄清研究中的模型来源及闪窗证明范围：当前模型由宿主回报，不推断选择原因；本机采用已核，闪窗原因未证且已搁置。审查原件在accord-integration-review-20260930-01；它仅核这批文稿及依赖，不构成普通行为准入或A01–A08通过，下一步仍沿现有本地路线完成必要实际交付与组合验收。
+
+**新SDK工程交付未完成，Root例行放行编排已纠正。** accord-sdk-gap-delivery-20260930-01在56f8bcae源、29220132现装、实际CLI0.159.2、gpt-6.1-sol/xhigh及独立工作目录前绑后执行；未点名Skill或要求迁移。Root两次例行放行等待分别105.479/66.357秒，总600秒及原30秒预留使业务实际只有396.984秒（单轮上限480），最终TURN_ACTIVITY_FAILED/turn activity deadline exceeded，gaps.md与claims.json均未交付。9输入及原调用器Hash保持；native0、非forced、连接关闭、所属Job0，最新报告用量955080/139891/4821（total/uncached/output，未报告尾部未知）；最终Goal读回未到达，不补为false。SDK时限未被扩大，也没有恢复或重跑该失败实例。
+
+修正在独立caller-readiness-repair副本：Root先审准确任务、权限、输入和预算，窄守卫仅即时核pre-dispatch/source-created的当前receipt epoch/revision、暂停/恢复、请求身份与原件/调用器/SDK/helper/计划Hash及真实设置，发布与消费前重核；未知、变化、过期、restore/custom recorder及非字符串输入保持，不自动批准plan/verify/未知请求或恢复。另向执行者说明真实caller-owned期限及用量边界，不冒充Goal、窗口或权限。15项测试/70检查通过；原askOwner回调缝位在控制桩中等待外部响应直到时限，新版在精准预审条件内返回。独立代码复核的计划漂移、native input强转两处遗漏已修复并补反例，最终无具体阻断。该私有机制修复尚未被后续原生业务采用；不改源SDK/包、主模型/模式/第三方Skill或全版准入。原件、初始准备目录错误与确认未派发后的修正、失败后态及两次审查都在同目录保留。
 
 ## 本批完成与实际未完项
 
