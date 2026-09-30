@@ -23,7 +23,13 @@
 
 ## 最近核实的状态
 
-源码候选现为 `3.3.0-dev.1+codex.20260929220132`（UTC构建身份），固定来源5efc66f8f190ed0052774e5188b077bcbc8e3cb1，24文件/SHA `c0b22b6cef785b760b77f26a57f9237db7a7c518fd631a0c0af1d29016b2a37e`，包含下述大检查点回读修复。本机现装仍为 `3.3.0-dev.1+codex.20260929100847`，固定包来源e147e7fec1bc596d4f3b13e7ba92ce427056cd75，24文件/SHA `90e5a84e90100f80de504b11186dc14b4f423a75ff084ee2bf88ee1d796d440b`。未安装新候选、改配置或授信，源码通过不代表现装已采用。
+源码和当前Root现装均为 `3.3.0-dev.1+codex.20260929220132`（UTC构建身份），固定来源5efc66f8f190ed0052774e5188b077bcbc8e3cb1，24文件/SHA `c0b22b6cef785b760b77f26a57f9237db7a7c518fd631a0c0af1d29016b2a37e`。当前Root新版入口与MCP采用已有直接证据；其它消费者和完整行为验收分别保留。旧29100847/e147包已留独立备份，不作为当前安装恢复目标自动重放。
+
+**更新05已安装并由当前Root采用，原目录关闭失败保留。** attempt `20260930T032442Z-d04a96e5`为update0/discover1；新cache/candidate及两份旧包备份各24文件与对应Git blob一致。执行后配置SHA可由原before仅替换Accord ref精确重建，Hook声明/信任及其它19插件登记保持。重启后的model、tui模型提示和node_repl本机管道字段另有变化，保留当前环境，不归因安装或回写旧配置。
+
+目录RPC只有initialize/initialized/hooks-list/skills-list，返回6可信Hook/5Skill；root0之后4个所属子进程与reader未自然退出，forced收尾后Job0/reader停止。具体子进程身份和原因未取得，不改判`discover-failed`、不重跑或扩限。当前Root新Hook路径、MCP新增checkpointSource和新版工具描述、当前thread/turn/输入回执已核，普通新输入无replay/resume要求；桌面后端0.159.0、当前模型gpt-6.1-sol与独立CLI0.159.2分别绑定。05许可已消费，13份冻结执行源/plan/auth/快捷方式原件保留，仅Hash匹配桌面入口回收；确认无启动器写者后将Start-update.cmd改为说明，实跑0且无新attempt/配置变化。详见accord-local-adoption-20260930-01/ACTUAL-ADOPTION.md、ACTUAL-INSTALLATION.json及completion.json。
+
+用户确认两次短暂终端窗口发生于Codex重启后。官方0.159.2已有后台/Hook/执行启动的Windows闪窗修复，当前桌面更新器报告26.928.20755/prod/up_to_date；启动进程与时点吻合但未取得两次可见窗口的精确PID，不归因用户、火绒或Accord包，也不与目录关闭失败合并根因。取证及官方补丁见accord-terminal-flash-20260930-01/FINDINGS.md。未修改客户端、安全软件、发布通道或其它共享启动配置。
 
 **更新04已有安装及当前Root采用证据，原发现关闭失败保留。** 用户从客户端外运行attempt `20260929T131455Z-c2faa25b`：update exit0、discover exit1。新旧各24文件匹配e147/e85原件；执行时配置仅Accord ref变化，Hook信任不变，其它插件记录保持。原RPC返回新路径6个可信启用Hook、5个启用Skill。
 
@@ -75,7 +81,7 @@ bec8c2416579c2cd8140cf77c3663a69e1630656的[CI36628339588](https://github.com/yi
 
 ## 下一实际动作与工序
 
-大检查点修复的CI和本机采用准备已完成，用户已明确授权accord-local-adoption-20260930-01精确方案（29100847/e147→29220132/5ef，一次更新、不新增Hook信任）；许可已按新proposal及摘要记录，桌面独立入口“Accord 更新05（关闭 Codex 后运行）”已交付但未执行，不再重复询问同项权限。当前待客户端外关闭/启动动作，随后核原始执行记录、资源退出和原线程实际采用；不把现装旧包或用户完成报告直接当作已验证采用。此前接续文稿由Root直接维护并独立复核；原TASK/源映射只作准备记录，未执行其中的SDK业务或建立新case。9月29日入口处置沿既有Work Local/Remote开发路线及同标准的桌面控制判断对齐三个父范围及案例，并在原准入器保留未决模式、完整逐模式谓词和旧声明读取边界；该次没有新增scope/case、包、安装或外部执行，也不计行为准入。
+大检查点修复的CI、更新05安装及当前Root采用已核，原目录自然退出失败及具体原因未知继续保留；不再重复更新或重新索要已消费的许可。DevDay增量已按[官方研究记录](../../research/reviews/2026-09-30-devday-accord-impact.md)核对：Dots、MCP Events、Extensions和Agents API先作为受条件的原生候选比较；当前账号、完整状态/权限/恢复和生命周期未证，不默认启用、部署或新增入口ID。后续按实际宿主/开关重核受影响的输入与连续性，保持17项职责及原A01–A08。此前原TASK/源映射仍只作准备记录，未执行其中SDK业务或建立新case；普通交付沿已有授权和当前采用条件前瞻绑定。
 
 1. **入口调查已有明确停止条件**：5个待判聚合行及3个待判模式保持；不再重复同类介绍页或旧诊断。下一实例必须有能改变判断的新依据：具体版本的控制协议/原生回执，或实际可用的新云入口。按PLAN区分Work Cloud、新版发布环境和Legacy；仓库Skills、Start skill、项目指令、IDE原生历史/文件回退是不同组件，不合成为已证实的全链恢复。本次浏览器只读核对中，个人账户设置未显示可核实的新版环境配置入口，旧环境URL返回首页；不据此宣称账户不支持。未创建任务、环境、连接或修改设置，临时页已关闭。相关原文/核对记录见accord-entry-route-decision-20260930-01。已选Work Local/Remote及其它独立工作继续按各自条件推进。
 2. 普通交付主线不等待上述入口全部处置：选择确有需要的普通交付，把真实主代理/worker/内部核验/独立评估及当前包、入口、权限、输入、预算与observe/recheck在执行前绑定。既有CLI组合接口、SDK owner/recorder/恢复路径按需要复用；无断点不建新框架。对真实需要的连续性、环境变化和效果恢复取证，缺控制连接的路径单独保留，不扩大成全入口禁用。

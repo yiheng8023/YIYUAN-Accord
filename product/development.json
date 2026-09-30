@@ -234,6 +234,7 @@
       "tests/product/fixtures/resource_change/batch_tool.py",
       "tests/product/fixtures/resource_change/batch_worker.py",
       "research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md",
+      "research/reviews/2026-09-30-devday-accord-impact.md",
       "product/cases/candidate-review-v3.3.json"
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 adaptation candidates after the earlier cancellation. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",

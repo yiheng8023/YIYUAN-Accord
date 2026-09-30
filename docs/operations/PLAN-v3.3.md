@@ -90,6 +90,8 @@ Work云端继续待判：[云安全说明](https://learn.chatgpt.com/docs/enterp
 
 IDE资料的未知也应收准：[JetBrains历史](https://www.jetbrains.com/help/ai-assistant/chat-mode.html#chat-history)按项目跨IDE会话保存，[Xcode会话](https://developer.apple.com/documentation/xcode/writing-code-with-intelligence-in-xcode)提供用户可见转录、同线程跟进、Stop和基于Git的文件Restore。它们不是“没有历史或回退”；待核的是同一控制者的输入/身份/工作区绑定、压缩或重连后的指导与状态恢复、暂停时在途操作及退出承担者。UI停止响应或恢复文件不证明进程静止、外部效果撤销或交权完成。内置集成继续pending，外部Codex接IDE工具的既有组合路线保持。停止重复同类使用说明和旧诊断；只有版本化实现/协议、原生回执或可用的新入口能改变这些判断时，才推进依赖的实例核验。其余普通交付与组合验收按原工序继续，17项职责和A01–A08不变。
 
+2026-09-30按用户关于DevDay变化的提醒核对[十项官方来源](../../research/reviews/2026-09-30-devday-accord-impact.md)。Dots的notes、暂停/唤醒及委派、MCP Events的异步订阅、Plugin Extensions的交互通道和Agents API的托管状态提供新的原生比较路线；它们的账号条件、不同停止语义、漏失/重复事件、云协调Hook限制及实际效果仍分别验证。先比较能否承担既有职责，不因新品可见新增入口ID、常驻服务、订阅、付费套餐或默认长程Goal，也不以新闻代验当前SDK/CLI链。CLI0.159的opt-in输入交错和启动变化按真实版本/开关核受影响部分，不强制全量重验或自动变更用户模型。当前Root本机新包已实际采用；目录自然退出失败和重启闪窗分别保留，完整验收、范围和发布条件不变。
+
 ## 全维度动态评价框架
 
 评价就是对现有 A01–A08 验收条件作具体量化，不在验收外新增一套评分体系。共识/需求是否自洽、实现是否符合要求、真实用途是否满足，分别核对；同一组判据也用于当前开发、历史重审和 Accord 的实际应用。
