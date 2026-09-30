@@ -54,6 +54,16 @@
 
 八个无活动case范围：dynamic-model-routing、autonomous-continuity、codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。保留缺口，不为填数制造业务。
 
+### 最新实际交付：候选离线分发与条件修订
+
+2026-10-01已在新预绑任务中完成当前d90候选的两阶段普通CLI交付：先生成`candidate.zip`、独立`verify_bundle.py`及两份交付说明，再按新输入补入当前Root安装态与04/05失败历史，只修订两份说明。两轮均为真实0.159.2/gpt-6.1-sol/medium/default，正常终态、退出0、非forced；233.981/146.774秒，整段384.812秒，原600秒总限/240秒轮限/20秒恢复限未变，没有催促、救场、重跑或SDK桥。
+
+- 原生记录证实两轮活动前收到现装Hook指导，第一轮自行读取验证Skill并实际校验；独立审查核报告一致、历史失败/未知及Root-only采用范围。24个ZIP成员逐字节等于固定Gitblob；5输入Hash/mtime保持，第二轮ZIP与工具Hash/mtime保持。Root独立30项字节/原件检查和10项校验器正反例通过，反例重算外层摘要，保留合法重打包正例，避免只靠整包摘要拒绝。
+- 累计312752 total/44658 uncached/10558 output在原上限内，货币成本未知。两次阶段后Goal原始RPC均null，间隔原生工具记录未见Plan/Goal调用；不将读取时点外推完整未来状态。两CLI及只读reader自然退出、所属Job0/reader停止；共享配置前后和独立回读字节相同，没有实际建立新信任或恢复写入。两轮CLI提示忽略`computer_use.windows.always_allowed_app_ids`，未用于此次业务、不改用户配置。
+- 此结果支持本次实际入口参与、具体Skill采用、同线程新输入修订、成品核验和所属资源收尾；它不是自主fresh交接、压力/能力失效、默认最小环境、其它入口或完整A08。私有case在派发前固定；没有追认成已提交的准入case，17scope/10活动case、A01–A08及发布资格不变。原包未安装或发布，独立工具只核可信交付清单对应的完整性，不认证来源或证明功能。
+
+原件与成品在`C:\Users\15521\.codex\backups\accord-integration-bundle-20261001-01`：case/binding、两轮原生记录、独立字节/工具行为检查、语义审查和收尾；实际成品位于workspace。本次单次许可已消费，线程/原件保持。当前已从重复盘点回到实际交付，后续针对未覆盖连接前瞻绑定，复用本次有效成果，不重打包或重跑此案。
+
 ## 本轮工序纠偏与下一工作
 
 用户要求检查跑偏并纠偏继续。当前发现的是工序偏移：可选说明更新06、daemon维护和SDK轻文稿/诊断取证占据主线；现装执行机制足够继续，而普通功能组合未获得对应结果。有效修复/CI/原件保留，更新06移出当前必经工序，不用等待维护决定才能开发。用户随后主动授权并完成更新，本次维护已核收尾，不再投入相同更新或诊断；普通功能组合仍未完成。
