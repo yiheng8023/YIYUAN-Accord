@@ -93,7 +93,12 @@ const MANAGE_TOOL = Object.freeze({
     inputs: {type: 'array', maxItems: 100, items: {type: 'string', minLength: 1, maxLength: 4096}},
     outputs: {type: 'array', minItems: 1, maxItems: 100, items: OUTPUT_CHECK},
     nextAction: {type: 'string', minLength: 1, maxLength: 16384},
-    canContinue: {type: 'boolean'},
+    canContinue: {type: 'boolean',
+      description: 'Caller judgment on requesting an additional automatic continuation turn from Stop. '
+        + 'Set true only when the next concrete work can proceed safely within current authority. '
+        + 'Set false while waiting for necessary user observation, decision, authorization or external conditions, preserving unfinished conditions. '
+        + 'An unfinished project or mode=active alone does not justify true. '
+        + 'False does not mean completion, cancellation or user pause, and does not block later user input.'},
     revisionReason: {type: 'string', minLength: 1, maxLength: 2048},
     inputRevisions: {type: 'array', maxItems: 100, items: {type: 'object', properties: {
       path: {type: 'string', minLength: 1, maxLength: 4096}, observed: OBSERVED_FILE,

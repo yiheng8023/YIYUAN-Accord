@@ -10,11 +10,10 @@ Use current goal and authority. If coordination duties are absent, read the
 
 ## Modes and saved task state
 
-Preserve the user's explicit mode choice and actual host constraints. Reconcile
-changed modes with the latest goal, pauses, budget and unfinished work; permission
-mode is not collaboration mode. Ordinary continuation does not enable Plan/Goal,
-create a new goal, reset its budget or lift a pause. A genuinely achieved Goal may
-be completed through its normal lifecycle. Task plans remain revisable artifacts.
+Honor the user's mode choice and host limits; reconcile goals, pauses, budgets
+and unfinished work after changes. Permission and collaboration modes differ.
+Ordinary continuation enables no Plan/Goal or new goal, resets no budget and
+lifts no pause. Complete achieved Goals through their lifecycle; plans are revisable.
 
 When mode state matters, use the host's read-only Goal query (`get_goal` or
 `thread/goal/get` on an existing owned connection), independently of collaboration
@@ -37,16 +36,19 @@ integrity evidence and sourced tail/work/handoff/recovery/safety estimates.
 The helper consumes fresh counters; changed input, revision or generation requires
 reassessment. A fit grants neither permission nor takeover. Choose `contextMaxAgeMs`
 for the work without restamping evidence or ignoring the unobserved tail.
-Default status reads omit context I/O; assessment uses existing short-lived locks
-without changing saved task state or creating a control connection.
-For necessary checkpoint changes, use available `manage_task_state` with the
-inspected epoch/revision and current authority. `bind` preserves input baselines,
-output predicates and unresolved work; revisions need the required reasons and
-dispositions. Pauses survive binding unless an actual authorized resume is recorded.
+For necessary checkpoint changes, use `manage_task_state` with the
+inspected epoch/revision and current authority. `bind` retains input baselines,
+output predicates and unresolved work. Supply required revision reasons and
+dispositions; pauses remain until an authorized resume is recorded.
 Retire only state whose responsibilities are resolved or explicitly cancelled.
 Reasons and local file matches do not prove user permission or whole-task completion.
 Inspect uncertain effects before retry. Honor host approval; do not bypass denial.
 If absent, use helper `--help`; replay and lock recovery stay separate.
+
+`canContinue` requests an extra Stop turn for concrete safe authorized work.
+For necessary user/external input, use `false` and retain unmet conditions.
+Active or unfinished is insufficient; `false` neither ends, cancels nor pauses
+the task, and preserves later user input.
 
 Retrieve missing captured text through `read_task_input` or `read-native-input`;
 these contain Hook inputs, not full history, attachments or progress. Pass each

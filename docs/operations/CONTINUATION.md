@@ -23,7 +23,7 @@
 
 ## 最近核实的状态
 
-源码和当前Root现装均为 `3.3.0-dev.1+codex.20260929220132`（UTC构建身份），固定来源5efc66f8f190ed0052774e5188b077bcbc8e3cb1，24文件/SHA `c0b22b6cef785b760b77f26a57f9237db7a7c518fd631a0c0af1d29016b2a37e`。当前Root新版入口与MCP采用已有直接证据；其它消费者和完整行为验收分别保留。旧29100847/e147包已留独立备份，不作为当前安装恢复目标自动重放。
+源码候选为 `3.3.0-dev.1+codex.20260930132822`（UTC构建身份），24文件/SHA `c8288c032f08cc916e061482259c15a94fb8bfb61aefe452816332d51bf8c63f`；本轮仅澄清工具与本项目Skill中的`canContinue`判断，尚未安装。当前Root现装仍为 `3.3.0-dev.1+codex.20260929220132`，固定来源5efc66f8f190ed0052774e5188b077bcbc8e3cb1，24文件/SHA `c0b22b6cef785b760b77f26a57f9237db7a7c518fd631a0c0af1d29016b2a37e`。现装入口与MCP采用已有直接证据；其它消费者和完整行为验收分别保留。旧29100847/e147包已留独立备份，不作为当前安装恢复目标自动重放。
 
 **更新05已安装并由当前Root采用，原目录关闭失败保留。** attempt `20260930T032442Z-d04a96e5`为update0/discover1；新cache/candidate及两份旧包备份各24文件与对应Git blob一致。执行后配置SHA可由原before仅替换Accord ref精确重建，Hook声明/信任及其它19插件登记保持。重启后的model、tui模型提示和node_repl本机管道字段另有变化，保留当前环境，不归因安装或回写旧配置。
 
@@ -63,9 +63,13 @@ b8fcaf4d..1db9e726增量已完成独立来源及共识审查，未发现实质�
 
 **新SDK工程交付未完成，Root例行放行编排已纠正。** accord-sdk-gap-delivery-20260930-01在56f8bcae源、29220132现装、实际CLI0.159.2、gpt-6.1-sol/xhigh及独立工作目录前绑后执行；未点名Skill或要求迁移。Root两次例行放行等待分别105.479/66.357秒，总600秒及原30秒预留使业务实际只有396.984秒（单轮上限480），最终TURN_ACTIVITY_FAILED/turn activity deadline exceeded，gaps.md与claims.json均未交付。9输入及原调用器Hash保持；native0、非forced、连接关闭、所属Job0，最新报告用量955080/139891/4821（total/uncached/output，未报告尾部未知）；最终Goal读回未到达，不补为false。SDK时限未被扩大，也没有恢复或重跑该失败实例。
 
-修正在独立caller-readiness-repair副本：Root先审准确任务、权限、输入和预算，窄守卫仅即时核pre-dispatch/source-created的当前receipt epoch/revision、暂停/恢复、请求身份与原件/调用器/SDK/helper/计划Hash及真实设置，发布与消费前重核；未知、变化、过期、restore/custom recorder及非字符串输入保持，不自动批准plan/verify/未知请求或恢复。另向执行者说明真实caller-owned期限及用量边界，不冒充Goal、窗口或权限。15项测试/70检查通过；原askOwner回调缝位在控制桩中等待外部响应直到时限，新版在精准预审条件内返回。独立代码复核的计划漂移、native input强转两处遗漏已修复并补反例，最终无具体阻断。该私有机制修复尚未被后续原生业务采用；不改源SDK/包、主模型/模式/第三方Skill或全版准入。原件、初始准备目录错误与确认未派发后的修正、失败后态及两次审查都在同目录保留。
+修正在独立caller-readiness-repair副本：Root先审准确任务、权限、输入和预算，窄守卫仅即时核pre-dispatch/source-created的当前receipt epoch/revision、暂停/恢复、请求身份与原件/调用器/SDK/helper/计划Hash及真实设置，发布与消费前重核；未知、变化、过期、restore/custom recorder及非字符串输入保持，不自动批准plan/verify/未知请求或恢复。另向执行者说明真实caller-owned期限及用量边界，不冒充Goal、窗口或权限。15项测试/70检查通过；原askOwner回调缝位在控制桩中等待外部响应直到时限，新版在精准预审条件内返回。独立代码复核的计划漂移、native input强转两处遗漏已修复并补反例，最终无具体阻断。该私有修复随后由下述新任务采用，仍不改源SDK、主模型/模式/第三方Skill或全版准入。原件、初始准备目录错误与确认未派发后的修正、失败后态及两次审查都在同目录保留。
 
 后续accord-readiness-livecheck-20260930-01已用真实Root的只读status helper与已审owner回调前段核对：当前已reconciled receipt/revision匹配时约1.8秒返回，旧input epoch及旧revision均保持拒绝，Root输入/检查点原始字节Hash不变。没有启动App Server、模型或新线程；这补上实际Root状态适配，仍不代验完整原生业务采用、source-created端到端或A01–A08。任务进程已退出，实际观察及原请求留result.json和独立目录；下一必要业务沿原预算与新条件前瞻绑定。
+
+**等待输入时的接续判断已澄清，新SDK调用仍未正常完成。** 用户反馈的LED等待实例为Stop阻止1次、失败0次：该线程绑定时`canContinue=true`，额外续轮后自行改为false并保留实际LED观察责任；未见业务副作用，不能当作旧exit1重现。accord-continuation-guidance-delivery-20260930-01以f780144a源码、29220132现装和相同CLI/模型/预算前瞻绑定，保护4份输入，限定交付change.patch与rationale.md。例行pre-dispatch/source-created响应分别1.885/2.196秒，实际采用上述守卫；两份有效产物已交付，但480秒轮次仍以TURN_ACTIVITY_FAILED结束，没有成功终态或最终Goal读回。native0、非forced、连接关闭、所属Job0，输入Hash保持；最新报告用量372230/65238/8368，尾部及最终费用未知。原失败实例不重跑或恢复，产物有效不改判SDK调用成功。
+
+Root审查后集成工具参数描述及本项目连续性Skill：只有具体、安全、已授权的下一工作才申请额外Stop续轮；必要用户/外部输入未到时保留未完条件并用false，未完或active本身不足，false不等于完成、取消或用户暂停。两份Stop执行代码保持；原worker补丁超过8000字节Skill上限，Root等义收紧至7994字节，上限不放宽。源码与插件副本、24文件候选及机器投影已对齐；44项MCP回归、4项等待/未完/暂停/过期回执检查与源码verify通过，最终独立静态审查无实质问题。新候选须核精确提交的CI；尚未安装、不新增正式case准入或A01–A08通过。原件、审查及核对材料保存在同名私有目录。
 
 ## 本批完成与实际未完项
 
