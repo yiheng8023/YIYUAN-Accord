@@ -24,7 +24,7 @@ Work Sync 的适用新任务采用云协调；旧任务不升级。设备在新�
 
 **工程判断。** 这是对自建固定唤醒/持续协调层的实质替代候选；需比较已有职责的同等效果和生命周期后再缩减实现。它不是现有 SDK 源会话的自动升级，也未证明提供 fresh 接管、单写者或未知效果对账。Dots 的云协调 Hook 限制沿用上项。[Meet dots](https://learn.chatgpt.com/docs/dots)、[Hooks](https://learn.chatgpt.com/docs/hooks#managed-hooks-from-requirementstoml)
 
-**下一条件/未知。** 先只读核当前账户可用性、控制者和责任链；实际 dot 尚未创建/连接/采用。原生候选不新增入口 ID 或改判现有 scope。本任务主模型仍按用户选择的 `gpt-6.1-sol` 绑定；dot 的产品模型不能据此改变主任务模型。[Meet dots](https://learn.chatgpt.com/docs/dots)
+**下一条件/未知。** 先只读核当前账户可用性、控制者和责任链；实际 dot 尚未创建/连接/采用。原生候选不新增入口 ID 或改判现有 scope。当前宿主回报本任务模型为 `gpt-6.1-sol`，只证明该次观测的实际模型，不推断选择原因；保留当前配置，dot 的产品模型不能据此改变主任务模型。[Meet dots](https://learn.chatgpt.com/docs/dots)
 
 ## 3. MCP Events 与 Plugin Extensions 改变触发和交互，不提供全生命周期保障
 
@@ -50,7 +50,7 @@ Plugin Extensions 提供 sidebar、对话 panel、文件查看/编辑、设置�
 
 **官方契约。** 9 月 29 日 changelog 列：0.159.0 增加 opt-in `instant_interrupt`，可在模型响应或长 code-mode 调用中接受新输入；0.159.1 更新 `gpt-6.1-sol` 目录默认；0.159.2 修复 Windows 后台/沙箱命令的短暂 console 窗口。0.159.0 还移除自动 follow-up suggestions 与 bundled plugin-creator。[ChatGPT & Codex changelog](https://learn.chatgpt.com/docs/changelog)
 
-**工程判断。** 后续案例绑定真实调用者版本与实际开关，重点重验受影响的输入、暂停、在途效果和启动边界；官方修复不证明 Desktop 内置版本已升级或当前闪窗同因。移除 plugin-creator 不表示 Accord Skills 被移除。重启、reload 和更换消费者仍按既有生命周期执行；Root 的本机 05 更新与闪窗核验承担实际证明。[Changelog](https://learn.chatgpt.com/docs/changelog)
+**工程判断。** 后续案例绑定真实调用者版本与实际开关，重点重验受影响的输入、暂停、在途效果和启动边界；官方修复不证明 Desktop 内置版本已升级或当前闪窗同因。移除 plugin-creator 不表示 Accord Skills 被移除。重启、reload 和更换消费者仍按既有生命周期执行；Root 的本机 05 更新已有实际采用证据，闪窗原因仍未知，未再复现的诊断依用户决定搁置。[Changelog](https://learn.chatgpt.com/docs/changelog)
 
 新模型/Ultrafast 的可见性不构成当前选择或购买条件；本次保持用户已选主模型，不新增 $500 套餐或模型业务。[本周官方更新](https://learn.chatgpt.com/docs/whats-new/september-28-october-2-2026)
 
