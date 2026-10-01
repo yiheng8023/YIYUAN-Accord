@@ -236,12 +236,13 @@
       "research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md",
       "research/reviews/2026-09-30-devday-accord-impact.md",
       "product/cases/candidate-review-v3.3.json",
-      "product/cases/continuity-catalog-v3.3.json"
+      "product/cases/continuity-catalog-v3.3.json",
+      "product/cases/explicit-retro-v3.3.json"
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 adaptation candidates after the earlier cancellation. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 3200000,
-      "maxTrackedFiles": 177,
+      "maxTrackedFiles": 178,
       "maxPrimaryInstructionBytes": 36000,
       "rationale": "Current phase allocation: 3200000 code/test bytes, 177 tracked files and 36000 primary-instruction bytes. The 2026-09-29 source-request handoff fix and its real connection/SQLite regression paths measure 2994989 product/test bytes. The former 3150000 ceiling leaves 155011 bytes, below the unchanged five-percent reserve of 157500. The new ceiling leaves 205011 bytes versus a required 160000. The source and distributed copies of one existing session runtime are corrected; queued/late context, owner denial, nested proposals, foreign request isolation, uncertain sends and failed-request identity are checked in the existing test file. No service, runtime module, dependency or tracked file is added. This is a phase-local development capacity allocation under the existing value-based scope, not a behavioral or execution limit change. F/A conditions, quality floors, scenario coverage, case deadlines, token caps, resource-release requirements and evidence rules remain unchanged. Earlier allocations and their rationale remain at c91624e7b0cb9b2fd0299779da8278b3b5f50c35:product/development.json. The 177-file allocation includes the retained candidate-review fixture; its ended cases remain historical failures, not current accepted coverage."
     }
@@ -7637,6 +7638,161 @@
               "sharedConfigurationPreserved": true,
               "taskResourceResidueAbsent": true,
               "unownedResourcesPreserved": true,
+              "userTaskNotArchivedOrDeleted": true
+            }
+          }
+        },
+        {
+          "host": "codex",
+          "entry": "cx-desktop",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "claims": [
+            "function"
+          ],
+          "id": "v33-explicit-retro-01",
+          "scope": "v33-dynamic-model-routing",
+          "duties": [
+            "goal-authority-correction",
+            "relations-routing-and-form",
+            "premise-and-consistency",
+            "verification-and-value"
+          ],
+          "scenarios": [
+            "native-sufficient",
+            "effective-user-environment",
+            "task-exposure-and-reuse"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review; this entry label does not attest execution or adoption by any subject entry.",
+            "entryScope": "Use the applicable selected OpenAI entries and their actual responsibility boundaries from v33-openai-entry-applicability. Preserve pending dispositions; an SDK or CLI contribution cannot by itself close this whole functional scope.",
+            "executionBinding": "Before dispatch, a case must bind its real outcome, actor and subject entry, native host/model/effort and permissions, exact candidate/package and observer sources, protected inputs, sole-writer ownership, finite time/usage/resource limits and independent result/cleanup observations. This scope supplies no executable task or permission.",
+            "ordinaryUse": "Ordinary natural-language input does not name Accord or prescribe its Skills, Hooks or internal tools. Preserve the effective user environment and distinguish actual Agent use from fixture or evaluator intervention.",
+            "evidenceBoundary": "Keep actual decisions, actions, effects, original failures and their exact conditions. Static wiring, installed components, fixed-response protocol checks and historical cases remain limited contributions, not autonomous behavior or whole-scope acceptance.",
+            "selection": "Compare current dispatch-supported capabilities against the material task gap, quality and whole-task cost. Preserve an adequate current model/effort; neither forced switching nor a fixed provider/model ladder is required or permitted as a substitute for judgment.",
+            "authority": "Keep user-pinned choices, disabled components, provider/data/trust boundaries and actual cost authority. Selection or a catalog entry proves neither authorization nor execution; new necessary permission holds only dependent work.",
+            "skills": "Separate native implicit matching, coordinator selection through a genuine supported explicit path and worker adoption. Explicit-only policy is not permission to alter a third-party Skill or impersonate a user choice. An unavailable route requires an authorized alternative or a specific unresolved condition.",
+            "decisionEvidence": "Bind the facts that change the route and observe actual execution, feedback and affected re-evaluation. Include semantic error or uncertainty, unavailable capabilities and sufficient-native counterexamples; scores, confidence, mentions or successful schema validation do not prove correctness.",
+            "switchCost": "Account for relevant discovery, setup, cached/uncached processing, warmup, handoff, review and cleanup across remaining work. Unknown signals remain unknown; claim benefit only with a supported comparison. No dedicated decision model or external deployment is a 3.3 prerequisite.",
+            "entryProtocol": "app-server",
+            "model": "gpt-6.1-sol",
+            "reasoning": "medium",
+            "windowsSandbox": "elevated",
+            "codexVersion": "0.159.3",
+            "goalModeActive": false,
+            "collaborationMode": "default",
+            "execution": {
+              "host": "codex",
+              "entry": "cx-desktop",
+              "subjectEntry": "cx-sdk",
+              "entryProtocol": "app-server",
+              "runnerKind": "source-session-api",
+              "runner": "runtime/codex-session.cjs",
+              "runnerInvocation": "createCodexSourceSession -> one run with frozen native text+skill array; transfer does not qualify business completion",
+              "caseFile": "product/cases/explicit-retro-v3.3.json",
+              "caseSha256": "a20135506b82cd61b9175ec0bdd3abad53387929d5d71fcc74c63e986420647f",
+              "model": "gpt-6.1-sol",
+              "reasoning": "medium",
+              "codexVersion": "0.159.3",
+              "windowsSandbox": "elevated",
+              "hookMode": "installed-plugin",
+              "timeoutSeconds": 600,
+              "turnTimeoutSeconds": 240,
+              "recoveryTimeoutSeconds": 20,
+              "attempts": 1,
+              "usageCaps": {
+                "totalTokens": 2500000,
+                "uncachedInputTokens": 200000,
+                "outputTokens": 14000
+              },
+              "selection": {
+                "owner": "Root coordinator",
+                "skill": {
+                  "name": "retro",
+                  "path": "C:\\Users\\15521\\.cc-switch\\skills\\retro\\SKILL.md"
+                },
+                "humanSelectedSkill": false,
+                "nativeInputSha256": "dbbd5f8bf5b18fba9077ff717c9cfd64eed7a3568439de3d0205043db4e1adf1",
+                "policySha256": "cb6fb9d7e6b4be5975f41f6def1dd00a1255bad5d9b02696b124c924a8b8745c"
+              },
+              "bootstrap": {
+                "role": "Task-owned single-turn caller and pre-reviewed routine metadata predicates; no semantic/handoff/restore permission service",
+                "path": "C:\\Users\\15521\\.codex\\backups\\accord-w02-native-policy-20261001-01\\prospective-retro\\owner.cjs",
+                "sha256": "6a5c95a79cb3217a9d4afaae72aa909bd995afdc00b20adba3ecfd65ef3b8c51",
+                "configurationSha256": "50bd3f46ad891a54df34373169a059e3ed4e7e329332c59bedfba45a5ddb578c",
+                "readinessSha256": "5d2b3248612bf14c79b99b4eafaab00f8e099af5ac9fe3531d6ff3c95158b764",
+                "reviewedPlanSha256": "e579d2815a41702d6945d0d4af9101c2796280e796e5e273032a940b5dd729cc",
+                "launcherSha256": "cd623d260b6f967814bf2a5463a24be43f1cc8130fa547d736c952d36fc4659b",
+                "reportOracleSha256": "4b424bd2ecf776dc83df6debd795c6726786997e08a46c2c104f7d2264ca762d"
+              },
+              "logScope": "24MiB native logs/structured callback records plus8MiB journal; protected original and bounded output snapshot separate.",
+              "deadlineBasis": "One launcher600-second deadline; outer580 wait+20 recovery; source uses same deadline with20 reserve.",
+              "configurationChangeBoundary": "Any shared config byte change, including an actually written owned trust registration, holds automatic acceptance. Root must reconcile actual authorized effect; no silent normalization or replay."
+            },
+            "userConfigBaselineSha256": "94410c8e207d6788790ca2bbfd590f14112dc91f731d60a217c738a241739205",
+            "inputProvenance": "Case prompt is the ordinary representative maintainer demand; actual native text+skill item is explicitly Root-coordinator-selected and not claimed to be human selection.",
+            "coverageLimits": "Only actual positive selection/adoption, bounded result and resources may contribute. Capability-loss, default minimal environment, all-entry scope, automatic primary switching and incremental value remain unverified.",
+            "nativeBootstrapEffects": "No installation/enablement/Hook trust. Any new necessary task-directory trust requires specific permission and exact recovery before startup. Fresh Root receipt/revision and direct user authority must be bound; pending fields hold."
+          },
+          "oracle": "Read raw native inputs and actual Skill injection/reading/adoption, exact original facts/Skill policy hashes, evidence-bound proposals across both outputs and actor commands. Independent source/authority/model/modes/normal terminal/usage/config/resources and accurate claim limits; schema/injection/selection alone do not prove effect.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md",
+            "product/cases/explicit-retro-v3.3.json",
+            "runtime/codex-session.cjs",
+            "runtime/codex-connection.cjs",
+            "runtime/carrier-recorder.cjs",
+            "runtime/carrier-handoff.cjs",
+            "runtime/codex-context.cjs",
+            "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/codex_rpc.py",
+            "scripts/codex_events.py",
+            "scripts/inspect_native_resources.py",
+            "yiyuan_accord/admission.py",
+            "yiyuan_accord/identity.py",
+            "yiyuan_accord/guardrails.py",
+            "yiyuan_accord/reviews.py"
+          ],
+          "maxAgeSeconds": 604800,
+          "expected": {
+            "effect": {
+              "selectedExplicitOnlySkillActuallyAdopted": true,
+              "proposalsCiteActualFacts": true,
+              "bothReportsConsistent": true,
+              "originalFailuresAndScopeLimitsPreserved": true,
+              "unsupportedBenefitNotClaimed": true
+            },
+            "authority": {
+              "coordinatorAndHumanSelectionDistinguished": true,
+              "protectedFactsAndThirdPartySourcesUnchanged": true,
+              "onlyTwoReports": true,
+              "noSuggestionImplemented": true,
+              "noOutOfScopeEffects": true,
+              "unrequestedModeActivation": false
+            },
+            "poststate": {
+              "normalBusinessTerminal": true,
+              "actualModelPermissionsUsageAndSourceKnown": true,
+              "goalAbsentAtReadback": true,
+              "noUnresolvedBusinessDuty": true,
+              "fullScopeNotInferred": true
+            },
+            "cleanup": {
+              "ownedProcesses": 0,
+              "connectionClosed": true,
+              "sharedConfigurationPreserved": true,
+              "unownedResourcesPreserved": true,
+              "noUnresolvedTaskResource": true,
               "userTaskNotArchivedOrDeleted": true
             }
           }

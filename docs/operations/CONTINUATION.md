@@ -42,7 +42,7 @@
 
 ## 功能与必要验收未完项
 
-17必要scope均已定义、11活动case，其中新增目录清单两轮案仅为前瞻执行绑定；六项历史准入只属原版本/条件。A01–A08仍未完整收官，`functionalCompletion=false`、`candidateEligible=false`、`selectionFinal=false`保持。没有稳定剩余工作量权重，不编总百分比；定义、测试、安装或文稿数量不算功能完成率。
+17必要scope均已定义、12活动case，其中目录清单两轮案已有有限准入，新增显式Skill复盘案仅为前瞻执行绑定；六项历史准入只属原版本/条件。A01–A08仍未完整收官，`functionalCompletion=false`、`candidateEligible=false`、`selectionFinal=false`保持。没有稳定剩余工作量权重，不编总百分比；定义、测试、安装或文稿数量不算功能完成率。
 
 | 工作范围 | 必须继续的结果 |
 |---|---|
@@ -52,7 +52,7 @@
 | W06/W07 | 环境/压力变化后必要续做、消费者有效采用、资产保护和完整资源退出；局部Job治理不能代验普通宿主 |
 | W08 | 同一episode全链组合与独立净影响判断；A08依赖A01–A07，不能平均分或拼散案补短板；精确候选与发布后态分别核 |
 
-七个无活动case范围：dynamic-model-routing、codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。autonomous-continuity的一个代表性案已获限定普通两轮case准入；父范围的recovery-and-rollback、capability-loss及未观测接管/失败条件仍缺，完整A05不关闭。必要发布前代表性测试本身服务项目验收，不必等待外部客户委托；合成材料必须明示，不能把准备或案例数量当整项结果。
+六个无活动case范围：codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。dynamic-model-routing仅前绑显式Skill复盘案；autonomous-continuity的代表性案已获限定普通两轮case准入，父范围的recovery-and-rollback、capability-loss及未观测接管/失败条件仍缺，完整A05不关闭。必要发布前代表性测试本身服务项目验收，不必等待外部客户委托；合成材料必须明示，不能把准备或案例数量当整项结果。
 
 ### 最新实际交付：候选离线分发与条件修订
 
@@ -69,6 +69,12 @@
 独立有界源码短审未确认新的SDK实现断点：初始化、认证、幸存owner、预算与语义核验是可调用适配器的外部前提，公共脚本未消费该API不能单独证明契约违约。原私有owner两次缺正常terminal保持，不为该结论再开同路诊断或新增控制框架。新补验只证明当前版本受控连接，仍不证明模型自主择时、实际普通业务或GUI控制；不能用于关闭完整A05。原件在`accord-native-continuity-current-20261001-01`，不重跑、冷恢复、启用组件或改用户设置。
 
 ## 本轮工序纠偏与下一工作
+
+W02下一切片已在派发前准备`explicit-retro-v3.3.json`及`v33-explicit-retro-01`：根据刚结束episode的实际209.102秒Root等待和两处遗漏计数，协调者选用受管理、已启用且policy=false的`retro`提出有依据的改进；原自然需求、协调者选择和正式text+$retro/skill项分别保留，不冒称用户亲选、不把显式代选称作原生隐式匹配。36个受管理Skills的源/YAML保持，21个声明false；`code-review`未声明false，不能泛称全部Matt Skills都禁止隐式。官方[Skills规则](https://learn.chatgpt.com/docs/build-skills)与[App Server接口](https://learn.chatgpt.com/docs/app-server)，及实际CLI0.159.3生成的协议均支持显式skill输入；文档/schema/发现不代验采用。
+
+新任务私有单轮caller复用现有SDK、Job及收尾，保留600秒含20恢复/turn240/usage/单次约束；两项例行启动检查使用Root预审静态pin、新许可后的真实parent receipt/revision、保护字节、原生模型/Skill enabled/源设置和发布消费前重核，未知即hold，不能自刷新Root绑定为新权限。13控制正反检查、5报告结构/源算术反例和4准入计数回归通过，独立源码短审未发现阻断；实际权限仍false、parent basis未绑定、尚未启动native/model。只多一必要数据fixture将文件分配177→178，全部17范围、原11case definitions、byte budgets与质量/完成谓词保持；不新建产品控制层或改第三方源。原件在`accord-w02-native-policy-20261001-01/prospective-retro`。完整已提交绑定和新具体权限前不派发，不申请未准备方案。
+
+上一批ba34610e的精确CI36826419764已全部11/11成功；原3e5失败保持。本批前瞻case及测试变化独立核新CI，不把上一批绿灯借给新候选。
 
 2026-10-01代表性案`product/cases/continuity-catalog-v3.3.json`已按3e5ba0f0前绑执行一次：8个明确SYNTHETIC原件、3份产物，两轮从首次安装清单改为已有安装的升级清单；不可信材料没有改变版本、公开边界或执行权限。实际SDK API是runner，私有caller、配置、Root首轮协调和成品oracle分别冻结。CLI0.159.3/gpt-6.1-sol/medium，同一source两轮正常终态119.542/99.187秒，总432.168秒；固定600秒含20秒恢复、240秒轮限与用量上限保持，累计458723/54693/5694 total/uncached/output，费用未知。三个Root gate等待合计209.102秒计入总时长，其中首轮审查因原生emittedAtMs元数据与SDK规范化terminal差异发生一次检查器误拒，按精确method/params原文重核，未改业务产物或重跑。
 

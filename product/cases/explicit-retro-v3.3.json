@@ -1,0 +1,219 @@
+{
+  "schema": "yiyuan-accord-scoped-task-case/v1",
+  "purpose": "Prospective representative W02 positive coordinator selection and actual adoption check. The retrospective serves observed open improvement questions of the just-completed development episode (Root gate cost and coupled-check omissions); it does not replay the ended business or create a fictional customer. Root selects an installed enabled explicit-only Skill through the supported native input route, declaring the coordinator rather than human as selector. No source/policy or implicit matching is altered.",
+  "inputs": {
+    "facts.json": {
+      "schema": "accord-session-closure-facts/v1",
+      "purpose": "Actual just-completed project episode retrospective; evidence is qualified, not an invented customer or new product outcome.",
+      "episode": "C:\\Users\\15521\\.codex\\backups\\accord-sdk-continuity-catalog-20261001-01",
+      "facts": {
+        "ordinaryTurns": [
+          119.542,
+          99.187
+        ],
+        "wholeSeconds": 432.16765369998757,
+        "rootCallbackWaits": [
+          {
+            "id": "0001",
+            "kind": "pre-dispatch",
+            "seconds": 36.957
+          },
+          {
+            "id": "0002",
+            "kind": "source-created",
+            "seconds": 46.667
+          },
+          {
+            "id": "0003",
+            "kind": "stage-review",
+            "seconds": 125.478
+          }
+        ],
+        "actualSkill": {
+          "name": "verify-and-close-outcome",
+          "adoption": "actual actor read before work; no dedicated explicit input item"
+        },
+        "contextTool": "Two actual calls both unknown; no inferred window or mandatory handoff",
+        "modelAndModes": "Worker .3/gpt6.1-sol/medium; main reported .2; goals absent at reads, no mode creation",
+        "outcome": "Three outputs correctly changed clean to installed, eight original bytes/mtimes unchanged; no transfer.",
+        "observerCorrection": "Initial Root whole-frame equality rejected extra raw emittedAtMs absent from normalized SDK terminal; exact method/params recheck matched; no worker rescue/replay.",
+        "ci": "Original3e5 failed because Root missed two old fixture count constants; nine product jobs failed, two native jobs passed. Three inspected platforms showed same2 assertions. Exact2 local tests passed after counts corrected; ba346 new CI separate.",
+        "sourceRole": "Package source d90face; execution binding3e5; current case review/admission ba346. Not one common revision.",
+        "limits": "600 whole including20 recovery, 240 each turn, oneattempt, cumulative usage2.5m/200k/14k; no extensions or replay",
+        "resources": "Native/outer exit0/nonforced/Job0/connectionclosed, original config exact, no newtrust or restoration; task tmp caches removed after exit, evidence/thread/SQLite retained",
+        "claimLimit": "One qualified ordinary SDK two-turn case only; wholeA05/A08, fresh/failure/GUI/minimal environment/net gain not proved"
+      }
+    },
+    "evidence.json": {
+      "schema": "accord-selected-primary-evidence/v1",
+      "sourceRefs": {
+        "events": "C:\\Users\\15521\\.codex\\backups\\accord-sdk-continuity-catalog-20261001-01\\source\\owner-events.jsonl",
+        "result": "C:\\Users\\15521\\.codex\\backups\\accord-sdk-continuity-catalog-20261001-01\\source\\result.json",
+        "outer": "C:\\Users\\15521\\.codex\\backups\\accord-sdk-continuity-catalog-20261001-01\\source\\outer-result.json"
+      },
+      "rootCallbacks": [
+        {
+          "at": "2026-10-01T03:43:40.205Z",
+          "kind": "owner-request",
+          "id": "0001",
+          "requestKind": "pre-dispatch"
+        },
+        {
+          "at": "2026-10-01T03:44:17.162Z",
+          "kind": "owner-response",
+          "id": "0001",
+          "requestKind": null
+        },
+        {
+          "at": "2026-10-01T03:44:18.214Z",
+          "kind": "owner-request",
+          "id": "0002",
+          "requestKind": "source-created"
+        },
+        {
+          "at": "2026-10-01T03:45:04.881Z",
+          "kind": "owner-response",
+          "id": "0002",
+          "requestKind": null
+        },
+        {
+          "at": "2026-10-01T03:47:04.504Z",
+          "kind": "owner-request",
+          "id": "0003",
+          "requestKind": "stage-review"
+        },
+        {
+          "at": "2026-10-01T03:49:09.982Z",
+          "kind": "owner-response",
+          "id": "0003",
+          "requestKind": null
+        }
+      ],
+      "normalTurns": [
+        {
+          "sourceThreadId": "01a0f590-1b52-7a23-a3d3-7cb2ec652bd7",
+          "turnId": "01a0f590-d579-7bd3-8de6-6997b695ba0e",
+          "method": "turn/completed",
+          "turn": {
+            "id": "01a0f590-d579-7bd3-8de6-6997b695ba0e",
+            "itemsView": "summary",
+            "status": "completed",
+            "error": null,
+            "startedAt": 1790826304,
+            "completedAt": 1790826424,
+            "durationMs": 119542
+          }
+        },
+        {
+          "sourceThreadId": "01a0f590-1b52-7a23-a3d3-7cb2ec652bd7",
+          "turnId": "01a0f594-92ea-7e93-b314-4bb6329cfc15",
+          "method": "turn/completed",
+          "turn": {
+            "id": "01a0f594-92ea-7e93-b314-4bb6329cfc15",
+            "itemsView": "summary",
+            "status": "completed",
+            "error": null,
+            "startedAt": 1790826550,
+            "completedAt": 1790826649,
+            "durationMs": 99187
+          }
+        }
+      ],
+      "nativePoststate": {
+        "nativeExit": {
+          "code": 0,
+          "signal": null
+        },
+        "forced": false,
+        "connectionClosed": true,
+        "usage": {
+          "totalTokens": 458723,
+          "uncachedInputTokens": 54693,
+          "outputTokens": 5694
+        },
+        "usageClaimLimit": "Latest reported cumulative counters for acknowledged executions; interrupted work may have an unreported tail. Not final monetary cost or context occupancy."
+      },
+      "outer": {
+        "resourceReceipt": {
+          "arguments": [
+            "C:\\Users\\15521\\.codex\\backups\\accord-sdk-continuity-catalog-20261001-01\\owner.cjs",
+            "C:\\Users\\15521\\.codex\\backups\\accord-sdk-continuity-catalog-20261001-01\\source\\config.json"
+          ],
+          "exitCode": 0,
+          "forced": false,
+          "failure": null,
+          "after": {
+            "time": 1790826649.9446523,
+            "cpuSeconds": 44.9375,
+            "activeProcesses": 0,
+            "totalProcesses": 131,
+            "processes": []
+          },
+          "controller": "windows-job-object",
+          "evidenceScope": "Windows Job assigned before execution; Job process counts and working sets",
+          "cleanupState": "released-within-controller-scope"
+        },
+        "callerResult": {
+          "state": "closed",
+          "failure": null,
+          "nativeExit": {
+            "code": 0,
+            "signal": null
+          },
+          "forced": false,
+          "connectionClosed": true
+        },
+        "seconds": 432.16765369998757
+      },
+      "ciFailureExtract": [
+        "2026-10-01T03:53:30.1881249Z FAIL: test_diagnostic_retains_unplanned_scope_and_scenario_gaps (test_admission.CurrentDevelopmentEvidenceTests.test_diagnostic_retains_unplanned_scope_and_scenario_gaps)",
+        "2026-10-01T03:53:30.1887692Z AssertionError: 8 != 9",
+        "2026-10-01T03:53:30.1890111Z FAIL: test_partial_allocation_case_keeps_uncovered_duties_and_scenarios_open (test_admission.CurrentDevelopmentEvidenceTests.test_partial_allocation_case_keeps_uncovered_duties_and_scenarios_open)",
+        "2026-10-01T03:53:30.1897085Z AssertionError: 6 != 7",
+        "2026-10-01T03:53:30.1898285Z Ran 737 tests in 746.466s",
+        "2026-10-01T03:53:30.1904133Z FAILED (failures=2)"
+      ]
+    }
+  },
+  "allowedPaths": [
+    "review.md",
+    "recommendations.json"
+  ],
+  "deliverables": [
+    "review.md",
+    "recommendations.json"
+  ],
+  "limits": {
+    "usageCaps": {
+      "totalTokens": 2500000,
+      "uncachedInputTokens": 200000,
+      "outputTokens": 14000
+    },
+    "usageScope": "One owned persistent SDK source, cumulative native usage; total600 seconds including20 recovery, turn240, oneattempt, no extension/retry. No other model tasks. Currency and comparison remain unknown."
+  },
+  "stages": [
+    {
+      "id": "retrospective",
+      "prompt": "请复盘这段刚完成的开发工作，依据facts.json和evidence.json，找出有证据支持、能减少后续等待或检查遗漏的改进。区分已修正的问题和仍需改进的机制，保留原失败与验收边界，不重做原业务，不执行任何改造、联网、安装、信任或配置变更。只交付review.md及recommendations.json；建议应包含事实依据、可能收益、风险和仍未知之处，不编造百分比或对照收益。 recommendations.json严格包含subject、observed、proposals、limits四个字段；subject标明本次被复盘的episode，observed保留事实与证据定位，proposals每项包含依据、建议、收益假设、风险和未知，不实施建议；limits保留未做对照、费用未知及有限案例边界。",
+      "files": {
+        "review.md": {
+          "state": "required",
+          "format": "utf8",
+          "nonempty": true
+        },
+        "recommendations.json": {
+          "state": "required",
+          "format": "json",
+          "jsonType": "object",
+          "requiredKeys": [
+            "subject",
+            "observed",
+            "proposals",
+            "limits"
+          ]
+        }
+      },
+      "semanticReview": "Independently reconstruct native119.542+99.187, whole432.1676537 and Root36.957+46.667+125.478=209.102 from frozen facts; keep source d90, execution3e5, reviewba346 roles and the original failure/limited admission. Review and structured recommendations must agree, cite actual facts, distinguish observed correction from future improvements, weigh risk/unknown costs and preserve noncompensable acceptance. Suggestions may be neutral or reject unnecessary changes; no expected model praise, benefit percentage, install/setup/issue writes or forced switching. Native exact coordinator text plus retro skill item and actual injected/read/adopted Skill guidance must be proven separately from schema or discovery. Source and policy hashes/mtime, original facts, Goal/settings/model/usage/normal terminal and owned resources/configuration are independently observed. No full W02/A02 or other entry/fault/value closure inferred."
+    }
+  ]
+}
