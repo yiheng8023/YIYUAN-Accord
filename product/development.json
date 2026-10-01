@@ -7727,9 +7727,9 @@
                 "role": "Task-owned single-turn caller and pre-reviewed routine metadata predicates; no semantic/handoff/restore permission service",
                 "path": "C:\\Users\\15521\\.codex\\backups\\accord-w02-native-policy-20261001-01\\prospective-retro\\owner.cjs",
                 "sha256": "6a5c95a79cb3217a9d4afaae72aa909bd995afdc00b20adba3ecfd65ef3b8c51",
-                "configurationSha256": "50bd3f46ad891a54df34373169a059e3ed4e7e329332c59bedfba45a5ddb578c",
+                "configurationSha256": "c4d29d38c583e0e18e60694a8b2ce68c3aa197ca1dec250d11343ba6745d8c9b",
                 "readinessSha256": "5d2b3248612bf14c79b99b4eafaab00f8e099af5ac9fe3531d6ff3c95158b764",
-                "reviewedPlanSha256": "e579d2815a41702d6945d0d4af9101c2796280e796e5e273032a940b5dd729cc",
+                "reviewedPlanSha256": "854ac55deff8b3fafe0301710ff6b4cc1627be32ad1c6c27974d5060ae104e49",
                 "launcherSha256": "cd623d260b6f967814bf2a5463a24be43f1cc8130fa547d736c952d36fc4659b",
                 "reportOracleSha256": "4b424bd2ecf776dc83df6debd795c6726786997e08a46c2c104f7d2264ca762d"
               },
@@ -7737,7 +7737,7 @@
               "deadlineBasis": "One launcher600-second deadline; outer580 wait+20 recovery; source uses same deadline with20 reserve.",
               "configurationChangeBoundary": "Any shared config byte change, including an actually written owned trust registration, holds automatic acceptance. Root must reconcile actual authorized effect; no silent normalization or replay."
             },
-            "userConfigBaselineSha256": "94410c8e207d6788790ca2bbfd590f14112dc91f731d60a217c738a241739205",
+            "userConfigBaselineSha256": "9cbc80f91d79a9d2bc70abd809a4ebc8c65406dda0decf7c682a9d174d794f31",
             "inputProvenance": "Case prompt is the ordinary representative maintainer demand; actual native text+skill item is explicitly Root-coordinator-selected and not claimed to be human selection.",
             "coverageLimits": "Only actual positive selection/adoption, bounded result and resources may contribute. Capability-loss, default minimal environment, all-entry scope, automatic primary switching and incremental value remain unverified.",
             "nativeBootstrapEffects": "No installation/enablement/Hook trust. Any new necessary task-directory trust requires specific permission and exact recovery before startup. Fresh Root receipt/revision and direct user authority must be bound; pending fields hold."
