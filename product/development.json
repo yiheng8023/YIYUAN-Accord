@@ -132,6 +132,7 @@
   "changeBoundary": {
     "allowedPaths": [
       ".claude-plugin/marketplace.json",
+      ".gitignore",
       ".github/workflows/sdk-lifecycle-case.yml",
       ".github/workflows/validate.yml",
       "AGENTS.md",
@@ -4734,6 +4735,15 @@
       "authority": "Single concrete proposed-step continuation authorization consumed; no source/model restart, archive, newGoal or broader effects inferred.",
       "retainedEvidence": "C:/Users/15521/.codex/backups/accord-w02-native-policy-20261001-01/prospective-retro/ACTUAL-RESULT.md",
       "disposition": "Ended execution instance becomes historical under existing plan; all17 required scopes, fullF/A and quality floors remain. W02 still lacks complete required dimensions; never count a removed failed case as scope completion."
+    },
+    {
+      "id": "parallel-audit-root-reconciliation-20261002",
+      "status": "findings-source-rechecked-limited-fix-complete-runtime-gap-open",
+      "basis": "Two source-preserved readonly audits at443ca2de; Root captured15 raw files and independently checked178 protected files per participant and four shared settings. Unknown normal source unsubscribe after verified target continuation reproduces with real SQLite and fixed transport; existing recovery entries reject the recorded phase. Help Center native-source rejection independently reproduced and corrected.",
+      "currentCorrection": "Accept precise help.openai.com documentation for Codex native-source validation while keeping effects unverified and rejecting insecure, foreign, misleading and credential-bearing URLs. Retain .tmp residue gates; correct audit-retention sequencing rather than exempting a directory. Only root/.mimosa local third-party runtime state is excluded from Git source inventory; preserve the records/plugin/settings and allow the necessary .gitignore source adjustment. No tracked file, runtime module, delivery package, required scope or case is added.",
+      "latestUserDecision": "Root owns main, independent verification and integration; complete code is visible but edits require explicit assignment. Named temporary branches are retained only while useful, then valid effects are integrated into main and original evidence/writers reconciled before main-only branch closeout. User conversations are retained.",
+      "retainedEvidence": "C:/Users/15521/.codex/backups/accord-parallel-review-20261001-01/received and root-review/ROOT-REVIEW.md; PREPARATION.json/tracked baselines; release reproduction and affected contract logs.",
+      "limits": "Audit claims are not full functional or behavioral acceptance. GLM F02/F08 remain partly unread; ZCode session directory is still main despite worktree tool use, so next write authority needs a correct workspace binding. Bytecode leakage and hypothetical future manifest escape remain unproven. Normal release recovery is open; do not replay unknown effects, invent receipts or claim wholeA05/A08, net benefit, billing or release readiness. Hosted checks bind the next exact commit separately. All17scopes/11cases/quality and current runtime package remain unchanged."
     },
     {
       "id": "stop-continuation-status-and-active-state-reconciliation-20261001",

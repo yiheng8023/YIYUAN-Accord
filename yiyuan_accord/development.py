@@ -545,7 +545,7 @@ def development_contract_errors(contract, golden_task_ids):
         native_ids.add(capability["id"])
         require(capability.get("layer") in ("model", "host-runtime", "model-api-composition"),
                 "model, host runtime and API composition must remain distinct")
-        domains = {"codex": {"learn.chatgpt.com", "developers.openai.com"},
+        domains = {"codex": {"learn.chatgpt.com", "developers.openai.com", "help.openai.com"},
                    "claude-code": {"code.claude.com", "platform.claude.com"}}
         try:
             url = urlsplit(capability["officialSource"])

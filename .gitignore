@@ -3,3 +3,5 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .tmp/
+# Local third-party coding-client Hook state; retain outside Git source inventory.
+/.mimosa/

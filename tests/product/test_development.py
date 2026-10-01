@@ -879,6 +879,23 @@ class SuccessorDevelopmentTests(unittest.TestCase):
     def errors(self, contract):
         return development_contract_errors(contract, self.tasks)
 
+    def test_native_codex_source_accepts_help_center_without_promoting_effect(self):
+        altered = copy.deepcopy(self.contract)
+        native = next(row for row in altered["capabilityMap"]["native"]
+                      if row["host"] == "codex")
+        native["officialSource"] = (
+            "https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex")
+        self.assertEqual(self.errors(altered), [])
+        self.assertEqual(native["currentEffect"], "unverified")
+        for source in ("http://help.openai.com/en/articles/20001275",
+                       "https://help.openai.com.attacker.example/article",
+                       "https://support.claude.com/article",
+                       "https://user@help.openai.com/article"):
+            native["officialSource"] = source
+            with self.subTest(source=source):
+                self.assertIn("native capability needs the relevant official host source",
+                              self.errors(altered))
+
     def test_cli_reports_unicode_as_utf8_under_legacy_output_encoding(self):
         for options in ([], ['--json']):
             with self.subTest(options=options):
