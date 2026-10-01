@@ -52,7 +52,7 @@
 | W06/W07 | 环境/压力变化后必要续做、消费者有效采用、资产保护和完整资源退出；局部Job治理不能代验普通宿主 |
 | W08 | 同一episode全链组合与独立净影响判断；A08依赖A01–A07，不能平均分或拼散案补短板；精确候选与发布后态分别核 |
 
-七个无活动case范围：dynamic-model-routing、codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。autonomous-continuity已前瞻绑定一个代表性案，仍无当前普通行为准入；完整缺口保持。必要发布前代表性测试本身服务项目验收，不必等待外部客户委托；合成材料必须明示，不能把准备或案例数量当结果。
+七个无活动case范围：dynamic-model-routing、codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。autonomous-continuity的一个代表性案已获限定普通两轮case准入；父范围的recovery-and-rollback、capability-loss及未观测接管/失败条件仍缺，完整A05不关闭。必要发布前代表性测试本身服务项目验收，不必等待外部客户委托；合成材料必须明示，不能把准备或案例数量当整项结果。
 
 ### 最新实际交付：候选离线分发与条件修订
 
@@ -75,6 +75,8 @@
 独立四轴审查接受本次有限SDK普通两轮交付：两轮集合、严格JSON、checksum全字节和完整说明一致，全部8原件hash/mtime保持，最终仅3成品；实际Hook、验证Skill读取和两次context工具参与可定位，context均unknown且未被猜成容量或迁移许可。两阶段及末尾Goal均null，原请求无模式创建。native/外层自然退出0、非forced、连接关闭、Job0；共享配置原字节保持，无实际新信任或恢复写入，任务临时缓存在退出后回收。实际networkAccess=true，只称已观察业务离线；合作式单写者不冒称OS排他锁。授权已消费，原件与审查在`accord-sdk-continuity-catalog-20261001-01`，不重放该案。既有17范围、10旧案、质量底线及包保持；fresh接管、失败窗口、其它入口、最小环境、增量价值及完整A05/A08仍开放，有限交付审查不代替整版准入。
 
 原3e5ba0f0的CI36811619722已终态失败：两native lifecycle通过，产品矩阵因两个遗漏的旧fixture计数断言失败。Ubuntu/Windows/macOS原日志一致；Root仅同步“无case范围”7→6及9→8，缺失维度、全部质量与完成谓词保持，两项准确失败回归本地3.309秒通过。原CI失败保留，新提交单独核托管结果；不重跑模型任务或把新case定义当已验范围。
+
+在ba34610e候选上，由两个实际原生只读审查者分别重核product/specification与implementation/standards，披露各自历史、共享环境、Accord暴露和前置参与，规格与实现不共用审查者。Root认证原始回调后通过既有observe/recheck准入：`acceptedCases=[v33-continuity-catalog-01]`、errors及caseRejections为空，`functionalCompletion=false`、`candidateEligible=false`保持。只返回本次有实证的记录，不伪填其余10案、父范围接管/故障效果或当前CI通过。formal-admission、formal-case-observation、review bundle/原生来源说明与closeout留同一私有目录；执行仍绑定3e5ba0f0，包源仍d90face，各角色不混写。新CI36826419764尚待终态，旧失败与历史准入保留各自条件；此处文稿同步不重跑业务或矩阵。
 
 用户要求检查跑偏并纠偏继续。当前发现的是工序偏移：可选说明更新06、daemon维护和SDK轻文稿/诊断取证占据主线；现装执行机制足够继续，而普通功能组合未获得对应结果。有效修复/CI/原件保留，更新06移出当前必经工序，不用等待维护决定才能开发。用户随后主动授权并完成更新，本次维护已核收尾，不再投入相同更新或诊断；普通功能组合仍未完成。
 
