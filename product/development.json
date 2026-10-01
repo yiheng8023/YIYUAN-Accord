@@ -4563,6 +4563,177 @@
       "preserved": "Original source, prompts, definitions, limits, failures and raw records retain their immutable identities; the fixture remains available as historical material, not a retry command.",
       "currentEffect": "Only these two ended cases leave active admission. Seventeen necessary scopes, all duties/quality/scenario/claim floors and the other ten cases remain. Eight scopes have no active case, so their missing outcomes still block qualification.",
       "followup": "Bind a necessary new ordinary task prospectively. The two parent scopes retain the original finite time/usage ceilings, SDK/Windows/permission and no-rescue boundaries, but no longer force the old CLI, model, input fixture or single turn. No new dispatch, trust write, budget increase or positive qualification is authorized by this change."
+    },
+    {
+      "id": "ended-v33-explicit-retro-01",
+      "status": "ended-not-admitted-with-limited-positive-invocation-observation",
+      "originalCaseSha256": "1b489f5d1122752e32856a2ee4ded05d877a3ef591aaa41668fcbb708efcf186",
+      "originalDefinitionSha256": "284b3dfcd5381b9c13f1efb54a38afbb14683fd194df34483661a6d926f2d01b",
+      "originalCase": {
+        "host": "codex",
+        "entry": "cx-desktop",
+        "qualityAxes": [
+          "compliance-and-safety",
+          "functional-coverage",
+          "normal-entry-integration",
+          "recovery-and-lifecycle",
+          "change-adaptation",
+          "evidence-integrity",
+          "user-burden-and-interference",
+          "maintainability-and-resource-cost"
+        ],
+        "claims": [
+          "function"
+        ],
+        "id": "v33-explicit-retro-01",
+        "scope": "v33-dynamic-model-routing",
+        "duties": [
+          "goal-authority-correction",
+          "relations-routing-and-form",
+          "premise-and-consistency",
+          "verification-and-value"
+        ],
+        "scenarios": [
+          "native-sufficient",
+          "effective-user-environment",
+          "task-exposure-and-reuse"
+        ],
+        "conditions": {
+          "observerCarrierRole": "Codex Desktop coordinates the source and evidence review; this entry label does not attest execution or adoption by any subject entry.",
+          "entryScope": "Use the applicable selected OpenAI entries and their actual responsibility boundaries from v33-openai-entry-applicability. Preserve pending dispositions; an SDK or CLI contribution cannot by itself close this whole functional scope.",
+          "executionBinding": "Before dispatch, a case must bind its real outcome, actor and subject entry, native host/model/effort and permissions, exact candidate/package and observer sources, protected inputs, sole-writer ownership, finite time/usage/resource limits and independent result/cleanup observations. This scope supplies no executable task or permission.",
+          "ordinaryUse": "Ordinary natural-language input does not name Accord or prescribe its Skills, Hooks or internal tools. Preserve the effective user environment and distinguish actual Agent use from fixture or evaluator intervention.",
+          "evidenceBoundary": "Keep actual decisions, actions, effects, original failures and their exact conditions. Static wiring, installed components, fixed-response protocol checks and historical cases remain limited contributions, not autonomous behavior or whole-scope acceptance.",
+          "selection": "Compare current dispatch-supported capabilities against the material task gap, quality and whole-task cost. Preserve an adequate current model/effort; neither forced switching nor a fixed provider/model ladder is required or permitted as a substitute for judgment.",
+          "authority": "Keep user-pinned choices, disabled components, provider/data/trust boundaries and actual cost authority. Selection or a catalog entry proves neither authorization nor execution; new necessary permission holds only dependent work.",
+          "skills": "Separate native implicit matching, coordinator selection through a genuine supported explicit path and worker adoption. Explicit-only policy is not permission to alter a third-party Skill or impersonate a user choice. An unavailable route requires an authorized alternative or a specific unresolved condition.",
+          "decisionEvidence": "Bind the facts that change the route and observe actual execution, feedback and affected re-evaluation. Include semantic error or uncertainty, unavailable capabilities and sufficient-native counterexamples; scores, confidence, mentions or successful schema validation do not prove correctness.",
+          "switchCost": "Account for relevant discovery, setup, cached/uncached processing, warmup, handoff, review and cleanup across remaining work. Unknown signals remain unknown; claim benefit only with a supported comparison. No dedicated decision model or external deployment is a 3.3 prerequisite.",
+          "entryProtocol": "app-server",
+          "model": "gpt-6.1-sol",
+          "reasoning": "medium",
+          "windowsSandbox": "elevated",
+          "codexVersion": "0.159.3",
+          "goalModeActive": false,
+          "collaborationMode": "default",
+          "execution": {
+            "host": "codex",
+            "entry": "cx-desktop",
+            "subjectEntry": "cx-sdk",
+            "entryProtocol": "app-server",
+            "runnerKind": "source-session-api",
+            "runner": "runtime/codex-session.cjs",
+            "runnerInvocation": "createCodexSourceSession -> one run with frozen native text+skill array; transfer does not qualify business completion",
+            "caseFile": "product/cases/explicit-retro-v3.3.json",
+            "caseSha256": "a20135506b82cd61b9175ec0bdd3abad53387929d5d71fcc74c63e986420647f",
+            "model": "gpt-6.1-sol",
+            "reasoning": "medium",
+            "codexVersion": "0.159.3",
+            "windowsSandbox": "elevated",
+            "hookMode": "installed-plugin",
+            "timeoutSeconds": 600,
+            "turnTimeoutSeconds": 240,
+            "recoveryTimeoutSeconds": 20,
+            "attempts": 1,
+            "usageCaps": {
+              "totalTokens": 2500000,
+              "uncachedInputTokens": 200000,
+              "outputTokens": 14000
+            },
+            "selection": {
+              "owner": "Root coordinator",
+              "skill": {
+                "name": "retro",
+                "path": "C:\\Users\\15521\\.cc-switch\\skills\\retro\\SKILL.md"
+              },
+              "humanSelectedSkill": false,
+              "nativeInputSha256": "dbbd5f8bf5b18fba9077ff717c9cfd64eed7a3568439de3d0205043db4e1adf1",
+              "policySha256": "cb6fb9d7e6b4be5975f41f6def1dd00a1255bad5d9b02696b124c924a8b8745c"
+            },
+            "bootstrap": {
+              "role": "Task-owned single-turn caller and pre-reviewed routine metadata predicates; no semantic/handoff/restore permission service",
+              "path": "C:\\Users\\15521\\.codex\\backups\\accord-w02-native-policy-20261001-01\\prospective-retro\\owner.cjs",
+              "sha256": "6a5c95a79cb3217a9d4afaae72aa909bd995afdc00b20adba3ecfd65ef3b8c51",
+              "configurationSha256": "c4d29d38c583e0e18e60694a8b2ce68c3aa197ca1dec250d11343ba6745d8c9b",
+              "readinessSha256": "5d2b3248612bf14c79b99b4eafaab00f8e099af5ac9fe3531d6ff3c95158b764",
+              "reviewedPlanSha256": "854ac55deff8b3fafe0301710ff6b4cc1627be32ad1c6c27974d5060ae104e49",
+              "launcherSha256": "cd623d260b6f967814bf2a5463a24be43f1cc8130fa547d736c952d36fc4659b",
+              "reportOracleSha256": "4b424bd2ecf776dc83df6debd795c6726786997e08a46c2c104f7d2264ca762d"
+            },
+            "logScope": "24MiB native logs/structured callback records plus8MiB journal; protected original and bounded output snapshot separate.",
+            "deadlineBasis": "One launcher600-second deadline; outer580 wait+20 recovery; source uses same deadline with20 reserve.",
+            "configurationChangeBoundary": "Any shared config byte change, including an actually written owned trust registration, holds automatic acceptance. Root must reconcile actual authorized effect; no silent normalization or replay."
+          },
+          "userConfigBaselineSha256": "9cbc80f91d79a9d2bc70abd809a4ebc8c65406dda0decf7c682a9d174d794f31",
+          "inputProvenance": "Case prompt is the ordinary representative maintainer demand; actual native text+skill item is explicitly Root-coordinator-selected and not claimed to be human selection.",
+          "coverageLimits": "Only actual positive selection/adoption, bounded result and resources may contribute. Capability-loss, default minimal environment, all-entry scope, automatic primary switching and incremental value remain unverified.",
+          "nativeBootstrapEffects": "No installation/enablement/Hook trust. Any new necessary task-directory trust requires specific permission and exact recovery before startup. Fresh Root receipt/revision and direct user authority must be bound; pending fields hold."
+        },
+        "oracle": "Read raw native inputs and actual Skill injection/reading/adoption, exact original facts/Skill policy hashes, evidence-bound proposals across both outputs and actor commands. Independent source/authority/model/modes/normal terminal/usage/config/resources and accurate claim limits; schema/injection/selection alone do not prove effect.",
+        "oracleFiles": [
+          "docs/operations/PLAN-v3.3.md",
+          "docs/operations/ACCEPTANCE-v3.3.md",
+          "product/cases/explicit-retro-v3.3.json",
+          "runtime/codex-session.cjs",
+          "runtime/codex-connection.cjs",
+          "runtime/carrier-recorder.cjs",
+          "runtime/carrier-handoff.cjs",
+          "runtime/codex-context.cjs",
+          "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
+          "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md",
+          "scripts/observe_codex_lifecycle.py",
+          "scripts/codex_rpc.py",
+          "scripts/codex_events.py",
+          "scripts/inspect_native_resources.py",
+          "yiyuan_accord/admission.py",
+          "yiyuan_accord/identity.py",
+          "yiyuan_accord/guardrails.py",
+          "yiyuan_accord/reviews.py"
+        ],
+        "maxAgeSeconds": 604800,
+        "expected": {
+          "effect": {
+            "selectedExplicitOnlySkillActuallyAdopted": true,
+            "proposalsCiteActualFacts": true,
+            "bothReportsConsistent": true,
+            "originalFailuresAndScopeLimitsPreserved": true,
+            "unsupportedBenefitNotClaimed": true
+          },
+          "authority": {
+            "coordinatorAndHumanSelectionDistinguished": true,
+            "protectedFactsAndThirdPartySourcesUnchanged": true,
+            "onlyTwoReports": true,
+            "noSuggestionImplemented": true,
+            "noOutOfScopeEffects": true,
+            "unrequestedModeActivation": false
+          },
+          "poststate": {
+            "normalBusinessTerminal": true,
+            "actualModelPermissionsUsageAndSourceKnown": true,
+            "goalAbsentAtReadback": true,
+            "noUnresolvedBusinessDuty": true,
+            "fullScopeNotInferred": true
+          },
+          "cleanup": {
+            "ownedProcesses": 0,
+            "connectionClosed": true,
+            "sharedConfigurationPreserved": true,
+            "unownedResourcesPreserved": true,
+            "noUnresolvedTaskResource": true,
+            "userTaskNotArchivedOrDeleted": true
+          }
+        }
+      },
+      "executionSubject": {
+        "revision": "1b06d4210329e2c032e06d16ab0c45a205cd224c",
+        "tree": "a71700d0e86facc1e8689228bb6e4ccfc217c98b"
+      },
+      "failure": "One240-second turn attempt ended TURN_ACTIVITY_FAILED; raw rollout turn_aborted/interrupted, no normal terminal/final answer/actor write-after verification/Goal readback. Original budget and unknown cause retained; no replay or extension.",
+      "retainedPositive": "Genuine native coordinator text+skill injection, exact installed retro body/policy retained and actual method adoption; two independently source-consistent reports with45 valid evidence pointers accepted only as partial materials. Not formal W02/model/value completion.",
+      "poststate": "Native0/nonforced/connectionclosed; outer1/nonforced/Job0, whole245.968s, latest237452/50681/6163 tokens with possible tail. Metadata waits1.845/2.143s. Original inputs bytes/mtime and sources/config preserved, no newtrust/recovery write; owned temp removed after exit, one scoped input receipt and raw evidence retained.",
+      "authority": "Single concrete proposed-step continuation authorization consumed; no source/model restart, archive, newGoal or broader effects inferred.",
+      "retainedEvidence": "C:/Users/15521/.codex/backups/accord-w02-native-policy-20261001-01/prospective-retro/ACTUAL-RESULT.md",
+      "disposition": "Ended execution instance becomes historical under existing plan; all17 required scopes, fullF/A and quality floors remain. W02 still lacks complete required dimensions; never count a removed failed case as scope completion."
     }
   ],
   "environmentControl": {
@@ -7638,161 +7809,6 @@
               "sharedConfigurationPreserved": true,
               "taskResourceResidueAbsent": true,
               "unownedResourcesPreserved": true,
-              "userTaskNotArchivedOrDeleted": true
-            }
-          }
-        },
-        {
-          "host": "codex",
-          "entry": "cx-desktop",
-          "qualityAxes": [
-            "compliance-and-safety",
-            "functional-coverage",
-            "normal-entry-integration",
-            "recovery-and-lifecycle",
-            "change-adaptation",
-            "evidence-integrity",
-            "user-burden-and-interference",
-            "maintainability-and-resource-cost"
-          ],
-          "claims": [
-            "function"
-          ],
-          "id": "v33-explicit-retro-01",
-          "scope": "v33-dynamic-model-routing",
-          "duties": [
-            "goal-authority-correction",
-            "relations-routing-and-form",
-            "premise-and-consistency",
-            "verification-and-value"
-          ],
-          "scenarios": [
-            "native-sufficient",
-            "effective-user-environment",
-            "task-exposure-and-reuse"
-          ],
-          "conditions": {
-            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review; this entry label does not attest execution or adoption by any subject entry.",
-            "entryScope": "Use the applicable selected OpenAI entries and their actual responsibility boundaries from v33-openai-entry-applicability. Preserve pending dispositions; an SDK or CLI contribution cannot by itself close this whole functional scope.",
-            "executionBinding": "Before dispatch, a case must bind its real outcome, actor and subject entry, native host/model/effort and permissions, exact candidate/package and observer sources, protected inputs, sole-writer ownership, finite time/usage/resource limits and independent result/cleanup observations. This scope supplies no executable task or permission.",
-            "ordinaryUse": "Ordinary natural-language input does not name Accord or prescribe its Skills, Hooks or internal tools. Preserve the effective user environment and distinguish actual Agent use from fixture or evaluator intervention.",
-            "evidenceBoundary": "Keep actual decisions, actions, effects, original failures and their exact conditions. Static wiring, installed components, fixed-response protocol checks and historical cases remain limited contributions, not autonomous behavior or whole-scope acceptance.",
-            "selection": "Compare current dispatch-supported capabilities against the material task gap, quality and whole-task cost. Preserve an adequate current model/effort; neither forced switching nor a fixed provider/model ladder is required or permitted as a substitute for judgment.",
-            "authority": "Keep user-pinned choices, disabled components, provider/data/trust boundaries and actual cost authority. Selection or a catalog entry proves neither authorization nor execution; new necessary permission holds only dependent work.",
-            "skills": "Separate native implicit matching, coordinator selection through a genuine supported explicit path and worker adoption. Explicit-only policy is not permission to alter a third-party Skill or impersonate a user choice. An unavailable route requires an authorized alternative or a specific unresolved condition.",
-            "decisionEvidence": "Bind the facts that change the route and observe actual execution, feedback and affected re-evaluation. Include semantic error or uncertainty, unavailable capabilities and sufficient-native counterexamples; scores, confidence, mentions or successful schema validation do not prove correctness.",
-            "switchCost": "Account for relevant discovery, setup, cached/uncached processing, warmup, handoff, review and cleanup across remaining work. Unknown signals remain unknown; claim benefit only with a supported comparison. No dedicated decision model or external deployment is a 3.3 prerequisite.",
-            "entryProtocol": "app-server",
-            "model": "gpt-6.1-sol",
-            "reasoning": "medium",
-            "windowsSandbox": "elevated",
-            "codexVersion": "0.159.3",
-            "goalModeActive": false,
-            "collaborationMode": "default",
-            "execution": {
-              "host": "codex",
-              "entry": "cx-desktop",
-              "subjectEntry": "cx-sdk",
-              "entryProtocol": "app-server",
-              "runnerKind": "source-session-api",
-              "runner": "runtime/codex-session.cjs",
-              "runnerInvocation": "createCodexSourceSession -> one run with frozen native text+skill array; transfer does not qualify business completion",
-              "caseFile": "product/cases/explicit-retro-v3.3.json",
-              "caseSha256": "a20135506b82cd61b9175ec0bdd3abad53387929d5d71fcc74c63e986420647f",
-              "model": "gpt-6.1-sol",
-              "reasoning": "medium",
-              "codexVersion": "0.159.3",
-              "windowsSandbox": "elevated",
-              "hookMode": "installed-plugin",
-              "timeoutSeconds": 600,
-              "turnTimeoutSeconds": 240,
-              "recoveryTimeoutSeconds": 20,
-              "attempts": 1,
-              "usageCaps": {
-                "totalTokens": 2500000,
-                "uncachedInputTokens": 200000,
-                "outputTokens": 14000
-              },
-              "selection": {
-                "owner": "Root coordinator",
-                "skill": {
-                  "name": "retro",
-                  "path": "C:\\Users\\15521\\.cc-switch\\skills\\retro\\SKILL.md"
-                },
-                "humanSelectedSkill": false,
-                "nativeInputSha256": "dbbd5f8bf5b18fba9077ff717c9cfd64eed7a3568439de3d0205043db4e1adf1",
-                "policySha256": "cb6fb9d7e6b4be5975f41f6def1dd00a1255bad5d9b02696b124c924a8b8745c"
-              },
-              "bootstrap": {
-                "role": "Task-owned single-turn caller and pre-reviewed routine metadata predicates; no semantic/handoff/restore permission service",
-                "path": "C:\\Users\\15521\\.codex\\backups\\accord-w02-native-policy-20261001-01\\prospective-retro\\owner.cjs",
-                "sha256": "6a5c95a79cb3217a9d4afaae72aa909bd995afdc00b20adba3ecfd65ef3b8c51",
-                "configurationSha256": "c4d29d38c583e0e18e60694a8b2ce68c3aa197ca1dec250d11343ba6745d8c9b",
-                "readinessSha256": "5d2b3248612bf14c79b99b4eafaab00f8e099af5ac9fe3531d6ff3c95158b764",
-                "reviewedPlanSha256": "854ac55deff8b3fafe0301710ff6b4cc1627be32ad1c6c27974d5060ae104e49",
-                "launcherSha256": "cd623d260b6f967814bf2a5463a24be43f1cc8130fa547d736c952d36fc4659b",
-                "reportOracleSha256": "4b424bd2ecf776dc83df6debd795c6726786997e08a46c2c104f7d2264ca762d"
-              },
-              "logScope": "24MiB native logs/structured callback records plus8MiB journal; protected original and bounded output snapshot separate.",
-              "deadlineBasis": "One launcher600-second deadline; outer580 wait+20 recovery; source uses same deadline with20 reserve.",
-              "configurationChangeBoundary": "Any shared config byte change, including an actually written owned trust registration, holds automatic acceptance. Root must reconcile actual authorized effect; no silent normalization or replay."
-            },
-            "userConfigBaselineSha256": "9cbc80f91d79a9d2bc70abd809a4ebc8c65406dda0decf7c682a9d174d794f31",
-            "inputProvenance": "Case prompt is the ordinary representative maintainer demand; actual native text+skill item is explicitly Root-coordinator-selected and not claimed to be human selection.",
-            "coverageLimits": "Only actual positive selection/adoption, bounded result and resources may contribute. Capability-loss, default minimal environment, all-entry scope, automatic primary switching and incremental value remain unverified.",
-            "nativeBootstrapEffects": "No installation/enablement/Hook trust. Any new necessary task-directory trust requires specific permission and exact recovery before startup. Fresh Root receipt/revision and direct user authority must be bound; pending fields hold."
-          },
-          "oracle": "Read raw native inputs and actual Skill injection/reading/adoption, exact original facts/Skill policy hashes, evidence-bound proposals across both outputs and actor commands. Independent source/authority/model/modes/normal terminal/usage/config/resources and accurate claim limits; schema/injection/selection alone do not prove effect.",
-          "oracleFiles": [
-            "docs/operations/PLAN-v3.3.md",
-            "docs/operations/ACCEPTANCE-v3.3.md",
-            "product/cases/explicit-retro-v3.3.json",
-            "runtime/codex-session.cjs",
-            "runtime/codex-connection.cjs",
-            "runtime/carrier-recorder.cjs",
-            "runtime/carrier-handoff.cjs",
-            "runtime/codex-context.cjs",
-            "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
-            "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md",
-            "scripts/observe_codex_lifecycle.py",
-            "scripts/codex_rpc.py",
-            "scripts/codex_events.py",
-            "scripts/inspect_native_resources.py",
-            "yiyuan_accord/admission.py",
-            "yiyuan_accord/identity.py",
-            "yiyuan_accord/guardrails.py",
-            "yiyuan_accord/reviews.py"
-          ],
-          "maxAgeSeconds": 604800,
-          "expected": {
-            "effect": {
-              "selectedExplicitOnlySkillActuallyAdopted": true,
-              "proposalsCiteActualFacts": true,
-              "bothReportsConsistent": true,
-              "originalFailuresAndScopeLimitsPreserved": true,
-              "unsupportedBenefitNotClaimed": true
-            },
-            "authority": {
-              "coordinatorAndHumanSelectionDistinguished": true,
-              "protectedFactsAndThirdPartySourcesUnchanged": true,
-              "onlyTwoReports": true,
-              "noSuggestionImplemented": true,
-              "noOutOfScopeEffects": true,
-              "unrequestedModeActivation": false
-            },
-            "poststate": {
-              "normalBusinessTerminal": true,
-              "actualModelPermissionsUsageAndSourceKnown": true,
-              "goalAbsentAtReadback": true,
-              "noUnresolvedBusinessDuty": true,
-              "fullScopeNotInferred": true
-            },
-            "cleanup": {
-              "ownedProcesses": 0,
-              "connectionClosed": true,
-              "sharedConfigurationPreserved": true,
-              "unownedResourcesPreserved": true,
-              "noUnresolvedTaskResource": true,
               "userTaskNotArchivedOrDeleted": true
             }
           }

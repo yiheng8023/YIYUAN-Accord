@@ -59,6 +59,8 @@ jobs:
         run: python -B -m yiyuan_accord verify --root . --json
       - name: Verify Codex projection
         run: python -B -m yiyuan_accord host-check --adapter codex --root . --json
+      - name: Check declared case gaps before the full suite
+        run: python -B -m unittest -v tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_current_declaration_without_observer_reports_actual_missing_coverage tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_partial_allocation_case_keeps_uncovered_duties_and_scenarios_open tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_diagnostic_retains_unplanned_scope_and_scenario_gaps tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_case_bindings_do_not_count_as_accepted_evidence
       - name: Check native fixture path assumptions before the full suite
         run: python -B -m unittest -v tests.product.test_codex_session_native tests.product.test_codex_entry.EntryTests.test_native_goal_readback_binds_persisted_thread_and_releases_reader tests.product.test_codex_entry.EntryTests.test_persistent_preparation_preserves_multiline_prompt_bytes tests.product.test_codex_entry.EntryTests.test_failure_after_agent_popen_keeps_native_execution_phase
       - name: Test current product seam

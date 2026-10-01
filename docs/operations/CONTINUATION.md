@@ -42,7 +42,7 @@
 
 ## 功能与必要验收未完项
 
-17必要scope均已定义、12活动case，其中目录清单两轮案已有有限准入，新增显式Skill复盘案仅为前瞻执行绑定；六项历史准入只属原版本/条件。A01–A08仍未完整收官，`functionalCompletion=false`、`candidateEligible=false`、`selectionFinal=false`保持。没有稳定剩余工作量权重，不编总百分比；定义、测试、安装或文稿数量不算功能完成率。
+17必要scope均已定义、11活动case，其中目录清单两轮案已有有限准入；显式Skill复盘案已结束且未准入，完整原定义与失败转历史观察。六项历史准入只属原版本/条件。A01–A08仍未完整收官，`functionalCompletion=false`、`candidateEligible=false`、`selectionFinal=false`保持。没有稳定剩余工作量权重，不编总百分比；定义、测试、安装或文稿数量不算功能完成率。
 
 | 工作范围 | 必须继续的结果 |
 |---|---|
@@ -52,7 +52,7 @@
 | W06/W07 | 环境/压力变化后必要续做、消费者有效采用、资产保护和完整资源退出；局部Job治理不能代验普通宿主 |
 | W08 | 同一episode全链组合与独立净影响判断；A08依赖A01–A07，不能平均分或拼散案补短板；精确候选与发布后态分别核 |
 
-六个无活动case范围：codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。dynamic-model-routing仅前绑显式Skill复盘案；autonomous-continuity的代表性案已获限定普通两轮case准入，父范围的recovery-and-rollback、capability-loss及未观测接管/失败条件仍缺，完整A05不关闭。必要发布前代表性测试本身服务项目验收，不必等待外部客户委托；合成材料必须明示，不能把准备或案例数量当整项结果。
+七个无活动case范围：dynamic-model-routing、codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。dynamic-model-routing的已结束复盘案仅保留真实显式选择/加载/方法采用与有限材料观察，没有完整case通过；autonomous-continuity的代表性案已有限定普通两轮case准入，父范围的recovery-and-rollback、capability-loss及未观测接管/失败条件仍缺，完整A05不关闭。必要发布前代表性测试本身服务项目验收，不必等待外部客户委托；合成材料必须明示，不能把准备或案例数量当整项结果。
 
 ### 最新实际交付：候选离线分发与条件修订
 
@@ -70,9 +70,15 @@
 
 ## 本轮工序纠偏与下一工作
 
-W02下一切片已在派发前准备`explicit-retro-v3.3.json`及`v33-explicit-retro-01`：根据刚结束episode的实际209.102秒Root等待和两处遗漏计数，协调者选用受管理、已启用且policy=false的`retro`提出有依据的改进；原自然需求、协调者选择和正式text+$retro/skill项分别保留，不冒称用户亲选、不把显式代选称作原生隐式匹配。36个受管理Skills的源/YAML保持，21个声明false；`code-review`未声明false，不能泛称全部Matt Skills都禁止隐式。官方[Skills规则](https://learn.chatgpt.com/docs/build-skills)与[App Server接口](https://learn.chatgpt.com/docs/app-server)，及实际CLI0.159.3生成的协议均支持显式skill输入；文档/schema/发现不代验采用。
+W02显式Skill切片的原前绑为`explicit-retro-v3.3.json`及`v33-explicit-retro-01`：根据已结束episode的实际209.102秒Root等待和两处遗漏计数，协调者选用受管理、已启用且policy=false的`retro`提出有依据的改进；原自然需求、协调者选择和正式text+$retro/skill项分别保留，不冒称用户亲选、不把显式代选称作原生隐式匹配。36个受管理Skills的源/YAML保持，21个声明false；`code-review`未声明false，不能泛称全部Matt Skills都禁止隐式。官方[Skills规则](https://learn.chatgpt.com/docs/build-skills)与[App Server接口](https://learn.chatgpt.com/docs/app-server)，及实际CLI0.159.3生成的协议均支持显式skill输入；本轮实际采用的证据与失败限度见下。
 
-新任务私有单轮caller复用现有SDK、Job及收尾，保留600秒含20恢复/turn240/usage/单次约束；两项例行启动检查使用Root预审静态pin、新许可后的真实parent receipt/revision、保护字节、原生模型/Skill enabled/源设置和发布消费前重核，未知即hold，不能自刷新Root绑定为新权限。13控制正反检查、5报告结构/源算术反例和4准入计数回归通过，独立源码短审未发现阻断；实际权限仍false、parent basis未绑定、尚未启动native/model。只多一必要数据fixture将文件分配177→178，全部17范围、原11case definitions、byte budgets与质量/完成谓词保持；不新建产品控制层或改第三方源。原件在`accord-w02-native-policy-20261001-01/prospective-retro`。完整已提交绑定和新具体权限前不派发，不申请未准备方案。
+私有单轮caller复用现有SDK、Job及收尾，保留600秒含20恢复/turn240/usage/单次约束；两项例行启动检查使用Root预审静态pin、新输入下的parent receipt/revision、保护字节、原生模型/Skill enabled/源设置和发布消费前重核，未知即hold，不能自刷新Root绑定为新权限。13控制正反检查、5报告结构/源算术反例和4准入计数回归通过，独立源码短审未发现阻断。恢复时发现共享配置只改变宿主node/browser/notify桥路径及pipe，模型/Skills/Accord与notify参数保持；原准备保存，未回写设置，唯一未派发case按实际字节重绑1b06d421。文件分配177→178只承载必要数据fixture；17范围、其他11case definitions、byte budgets与质量/完成谓词保持。
+
+用户对具体待执行方案说“继续”后，已在87616d4c输入/rev171绑定一次执行依据。新source01a0f691-f87a-7f80-813a-26c5df9c8aa9 / turn01a0f692-03ca-7103-91ef-e0d7b1f7b99a，实际CLI0.159.3/sol-medium；两metadata gate1.845/2.143秒，源轮触及原240秒上限，TURN_ACTIVITY_FAILED。原stream无正常terminal，原rollout有turn_aborted/interrupted；写入前hash命令及随后fileChange已完成，但写后检查、final answer和Goal读回均未完成。为何用尽轮限仍未知，不说仅缺日志、不扩限/重跑/恢复旧实例。native0/非forced/连接闭，outer1/非forced/Job0，总245.968秒，最新237452/50681/6163 tokens可能有未报告尾部；config及全部源Hash、两原件bytes/mtime保持，无actual newtrust/restoration。授权已消费、authorityfalse，退出后清空owned temp，保留一份 scoped input receipt及原件/SQLite/私有线程。
+
+原native text+skill与冻结数组精确匹配，原rollout注入retro全文且policy=false未改，actor实际读取方法指导并采用证据/建议/风险/未知结构。独立只读审查确认两报告一致、45证据指针可解析、不虚称收益或实施建议，因此仅接受其有限材料质量；不能补上缺失正常交付或追認完整W02、模型路由/价值。原完整case、definition284b3d…、输入/限额/失败和局部正向观察转`developmentObservations`，父scope与全部底线不变；不让结束实例永久锁住后续，也不借删除case清零缺口。原件在`accord-w02-native-policy-20261001-01/prospective-retro/ACTUAL-RESULT.md`，不重放。
+
+Root已落实这份有限材料的P1早期检查建议：原CI确实已有全suite，并非缺guardrail；现仅在host-check后、原生夹具及全suite前执行四项既有admission缺口回归。缺口独立断言、minimumTestCount、无skip/expectedFailure约束、原矩阵与native lifecycle保持。新四项本地4.190秒通过，actionlint通过，独立源码检查未发现误删底线或失败改pass；不宣称提前检查已获比较收益。本轮报告仍为建议原件，Root后来实施不追认为actor完成。上一71003 CI36832966764已终态success；当前配置重绑/实例历史处置/CI前段改动须核自身新提交，不借旧绿灯。
 
 上一批ba34610e的精确CI36826419764已全部11/11成功；原3e5失败保持。本批前瞻case及测试变化独立核新CI，不把上一批绿灯借给新候选。
 
