@@ -5,6 +5,8 @@
 
 ## 目标、责任与边界
 
+2026-10-01并行协作准备：用户选择为ZCode GLM-5.3-Flash和Antigravity Gemini 3.8 Flash“高”档写提示词，Root主线与最终把关保持。从固定443ca2dea46e5e0a3efb8455fa281a30e0129cac建立两个独立worktree：`C:\Users\15521\.codex\worktrees\v33-glm-audit\YIYUAN-Accord` / `accord/v33-glm-audit`，`C:\Users\15521\.codex\worktrees\v33-gemini-audit\YIYUAN-Accord` / `accord/v33-gemini-audit`；全部项目代码可读，首段只读审计，业务修改须有Root明确派发且只在自身检出写入。提示词保存在本机`C:\Users\15521\.codex\backups\accord-parallel-review-20261001-01\prompts`中的`GLM-v3.3.md`与`GEMINI-v3.3.md`，并复制到各自检出的`.tmp/parallel-review/START.md`；原始交付留各自同一目录。本次仅完成准备，外部会话/实际模型运行尚未派发或接收；Root未把本阶段当两方行为验收。免费窗口为用户提供的23:00–09:00，Google双窗口与超额计费关闭有用户截图，实际启动仍核条件；不新增安装、信任、充值、API费用、推送或发布权限。两方结果到达后Root核实际差异、共享设置、当前写者/在途动作、精确提交及证据，再独立验证并选择整合；用户要求最终合并到main且只保留main，确认成果/必要证据保存和写者退出后清理这两个临时分支与检出，用户会话/原件仍保留。具体分工见[计划](PLAN-v3.3.md#当前推进顺序)。
+
 “主线程23”（01a0d6a8-d302-7081-ab25-b1b4281dd924）继续使用原main检出 `C:\Projects\YIYUAN-Accord`，Root承担仓库集成及共享业务写入；旧线程保留，不并行写入。恢复先核Git、最新用户决定、原生输入/状态和已发生效果，再续做。
 
 - 完成3.3必要功能、质量和完整验收后，依既有条件授权发布3.3.0。必要开发、提交、推送及验证已授权；当前尚不具备发布资格。进度只算到正式发布后态，传播、市场、部署及后续治理不计入。
