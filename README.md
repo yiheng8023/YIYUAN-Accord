@@ -74,6 +74,12 @@ Managing the ecosystem is also a core duty: plugins, Apps, Skills and MCP capabi
 
 ## Capability limits and current evidence
 
+### Understanding Hook status
+
+A Stop Hook marked “blocked” requires reading its feedback. An Accord continuation request holds the end of the current turn so the Agent can advance a concrete, authorized and safe work span. This differs from a Hook failure or exit error. “Blocked” alone proves neither a fault nor that the continuation decision was appropriate.
+
+Do not request automatic continuation when a necessary decision, user or on-site observation, or permission cannot be obtained within the Agent's authority and no concrete safe work remains, or when only an external wait remains. Obtain facts the Agent can inspect; a missing condition holds only dependent actions. Retain unfinished responsibility; ordinary continuation enables no Goal/Plan. Unchanged observations must not produce endless retries. The Agent should explain the callback, check actual state, and correct mistakes or changed conditions.
+
 3.3 has bounded observations for ordinary tasks, input correction, file state, context assessment and controlled takeover. Complete ordinary-entry behavior, autonomous continuity, recovery, environment changes and system impact remain unaccepted. One entry, version or configuration cannot validate another; development scripts, controller assistance and explicit prompts do not demonstrate ordinary autonomous use.
 
 Accord does not train models, expand native context windows or bypass host permissions and interfaces. The Agent investigates feasible alternatives and missing conditions; real limits must still be reported with unfinished responsibilities preserved. A reference core or prompt alone cannot guarantee execution or enforce permissions.

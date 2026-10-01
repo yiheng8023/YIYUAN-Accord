@@ -70,6 +70,12 @@
 
 ## 本轮工序纠偏与下一工作
 
+2026-10-01用户截图的Stop“已阻止1/未成功0”已匹配d011接续回调：Root原生completed状态调用从rev171请求一个可安全推进的预算诊断段，`canContinue=true`形成rev172；诊断结束后的completed调用改为false形成rev173。它是本次有意接续，不是旧exit1复发，也不能据此称所有block都合理或故障均已排除。README双语补充状态解释，基线/验收/计划分别澄清既有职责和数量/实现分配关系；源码Hook行为、分发包、17scope/F/A与完整判据不改。
+
+检查点已累积32条且大量是已闭历史，新增一次状态写入因此超过已声明列表边界被拒、未改rev171；问题在当前状态组织，不为容纳日志提升协议上限。最新整理保留原173全文/字节Hash及32项逐项映射，活動态只放9个Goal/权限/结果缺口/入口Cloud/能力/连续性/历史未知/已结束实例/Hook解释胶囊。原生manage形成rev174，独立只读审查重算原件/32项Hash及0–31映射并核9胶囊，无当前目标、权限或真正未知丢失；只指出一般“观察缺失”不能阻断Agent可自行取得事实的动作，README已收准为不可代办条件且无其他安全具体工作。三个既有Stop/等待/不重复回归本地3.800秒通过；没有重放真实Stop或改已安装包。原件在`accord-stop-clarity-20261001-01`；机器投影只追加限定观察，不写成产品通过或新权限。用户再次明确组件与工序按价值持续纠偏，其它未影响部分不为“灵活”制造改动。
+
+前批a6f07258精确CI36839455927已终态success，全矩阵及既有native生命周期通过。当前仅用户说明、当前责任组织和限定观察同步，runtime/包与17scope/11case/完成谓词保持，不重跑旧模型或相同CI矩阵。
+
 W02显式Skill切片的原前绑为`explicit-retro-v3.3.json`及`v33-explicit-retro-01`：根据已结束episode的实际209.102秒Root等待和两处遗漏计数，协调者选用受管理、已启用且policy=false的`retro`提出有依据的改进；原自然需求、协调者选择和正式text+$retro/skill项分别保留，不冒称用户亲选、不把显式代选称作原生隐式匹配。36个受管理Skills的源/YAML保持，21个声明false；`code-review`未声明false，不能泛称全部Matt Skills都禁止隐式。官方[Skills规则](https://learn.chatgpt.com/docs/build-skills)与[App Server接口](https://learn.chatgpt.com/docs/app-server)，及实际CLI0.159.3生成的协议均支持显式skill输入；本轮实际采用的证据与失败限度见下。
 
 私有单轮caller复用现有SDK、Job及收尾，保留600秒含20恢复/turn240/usage/单次约束；两项例行启动检查使用Root预审静态pin、新输入下的parent receipt/revision、保护字节、原生模型/Skill enabled/源设置和发布消费前重核，未知即hold，不能自刷新Root绑定为新权限。13控制正反检查、5报告结构/源算术反例和4准入计数回归通过，独立源码短审未发现阻断。恢复时发现共享配置只改变宿主node/browser/notify桥路径及pipe，模型/Skills/Accord与notify参数保持；原准备保存，未回写设置，唯一未派发case按实际字节重绑1b06d421。文件分配177→178只承载必要数据fixture；17范围、其他11case definitions、byte budgets与质量/完成谓词保持。
