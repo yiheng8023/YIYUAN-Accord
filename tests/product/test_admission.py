@@ -1086,7 +1086,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 17, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 0, "coverageDefinedButUnverified": 17,
-            "coverageWithoutCases": 8, "coverageWithCaseBindingGaps": 8,
+            "coverageWithoutCases": 7, "coverageWithCaseBindingGaps": 8,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
         self.assertEqual(set(report['caseBindingGaps']),
@@ -1094,9 +1094,14 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                           'v33-codex-entry-coverage', 'v33-system-integration',
                           'v33-codex-lifecycle', 'v33-system-impact-assessment',
                           'v33-resource-pressure-and-exit', 'v33-environment-adaptation'})
-        for claims in report['caseBindingGaps'].values():
+        for scope_id, claims in report['caseBindingGaps'].items():
             for gap in claims.values():
-                self.assertEqual(gap['caseIds'], [])
+                if scope_id == 'v33-autonomous-continuity':
+                    self.assertEqual(gap['caseIds'], ['v33-continuity-catalog-01'])
+                    self.assertEqual(gap['missingDimensions']['duties'], ['recovery-and-rollback'])
+                    self.assertEqual(gap['missingDimensions']['scenarios'], ['capability-loss'])
+                else:
+                    self.assertEqual(gap['caseIds'], [])
                 self.assertTrue(gap['missingDimensions']['duties'])
         self.assertTrue(report['caseBindingGaps']['v33-system-integration']['function']['jointCaseMissing'])
         self.assertEqual(report['acceptanceRequirements']['A08']['blockedBy'],

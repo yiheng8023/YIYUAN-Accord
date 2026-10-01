@@ -42,7 +42,7 @@
 
 ## 功能与必要验收未完项
 
-17必要scope均已定义、10活动case，六项历史准入只属原版本/条件。A01–A08仍未完整收官，`functionalCompletion=false`、`candidateEligible=false`、`selectionFinal=false`保持。没有稳定剩余工作量权重，不编总百分比；定义、测试、安装或文稿数量不算功能完成率。
+17必要scope均已定义、11活动case，其中新增目录清单两轮案仅为前瞻执行绑定；六项历史准入只属原版本/条件。A01–A08仍未完整收官，`functionalCompletion=false`、`candidateEligible=false`、`selectionFinal=false`保持。没有稳定剩余工作量权重，不编总百分比；定义、测试、安装或文稿数量不算功能完成率。
 
 | 工作范围 | 必须继续的结果 |
 |---|---|
@@ -52,7 +52,7 @@
 | W06/W07 | 环境/压力变化后必要续做、消费者有效采用、资产保护和完整资源退出；局部Job治理不能代验普通宿主 |
 | W08 | 同一episode全链组合与独立净影响判断；A08依赖A01–A07，不能平均分或拼散案补短板；精确候选与发布后态分别核 |
 
-八个无活动case范围：dynamic-model-routing、autonomous-continuity、codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。保留缺口，不为填数制造业务。
+七个无活动case范围：dynamic-model-routing、codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。autonomous-continuity已前瞻绑定一个代表性案，仍无当前普通行为准入；完整缺口保持。必要发布前代表性测试本身服务项目验收，不必等待外部客户委托；合成材料必须明示，不能把准备或案例数量当结果。
 
 ### 最新实际交付：候选离线分发与条件修订
 
@@ -69,6 +69,8 @@
 独立有界源码短审未确认新的SDK实现断点：初始化、认证、幸存owner、预算与语义核验是可调用适配器的外部前提，公共脚本未消费该API不能单独证明契约违约。原私有owner两次缺正常terminal保持，不为该结论再开同路诊断或新增控制框架。新补验只证明当前版本受控连接，仍不证明模型自主择时、实际普通业务或GUI控制；不能用于关闭完整A05。原件在`accord-native-continuity-current-20261001-01`，不重跑、冷恢复、启用组件或改用户设置。
 
 ## 本轮工序纠偏与下一工作
+
+2026-10-01已准备`product/cases/continuity-catalog-v3.3.json`：8个明确SYNTHETIC原件、3份产物，两轮从首次安装清单改为已有安装的升级清单；不可信材料不能改变版本、公开边界或执行权限。实际SDK API是runner，任务私有caller、配置、Root首轮协调与独立成品oracle分别冻结；新案在派发前纳入既有准入契约。只执行一次，600秒总限、240秒轮限、20秒恢复预留及原用量上限保持。当前尚未派发；既有17范围、10旧案、全部质量/验收底线与包保持。正常接续可以成立，不制造压力或强制迁移；未观察的fresh接管、失败窗口、其它入口及完整A05/A08继续开放。
 
 用户要求检查跑偏并纠偏继续。当前发现的是工序偏移：可选说明更新06、daemon维护和SDK轻文稿/诊断取证占据主线；现装执行机制足够继续，而普通功能组合未获得对应结果。有效修复/CI/原件保留，更新06移出当前必经工序，不用等待维护决定才能开发。用户随后主动授权并完成更新，本次维护已核收尾，不再投入相同更新或诊断；普通功能组合仍未完成。
 
