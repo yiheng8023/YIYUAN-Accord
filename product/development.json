@@ -242,14 +242,15 @@
       "product/cases/explicit-retro-v3.3.json",
       "product/cases/skill-glossary-v3.3.json",
       "product/cases/concept-relations-v3.3.json",
-      "GLOSSARY.md"
+      "GLOSSARY.md",
+      "product/cases/state-client-decisions-v3.3.json"
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 3250000,
-      "maxTrackedFiles": 182,
+      "maxTrackedFiles": 183,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current phase allocation: 3250000 code/test bytes, 182 tracked files and 36000 primary-instruction bytes. The 2026-10-02 reviewed normal-release recovery and exact-request/completed-basis regression paths measure 3067438 product/test bytes. The former 3200000 ceiling leaves 132562 bytes, below the unchanged five-percent reserve of 160000. The new ceiling leaves 182562 bytes versus a required 162500. Changes stay in the existing handoff runtime and distributed mirror, existing tests and interface reference; no service, runtime module, dependency or tracked file is added. This is a phase-local capacity allocation for a confirmed recovery defect, not a behavioral or execution-limit change. F/A conditions, quality floors, scope and scenario coverage, case deadlines, token caps, resource-release requirements and evidence rules remain unchanged. Earlier allocations and rationale remain in Git, including 2b6b4037685a96da9b5e984716962dc6f6e0f3d1:product/development.json. Historical failed cases keep their original conditions and verdicts. Prospective skill-glossary data-only fixture allocation adds one tracked file (178 to 179); the 3250000 byte budget, 36000 instruction budget and existing five-percent reserve floor remain unchanged. The real pre-release concept-relations fixture adds one further data file (179 to 180); it preserves the same byte/instruction budgets and quality reserve, with no runtime or service added. Root ordinary repository development adds the single source-aligned project glossary (180 to 181); it is not a replay, substitute output or passing result of the ended SDK case, and changes no functional/acceptance definition. Preparation, binding and case count do not establish functional completion. The single demand-bound MCP client guide adds one tracked reference file (181 to 182), linked only for integration/parameter/error branches. Runtime, services, dependencies, primary instructions, quality floors and behavioral acceptance are unchanged; isolated request-template checks are not native adoption or F/A admission."
+      "rationale": "Current phase allocation: 3250000 code/test bytes, 182 tracked files and 36000 primary-instruction bytes. The 2026-10-02 reviewed normal-release recovery and exact-request/completed-basis regression paths measure 3067438 product/test bytes. The former 3200000 ceiling leaves 132562 bytes, below the unchanged five-percent reserve of 160000. The new ceiling leaves 182562 bytes versus a required 162500. Changes stay in the existing handoff runtime and distributed mirror, existing tests and interface reference; no service, runtime module, dependency or tracked file is added. This is a phase-local capacity allocation for a confirmed recovery defect, not a behavioral or execution-limit change. F/A conditions, quality floors, scope and scenario coverage, case deadlines, token caps, resource-release requirements and evidence rules remain unchanged. Earlier allocations and rationale remain in Git, including 2b6b4037685a96da9b5e984716962dc6f6e0f3d1:product/development.json. Historical failed cases keep their original conditions and verdicts. Prospective skill-glossary data-only fixture allocation adds one tracked file (178 to 179); the 3250000 byte budget, 36000 instruction budget and existing five-percent reserve floor remain unchanged. The real pre-release concept-relations fixture adds one further data file (179 to 180); it preserves the same byte/instruction budgets and quality reserve, with no runtime or service added. Root ordinary repository development adds the single source-aligned project glossary (180 to 181); it is not a replay, substitute output or passing result of the ended SDK case, and changes no functional/acceptance definition. Preparation, binding and case count do not establish functional completion. The single demand-bound MCP client guide adds one tracked reference file (181 to 182), linked only for integration/parameter/error branches. Runtime, services, dependencies, primary instructions, quality floors and behavioral acceptance are unchanged; isolated request-template checks are not native adoption or F/A admission. The prospective guide-consumption fixture adds one necessary data file (182 to 183). No runtime/service/primary instruction or test module is added, and byte budgets, five-percent reserve, 17 scope definitions and full F/A floors remain unchanged. Its static preparation is not admission or completion."
     }
   },
   "source": {
@@ -8161,8 +8162,169 @@
               "userTaskNotArchivedOrDeleted": true
             }
           }
+        },
+      {
+        "host": "codex",
+        "entry": "cx-desktop",
+        "qualityAxes": [
+          "compliance-and-safety",
+          "functional-coverage",
+          "normal-entry-integration",
+          "recovery-and-lifecycle",
+          "change-adaptation",
+          "evidence-integrity",
+          "user-burden-and-interference",
+          "maintainability-and-resource-cost"
+        ],
+        "claims": [
+          "function"
+        ],
+        "id": "v33-state-client-decisions-01",
+        "scope": "v33-system-integration",
+        "duties": [
+          "goal-authority-correction",
+          "relations-routing-and-form",
+          "execution-configuration-and-code",
+          "premise-and-consistency",
+          "correction-and-evolution",
+          "resources-and-cleanup",
+          "verification-and-value"
+        ],
+        "scenarios": [
+          "effective-user-environment",
+          "task-exposure-and-reuse"
+        ],
+        "conditions": {
+          "observerCarrierRole": "Codex Desktop coordinates the source and evidence review. The entry label identifies that observer, not adoption or execution by a subject entry. Case and execution entry bindings must match the actual observer; separately establish subject actors and roles without relabelling old CLI/SDK executions.",
+          "subjectCoverage": "Use the applicable selected OpenAI entries and actual responsibilities established by v33-openai-entry-applicability. Preserve pending dispositions and unknown differences; this definition neither finalizes the support set nor activates another host.",
+          "executionBinding": "Before effects, bind the real outcome and inputs, exact host/entry/package/candidate and observer sources, actual actor identities and permissions, protected material and writer ownership, repetition count, time/usage/resource limits and recovery conditions. Definitions do not supply executable cases or new authority.",
+          "evidenceBoundary": "Use independent source observations and consequential post-state at their actual subject, time and conditions. Keep fixed-response checks, method failures, human assistance and ordinary Agent behavior distinct; valid historical or child-scope evidence contributes only at its bound scope.",
+          "joinedEpisode": "At least one admitted case must cover this scope's complete duties, quality axes and scenarios in one coherent episode. Bind the relationship from current intent and capabilities through action, feedback, necessary continuity and recovery to verified delivery and resource post-state. A union of independent successful cases is insufficient.",
+          "systemCorrection": "Assess changed goals, assumptions, inputs, shared conditions and effects across all dependent plans, implementation, artifacts and evidence. Correct and independently recheck all affected objects; preserve valid results and original failures. Retain material unresolved effects across new input and recovery, including adopted historical debt rather than only future actions.",
+          "composition": "Verify real actor roles, scope and interfaces, current authority, single-writer ownership, late/unknown effects, pause and recovery behavior, and attributable resource exit across the composed chain. Parallel branch success, directory visibility, a handoff receipt or evaluator rescue is not whole-system success.",
+          "qualification": "A08 completion also requires A01-A07 complete and the independent required impact assessment. Local systemic correction and SDK mechanisms retain their own evidence; none may compensate for a necessary missing duty or severe unresolved regression. Exact candidate and publication gates remain separate.",
+          "execution": {
+            "host": "codex",
+            "entry": "cx-desktop",
+            "subjectEntry": "cx-sdk",
+            "entryProtocol": "app-server",
+            "runnerKind": "source-session-api",
+            "runner": "runtime/codex-session.cjs",
+            "runnerInvocation": "One persistent source, two normal runs for guide-consumption decisions and an explicitly supplied sample change; fresh pre-thread/pre-turn Root review; no replay/restore/handoff/adopt or third turn.",
+            "caseFile": "product/cases/state-client-decisions-v3.3.json",
+            "caseSha256": "a0b99747bb2a3a98c43b9ded2f1216c5a702bc189596ac7a8d66e1d33fd842b1",
+            "model": "gpt-6.1-sol",
+            "reasoning": "medium",
+            "codexVersion": "0.160.0",
+            "windowsSandbox": "elevated",
+            "hookMode": "installed-plugin",
+            "timeoutSeconds": 600,
+            "turnTimeoutSeconds": 240,
+            "recoveryTimeoutSeconds": 20,
+            "attempts": 1,
+            "maxTurns": 2,
+            "logMaxBytes": 33554432,
+            "usageCaps": {
+              "totalTokens": 2500000,
+              "uncachedInputTokens": 200000,
+              "outputTokens": 14000
+            },
+            "selection": {
+              "decision": "native-sufficient",
+              "skillSelected": false,
+              "basis": "Bounded guide-consumption decisions and client note; no Skill forced to manufacture coverage."
+            },
+            "bootstrap": {
+              "role": "Task-owned SDK caller; fresh Root-only decisions; no GUI or daemon control.",
+              "path": "C:\\Users\\15521\\.codex\\backups\\accord-state-client-execution-20261003-01\\caller\\owner.cjs",
+              "sha256": "66df787249d10487425d141ded5f526bbb539c718fbd0a2f69a14febd18bef21",
+              "configurationPath": "C:\\Users\\15521\\.codex\\backups\\accord-state-client-execution-20261003-01\\caller\\config.json",
+              "configurationSha256": "c720d31d37545515c87557b7102d223829148153acea468cea9629eecbf668c6",
+              "launcherSha256": "531a91e0e52b27a8d81d83b0c733e7b3600f2cb0a75df773f3228ed1c227d000",
+              "guardSha256": "561897959a2efefccdf831ebd362c200edfdaa457fcd6a9f4e7b23ccfc2bb2d4",
+              "launcherGuardSha256": "ba45f38c975a85cd5809fc628c6c3586dbc335ac53c8018441beebdb7f6a9c46",
+              "oracleSha256": "3fd4c39958dcc15f67d3805d360bdec4ba05e48c3fcfbaf768f54a17032bc455",
+              "semanticOracleSha256": "520f1d0c8502053e64ad21d5651d363b6b7b3f6d8af116de5a3dbca9c9025edc",
+              "sourcePolicySha256": "35ab10dda5cb6799228a51b4329f54137ba83f51153221d4c0631d4ab473d587",
+              "sourceManifestSha256": "0f20eae7e294fc40db06d3fb3a99b392f77152bfd0ec62514f446a61e6172c4e"
+            },
+            "deadlineBasis": "One total600 deadline including20 recovery, each turn240, without reset/retry/extension.",
+            "logScope": "Bounded32MiB aggregate of native/callback/journal/input/stage snapshot records; not all SQLite or cache disk use.",
+            "sourceGateMode": "manual-combined"
+          },
+          "entryProtocol": "app-server",
+          "model": "gpt-6.1-sol",
+          "reasoning": "medium",
+          "windowsSandbox": "elevated",
+          "codexVersion": "0.160.0",
+          "goalModeActive": false,
+          "collaborationMode": "default",
+          "userConfigBaselineSha256": "1fe9c2e4140ae684cc659026200ad20a884a17775feaec5caf04acb5fd9a479e",
+          "sourceGateMode": "manual-combined",
+          "inputProvenance": "Real maintainer need: consume the delivered guide into an inert client branch table and usage note. All six business scenarios are SYNTHETIC, not native identities/authority or runtime requests. Stage2 is a predeclared ordinary sample change, not spontaneous discovery or a real human interruption.",
+          "coverageLimits": "Guide-consumption and finite two-stage adaptation only; no actual mutation by the inert calls, implicit/explicit-only Skill proof, autonomous handoff, default/capability-loss environment, full joined scope/A08 or incremental value claim.",
+          "nativeBootstrapEffects": "Separate one-use startup/model authority required. Preserve existing trust unchanged; if new directory/Hook trust is required, hold dependent execution and retain effects. Existing consumed permissions not reused; prebinding does not execute or grant."
+        },
+        "oracle": "Root reads both real normal terminals and source-bound outputs. Independent oracle checks six inert decision rows, complete binding/current observation, protected sources and planned W02 change; required semantic review rejects contradictory nonempty prose. Actual usage/configuration/modes and owned resources need native evidence. Structural pass, prepared golden data or guide references cannot establish execution or whole-scope success.",
+        "oracleFiles": [
+          "docs/operations/PLAN-v3.3.md",
+          "docs/operations/ACCEPTANCE-v3.3.md",
+          "docs/task-state-clients.md",
+          "product/cases/state-client-decisions-v3.3.json",
+          "runtime/codex-session.cjs",
+          "runtime/codex-connection.cjs",
+          "runtime/carrier-recorder.cjs",
+          "runtime/carrier-handoff.cjs",
+          "runtime/native-state-mcp.cjs",
+          "runtime/task-checkpoint.cjs",
+          "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
+          "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md",
+          "scripts/observe_codex_lifecycle.py",
+          "scripts/observe_codex_entry.py",
+          "scripts/codex_rpc.py",
+          "scripts/codex_events.py",
+          "scripts/inspect_native_resources.py",
+          "yiyuan_accord/admission.py",
+          "yiyuan_accord/identity.py",
+          "yiyuan_accord/guardrails.py",
+          "yiyuan_accord/reviews.py"
+        ],
+        "maxAgeSeconds": 604800,
+        "expected": {
+          "effect": {
+            "sixSourceAlignedInertDecisions": true,
+            "plannedChangeSourceAligned": true,
+            "usableClientExplanation": true,
+            "protectedOriginalsUnchanged": true,
+            "onlyTwoDeliverables": true,
+            "noOutOfScopeEffects": true,
+            "unrequestedModeActivation": false
+          },
+          "authority": {
+            "syntheticSeparatedFromNativeAuthority": true,
+            "pauseRecoveryUnknownEffectsRespected": true,
+            "actualScopedAuthorityPresent": true,
+            "originalBytesAndMtimesPreserved": true
+          },
+          "poststate": {
+            "twoNormalBusinessTerminals": true,
+            "goalAbsentAtReadback": true,
+            "noUnresolvedBusinessDuty": true,
+            "fullScopeNotInferred": true,
+            "reportedConfigurationNativeUsageAndSourceKnown": true
+          },
+          "cleanup": {
+            "ownedProcesses": 0,
+            "connectionClosed": true,
+            "sharedConfigurationPreserved": true,
+            "unownedResourcesPreserved": true,
+            "noUnresolvedTaskResource": true,
+            "naturalProcessAndJobExit": true,
+            "userTaskNotArchivedOrDeleted": true
+          }
         }
-      ]
+      }
+    ]
     },
     "coverageRule": "The inherited responsibilities below are a review inventory, not an immutable feature list. Review necessity against the user's actual goal: retain, delegate to the host, merge, retire or fill a demonstrated gap. Record retired/merged responsibilities and their changed acceptance explicitly rather than silently dropping coverage. Preserve the outcomes that remain necessary, not every historical implementation or test. Decomposition and test identifiers are revisable mappings. Actively discover unlisted design defects, broken cross-function relations, entry/configuration blind spots and unnecessary mechanisms through task-relevant official changes, realistic normal-entry work, counterexamples and failure observations. Known findings seed but never bound the review. Prioritize consequences and affected dependencies; end a research branch when sufficient evidence supports the next safe implementation or validation. Complete outcomes and independently observed value, not counts of documents, tests, rules or components, determine completeness. Within existing A02/A06/A08 scopes, verify default versus user-exposed reasoning options and actual main/subagent dispatch separately. Include applicable native-implicit selection, explicit-only with valid delegated selection, missing delegation or supported route, disabled/excluded components, explicit human selection and changed-policy cases. Require original files/management preservation, true selection provenance and valid target control. Native explicit loading alone does not prove semantic choice. Forged human selection/delegation, bypass of disabled/excluded components, duplicate installation, unnecessary per-use approval within existing scoped delegation, forced workflows and treating visibility or eligibility as adoption fail; preserve unverified outcomes and unaffected historical evidence.",
     "functionReview": "For each applicable result establish the user need, current sufficient host responsibility, necessary Accord intervention, observable effect and lifecycle cost. Judge native sufficiency against prebound outcomes, quality, authority and applicable post-state in the actual entry and composition; use risk-scaled effect/failure evidence and acceptable total burden, not capability names or one lucky success. Simple reversible work can execute and verify directly. Unknowns limit dependent claims; sufficiency is contextual and is not optimality or product retirement. The inventory requires neither one module per duty nor one stage per action. Separate task delivery and verification from optional cross-task learning, authorized package lifecycle and maintainer product/value qualification. If a need no longer applies, revise its dependent acceptance explicitly; if only its representation or implementation is redundant, preserve the result through a verified replacement. Machine-suited means need no human-workflow imitation, but still need evidence and necessary human control. Include the control Accord must retain and the evidence that each delegated dependency is sufficient in a customized environment. Verify compatible aid, material conflict and change during work; test the connected result and recovery rather than blaming all failures on the environment or attributing all success to Accord. Reopen ownership when a function exists only in maintainer tooling or model-followed prose while its promised runtime control remains absent. Verify compatible extension help and conflicting extension advice separately. Check source and scope priority against the bound user request and host limits, affected-only invalidation, no implied permission escalation, preserved unrelated state and actual recovery. A logical middle or mixed layer cannot claim interception of all host paths.",

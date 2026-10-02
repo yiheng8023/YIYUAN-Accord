@@ -1,0 +1,730 @@
+{
+  "schema": "yiyuan-state-client-prospective-case-draft/v1",
+  "caseId": "v33-state-client-decisions-01",
+  "status": "prepared-not-authorized",
+  "purpose": "Maintainer representative acceptance: consume the existing calling guide into a usable client decision table and revise it after one explicitly authorized sample requirement change.",
+  "boundaries": {
+    "materialClassification": "SYNTHETIC",
+    "syntheticIs": "business input for branch analysis only",
+    "syntheticIsNot": [
+      "host metadata/authorization",
+      "live state",
+      "executable request"
+    ],
+    "forbidden": [
+      "main/config/source modification",
+      "live state calls or CLI/SDK/model execution during preparation",
+      "network/install/trust/agents/publication",
+      "old cases/effects/consumed permissions replay"
+    ],
+    "claimCeiling": "Draft only; no behavior, admission, functional completion or release proof."
+  },
+  "sourceBinding": {
+    "mainReportedByRoot": "3b536605",
+    "installedReportedByRoot": "5b / 20261002232312",
+    "guide": {
+      "path": "inputs/calling-guide.md",
+      "gitPath": "docs/task-state-clients.md",
+      "commit": "3b5366051f3a08985a85200dc1a9162e9817ed8b",
+      "sha256": "ff62d1622664ca51abab104d3f864bbca08c7659b3ad87e1eeefb588552b9ab1",
+      "bytes": 9059,
+      "workingTreeSha256": "ff62d1622664ca51abab104d3f864bbca08c7659b3ad87e1eeefb588552b9ab1",
+      "guideDeclaredSource": "315e2476e4818545d0dbb6a2c241be72b01ceae4",
+      "protection": "Exact raw Git bytes staged; source and staged inputs remain protected."
+    },
+    "limitsSource": "product/cases/continuity-catalog-v3.3.json#/limits",
+    "bindingState": "Root review and current full source/package/executor binding required.",
+    "mainCommit": "3b5366051f3a08985a85200dc1a9162e9817ed8b",
+    "draft": {
+      "path": "C:\\Users\\15521\\.codex\\backups\\accord-state-client-case-20261003-01\\case-draft.json",
+      "sha256": "51e107fdcd47ecbab5c9bfd49bea90f5687a7ede0cd86e5b4f6d9f2d93ec1a44",
+      "role": "Retained proposal; this derivative is the operative prepared contract."
+    }
+  },
+  "executionProposal": {
+    "rootModel": "unchanged",
+    "workerCandidate": {
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "medium",
+      "selection": "proposal only; use a truly supported and authorized path"
+    },
+    "attempts": 1,
+    "stages": 2,
+    "limits": {
+      "turnSeconds": 240,
+      "wholeWorkSeconds": 600,
+      "recoveryReserveSeconds": 20,
+      "logBytes": 33554432,
+      "usageCaps": {
+        "totalTokens": 2500000,
+        "uncachedInputTokens": 200000,
+        "outputTokens": 14000
+      },
+      "usageScope": "Cumulative native usage over two stages; each actual thread once. 600s includes 20s reserve. No reset/retry/extension or unknown-effect replay."
+    },
+    "dispatchGates": [
+      "Root review/source binding",
+      "supported executor/model selection",
+      "New specific one-use execution/startup/model authority; existing trust only.",
+      "isolated executor workspace/sole writer"
+    ],
+    "thirdPartySkill": "Root may select original writing-for-agents only through a supported path if the real deliverable needs it; no invented task or source rewrite.",
+    "trustBoundary": "Do not change trust. If the existing host requires new directory/Hook trust, hold dependent execution and retain effects."
+  },
+  "inputs": {
+    "stagedReadOnlyFiles": [
+      {
+        "path": "inputs/calling-guide.md",
+        "source": "sourceBinding.guide exact bytes"
+      },
+      {
+        "path": "inputs/client-cases.json",
+        "source": "businessMaterial exact JSON serialization; keep oracle and executor fields out of worker input"
+      }
+    ],
+    "stage2Payload": "stages[1].authorizedChange delivered by the executor as a new ordinary requirement; do not mutate stage-1 inputs."
+  },
+  "businessMaterial": {
+    "classification": "SYNTHETIC",
+    "clientWorkspace": "C:\\SYNTHETIC\\client-case",
+    "interpretation": "SYNTHETIC simplified projection only. Resolve savedCheckpoint.base from savedContractDefaults and shallowly apply overrides. snapshot is the current observation; checkpoint.epoch is stale binding basis. Never execute sample calls. Inert business oracle data; not nativeShape, permission or epochMetadata. Never execute real MCP.",
+    "cases": [
+      {
+        "id": "B01",
+        "intentEvidence": {
+          "classification": "SYNTHETIC",
+          "text": "Approved request: proceed with checklist drafting."
+        },
+        "observations": [
+          {
+            "id": "B01-old",
+            "latest": false,
+            "value": {
+              "checkpoint": {
+                "state": "observed",
+                "epoch": "SYNTHETIC-old-binding-epoch",
+                "snapshot": {
+                  "epoch": "SYNTHETIC-bind-old",
+                  "revision": 2,
+                  "mode": "active",
+                  "needsNativeReplay": false,
+                  "needsResumeReconciliation": false
+                }
+              },
+              "savedCheckpoint": {
+                "base": "savedContractDefaults",
+                "overrides": {}
+              }
+            }
+          },
+          {
+            "id": "B01-latest",
+            "latest": true,
+            "value": {
+              "checkpoint": {
+                "state": "observed",
+                "epoch": "SYNTHETIC-old-binding-epoch",
+                "snapshot": {
+                  "epoch": "SYNTHETIC-bind-current",
+                  "revision": 3,
+                  "mode": "active",
+                  "needsNativeReplay": false,
+                  "needsResumeReconciliation": false
+                }
+              },
+              "savedCheckpoint": {
+                "base": "savedContractDefaults",
+                "overrides": {}
+              }
+            }
+          }
+        ],
+        "businessEvidence": {
+          "protectedInputs": [
+            {
+              "path": "request.json",
+              "current": {
+                "present": true,
+                "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              }
+            }
+          ],
+          "safeAuthorizedNextAction": true
+        }
+      },
+      {
+        "id": "W02",
+        "intentEvidence": {
+          "classification": "SYNTHETIC",
+          "text": "Destination version is missing; wait for it before drafting."
+        },
+        "observations": [
+          {
+            "id": "W02-latest",
+            "latest": true,
+            "value": {
+              "checkpoint": {
+                "state": "observed",
+                "epoch": "SYNTHETIC-old-binding-epoch",
+                "snapshot": {
+                  "epoch": "SYNTHETIC-wait",
+                  "revision": 7,
+                  "mode": "active",
+                  "needsNativeReplay": false,
+                  "needsResumeReconciliation": false
+                }
+              },
+              "savedCheckpoint": {
+                "base": "savedContractDefaults",
+                "overrides": {
+                  "nextAction": "Wait for the destination version.",
+                  "canContinue": false,
+                  "unresolved": [
+                    "destination version is missing"
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "businessEvidence": {
+          "protectedInputs": [
+            {
+              "path": "request.json",
+              "current": {
+                "present": true,
+                "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              }
+            }
+          ],
+          "destinationVersion": null,
+          "safeAuthorizedNextAction": false
+        }
+      },
+      {
+        "id": "P03",
+        "intentEvidence": {
+          "classification": "SYNTHETIC",
+          "text": "Pause now and preserve unfinished checklist."
+        },
+        "observations": [
+          {
+            "id": "P03-latest",
+            "latest": true,
+            "value": {
+              "checkpoint": {
+                "state": "observed",
+                "epoch": "SYNTHETIC-old-binding-epoch",
+                "snapshot": {
+                  "epoch": "SYNTHETIC-pause",
+                  "revision": 4,
+                  "mode": "active",
+                  "needsNativeReplay": false,
+                  "needsResumeReconciliation": false
+                }
+              },
+              "savedCheckpoint": {
+                "base": "savedContractDefaults",
+                "overrides": {}
+              }
+            }
+          }
+        ],
+        "businessEvidence": {
+          "userPauseDecisionPresent": true
+        }
+      },
+      {
+        "id": "H04",
+        "intentEvidence": {
+          "classification": "SYNTHETIC",
+          "text": "Report applicable branch; no resume decision supplied."
+        },
+        "observations": [
+          {
+            "id": "H04-latest",
+            "latest": true,
+            "value": {
+              "checkpoint": {
+                "state": "observed",
+                "epoch": "SYNTHETIC-old-binding-epoch",
+                "snapshot": {
+                  "epoch": "SYNTHETIC-held-pause",
+                  "revision": 5,
+                  "mode": "paused",
+                  "needsNativeReplay": false,
+                  "needsResumeReconciliation": false
+                }
+              },
+              "savedCheckpoint": {
+                "base": "savedContractDefaults",
+                "overrides": {
+                  "canContinue": false,
+                  "pause": {
+                    "reason": "The sample user previously paused this work."
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "businessEvidence": {
+          "resumeAuthorization": false
+        }
+      },
+      {
+        "id": "R05",
+        "intentEvidence": {
+          "classification": "SYNTHETIC",
+          "text": "May this unbound receipt be retired? No repair or replay."
+        },
+        "observations": [
+          {
+            "id": "R05-latest",
+            "latest": true,
+            "value": {
+              "checkpoint": {
+                "state": "observed",
+                "epoch": "SYNTHETIC-old-binding-epoch",
+                "snapshot": {
+                  "epoch": "SYNTHETIC-recovery",
+                  "revision": 0,
+                  "mode": "unbound",
+                  "needsNativeReplay": true,
+                  "needsResumeReconciliation": false
+                }
+              },
+              "savedCheckpoint": null
+            }
+          }
+        ],
+        "businessEvidence": {
+          "inputsReconciled": false,
+          "cancellationDecision": false,
+          "recoveryVariants": [
+            {
+              "id": "R05-native-replay",
+              "needsNativeReplay": true,
+              "needsResumeReconciliation": false
+            },
+            {
+              "id": "R05-resume-reconciliation",
+              "needsNativeReplay": false,
+              "needsResumeReconciliation": true
+            }
+          ],
+          "variantInterpretation": "Independent alternatives to the main snapshot recovery flags; both retain unbound/revision0 and each requires hold."
+        }
+      },
+      {
+        "id": "T06",
+        "intentEvidence": {
+          "classification": "SYNTHETIC",
+          "text": "Transport failed after possible mutation; select next safe branch without resend."
+        },
+        "observations": [
+          {
+            "id": "T06-pre-mutation",
+            "latest": false,
+            "value": {
+              "checkpoint": {
+                "state": "observed",
+                "epoch": "SYNTHETIC-old-binding-epoch",
+                "snapshot": {
+                  "epoch": "SYNTHETIC-transport-before",
+                  "revision": 9,
+                  "mode": "active",
+                  "needsNativeReplay": false,
+                  "needsResumeReconciliation": false
+                }
+              },
+              "savedCheckpoint": {
+                "base": "savedContractDefaults",
+                "overrides": {}
+              }
+            }
+          }
+        ],
+        "businessEvidence": {
+          "sentCall": {
+            "name": "manage_task_state",
+            "arguments": {
+              "cwd": "C:\\SYNTHETIC\\client-case",
+              "action": "bind",
+              "epoch": "SYNTHETIC-transport-before",
+              "expectedRevision": 9
+            },
+            "bindingFieldsSource": "savedContractDefaults: all five contract fields; convert saved input objects to path strings"
+          },
+          "receipt": null,
+          "transportDisposition": "effect-unknown-after-mutation",
+          "postStateObserved": false
+        }
+      }
+    ],
+    "savedContractDefaults": {
+      "result": "Produce the internal migration checklist and its note.",
+      "inputs": [
+        {
+          "path": "request.json",
+          "observed": {
+            "present": true,
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "path": "migration-checklist.json",
+          "json": {
+            "/ready": true
+          }
+        },
+        {
+          "path": "migration-note.md"
+        }
+      ],
+      "nextAction": "Draft the migration checklist from the approved request.",
+      "canContinue": true,
+      "unresolved": [],
+      "pause": null
+    }
+  },
+  "deliverables": {
+    "decisionFile": {
+      "path": "client-decisions.json",
+      "exactTopLevelKeys": [
+        "schema",
+        "classification",
+        "stage",
+        "decisions",
+        "changes"
+      ],
+      "schemaValue": "synthetic-client-decisions/v1",
+      "classificationValue": "SYNTHETIC",
+      "stageValues": [
+        1,
+        2
+      ],
+      "decisions": {
+        "count": 6,
+        "idOrder": [
+          "B01",
+          "W02",
+          "P03",
+          "H04",
+          "R05",
+          "T06"
+        ],
+        "exactRowKeys": [
+          "id",
+          "decision",
+          "expectedCall",
+          "nextRead",
+          "basisObservation",
+          "stateExpectation",
+          "reasons",
+          "evidenceGaps"
+        ],
+        "decisionValues": [
+          "call",
+          "hold"
+        ],
+        "expectedCall": "null for hold; otherwise inert {name,arguments}",
+        "nextRead": "null except T06: inert inspect object",
+        "basisObservation": {
+          "type": "object",
+          "exactKeys": [
+            "id",
+            "qualification"
+          ],
+          "id": "observation id from corresponding case",
+          "qualificationValues": [
+            "latest",
+            "stale-pre-mutation"
+          ]
+        },
+        "reasons": "nonempty grounded string array",
+        "evidenceGaps": "explicit array",
+        "stateExpectationValues": [
+          "active",
+          "paused",
+          "unbound",
+          "unknown"
+        ]
+      },
+      "changes": {
+        "stage1": [],
+        "stage2": {
+          "count": 1,
+          "exactKeys": [
+            "id",
+            "trigger",
+            "priorObservation",
+            "newObservation",
+            "explanation"
+          ],
+          "values": {
+            "id": "W02",
+            "trigger": "explicit-authorized-sample-change",
+            "priorObservation": "W02-latest",
+            "newObservation": "W02-stage2-latest"
+          },
+          "explanation": "nonempty string grounded in the received change"
+        }
+      }
+    },
+    "noteFile": {
+      "path": "client-note.md",
+      "requirements": [
+        "Explain consuming rows/hold/nextRead and fresh inspection before dependent calls.",
+        "Explain synthetic and authorization limits plus six guide branches.",
+        "Stage 2 records explicit requirement change; no spontaneous-correction or actual-effect claims."
+      ]
+    }
+  },
+  "oracle": {
+    "evaluation": "Evaluator-only. Expand callTemplates then shallowly apply argumentOverrides; compare full inert output calls and branch semantics against frozen guide/current source. Do not send oracle to worker.",
+    "stage1": [
+      {
+        "id": "B01",
+        "decision": "call",
+        "expectedCall": {
+          "template": "bind",
+          "argumentOverrides": {}
+        },
+        "stateExpectation": "active",
+        "evidenceGaps": [],
+        "nextRead": null,
+        "basisObservation": {
+          "id": "B01-latest",
+          "qualification": "latest"
+        }
+      },
+      {
+        "id": "W02",
+        "decision": "call",
+        "expectedCall": {
+          "template": "bind",
+          "argumentOverrides": {
+            "epoch": "SYNTHETIC-wait",
+            "expectedRevision": 7,
+            "nextAction": "Wait for the destination version.",
+            "canContinue": false
+          }
+        },
+        "stateExpectation": "active",
+        "evidenceGaps": [
+          "destination version is missing"
+        ],
+        "nextRead": null,
+        "basisObservation": {
+          "id": "W02-latest",
+          "qualification": "latest"
+        }
+      },
+      {
+        "id": "P03",
+        "decision": "call",
+        "expectedCall": {
+          "name": "manage_task_state",
+          "arguments": {
+            "cwd": "C:\\SYNTHETIC\\client-case",
+            "action": "pause",
+            "epoch": "SYNTHETIC-pause",
+            "expectedRevision": 4,
+            "reason": "The sample user explicitly requested pausing this unfinished work."
+          }
+        },
+        "stateExpectation": "paused",
+        "evidenceGaps": [],
+        "nextRead": null,
+        "basisObservation": {
+          "id": "P03-latest",
+          "qualification": "latest"
+        }
+      },
+      {
+        "id": "H04",
+        "decision": "hold",
+        "expectedCall": null,
+        "nextRead": null,
+        "stateExpectation": "paused",
+        "evidenceGaps": [
+          "current authorization to resume is absent"
+        ],
+        "basisObservation": {
+          "id": "H04-latest",
+          "qualification": "latest"
+        }
+      },
+      {
+        "id": "R05",
+        "decision": "hold",
+        "expectedCall": null,
+        "nextRead": null,
+        "stateExpectation": "unbound",
+        "evidenceGaps": [
+          "Any true or unknown recovery flag prevents receipt retirement.",
+          "Current input reconciliation is absent."
+        ],
+        "basisObservation": {
+          "id": "R05-latest",
+          "qualification": "latest"
+        },
+        "recoveryVariantDecisions": {
+          "R05-native-replay": "hold",
+          "R05-resume-reconciliation": "hold"
+        }
+      },
+      {
+        "id": "T06",
+        "decision": "hold",
+        "expectedCall": null,
+        "nextRead": {
+          "name": "inspect_task_state",
+          "arguments": {
+            "cwd": "C:\\SYNTHETIC\\client-case"
+          }
+        },
+        "stateExpectation": "unknown",
+        "evidenceGaps": [
+          "post-mutation state and receipt/effect reconciliation are absent"
+        ],
+        "basisObservation": {
+          "id": "T06-pre-mutation",
+          "qualification": "stale-pre-mutation"
+        }
+      }
+    ],
+    "globalRules": [
+      "Exactly six rows; no invented host identities, metadata or authorization.",
+      "All bind fields explicit, using latest snapshot epoch/revision; string inputs and nonempty outputs.",
+      "Respect pause; waiting is not pause; unknown effects require inspection, not replay.",
+      "No recovery retirement; no completion/cancellation or acceptance overclaim.",
+      "Only two output files; protected source hashes unchanged.",
+      "B01 bind inputs equal savedContractDefaults.inputs[].path strings and outputs equal the complete saved outputs.",
+      "R05 each independent true recovery flag requires hold; any unknown flag also blocks retirement.",
+      "basisObservation and changes must satisfy exact object schemas; stage2 uses latest W02 id.",
+      "W02 stage1 retains the existing missing-version condition, by omission or an identical explicit list. Stage2 unresolved=[] requires a nonempty grounded revisionReason. Natural-language reasons, nextAction and pause/revision text need semantic review, not exact sentence matching."
+    ],
+    "stage2": {
+      "replaceOnly": "W02",
+      "expectedCall": {
+        "template": "bind",
+        "argumentOverrides": {
+          "epoch": "SYNTHETIC-wait-fact-arrived",
+          "expectedRevision": 8,
+          "nextAction": "Draft the migration checklist for destination version 2.0.",
+          "unresolved": [],
+          "revisionReason": "The sample user supplied destination version 2.0 and explicitly authorized drafting; the prior missing-version condition is resolved."
+        }
+      },
+      "stateExpectation": "active",
+      "evidenceGaps": [],
+      "otherRows": "Other five rows unchanged in semantics.",
+      "requiredReasons": [
+        "Latest W02 observation; full contract; unresolved=[] with revisionReason based on new fact and explicit authorization.",
+        "Received requirement change, not spontaneous correction."
+      ],
+      "basisObservation": {
+        "id": "W02-stage2-latest",
+        "qualification": "latest"
+      },
+      "decision": "call",
+      "nextRead": null
+    },
+    "callTemplates": {
+      "bind": {
+        "name": "manage_task_state",
+        "arguments": {
+          "cwd": "C:\\SYNTHETIC\\client-case",
+          "action": "bind",
+          "epoch": "SYNTHETIC-bind-current",
+          "expectedRevision": 3,
+          "result": "Produce the internal migration checklist and its note.",
+          "inputs": [
+            "request.json"
+          ],
+          "outputs": [
+            {
+              "path": "migration-checklist.json",
+              "json": {
+                "/ready": true
+              }
+            },
+            {
+              "path": "migration-note.md"
+            }
+          ],
+          "nextAction": "Draft the migration checklist from the approved request.",
+          "canContinue": true
+        }
+      }
+    }
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "prompt": "请依据 inputs/calling-guide.md 和 inputs/client-cases.json，交付客户端分支表 client-decisions.json 与接入说明 client-note.md。全部是 SYNTHETIC 样本，只分析，不执行调用或用作真实身份、授权。JSON顶层为 schema=synthetic-client-decisions/v1、classification=SYNTHETIC、stage=1、decisions、changes=[]。六行分别含 id、decision(call/hold)、expectedCall、nextRead、basisObservation、stateExpectation、reasons、evidenceGaps。basisObservation为对象，含id和qualification，qualification取latest或stale-pre-mutation。call给完整参数；hold给缺口和安全下一步。说明R05每个独立恢复标志变体为何都hold。原输入字节不变，只写两成品。 六行按B01,W02,P03,H04,R05,T06排序。stateExpectation只取active、paused、unbound、unknown；它描述本样本预期状态，不是已执行或成功回执。只给有来源支持的理由；不编造真实授权或完成。说明精简且可供接入者使用，两文件建议合计18000字节、最终答复200字内，不隐去必要条件。"
+    },
+    {
+      "stage": 2,
+      "authorizedChange": {
+        "classification": "SYNTHETIC",
+        "caseId": "W02",
+        "sampleUserRequest": "目标版本现在确认是2.0。我明确同意按这个版本继续起草迁移检查清单；原保护输入和两项输出要求不变。这里只改变W02，其余场景意图和状态不变。",
+        "newBusinessEvidence": {
+          "destinationVersion": "2.0",
+          "safeAuthorizedNextAction": true,
+          "protectedInputs": [
+            {
+              "path": "request.json",
+              "current": {
+                "present": true,
+                "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              }
+            }
+          ]
+        },
+        "newObservation": {
+          "id": "W02-stage2-latest",
+          "latest": true,
+          "value": {
+            "checkpoint": {
+              "state": "observed",
+              "epoch": "SYNTHETIC-old-binding-epoch",
+              "snapshot": {
+                "epoch": "SYNTHETIC-wait-fact-arrived",
+                "revision": 8,
+                "mode": "active",
+                "needsNativeReplay": false,
+                "needsResumeReconciliation": false
+              }
+            },
+            "savedCheckpoint": {
+              "base": "savedContractDefaults",
+              "overrides": {
+                "canContinue": false,
+                "nextAction": "Wait for the destination version.",
+                "unresolved": [
+                  "destination version is missing"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "prompt": "现明确授权修改W02样本：目标版本已确认2.0，同意据此继续起草；保护输入和输出要求不变。根据本轮新观察修订原两成品，stage=2，changes仅一条，含id=W02、trigger=explicit-authorized-sample-change、priorObservation=W02-latest、newObservation=W02-stage2-latest及非空explanation。判断旧未决条件的处置，给完整参数与理由；其余五行语义保持。原输入和指南字节不变，不执行调用，不声称自发纠偏或真实成功。 保持同一行序及stateExpectation四枚举。自然文字可依事实改写，不要求与示例同句。changes只记录本轮明确收到的样本变化，不把要求变化称为自发发现。"
+    }
+  ],
+  "acceptance": "Root must review both normal stage terminals, usable outputs, source hashes and closed resources before any formal admission.",
+  "rootDerivation": {
+    "executorDispatched": false,
+    "authorization": "not-granted",
+    "changes": [
+      "New formal case ID; raw Git guide binding; explicit state enum; semantic text review instead of literal sentences; equivalent retention allowed."
+    ],
+    "claimLimit": "Preparation and oracle checks do not establish ordinary behavior or admission."
+  }
+}
