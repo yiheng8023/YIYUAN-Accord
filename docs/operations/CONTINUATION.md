@@ -96,11 +96,19 @@
 
 ## 本轮工序纠偏与下一工作
 
-2026-10-02当前前瞻准备转入真实项目概念交付：仓库缺少专用词表，现登记`v33-concept-relations-01` / `product/cases/concept-relations-v3.3.json`，固定497bd8原始Git来源的八份必要导出，加来源摘要与输出合同。第一轮供工程维护者，第二轮按预先明示的收件者安排面向首次读者，三份候选成品由Root独立审查；不冒称突发纠正、客户业务或正式概念已采用。S03明确保留3.1历史身份；S01当前3.3范围仅取raw Git L130的149字节前缀，其余选中行保持，未来宿主名单不进入本次交付材料，原文与旧导出保留。正式fixture SHA `0b604f7e46c4f76ace2b90e25a78b97dcf44c6cf9f4122ebe9e3d8ac5fc4d1fa`。
+2026-10-02前瞻准备的原状态记录（实例现已结束，实际结果见下）：当时仓库缺少专用词表，登记`v33-concept-relations-01` / `product/cases/concept-relations-v3.3.json`，固定497bd8原始Git来源的八份必要导出，加来源摘要与输出合同。第一轮供工程维护者，第二轮按预先明示的收件者安排面向首次读者，三份候选成品由Root独立审查；不冒称突发纠正、客户业务或正式概念已采用。S03明确保留3.1历史身份；S01当前3.3范围仅取raw Git L130的149字节前缀，其余选中行保持，未来宿主名单不进入本次交付材料，原文与旧导出保留。正式fixture SHA `0b604f7e46c4f76ace2b90e25a78b97dcf44c6cf9f4122ebe9e3d8ac5fc4d1fa`。
 
 新案明确选人工合并审查：保留thread/start前Root判断，将完整真实创建回执、ID/hash及逐字段语义审查合并进紧邻turn/start的同一次fresh Root门。未知权限/来源/扩展或ACK继续hold；没有完整静态expected不等于已接受，更不能凭run或hash放行。独立复审修正了正确配置来源不可引用的缺口，新增外部binding固定的canonical配置、当前settings和完整安装包成员三类来源引用，避免自hash循环；并按实际schema移除Thread/Session ID相等的自设硬门，将明确独立于turn执行的四项记录元数据保留给Root判断。具体新owner/真实语义守卫的36纯模拟情景153断言由Root复跑，十原件物理检查、未授权的JS/Python真实拒绝门及四项现有准入回归通过，均不代替真实SDK或业务结果。
 
-Root仍为main唯一写者；子任务及原件保护边界保持。新案请求worker Sol/high，主Sol/max按用户选择保持，实际effort/费用/收益未证不补值。预算仍600整段/240每轮/20恢复、两轮单次及原token/log限。案例定义增为13，文件容量179→180仅容纳一份必要数据fixture，原17范围/F01–F08/A01–A08、字节/指导容量和质量余量保持，完整功能/候选资格仍false。私有`accord-concept-relations-execution-20261002-01`保存具体caller、原始准备/修改前备份与源前缀证明；canonical配置已准备，授权账本明确not-granted，无run或该模型业务。正式committedsubject/执行绑定及新的单次模型/必要单目录信任许可是下一依赖；旧课程词表、catalog、retro及旧许可不重放。运行源码相同部分复用exact32ea的11/11 CI，此次数据与前绑另作本地校验，不冒称新提交已跑该矩阵。
+该准备时Root仍为main唯一写者；子任务及原件保护边界保持。新案请求worker Sol/high，主Sol/max按用户选择保持，实际effort/费用/收益未证不补值。预算仍600整段/240每轮/20恢复、两轮单次及原token/log限。案例定义增为13，文件容量179→180仅容纳一份必要数据fixture，原17范围/F01–F08/A01–A08、字节/指导容量和质量余量保持，完整功能/候选资格仍false。私有`accord-concept-relations-execution-20261002-01`保存具体caller、原始准备/修改前备份与源前缀证明；当时canonical配置已准备，授权账本not-granted，尚无run。原前置状态不能当作当前许可或待办；旧课程词表、catalog、retro及旧许可不重放。运行源码相同部分复用exact32ea的11/11 CI，此次数据与前绑另作本地校验，不冒称新提交已跑该矩阵。
+
+2026-10-02本案唯一实际执行绑定clean `daa681da`，经真实用户epoch4b10d8cb/turn01a0fc95授权后启动source01a0fc9d-4d9a-7352-8626-fb3aab7dcc5f。原生回执确认CLI0.160.0/Sol/high、workspace-write/never及业务网络false，原domain-modeling正文真实展开、worker声明使用并完成两次只读源/格式检查。但Root临场构造长JSON代码，两门实际等待110504/90537毫秒；首次SDK run的240秒绝对截止包括source创建和owner callbacks，模型派发时只剩31511毫秒。其turn已启动，随后TURN_ACTIVITY_FAILED/turn activity deadline exceeded，无匹配正常终态、完成快照或三成品，第二轮未派发。不能将该局部配置/加载写成完整Skill采用、动态协调、模型质量或功能验收通过，也不把Root处理延迟归给SDK内部。实际81603 total/41751 uncached/300 output为原生累计计数，费用及实际推理强度遥测未知。
+
+该实例总246.2308秒，native自然退出0、非forced/connection关闭，outer退出1、非forced、Job active0/total65；十原件hash/mtime完整，退出后11个可归属node缓存90452字节和5个空临时目录已收尾，raw日志、SQLite、私有线程与原许可保留。许可status已变consumed，现有granted门独立拒绝，started/result/run仍保留，不复跑或cold restore。独立实际报告、ACTUAL-RESULT及TEMP-CACHE-CLEANUP在上述私有目录。执行期设置c12和ACK serviceTier default保持；后续12:44:47Z配置仅service_tier变priority，其它TOML字段一致、无trust变化，写者/意图未知，保留当前91718f12字节，不回滚成旧基线或虚构信任恢复。
+
+Root纠偏首先收准工具编排：私有`accord-root-decision-io-20261002-01`的60行助手只封装Root已独立审查的决定与fresh真实来源/输入/nonce，不生成许可、语义判断或response-derived期待值，不启动模型/服务。独立审查发现decision文件路径未与actor写域隔离，原件保全后补相同边界；33项纯IO/guard stub检查经Root复跑，不代验真实时延或Root判断质量。未来具体方案应在计时前备好封包模板，仍须每次实时语义判断；当前失败与240/600不改，不为Root慢新增SDK接口或再开同案。
+
+项目术语缺口另由Root在普通已授权仓库开发中完成[词表](../../GLOSSARY.md)：八个既有域概念经PLAN/BASELINE独立源审，不加入通用宿主/工程术语，删除会误禁合法不同概念的Avoid项，未完责任留档不得代替完成条件。它不属于上述失败episode的三成品或验收证据；原工作区三成品仍不存在。文件容量180→181只承载该必要文档，原功能/验收判据、包、主配置/模型及第三方保持。下一模型作用域须有真实新用途、具体完整前绑和对应权限；当前不申请未准备的新执行，安全仓库工作继续。
 
 2026-10-01用户截图的Stop“已阻止1/未成功0”已匹配d011接续回调：Root原生completed状态调用从rev171请求一个可安全推进的预算诊断段，`canContinue=true`形成rev172；诊断结束后的completed调用改为false形成rev173。它是本次有意接续，不是旧exit1复发，也不能据此称所有block都合理或故障均已排除。README双语补充状态解释，基线/验收/计划分别澄清既有职责和数量/实现分配关系；源码Hook行为、分发包、17scope/F/A与完整判据不改。
 

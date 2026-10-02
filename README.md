@@ -16,6 +16,8 @@
 
 **Our mission: Empower every dream.**
 
+See the [project glossary](GLOSSARY.md) for terms concerning objectives, authority, responsibility and evidence.
+
 YIYUAN Accord is designed to support reliable long-term human–AI collaboration. Its goal is for the Agent to clarify a user's requirements, assess feasibility, establish necessary conditions, and own authorized execution, correction, recovery and result verification. Users should not need to learn tool coordination, configuration, model routing or task handoff first; experienced users retain control over their own actions and changes of direction.
 
 The project is open source and not driven by profit. It aims for industrial and commercial production quality, equitable access and user autonomy. Project decisions are guided by user interests, verifiable value and sustainable maintenance. Commercial funding and platform relationships do not change its supplier independence. Its general collaboration design is separate from host adapters; native and mature external capabilities are used according to their actual value.
