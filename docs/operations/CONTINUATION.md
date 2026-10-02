@@ -1,11 +1,11 @@
 # 当前接续
 
-更新：2026-10-01 · N33-20260909 / r34。以实时Git、当前原生输入及受影响资源为准。
+更新：2026-10-02 · N33-20260909 / r34。以实时Git、当前原生输入及受影响资源为准。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识与路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)与[机器投影](../../product/development.json)分别展开结果、判据和验证投影。本页只保留当前责任；旧详记见末尾固定版本入口。
 
 ## 目标、责任与边界
 
-2026-10-01并行协作准备：用户选择为ZCode GLM-5.3-Flash和Antigravity Gemini 3.8 Flash“高”档写提示词，Root主线与最终把关保持。从固定443ca2dea46e5e0a3efb8455fa281a30e0129cac建立两个独立worktree：`C:\Users\15521\.codex\worktrees\v33-glm-audit\YIYUAN-Accord` / `accord/v33-glm-audit`，`C:\Users\15521\.codex\worktrees\v33-gemini-audit\YIYUAN-Accord` / `accord/v33-gemini-audit`；全部项目代码可读，首段只读审计，业务修改须有Root明确派发且只在自身检出写入。提示词保存在本机`C:\Users\15521\.codex\backups\accord-parallel-review-20261001-01\prompts`中的`GLM-v3.3.md`与`GEMINI-v3.3.md`，并复制到各自检出的`.tmp/parallel-review/START.md`；原始交付留各自同一目录。本次仅完成准备，外部会话/实际模型运行尚未派发或接收；Root未把本阶段当两方行为验收。免费窗口为用户提供的23:00–09:00，Google双窗口与超额计费关闭有用户截图，实际启动仍核条件；不新增安装、信任、充值、API费用、推送或发布权限。两方结果到达后Root核实际差异、共享设置、当前写者/在途动作、精确提交及证据，再独立验证并选择整合；用户要求最终合并到main且只保留main，确认成果/必要证据保存和写者退出后清理这两个临时分支与检出，用户会话/原件仍保留。具体分工见[计划](PLAN-v3.3.md#当前推进顺序)。
+2026-10-02并行协作进入Root整合：用户已向正确的GLM/Gemini专用会话派发并确认两方完成。GLM交付5个授权文件的未提交补丁；Gemini最终报告为`INDEPENDENT-REVIEW-REPORT.md`，只读意见不是补丁验收。Root已把原始补丁、两方报告/交接及哈希保存到本机`C:\Users\15521\.codex\backups\accord-parallel-review-20261001-01\received`，在独立`root-review/integration`副本修正并验证，原件不改。两个审计检出分支为`accord/v33-glm-audit`与`accord/v33-gemini-audit`，Root仍是原main唯一集成者；留证、写者与效果核对后按用户既有授权回收两临时检出/分支，用户会话保持。没有再次启动外部CLI、安装、改信任、改模型/模式或重跑已闭业务。
 
 “主线程23”（01a0d6a8-d302-7081-ab25-b1b4281dd924）继续使用原main检出 `C:\Projects\YIYUAN-Accord`，Root承担仓库集成及共享业务写入；旧线程保留，不并行写入。恢复先核Git、最新用户决定、原生输入/状态和已发生效果，再续做。
 
@@ -19,14 +19,14 @@
 
 ## 当前可复用的实现与实际状态
 
-2026-10-02新输入纠正：用户确认先前两方工作区选择在主项目、现已处理，GLM第二段补审/方案完成；不归因模型、也不把历史错误登记当永久阻塞。Root保存5份新工件43813字节并核到正确GLM worktree的新会话。其恢复设计中的未知unsubscribe重发与续作Hash冒称receiptDigest不采纳；F08完成有依赖，但组合/影响评价仍贯穿主线。Root已准备并明确授权`GLM-repair-v3.3.md`（本机accord-parallel-review-20261001-01/prompts，专用REPAIR.md副本），限定自身分支的既有运行模块/镜像、相关测试及接口说明：保全真实尝试身份/原失败，证据不足持有，不发未知释放或续作，fresh权限/暂停/历史/写者及CAS不放宽。官方CLI自动派发两次均在业务开始前退出：先为配置定位，使用安装包现有配置的子进程级路径后为Model creation failed；没有新会话输入或业务源码变化，配置哈希保持，不继续登录/安装/改账户。任务可由已健康的界面会话接收，实际修复未开始/未完成；Root其它工程不等CLI维护。前d89精确CI36892407984已全部success，此次仅接续状态同步不重跑矩阵。最新方案处置及CLI原件留同私有目录；17scope/11case/包/全部验收与质量保持。
+2026-10-02释放恢复修复：正常目标续作已验证、源unsubscribe结果未知时，现有finalize入口可以依据前瞻保存的精确请求、原失败与完成终态恢复；缺少支持的释放观察则只读held，不重复释放或续作。Root独立复核修正了原补丁漏守卫：旧first-continuation恢复的类型/目标/终态、已完成调用的连接与原turn身份、normal路径固定null摘要、原始错误必要字段和已知requestRef不可改写/擦除。原释放授权另存，避免后续观察覆盖合法重复调用的依据。最终限定独立复验通过；局部机制回归与源码一致性另记录，不等于普通自主交接、GUI或全A05/A08。GLM的提交门在其Mimosa环境拒绝既有无关行，Root已检查为固定自有fixture与已有mock路径；不改第三方策略、不使用跳过Hook选项。此前两CLI派发失败不重试，d89精确CI36892407984只证明其原源码。
 
 2026-10-02 Root已回读两方首段审计并保存原始哈希快照：两边178文件/分支起点未变，四项共享设置一致，无业务提交；不是两份完整全维行为验收。GLM释放未知后的机械恢复缺口已用固定传输+真实SQLite独立复现，仍待必要恢复方案/实现；其F02/F08未实际审查，后续补审。Gemini官方来源域误拒已复现并由Root修复，Help Center精确域可用于native能力来源，效果仍unverified；HTTP/相似域/其它宿主域/带用户信息URL仍拒绝。`.tmp`是阶段报告与收尾检查的工序冲突，不放宽残留条件；子进程缓存污染与未来manifest布局越界未取得当前可达反例，文件预算按实需调整。ZCode会话虽在工具中使用worktree，宿主directory仍登记main，后续写入前必须正确绑定；主目录Mimosa记录保留且仅根/.mimosa从Git源码清单排除，未改其插件/配置或所有权，机器仅补.gitignore允许调整。私有ROOT-REVIEW.md、15文件原始快照、源码/设置起始值及GLM补审方案提示词在`accord-parallel-review-20261001-01`。修正源在隔离检出development/admission156项通过（1302.717秒），后续受影响契约44项通过（9.977秒），全版完成/候选资格仍false；新托管结果另核，两个临时分支暂供后续有界工作，最终由Root整合main后按授权收尾，不归档用户会话。
 
 | 对象 | 当前事实 | 边界 |
 |---|---|---|
 | Root现装 | `3.3.0-dev.1+codex.20260930132822`，源d90face31be324ec4b5f62ccd46037046f002497；24文件/SHA `c8288c032f08cc916e061482259c15a94fb8bfb61aefe452816332d51bf8c63f` | 当前Hook入口、新MCP目录与实际调用已核，不能外推全部消费者 |
-| 源码候选 | 与当前Root现装精确包一致，30132822/d90、24文件/SHA c8288c03… | 本次仅manifest、MCP参数描述、连续性Skill变化，执行机制/Stop与旧29220132相同；其它入口采用另核 |
+| 源码候选 | `3.3.0-dev.1+codex.20261002080658`，24文件/SHA `d8dbfacf40bb20a4948cb6cb39032f1559f46c4ed4bf5650ed688486de47a347` | 本次释放恢复源码与接口说明已改变；当前Root仍用旧现装，不把源码同步或静态通过写成已采用，新精确CI另核 |
 | 实际宿主 | 当前Root调用metadata报告0.159.2；独立CLI实读0.159.3，主模型gpt-6.1-sol | 主进程与外部执行器分别绑定；不将旧轮次版本改成新版本，不把旧0.154缓存实现观察外推为新版刷新验收 |
 | 托管检查 | [CI36728735105](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36728735105) attempt2 exact d90已11/11成功；5ef、f153、25a5等前轮已闭 | 原attempt1十成功/一未获Runner取消及过早补跑403保持；只补macOS生命周期，十原成功步骤时间/结果不变，不再轮询或重跑 |
 

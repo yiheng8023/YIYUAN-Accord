@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20260930132822",
+    "version": "3.3.0-dev.1+codex.20261002080658",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20260930132822",
-        "packageSha256": "c8288c032f08cc916e061482259c15a94fb8bfb61aefe452816332d51bf8c63f",
+        "packageVersion": "3.3.0-dev.1+codex.20261002080658",
+        "packageSha256": "d8dbfacf40bb20a4948cb6cb39032f1559f46c4ed4bf5650ed688486de47a347",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -242,10 +242,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 adaptation candidates after the earlier cancellation. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 3200000,
+      "maxProductCodeAndTestBytes": 3250000,
       "maxTrackedFiles": 178,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current phase allocation: 3200000 code/test bytes, 177 tracked files and 36000 primary-instruction bytes. The 2026-09-29 source-request handoff fix and its real connection/SQLite regression paths measure 2994989 product/test bytes. The former 3150000 ceiling leaves 155011 bytes, below the unchanged five-percent reserve of 157500. The new ceiling leaves 205011 bytes versus a required 160000. The source and distributed copies of one existing session runtime are corrected; queued/late context, owner denial, nested proposals, foreign request isolation, uncertain sends and failed-request identity are checked in the existing test file. No service, runtime module, dependency or tracked file is added. This is a phase-local development capacity allocation under the existing value-based scope, not a behavioral or execution limit change. F/A conditions, quality floors, scenario coverage, case deadlines, token caps, resource-release requirements and evidence rules remain unchanged. Earlier allocations and their rationale remain at c91624e7b0cb9b2fd0299779da8278b3b5f50c35:product/development.json. The 177-file allocation includes the retained candidate-review fixture; its ended cases remain historical failures, not current accepted coverage."
+      "rationale": "Current phase allocation: 3250000 code/test bytes, 178 tracked files and 36000 primary-instruction bytes. The 2026-10-02 reviewed normal-release recovery and exact-request/completed-basis regression paths measure 3067438 product/test bytes. The former 3200000 ceiling leaves 132562 bytes, below the unchanged five-percent reserve of 160000. The new ceiling leaves 182562 bytes versus a required 162500. Changes stay in the existing handoff runtime and distributed mirror, existing tests and interface reference; no service, runtime module, dependency or tracked file is added. This is a phase-local capacity allocation for a confirmed recovery defect, not a behavioral or execution-limit change. F/A conditions, quality floors, scope and scenario coverage, case deadlines, token caps, resource-release requirements and evidence rules remain unchanged. Earlier allocations and rationale remain in Git, including 2b6b4037685a96da9b5e984716962dc6f6e0f3d1:product/development.json. Historical failed cases keep their original conditions and verdicts."
     }
   },
   "source": {

@@ -314,7 +314,17 @@ async function run(config) {
         }
         return {turn: {id: 'turn-' + (scenario === 'reused-turn' || scenario === 'reuse-first-intake' && turn===3 ? 1 : turn), status: 'inProgress'}};
       }
-      if (method === 'thread/unsubscribe') return scenario === 'invalid-unsubscribe' ? {} : {status:'unsubscribed'};
+      if (method === 'thread/unsubscribe') {
+        if (scenario === 'release-unknown-status') return {status: 'notSubscribed', nativeRequestId: 'unsub-1'};
+        if (scenario === 'release-unknown-weird') return {status: 'dispatched-no-recognized-receipt'};
+        if (scenario === 'release-unsubscribe-throw') {
+          const failure = new Error('controlled unsubscribe acknowledgement loss');
+          failure.rpcRequest = {connectionId: transport.connectionId,
+            hostVersion: transport.hostVersion, requestId: 'unsubscribe-original-1', method};
+          throw failure;
+        }
+        return scenario === 'invalid-unsubscribe' ? {} : {status:'unsubscribed'};
+      }
       throw new Error('unexpected native method:' + method);
     },
     async waitTerminal(threadId, turnId, deadline) {
@@ -618,6 +628,16 @@ async function run(config) {
       if(finalInput().releaseKind==='native-unsubscribe'){
         recoveryTransport.connectionId=state.connection.connectionId;
       }
+      if(finalMode?.startsWith('same-corrupt-')){
+        state.phase='release-authorized';
+        state.pendingEffect={method:'thread/unsubscribe',params:{threadId:plan.source.threadId}};
+        state.releaseIntent={kind:'native-unsubscribe',threadId:plan.source.threadId,
+          sourceConnectionId:state.connection.connectionId,currentConnectionId:state.connection.connectionId,
+          receiptDigest:state.reconciliation.receiptDigest};
+        if(finalMode==='same-corrupt-kind')state.reconciliation.kind='foreign-kind';
+        if(finalMode==='same-corrupt-target')state.reconciliation.turn.threadId='foreign-target';
+        if(finalMode==='same-corrupt-terminal')state.reconciliation.turn.status='failed';
+      }
       const finish=async input=>{try{return {result:await finalizeReconciledHandoff(input,{
         transport:recoveryTransport,recorder:recoveryRecorder,verify:recoveryVerify})};}
         catch(e){return {error:{code:e.code,message:e.message,state:e.state,details:e.details}};}};
@@ -626,7 +646,7 @@ async function run(config) {
         finalized=(await Promise.all([finish(clone(basis)),finish(clone(basis))]));
       }else{
         finalized={first:await finish(finalInput())};
-        if((finalMode==='repeated'&&finalized.first.result)||
+        if((['repeated','repeat-foreign-turn'].includes(finalMode)&&finalized.first.result)||
             ['authorization-cas-loss','authorization-cas-loss-third','third-finalizer-cas-loss',
               'third-finalizer-cas-loss-denied','final-cas-loss','observation-cas-loss','same-unknown','same-invalid',
               'same-unknown-cross','same-unknown-cross-denied'].includes(finalMode)){
@@ -640,6 +660,7 @@ async function run(config) {
           if(finalMode==='third-finalizer-cas-loss'||finalMode==='third-finalizer-cas-loss-denied'){
             recoveryTransport.connectionId='fourth-after-finalizer-close';
           }
+          if(finalMode==='repeat-foreign-turn')state.reconciliation.turn.turnId='FOREIGN';
           finalized.second=await finish(finalInput());
         }
       }
@@ -647,7 +668,96 @@ async function run(config) {
     reconciled={first,second,finalized,reads,commits,checks,calls:recoveryCalls,
       originalState,state:clone(state),revision,lease:clone(lease)};
   }
-  process.stdout.write(JSON.stringify({kind:'done', result, error, calls, snapshots, verdicts, concurrent, proposal,reconciled}) + '\n');
+  let releaseRecovery=null;
+  if(config.releaseRecovery && error){
+    const mode=config.releaseRecovery;
+    const releaseCalls=[];
+    const releaseTransport={
+      connectionId:mode==='cross-controller'?'new-controller-connection':
+        mode==='foreign-connection'?'foreign-connection':'test-connection',
+      hostVersion:'fixture-host',
+      async request(method,params){
+        releaseCalls.push({method,params:clone(params)});
+        if(method!=='thread/read')throw new Error('unexpected release-recovery method:'+method);
+        const target=params.threadId===state.target?.threadId;
+        const turns=[...state.intakeTurns.map(item=>({id:item.turnId,status:'completed',items:[]})),
+          {id:state.continuationTurn?.turnId,status:'completed',items:[]}];
+        if(mode==='history-changed'&&target)turns.splice(0,1);
+        if(mode==='failed-history'&&target)turns[turns.length-1].status='failed';
+        return {thread:{id:params.threadId,ephemeral:false,
+          status:{type:(mode==='active-source'&&!target)||(mode==='active-target'&&target)?'active':'idle'},
+          ...(target?{turns}:{})}};
+      },
+      async waitTerminal(){throw new Error('unused')}};
+    const releaseRecorder={
+      async read(){return {revision,state:clone(state),lease:clone(lease)};},
+      async compareAndSet(...args){
+        const committed=await recorder.compareAndSet(...args);
+        if(mode==='commit-unknown')throw new Error('release recovery CAS acknowledgement lost after durable write');
+        return committed;
+      }};
+    const releaseVerify=async stage=>{
+      const value={decision:'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,
+        stateRef:plan.stateRef,sourceRef:'release-recovery:'+stage,
+        pauseStateVerified:true,sourceRecoveryReady:true,singleWriter:true,
+        effectsVerified:true,receiptVerified:true,reconciliationAuthorized:true,
+        releaseAuthorized:true,priorAttemptQuiesced:true};
+      if(stage==='reconciled-release'&&mode==='cross-controller')Object.assign(value,{
+        priorControllerClosed:true,priorControllerQuiesced:true,sourceConnectionReleased:true,
+        subscriptionReleaseVerified:true,
+        subscriptionReleaseEvidenceRef:'release-recovery-prior-close-evidence'});
+      if(stage==='reconciled-release'&&mode==='paused-denied')value.pauseStateVerified=false;
+      if(stage==='reconciled-release'&&mode==='authority-denied')value.decision='hold';
+      if(stage==='reconciled-release-observed')Object.assign(value,{
+        sourceRef:'release-recovery-observed-receipt',subscriptionReleaseVerified:true,
+        subscriptionReleaseEvidenceRef:'release-recovery-observed-evidence',
+        sameConnectionSubscriptionReleased:true});
+      if(stage==='reconciled-release-recover')Object.assign(value,{
+        sourceRef:'release-recovery-fresh-receipt',subscriptionReleaseVerified:true,
+        subscriptionReleaseEvidenceRef:'release-recovery-fresh-evidence',
+        sameConnectionSubscriptionReleased:true,
+        ...(mode==='fresh-observation'||mode==='commit-unknown'?{nativeStatus:'unsubscribed'}:{})});
+      return value;
+    };
+    const basis=()=>({transferId:plan.transferId,scopeRef:plan.scopeRef,
+        authorityRef:plan.authorityRef,
+        stateRef:mode==='foreign-state'?'foreign-state':plan.stateRef,
+      deadlineMs:Date.now()+2000,
+      expectedRevision:mode==='stale-cas'?revision+5:revision,expectedLease:clone(lease),
+      receiptDigest:mode==='fabricated-digest'||mode==='repeat-injected-digest'&&state.phase==='source-subscription-released'?'a'.repeat(64):null,
+      releaseKind:mode==='cross-controller'?'prior-controller-closed':'native-unsubscribe'});
+    const finish=async()=>{try{return {result:await finalizeReconciledHandoff(basis(),
+      {transport:releaseTransport,recorder:releaseRecorder,verify:releaseVerify})};}
+      catch(e){return {error:{code:e.code,message:e.message}};}};
+    if(mode==='legacy-shape'){
+      delete state.releaseIntent;delete state.releaseObservation;
+      state.phase='reconciliation-required';
+    }
+    if(mode==='missing-attempt')delete state.normalReleaseAttempt;
+    if(mode==='missing-terminal')delete state.normalReleaseAttempt.continuationTerminal;
+    if(mode==='wrong-request')state.normalReleaseAttempt.request.params.threadId='foreign-source';
+    if(mode==='missing-original-error')delete state.failure.originalError;
+    if(mode==='empty-original-error'){state.failure.originalError={};delete state.pendingEffect.requestRef;state.releaseObservation.requestRef=null;}
+    if(mode==='wrong-request-ref')state.releaseObservation.requestRef={
+      connectionId:'foreign-connection',hostVersion:'fixture-host',
+      requestId:'original-release',method:'thread/unsubscribe'};
+    if(mode==='changed-request-id')state.releaseObservation.requestRef.requestId='foreign-request-id';
+    if(mode==='missing-request-ref')state.releaseObservation.requestRef=null;
+    if(mode==='missing-response')state.releaseObservation.response=null;
+    if(mode==='mismatched-response')state.releaseObservation.response={status:'still-subscribed'};
+    const first=await finish();
+    releaseRecovery={mode,first,calls:releaseCalls,
+      ledgerAfterFirst:{revision,state:clone(state)}};
+    if(first.result||(first.error?.code==='RECORDER_COMMIT_UNKNOWN'&&mode==='commit-unknown')){
+      if(mode==='repeat-missing-attempt')delete state.normalReleaseAttempt;
+      if(mode==='repeat-missing-error')delete state.failure.originalError;
+      if(mode==='repeat-failed-terminal')state.normalReleaseAttempt.continuationTerminal.params.turn.status='failed';
+      if(mode==='repeat-injected-digest')state.releaseIntent.receiptDigest='a'.repeat(64);
+      if(mode==='repeat-foreign')releaseTransport.connectionId='foreign-controller';
+      releaseRecovery.second=await finish();
+    }
+  }
+  process.stdout.write(JSON.stringify({kind:'done', result, error, calls, snapshots, verdicts, concurrent, proposal,reconciled,releaseRecovery}) + '\n');
   rl.close(); process.stdin.destroy();
 }
 rl.on('line', line => {

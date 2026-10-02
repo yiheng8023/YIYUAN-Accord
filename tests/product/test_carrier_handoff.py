@@ -162,6 +162,185 @@ class CarrierHandoffTests(unittest.TestCase):
         self.assertEqual(denied['finalized']['second']['error']['code'],'VERIFICATION_DENIED')
         self.assertEqual(sum(c['method']=='thread/unsubscribe' for c in denied['calls']),1)
 
+    FORBIDDEN_RECOVERY_METHODS = ('thread/unsubscribe','turn/start','thread/resume',
+                                  'thread/archive','thread/delete')
+
+    def assert_recovery_never_replays(self, calls):
+        methods=[c['method'] for c in calls]
+        self.assertFalse(any(m in self.FORBIDDEN_RECOVERY_METHODS for m in methods), methods)
+        return methods
+
+    def release_failure_record(self, result):
+        return [s for s in result['snapshots']
+                if s.get('phase') == 'release-authorized' and s.get('failure')][-1]
+
+    def test_release_unknown_failure_preserves_original_materials_then_finalizes(self):
+        r=self.run_case('release-unknown-status', releaseRecovery='observed-status')
+        self.assertEqual(r['error']['code'],'UNSUBSCRIBE_OUTCOME_UNKNOWN')
+        last=self.release_failure_record(r)
+        self.assertEqual(last['phase'],'release-authorized')
+        self.assertEqual(last['writer'],'target')
+        self.assertEqual(last['releaseIntent'],{'kind':'native-unsubscribe',
+            'threadId':'source-1','sourceConnectionId':'test-connection',
+            'currentConnectionId':'test-connection'})
+        self.assertNotIn('receiptDigest',last['releaseIntent'])
+        self.assertEqual(last['releaseObservation'],
+            {'response':{'status':'notSubscribed','nativeRequestId':'unsub-1'},
+             'nativeStatus':'notSubscribed','requestRef':None})
+        self.assertEqual(last['failure']['stage'],'release:source-unsubscribe')
+        self.assertEqual(last['failure']['originalError']['code'],'UNSUBSCRIBE_OUTCOME_UNKNOWN')
+        attempt=last['normalReleaseAttempt']
+        self.assertEqual(attempt['request'],{'method':'thread/unsubscribe','params':{'threadId':'source-1'}})
+        self.assertEqual(attempt['continuationTerminal']['params']['turn']['status'],'completed')
+        rr=r['releaseRecovery']
+        final=rr['first']['result']
+        self.assertEqual(final['status'],'finalized')
+        self.assertEqual(final['subscriptionRelease']['kind'],'native-unsubscribe')
+        self.assertEqual(final['subscriptionRelease']['nativeStatus'],'notSubscribed')
+        self.assertNotIn('receiptDigest',final['subscriptionRelease'])
+        self.assertEqual(rr['second']['result']['status'],'already-finalized')
+        methods=self.assert_recovery_never_replays(rr['calls'])
+        self.assertEqual(methods,['thread/read','thread/read'])
+        self.assertEqual(rr['ledgerAfterFirst']['state']['phase'],
+                         'source-subscription-released')
+        self.assertIsNone(rr['ledgerAfterFirst']['state']['pendingEffect'])
+
+    def test_release_unknown_without_supported_observation_is_held_without_requests(self):
+        r=self.run_case('release-unknown-weird', releaseRecovery='held')
+        self.assertEqual(r['error']['code'],'UNSUBSCRIBE_OUTCOME_UNKNOWN')
+        rr=r['releaseRecovery']
+        held=rr['first']['result']
+        self.assertEqual(held['status'],'held')
+        self.assertEqual(held['reason'],'SOURCE_RELEASE_OBSERVATION_UNSUPPORTED')
+        self.assertIsNotNone(held['settle'])
+        self.assertEqual(held['releaseObservation']['nativeStatus'],
+                         'dispatched-no-recognized-receipt')
+        self.assertEqual(rr['second']['result']['status'],'held')
+        methods=self.assert_recovery_never_replays(rr['calls'])
+        self.assertEqual(methods,['thread/read']*4)
+        ledger=rr['ledgerAfterFirst']['state']
+        self.assertEqual(ledger['phase'],'release-authorized')
+        self.assertEqual(ledger['failure']['code'],'UNSUBSCRIBE_OUTCOME_UNKNOWN')
+        self.assertIsNotNone(ledger['releaseIntent'])
+        self.assertEqual(ledger['releaseObservation']['nativeStatus'],
+                         'dispatched-no-recognized-receipt')
+
+    def test_release_transport_throw_recovers_via_fresh_independent_observation(self):
+        r=self.run_case('release-unsubscribe-throw', releaseRecovery='fresh-observation')
+        self.assertEqual(r['error']['code'],'NATIVE_EFFECT_UNKNOWN')
+        last=self.release_failure_record(r)
+        self.assertIsNone(last['releaseObservation']['response'])
+        self.assertIsNone(last['releaseObservation']['nativeStatus'])
+        self.assertEqual(last['releaseObservation']['requestRef']['requestId'],
+                         'unsubscribe-original-1')
+        self.assertEqual(last['pendingEffect']['requestRef']['requestId'],
+                         'unsubscribe-original-1')
+        rr=r['releaseRecovery']
+        final=rr['first']['result']
+        self.assertEqual(final['status'],'finalized')
+        self.assertEqual(final['subscriptionRelease']['evidenceRef'],
+                         'release-recovery-fresh-evidence')
+        self.assertEqual(final['subscriptionRelease']['nativeStatus'],'unsubscribed')
+        methods=self.assert_recovery_never_replays(rr['calls'])
+        self.assertEqual(methods,['thread/read','thread/read'])
+        self.assertEqual(rr['second']['result']['status'],'already-finalized')
+
+    def test_root_recovery_preserves_original_materials_and_refuses_corruption(self):
+        for mode in ('missing-attempt','missing-terminal','wrong-request',
+                     'missing-original-error','empty-original-error','wrong-request-ref'):
+            with self.subTest(mode=mode):
+                rr=self.run_case('release-unknown-status',releaseRecovery=mode)['releaseRecovery']
+                self.assertEqual(rr['first']['error']['code'],'FINALIZATION_EVIDENCE_CONFLICT')
+                self.assertEqual(rr['calls'],[])
+        for mode in ('missing-response','mismatched-response'):
+            with self.subTest(mode=mode):
+                rr=self.run_case('release-unknown-status',releaseRecovery=mode)['releaseRecovery']
+                self.assertEqual(rr['first']['result']['status'],'held')
+                self.assert_recovery_never_replays(rr['calls'])
+
+    def test_root_finalized_basis_refuses_another_connection(self):
+        rr=self.run_case('release-unknown-status',releaseRecovery='repeat-foreign')['releaseRecovery']
+        self.assertEqual(rr['first']['result']['status'],'finalized')
+        self.assertEqual(rr['second']['error']['code'],'FINALIZATION_RELEASE_KIND_MISMATCH')
+        self.assertEqual([c['method'] for c in rr['calls']],['thread/read','thread/read'])
+
+    def test_root_existing_reconciled_recovery_keeps_its_original_guards(self):
+        for mode in ('same-corrupt-kind','same-corrupt-target','same-corrupt-terminal'):
+            with self.subTest(mode=mode):
+                final=self.finalization_case(mode)['finalized']
+                self.assertEqual(final['first']['error']['code'],'FINALIZATION_NOT_APPLICABLE')
+
+    def test_root_release_original_request_identity_cannot_be_changed_or_erased(self):
+        for mode in ('changed-request-id','missing-request-ref'):
+            with self.subTest(mode=mode):
+                rr=self.run_case('release-unsubscribe-throw',releaseRecovery=mode)['releaseRecovery']
+                self.assertEqual(rr['first']['error']['code'],'FINALIZATION_EVIDENCE_CONFLICT')
+                self.assertEqual(rr['calls'],[])
+
+    def test_root_already_finalized_still_requires_its_original_basis(self):
+        for mode in ('repeat-missing-attempt','repeat-missing-error','repeat-failed-terminal','repeat-injected-digest'):
+            with self.subTest(mode=mode):
+                rr=self.run_case('release-unknown-status',releaseRecovery=mode)['releaseRecovery']
+                self.assertEqual(rr['first']['result']['status'],'finalized')
+                self.assertEqual(rr['second']['error']['code'],'FINALIZATION_EVIDENCE_CONFLICT')
+                self.assertEqual([call['method'] for call in rr['calls']],['thread/read','thread/read'])
+
+    def test_reconciled_completed_repeat_rejects_a_foreign_turn(self):
+        final=self.finalization_case('repeat-foreign-turn')['finalized']
+        self.assertEqual(final['first']['result']['status'],'finalized')
+        self.assertEqual(final['second']['error']['code'],'FINALIZATION_EVIDENCE_CONFLICT')
+
+    def test_release_recovery_commit_unknown_is_not_replayed_and_repeat_finalizes(self):
+        r=self.run_case('release-unsubscribe-throw', releaseRecovery='commit-unknown')
+        rr=r['releaseRecovery']
+        self.assertEqual(rr['first']['error']['code'],'RECORDER_COMMIT_UNKNOWN')
+        self.assertEqual(rr['second']['result']['status'],'already-finalized')
+        methods=self.assert_recovery_never_replays(rr['calls'])
+        self.assertEqual(methods,['thread/read','thread/read'])
+
+    def test_release_unknown_cross_controller_recovery_uses_prior_close_evidence(self):
+        r=self.run_case('release-unknown-status', releaseRecovery='cross-controller')
+        rr=r['releaseRecovery']
+        final=rr['first']['result']
+        self.assertEqual(final['status'],'finalized')
+        release=final['subscriptionRelease']
+        self.assertEqual(release['kind'],'prior-controller-closed')
+        self.assertEqual(release['originalIntentKind'],'native-unsubscribe')
+        self.assertIsNone(release['receiptDigest'])
+        methods=self.assert_recovery_never_replays(rr['calls'])
+        self.assertEqual(methods,['thread/read','thread/read'])
+        self.assertEqual(rr['ledgerAfterFirst']['state']['phase'],
+                         'source-subscription-released')
+
+    def test_release_recovery_rejections_preserve_ledger_and_send_nothing(self):
+        expectations={
+            'legacy-shape':('FINALIZATION_NOT_APPLICABLE',0,'reconciliation-required'),
+            'foreign-connection':('FINALIZATION_RELEASE_KIND_MISMATCH',0,'release-authorized'),
+            'foreign-state':('INVALID_FINALIZATION_STATE',0,'release-authorized'),
+            'stale-cas':('FINALIZATION_BASIS_CHANGED',0,'release-authorized'),
+            'fabricated-digest':('FINALIZATION_EVIDENCE_CONFLICT',0,'release-authorized'),
+            'active-source':('FINALIZATION_THREAD_ACTIVE',2,'release-authorized'),
+            'active-target':('FINALIZATION_THREAD_ACTIVE',2,'release-authorized'),
+            'history-changed':('FINALIZATION_NATIVE_MISMATCH',2,'release-authorized'),
+            'failed-history':('FINALIZATION_NATIVE_MISMATCH',2,'release-authorized'),
+            'paused-denied':('VERIFICATION_DENIED',2,'release-authorized'),
+            'authority-denied':('VERIFICATION_DENIED',2,'release-authorized'),
+        }
+        for mode,(code,reads,phase) in expectations.items():
+            with self.subTest(mode=mode):
+                r=self.run_case('release-unknown-status', releaseRecovery=mode)
+                self.assertEqual(r['error']['code'],'UNSUBSCRIBE_OUTCOME_UNKNOWN')
+                rr=r['releaseRecovery']
+                self.assertEqual(rr['first']['error']['code'],code)
+                methods=self.assert_recovery_never_replays(rr['calls'])
+                self.assertEqual(methods,['thread/read']*reads)
+                ledger=rr['ledgerAfterFirst']['state']
+                self.assertEqual(ledger['phase'],phase)
+                self.assertEqual(ledger['failure']['code'],'UNSUBSCRIBE_OUTCOME_UNKNOWN')
+                if mode!='legacy-shape':
+                    self.assertIsNotNone(ledger['releaseIntent'])
+                    self.assertNotIn('receiptDigest',ledger['releaseIntent'])
+
     def test_finalization_cas_ack_loss_and_repeat_use_readback_without_duplicate_effects(self):
         for mode,second_status in [('authorization-cas-loss','finalized'),
                                    ('authorization-cas-loss-third','finalized'),

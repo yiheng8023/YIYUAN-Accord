@@ -629,7 +629,8 @@ continuation or resumes the source merely to obtain a subscription.
 
 The exact input fields are `transferId`, `scopeRef`, `authorityRef`, `stateRef`,
 fresh absolute `deadlineMs`, `expectedRevision`, `expectedLease`, `receiptDigest`
-and `releaseKind`. The lease has `scopeRef`, `transferId`, `token` and
+(the reconciled record's digest, or `null` only for the release-failure recovery
+below) and `releaseKind`. The lease has `scopeRef`, `transferId`, `token` and
 `writerThreadId`; initially use the acknowledged reconciled record's revision,
 lease and receipt digest. For an interrupted finalization, inspect its actual
 record and pending effects before binding the current revision and lease to the
@@ -673,6 +674,50 @@ actual acknowledged scope receipt can then be used with
 `restoreCodexSourceSession` where that operation's own prerequisites hold.
 Neither release nor a repeated stored result proves current readiness,
 business completion, arbitrary crash recovery or permission for a new turn.
+
+## Recover a verified handoff whose release stayed unknown
+
+When a normal, fully verified handoff fails at `release:source-unsubscribe`, the
+surviving record keeps the `release-authorized` phase and preserves the original
+attempt without reconstructing it: before dispatch, `normalReleaseAttempt`
+binds the exact source/target, connection, request, verified continuation
+terminal and verifier references. `verification.normalReleaseAuthorized`
+retains the original release authorization separately from the later result.
+Failure capture then retains `releaseIntent` (kind, source thread, source
+and current connection), `releaseObservation` (verbatim native response or
+`null`, the raw status string or `null`, and the native request reference when
+the request itself failed), the pending effect and the original failure code, message, stage and details.
+A known native request reference must still match exactly; a changed or erased
+reference is rejected. No
+native receipt exists, so no digest is fabricated.
+
+The same `finalizeReconciledHandoff` entry accepts this record as a distinct
+source: pass `receiptDigest: null` — the honest basis. It is refused for a
+ledger without the preserved intent, for a ledger that still carries a
+`reconciliation` record (that path keeps its own rules), and for a release
+intent that carries a digest. The reconciled first-continuation path and all
+existing pause, writer and CAS rules are unchanged.
+
+The recovery never resends `thread/unsubscribe` and never sends `turn/start`,
+resume, archive or delete. The release is confirmed only from the original
+attempt's preserved recognized native result (for example a verbatim
+`notSubscribed` response checked through `reconciled-release-observed`), or
+from a fresh, independent verifier observation bound to that connection and
+thread, returned by `reconciled-release-recover` as `nativeStatus` with release
+evidence. With neither, the call returns the read-only result
+`{status: "held", reason: "SOURCE_RELEASE_OBSERVATION_UNSUPPORTED"}` and the
+ledger keeps every retained material unchanged; a later call may supply better
+evidence. Idle or `notLoaded` threads, intent digests and caller text never
+substitute for a supported release observation.
+
+A different controller proves old-controller closure through the existing
+`prior-controller-closed` evidence chain, and the settled record keeps the
+original `native-unsubscribe` intent as `originalIntentKind`. A repeated
+finalization of an already settled release returns `already-finalized` when the
+same original basis is intact and echoed; a normal-release recovery always
+uses null and never accepts an injected digest. The first-continuation route
+still requires its completed turn to match the retained continuation identity; a different digest, connection, target,
+scope or stale revision or lease is rejected without requests or side effects.
 
 ## Event-driven proposal dispatch
 

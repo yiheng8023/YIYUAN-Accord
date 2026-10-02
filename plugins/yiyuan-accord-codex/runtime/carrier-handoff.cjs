@@ -472,6 +472,7 @@ function createExecution(rawPlan, rawDependencies) {
   let nativeMutation = false;
   let nativeRequestUnresolved = false;
   let unresolvedEffect = null;
+  let releaseAttemptObservation = null;
   let writerTransferred = false;
   let targetThreadId = null;
   let targetTurnId = null;
@@ -798,10 +799,18 @@ function createExecution(rawPlan, rawDependencies) {
       unresolvedEffect !== null || writerTransferred || targetThreadId !== null ||
       !recorderCertain || !bindingCertain;
     const retainedPendingEffect = unresolvedEffect;
+    // A release-stage failure after the verified continuation keeps the
+    // release-authorized phase and preserves the original attempt's identity,
+    // request and response materials, so the finalization release-recovery
+    // entry can later confirm the effect without resending anything. Every
+    // other failure stage keeps the reconciliation-required record unchanged.
+    const releaseStageFailure = original.stage === 'release:source-unsubscribe' &&
+      writerTransferred;
     if (recorderCertain && bindingCertain && revision !== null) {
       try {
         await record({...recordState,
-          phase: reconciliationRequired ? 'reconciliation-required' : 'held',
+          phase: releaseStageFailure ? 'release-authorized' :
+            reconciliationRequired ? 'reconciliation-required' : 'held',
           sourceRecovery: 'retained',
           pendingEffect: retainedPendingEffect,
           failure: {
@@ -812,7 +821,29 @@ function createExecution(rawPlan, rawDependencies) {
             targetTurnTerminal,
             writerTransferred,
             recovery,
-          }}, true);
+            ...(releaseStageFailure ? {originalError: recordState.failure?.originalError || {
+              code: original.code, message: original.message, stage: original.stage,
+              details: plainObject(original.details) ? cloneData(original.details) : null,
+            }} : {}),
+          },
+          ...(releaseStageFailure ? {
+            releaseIntent: {
+              kind: 'native-unsubscribe',
+              threadId: plan.source.threadId,
+              sourceConnectionId: connectionBinding.connectionId,
+              currentConnectionId: transport.connectionId,
+            },
+            releaseObservation: {
+              response: releaseAttemptObservation?.response ?? null,
+              nativeStatus: releaseAttemptObservation?.nativeStatus ?? null,
+              // The throw path carries the reference in the pending effect,
+              // which survives across repeated failure handling; the
+              // unrecognized-response path never had one.
+              requestRef: releaseAttemptObservation === null ?
+                (retainedPendingEffect?.requestRef ?? null) : null,
+            },
+          } : {}),
+        }, true);
       } catch (_) {
         recorderCertain = false;
       }
@@ -1114,15 +1145,28 @@ function createExecution(rawPlan, rawDependencies) {
       recordedWriter: recordState.writer,
     });
     idleThread(releaseSourceRead, stage, transferId);
-    await record({...recordState, phase: 'release-authorized', pendingEffect: {
+    const normalReleaseAttempt = immutable({kind: 'verified-continuation-release',
+      transferId, scopeRef: plan.scopeRef, sourceThreadId: plan.source.threadId,
+      targetThreadId, connection: connectionBinding,
+      continuationTurn: recordState.continuationTurn, continuationTerminal,
+      continuedSourceRef: continued.sourceRef, releaseSourceRef: release.sourceRef,
+      request: {method: 'thread/unsubscribe', params: {threadId: plan.source.threadId}}});
+    await record({...recordState, phase: 'release-authorized', normalReleaseAttempt, pendingEffect: {
       method: 'thread/unsubscribe', threadId: plan.source.threadId,
-    }, verification: {...recordState.verification, release: release.sourceRef}});
+    }, verification: {...recordState.verification, release: release.sourceRef,
+      normalReleaseAuthorized: release.sourceRef}});
     const unsubscribe = await request('thread/unsubscribe', {threadId: plan.source.threadId},
       'release:source-unsubscribe', true);
     if (!plainObject(unsubscribe) || unsubscribe.status !== 'unsubscribed') {
       nativeRequestUnresolved = true;
       unresolvedEffect = immutable({method: 'thread/unsubscribe',
         params: {threadId: plan.source.threadId}});
+      // Preserve the original attempt's verbatim native materials before the
+      // record is rewritten; this response is the only receipt that ever exists.
+      releaseAttemptObservation = immutable({
+        response: cloneData(unsubscribe),
+        nativeStatus: plainObject(unsubscribe) && typeof unsubscribe.status === 'string' ?
+          unsubscribe.status : null});
       fail('UNSUBSCRIBE_OUTCOME_UNKNOWN', 'source unsubscribe lacked a positive native receipt', {
         stage: 'release:source-unsubscribe', transferId, reconciliationRequired: true,
       });
@@ -1605,10 +1649,15 @@ async function reconcileContinuation(rawInput, dependencies) {
   }
 }
 
-// Finish only the release tail of an exactly reconciled first continuation.
-// No turn is started or resumed. A same-connection caller may remove its own
-// source subscription once; a different controller must instead prove that the
-// prior source connection is closed and can no longer dispatch.
+// Finish only the release tail of an exactly reconciled first continuation, or
+// recover the release tail of a fully verified handoff whose unsubscribe
+// outcome stayed unknown. No turn is started or resumed, and no recovery path
+// resends thread/unsubscribe: a same-connection recovery confirms the release
+// only from the original attempt's preserved native result or from a fresh,
+// independent verifier observation bound to that connection and thread, and
+// returns held without side effects when neither exists. A different controller
+// must instead prove that the prior source connection is closed and can no
+// longer dispatch.
 async function finalizeReconciledHandoff(rawInput, rawDependencies) {
   const clock = {wall: Date.now(), monotonic: performance.now()};
   let input, transport, recorder, verify;
@@ -1637,8 +1686,12 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
     text(input.expectedLease.token, 'finalization.expectedLease.token');
     text(input.expectedLease.writerThreadId,
       'finalization.expectedLease.writerThreadId');
-    if (typeof input.receiptDigest !== 'string' ||
-        !/^[a-f0-9]{64}$/.test(input.receiptDigest)) {
+    // A release-failure recovery has no native receipt digest to echo: null is
+    // the honest basis, and a fabricated hash is refused. Every caller on the
+    // reconciled first-continuation path still requires the 64-hex digest.
+    if (input.receiptDigest !== null &&
+        (typeof input.receiptDigest !== 'string' ||
+          !/^[a-f0-9]{64}$/.test(input.receiptDigest))) {
       throw new TypeError('finalization.receiptDigest is invalid');
     }
     if (!['native-unsubscribe', 'prior-controller-closed'].includes(input.releaseKind)) {
@@ -1754,6 +1807,61 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
     const sourceId = state.source?.threadId, targetId = state.target?.threadId;
     text(sourceId, 'finalization source thread');
     text(targetId, 'finalization target thread');
+    const originalConnection = state.connection;
+    if (!plainObject(originalConnection)) {
+      reject('INVALID_FINALIZATION_STATE', 'original source connection is unavailable');
+    }
+    const sameConnection = binding.connectionId === originalConnection.connectionId;
+    if ((input.releaseKind === 'native-unsubscribe') !== sameConnection) {
+      reject('FINALIZATION_RELEASE_KIND_MISMATCH',
+        'release kind does not match the current/source connection relationship');
+    }
+    const validateNormalRelease = () => {
+      const attempt = state.normalReleaseAttempt;
+      const originalError = state.failure?.originalError;
+      if (input.receiptDigest !== null ||
+          state.releaseIntent?.kind !== 'native-unsubscribe' ||
+          Object.hasOwn(state.releaseIntent, 'receiptDigest') ||
+          !plainObject(originalError) ||
+          typeof originalError.code !== 'string' || !originalError.code.trim() ||
+          originalError.code !== state.failure.code ||
+          originalError.stage !== 'release:source-unsubscribe' ||
+          typeof originalError.message !== 'string' || !originalError.message.trim() ||
+          !Object.hasOwn(originalError, 'details') ||
+          originalError.details !== null && !plainObject(originalError.details) ||
+          !plainObject(attempt) || attempt.kind !== 'verified-continuation-release' ||
+          attempt.transferId !== input.transferId || attempt.scopeRef !== input.scopeRef ||
+          attempt.sourceThreadId !== sourceId || attempt.targetThreadId !== targetId ||
+          canonical(attempt.connection) !== canonical(originalConnection) ||
+          canonical(attempt.continuationTurn) !== canonical(state.continuationTurn) ||
+          attempt.continuedSourceRef !== state.verification.continued ||
+          attempt.releaseSourceRef !== state.verification.normalReleaseAuthorized ||
+          canonical(attempt.request) !== canonical({method: 'thread/unsubscribe',
+            params: {threadId: sourceId}}) ||
+          !plainObject(state.releaseObservation) || !plainObject(state.failure?.originalError) ||
+          state.failure.stage !== 'release:source-unsubscribe') {
+        reject('FINALIZATION_EVIDENCE_CONFLICT', 'original release attempt materials are incomplete');
+      }
+      try {
+        requireCompleted(attempt.continuationTerminal, targetId,
+          state.continuationTurn.turnId, 'finalization:original-continuation', input.transferId);
+      } catch (_) {
+        reject('FINALIZATION_EVIDENCE_CONFLICT', 'original continuation terminal differs');
+      }
+      const requestRef = state.releaseObservation.requestRef;
+      const originalRefs = [state.pendingEffect?.requestRef,
+        state.failure.originalError.details?.requestRef].filter(value => value != null);
+      if (originalRefs.some(value => canonical(value) !== canonical(requestRef))) {
+        reject('FINALIZATION_EVIDENCE_CONFLICT', 'original release request identity changed');
+      }
+      if (requestRef !== null && (!plainObject(requestRef) ||
+          requestRef.connectionId !== originalConnection.connectionId ||
+          requestRef.hostVersion !== originalConnection.hostVersion ||
+          requestRef.method !== 'thread/unsubscribe' || typeof requestRef.requestId !== 'string' ||
+          !requestRef.requestId.trim())) {
+        reject('FINALIZATION_EVIDENCE_CONFLICT', 'original release request reference differs');
+      }
+    };
     const result = (status, observed) => immutable({status,
       transferId: input.transferId, scopeRef: input.scopeRef,
       recorderRevision: observed.revision, lease: observed.lease,
@@ -1765,11 +1873,24 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
       claimLimit: 'Reconciled continuation release only; no new turn, source resume, task completion or general crash-recovery claim.',
     });
     if (state.phase === 'source-subscription-released') {
+      if (Object.hasOwn(state, 'reconciliation')) {
+        if (state.reconciliation?.kind !== 'first-continuation' ||
+            state.reconciliation?.receiptDigest !== input.receiptDigest ||
+            state.reconciliation?.turn?.threadId !== targetId ||
+            state.reconciliation?.turn?.status !== 'completed' ||
+            state.continuationTurn?.threadId !== targetId ||
+            state.reconciliation.turn.turnId !== state.continuationTurn?.turnId) {
+          reject('FINALIZATION_EVIDENCE_CONFLICT', 'completed reconciliation basis differs');
+        }
+      } else validateNormalRelease();
       if (state.pendingEffect !== null ||
-          state.reconciliation?.receiptDigest !== input.receiptDigest ||
+          (state.reconciliation?.receiptDigest ?? state.releaseIntent?.receiptDigest ?? null) !==
+            (input.receiptDigest ?? null) ||
           state.subscriptionRelease?.kind !== input.releaseKind ||
           state.subscriptionRelease?.threadId !== sourceId ||
           state.subscriptionRelease?.observed !== true ||
+          state.subscriptionRelease?.sourceConnectionId !== originalConnection.connectionId ||
+          state.subscriptionRelease?.currentConnectionId !== binding.connectionId ||
           typeof state.verification?.release !== 'string' ||
           !state.verification.release.trim()) {
         reject('FINALIZATION_EVIDENCE_CONFLICT',
@@ -1780,24 +1901,31 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
     const initial = state.phase === 'continuation-reconciled';
     const recovering = ['release-authorized', 'release-observed',
       'release-held'].includes(state.phase);
+    // A release-failure recovery ledger never carries a reconciliation record:
+    // its continuation facts were proven by the original handoff's own verify
+    // chain (continuationTurn + verification.continued/release), not by a
+    // later reconciliation. The two sources stay structurally distinct.
+    const releaseRecovery = recovering && !Object.hasOwn(state, 'reconciliation');
     if ((!initial && !recovering) ||
         initial && (state.pendingEffect !== null || state.continuationTurn !== null) ||
-        state.reconciliation?.kind !== 'first-continuation' ||
-        state.reconciliation?.receiptDigest !== input.receiptDigest ||
-        state.reconciliation?.turn?.threadId !== targetId ||
-        state.reconciliation?.turn?.status !== 'completed') {
+        !releaseRecovery && (
+          state.reconciliation?.kind !== 'first-continuation' ||
+          state.reconciliation?.receiptDigest !== input.receiptDigest ||
+          state.reconciliation?.turn?.threadId !== targetId ||
+          state.reconciliation?.turn?.status !== 'completed') ||
+        releaseRecovery && (!plainObject(state.releaseIntent) ||
+          state.releaseIntent?.kind !== 'native-unsubscribe' ||
+          state.releaseIntent?.receiptDigest !== undefined ||
+          state.releaseIntent?.threadId !== sourceId ||
+          state.continuationTurn?.threadId !== targetId ||
+          typeof state.verification?.continued !== 'string' ||
+          !state.verification.continued.trim() ||
+          typeof state.verification?.release !== 'string' ||
+          !state.verification.release.trim())) {
       reject('FINALIZATION_NOT_APPLICABLE',
-        'only an exact reconciled first continuation can be finalized');
+        'only an exact reconciled first continuation or a preserved verified-release failure can be finalized');
     }
-    const originalConnection = state.connection;
-    if (!plainObject(originalConnection)) {
-      reject('INVALID_FINALIZATION_STATE', 'original source connection is unavailable');
-    }
-    const sameConnection = binding.connectionId === originalConnection.connectionId;
-    if ((input.releaseKind === 'native-unsubscribe') !== sameConnection) {
-      reject('FINALIZATION_RELEASE_KIND_MISMATCH',
-        'release kind does not match the current/source connection relationship');
-    }
+    if (releaseRecovery) validateNormalRelease();
     const nativeIntentClosedByNewController = recovering &&
       state.releaseIntent?.kind === 'native-unsubscribe' &&
       input.releaseKind === 'prior-controller-closed' && !sameConnection;
@@ -1814,7 +1942,7 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
     if (recovering && (!releaseIntentMatches ||
         state.releaseIntent?.threadId !== sourceId ||
         state.releaseIntent?.sourceConnectionId !== originalConnection.connectionId ||
-        state.releaseIntent?.receiptDigest !== input.receiptDigest ||
+        (state.releaseIntent?.receiptDigest ?? null) !== (input.receiptDigest ?? null) ||
         (state.releaseIntent?.kind === 'native-unsubscribe' &&
           (state.pendingEffect?.method !== 'thread/unsubscribe' ||
             state.pendingEffect?.params?.threadId !== sourceId)))) {
@@ -1836,7 +1964,7 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
       reject('FINALIZATION_THREAD_ACTIVE', 'source or target is not quiescent');
     }
     const ids = [...state.intakeTurns.map(item => item.turnId),
-      state.reconciliation.turn.turnId];
+      (state.reconciliation?.turn ?? state.continuationTurn)?.turnId];
     if (!Array.isArray(targetThread.turns) || targetThread.turns.length !== ids.length ||
         targetThread.turns.some((turn, index) =>
           turn.id !== ids[index] || turn.status !== 'completed')) {
@@ -1845,9 +1973,9 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
     }
     const facts = immutable({input, ledger: current, plan,
       currentConnection: binding, originalConnection,
-      reconciliationConnection: state.reconciliation.connection,
+      reconciliationConnection: state.reconciliation?.connection ?? null,
       releaseKind: input.releaseKind, sourceRead, targetRead,
-      continuationTurn: state.reconciliation.turn});
+      continuationTurn: state.reconciliation?.turn ?? state.continuationTurn ?? null});
     const verdict = await call('verify',
       ['reconciled-release', facts, deadline]);
     const common = verdict?.decision === 'allow' &&
@@ -1868,7 +1996,12 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
         verdict.subscriptionReleaseVerified === true &&
         typeof verdict.subscriptionReleaseEvidenceRef === 'string' &&
         verdict.subscriptionReleaseEvidenceRef.trim();
-    const reconciliationConnectionId = state.reconciliation.connection?.connectionId;
+    // Without a reconciliation record the controller that ran and verified the
+    // continuation is the original source connection itself; the same-connection
+    // branch then matches directly, and the cross-controller branch is covered
+    // by the prior-controller-closed evidence above.
+    const reconciliationConnectionId = state.reconciliation?.connection?.connectionId ??
+      originalConnection.connectionId;
     const reconciliationBranch = reconciliationConnectionId === binding.connectionId ||
       reconciliationConnectionId === originalConnection.connectionId ||
       verdict.reconciliationControllerClosed === true &&
@@ -1966,7 +2099,10 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
         }
       }
       let observedVerdict;
-      if (['unsubscribed', 'notSubscribed', 'notLoaded'].includes(nativeStatus)) {
+      const originalResponseMatches = plainObject(response) &&
+        response.status === nativeStatus;
+      if (['unsubscribed', 'notSubscribed', 'notLoaded'].includes(nativeStatus) &&
+          originalResponseMatches) {
         observedVerdict = await call('verify',
           ['reconciled-release-observed', immutable({...facts,
             ledger: current, nativeResponse: response, nativeStatus}), deadline]);
@@ -1989,6 +2125,22 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
           observedVerdict.subscriptionReleaseVerified !== true ||
           observedVerdict.sameConnectionSubscriptionReleased !== true ||
           observedVerdict.singleWriter !== true) {
+        // A release-failure recovery without a supported observation is held,
+        // not failed: the ledger keeps the retained materials untouched and the
+        // caller may retry with better evidence. No request was sent.
+        if (releaseRecovery) {
+          return immutable({status: 'held',
+            transferId: input.transferId, scopeRef: input.scopeRef,
+            recorderRevision: current.revision, lease: current.lease,
+            writer: 'target', sourceThreadId: sourceId, targetThreadId: targetId,
+            reason: 'SOURCE_RELEASE_OBSERVATION_UNSUPPORTED',
+            pendingEffect: state.pendingEffect,
+            releaseIntent: state.releaseIntent,
+            releaseObservation: current.state.releaseObservation || null,
+            settle: {transferId: input.transferId, revision: current.revision,
+              lease: current.lease},
+            claimLimit: 'Release-failure recovery held without a supported release observation; retained materials are not a release claim.'});
+        }
         reject('SOURCE_RELEASE_RECONCILIATION_REQUIRED',
           'native unsubscribe is pending independent release reconciliation',
           {nativeStatus: nativeStatus || null,
