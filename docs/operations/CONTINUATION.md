@@ -14,7 +14,7 @@
 - 2026-10-03补充：3.3之后可能先有小版本维护、更新或迭代，不要求下一发布直接进入3.4；具体版本/范围/节奏届时决定，其它后续计划保持，不扩成当前维护开工或新版本发布授权。
 - 3.3内化适用Jev/Laya等判断与反馈思路，专用第三方决策模型接入后置。保留用户固定的主模型/推理及实际模式；普通“继续”或插话不取消原任务，不启Plan/Goal、不新建目标或解除真实暂停。主模型选择与任务角色的受支持分工分别判断。
 - 保护第三方Skill源文件、策略及管理归属。原生隐式匹配、获准协调者经真实支持路径代选、实际加载与结果分别取证；不伪造用户亲选、偷改策略、绕过停用/排除或让用户每次研究工具。
-- 所有旧单次Cloud执行及本机更新01–07许可均已消费。更新07精确安装、更新/目录资源退出及当前Root新版Hook入口已核；其它安装、信任、账户/数据、重要费用、Cloud或无关外写仍按各自权限。可选维护不阻止其它已授权工作。
+- 所有旧单次Cloud执行及本机更新01–08许可均已消费。更新08精确安装、更新/目录资源退出及当前Root新版Hook/MCP目录和缺参分支已核；其它安装、信任、账户/数据、重要费用、Cloud或无关外写仍按各自权限。可选维护不阻止其它已授权工作。
 - 历史包、数据及链路按实际负面影响处理，先核消费者、归属和恢复/取证用途。任务资源按归属收尾，保留原件不因执行结束变成垃圾。用户线程归档/删除另需明确授权；不为取证要求采购Mac或JetBrains。
 - 大窗口、扩展及特殊账号不成为默认用户的隐含前提。未知成本不算收益，局部检查/托管/实际采用/行为/正式验收/发布分别声明。
 
@@ -28,10 +28,10 @@
 
 | 对象 | 当前事实 | 边界 |
 |---|---|---|
-| Root现装 | `3.3.0-dev.1+codex.20261002080658`，源beaf4f521039b72613b05745f7c29d82f637fafc；24文件/SHA `d8dbfacf40bb20a4948cb6cb39032f1559f46c4ed4bf5650ed688486de47a347` | 精确缓存、新版原生Hook入口及当前metadata-bound状态参与已核；MCP进程来源未独立定位，不外推全部消费者或动态模型协调 |
-| 源码候选 | 与上述现装相同，24文件逐字节匹配固定Git来源 | 释放恢复源码与接口说明已改变；精确beaf CI已11/11成功，当前Root入口观察仍不代替普通交接或整版验收 |
-| 实际宿主 | 当前Root调用metadata报告0.159.2；独立CLI与managed daemon本轮实读0.160.0，先前0.159.3属当时观察，主模型gpt-6.1-sol | 主进程与外部执行器分别绑定；不将旧轮次版本改成新版本，不把旧0.154缓存实现观察外推为新版刷新验收 |
-| 托管检查 | [CI36945227588](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36945227588) exact beaf已11/11成功 | d90等旧检查保持原对象；原取消/403/失败记录不改判，不借旧绿灯覆盖新源，不重复已终态检查 |
+| Root现装 | `3.3.0-dev.1+codex.20261002232312`，源5b34c3ccfb5ce983573c6b15bfb96431ac6f0205；24文件/SHA `5a247517dfb648da2b13afc258b55cc97a23ebc81b405da96ff5e7592f739c62` | 精确缓存、新版原生Hook入口、当前Root真实MCP目录和缺参分支已核；MCP进程精确文件来源未由metadata独立定位，不外推全部消费者或动态模型协调 |
+| 源码候选 | 与上述现装相同，24文件逐字节匹配固定Git来源 | bind调用指引及拒绝字段已改变；精确5b CI已11/11成功，当前Root入口观察仍不代替普通交接或整版验收 |
+| 实际宿主 | 当前Root调用metadata报告0.159.0-alpha.12.1；独立CLI按固定0.160.0/fdda字节执行；本次未查询或停止managed daemon，主模型gpt-6.1-sol | 主进程与外部执行器分别绑定；旧0.159.2/0.159.3/daemon观察保持当时对象，不把旧缓存实现外推为新版全入口采用 |
+| 托管检查 | [CI37027468776](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37027468776) exact 5b已11/11成功 | beaf/d90等旧检查保持原对象；原取消/403/失败记录不改判，后续纯接续记录不冒新矩阵，不重复已终态检查 |
 
 现装已有合法大检查点保存后的完整来源读回、超限时的明确省略及epoch/revision/暂停/恢复门槛；原128KiB边界未扩大。SDK提议/源请求处理、持久化、接管和失ACK恢复已有本地及三平台机制证据。它们是可复用实现，不是普通语义择时或全版通过，不为轻量工作再串复杂SDK演示。
 
@@ -121,11 +121,13 @@ Root纠偏首先收准工具编排：私有`accord-root-decision-io-20261002-01`
 
 2026-10-02随后修正一项真实调用缺口：`manage_task_state`共用flat schema未说明bind的五个必填字段，Root省略inputs/outputs后收到泛化错误。新工具说明逐项要求每次bind显式提交result/inputs/outputs/nextAction/canContinue；没有受保护输入时允许`inputs:[]`，输出谓词不得为空。缺字段仍拒绝且`effect=not-requested`，另返回固定requiredFields及实际missingFields，不回显业务值、不继承旧数组；字段存在但值非法仍走原验证。未引入新的条件schema形状，按action的完整验证继续由运行时承担。新增回归先红后绿，45项状态工具回归（28.045秒）、三静态检查及独立限域复核通过；保护原检查点字节、显式false/空输入、完整重绑、pause/retire及旧新鲜度门。
 
-新源码候选为`3.3.0-dev.1+codex.20261002232312`，24文件包SHA `5a247517dfb648da2b13afc258b55cc97a23ebc81b405da96ff5e7592f739c62`，机器当前delivery同步。2026-10-03按完整源SHA `5b34c3ccfb5ce983573c6b15bfb96431ac6f0205`核[CI37027468776](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37027468776)，11/11均completed/success。本机现装仍`20261002080658`，未更新、改Hook信任或主选择。此修正改善调用指引与错误可纠正性，不代验全F02/A02、普通交接或整版功能完成，旧实例与许可保持原处置。
+新源码候选为`3.3.0-dev.1+codex.20261002232312`，24文件包SHA `5a247517dfb648da2b13afc258b55cc97a23ebc81b405da96ff5e7592f739c62`，机器当前delivery同步。2026-10-03按完整源SHA `5b34c3ccfb5ce983573c6b15bfb96431ac6f0205`核[CI37027468776](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37027468776)，11/11均completed/success。当时现装仍`20261002080658`；后续更新08实际采用见下文，不将准备状态当现装。此修正改善调用指引与错误可纠正性，不代验全F02/A02、普通交接或整版功能完成，旧实例与许可保持原处置。
 
 2026-10-03更新08已完成一个离线准备段：私有`accord-local-adoption-20261003-08`保留固定候选24文件、当前配置只读基线、UPDATE-PROPOSAL、12份有限派生执行文件、DERIVATION及15项OFFLINE-CHECKS；独立复核核源码/派生哈希一致。新plan仍`not-granted/offline-incomplete`，实际路径未复制旧authorization、daemon-binding或执行标记。update在外部进程调用前拒绝未完成、缺授权及旧已消费许可；测试仅为隔离拒绝门，不代验安装/运行时，launch仍会先写本次attempt/锁，不能称整个入口零写入。原07源与恢复材料不改，未运行CLI/App Server/daemon请求、安装、授信或模型。MCP采用核验改为重启后原Root实际工具目录/调用，不以新独立进程目录或Hook消息代验；完整实时绑定、最终预检/审查和对应新授权仍待具备。ROOT-PREPARATION-REVIEW记录当前边界，本机现装及主选择保持。
 
 随后更新08收准为无daemon停止路线：完整codex.exe OS元数据没有managed daemon，只保留实际官方updater的精确身份/字节来源绑定；新后台或未知消费者一律阻断，不执行停止。0.160官方固定源码核明proxy只连接既有socket，但daemon version在失效PID路径可维护锁/PID，旧custom initialize名称还会改进程级来源标识；备用reader已修为proxy-only、非来源后台标识及有界收尾，18项隔离检查通过，本次路线不调用它或旧require_empty版本合同。3项纯无daemon路由检查和实际只读预检通过；17个冻结项独立复核一致，现有21个客户端仍须用户关闭后再核。当前plan为`review-ready/not-granted`，UPDATE-READY及FINAL-PREAUTH取代旧原稿的执行/停止许可建议；原稿保留历史。待一次ref/cache更新及原Root两次inspect、一次无写入缺参拒绝采用观察的明确许可，不改Hook信任、主选择、第三方或模型/Cloud边界。未进行安装、停止或实际proxy请求。
+
+更新08随后获明确许可并完成唯一attempt `20261002T214204Z-0deef59b`：update/discover退出0，五条CLI均nonforced/Job0；目录新进程nonforced/Job0且reader停止，6可信Hook/5Skill有固定来源。新缓存24文件匹配5b，旧缓存已不存在，但独立`installed-before`恢复24文件及原配置精确保留，不把旧缓存消失误判为恢复材料丢失。执行前配置相对准备基线仅service_tier变更，更新器重新绑定当时字节；重启后相对原件加目标ref只另变运行期node_repl管道，Hook信任、插件启用及其它解析字段相等，写者未知，当前值不回滚。当前Root新版描述和五个Required for bind字段可见；获准的两次inspect夹一次缺参拒绝，得到新requiredFields/missingFields，epoch/revision216与checkpoint SHA相同，未写绑定。完整输入新鲜，无replay/resume缺口；此只核该目录和分支，不扩成全部功能或进程包来源已独立证明。授权已消费，17冻结执行源、原日志/三MCP回执、旧包/配置均保留；核无外部launcher读者后，回收匹配Hash的自建桌面入口并将Start改说明，用户线程不归档。ACTUAL-ADOPTION/完成后态见同私有目录；旧原稿保持历史，安装不再是本版当前待办。
 
 2026-10-01用户截图的Stop“已阻止1/未成功0”已匹配d011接续回调：Root原生completed状态调用从rev171请求一个可安全推进的预算诊断段，`canContinue=true`形成rev172；诊断结束后的completed调用改为false形成rev173。它是本次有意接续，不是旧exit1复发，也不能据此称所有block都合理或故障均已排除。README双语补充状态解释，基线/验收/计划分别澄清既有职责和数量/实现分配关系；源码Hook行为、分发包、17scope/F/A与完整判据不改。
 
