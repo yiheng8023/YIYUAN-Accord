@@ -5,7 +5,7 @@
 
 ## 目标、责任与边界
 
-2026-10-02并行协作进入Root整合：用户已向正确的GLM/Gemini专用会话派发并确认两方完成。GLM交付5个授权文件的未提交补丁；Gemini最终报告为`INDEPENDENT-REVIEW-REPORT.md`，只读意见不是补丁验收。Root已把原始补丁、两方报告/交接及哈希保存到本机`C:\Users\15521\.codex\backups\accord-parallel-review-20261001-01\received`，在独立`root-review/integration`副本修正并验证，原件不改。两个审计检出分支为`accord/v33-glm-audit`与`accord/v33-gemini-audit`，Root仍是原main唯一集成者；留证、写者与效果核对后按用户既有授权回收两临时检出/分支，用户会话保持。没有再次启动外部CLI、安装、改信任、改模型/模式或重跑已闭业务。
+2026-10-02并行协作进入Root整合：用户已向正确的GLM/Gemini专用会话派发并确认两方完成。GLM交付5个授权文件的未提交补丁；Gemini最终报告为`INDEPENDENT-REVIEW-REPORT.md`，只读意见不是补丁验收。Root已把原始补丁、两方报告/交接及哈希保存到本机`C:\Users\15521\.codex\backups\accord-parallel-review-20261001-01\received`，已在独立`root-review/integration`副本修正并验证，复核补丁及原件保全后该临时副本已移除。原两个审计检出分支为`accord/v33-glm-audit`与`accord/v33-gemini-audit`，Root仍是原main唯一集成者；29份阶段报告/门记录另行保全，GLM原生task状态completed、四输入均promoted、无running工具，Gemini用户完成确认与最终文件稳定。两工作树已形成可恢复归档，原两临时分支已删除，实际Git仅main及其原工作区；用户会话保持。没有再次启动外部CLI、安装、改信任、改模型/模式或重跑已闭业务。
 
 “主线程23”（01a0d6a8-d302-7081-ab25-b1b4281dd924）继续使用原main检出 `C:\Projects\YIYUAN-Accord`，Root承担仓库集成及共享业务写入；旧线程保留，不并行写入。恢复先核Git、最新用户决定、原生输入/状态和已发生效果，再续做。
 
@@ -20,6 +20,8 @@
 ## 当前可复用的实现与实际状态
 
 2026-10-02释放恢复修复：正常目标续作已验证、源unsubscribe结果未知时，现有finalize入口可以依据前瞻保存的精确请求、原失败与完成终态恢复；缺少支持的释放观察则只读held，不重复释放或续作。Root独立复核修正了原补丁漏守卫：旧first-continuation恢复的类型/目标/终态、已完成调用的连接与原turn身份、normal路径固定null摘要、原始错误必要字段和已知requestRef不可改写/擦除。原释放授权另存，避免后续观察覆盖合法重复调用的依据。最终限定独立复验通过；局部机制回归与源码一致性另记录，不等于普通自主交接、GUI或全A05/A08。GLM的提交门在其Mimosa环境拒绝既有无关行，Root已检查为固定自有fixture与已有mock路径；不改第三方策略、不使用跳过Hook选项。此前两CLI派发失败不重试，d89精确CI36892407984只证明其原源码。
+
+2026-10-02 Root已整合并推送修复源`beaf4f521039b72613b05745f7c29d82f637fafc`。最终50项交接回归（26.557秒）、8项受影响包/开发契约（55.741秒）和verify/development/host-check均通过；24文件包的原始Git字节与批准SHA一致。另用真实SQLite recorder和受控transport核到finalized能结算/目标写者保留，held不能结算且原活跃传输保留；恢复仅thread/read，mock不代验实际宿主。新[CI36945227588](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/36945227588)绑定beaf，两个原生生命周期job已success、九项主矩阵仍在运行；原d89成功不外推新源。代码容量按3067438字节分配3250000，182562余量满足原5%底线；不改变验收或执行限额。下一重点仍是普通入口的实际自主交接/恢复及能力协调的正向结果，闭案不重放，新的执行边界先形成具体方案。完整功能/候选资格仍false。
 
 2026-10-02 Root已回读两方首段审计并保存原始哈希快照：两边178文件/分支起点未变，四项共享设置一致，无业务提交；不是两份完整全维行为验收。GLM释放未知后的机械恢复缺口已用固定传输+真实SQLite独立复现，仍待必要恢复方案/实现；其F02/F08未实际审查，后续补审。Gemini官方来源域误拒已复现并由Root修复，Help Center精确域可用于native能力来源，效果仍unverified；HTTP/相似域/其它宿主域/带用户信息URL仍拒绝。`.tmp`是阶段报告与收尾检查的工序冲突，不放宽残留条件；子进程缓存污染与未来manifest布局越界未取得当前可达反例，文件预算按实需调整。ZCode会话虽在工具中使用worktree，宿主directory仍登记main，后续写入前必须正确绑定；主目录Mimosa记录保留且仅根/.mimosa从Git源码清单排除，未改其插件/配置或所有权，机器仅补.gitignore允许调整。私有ROOT-REVIEW.md、15文件原始快照、源码/设置起始值及GLM补审方案提示词在`accord-parallel-review-20261001-01`。修正源在隔离检出development/admission156项通过（1302.717秒），后续受影响契约44项通过（9.977秒），全版完成/候选资格仍false；新托管结果另核，两个临时分支暂供后续有界工作，最终由Root整合main后按授权收尾，不归档用户会话。
 
