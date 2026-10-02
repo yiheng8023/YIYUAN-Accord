@@ -48,6 +48,10 @@
 
 ## 必须保留的失败与未知
 
+2026-10-02词表案唯一实例已结束且未准入：Root门禁001/002实际等待106998/92892毫秒，003剩余35620毫秒后无答案消费；首次SDK run的240秒覆盖新source创建及这三处Root等待，模型尚未进入就耗尽。保留原 `TURN_START_UNKNOWN`，原9条请求没有turn/start，rollout仅session_meta、零业务终态/成品，不能称模型或Skill失败、预算只差日志或来源已回滚。实际thread/start返回Sol/medium/CLI0.160.0，证明该线程设置被宿主接受，不能外推推理已执行、Skill采用或动态协调完整通过。总245.613秒，native0/非forced/连接闭，outer1/非forced/Job0；8原件hash/mtime及配置c12保持，无实际新目录信任或恢复写入。许可已消费，原数据/SQLite/私有线程/三门禁及独立ACTUAL-ATTEMPT-REVIEW保留，退出核实后只清9个node编译缓存文件。此实例不重跑、冷恢复或扩限；当前case定义只留原前绑身份，未观察部分继续是缺口。
+
+后续工序先修正实际Root协调负担。当前SDK没有新source的独立bootstrap公开接口，ensureSource在首次run内；不能用空输入、restore或adoptTarget冒充新初始化，也不把本次Root处理慢称SDK缺陷。下一有界准备只评估已有预审与实时检查的职责分工，减少重复语义审阅，保留模型动作前真实当前输入/权限/暂停/字节和必要结果审查，不新增常驻控制器或主模型热切，不立即申请同案重跑。源码事实见runtime/codex-session.cjs:407–457,505–522,1010–1034；功能质量、17scope与F/A条件保持。
+
 2026-10-02恢复后，用户已明确授权同一词表案一次执行及必要单工作区信任；未启动、未消费。当前Root MCP metadata报告0.159.0-alpha.12.1，独立CLI固定0.160.0，分别保留。配置现为c12de6ef47a7b42eeb780a7199f4b52f1f96e5c0e7c8edf11d4f243fa154ba9c；独立TOML复核相对更新07完整ec1710原件的10变/223叶字段相等，变化包含App/runtime/CLI路径、notify、browser桥接值及ref/pipe，模型/审批/沙箱/项目信任等保持。旧25032完整字节未找到，不能从hash重建或称仅pipe变化。Root保留旧case/config/binding，在未派发阶段按当前实际环境重新绑定配置SHA `3994ef24173b63004ccd291b378acdab18e41e4c899bd442d9d1e529695b3056`；模型、CLI、两轮、单次、全部预算和8原件不变，无主配置回写。仅配置基线身份/接续数据变化，执行源码仍32ea；原CI36975342068待自身终态并只作为相同源码检查，不冒称后续数据提交通过该CI。源记录见SETTINGS-RESUME-REVIEW.md和resume-rebind，实际采用/行为仍须新case观察。
 
 - 更新04/05的安装与当前Root采用分别有证据，但原目录发现均update0/discover1：root0后四所属子进程和reader未自然退出，强制收尾才Job0/reader停止。具体身份与原因未取得，不归因用户、火绒或产品，不改判原失败、重跑或扩限。旧包/配置、冻结执行源、失败回执与恢复材料保持。
