@@ -81,7 +81,7 @@ const OBSERVED_FILE = Object.freeze({type: 'object', properties: {
 }, required: ['present'], additionalProperties: false});
 const MANAGE_TOOL = Object.freeze({
   name: 'manage_task_state',
-  description: 'Bind, pause or retire this root task\'s existing Accord checkpoint using the exact observed receipt epoch and revision. Identity and current turn come only from native call metadata. Bind inspects declared workspace files but never writes business files. Pause preserves unfinished conditions. Retire deletes only this task\'s owned checkpoint/receipt state when the helper\'s existing predicates allow it. Results, reasons, metadata and annotations are observations, not proof of task completion, user permission, current intent, writer ownership or takeover; the Agent must verify the actual user decision or applicable host-approved source.',
+  description: 'Bind, pause or retire this root task\'s existing Accord checkpoint using the exact observed receipt epoch and revision. Identity and current turn come only from native call metadata. For bind, explicitly provide result, inputs, outputs, nextAction and canContinue on every call; these fields are not inherited. Use inputs: [] when there are no protected inputs, and at least one output predicate. Bind inspects declared workspace files but never writes business files. Pause preserves unfinished conditions. Retire deletes only this task\'s owned checkpoint/receipt state when the helper\'s existing predicates allow it. Results, reasons, metadata and annotations are observations, not proof of task completion, user permission, current intent, writer ownership or takeover; the Agent must verify the actual user decision or applicable host-approved source.',
   inputSchema: {type: 'object', properties: {
     cwd: TOOL.inputSchema.properties.cwd,
     action: {type: 'string', enum: ['bind', 'pause', 'retire']},
@@ -89,12 +89,16 @@ const MANAGE_TOOL = Object.freeze({
       description: 'Exact current receipt epoch from inspect_task_state. The adapter never refreshes it automatically.'},
     expectedRevision: {...TOKEN_BOUND,
       description: 'Exact current checkpoint revision from inspect_task_state. The adapter never refreshes it automatically.'},
-    result: {type: 'string', minLength: 1, maxLength: 16384},
-    inputs: {type: 'array', maxItems: 100, items: {type: 'string', minLength: 1, maxLength: 4096}},
-    outputs: {type: 'array', minItems: 1, maxItems: 100, items: OUTPUT_CHECK},
-    nextAction: {type: 'string', minLength: 1, maxLength: 16384},
+    result: {type: 'string', minLength: 1, maxLength: 16384,
+      description: 'Required for bind: the current authorized result; explicitly supply it on every bind.'},
+    inputs: {type: 'array', maxItems: 100, items: {type: 'string', minLength: 1, maxLength: 4096},
+      description: 'Required for bind: the complete protected input list, not inherited. Use [] when there are no protected inputs; reconcile any removal of prior inputs.'},
+    outputs: {type: 'array', minItems: 1, maxItems: 100, items: OUTPUT_CHECK,
+      description: 'Required for bind: the complete output predicate list with at least one entry, not inherited. Read the current contract and reconcile changes before submitting it.'},
+    nextAction: {type: 'string', minLength: 1, maxLength: 16384,
+      description: 'Required for bind: the next concrete action within current authority; explicitly supply it on every bind.'},
     canContinue: {type: 'boolean',
-      description: 'Caller judgment on requesting an additional automatic continuation turn from Stop. '
+      description: 'Required for bind: explicitly supply true or false on every bind. Caller judgment on requesting an additional automatic continuation turn from Stop. '
         + 'Set true only when the next concrete work can proceed safely within current authority. '
         + 'Set false while waiting for necessary user observation, decision, authorization or external conditions, preserving unfinished conditions. '
         + 'An unfinished project or mode=active alone does not justify true. '
@@ -325,6 +329,13 @@ function manageTaskState(params) {
       || Buffer.byteLength(JSON.stringify(args)) > MAX_FRAME) return rejected('invalid-task-state-operation');
   if (args.action === 'bind') {
     const required = ['result', 'inputs', 'outputs', 'nextAction', 'canContinue'];
+    const missingFields = required.filter(key => !own(args, key));
+    if (missingFields.length) {
+      const error = rejected('invalid-task-state-binding');
+      error.value.requiredFields = required;
+      error.value.missingFields = missingFields;
+      return error;
+    }
     const observed = value => record(value) && typeof value.present === 'boolean'
       && Object.keys(value).sort().join(',') === (value.present ? 'present,sha256' : 'present')
       && (!value.present || typeof value.sha256 === 'string' && /^[a-f0-9]{64}$/.test(value.sha256));
@@ -335,7 +346,7 @@ function manageTaskState(params) {
     const revision = value => record(value)
       && Object.keys(value).sort().join(',') === 'observed,path,reason'
       && boundedText(value.path, 4096) && observed(value.observed) && boundedText(value.reason, 2048);
-    if (!required.every(key => own(args, key)) || !boundedText(args.result, 16384)
+    if (!boundedText(args.result, 16384)
         || !boundedText(args.nextAction, 16384) || typeof args.canContinue !== 'boolean'
         || !Array.isArray(args.inputs) || !Array.isArray(args.outputs) || args.outputs.length === 0
         || args.inputs.length + args.outputs.length > 100

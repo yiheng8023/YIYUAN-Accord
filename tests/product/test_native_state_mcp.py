@@ -201,6 +201,37 @@ class NativeStateMcpTests(unittest.TestCase):
                     hook='UserPromptSubmit')
         return self.helper({'op': 'status'})
 
+    def test_bind_missing_contract_fields_explains_retry_without_inheriting_state(self):
+        status = self.receive_current_input()
+        contract = dict(action='bind', epoch=status['epoch'], expectedRevision=0,
+            result='Deliver three reviewed artifacts', inputs=[],
+            outputs=[{'path': name} for name in ('report.md', 'facts.json', 'review.md')],
+            nextAction='Verify the artifacts', canContinue=False)
+        self.assertFalse(self.manage(**contract)['isError'])
+        saved = self.helper({'op': 'status'})
+        contract['expectedRevision'] = saved['revision']
+        before = self.files()
+        required = ['result', 'inputs', 'outputs', 'nextAction', 'canContinue']
+        for omitted in (['inputs', 'outputs'], *([field] for field in required)):
+            with self.subTest(omitted=omitted):
+                request = {key: value for key, value in contract.items() if key not in omitted}
+                response = self.manage(**request)
+                self.assertTrue(response['isError'])
+                self.assertEqual(response['value']['reason'], 'invalid-task-state-binding')
+                self.assertEqual(response['value']['effect'], 'not-requested')
+                self.assertEqual(response['value']['requiredFields'], required)
+                self.assertEqual(response['value']['missingFields'], omitted)
+                self.assertEqual(self.files(), before)
+        # Empty inputs and false continuation are explicit values, not omissions.
+        response = self.manage(**contract)
+        self.assertFalse(response['isError'])
+        self.assertNotIn('missingFields', response['value'])
+        current = self.helper({'op': 'status'})
+        self.assertEqual(current['revision'], saved['revision'] + 1)
+        self.assertEqual(current['checkpoint']['outputs'], saved['checkpoint']['outputs'])
+        self.assertEqual(current['checkpoint']['inputs'], [])
+        self.assertFalse(current['checkpoint']['canContinue'])
+
     def test_hook_workspace_locator_reaches_receipt_without_redirecting_explicit_scope(self):
         business = self.work
         self.work = self.root / "projectless work [目录] 'quoted'"
@@ -1029,6 +1060,14 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertTrue(rows[2]['result']['tools'][2]['annotations']['destructiveHint'])
         self.assertEqual(rows[2]['result']['tools'][2]['inputSchema']['properties']['action']['enum'],
                          ['bind', 'pause', 'retire'])
+        manage_tool = rows[2]['result']['tools'][2]
+        self.assertIn('For bind, explicitly provide result, inputs, outputs, nextAction and canContinue',
+                      manage_tool['description'])
+        for field in ('result', 'inputs', 'outputs', 'nextAction', 'canContinue'):
+            self.assertIn('Required for bind',
+                          manage_tool['inputSchema']['properties'][field]['description'])
+        self.assertIn('no protected inputs', manage_tool['inputSchema']['properties']['inputs']['description'])
+        self.assertIn('not inherited', manage_tool['inputSchema']['properties']['outputs']['description'])
         self.assertEqual(rows[3]['result']['structuredContent']['source']['threadId'], 'current-thread')
         self.assertEqual(rows[4]['error']['code'], -32601)
         self.assertTrue(rows[5]['result']['isError'])
