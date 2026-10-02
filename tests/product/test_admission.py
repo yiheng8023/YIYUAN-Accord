@@ -1101,7 +1101,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     self.assertEqual(gap['missingDimensions']['duties'], ['recovery-and-rollback'])
                     self.assertEqual(gap['missingDimensions']['scenarios'], ['capability-loss'])
                 elif scope_id == 'v33-dynamic-model-routing':
-                    self.assertEqual(gap['caseIds'], ['v33-skill-glossary-01'])
+                    self.assertEqual(set(gap['caseIds']), {'v33-skill-glossary-01', 'v33-concept-relations-01'})
                     self.assertEqual(gap['missingDimensions']['duties'],
                                      ['environment-and-self-exposure', 'execution-configuration-and-code'])
                     self.assertEqual(set(gap['missingDimensions']['scenarios']),
@@ -1190,7 +1190,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         report = self.assess(contract)
         self.assertEqual(report['errors'], [])
         gap = report['caseBindingGaps'][scope['id']]['function']
-        self.assertEqual(set(gap['caseIds']), {'v33-skill-glossary-01', case['id']})
+        self.assertEqual(set(gap['caseIds']), {'v33-skill-glossary-01', 'v33-concept-relations-01', case['id']})
         self.assertTrue(gap['missingDimensions']['duties'])
         self.assertIn('capability-loss', gap['missingDimensions']['scenarios'])
         self.assertIn('default-host-without-extra-extensions', gap['missingDimensions']['scenarios'])
