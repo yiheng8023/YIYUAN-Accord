@@ -125,6 +125,8 @@ Root纠偏首先收准工具编排：私有`accord-root-decision-io-20261002-01`
 
 2026-10-03更新08已完成一个离线准备段：私有`accord-local-adoption-20261003-08`保留固定候选24文件、当前配置只读基线、UPDATE-PROPOSAL、12份有限派生执行文件、DERIVATION及15项OFFLINE-CHECKS；独立复核核源码/派生哈希一致。新plan仍`not-granted/offline-incomplete`，实际路径未复制旧authorization、daemon-binding或执行标记。update在外部进程调用前拒绝未完成、缺授权及旧已消费许可；测试仅为隔离拒绝门，不代验安装/运行时，launch仍会先写本次attempt/锁，不能称整个入口零写入。原07源与恢复材料不改，未运行CLI/App Server/daemon请求、安装、授信或模型。MCP采用核验改为重启后原Root实际工具目录/调用，不以新独立进程目录或Hook消息代验；完整实时绑定、最终预检/审查和对应新授权仍待具备。ROOT-PREPARATION-REVIEW记录当前边界，本机现装及主选择保持。
 
+随后更新08收准为无daemon停止路线：完整codex.exe OS元数据没有managed daemon，只保留实际官方updater的精确身份/字节来源绑定；新后台或未知消费者一律阻断，不执行停止。0.160官方固定源码核明proxy只连接既有socket，但daemon version在失效PID路径可维护锁/PID，旧custom initialize名称还会改进程级来源标识；备用reader已修为proxy-only、非来源后台标识及有界收尾，18项隔离检查通过，本次路线不调用它或旧require_empty版本合同。3项纯无daemon路由检查和实际只读预检通过；17个冻结项独立复核一致，现有21个客户端仍须用户关闭后再核。当前plan为`review-ready/not-granted`，UPDATE-READY及FINAL-PREAUTH取代旧原稿的执行/停止许可建议；原稿保留历史。待一次ref/cache更新及原Root两次inspect、一次无写入缺参拒绝采用观察的明确许可，不改Hook信任、主选择、第三方或模型/Cloud边界。未进行安装、停止或实际proxy请求。
+
 2026-10-01用户截图的Stop“已阻止1/未成功0”已匹配d011接续回调：Root原生completed状态调用从rev171请求一个可安全推进的预算诊断段，`canContinue=true`形成rev172；诊断结束后的completed调用改为false形成rev173。它是本次有意接续，不是旧exit1复发，也不能据此称所有block都合理或故障均已排除。README双语补充状态解释，基线/验收/计划分别澄清既有职责和数量/实现分配关系；源码Hook行为、分发包、17scope/F/A与完整判据不改。
 
 检查点已累积32条且大量是已闭历史，新增一次状态写入因此超过已声明列表边界被拒、未改rev171；问题在当前状态组织，不为容纳日志提升协议上限。最新整理保留原173全文/字节Hash及32项逐项映射，活動态只放9个Goal/权限/结果缺口/入口Cloud/能力/连续性/历史未知/已结束实例/Hook解释胶囊。原生manage形成rev174，独立只读审查重算原件/32项Hash及0–31映射并核9胶囊，无当前目标、权限或真正未知丢失；只指出一般“观察缺失”不能阻断Agent可自行取得事实的动作，README已收准为不可代办条件且无其他安全具体工作。三个既有Stop/等待/不重复回归本地3.800秒通过；没有重放真实Stop或改已安装包。原件在`accord-stop-clarity-20261001-01`；机器投影只追加限定观察，不写成产品通过或新权限。用户再次明确组件与工序按价值持续纠偏，其它未影响部分不为“灵活”制造改动。
