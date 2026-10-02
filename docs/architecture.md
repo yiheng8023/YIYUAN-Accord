@@ -125,6 +125,14 @@ own identity responsibility. No business output, host mode, replay or lock recov
 is changed through the tool. Pauses and unresolved conditions retain their existing
 rules; reasons are caller claims, not proof of authorization. Mutating/destructive
 annotations are accurate hints, not a guarantee of approval or server authorization.
+For client integration, bind/pause/retire parameters, contract changes or error
+reconciliation, use the [task-state client guide (Chinese)](task-state-clients.md).
+Every bind explicitly supplies `result`, `inputs`, `outputs`, `nextAction` and
+`canContinue`; the client supplies the complete reviewed contract, not implicit
+empty defaults. Missing fields are rejected before the helper operation, with
+the required/missing names and `effect: not-requested`. Errors after an operation
+begins still require post-state reconciliation. The examples construct parameters
+from a fresh observation; they do not grant authority or invoke real tools.
 The host may require approval for this tool; a `never` policy can reject it before
 the adapter runs. Inspect the actual disposition and retain unfinished work;
 do not change policy or switch routes merely to bypass a denial. In the inspected
