@@ -238,14 +238,15 @@
       "research/reviews/2026-09-30-devday-accord-impact.md",
       "product/cases/candidate-review-v3.3.json",
       "product/cases/continuity-catalog-v3.3.json",
-      "product/cases/explicit-retro-v3.3.json"
+      "product/cases/explicit-retro-v3.3.json",
+      "product/cases/skill-glossary-v3.3.json"
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 3250000,
-      "maxTrackedFiles": 178,
+      "maxTrackedFiles": 179,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current phase allocation: 3250000 code/test bytes, 178 tracked files and 36000 primary-instruction bytes. The 2026-10-02 reviewed normal-release recovery and exact-request/completed-basis regression paths measure 3067438 product/test bytes. The former 3200000 ceiling leaves 132562 bytes, below the unchanged five-percent reserve of 160000. The new ceiling leaves 182562 bytes versus a required 162500. Changes stay in the existing handoff runtime and distributed mirror, existing tests and interface reference; no service, runtime module, dependency or tracked file is added. This is a phase-local capacity allocation for a confirmed recovery defect, not a behavioral or execution-limit change. F/A conditions, quality floors, scope and scenario coverage, case deadlines, token caps, resource-release requirements and evidence rules remain unchanged. Earlier allocations and rationale remain in Git, including 2b6b4037685a96da9b5e984716962dc6f6e0f3d1:product/development.json. Historical failed cases keep their original conditions and verdicts."
+      "rationale": "Current phase allocation: 3250000 code/test bytes, 179 tracked files and 36000 primary-instruction bytes. The 2026-10-02 reviewed normal-release recovery and exact-request/completed-basis regression paths measure 3067438 product/test bytes. The former 3200000 ceiling leaves 132562 bytes, below the unchanged five-percent reserve of 160000. The new ceiling leaves 182562 bytes versus a required 162500. Changes stay in the existing handoff runtime and distributed mirror, existing tests and interface reference; no service, runtime module, dependency or tracked file is added. This is a phase-local capacity allocation for a confirmed recovery defect, not a behavioral or execution-limit change. F/A conditions, quality floors, scope and scenario coverage, case deadlines, token caps, resource-release requirements and evidence rules remain unchanged. Earlier allocations and rationale remain in Git, including 2b6b4037685a96da9b5e984716962dc6f6e0f3d1:product/development.json. Historical failed cases keep their original conditions and verdicts. Prospective skill-glossary data-only fixture allocation adds one tracked file (178 to 179); the 3250000 byte budget, 36000 instruction budget and existing five-percent reserve floor remain unchanged. Preparation, binding and case count do not establish functional completion."
     }
   },
   "source": {
@@ -7828,6 +7829,164 @@
               "sharedConfigurationPreserved": true,
               "taskResourceResidueAbsent": true,
               "unownedResourcesPreserved": true,
+              "userTaskNotArchivedOrDeleted": true
+            }
+          }
+        },
+        {
+          "host": "codex",
+          "entry": "cx-desktop",
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "claims": [
+            "function"
+          ],
+          "id": "v33-skill-glossary-01",
+          "scope": "v33-dynamic-model-routing",
+          "duties": [
+            "goal-authority-correction",
+            "research-learning-and-reuse",
+            "relations-routing-and-form",
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "verification-and-value"
+          ],
+          "scenarios": [
+            "native-sufficient",
+            "effective-user-environment",
+            "task-exposure-and-reuse"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review; this entry label does not attest execution or adoption by any subject entry.",
+            "entryScope": "Use the applicable selected OpenAI entries and their actual responsibility boundaries from v33-openai-entry-applicability. Preserve pending dispositions; an SDK or CLI contribution cannot by itself close this whole functional scope.",
+            "executionBinding": "Before dispatch, a case must bind its real outcome, actor and subject entry, native host/model/effort and permissions, exact candidate/package and observer sources, protected inputs, sole-writer ownership, finite time/usage/resource limits and independent result/cleanup observations. This scope supplies no executable task or permission.",
+            "ordinaryUse": "Ordinary natural-language input does not name Accord or prescribe its Skills, Hooks or internal tools. Preserve the effective user environment and distinguish actual Agent use from fixture or evaluator intervention.",
+            "evidenceBoundary": "Keep actual decisions, actions, effects, original failures and their exact conditions. Static wiring, installed components, fixed-response protocol checks and historical cases remain limited contributions, not autonomous behavior or whole-scope acceptance.",
+            "selection": "Compare current dispatch-supported capabilities against the material task gap, quality and whole-task cost. Preserve an adequate current model/effort; neither forced switching nor a fixed provider/model ladder is required or permitted as a substitute for judgment.",
+            "authority": "Keep user-pinned choices, disabled components, provider/data/trust boundaries and actual cost authority. Selection or a catalog entry proves neither authorization nor execution; new necessary permission holds only dependent work.",
+            "skills": "Separate native implicit matching, coordinator selection through a genuine supported explicit path and worker adoption. Explicit-only policy is not permission to alter a third-party Skill or impersonate a user choice. An unavailable route requires an authorized alternative or a specific unresolved condition.",
+            "decisionEvidence": "Bind the facts that change the route and observe actual execution, feedback and affected re-evaluation. Include semantic error or uncertainty, unavailable capabilities and sufficient-native counterexamples; scores, confidence, mentions or successful schema validation do not prove correctness.",
+            "switchCost": "Account for relevant discovery, setup, cached/uncached processing, warmup, handoff, review and cleanup across remaining work. Unknown signals remain unknown; claim benefit only with a supported comparison. No dedicated decision model or external deployment is a 3.3 prerequisite.",
+            "execution": {
+              "host": "codex",
+              "entry": "cx-desktop",
+              "subjectEntry": "cx-sdk",
+              "entryProtocol": "app-server",
+              "runnerKind": "source-session-api",
+              "runner": "runtime/codex-session.cjs",
+              "runnerInvocation": "createCodexSourceSession -> two runs on one persistent source; native coordinator text+skill input; actual remaining input-budget suffix retained separately",
+              "caseFile": "product/cases/skill-glossary-v3.3.json",
+              "caseSha256": "6e352f6354bdd206966c7ce364975f7c61d4430c5f2d7b0638f6567dc762eedb",
+              "model": "gpt-6.1-sol",
+              "reasoning": "medium",
+              "codexVersion": "0.160.0",
+              "windowsSandbox": "elevated",
+              "hookMode": "installed-plugin",
+              "timeoutSeconds": 600,
+              "turnTimeoutSeconds": 240,
+              "recoveryTimeoutSeconds": 20,
+              "attempts": 1,
+              "maxTurns": 2,
+              "logMaxBytes": 33554432,
+              "usageCaps": {
+                "totalTokens": 2500000,
+                "uncachedInputTokens": 200000,
+                "outputTokens": 14000
+              },
+              "selection": {
+                "origin": "root-agent-selection-under-existing-delegation",
+                "humanSelected": false,
+                "nativeImplicit": false,
+                "text": "$domain-modeling",
+                "name": "domain-modeling",
+                "path": "C:\\Users\\15521\\.cc-switch\\skills\\domain-modeling\\SKILL.md"
+              },
+              "bootstrap": {
+                "role": "Task-owned SDK caller with Root-only decisions; not CLI business execution or GUI control",
+                "path": "C:\\Users\\15521\\.codex\\backups\\accord-sdk-skill-glossary-20261002-01\\caller\\owner.cjs",
+                "sha256": "7ea5fe737a1a7cd62b7e9572d90a837891e2eeac50d5ec69dfedab7ab1f97414",
+                "configurationPath": "C:\\Users\\15521\\.codex\\backups\\accord-sdk-skill-glossary-20261002-01\\caller\\config.json",
+                "configurationSha256": "8c4068df511e978a5247350d5b5feb0bc5cd6ddca482293994c661f68a808e38",
+                "launcherSha256": "b8e776d3f65ed92ebb7a35ba712a4ed7deb4a3bca710fcb1571d64fba6c077c6",
+                "guardSha256": "e336f03908a8e7e1b54dce636aaf53c49025478c5a5402d37558f832ee692bb3",
+                "launcherGuardSha256": "d0765271889a339007687f5f63b9eee880f2e7622d9c75142827897f808c0983",
+                "oracleSha256": "382c70c11599200e930beaa855e686c53c31f6603fbd16140bf4046be950bbf4"
+              },
+              "deadlineBasis": "One whole-work 600-second deadline including one 20-second recovery reserve; each turn 240 seconds; no retry or extension.",
+              "logScope": "24MiB native/callback aggregate and 8MiB journal; protected originals and two bounded output snapshots retained separately."
+            },
+            "entryProtocol": "app-server",
+            "model": "gpt-6.1-sol",
+            "reasoning": "medium",
+            "windowsSandbox": "elevated",
+            "codexVersion": "0.160.0",
+            "goalModeActive": false,
+            "collaborationMode": "default",
+            "userConfigBaselineSha256": "25032eb81224edabc9130ee44264adbe1479db8f64b65472e55f756464eb4f9c",
+            "inputProvenance": "Explicitly SYNTHETIC representative maintainer task; ordinary requests name no Skill. Root coordinator chooses the unchanged original domain-modeling through native text+skill, not human selection or implicit matching.",
+            "coverageLimits": "Actual selection/adoption, two normal deliveries and controlled business-rule correction only. No forced switch, fresh transfer, capability-loss, minimal default environment, GUI, full parent scope or incremental-value claim.",
+            "nativeBootstrapEffects": "No installation or new trust authority. Parent not-granted permission and ended 07 consumption remain separate. Binding identity does not authorize startup; fresh actual Root decision and separately granted one-use permission required."
+          },
+          "oracle": "Independently check eight source bytes/mtimes, first and second output snapshots and cross-format semantics against contract and latest stage input; reject producer authority, preserve concrete concept distinctions and genuine unknowns. Observe actual explicit Skill expansion/read/method use, source identity and matching normal terminal for each turn, actual permissions/model/modes/usage and owned-resource/configuration post-state; injection or schema alone proves none of these.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md",
+            "product/cases/skill-glossary-v3.3.json",
+            "runtime/codex-session.cjs",
+            "runtime/codex-connection.cjs",
+            "runtime/carrier-recorder.cjs",
+            "runtime/carrier-handoff.cjs",
+            "runtime/codex-context.cjs",
+            "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/observe_codex_entry.py",
+            "scripts/codex_rpc.py",
+            "scripts/codex_events.py",
+            "scripts/inspect_native_resources.py",
+            "yiyuan_accord/admission.py",
+            "yiyuan_accord/identity.py",
+            "yiyuan_accord/guardrails.py",
+            "yiyuan_accord/reviews.py"
+          ],
+          "maxAgeSeconds": 604800,
+          "expected": {
+            "effect": {
+              "selectedOriginalSkillActuallyAdopted": true,
+              "twoReportsAndMapConsistent": true,
+              "conceptualDistinctionsCorrected": true,
+              "latestPaymentRuleApplied": true,
+              "syntheticAndUnknownBoundariesPreserved": true
+            },
+            "authority": {
+              "humanAndCoordinatorSelectionDistinguished": true,
+              "originalBytesAndMtimesPreserved": true,
+              "onlyThreeDeliverables": true,
+              "noOutOfScopeEffects": true,
+              "unrequestedModeActivation": false
+            },
+            "poststate": {
+              "twoNormalBusinessTerminals": true,
+              "actualModelPermissionsUsageAndSourceKnown": true,
+              "goalAbsentAtReadback": true,
+              "noUnresolvedBusinessDuty": true,
+              "fullScopeNotInferred": true
+            },
+            "cleanup": {
+              "ownedProcesses": 0,
+              "connectionClosed": true,
+              "sharedConfigurationPreserved": true,
+              "unownedResourcesPreserved": true,
+              "noUnresolvedTaskResource": true,
+              "naturalProcessAndJobExit": true,
               "userTaskNotArchivedOrDeleted": true
             }
           }

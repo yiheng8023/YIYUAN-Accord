@@ -36,6 +36,137 @@ def legacy_close_helper_sources(root):
     return sources
 
 
+class ControlledOwnerCloseDeadlineTests(unittest.TestCase):
+    """Only fake time/Popen/Job; exercise the existing CLI resource boundary."""
+    def run_owner(self, *, close=600, start=579.8, natural_exit=583,
+                  force_release_delay=0, attach_error=False, late_preflight=False):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'commands').mkdir()
+            manifest = {'evidence': str(root), 'codex': 'never-executed',
+                        'ownedRoots': {'workspace': str(root)},
+                        'limits': {'requestSeconds': 600, 'recoverySeconds': 20},
+                        'resourceController': 'windows-job-object'}
+            clock, kills = [start], []
+
+            def sleep(seconds): clock[0] += seconds
+
+            class Process:
+                returncode = None
+                def poll(self):
+                    if self.returncode is None and natural_exit is not None and clock[0] >= natural_exit:
+                        self.returncode = 0
+                    return self.returncode
+                def wait(self, timeout):
+                    if self.poll() is None:
+                        remaining = natural_exit - clock[0] if natural_exit is not None else float('inf')
+                        sleep(min(timeout, remaining))
+                    if self.poll() is None: raise lifecycle.subprocess.TimeoutExpired('fake', timeout)
+                    return self.returncode
+                def kill(self): self.returncode = -9
+
+            process = Process()
+
+            class Job:
+                closed = False
+                def attach_and_resume(self, _process):
+                    if attach_error:
+                        clock[0] = 599
+                        raise RuntimeError('fake attach error at 599')
+                def terminate(self):
+                    kills.append(clock[0])
+                    process.kill()
+                def sample(self):
+                    released = process.poll() is not None and (not kills or clock[0] >= kills[0] + force_release_delay)
+                    return {'controller': 'windows-job-object', 'activeProcesses': 0 if released else 1}
+                def close(self): self.closed = True
+
+            job = Job()
+
+            def popen(_arguments, **kwargs):
+                kwargs['stdout'].write(b'{}')
+                return process
+
+            def host_launch(*_args):
+                if late_preflight: clock[0] = 580
+
+            with patch.object(lifecycle.time, 'monotonic', side_effect=lambda: clock[0]), \
+                    patch.object(lifecycle.time, 'sleep', side_effect=sleep), \
+                    patch.object(lifecycle.subprocess, 'Popen', side_effect=popen) as spawned, \
+                    patch.object(lifecycle, '_new_controller', return_value=job) as controller, \
+                    patch.object(lifecycle, '_record_host_launch', side_effect=host_launch), \
+                    patch.object(lifecycle, '_spawn_options', return_value={}):
+                error = None
+                try:
+                    kwargs = {} if close is None else {'close_deadline': close}
+                    record, _ = lifecycle._run_cli(manifest, 'owner', [], {}, 580, **kwargs)
+                except Exception as caught:
+                    error, record = caught, None
+                path = root / 'commands/owner/record.json'
+                if path.exists(): record = json.loads(path.read_text(encoding='utf-8'))
+            return {'clock': clock[0], 'kills': kills, 'record': record, 'error': error,
+                    'spawns': spawned.call_count, 'controllers': controller.call_count,
+                    'labelCreated': (root / 'commands/owner').exists(), 'closed': job.closed}
+
+    def test_work_complete_at_579_8_allows_natural_exit_at_583(self):
+        result = self.run_owner()
+        self.assertIsNone(result['error'])
+        self.assertEqual(result['record']['exitCode'], 0)
+        self.assertFalse(result['record']['forced'])
+        self.assertEqual(result['kills'], [])
+        self.assertGreaterEqual(result['clock'], 583)
+        self.assertLess(result['clock'], 584)
+        self.assertTrue(result['closed'])
+
+    def test_force_at_595_preserves_time_to_observe_release(self):
+        result = self.run_owner(natural_exit=None, force_release_delay=3)
+        self.assertIsNone(result['error'])
+        self.assertTrue(result['record']['forced'])
+        self.assertAlmostEqual(result['kills'][0], 595)
+        self.assertEqual(result['record']['after']['activeProcesses'], 0)
+        self.assertLessEqual(result['clock'], 600)
+
+    def test_unreleased_job_stops_observing_at_absolute_600(self):
+        result = self.run_owner(natural_exit=None, force_release_delay=30)
+        self.assertIsInstance(result['error'], RuntimeError)
+        self.assertEqual(result['record']['after']['activeProcesses'], 1)
+        self.assertLessEqual(result['clock'], 600)
+        self.assertTrue(result['closed'])
+
+    def test_expired_work_or_preparation_consumption_has_zero_popen(self):
+        for kwargs in ({'start': 580}, {'late_preflight': True}):
+            with self.subTest(kwargs=kwargs):
+                result = self.run_owner(**kwargs)
+                self.assertIsInstance(result['error'], TimeoutError)
+                self.assertEqual(result['spawns'], 0)
+                self.assertEqual(result['controllers'], 0)
+
+    def test_invalid_close_deadline_has_no_directory_job_or_popen_effects(self):
+        for deadline in (False, '600', float('nan'), float('inf'), 579, 580, 601):
+            with self.subTest(deadline=deadline):
+                result = self.run_owner(close=deadline)
+                self.assertIsInstance(result['error'], ValueError)
+                self.assertFalse(result['labelCreated'])
+                self.assertEqual(result['controllers'], 0)
+                self.assertEqual(result['spawns'], 0)
+
+    def test_default_cli_still_forces_at_original_work_deadline(self):
+        result = self.run_owner(close=None)
+        self.assertIsNone(result['error'])
+        self.assertTrue(result['record']['forced'])
+        self.assertGreaterEqual(result['kills'][0], 580)
+        self.assertLessEqual(result['kills'][0], 580.05)
+        self.assertEqual(result['record']['failure'], 'work-deadline')
+
+    def test_attach_exception_at_599_does_not_restart_twenty_second_recovery(self):
+        result = self.run_owner(attach_error=True, force_release_delay=30)
+        self.assertRegex(str(result['error']), 'fake attach error')
+        self.assertEqual(result['spawns'], 1)
+        self.assertLessEqual(result['clock'], 600)
+        self.assertEqual(result['record']['after']['activeProcesses'], 1)
+        self.assertTrue(result['closed'])
+
+
 class CodexLifecycleTests(unittest.TestCase):
     def test_legacy_fixture_missing_history_reports_prerequisite_without_native_execution(self):
         import subprocess

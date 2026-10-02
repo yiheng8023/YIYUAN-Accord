@@ -44,6 +44,8 @@
 
 2026-10-02模型协调执行纠偏：最近Root子代理多次未显式选择模型/推理强度而继承默认配置，按任务选择没有稳定落实，不能算动态协调已生效或已验收。相同配置本身也不证明选择一定不合理。保留用户指定的主代理Sol/max；普通更新后态核对请求Sol/medium，权限、预算和退出边界的调用者复审请求Sol/high。每项请求理由、实际可观察配置、结果质量与成本分别核验，缺失的实际effort/费用保持未知；参数请求不等于实际生效或净收益。这是既有W02/F02/A02的执行纠偏，原基线、机器投影中的未验状态和验收底线保持，不新增固定模型梯子或重复调度服务。
 
+该次独立复审发现准备材料误收模拟/错误原生来源、Python布尔/整数混同、输出建议被升级为硬拒以及580/600秒退出竞争。Root保留原件后修正来源schema/state/callId、真实Root身份和完整当前输入字段；保留独立语义判断，16000字节建议只提示，必要布尔须严格类型。现有Job helper新增受控owner可选绝对关闭截止，保留580秒工作及600秒整段，自然退出观察到595、余下5秒强制收尾；默认CLI路径不变，异常不重置恢复限额。相关46项生命周期/资源检查、69项VM控制、8项Python守卫、11项oracle反例通过，仅证明这些机制与准备，非模型业务通过。另去掉配置/未来提交SHA的自引用，并按Git原始blob规范化新fixture行尾，原JSON含义和8业务原件保持。新案 `v33-skill-glossary-01` / `product/cases/skill-glossary-v3.3.json` 已前瞻登记，fixture SHA `6e352f6354bdd206966c7ce364975f7c61d4430c5f2d7b0638f6567dc762eedb`，caller配置SHA `8c4068df511e978a5247350d5b5feb0bc5cd6ddca482293994c661f68a808e38`。179文件分配仅新增此数据fixture，字节/指令预算、5%余量和17scope/F-A保持。正式提交后的真实binder及本批CI仍待核，新模型与目录信任权限未获；不借beaf旧CI或更新07许可派发。
+
 ## 必须保留的失败与未知
 
 - 更新04/05的安装与当前Root采用分别有证据，但原目录发现均update0/discover1：root0后四所属子进程和reader未自然退出，强制收尾才Job0/reader停止。具体身份与原因未取得，不归因用户、火绒或产品，不改判原失败、重跑或扩限。旧包/配置、冻结执行源、失败回执与恢复材料保持。
@@ -56,7 +58,7 @@
 
 ## 功能与必要验收未完项
 
-17必要scope均已定义、11活动case，其中目录清单两轮案已有有限准入；显式Skill复盘案已结束且未准入，完整原定义与失败转历史观察。六项历史准入只属原版本/条件。A01–A08仍未完整收官，`functionalCompletion=false`、`candidateEligible=false`、`selectionFinal=false`保持。没有稳定剩余工作量权重，不编总百分比；定义、测试、安装或文稿数量不算功能完成率。
+17必要scope均已定义、12活动case，其中新增课程词表案仅前瞻登记、尚未执行或准入，目录清单两轮案已有有限准入；显式Skill复盘案已结束且未准入，完整原定义与失败转历史观察。六项历史准入只属原版本/条件。A01–A08仍未完整收官，`functionalCompletion=false`、`candidateEligible=false`、`selectionFinal=false`保持。没有稳定剩余工作量权重，不编总百分比；定义、测试、安装或文稿数量不算功能完成率。
 
 | 工作范围 | 必须继续的结果 |
 |---|---|
@@ -66,7 +68,7 @@
 | W06/W07 | 环境/压力变化后必要续做、消费者有效采用、资产保护和完整资源退出；局部Job治理不能代验普通宿主 |
 | W08 | 同一episode全链组合与独立净影响判断；A08依赖A01–A07，不能平均分或拼散案补短板；精确候选与发布后态分别核 |
 
-七个无活动case范围：dynamic-model-routing、codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。dynamic-model-routing的已结束复盘案仅保留真实显式选择/加载/方法采用与有限材料观察，没有完整case通过；autonomous-continuity的代表性案已有限定普通两轮case准入，父范围的recovery-and-rollback、capability-loss及未观测接管/失败条件仍缺，完整A05不关闭。必要发布前代表性测试本身服务项目验收，不必等待外部客户委托；合成材料必须明示，不能把准备或案例数量当整项结果。
+六个无活动case范围：codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。dynamic-model-routing新增词表案只覆盖受委托选择、采用与两轮纠正的必要观察；默认/最小环境、能力失效、完整动态分工及净价值仍未验。已结束复盘案保留其真实显式选择/加载/方法采用与有限材料观察，没有完整case通过；autonomous-continuity的代表性案已有限定普通两轮case准入，父范围的recovery-and-rollback、capability-loss及未观测接管/失败条件仍缺，完整A05不关闭。必要发布前代表性测试本身服务项目验收，不必等待外部客户委托；合成材料必须明示，不能把准备或案例数量当整项结果。
 
 ### 最新实际交付：候选离线分发与条件修订
 

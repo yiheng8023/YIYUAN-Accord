@@ -1086,7 +1086,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 17, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 0, "coverageDefinedButUnverified": 17,
-            "coverageWithoutCases": 7, "coverageWithCaseBindingGaps": 8,
+            "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 8,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
         self.assertEqual(set(report['caseBindingGaps']),
@@ -1100,6 +1100,12 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     self.assertEqual(gap['caseIds'], ['v33-continuity-catalog-01'])
                     self.assertEqual(gap['missingDimensions']['duties'], ['recovery-and-rollback'])
                     self.assertEqual(gap['missingDimensions']['scenarios'], ['capability-loss'])
+                elif scope_id == 'v33-dynamic-model-routing':
+                    self.assertEqual(gap['caseIds'], ['v33-skill-glossary-01'])
+                    self.assertEqual(gap['missingDimensions']['duties'],
+                                     ['environment-and-self-exposure', 'execution-configuration-and-code'])
+                    self.assertEqual(set(gap['missingDimensions']['scenarios']),
+                                     {'default-host-without-extra-extensions', 'capability-loss'})
                 else:
                     self.assertEqual(gap['caseIds'], [])
                 self.assertTrue(gap['missingDimensions']['duties'])
@@ -1184,7 +1190,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         report = self.assess(contract)
         self.assertEqual(report['errors'], [])
         gap = report['caseBindingGaps'][scope['id']]['function']
-        self.assertEqual(gap['caseIds'], [case['id']])
+        self.assertEqual(set(gap['caseIds']), {'v33-skill-glossary-01', case['id']})
         self.assertTrue(gap['missingDimensions']['duties'])
         self.assertIn('capability-loss', gap['missingDimensions']['scenarios'])
         self.assertIn('default-host-without-extra-extensions', gap['missingDimensions']['scenarios'])
@@ -1196,7 +1202,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def test_diagnostic_retains_unplanned_scope_and_scenario_gaps(self):
         report = self.assess(self.without_correction_and_user_environment_cases())
         self.assertEqual(report['errors'], [])
-        self.assertEqual(report['progress']['coverageWithoutCases'], 8)
+        self.assertEqual(report['progress']['coverageWithoutCases'], 7)
         self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 10)
         gaps = report['caseBindingGaps']
         self.assertEqual(set(gaps), {'v33-systemic-correction', 'v33-codex-cli-ordinary-delivery',

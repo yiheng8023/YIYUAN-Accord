@@ -18,6 +18,7 @@ import argparse
 import hashlib
 import http.server
 import json
+import math
 import os
 from pathlib import Path
 import queue
@@ -873,15 +874,27 @@ def _validate_prebound(manifest):
         raise ValueError("prepared standalone Skill changed")
 
 
-def _wait_job(job, deadline):
+def _wait_job(job, deadline, *, exact_deadline=False):
     sample = job.sample()
     while not _released(sample) and time.monotonic() < deadline:
-        time.sleep(0.05)
+        time.sleep(min(0.05, max(0, deadline - time.monotonic())) if exact_deadline else 0.05)
         sample = job.sample()
     return sample
 
 
-def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_override="file", codex_role="source"):
+def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_override="file", codex_role="source", close_deadline=None):
+    # Opt-in owner already stops business/initiates EOF at work_deadline. Its
+    # remaining shutdown must fit the existing recovery allowance, never renew it.
+    if close_deadline is not None:
+        recovery = manifest["limits"]["recoverySeconds"]
+        if (any(type(value) not in (int, float) or not math.isfinite(value)
+                for value in (work_deadline, close_deadline, recovery))
+                or not 0 < close_deadline - work_deadline <= recovery):
+            raise ValueError("absolute close deadline must fit the existing recovery allowance")
+        if time.monotonic() >= work_deadline:
+            raise TimeoutError("owner work deadline exhausted before native preparation")
+        # Three quarters for natural drain, one quarter retained for forced exit.
+        owner_graceful_deadline = close_deadline - (close_deadline - work_deadline) / 4
     evidence = Path(manifest["evidence"])
     root = evidence / "commands" / label
     root.mkdir()
@@ -893,9 +906,13 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
     _record_host_launch(manifest, "commands", label, codex_role, full_arguments)
     launch_fields = ({"executable": identity["path"], "hostVersion": identity["version"]}
                      if _replacement_binding(manifest) is not None else {})
+    if close_deadline is not None and time.monotonic() >= work_deadline:
+        raise TimeoutError("owner work deadline exhausted before native resource creation")
     job, process, forced, failure, recovery_deadline = _new_controller(), None, False, None, None
     try:
         with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
+            if close_deadline is not None and time.monotonic() >= work_deadline:
+                raise TimeoutError("owner work deadline exhausted before Popen")
             process = subprocess.Popen(full_arguments, cwd=manifest["ownedRoots"]["workspace"],
                 env=env, stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
                 **_spawn_options())
@@ -912,6 +929,8 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
                 raise
             try:
                 query_deadline = min(work_deadline, time.monotonic() + manifest["limits"]["requestSeconds"])
+                if close_deadline is not None and query_deadline == work_deadline:
+                    query_deadline = owner_graceful_deadline
                 while process.poll() is None:
                     if stdout_path.stat().st_size + stderr_path.stat().st_size > 4 * 1024 * 1024:
                         forced, failure = True, "output-limit"
@@ -919,19 +938,19 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
                         break
                     if time.monotonic() >= query_deadline:
                         raise TimeoutError("native command work deadline")
-                    time.sleep(0.05)
+                    time.sleep(min(0.05, max(0, query_deadline - time.monotonic())) if close_deadline is not None else 0.05)
             except (subprocess.TimeoutExpired, TimeoutError):
-                forced, failure = True, "work-deadline"
+                forced, failure = True, ("owner-close-deadline" if close_deadline is not None and query_deadline == owner_graceful_deadline else "work-deadline")
                 job.terminate()
-        recovery_deadline = time.monotonic() + manifest["limits"]["recoverySeconds"]
+        recovery_deadline = close_deadline if close_deadline is not None else time.monotonic() + manifest["limits"]["recoverySeconds"]
         if process is not None and process.poll() is None:
-            process.wait(timeout=max(0.001, recovery_deadline - time.monotonic()))
-        graceful_deadline = recovery_deadline - manifest["limits"]["recoverySeconds"] / 2
-        after = _wait_job(job, recovery_deadline if forced else graceful_deadline)
+            process.wait(timeout=max(0 if close_deadline is not None else 0.001, recovery_deadline - time.monotonic()))
+        graceful_deadline = owner_graceful_deadline if close_deadline is not None else recovery_deadline - manifest["limits"]["recoverySeconds"] / 2
+        after = _wait_job(job, recovery_deadline if forced else graceful_deadline, exact_deadline=close_deadline is not None)
         if not _released(after):
             forced = True
             job.terminate()
-            after = _wait_job(job, recovery_deadline)
+            after = _wait_job(job, recovery_deadline, exact_deadline=close_deadline is not None)
         record = {"arguments": arguments, **launch_fields,
                   **_resource_record(manifest, process, forced, after, failure)}
         save(root / "record.json", record)
@@ -941,7 +960,7 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
         parsed = json.loads(raw) if raw.strip() else None
         return record, parsed
     except BaseException:
-        recovery_deadline = recovery_deadline or time.monotonic() + manifest["limits"]["recoverySeconds"]
+        recovery_deadline = close_deadline if close_deadline is not None else recovery_deadline or time.monotonic() + manifest["limits"]["recoverySeconds"]
         if process is not None and process.poll() is None:
             forced = True
             try:
@@ -950,10 +969,10 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
                 if process.poll() is None:
                     process.kill()
             try:
-                process.wait(timeout=max(0.001, recovery_deadline - time.monotonic()))
+                process.wait(timeout=max(0 if close_deadline is not None else 0.001, recovery_deadline - time.monotonic()))
             except subprocess.TimeoutExpired:
                 pass
-        after = _wait_job(job, recovery_deadline)
+        after = _wait_job(job, recovery_deadline, exact_deadline=close_deadline is not None)
         save(root / "record.json", {"arguments": arguments, **launch_fields,
             **_resource_record(manifest, process, forced, after, failure or "native-command")})
         raise
