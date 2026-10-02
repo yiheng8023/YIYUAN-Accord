@@ -7914,7 +7914,7 @@
                 "path": "C:\\Users\\15521\\.codex\\backups\\accord-sdk-skill-glossary-20261002-01\\caller\\owner.cjs",
                 "sha256": "7ea5fe737a1a7cd62b7e9572d90a837891e2eeac50d5ec69dfedab7ab1f97414",
                 "configurationPath": "C:\\Users\\15521\\.codex\\backups\\accord-sdk-skill-glossary-20261002-01\\caller\\config.json",
-                "configurationSha256": "8c4068df511e978a5247350d5b5feb0bc5cd6ddca482293994c661f68a808e38",
+                "configurationSha256": "3994ef24173b63004ccd291b378acdab18e41e4c899bd442d9d1e529695b3056",
                 "launcherSha256": "b8e776d3f65ed92ebb7a35ba712a4ed7deb4a3bca710fcb1571d64fba6c077c6",
                 "guardSha256": "e336f03908a8e7e1b54dce636aaf53c49025478c5a5402d37558f832ee692bb3",
                 "launcherGuardSha256": "d0765271889a339007687f5f63b9eee880f2e7622d9c75142827897f808c0983",
@@ -7930,7 +7930,7 @@
             "codexVersion": "0.160.0",
             "goalModeActive": false,
             "collaborationMode": "default",
-            "userConfigBaselineSha256": "25032eb81224edabc9130ee44264adbe1479db8f64b65472e55f756464eb4f9c",
+            "userConfigBaselineSha256": "c12de6ef47a7b42eeb780a7199f4b52f1f96e5c0e7c8edf11d4f243fa154ba9c",
             "inputProvenance": "Explicitly SYNTHETIC representative maintainer task; ordinary requests name no Skill. Root coordinator chooses the unchanged original domain-modeling through native text+skill, not human selection or implicit matching.",
             "coverageLimits": "Actual selection/adoption, two normal deliveries and controlled business-rule correction only. No forced switch, fresh transfer, capability-loss, minimal default environment, GUI, full parent scope or incremental-value claim.",
             "nativeBootstrapEffects": "No installation or new trust authority. Parent not-granted permission and ended 07 consumption remain separate. Binding identity does not authorize startup; fresh actual Root decision and separately granted one-use permission required."
