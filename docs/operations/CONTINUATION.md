@@ -40,6 +40,8 @@
 
 2026-10-02下一必要准备：当前CLI/daemon升级至0.160.0，已用实际help、导出的实验协议schema与[官方App Server](https://learn.chatgpt.com/docs/app-server)核对所需text+skill路径；现有plugin add/remove命令与[兼容manifest](https://developers.openai.com/plugins/build/plugins)保持，未捏造命令改名或迁移旧包。07更新仅在私有accord-local-adoption-20261002-07准备，目标仍beaf/20261002080658/d8db，未授权、未执行。受控代表性模型测试可透明用合成材料，以维护者功能验收为真实用途；不是虚构客户业务或填清单求绿。新课程报名词表case的8原件、两阶段、3输出和独立oracle已在accord-sdk-skill-glossary-20261002-01准备，选择原Matt domain-modeling经原生explicit输入且不改源/策略；调用者/正式前绑/完整预检未成，未授权，不启动模型。健康续作正确时不强迫handoff，SDK贡献不扩展GUI/全A05/A08。
 
+2026-10-02更新07已获一次明确许可：当前30132822/d90/c828更新至20261002080658/beaf/d8db，限定客户端关闭后的精确0.160.0空闲/no-recovery后台官方停止，忙碌/未知即拒绝，保留旧包与恢复原件，不改Hook信任、主模型/模式/第三方，不执行Cloud或模型业务。方案已独立复审及Root复核，50离线检查通过、13执行源冻结，scope digest290d2d0347593a3b67bee02bfb9dc650cc9c52d9f886d57996238263649fc736。首次及后续命令前的source/CLI/授权/有效proposal漂移已用实际run()反例收准，原error/partial poststate保留，旧prepare红例不改判。许可按当前用户reply、epoch c3e5064e-1d68-457c-9597-225a2cd84ecd记录在accord-local-adoption-20261002-07；尚未派发/安装。桌面Accord 本机更新07-20261002.lnk指向客户端外Start-update.cmd，用户独立启动后关闭Codex及相关IDE/CLI、回该窗口继续；不在会随客户端关闭的终端运行。完成后回本线程核实际采用，失败不重跑。
+
 ## 必须保留的失败与未知
 
 - 更新04/05的安装与当前Root采用分别有证据，但原目录发现均update0/discover1：root0后四所属子进程和reader未自然退出，强制收尾才Job0/reader停止。具体身份与原因未取得，不归因用户、火绒或产品，不改判原失败、重跑或扩限。旧包/配置、冻结执行源、失败回执与恢复材料保持。
