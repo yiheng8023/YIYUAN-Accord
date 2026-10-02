@@ -68,7 +68,7 @@
 
 ## 功能与必要验收未完项
 
-17必要scope均已定义、12活动case，其中新增课程词表案仅前瞻登记、尚未执行或准入，目录清单两轮案已有有限准入；显式Skill复盘案已结束且未准入，完整原定义与失败转历史观察。六项历史准入只属原版本/条件。A01–A08仍未完整收官，`functionalCompletion=false`、`candidateEligible=false`、`selectionFinal=false`保持。没有稳定剩余工作量权重，不编总百分比；定义、测试、安装或文稿数量不算功能完成率。
+17必要scope均已定义、13份case定义保留。课程词表案、概念关系案和显式Skill复盘案均已执行结束且未准入，保留原前绑定义与失败观察；目录清单两轮案已有有限准入。六项历史准入只属原版本/条件。A01–A08仍未完整收官，`functionalCompletion=false`、`candidateEligible=false`、`selectionFinal=false`保持。没有稳定剩余工作量权重，不编总百分比；定义、测试、安装或文稿数量不算功能完成率。
 
 | 工作范围 | 必须继续的结果 |
 |---|---|
@@ -113,6 +113,10 @@ Root纠偏首先收准工具编排：私有`accord-root-decision-io-20261002-01`
 同日下一有界只读核验取得原生协作的新事实：仅按当前Root的spawn关系读取SQLite四行及明确四个rollout尾部，未新派模型/CLI。root_gate_design的逐轮turn_context为Sol/medium，root_gate_counteraudit为Luna/high，next_outcome_bind为Sol/high；当前Root本轮01a0fc95记录为Sol/max。子线程表、session_meta关系及逐轮配置一致，Root线程表旧值ultra不能覆盖本轮max。由此可把这些具体子代理从“仅有参数请求”收准到“已有原生逐轮配置观测”，不改写更早继承默认的历史，也不推成实际思考量、成本或全动态最优。tool/output/final/task_complete及token记录提供进一步实际结果来源，尾部计数不当生命周期或资源归零；spawn edge open也不当运行状态。私有`accord-native-collaboration-observation-20261002-01`的facts/sources/四原始context记录及ROUTE-REVIEW保留边界。
 
 据现有事实，普通有界源码/文件工作优先采用受支持的原生分工与Root独立验收；确需持久连接/载体写者/交接恢复时才用现有SDK。保留用户主模型及当前模式，不为配置子代理再绕外部启动/重复Root封包时钟，不把SDK失败case或旧业务换载体重放。原生协作共享宿主，不能凭final宣称所有queued effects或专用Job已闭；未来实例按实际资源归属和入口验收，不借其它形式的EOF/Job证据。完整F02/A02及新实际结果仍未验，当前只完成该只读路线核验。
+
+2026-10-02当前输入进一步说明：Fast与Sol/Ultra为用户主动选择，当前原生turn_context及截图吻合；上段Sol/max仅属上一轮。子代理按具体任务独立选择模型和推理强度，主代理仍承担拆解、协调及最终验收；不把高推理强度或不同参数本身当作质量、速度或净收益证明。保留当前选择，服务负载与官方配额重置消息未在本轮独立核实，不据此归因本地等待。
+
+本轮F02/F08两份独立源码审查未发现需要新增路由器、决策服务或修改第三方Skill策略的具体反例。现有需求判断、原生Skill选择/正文传输及结果复核路径保留，判断内化的实际普通行为与净影响仍待验收；不新增实现充当行为证据。原件为私有`accord-native-route-gap-review-20261002-01/F02-SOURCE-REVIEW.md`与`JUDGMENT-SOURCE-REVIEW.md`。最新Stop截图对应9fdb反馈、已阻止1/未成功0及随后完成，与本次有条件续作相符，不等于旧exit1失败或既有文件失效。基线中的3.4宿主说明已对齐仅候选、发布后共同决定，机器投影已有相同决定，原17scope/F/A及质量底线不变。
 
 2026-10-01用户截图的Stop“已阻止1/未成功0”已匹配d011接续回调：Root原生completed状态调用从rev171请求一个可安全推进的预算诊断段，`canContinue=true`形成rev172；诊断结束后的completed调用改为false形成rev173。它是本次有意接续，不是旧exit1复发，也不能据此称所有block都合理或故障均已排除。README双语补充状态解释，基线/验收/计划分别澄清既有职责和数量/实现分配关系；源码Hook行为、分发包、17scope/F/A与完整判据不改。
 
