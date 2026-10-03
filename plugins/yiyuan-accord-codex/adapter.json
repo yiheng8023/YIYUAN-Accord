@@ -108,6 +108,15 @@
     "limits": "advisory-agent-guidance; no-state-transition-or-stop-gate-change; prerequisites-must-hold-in-actual-execution-environment; skill-only-use-does-not-prove-ordinary-input-participation",
     "detailGuidance": "demand-driven-host-skill",
     "contextReentry": "SessionStart/compact restores task duties and a source-recovery cue; preserves input identity, pauses and quarantine; no restored-goal, fresh-authority or completed-takeover claim",
-    "startupEntry": "SessionStart/startup and clear inject shared core guidance and same-package detail paths without reading or writing task-state storage; no receipt, restored state or new authority. Node and current Hook trust remain prerequisites."
+    "startupEntry": "SessionStart/startup and clear inject shared core guidance and same-package detail paths without reading or writing task-state storage; no receipt, restored state or new authority. Node and current Hook trust remain prerequisites.",
+    "metaGuidance": {
+      "source": "skills/deliver-demand-driven-outcome/references/meta-guidance.md",
+      "sourceSha256": "511861ec00a15e051c97221d9d62e9586856a5d659724eff2d2953f002f457bc",
+      "sourceBytes": 4444,
+      "effect": "full-original-foundation-plus-task-coordination-at-supported-entry-events",
+      "subagentEvent": "SubagentStart-guidance-only; no-parent-task-state-access",
+      "additionalContextLimit": 4000,
+      "limits": "host-priority-and-user-authority-preserved; enabled-trusted-host-support-required; injection-is-not-behavior-or-all-surface-coverage"
+    }
   }
 }

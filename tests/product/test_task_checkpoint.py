@@ -498,7 +498,7 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
             self.assertNotIn('Native input receipt:', context)
             self.assertIn(str(RUNTIME), context)
             self.assertIn(str(RUNTIME.parent.parent / 'plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md'), context)
-            self.assertLess(len(context.encode('utf-8')), 2500 * 4)
+            self.assertLess(len(context.encode('utf-8')), 4000 * 4)
         error = self.invoke({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Continue.'},
                             hook=True, success=False)
         self.assertIn('freshness is unknown', error)
@@ -526,6 +526,91 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
         self.assertNotEqual(read().returncode, 0)
         entry.unlink()
         self.assertNotEqual(read().returncode, 0)
+
+    def test_default_entry_includes_exact_original_and_rejects_changed_foundation(self):
+        package = self.root / 'meta-package'
+        shutil.copytree(RUNTIME.parent.parent / 'plugins/yiyuan-accord-codex', package)
+        foundation = package / 'skills/deliver-demand-driven-outcome/references/meta-guidance.md'
+        original = foundation.read_bytes()
+        self.assertEqual(len(original), 4444)
+        self.assertEqual(hashlib.sha256(original).hexdigest(),
+                         '511861ec00a15e051c97221d9d62e9586856a5d659724eff2d2953f002f457bc')
+        module = package / 'runtime/task-checkpoint.cjs'
+        def read():
+            return subprocess.run([self.node, '-e',
+                'process.stdout.write(require(process.argv[1]).entryGuidance())', str(module)],
+                capture_output=True, timeout=10, cwd=self.work)
+        result = read()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.count(original), 1)
+        self.assertIn(b'Coordinate the current task', result.stdout)
+        self.assertIn(b'host instruction priority', result.stdout)
+        for changed in (original.replace(b'not a fact source', b'a fact source', 1),
+                        original.replace(b'\r\n', b'\n'), b'\xffinvalid UTF8', original[:100]):
+            with self.subTest(size=len(changed)):
+                foundation.write_bytes(changed)
+                self.assertNotEqual(read().returncode, 0)
+        foundation.unlink()
+        self.assertNotEqual(read().returncode, 0)
+
+    def test_subagent_start_guidance_is_complete_and_never_changes_root_state(self):
+        self.bind(unresolved=['Root remains unfinished.'])
+        self.pause('Root is paused.')
+        before = {p.name:p.read_bytes() for p in self.state.iterdir()}
+        original = (RUNTIME.parents[1] / 'plugins/yiyuan-accord-codex/skills/'
+                    'deliver-demand-driven-outcome/references/meta-guidance.md').read_bytes().decode('utf-8')
+        for identity in ({'agent_id':'synthetic-child','agent_type':'worker'},
+                         {'agent_id':'','agent_type':'worker'}, {'agent_type':'worker'}):
+            event = {'hook_event_name':'SubagentStart','session_id':'test-session',
+                     'cwd':str(self.work), **identity}
+            result = subprocess.run([self.node, str(RUNTIME.with_name('accord-hook.cjs'))],
+                input=json.dumps(event), text=True, encoding='utf-8', capture_output=True,
+                env=self.environment, cwd=self.work, timeout=10)
+            if identity.get('agent_id'):
+                self.assertEqual(result.returncode, 0, result.stderr)
+                output = json.loads(result.stdout)['hookSpecificOutput']
+                self.assertEqual(output['hookEventName'], 'SubagentStart')
+                self.assertEqual(output['additionalContext'].count(original), 1)
+                self.assertIn('leave the parent checkpoint unchanged', output['additionalContext'])
+            else:
+                self.assertNotEqual(result.returncode, 0)
+            self.assertEqual({p.name:p.read_bytes() for p in self.state.iterdir()}, before)
+        blocked = self.root / 'not-state-storage'
+        blocked.write_bytes(b'original unrelated file')
+        self.environment['YIYUAN_ACCORD_TASK_STATE_DIR'] = str(blocked)
+        result = subprocess.run([self.node, str(RUNTIME.with_name('accord-hook.cjs'))],
+            input=json.dumps({'hook_event_name':'SubagentStart','agent_id':'synthetic-child','agent_type':'worker'}),
+            text=True, encoding='utf-8', capture_output=True, env=self.environment, cwd=self.work, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(blocked.read_bytes(), b'original unrelated file')
+
+    def test_meta_payload_limits_are_positive_for_each_full_entry_handler(self):
+        hooks = json.loads((RUNTIME.parents[1]/'plugins/yiyuan-accord-codex/hooks/hooks.json').read_text('utf-8'))['hooks']
+        for event in ('SessionStart', 'UserPromptSubmit', 'SubagentStart'):
+            with self.subTest(event=event):
+                self.assertEqual(hooks[event][0]['hooks'][0]['additionalContextLimit'], 4000)
+        recovery = hooks['SessionStart'][1]
+        self.assertEqual(recovery['matcher'], 'resume|compact')
+        self.assertIn('task-checkpoint.cjs', recovery['hooks'][0]['command'])
+
+    def test_final_meta_context_limit_rejects_oversize_without_partial_output(self):
+        result = subprocess.run([self.node, '-e',
+            "const m=require(process.argv[1]); console.log(m.limitEntryContext('x'.repeat(16000)).length); "
+            "try {m.limitEntryContext('x'.repeat(16001));process.exit(2)}catch(e){if(e.message!=='entry-guidance-unavailable')throw e}",
+            str(RUNTIME)], capture_output=True, text=True, cwd=self.work, timeout=10)
+        self.assertEqual(result.returncode,0,result.stderr)
+        self.assertEqual(result.stdout.strip(),'16000')
+        # Valid large bridge bytes must fail at the whole entry bound, rather
+        # than returning a head/tail excerpt of the protected original.
+        package = self.root / 'large-entry'
+        shutil.copytree(RUNTIME.parents[1]/'plugins/yiyuan-accord-codex',package)
+        entry = package/'skills/deliver-demand-driven-outcome/SKILL.md'
+        entry.write_bytes(entry.read_bytes()+b'\n'+b'x'*4200)
+        run = subprocess.run([self.node,'-e',
+            'process.stdout.write(require(process.argv[1]).entryGuidance())',
+            str(package/'runtime/task-checkpoint.cjs')],capture_output=True,cwd=self.work,timeout=10)
+        self.assertNotEqual(run.returncode,0)
+        self.assertEqual(run.stdout,b'')
 
     def test_startup_guidance_does_not_touch_unwritable_state_or_clear_quarantine(self):
         self.bind()
@@ -2185,6 +2270,9 @@ catch(e){process.stdout.write(e.message);}
         brief = package / 'skills/deliver-demand-driven-outcome/SKILL.md'
         brief.parent.mkdir(parents=True)
         brief.write_bytes((RUNTIME.parent.parent / 'plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md').read_bytes())
+        foundation = brief.parent / 'references/meta-guidance.md'
+        foundation.parent.mkdir()
+        foundation.write_bytes((RUNTIME.parent.parent / 'plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md').read_bytes())
         request = {'hook_event_name': 'UserPromptSubmit', 'session_id': 'no-skill',
                    'cwd': str(self.work), 'prompt': 'What can I do with these orders?'}
         run = subprocess.run([self.node, str(isolated), '--hook', 'UserPromptSubmit'],

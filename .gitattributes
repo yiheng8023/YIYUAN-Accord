@@ -10,3 +10,5 @@ NOTICE text eol=lf
 *.yaml text eol=lf
 *.sh text eol=lf
 *.ps1 text eol=lf
+# Preserve the user-approved original, including its CRLF bytes.
+plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md -text

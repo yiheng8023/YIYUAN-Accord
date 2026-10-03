@@ -6675,7 +6675,8 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
                     development_schema=contract.get("schema"), startup_entry=projection.get("startupEntry") is True,
                     carrier_handoff=projection.get("carrierHandoff") is True,
                     carrier_session=projection.get("carrierSession") is True,
-                    native_state_mcp=projection.get("nativeStateMcp") is True),
+                    native_state_mcp=projection.get("nativeStateMcp") is True,
+                    meta_guidance=projection.get("metaGuidance") is True),
                 unified_name=contract.get("schema") == "yiyuan-accord-development/v5",
                 retained_checkpoint_revision=(contract["previousDevelopmentSnapshot"].split(":", 1)[0]
                     if contract.get("schema") == "yiyuan-accord-development/v5"
@@ -6717,6 +6718,11 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
         ))
         for field in ("maxProductCodeAndTestBytes", "maxTrackedFiles", "maxPrimaryInstructionBytes"):
             program["complexityBudget"]["targets"][field] = development["complexityBudget"][field]
+        for projection in delivery["hostProjections"]:
+            if projection.get("metaGuidance") is True:
+                foundation = projection["skill"].rsplit("/", 1)[0] + "/references/meta-guidance.md"
+                if foundation not in program["complexityBudget"]["primaryInstructionPaths"]:
+                    program["complexityBudget"]["primaryInstructionPaths"].append(foundation)
         complexity = _validate_complexity(root, {"complexityBudget": program["complexityBudget"]},
                                           identity["pythonModule"], files, errors,
                                           runtime_code_files=[locator for locator in files

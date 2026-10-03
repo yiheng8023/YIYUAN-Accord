@@ -16,6 +16,12 @@
 
 **Our mission: Empower every dream.**
 
+The 3.3 candidate includes the [original meta-guidance](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)
+as its value and judgment foundation. Supported, enabled and trusted entry hooks
+deliver it with task coordination without editing your AGENTS.md. Installation
+and actual loading still need verification; this does not override host priority
+or establish coverage of every host, cloud mode or subagent path.
+
 See the [project glossary](GLOSSARY.md) for terms concerning objectives, authority, responsibility and evidence.
 
 YIYUAN Accord is designed to support reliable long-term human–AI collaboration. Its goal is for the Agent to clarify a user's requirements, assess feasibility, establish necessary conditions, and own authorized execution, correction, recovery and result verification. Users should not need to learn tool coordination, configuration, model routing or task handoff first; experienced users retain control over their own actions and changes of direction.

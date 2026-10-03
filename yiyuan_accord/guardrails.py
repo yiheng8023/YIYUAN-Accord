@@ -441,6 +441,7 @@ def activation_mechanism_errors(
     task_checkpoint=False, tool_batch_feedback=False, retained_checkpoint_revision=None,
     resume_reconciliation=False, context_reentry=False, native_context=False,
     startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False,
+    meta_guidance=False,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -560,6 +561,10 @@ def activation_mechanism_errors(
     }
     if adapter_id == "codex" and not startup_entry:
         handler["additionalContextLimit"] = 700
+    if meta_guidance:
+        if adapter_id != "codex" or not startup_entry:
+            errors.append(f"{prefix} meta guidance needs a supported startup entry")
+        handler["additionalContextLimit"] = 4000
     expected_value = {
         "hooks": {
             "SessionStart": [{
@@ -585,6 +590,8 @@ def activation_mechanism_errors(
                 "command": f'node "${{{root_variable}}}/runtime/task-checkpoint.cjs" --hook {event}',
                 "timeout": 3,
             }]}]
+            if meta_guidance and event == "UserPromptSubmit":
+                expected_value["hooks"][event][0]["hooks"][0]["additionalContextLimit"] = 4000
         checkpoint = repository_relative_path(root, checkpoint_locator)
         canonical_checkpoint = repository_relative_path(root, "runtime/task-checkpoint.cjs")
         try:
@@ -598,6 +605,8 @@ def activation_mechanism_errors(
                 errors.append(f"{prefix} task-checkpoint module differs from canonical bytes")
         except (OSError, subprocess.SubprocessError, ValueError):
             errors.append(f"{prefix} task-checkpoint module is unreadable")
+    if meta_guidance:
+        expected_value["hooks"]["SubagentStart"] = [{"hooks": [handler]}]
     if value != expected_value:
         errors.append(f"{prefix} activation mechanism contract is invalid")
     try:
@@ -786,6 +795,12 @@ def validate_host_projection(
             errors.append(f"{prefix} native-state MCP declaration must be boolean")
         if projection["nativeStateMcp"] and not (expected_contract and "nativeTaskStateMcp" in expected_contract):
             errors.append(f"{prefix} native-state MCP is outside the declared adapter")
+    if "metaGuidance" in projection:
+        expected_shape |= {"metaGuidance"}
+        if type(projection["metaGuidance"]) is not bool:
+            errors.append(f"{prefix} meta guidance declaration must be boolean")
+        if projection["metaGuidance"] and not (expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("metaGuidance")):
+            errors.append(f"{prefix} meta guidance is outside the declared adapter")
     if adapter_id not in ("codex", "claude-code") or not _exact(projection, expected_shape):
         errors.append(f"{prefix} program projection shape is invalid")
     manifest_locator, marketplace_locator = projection.get("manifest"), projection.get("marketplace")
@@ -803,6 +818,19 @@ def validate_host_projection(
         isinstance(item, str) for item in mechanisms
     ) else []
     references = projection.get("referenceFiles", [])
+    if projection.get("metaGuidance") is True:
+        foundation = skill_locator.rsplit("/", 1)[0] + "/references/meta-guidance.md" if isinstance(skill_locator, str) else ""
+        if not isinstance(references, list) or foundation not in references:
+            errors.append(f"{prefix} meta guidance reference is undeclared")
+        source = repository_relative_path(root, foundation)
+        expected = (expected_contract or {}).get("ordinaryInputParticipation", {}).get("metaGuidance", {})
+        try:
+            if (source is None or source.is_symlink() or not source.is_file()
+                    or source.stat().st_size != expected.get("sourceBytes")
+                    or sha256(_owned_bytes(source)).hexdigest() != expected.get("sourceSha256")):
+                errors.append(f"{prefix} original meta guidance bytes differ")
+        except OSError:
+            errors.append(f"{prefix} original meta guidance is unreadable")
     valid_references = (isinstance(references, list)
                         and all(_nonempty_string(item) for item in references)
                         and len(references) == len(set(references)))
@@ -874,6 +902,7 @@ def validate_host_projection(
         carrier_handoff=bool(expected_contract and expected_contract.get("optionalCarrierHandoff")),
         carrier_session=bool(expected_contract and expected_contract.get("optionalCarrierHandoff", {}).get("sourceSession")),
         native_state_mcp=bool(expected_contract and expected_contract.get("nativeTaskStateMcp")),
+        meta_guidance=bool(expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("metaGuidance")),
     ))
     expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,

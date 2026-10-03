@@ -78,7 +78,7 @@ def _strings(value, *, empty=False):
             and len(value) == len(set(value)))
 
 
-def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False):
+def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False, meta_guidance=False):
     """Describe this development package, not a mandatory product mechanism."""
     contract = {
         "schema": 2, "productId": "yiyuan-accord", "packageId": package_id,
@@ -187,6 +187,16 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "without reading or writing task-state storage; no receipt, restored state or new authority. "
                 "Node and current Hook trust remain prerequisites."
             )
+        if meta_guidance:
+            contract["ordinaryInputParticipation"]["metaGuidance"] = {
+                "source": "skills/deliver-demand-driven-outcome/references/meta-guidance.md",
+                "sourceSha256": "511861ec00a15e051c97221d9d62e9586856a5d659724eff2d2953f002f457bc",
+                "sourceBytes": 4444,
+                "effect": "full-original-foundation-plus-task-coordination-at-supported-entry-events",
+                "subagentEvent": "SubagentStart-guidance-only; no-parent-task-state-access",
+                "additionalContextLimit": 4000,
+                "limits": "host-priority-and-user-authority-preserved; enabled-trusted-host-support-required; injection-is-not-behavior-or-all-surface-coverage",
+            }
     if adapter_id == "claude-code":
         contract["optionalToolBatchFeedback"] = {
             "entry": "runtime/accord-hook.cjs", "nativeEvent": "PostToolBatch",

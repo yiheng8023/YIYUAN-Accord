@@ -1126,6 +1126,30 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         self.assertTrue(any("primaryInstructionBytes=" in error for error in report["errors"]))
         self.assertFalse(report["repositoryCandidateReady"])
 
+    def test_default_meta_foundation_is_bound_and_counted_as_primary_exposure(self):
+        projection = self.contract['delivery']['hostProjections'][0]
+        locator = projection['skill'].rsplit('/', 1)[0] + '/references/meta-guidance.md'
+        self.assertTrue(projection['metaGuidance'])
+        self.assertIn(locator, projection['referenceFiles'])
+        report = self.report()
+        self.assertTrue(report['valid'], report['errors'])
+        with self.changed(locator, b'Changed value guidance is not the approved original.'):
+            invalid = self.report()
+        self.assertFalse(invalid['valid'])
+        self.assertTrue(any('original meta guidance bytes differ' in x for x in invalid['errors']))
+        altered = copy.deepcopy(self.contract)
+        altered['delivery']['hostProjections'][0]['referenceFiles'].remove(locator)
+        with self.changed(DEVELOPMENT_FILE, json.dumps(altered).encode()):
+            undeclared = self.report()
+        self.assertFalse(undeclared['valid'])
+        self.assertTrue(any('meta guidance reference is undeclared' in x for x in undeclared['errors']))
+        # The approved4444 bytes contribute to the normal primary instruction cost.
+        without = copy.deepcopy(self.contract)
+        without['delivery']['hostProjections'][0]['metaGuidance'] = False
+        with self.changed(DEVELOPMENT_FILE, json.dumps(without).encode()):
+            baseline_cost = self.report()['complexity']['primaryInstructionBytes']
+        self.assertEqual(report['complexity']['primaryInstructionBytes']-baseline_cost,4444)
+
     def test_current_cost_includes_runtime_copies_and_node_test_fixtures(self):
         report = self.report()
         python_bytes = sum(p.stat().st_size for folder in ("yiyuan_accord", "tests/product")

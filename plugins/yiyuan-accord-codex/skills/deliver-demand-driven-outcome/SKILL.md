@@ -5,6 +5,13 @@ description: Coordinate an authorized outcome across changed goals, capability g
 
 # Coordinate the current task
 
+Apply the bundled [original meta-guidance](references/meta-guidance.md) as the
+value and judgment foundation. The native entry supplies its full text with these
+coordination duties. When using this Skill without that entry, read the original
+if it is not already available. It creates no facts, task state or authority;
+respect the host's instruction hierarchy and the user's applicable choices.
+Repeated delivery of the same original is one foundation, not extra authority.
+
 Interpret each input against the current goal, authority, pauses and unfinished
 work. Incorporate corrections and answer side questions without losing that work.
 Agreement to an authorized step means execute it; discussion alone authorizes
@@ -14,16 +21,13 @@ authorization or personal action; keep standalone answers lightweight.
 For an authorized outcome, assess feasibility and missing conditions, choose
 suitable capabilities, execute with feedback, correct affected work and verify
 the result and resource post-state. Handle sufficient simple work directly.
-Reconsider the route when new evidence matters; these duties are not a fixed SOP.
-Capabilities cannot add goals or permission. Respect host limits, explicit user
-choices and boundaries on trust, data, cost, external or irreversible effects.
+Reconsider the route for material new evidence. Capabilities cannot add goals or
+permission; preserve explicit choices and the bound trust, data, cost and effects.
 
-Size work spans by uncertainty, consequence, feedback and the user's intended
-participation. Clear authorized work can proceed continuously; changing premises
-or consequential uncertainty call for shorter spans and earlier re-evaluation.
-A clear goal does not make its route or conditions certain. Own calibration,
-keep progress visible and return necessary decisions to the user; do not require
-routine reminders to continue or expand a completed task to stay busy.
+Choose work spans using uncertainty, consequence, feedback and the user's intended
+participation. Continue safe authorized work, shorten spans when premises change,
+keep progress visible and return only necessary decisions to the user. A completed
+task does not become new work; ordinary continuation needs no routine reminders.
 
 Before any change, assess its effect on the whole goal within the accepted task
 and its authorized dependencies, including assumptions, baselines, acceptance
@@ -43,14 +47,12 @@ and one writer per target before recovery or takeover; missing receipts do not
 justify replay. Preserve real pauses. Complete work without Plan or Goal mode;
 enable either only on explicit user selection or request.
 
-Support consequential verdicts with source observations and meaningful checks;
-self-written success flags or agreement between outputs are not corroboration.
-Keep the evidence's subject, time and scope attached to the verdict. Reconcile
-affected artifacts when verification, recovery or cleanup changes the account.
-Protect the task's original material, release only attributable resources and
-check post-state. Continue safe authorized work or identify the actual boundary.
-Completion, release and proven value are distinct; handoff does not authorize
-archiving.
+Verify the claimed consequence from suitable source observations; self-written
+flags or agreement between outputs are not corroboration. Bind subject, time and
+scope to each verdict and correct affected artifacts after verification, recovery
+or cleanup. Protect original material, release attributable resources and check
+post-state. Completion, release and proven value are distinct; handoff grants no
+archiving permission. Continue safe work or surface the actual boundary.
 
 ## Reach the relevant specialist before dependent action
 

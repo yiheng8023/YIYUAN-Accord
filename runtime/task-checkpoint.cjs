@@ -876,26 +876,46 @@ function projectHostObservation(observation) {
     changes: observation.changes.map((change) => pick(change, ['field', 'previous', 'current', 'kind']))};
 }
 
+function limitEntryContext(context, limit = 16000) {
+  if (typeof context !== 'string' || Buffer.byteLength(context, 'utf8') > limit) fail('entry-guidance-unavailable');
+  return context;
+}
+
 // Shared host judgment duty survives ordinary entry and context restoration.
-// The brief Skill is the sole maintained entry body. Hook delivery resolves its
-// package-local links; reading guidance never touches task state.
+// The original foundation and brief coordination body each have one package
+// source. Hook delivery resolves local links; reading never touches task state.
 function entryGuidance() {
   const root = path.join(__dirname, '..');
   const packaged = fs.existsSync(path.join(root, '.codex-plugin', 'plugin.json'));
   const skill = path.join(root, ...(packaged ? [] : ['plugins', 'yiyuan-accord-codex']),
     'skills', 'deliver-demand-driven-outcome', 'SKILL.md');
-  const info = fs.lstatSync(skill);
-  if (!info.isFile() || info.isSymbolicLink() || info.size > 10000) fail('entry-guidance-unavailable');
-  const text = fs.readFileSync(skill, 'utf8').replace(/\r\n/g, '\n');
+  const foundation = path.join(path.dirname(skill), 'references', 'meta-guidance.md');
+  const readGuidance = (file, limit) => {
+    const info = fs.lstatSync(file);
+    if (!info.isFile() || info.isSymbolicLink() || info.size === 0 || info.size > limit) fail('entry-guidance-unavailable');
+    const bytes = fs.readFileSync(file);
+    const value = bytes.toString('utf8');
+    if (!Buffer.from(value, 'utf8').equals(bytes)) fail('entry-guidance-unavailable');
+    return value;
+  };
+  const original = readGuidance(foundation, 8000);
+  // The approved original is immutable for this build, including its CRLFs.
+  if (sha(Buffer.from(original, 'utf8')) !== '511861ec00a15e051c97221d9d62e9586856a5d659724eff2d2953f002f457bc') fail('entry-guidance-unavailable');
+  if (!/^# Idea-Driven AI Collaboration And Systems Engineering Prompt\r?\n/.test(original) ||
+      !original.includes('Authority: Execution guidance only; not a fact source, release authority, or') ||
+      !original.trimEnd().endsWith('refinement.')) fail('entry-guidance-unavailable');
+  const text = readGuidance(skill, 10000).replace(/\r\n/g, '\n');
   const matched = /^---\nname: deliver-demand-driven-outcome\ndescription: [^\n]+\n---\n+([\s\S]+)$/.exec(text);
   if (!matched || !matched[1].trim()) fail('entry-guidance-unavailable');
   const body = matched[1].trim().replace(/\]\((\.\.?\/[^)]+)\)/g,
     (_, target) => '](' + path.resolve(path.dirname(skill), target) + ')');
-  return 'Accord task entry: current coordination Skill body supplied by the native Hook. ' +
-    'Reuse these duties without a separate Skill selection.\n\n' + body +
+  const guidance = 'Accord task entry: current coordination Skill body supplied by the native Hook. ' +
+    'The bundled original meta-guidance is the value and judgment foundation; it does not change host instruction priority or grant authority. ' +
+    'Reuse these duties without a separate Skill selection.\n\n' + original + '\n' + body +
     `\n\nEntry source: "${skill}". Runtime helper: node "${__filename}" --help. ` +
     'State operations require the actual current native input receipt and compatible runtime; ' +
     'this guidance creates no receipt, recovered goal or new authority.';
+  return limitEntryContext(guidance, 12000);
 }
 
 function hint(event, where, currentInput, prior = null) {
@@ -1215,7 +1235,13 @@ function handleHook(event) {
 }
 
 function hook(event) {
-  try { return handleHook(event); }
+  try {
+    const result = handleHook(event);
+    if (event?.hook_event_name === 'UserPromptSubmit' && result.hookSpecificOutput?.additionalContext) {
+      limitEntryContext(result.hookSpecificOutput.additionalContext);
+    }
+    return result;
+  }
   catch (error) {
     // An unsuccessful replay is not another native input. It cannot advance
     // the token and invalidate the correctly selected current replay.
@@ -1345,4 +1371,4 @@ if (require.main === module) {
     });
   }
 }
-module.exports = {operate, hook, assessContext, observeContext, entryGuidance};
+module.exports = {operate, hook, assessContext, observeContext, entryGuidance, limitEntryContext};

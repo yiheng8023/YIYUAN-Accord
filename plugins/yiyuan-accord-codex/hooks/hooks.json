@@ -7,6 +7,7 @@
           {
             "type": "command",
             "command": "node \"${PLUGIN_ROOT}/runtime/accord-hook.cjs\"",
+            "additionalContextLimit": 4000,
             "timeout": 3
           }
         ]
@@ -28,6 +29,19 @@
           {
             "type": "command",
             "command": "node \"${PLUGIN_ROOT}/runtime/task-checkpoint.cjs\" --hook UserPromptSubmit",
+            "additionalContextLimit": 4000,
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${PLUGIN_ROOT}/runtime/accord-hook.cjs\"",
+            "additionalContextLimit": 4000,
             "timeout": 3
           }
         ]

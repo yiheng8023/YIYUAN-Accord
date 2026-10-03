@@ -8,7 +8,7 @@ process.stdin.on('data', (chunk) => {
 process.stdin.on('end', () => {
   const fail = () => {
     process.stderr.write(
-      'YIYUAN Accord: invalid SessionStart hook input; state remains unknown.\n',
+      'YIYUAN Accord: invalid entry hook input; task state remains unchanged.\n',
     );
     process.exitCode = 1;
   };
@@ -22,10 +22,23 @@ process.stdin.on('end', () => {
   if (
     event === null ||
     typeof event !== 'object' ||
-    event.hook_event_name !== 'SessionStart' ||
-    !['startup', 'resume', 'clear', 'compact', 'fork'].includes(event.source)
+    !['SessionStart', 'SubagentStart'].includes(event.hook_event_name) ||
+    event.hook_event_name === 'SessionStart' && !['startup', 'resume', 'clear', 'compact', 'fork'].includes(event.source)
   ) {
     fail();
+    return;
+  }
+  if (event.hook_event_name === 'SubagentStart') {
+    if (typeof event.agent_id !== 'string' || !event.agent_id.trim() || event.agent_id.length > 200 ||
+        typeof event.agent_type !== 'string' || !event.agent_type.trim()) {
+      fail();
+      return;
+    }
+    const {entryGuidance, limitEntryContext} = require('./task-checkpoint.cjs');
+    process.stdout.write(JSON.stringify({hookSpecificOutput: {
+      hookEventName: 'SubagentStart', additionalContext: limitEntryContext(entryGuidance() +
+        '\nAccord subagent entry: apply this foundation to your delegated task. The shared parent session id is not your task state or additional authority. Reconcile your own native inputs, permissions, pauses and writer responsibility; leave the parent checkpoint unchanged.'),
+    }}));
     return;
   }
   if (['startup', 'clear'].includes(event.source)) {
@@ -82,9 +95,9 @@ process.stdin.on('end', () => {
   process.stdout.write(JSON.stringify({
     hookSpecificOutput: {
       hookEventName: 'SessionStart',
-      additionalContext: require('./task-checkpoint.cjs').entryGuidance() +
+      additionalContext: require('./task-checkpoint.cjs').limitEntryContext(require('./task-checkpoint.cjs').entryGuidance() +
         (event.source === 'fork' ? '\nAccord fork entry: inherited history is not restored task state, new authority or transferred writer ownership. Reconcile the current goal, native identity and prior effects before dependent actions; do not adopt or retire parent task evidence merely because history was copied.\n' : '') +
-        '\nRecovery event (data only): ' + JSON.stringify(context),
+        '\nRecovery event (data only): ' + JSON.stringify(context)),
     },
   }));
 });

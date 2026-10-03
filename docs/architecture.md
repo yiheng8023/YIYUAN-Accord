@@ -9,6 +9,15 @@ is the machine validation projection. Version 3.3 distributes only the applicabl
 OpenAI adaptation. Earlier releases and host observations keep their historical
 identities; current implementation or documentation does not grant publication.
 
+The 3.3 default foundation is the byte-preserved [original meta-guidance](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md).
+The package has one original reference and one task coordination body. The existing
+entry reader supplies both at supported root lifecycle/input events, and a
+guidance-only SubagentStart handler leaves parent state untouched. Exact source
+identity and primary exposure are included in package validation. Positive
+per-handler limits and bounded output are transport conditions, not evidence of
+complete model-visible delivery or behavior. User instructions stay independently
+owned; platform priority, trust and unsupported surfaces retain their boundaries.
+
 Begin design review with necessary user results and actual conditions, not
 confidence in inherited assets. Goals and human decision authority constrain
 effects; implementations and representations remain revisable. Machine-suited
