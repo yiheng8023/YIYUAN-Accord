@@ -16,7 +16,7 @@
 
 **使命：助力每一个梦想。**
 
-3.3候选已内置[元指导原文](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)，作为价值与判断依据。受支持、已启用且可信的入口Hook会连同任务协调指导传入，保持用户AGENTS.md独立。安装和实际加载仍需核验；它不提高宿主指令优先级，也不证明所有宿主、云端模式或子代理路径都已覆盖。
+3.3候选已内置[元指导原文](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)，作为价值与判断依据。受支持、已启用且可信的入口Hook会连同任务协调指导传入，保持用户AGENTS.md独立。安装和实际加载仍需核验；它不提高宿主指令优先级，也不证明所有宿主、其它未选环境模式或子代理路径都已覆盖。
 
 项目中目标、权限、责任与证据的用语见[词表](GLOSSARY.md)。
 
@@ -24,7 +24,7 @@ YIYUAN Accord 的设计目标是为人与 AI 的长期协作提供协调与可�
 
 项目开源，不以盈利为目标，以工业/商业生产级标准建设，追求平权、普惠和用户自主。项目决策以用户权益、可验证价值和可持续维护为依据，商业资助与平台关系不改变供应商中立原则。通用协作设计与具体宿主适配分离，按实际价值复用宿主能力和成熟资源。
 
-> **3.3 正在开发，尚未完成验收或发布。** 当前继续已选本地OpenAI执行路线，包括CLI、桌面和IDE；托管Codex Cloud、Work Cloud及依赖其执行的路线移出3.3适配和发布前验收，未来是否支持另行决定。Linux/macOS CLI与通用连续性机制保留。普通Chat仅作辅助，具体支持仍须实际验收；Claude不在3.3分发范围，阶段聚焦不改变供应商中立性。
+> **3.3 正在开发，尚未完成验收或发布。** 当前范围为已选本地OpenAI执行路线，包括CLI、桌面和IDE，具体入口仍须实际验收。普通Chat仅辅助，Linux/macOS CLI与通用连续性保留；其它执行位置没有当前适配承诺。Claude不在3.3分发范围，供应商中立性不变。
 >
 > 当前设计、历史处置、系统图、未完工作和收官标准统一见 [3.3 共识节点与计划](docs/operations/PLAN-v3.3.md)。[v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1) 是保留的发布基点，旧版本范围与证据以其精确 tag 为准，不继承为 3.3 支持声明。
 

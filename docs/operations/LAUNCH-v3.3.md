@@ -38,7 +38,7 @@
 
 Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和还缺什么条件，在获准范围内选择、组合宿主已有能力与 Accord 组件，随着情况变化调整做法，并检查实际结果。若条件不足或影响先前判断，Agent 应说明、修正受影响的工作，并保留尚未完成的事项以便继续。用户不必预先掌握工具协调、配置或任务交接。
 
-3.3当前继续已选本地OpenAI执行路线，包括CLI、桌面和IDE，开发包为Codex适配。托管Codex Cloud、Work Cloud及依赖其执行的路线不在3.3适配与发布前验收范围；未来是否适配另行决定。Linux/macOS CLI和通用连续性机制保留，各具体入口的支持仍须实际验收。普通Chat仅作辅助，Claude不在3.3分发范围；阶段聚焦不改变供应商中立定位。
+3.3当前范围为已选本地OpenAI执行路线，包括CLI、桌面和IDE；开发包为Codex适配。各入口支持仍须实际验收，Linux/macOS CLI和通用连续性保留；其它执行位置没有当前适配承诺。普通Chat仅辅助，Claude不在3.3分发范围，供应商中立定位保持。
 
 ### 哪些决定仍由你掌握
 
@@ -64,7 +64,7 @@ You do not need to learn plugins, commands, or model settings first. Tell the Ag
 
 Accord is designed to have the Agent start by understanding the goal, assess feasibility and missing conditions, choose and combine host capabilities and Accord components within its authorization, adapt as circumstances change, and check the actual result. If conditions are missing or earlier judgments are affected, the Agent should explain and correct the affected work, while preserving unfinished items for continuation. Users need not first learn tool coordination, configuration, or task handoff.
 
-Version 3.3 continues development on selected local OpenAI execution paths, including CLI, desktop and IDE; the development package is the Codex adaptation. Hosted Codex Cloud, Work Cloud and routes that depend on their execution are outside 3.3 adaptation and pre-release acceptance. Future adaptation is undecided. Linux/macOS CLI and shared continuity mechanisms remain, and each entry still needs actual acceptance. Ordinary Chat is auxiliary; Claude is outside 3.3 distribution. This focus preserves vendor independence.
+Version 3.3 covers selected local OpenAI execution paths, including CLI, desktop and IDE; the development package is the Codex adaptation. Each entry still needs actual acceptance. Linux/macOS CLI and shared continuity remain; other execution locations have no current adaptation commitment. Ordinary Chat is auxiliary, and Claude is outside 3.3 distribution. Vendor independence is unchanged.
 
 ### Decisions that remain yours
 

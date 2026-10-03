@@ -20,7 +20,7 @@ The 3.3 candidate includes the [original meta-guidance](plugins/yiyuan-accord-co
 as its value and judgment foundation. Supported, enabled and trusted entry hooks
 deliver it with task coordination without editing your AGENTS.md. Installation
 and actual loading still need verification; this does not override host priority
-or establish coverage of every host, cloud mode or subagent path.
+or establish coverage of every host, execution mode or subagent path.
 
 See the [project glossary](GLOSSARY.md) for terms concerning objectives, authority, responsibility and evidence.
 
@@ -28,7 +28,7 @@ YIYUAN Accord is designed to support reliable long-term human–AI collaboration
 
 The project is open source and not driven by profit. It aims for industrial and commercial production quality, equitable access and user autonomy. Project decisions are guided by user interests, verifiable value and sustainable maintenance. Commercial funding and platform relationships do not change its supplier independence. Its general collaboration design is separate from host adapters; native and mature external capabilities are used according to their actual value.
 
-> **3.3 is in development; acceptance and publication are unfinished.** Development continues on selected local OpenAI execution paths, including CLI, desktop and IDE. Hosted Codex Cloud, Work Cloud and routes that depend on their execution are outside the 3.3 adaptation and pre-release acceptance scope; future support is undecided. Shared Linux/macOS CLI support and continuity mechanisms remain. Ordinary Chat is auxiliary, and support claims still require actual acceptance. Claude is outside 3.3 distribution; this focus does not change vendor independence.
+> **3.3 is in development; acceptance and publication are unfinished.** The current scope is selected local OpenAI execution paths, including CLI, desktop and IDE, with actual acceptance required for each. Ordinary Chat is auxiliary. Shared Linux/macOS CLI and continuity mechanisms remain; other execution locations have no current adaptation commitment. Claude is outside 3.3 distribution; vendor independence is unchanged.
 >
 > The [3.3 consensus node and plan](docs/operations/PLAN-v3.3.md) is the current entry for design, the system diagram, historical disposition, outstanding work and completion criteria. [v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1) remains a historical release baseline; its exact tag defines its scope and evidence, not 3.3 support.
 

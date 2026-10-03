@@ -835,6 +835,33 @@ class DevelopmentEvidenceTests(unittest.TestCase):
 
 class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     """Committed synthetic current subjects, never real host or review evidence."""
+
+    def test_current_mode_catalog_rejects_missing_duplicate_and_invalid_declarations(self):
+        from yiyuan_accord.admission import _entry_modes
+        surfaces = self.contract["capabilityMap"]["entrySurfaces"]
+        catalog = surfaces["modeCatalog"]
+        dispositions = next(row for row in self.contract["acceptance"]["admission"]["scopes"]
+                            if row["id"] == "v33-openai-entry-applicability")["conditions"]["entryDispositions"]
+        self.assertEqual(set(_entry_modes(dispositions, catalog)), set(catalog))
+        for change in (lambda x:x.pop("chatgpt-web"),
+                       lambda x:x.update({"chatgpt-web": []}),
+                       lambda x:x.update({"chatgpt-web": ["chat", "chat"]}),
+                       lambda x:x.update({"chatgpt-web": [False]})):
+            altered = copy.deepcopy(catalog); change(altered)
+            with self.assertRaises(ValueError):
+                _entry_modes(dispositions, altered)
+
+    def test_historical_mode_catalog_keeps_its_original_reading(self):
+        from yiyuan_accord.admission import _entry_modes
+        historical = json.loads(subprocess.check_output(
+            ["git", "show", "dce00cc9dc7a1224c027a85f7f2b88c824139e35:product/development.json"],
+            cwd=Path(__file__).resolve().parents[2]))
+        dispositions = next(row for row in historical["acceptance"]["admission"]["scopes"]
+                            if row["id"] == "v33-openai-entry-applicability")["conditions"]["entryDispositions"]
+        modes = _entry_modes(dispositions)
+        self.assertEqual(set(modes["chatgpt-desktop"]), {"chat", "work-local", "work-cloud", "remote"})
+        self.assertEqual(modes["chatgpt-desktop"]["work-cloud"]["status"], "deferred")
+
     git = DevelopmentEvidenceTests.__dict__["git"]
     history = DevelopmentEvidenceTests.history
 
@@ -1357,17 +1384,20 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 if disposition["status"] == "pending":
                     disposition["status"] = "deferred"
                 for mode, value in disposition.get("modes", {}).items():
-                    if (key, mode) == ("chatgpt-desktop", "work-cloud"):
+                    if (key, mode) == ("chatgpt-desktop", "work-local"):
                         value["status"] = "pending"
                     elif value["status"] == "pending":
                         value["status"] = "deferred"
+            if row.get("scope") in {"v33-admitted-entry-delivery", "v33-admitted-entry-lifecycle"}:
+                for mapping in row["expected"]["effect"].values():
+                    mapping["chatgpt-desktop"]["modes"].pop("work-local")
         with self.history():
             self.commit(contract)
             report = self.assess(contract, self.observer)
         self.assertEqual(report["errors"], [])
         self.assertFalse(report["entrySelection"]["final"])
-        self.assertEqual(report["entrySelection"]["pendingModes"]["chatgpt-desktop"], ["work-cloud"])
-        self.assertEqual(report["entrySelection"]["selectedModes"]["chatgpt-desktop"], ["remote", "work-local"])
+        self.assertEqual(report["entrySelection"]["pendingModes"]["chatgpt-desktop"], ["work-local"])
+        self.assertEqual(report["entrySelection"]["selectedModes"]["chatgpt-desktop"], ["remote"])
         self.assertFalse({"v33-openai-entry-applicability-01", "v33-admitted-entry-delivery-01",
                           "v33-admitted-entry-lifecycle-01"} & set(report["acceptedCases"]))
 
@@ -1396,7 +1426,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             modes = case["expected"]["effect"]["entryDelivery"]["chatgpt-desktop"]["modes"]
             if kind == "parent-drift": scope["conditions"]["entryDispositions"]["chatgpt-desktop"]["modes"]["remote"]["basis"] += " Changed."
             if kind == "missing-effect": modes.clear()
-            if kind == "extra-effect": modes["work-cloud"] = copy.deepcopy(modes["work-local"])
+            if kind == "extra-effect": modes["outside-scope"] = copy.deepcopy(modes["work-local"])
             if kind == "weakened-effect": modes["work-local"] = {"boundedModeVerified": True}
             with self.subTest(kind=kind):
                 self.assertTrue(admission_contract_errors(contract))

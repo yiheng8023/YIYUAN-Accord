@@ -135,23 +135,33 @@ def _sparse_package_files(contract, case):
     return sorted(files)
 
 
-def _entry_modes(dispositions):
+def _entry_modes(dispositions, catalog=None):
     """Keep unresolved modes visible when selecting a mixed OpenAI entry.
 
     Earlier v5 policies with all mixed entries pending retain their original form.
-    This catalog constrains declarations, not host availability or support.
+    New scope-bound catalogs replace the historical default. Neither catalog
+    proves host availability, user authority or functional acceptance.
     """
+    if catalog is None:
+        catalog = _ENTRY_MODES
+    elif (not isinstance(catalog, dict)
+          or set(catalog) != set(_ENTRY_MODES) & set(dispositions)
+          or any(not isinstance(values, list) or not values
+                 or any(not _text(value) for value in values)
+                 or len(values) != len(set(values))
+                 for values in catalog.values())):
+        raise ValueError("entry mode catalog must bind the current mixed entry scope")
     if (not any("modes" in row for row in dispositions.values())
-            and all(row["status"] == "pending" for key, row in dispositions.items() if key in _ENTRY_MODES)):
+            and all(row["status"] == "pending" for key, row in dispositions.items() if key in catalog)):
         return {}
     modes = {}
     for key, row in dispositions.items():
-        if key not in _ENTRY_MODES:
+        if key not in catalog:
             if "modes" in row:
                 raise ValueError("entry modes require a declared catalog")
             continue
         values = row.get("modes")
-        if (not isinstance(values, dict) or set(values) != _ENTRY_MODES[key]
+        if (not isinstance(values, dict) or set(values) != set(catalog[key])
                 or any(not isinstance(value, dict) or set(value) != {"status", "basis"}
                        or value.get("status") not in _ENTRY_DISPOSITIONS | {"auxiliary"}
                        or not _text(value.get("basis")) for value in values.values())):
@@ -165,7 +175,7 @@ def _entry_modes(dispositions):
     return modes
 
 
-def _entry_selection(policy, entries):
+def _entry_selection(policy, entries, mode_catalog=None):
     """Validate and return the current v5 multi-entry parent selection."""
     scopes = {row["id"]: row for row in policy["scopes"] if isinstance(row, dict) and _text(row.get("id"))}
     present = set(scopes) & set(_ENTRY_PARENT_SCOPES)
@@ -185,7 +195,7 @@ def _entry_selection(policy, entries):
                    or row.get("status") not in _ENTRY_DISPOSITIONS or not _text(row.get("basis"))
                    for row in dispositions.values())):
         raise ValueError("entry dispositions must bind every candidate, status and basis")
-    modes = _entry_modes(dispositions)
+    modes = _entry_modes(dispositions, mode_catalog)
     selected = {key for key, row in dispositions.items() if row["status"] == "selected"}
     if not selected:
         raise ValueError("entry selection cannot be empty")
@@ -341,7 +351,7 @@ def admission_contract_errors(contract):
             if "packageFiles" in case:
                 _sparse_package_files(contract, case)
         try:
-            _entry_selection(policy, entries) if current else None
+            _entry_selection(policy, entries, contract["capabilityMap"]["entrySurfaces"].get("modeCatalog")) if current else None
         except ValueError as error:
             return [str(error)]
     except (KeyError, TypeError, ValueError, RecursionError):
@@ -375,6 +385,9 @@ def _definition(contract, case):
     if "subjectEntries" in case:
         definition["subjectEntries"] = selected(
             contract["capabilityMap"]["entrySurfaces"]["rows"], case["subjectEntries"])
+        if (catalog := contract["capabilityMap"]["entrySurfaces"].get("modeCatalog")) is not None:
+            definition["subjectModeCatalog"] = {key: value for key, value in catalog.items()
+                                               if key in case["subjectEntries"]}
     return _hash(definition)
 
 
@@ -608,7 +621,8 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     cases = {v["id"]: v for v in policy["cases"]}
     scopes = {v["id"]: v for v in policy["scopes"]}
     entry_selection = (_entry_selection(policy, {row["id"]: row["host"]
-                       for row in contract["capabilityMap"]["entrySurfaces"]["rows"]})
+                       for row in contract["capabilityMap"]["entrySurfaces"]["rows"]},
+                       contract["capabilityMap"]["entrySurfaces"].get("modeCatalog"))
                        if policy["schema"] == CURRENT_SCHEMA else None)
     errors = report["errors"]
     case_errors = []
