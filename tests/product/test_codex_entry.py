@@ -1173,6 +1173,9 @@ class EntryTests(unittest.TestCase):
                 case_path = root / "multiline-case.json"
                 case_path.write_bytes(json.dumps(case, ensure_ascii=False).encode("utf-8"))
                 manifest = self.prepared_persistent(root, case_path=case_path, native_hooks=True)
+                child = manifest['nativeHookProjection']['hooks']['SubagentStart'][0]['hooks'][0]
+                self.assertEqual(child['additionalContextLimit'],4000)
+                self.assertIn('accord-hook.cjs',child['command'])
                 prepared = Path(manifest["evidence"]) / "prompt-1.txt"
                 self.assertEqual(prepared.read_bytes(), prompt.encode("utf-8"))
                 with patch.object(entry.subprocess, "Popen") as forbidden:

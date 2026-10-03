@@ -408,7 +408,7 @@ def _native_hook_projection(package, node):
     projected = json.loads(json.dumps(definition["hooks"]))
     sources = set()
     for event, registrations in projected.items():
-        if event not in (*EVENTS, "SessionStart") or not isinstance(registrations, list) or not registrations:
+        if event not in (*EVENTS, "SessionStart", "SubagentStart") or not isinstance(registrations, list) or not registrations:
             raise ValueError("unsupported hook event or registrations")
         for registration in registrations:
             if not isinstance(registration, dict) or not isinstance(registration.get("hooks"), list) or not registration["hooks"]:
