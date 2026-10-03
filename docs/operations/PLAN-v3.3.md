@@ -86,6 +86,8 @@ Work云端继续待判：[云安全说明](https://learn.chatgpt.com/docs/enterp
 
 2026-09-30进一步核对来源与实际界面后，云端必须区分三种控制者：Work Cloud、当前[Codex Cloud发布环境](https://learn.chatgpt.com/docs/environments/cloud-environments)及[Codex Cloud Legacy](https://learn.chatgpt.com/docs/environments/cloud-environment)。当前Codex Cloud有Install script、Start skill、仓库Skills和任务独立文件续存；新任务取发布快照，已有任务保留自身状态，默认VM状态可恢复期最多为上次启动轮次或恢复后的七天。这提供了可比较的准备/接续通道，不证明Start skill是每轮入口、插件Hook已采用或所有效果可恢复。旧setup/maintenance容器观察只约束旧实例；Linear/GitHub及Code Review仍有Legacy路径，Slack/Teams可使用新的云委派，不能把外部集成统一绑定一个云执行者。
 
+2026-10-03按官方现页与用户截图复核：新设置页的“创建环境”入口及当时空列表只支持该视图观察，不能追认环境创建、发布或Accord加载。现有安装/启动/仓库Skills通道可用于按需准备，保存配置、发布准备快照及新任务采用分别验证。当前Hook等限制按日期、实际模式/策略及证据记录，不能冻结为永久排除；也没有官方承诺某日开放Accord Hook。相关官方条款、原生能力契约或已获准实例的实际回执变化时，先重核必要差异，再做有权限的最小业务、输入/恢复与退出验证；不定时重跑旧失败或自动消费旧授权。预备可复用核心、受支持加载桥接和验收边界，能降低后续适配成本，不能提前算支持或必然完成。
+
 [项目说明](https://learn.chatgpt.com/docs/projects)还明确ChatGPT项目指令适用于项目内聊天，但这是项目作用域的指导通道，不等于已安装Accord的入口、全部非项目聊天或可靠的状态/效果恢复。不能借此要求用户重写AGENTS.md，或用静态指令替代应由宿主承担的确定性保护。实际账号的入口、权限和协调器采用条件分别核实；当前只读界面观察不能扩大为全账号不可用，也不授权创建/发布环境或修改项目指令。
 
 IDE资料的未知也应收准：[JetBrains历史](https://www.jetbrains.com/help/ai-assistant/chat-mode.html#chat-history)按项目跨IDE会话保存，[Xcode会话](https://developer.apple.com/documentation/xcode/writing-code-with-intelligence-in-xcode)提供用户可见转录、同线程跟进、Stop和基于Git的文件Restore。它们不是“没有历史或回退”；待核的是同一控制者的输入/身份/工作区绑定、压缩或重连后的指导与状态恢复、暂停时在途操作及退出承担者。UI停止响应或恢复文件不证明进程静止、外部效果撤销或交权完成。内置集成继续pending，外部Codex接IDE工具的既有组合路线保持。停止重复同类使用说明和旧诊断；只有版本化实现/协议、原生回执或可用的新入口能改变这些判断时，才推进依赖的实例核验。其余普通交付与组合验收按原工序继续，17项职责和A01–A08不变。
