@@ -81,6 +81,13 @@ python -B -X utf8 -m unittest discover -s tests/product -v
 CLI reports use UTF-8 on standard output, including redirected output. Decode
 captured report bytes as UTF-8; callers need not change their system locale.
 
+When an effect depends on a connection's source, bind peer observations to the
+same connection that carries its requests and receipts. Redirects, reconnects or
+proxy replacement can break that relationship even when the original peer check
+passed. Disable unwanted route changes or recheck the new connection. Retain raw
+interface fields and distinguish an omitted auxiliary field from an unobserved
+required fact; neither a guessed value nor a self-written success flag proves it.
+
 After changing a package, verify the committed candidate in a fresh checkout
 before pushing. Repository text uses LF through `.gitattributes`; a Windows
 editor or generator can leave CRLF in the working tree until Git normalizes it.

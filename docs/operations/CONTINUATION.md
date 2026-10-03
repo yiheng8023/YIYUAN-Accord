@@ -30,8 +30,8 @@
 |---|---|---|
 | Root现装 | `3.3.0-dev.1+codex.20261002232312`，源5b34c3ccfb5ce983573c6b15bfb96431ac6f0205；24文件/SHA `5a247517dfb648da2b13afc258b55cc97a23ebc81b405da96ff5e7592f739c62` | 精确缓存、新版原生Hook入口、当前Root真实MCP目录和缺参分支已核；MCP进程精确文件来源未由metadata独立定位，不外推全部消费者或动态模型协调 |
 | 源码候选 | `3.3.0-dev.1+codex.20261003094159`，包源24fa60e1833c39451648ee0ab3af7f7c7a0ef132；25文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171` | 元指导默认入口及SubagentStart已实现；更新09已授权未消费，现装仍是上一行5b，候选不冒称已采用 |
-| 实际宿主 | 2026-10-04当前Root调用metadata报告0.160.0、主模型gpt-6-astra；独立CLI原固定0.160.0/fdda来源保持 | 主进程与外部执行器分别绑定；当前effort、服务档位与费用未由此证明，旧Sol和宿主版本只属当时观察 |
-| 托管检查 | 包源24fa的CI37094406186已11/11成功；7e34的CI37135653495已成功；引用集合复用修复cbddfcd86c231ba97b85202043a3dffbd6f15b17的[CI37139442607](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37139442607)本次读取仍运行 | 各结果只绑定其精确源；原失败不改判，后续材料性终态再核，不把源码检查当采用或完整验收 |
+| 实际宿主 | 2026-10-04调用metadata报告0.160.0；主模型先观察到gpt-6-astra，后续用户输入改为gpt-6.1-sol；独立CLI原固定0.160.0/fdda来源保持 | 每轮以最新原生观察为准，保留用户选择；effort、服务档位与费用未由此证明，旧值只属当时观察 |
+| 托管检查 | 包源24fa的CI37094406186已11/11成功；7e34的CI37135653495已成功；引用集合修复cbddfcd8的[CI37139442607](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37139442607)及接续修正d779b684的[CI37139953518](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37139953518)均已completed/success | 各结果只绑定其精确源；原失败不改判，不把源码检查当采用或完整验收 |
 
 现装已有合法大检查点保存后的完整来源读回、超限时的明确省略及epoch/revision/暂停/恢复门槛；原128KiB边界未扩大。SDK提议/源请求处理、持久化、接管和失ACK恢复已有本地及三平台机制证据。它们是可复用实现，不是普通语义择时或全版通过，不为轻量工作再串复杂SDK演示。
 
@@ -95,6 +95,12 @@
 独立有界源码短审未确认新的SDK实现断点：初始化、认证、幸存owner、预算与语义核验是可调用适配器的外部前提，公共脚本未消费该API不能单独证明契约违约。原私有owner两次缺正常terminal保持，不为该结论再开同路诊断或新增控制框架。新补验只证明当前版本受控连接，仍不证明模型自主择时、实际普通业务或GUI控制；不能用于关闭完整A05。原件在`accord-native-continuity-current-20261001-01`，不重跑、冷恢复、启用组件或改用户设置。
 
 ## 本轮工序纠偏与下一工作
+
+2026-10-04来源绑定缺口取得实际证据：复用Windows公开`SIO_AF_UNIX_GETPEERPID`，在承载两次只读RPC的同一AF_UNIX/WebSocket连接前后读取真实peer PID42068，并以OS精确FILETIME134354701958857822、实际image SHA fdda及原PID记录交叉核对。`initialize`、`initialized`、完整`thread/loaded/list`的原始HTTP/WS与报告独立一致；该次loaded为空/cursor=null，0.5584秒，连接关闭、所属Python child自然exit0/Job0，config及daemon.pid字节保持。没有启动CLI/AppServer/daemon或模型、stop、安装、信任写入；更新09授权/原1657执行包仍未消费或改签。
+
+该接口的实际provider返回正确PID却将附带returnedBytes留0，原4字节门两次fixture误拒已保全，修正后仍拒零PID/未知长度/IOCTL错误；自有socket双向PID与正常释放已实测。独审发现websocket-client默认重定向可换连接，Root核到已装1.9.0确有此路径，已禁重定向并在握手/每次发送前要求原socket与101状态；10纯控制及实际wire独立复核通过。一般来源绑定/换路与缺失字段原则已沉淀贡献指导，不新增常驻服务或产品运行时。原件、初稿、反例、冻结源、原始wire及ROOT-RECONCILIATION在`accord-daemon-peer-binding-20261004-01`；观察只证明当次同连接/实例/加载列表，不是全消费者空闲、安装ready、未来租约或完整功能通过。
+
+工序据此收紧：新Meta实际采用依赖25成员候选进入真实入口，现装5b不能代验；与它无关的工作仍可独立推进。来源绑定原缺口已有可复用的实际路径，下一仅将该取证路径接入既有collector，并用实际owner/Job/创建依据区分限定CAS写入者与其它消费者；全部消费者退出、源/配置/许可新鲜及未改原执行包仍是门槛，不自行白名单或写true自证，不启更新、信任、模型业务或停止后台。
 
 2026-10-04沿上一缺陷追踪，确认scope职责/质量轴/场景/声明、subjectEntries及两层requiredCoverage/A01–A08映射的表示顺序同样会无谓改变复用摘要。已只在复用副本按其明确集合/ID映射语义规范化；原记录definition身份、输入对象及conditions/expected中的有序业务数组不改。七项定向回归覆盖等价重排、合法成员/要求映射变动、有序操作反转及原身份保全，独立复核另核历史模式读取；三项原有记录复用、依赖失效及规范更新集成回归通过（121.911秒），三静态检查通过。7e34精确CI37135653495已completed/success。此为准入复用正确性修复，不增执行案例、模型业务、安装或通过计数；主模型按本轮原生报告为gpt-6-astra，保留用户选择，不继承旧模型档位和过期上下文估计。
 
