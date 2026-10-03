@@ -155,6 +155,8 @@ Root纠偏首先收准工具编排：私有`accord-root-decision-io-20261002-01`
 
 完整入口回归随后发现另一项旧夹具假设：原注册保真测试仍期待6个handler，新增SubagentStart后实际为7；首次104项中只有此项失败。已校正数量并明确检验唯一child注册、accord-hook入口和4000声明，完整104项/37.869秒通过，不删除新入口或放宽其它拒绝门。aefe的[CI37092348252](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37092348252)核时仍in-progress，后续按精确新提交核终态；同包3862、原文5118及现装5b保持，托管矩阵和实际采用另验。
 
+88da的[CI37092815999](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37092815999)两项原生生命周期通过；Ubuntu完整763项中4个失败子项均属同一旧错误文案断言，仍期待SessionStart专用文案，当前entry已兼容子代理并明确“task state remains unchanged”。仅同步当前事件拒绝测试的文案，非零退出、空stdout、未知事件拒绝及原件完全不动断言保持，完整3项/0.695秒通过。历史适配器文案断言保留在其固定源，不改历史判定。原失败日志保全，同包与权限保持；新提交的完整托管结果另核，CI失败期间不安装。
+
 最新云端截图和官方事实只刷新[计划中的暂态条件与重核触发](PLAN-v3.3.md)：新环境创建/发布、Install script、Start skill和仓库Skills可作准备路径，与Legacy/Work Cloud分开。没有Cloud创建、安装、任务或信任操作；未来Hook是否开放/日期未知，准备降低后续适配成本但不提前计通过。元指导提案、云端路线及新的普通业务均继续原F/A工序，不以本案结束消除职责或让它永续。
 
 2026-10-01用户截图的Stop“已阻止1/未成功0”已匹配d011接续回调：Root原生completed状态调用从rev171请求一个可安全推进的预算诊断段，`canContinue=true`形成rev172；诊断结束后的completed调用改为false形成rev173。它是本次有意接续，不是旧exit1复发，也不能据此称所有block都合理或故障均已排除。README双语补充状态解释，基线/验收/计划分别澄清既有职责和数量/实现分配关系；源码Hook行为、分发包、17scope/F/A与完整判据不改。

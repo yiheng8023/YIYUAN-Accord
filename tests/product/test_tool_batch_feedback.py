@@ -1,4 +1,4 @@
-"""Current SessionStart event scope and retained historical registration."""
+"""Current entry event scope and retained historical registration."""
 import json
 from pathlib import Path
 import shutil
@@ -32,7 +32,7 @@ class HookEventScopeTests(unittest.TestCase):
                         self.assertEqual(result.returncode, 1)
                         self.assertEqual(result.stdout, '')
                         self.assertEqual(result.stderr,
-                            'YIYUAN Accord: invalid SessionStart hook input; state remains unknown.\n')
+                            'YIYUAN Accord: invalid entry hook input; task state remains unchanged.\n')
                         self.assertEqual({p.name: p.read_bytes() for p in root.iterdir()}, original)
 
     def run_hook(self, workspace, event):
