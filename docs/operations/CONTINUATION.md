@@ -153,6 +153,8 @@ Root纠偏首先收准工具编排：私有`accord-root-decision-io-20261002-01`
 
 实现提交5e286b8b的[CI37090558511](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37090558511)首次终态失败：9个matrix均在原生夹具准备的多行prompt测试报unsupported hook event，非模型派发/原文字节失败；源码观察器的投影白名单漏了新增官方SubagentStart。现仅补此事件，原Root EVENTS生命周期、任意未知事件/非Node命令/完整插件组件拒绝保持；相同LF/CRLF/混合三prompt和child4000配置正向保真，CI原15项fixture组本地2.285秒通过。包3862与本机旧包不改，保留旧CI/logs及失败，不把局部修复当整矩阵通过。CRLF原文的Git whitespace识别已用精确路径cr-at-eol属性修正（fbb566ff），原Git raw4444/SHA5118未变。
 
+完整入口回归随后发现另一项旧夹具假设：原注册保真测试仍期待6个handler，新增SubagentStart后实际为7；首次104项中只有此项失败。已校正数量并明确检验唯一child注册、accord-hook入口和4000声明，完整104项/37.869秒通过，不删除新入口或放宽其它拒绝门。aefe的[CI37092348252](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37092348252)核时仍in-progress，后续按精确新提交核终态；同包3862、原文5118及现装5b保持，托管矩阵和实际采用另验。
+
 最新云端截图和官方事实只刷新[计划中的暂态条件与重核触发](PLAN-v3.3.md)：新环境创建/发布、Install script、Start skill和仓库Skills可作准备路径，与Legacy/Work Cloud分开。没有Cloud创建、安装、任务或信任操作；未来Hook是否开放/日期未知，准备降低后续适配成本但不提前计通过。元指导提案、云端路线及新的普通业务均继续原F/A工序，不以本案结束消除职责或让它永续。
 
 2026-10-01用户截图的Stop“已阻止1/未成功0”已匹配d011接续回调：Root原生completed状态调用从rev171请求一个可安全推进的预算诊断段，`canContinue=true`形成rev172；诊断结束后的completed调用改为false形成rev173。它是本次有意接续，不是旧exit1复发，也不能据此称所有block都合理或故障均已排除。README双语补充状态解释，基线/验收/计划分别澄清既有职责和数量/实现分配关系；源码Hook行为、分发包、17scope/F/A与完整判据不改。

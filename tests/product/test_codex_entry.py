@@ -1022,7 +1022,12 @@ class EntryTests(unittest.TestCase):
             self.assertEqual(projection["definition"], definition)
             self.assertEqual(projection["hooks"], expected)
             self.assertEqual(len(expected["SessionStart"]), 2)
-            self.assertEqual(sum(len(r["hooks"]) for rows in expected.values() for r in rows), 6)
+            self.assertEqual(sum(len(r["hooks"]) for rows in expected.values() for r in rows), 7)
+            self.assertEqual(len(expected["SubagentStart"]), 1)
+            child = expected["SubagentStart"][0]["hooks"]
+            self.assertEqual(len(child), 1)
+            self.assertEqual(child[0]["additionalContextLimit"], 4000)
+            self.assertIn("runtime/accord-hook.cjs", child[0]["command"])
             self.assertEqual(projection["sourceFiles"], ["runtime/accord-hook.cjs", "runtime/task-checkpoint.cjs"])
             self.assertEqual(projection["packageFiles"], {
                 p.relative_to(Path(manifest["package"])).as_posix(): entry.digest(p)
