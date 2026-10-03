@@ -884,6 +884,85 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 if "subjectEntries" in case:
                     self.assertNotEqual(_reuse_definition(self.contract, case), _reuse_definition(changed, case))
 
+    def test_reference_set_order_reuses_without_mutating_original_declarations(self):
+        from yiyuan_accord.admission import _definition, _reuse_definition, admission_contract_errors
+        original = copy.deepcopy(self.contract)
+        for key in ("duties", "qualityAxes", "scenarios", "claims", "subjectEntries"):
+            reordered = copy.deepcopy(self.contract)
+            for group in ("scopes", "cases"):
+                for row in reordered["acceptance"]["admission"][group]:
+                    if key in row:
+                        row[key].reverse()
+            self.assertEqual(admission_contract_errors(reordered), [])
+            for old, new in zip(self.contract["acceptance"]["admission"]["cases"],
+                                reordered["acceptance"]["admission"]["cases"]):
+                with self.subTest(field=key, case=old["id"]):
+                    stored = _definition(self.contract, old)
+                    self.assertEqual(_reuse_definition(self.contract, old), _reuse_definition(reordered, new))
+                    self.assertEqual(stored, _definition(self.contract, old))
+        self.assertEqual(self.contract, original)
+
+    def test_reference_membership_and_execution_order_still_change_reuse(self):
+        from yiyuan_accord.admission import _reuse_definition, admission_contract_errors
+        for key in ("duties", "qualityAxes", "scenarios"):
+            changed = copy.deepcopy(self.contract)
+            scope = changed["acceptance"]["admission"]["scopes"][0]
+            removed = scope[key].pop()
+            for row in changed["acceptance"]["admission"]["cases"]:
+                if row["scope"] == scope["id"]:
+                    row[key] = [value for value in row[key] if value != removed]
+            self.assertEqual(admission_contract_errors(changed), [])
+            for old, new in zip(self.contract["acceptance"]["admission"]["cases"],
+                                changed["acceptance"]["admission"]["cases"]):
+                if old["scope"] == scope["id"]:
+                    with self.subTest(field=key, case=old["id"]):
+                        self.assertNotEqual(_reuse_definition(self.contract, old), _reuse_definition(changed, new))
+        first = copy.deepcopy(self.contract["acceptance"]["admission"]["cases"][0])
+        first["expected"]["effect"]["orderedActions"] = ["read", "write"]
+        reversed_actions = copy.deepcopy(first)
+        reversed_actions["expected"]["effect"]["orderedActions"].reverse()
+        self.assertNotEqual(_reuse_definition(self.contract, first), _reuse_definition(self.contract, reversed_actions))
+
+    def test_coverage_set_and_requirement_row_order_preserve_reuse(self):
+        from yiyuan_accord.admission import _definition, _reuse_definition, admission_contract_errors
+        original = copy.deepcopy(self.contract)
+        for kind in ("coverage", "requirement-rows", "requirement-coverage"):
+            reordered = copy.deepcopy(self.contract)
+            policy = reordered["acceptance"]["admission"]
+            if kind == "coverage":
+                for ids in policy["requiredCoverage"].values():
+                    ids.reverse()
+            elif kind == "requirement-rows":
+                policy["acceptanceRequirements"].reverse()
+            else:
+                for row in policy["acceptanceRequirements"]:
+                    for ids in row["requiredCoverage"].values():
+                        ids.reverse()
+            self.assertEqual(admission_contract_errors(reordered), [])
+            for case in self.contract["acceptance"]["admission"]["cases"]:
+                with self.subTest(kind=kind, case=case["id"]):
+                    stored = _definition(self.contract, case)
+                    self.assertEqual(_reuse_definition(self.contract, case), _reuse_definition(reordered, case))
+                    self.assertEqual(stored, _definition(self.contract, case))
+        self.assertEqual(self.contract, original)
+
+    def test_requirement_to_scope_mapping_change_remains_material(self):
+        from yiyuan_accord.admission import _reuse_definition, admission_contract_errors
+        changed = copy.deepcopy(self.contract)
+        requirements = changed["acceptance"]["admission"]["acceptanceRequirements"]
+        # Move one actual scope between requirements while preserving global
+        # membership. A mapping change must not be mistaken for presentation.
+        source, target, claim, scope = next(
+            (a, b, claim, scope)
+            for a in requirements for b in requirements if a is not b
+            for claim, ids in a["requiredCoverage"].items() if len(ids) > 1
+            for scope in ids if claim in b["requiredCoverage"] and scope not in b["requiredCoverage"][claim])
+        source["requiredCoverage"][claim].remove(scope)
+        target["requiredCoverage"][claim].append(scope)
+        self.assertEqual(admission_contract_errors(changed), [])
+        for case in self.contract["acceptance"]["admission"]["cases"]:
+            self.assertNotEqual(_reuse_definition(self.contract, case), _reuse_definition(changed, case))
+
     git = DevelopmentEvidenceTests.__dict__["git"]
     history = DevelopmentEvidenceTests.history
 

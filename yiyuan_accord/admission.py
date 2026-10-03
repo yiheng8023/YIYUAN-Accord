@@ -401,6 +401,25 @@ def _reuse_definition(contract, case):
     # Keep stored-record identity intact. Progress descriptions are not criteria;
     # the current subject still needs a fresh independent review and recheck.
     current = copy.deepcopy(contract)
+    current_case = copy.deepcopy(case)
+    policy = current["acceptance"]["admission"]
+    for claim, scopes in policy["requiredCoverage"].items():
+        policy["requiredCoverage"][claim] = sorted(scopes)
+    if "requiredHosts" in policy:
+        policy["requiredHosts"] = sorted(policy["requiredHosts"])
+    if "acceptanceRequirements" in policy:
+        policy["acceptanceRequirements"].sort(key=lambda requirement: requirement["id"])
+        for requirement in policy["acceptanceRequirements"]:
+            for claim, scopes in requirement["requiredCoverage"].items():
+                requirement["requiredCoverage"][claim] = sorted(scopes)
+    # These declaration fields are validated as sets of references. Do not
+    # recursively sort arbitrary condition/effect arrays: their order may matter.
+    for scope in policy["scopes"]:
+        for key in ("duties", "qualityAxes", "scenarios", "claims", "subjectEntries"):
+            if key in scope:
+                scope[key] = sorted(scope[key])
+    if "subjectEntries" in current_case:
+        current_case["subjectEntries"] = sorted(current_case["subjectEntries"])
     if (catalog := current["capabilityMap"]["entrySurfaces"].get("modeCatalog")) is not None:
         # Catalog membership is a set; its presentation order is not a changed
         # criterion. Normalize only the reuse copy, never the stored identity.
@@ -424,7 +443,7 @@ def _reuse_definition(contract, case):
             row.pop("currentEffect", None)
     # Static validation still enforces the actual Skill byte limit. All case,
     # scope, package, authority and substantive criteria remain bound.
-    return _definition(current, case)
+    return _definition(current, current_case)
 
 
 def _git(root, *args):
