@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-10-03 · N33-20260909 / r36。以实时Git、当前原生输入及受影响资源为准。
+更新：2026-10-04 · N33-20260909 / r36。以实时Git、当前原生输入及受影响资源为准。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识与路线；[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)与[机器投影](../../product/development.json)分别展开结果、判据和验证投影。本页只保留当前责任；旧详记见末尾固定版本入口。
 
 ## 目标、责任与边界
@@ -29,9 +29,9 @@
 | 对象 | 当前事实 | 边界 |
 |---|---|---|
 | Root现装 | `3.3.0-dev.1+codex.20261002232312`，源5b34c3ccfb5ce983573c6b15bfb96431ac6f0205；24文件/SHA `5a247517dfb648da2b13afc258b55cc97a23ebc81b405da96ff5e7592f739c62` | 精确缓存、新版原生Hook入口、当前Root真实MCP目录和缺参分支已核；MCP进程精确文件来源未由metadata独立定位，不外推全部消费者或动态模型协调 |
-| 源码候选 | 与上述现装相同，24文件逐字节匹配固定Git来源 | bind调用指引及拒绝字段已改变；精确5b CI已11/11成功，当前Root入口观察仍不代替普通交接或整版验收 |
-| 实际宿主 | 当前Root调用metadata报告0.159.0-alpha.12.1；独立CLI按固定0.160.0/fdda字节执行；本次未查询或停止managed daemon，主模型gpt-6.1-sol | 主进程与外部执行器分别绑定；旧0.159.2/0.159.3/daemon观察保持当时对象，不把旧缓存实现外推为新版全入口采用 |
-| 托管检查 | [CI37027468776](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37027468776) exact 5b已11/11成功 | beaf/d90等旧检查保持原对象；原取消/403/失败记录不改判，后续纯接续记录不冒新矩阵，不重复已终态检查 |
+| 源码候选 | `3.3.0-dev.1+codex.20261003094159`，包源24fa60e1833c39451648ee0ab3af7f7c7a0ef132；25文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171` | 元指导默认入口及SubagentStart已实现；更新09已授权未消费，现装仍是上一行5b，候选不冒称已采用 |
+| 实际宿主 | 2026-10-04当前Root调用metadata报告0.160.0、主模型gpt-6-astra；独立CLI原固定0.160.0/fdda来源保持 | 主进程与外部执行器分别绑定；当前effort、服务档位与费用未由此证明，旧Sol和宿主版本只属当时观察 |
+| 托管检查 | 包源24fa的CI37094406186已11/11成功；7e34的CI37135653495已成功；引用集合复用修复cbddfcd86c231ba97b85202043a3dffbd6f15b17的[CI37139442607](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37139442607)本次读取仍运行 | 各结果只绑定其精确源；原失败不改判，后续材料性终态再核，不把源码检查当采用或完整验收 |
 
 现装已有合法大检查点保存后的完整来源读回、超限时的明确省略及epoch/revision/暂停/恢复门槛；原128KiB边界未扩大。SDK提议/源请求处理、持久化、接管和失ACK恢复已有本地及三平台机制证据。它们是可复用实现，不是普通语义择时或全版通过，不为轻量工作再串复杂SDK演示。
 
@@ -39,7 +39,7 @@
 
 宿主更新按实际版本/开关与官方契约重验受影响依赖，未受影响成果复用。0.159.2对应实验协议中的既有请求字段/结束事件已核，官方仍支持当前Codex兼容包。DevDay的新原生能力先按实际账号、入口、控制与恢复条件比较，不默认启用、部署或新增入口ID。详见[官方研究](../../research/reviews/2026-09-30-devday-accord-impact.md)及原件索引。
 
-2026-10-02下一必要准备：当前CLI/daemon已升级至0.160.0，实际help、导出的实验协议schema与[官方App Server](https://learn.chatgpt.com/docs/app-server)已核所需text+skill路径。更新07已结束，新候选与当前Root入口有限采用已核。受控代表性模型测试可透明用合成材料，以维护者功能验收为真实用途；不是虚构客户业务或填清单求绿。新课程报名词表case的8原件、两阶段、3输出和独立oracle已在accord-sdk-skill-glossary-20261002-01准备；原Matt domain-modeling经原生explicit输入由协调者选定，源/策略不改。caller的18文件已冻结并交回Root，54纯控制与5启动拒绝检查仅属准备证据；独立复审、正式前绑及当前条件预检仍待完成。模型业务与单工作区信任尚未授权，不启动模型。健康续作正确时不强迫handoff，SDK贡献不扩展GUI/全A05/A08。
+2026-10-02词表案的历史准备（现已执行结束未准入，下述待办和权限仅属当时状态，不再派发）：当时CLI/daemon已升级至0.160.0，实际help、导出的实验协议schema与[官方App Server](https://learn.chatgpt.com/docs/app-server)已核所需text+skill路径。更新07已结束，新候选与当时Root入口有限采用已核。受控代表性模型测试可透明用合成材料，以维护者功能验收为真实用途；不是虚构客户业务或填清单求绿。新课程报名词表case的8原件、两阶段、3输出和独立oracle已在accord-sdk-skill-glossary-20261002-01准备；原Matt domain-modeling经原生explicit输入由协调者选定，源/策略不改。caller的18文件已冻结并交回Root，54纯控制与5启动拒绝检查仅属准备证据；独立复审、正式前绑及当时条件预检仍待完成。当时模型业务与单工作区信任尚未授权，未启动模型。健康续作正确时不强迫handoff，SDK贡献不扩展GUI/全A05/A08。
 
 2026-10-02更新07实际收尾：用户在客户端外启动唯一attempt `20261002T050158Z-3476ede2`，update/discover均退出0；新缓存24文件和旧恢复24文件再次匹配固定源。目录核验非forced、Job0、reader已停止，执行未改Hook信任、主代理选择或第三方组件。重启后的node_repl管道与保存后态不同，保留当前设置，不擅自回滚或推断写者。当前Root原生入口明确指向新包，状态工具调用metadata实际参与；同字节的MCP/state协议不能据此定位MCP进程包源或证明全消费者采用。确认无更新写者后保留13冻结执行源、原plan/授权/桌面lnk，回收Hash匹配的自建桌面入口并将Start-update.cmd改为仅说明；许可已消费，不重放。记录见 `accord-local-adoption-20261002-07/ACTUAL-INSTALLATION.json`、`completion.json` 及原attempt；模型case权限不包含在此次更新内。
 
@@ -78,7 +78,7 @@
 | W06/W07 | 环境/压力变化后必要续做、消费者有效采用、资产保护和完整资源退出；局部Job治理不能代验普通宿主 |
 | W08 | 同一episode全链组合与独立净影响判断；A08依赖A01–A07，不能平均分或拼散案补短板；精确候选与发布后态分别核 |
 
-六个无活动case范围：codex-entry-coverage、system-integration、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。dynamic-model-routing新增词表案只覆盖受委托选择、采用与两轮纠正的必要观察；默认/最小环境、能力失效、完整动态分工及净价值仍未验。已结束复盘案保留其真实显式选择/加载/方法采用与有限材料观察，没有完整case通过；autonomous-continuity的代表性案已有限定普通两轮case准入，父范围的recovery-and-rollback、capability-loss及未观测接管/失败条件仍缺，完整A05不关闭。必要发布前代表性测试本身服务项目验收，不必等待外部客户委托；合成材料必须明示，不能把准备或案例数量当整项结果。
+五个尚无case定义的范围：codex-entry-coverage、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。system-integration已有state-client-decisions定义，但其实际执行已结束未准入；定义存在不等于正在执行或已通过。dynamic-model-routing的词表与概念关系案均已结束未准入；默认/最小环境、能力失效、完整动态分工及净价值仍未验。已结束复盘案保留其真实显式选择/加载/方法采用与有限材料观察，没有完整case通过；autonomous-continuity的代表性案已有限定普通两轮case准入，父范围的recovery-and-rollback、capability-loss及未观测接管/失败条件仍缺，完整A05不关闭。必要发布前代表性测试本身服务项目验收，不必等待外部客户委托；合成材料必须明示，不能把准备或案例数量当整项结果。
 
 ### 最新实际交付：候选离线分发与条件修订
 
