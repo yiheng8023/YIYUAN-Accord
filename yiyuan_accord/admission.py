@@ -401,6 +401,11 @@ def _reuse_definition(contract, case):
     # Keep stored-record identity intact. Progress descriptions are not criteria;
     # the current subject still needs a fresh independent review and recheck.
     current = copy.deepcopy(contract)
+    if (catalog := current["capabilityMap"]["entrySurfaces"].get("modeCatalog")) is not None:
+        # Catalog membership is a set; its presentation order is not a changed
+        # criterion. Normalize only the reuse copy, never the stored identity.
+        for key, values in catalog.items():
+            catalog[key] = sorted(values)
     if _sparse_package_files(contract, case) is not None:
         # The selected package files, not an unrelated package change or the
         # development cache stamp, determine whether this execution still applies.

@@ -206,6 +206,20 @@ Keep mutation survivors, equivalent changes, timeouts and tool errors distinct;
 [PIT explains these limits](https://pitest.org/quickstart/basic_concepts/).
 Broad mutation campaigns and universal score thresholds are not prerequisites.
 
+Bind checks to the meaning of the requirement. A declared set's presentation
+order must not invalidate reusable evidence; preserve original record identity
+separately from semantic comparison. Actual membership, authority, criteria or
+scope changes still invalidate affected reuse and require review. Exercise both
+equivalent rearrangements and substantive changes when maintaining such checks.
+
+Before consequential shell effects, require an explicit successful result for
+each necessary precondition and propagate evaluation errors. An exit code of zero
+does not settle a command that also reported a failed guard. In PowerShell use
+terminating error handling for the guarded sequence, flatten native collections
+before testing item properties, and do not continue deletion or another write
+after a precondition error. Inspect partial effects before retrying; corrections
+and post-state checks do not retroactively make the failed guard successful.
+
 Complexity, coverage and CRAP help locate change risk; they cannot establish
 requirement coverage, architecture quality or product value. Define the measured
 unit, coverage kind and justified threshold before using a metric as a gate.

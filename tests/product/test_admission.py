@@ -862,6 +862,28 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(set(modes["chatgpt-desktop"]), {"chat", "work-local", "work-cloud", "remote"})
         self.assertEqual(modes["chatgpt-desktop"]["work-cloud"]["status"], "deferred")
 
+    def test_mode_presentation_order_reuses_meaning_without_rewriting_identity(self):
+        from yiyuan_accord.admission import _definition, _reuse_definition, admission_contract_errors
+        reordered = copy.deepcopy(self.contract)
+        reordered["capabilityMap"]["entrySurfaces"]["modeCatalog"]["chatgpt-desktop"].reverse()
+        self.assertEqual(admission_contract_errors(reordered), [])
+        for case in self.contract["acceptance"]["admission"]["cases"]:
+            if "subjectEntries" not in case:
+                continue
+            original = _definition(self.contract, case)
+            self.assertNotEqual(original, _definition(reordered, case))
+            self.assertEqual(_reuse_definition(self.contract, case), _reuse_definition(reordered, case))
+            self.assertEqual(original, _definition(self.contract, case))
+
+    def test_substantive_mode_membership_change_never_reuses_old_meaning(self):
+        from yiyuan_accord.admission import _reuse_definition
+        for operation in (lambda values: values.remove("remote"), lambda values: values.append("new-mode")):
+            changed = copy.deepcopy(self.contract)
+            operation(changed["capabilityMap"]["entrySurfaces"]["modeCatalog"]["chatgpt-desktop"])
+            for case in self.contract["acceptance"]["admission"]["cases"]:
+                if "subjectEntries" in case:
+                    self.assertNotEqual(_reuse_definition(self.contract, case), _reuse_definition(changed, case))
+
     git = DevelopmentEvidenceTests.__dict__["git"]
     history = DevelopmentEvidenceTests.history
 

@@ -4368,51 +4368,9 @@
       "evidence": "Private originals: accord-continuity-interface-20260927-01/sdk-evidence; sdk-hosted-run.json, sdk-job.log, sdk-reviewer-originals.json, sdk-semantic-review.md, sdk-evaluation-sources.json and sdk-admission-final.json. No replay of this completed instance.",
       "remaining": "The separate validate-product run36255868953 for this exact candidate remains in progress at this recording, two jobs successful and nine running, no failure observed. All original predicates, 17 required scopes, 10 cases, seven pending entry dispositions and six unbound scopes remain. functionalCompletion/candidateEligible=false."
     },
-    {
-      "id": "cloud-preload-conditional-preparation-20260927",
-      "observedAt": "2026-09-27",
-      "scope": "local-prospective-preparation-not-cloud-execution",
-      "basis": "Retained runtime observation ties /opt/codex to tool ancestor PID3450 CODEX_HOME and an existing config candidate. Different-time PID4641 app-server/-c is not merged. Versioned configuration schema identifies the user layer and session overrides; neither this nor Agents API architecture attests the actual Codex Cloud controller or adoption.",
-      "routeCorrection": "Actual future Agent adoption is an observation target, not a prerequisite for all local preparation. Reuse the existing bounded repair draft to prepare a sourced candidate with guards; no path guessing, new probe, replay, generic runtime or extra acceptance case is required.",
-      "prepared": "Separate private accord-cloud-preload-20260927-01 binds the unchanged 202615/6dda complete package, current four helper hashes and original source provenance. Prepared output explicitly remains awaiting-agent/unverified. Eighteen offline regressions block native process creation; embedded setup payload/compiled Python/shell syntax were checked. Original repair/as-run and past results remain untouched.",
-      "recoveryCorrection": "Preparation process exit does not prove actual Cloud Agent/MCP/Hook release. The new rollback CLI defers before target access or native calls; the old internal routine is reference only and is excluded from the setup payload. No promise of automatic same-task uninstall or whole-container rollback. Installation commands have no cross-process CAS: avoid known concurrent writers; detected drift preserves unknown effects without replay or overwrite-restoration.",
-      "authorization": "Pending new explicit authority for one temporary setup change, one new cloud adoption observation, restoring setup prestate, and retaining candidate registration/trust/cache, this task's normal Hook input/lock/failure records and recovery material when actual consumer release cannot be verified. No new cloud write, install, trust, task, cleanup continuation, host kill or archive/delete has occurred.",
-      "remaining": "Actual controller consumption, override effects and supported release remain unverified. All original required scopes, predicates, failures and release gates remain; local preparation is not acceptance."
-    },
-    {
-      "id": "cloud-preload-authorized-attempt-stopped-20260927",
-      "observedAt": "2026-09-27",
-      "scope": "one-authorized-loading-attempt-not-agent-acceptance",
-      "authorization": "User explicitly approved the already reviewed proposal, including temporary setup, one new task, setup restoration and retention when original consumer release is unverified. That single attempt is now consumed.",
-      "taskUrl": "https://chatgpt.com/codex/cloud/tasks/task_e_6ab867c52264832bb91d46d78bcb35bb",
-      "environmentId": "6a870b3542cc819199cff184a2e06f37",
-      "submissions": 1,
-      "visibleEnvironmentCount": {
-        "before": 12,
-        "after": 13
-      },
-      "sourceIdentity": {
-        "approvedSetupSha256": "36c9e7a04c328db50c8e0d6de8e499bdfe25415f319a7617b0fa8c5f56acd557",
-        "savedSetupSha256": "84645ac0a45a44b1f6d9fdad88fe54cc9f27814fcf8839c6f7883f736bcbca9c",
-        "uiDifference": "Both submitted setup and task prompt contain exactly one extra trailing LF. Approved originals and exact submitted bytes retained; executable payload unchanged."
-      },
-      "result": "Setup stopped with PreparationError at native-resource-close: native app process release unobserved. targetMutationDispatched=false is the scoped marker that no target market/plugin/Hook write had been dispatched. Actual Agent adoption observation was not reached.",
-      "limits": "The marker does not establish zero filesystem/bootstrap effects. The composite close predicate does not identify timeout, forced termination, a surviving process or another root cause, nor prove all earlier preflight conditions passed. No original-container resource receipt was retrieved.",
-      "restoration": "Saved and independently re-read automatic setup plus empty manual/maintenance scripts. Image universal, agent network off and cache-enabled setting preserved. This settings restoration is not full container rollback or native process-release proof.",
-      "disposition": "Original task/logs and local evidence retained. No follow-up input, retry, rollback, host kill, archive or deletion; no claim that Cloud cannot support Accord. Future cloud actions require separately bound evidence and authority; do not replay this ended instance.",
-      "evidence": "accord-cloud-preload-20260927-01: approval-state.json, setup-saved.sh, task-prompt-submitted.txt, setup-log-visible.txt, prestate.json, poststate.json, execution-result.json and screenshots. Independent read-only reconciliation supports these bounded conclusions."
-    },
-    {
-      "id": "cloud-preparation-close-diagnostic-repair-20260927",
-      "observedAt": "2026-09-27",
-      "scope": "local-preparation-wrapper-diagnostics-only",
-      "finding": "The as-run wrapper collapsed distinct close failures and could replace the first close exception during finally cleanup. Offline regressions reproduced this information loss; they do not identify the original Cloud process failure.",
-      "change": "A separate diagnostic-repair copy exposes only constrained primitive receipt fields, fixed phase and error type. It preserves the first close diagnostic across repeated finally-close, includes the real alive enum and keeps direct helper interruptions unchanged. Release predicate, process controls, deadlines and target-effect uncertainty are unchanged.",
-      "verification": "13 focused regressions and 18 original offline checks pass with native process startup blocked. Independent read-only review found no remaining blocker after targeted corrections. All 33 original files and prepared/executed evidence hashes were checked unchanged; the owned offline test directory was removed.",
-      "identity": "diagnostic-repair/bootstrap.py SHA256 877438de7fee034311b5f7586ccd4bc6e2c23fa7fd24a8d91ba889c8a7f00f6e; shipped Accord package and third-party Skills unchanged.",
-      "limits": "No new setup bundle, Cloud input, native/model execution, install, trust change or rollback. Original Cloud root cause and native resource post-state remain unknown; actual Agent adoption was not reached. The consumed one-time authorization and acceptance boundaries remain unchanged.",
-      "evidence": "accord-cloud-preload-20260927-01/diagnostic-repair: provenance.json, red-test.txt, review-red-test.txt, test_close_diagnostics-green.txt, test_repair-green.txt, originals-verified.json, review.md, result.json and README.md."
-    },
+
+
+
     {
       "id": "ordinary-continuity-failure-paths-20260927",
       "observedAt": "2026-09-27",
@@ -4741,7 +4699,7 @@
       "limits": "This source/record clarification is not whole function/host acceptance or reason to suppress healthy Hook continuation. Block decisions and hook failures still require source/condition/impact review."
     },
     {"id":"state-client-guide-unique-attempt-20261003","observedAt":"2026-10-03","scope":"actual-created-source-and-failed-pre-model-episode-not-admission","subject":"cc09b3f7fb7aaac790bb0faeb65885c9a38d4e59","case":"v33-state-client-decisions-01","reportedCreation":{"cli":"0.160.0","model":"gpt-6.1-sol","reasoningEffort":"medium","businessNetwork":false},"actual":{"threadStart":1,"turnStart":0,"businessOutputs":0,"normalBusinessTerminals":0,"rootGateWaitMs":[135025,97718],"outerSeconds":244.9549766,"nativeExit":0,"outerExit":1,"forced":false,"connectionClosed":true,"assignedJobActive":0,"assignedJobTotal":40},"disposition":"ended-not-admitted; unique authority consumed; no replay/restore/archive","evidence":"Private accord-state-client-execution-20261003-01 ACTUAL-RESULT/raw records and independent ACTUAL-REVIEW; source/Root/SQLite/private thread retained.","cleanup":"Two input bytes/mtimes,20 frozen sources/settings1fe9/globalmeta5118 match;10 owned caches89632 bytes and7 empty temporary directories removed.","cause":"Root semantic handling exhausted first240-second deadline before model dispatch. Generic cancellation wording does not prove a user or host cancellation.","limits":"No business model use, outputs, admission, full F/A or speed benefit. Usage/final Goal readback unknown. Late G0002 cannot satisfy an expired gate; global instruction byte binding gap preserved separately. Private review overprojection retained without copying scope values."},
-    {"id":"cloud-environment-temporary-capability-recheck-20261003","observedAt":"2026-10-03","scope":"official-documents-and-user-screenshot-not-cloud-execution","sources":["https://learn.chatgpt.com/docs/environments/cloud-environments","https://learn.chatgpt.com/docs/enterprise/cloud-local-access"],"observation":"Official new Codex Cloud environment creation/publication,Install script,Start skill and repository Skills provide preparation candidates. Screenshot shows new/Legacy menus and a creation entry with an empty current view.","disposition":"Keep Work Cloud,new published Codex Cloud and Legacy separate; current restrictions are dated/mode/policy-bound, not permanent exclusions.","recheck":"Official contract/native capability changes or meaningful receipts from a specifically authorized current instance trigger minimal affected recheck; do not replay old failures or infer future permission.","limits":"No environment/task/account access, creation,installation,trust or Cloud business. Start skill is not proven per-turn/meta/Hook adoption. Hook roadmap/date and actual Accord suitability remain unknown; no coverage or release change."},
+
     {"id":"original-meta-guidance-inclusion-proposal-20261003","observedAt":"2026-10-03","scope":"source-preserving-design-discussion-not-distributed-or-active-product-guidance","sourceSha256":"511861ec00a15e051c97221d9d62e9586856a5d659724eff2d2953f002f457bc","sourceBytes":4444,"observation":"Original user framework preserved exactly in private proposal; current Accord truth/authority/closure/adaptation duties overlap. No complete conflict-free or behavior verdict.","proposal":"One canonical original plus supported host loading; reconcile duplicated bridge statements while retaining specific safeguards and user-owned instruction independence.","limits":"Not implemented/adopted/installed; no global user AGENTS modification. Philosophical upstream does not change host priority. Current entry5359 bytes plus original approximately9803 bytes is not a token/coverage proof; complete loading/recovery,spilling/duplication and consequences need verification."}
   ],
   "environmentControl": {
