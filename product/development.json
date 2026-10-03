@@ -5,7 +5,7 @@
   "status": "in-development",
   "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
   "authority": {
-    "basis": "The user authorized 3.3 functional development in the bound checkout, prioritizing actual ChatGPT and Codex entries including first-class CLI. Users provide natural-language ideas, accountable judgments and necessary authorization; the Agent researches feasibility and official or mature ecosystem sources, chooses and operates tools, corrects and recovers, owns continuity and OS/host resource management, and closes work without technical rescue. The latest bound consensus limits 3.3 delivery to OpenAI. On 2026-09-28 the user first cancelled the planned subsequent Claude adaptation, then reopened Claude alongside Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity as possible 3.4 adaptation candidates only. Existing other future plans remain unchanged. On 2026-10-02 the user clarified that these hosts remain candidates only, with adaptation undecided. After 3.3 publication the user will explain the reasons; user and Agent will then discuss and decide whether any host should be adapted. Other future plans remain unchanged. Candidate listing is not a scheduled adaptation task or authority for installation, evaluation spending, new trust or 3.4 publication; 3.3 remains OpenAI-only. Release progress ends at verified publication of 3.3.0 and excludes later deployment, promotion, marketplace submission and governance. The user also authorized removing obsolete packages, data and paths with negative effects or historical debt after checking current consumers, ownership, evidence and recovery needs. Claude is excluded from current distribution and support claims. Historical assets retain their original identity. Prefer reversible task-local isolation; necessary shared changes require known scope, backup, affected tasks and recovery. On 2026-09-14 the user requested completing and publishing 3.3 promptly without reducing functionality or quality. This authorizes release 3.3.0 only after the retained necessary acceptance and exact-candidate conditions; it is not present readiness. Previous 3.2 publication and one-use installation permissions are historical, not standing 3.3 authority. On 2026-09-13 the user authorized disabling Accord if it interferes with development, and required the plan and continuation state to stay flexible and current; this does not grant unrelated configuration changes, account or trust access, social publication, or releases outside this target. On 2026-10-03 the user clarified that post-3.3 maintenance, updates or incremental releases may precede 3.4; the next release is not necessarily 3.4. Specific versions, scope and timing remain to be decided as needed. Other future plans and the candidate-only host list remain unchanged; this does not authorize other releases or alter the current 3.3 acceptance and progress boundary. On 2026-10-03 the user explicitly authorized including the original meta-guidance by default in 3.3. Preserve the exact original, reconcile duplicated principles with concrete task duties, verify supported entry/recovery/subagent loading, and preserve host priority and user files. This authorizes repository implementation, not local installation, new Hook trust, Cloud execution or removal of the user global AGENTS copy. On 2026-10-03 the user directed subsequent project Cloud work to use the new Codex Cloud instead of Legacy. Follow the corresponding official migration of the existing YIYUAN-Accord environment and ordinary preparation, preserving old task evidence and settings. The platform migration entry created its own onboarding request; do not relabel it as a human-authored Skill/model choice. This direction does not authorize unrelated business, GitHub writes, new accounts/credentials/trust, broader network/data access or material additional costs; preparation/publication/new-task adoption and full Accord acceptance remain separate.",
+    "basis": "The user authorized 3.3 functional development in the bound checkout, prioritizing actual ChatGPT and Codex entries including first-class CLI. Users provide natural-language ideas, accountable judgments and necessary authorization; the Agent researches feasibility and official or mature ecosystem sources, chooses and operates tools, corrects and recovers, owns continuity and OS/host resource management, and closes work without technical rescue. The latest bound consensus limits 3.3 delivery to OpenAI. On 2026-09-28 the user first cancelled the planned subsequent Claude adaptation, then reopened Claude alongside Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity as possible 3.4 adaptation candidates only. Existing other future plans remain unchanged. On 2026-10-02 the user clarified that these hosts remain candidates only, with adaptation undecided. After 3.3 publication the user will explain the reasons; user and Agent will then discuss and decide whether any host should be adapted. Other future plans remain unchanged. Candidate listing is not a scheduled adaptation task or authority for installation, evaluation spending, new trust or 3.4 publication; 3.3 remains OpenAI-only. Release progress ends at verified publication of 3.3.0 and excludes later deployment, promotion, marketplace submission and governance. The user also authorized removing obsolete packages, data and paths with negative effects or historical debt after checking current consumers, ownership, evidence and recovery needs. Claude is excluded from current distribution and support claims. Historical assets retain their original identity. Prefer reversible task-local isolation; necessary shared changes require known scope, backup, affected tasks and recovery. On 2026-09-14 the user requested completing and publishing 3.3 promptly without reducing functionality or quality. This authorizes release 3.3.0 only after the retained necessary acceptance and exact-candidate conditions; it is not present readiness. Previous 3.2 publication and one-use installation permissions are historical, not standing 3.3 authority. On 2026-09-13 the user authorized disabling Accord if it interferes with development, and required the plan and continuation state to stay flexible and current; this does not grant unrelated configuration changes, account or trust access, social publication, or releases outside this target. On 2026-10-03 the user clarified that post-3.3 maintenance, updates or incremental releases may precede 3.4; the next release is not necessarily 3.4. Specific versions, scope and timing remain to be decided as needed. Other future plans and the candidate-only host list remain unchanged; this does not authorize other releases or alter the current 3.3 acceptance and progress boundary. On 2026-10-03 the user explicitly authorized including the original meta-guidance by default in 3.3. Preserve the exact original, reconcile duplicated principles with concrete task duties, verify supported entry/recovery/subagent loading, and preserve host priority and user files. This authorizes repository implementation, not local installation, new Hook trust, Cloud execution or removal of the user global AGENTS copy. On 2026-10-03 the user directed subsequent project Cloud work to use the new Codex Cloud instead of Legacy. Follow the corresponding official migration of the existing YIYUAN-Accord environment and ordinary preparation, preserving old task evidence and settings. The platform migration entry created its own onboarding request; do not relabel it as a human-authored Skill/model choice. This direction does not authorize unrelated business, GitHub writes, new accounts/credentials/trust, broader network/data access or material additional costs; preparation/publication/new-task adoption and full Accord acceptance remain separate. On 2026-10-03 the user subsequently directed removing Cloud adaptation entirely from the current 3.3 work and release-before acceptance scope, without permanently rejecting future support. This supersedes the earlier new-Cloud migration workflow. Hosted Codex Cloud (new and Legacy), Work Cloud and dependent external trigger/return routes are deferred; existing local selected entries, Linux/macOS CLI, general continuity, quality floors and historical evidence remain. No Cloud preparation, publication, investigation or business acceptance remains a current prerequisite. Future reuse and migration cost are unverified, and renewed adaptation requires a later user decision.",
     "scope": ["source-semantics", "full-function-acceptance-mapping", "local-contract-validation", "matching-navigation-and-glossary", "whole-system-optimization", "existing-host-functional-closure", "next-version-development", "controlled-existing-host-evaluation", "chatgpt-codex-functional-development", "conditional-v3.3-release"],
     "notGranted": ["other-host-experiments", "new-trust-data-or-material-cost", "unrelated-external-writes", "rewrite-historical-tags-or-releases", "publication-outside-current-conditional-release-authority", "blind-process-termination-or-global-environment-reset"],
     "conditionalRelease": {
@@ -26,7 +26,7 @@
       "codex"
     ],
     "additionalHostAdaptation": "deferred",
-    "scopeRule": "Version 3.3 develops only the OpenAI adaptation. Select execution entries by real user value, a feasible end-to-end duty composition and lifecycle burden before binding a delivery commitment; verify actual behavior before making support claims. Web/cloud location, brand, plugin installation or Hook support alone cannot establish or rule out suitability. Ordinary Chat is not a default standalone deliverable; any auxiliary dialogue or transfer role needs a concrete use and its own accountability. ChatGPT Work and Codex cloud remain execution candidates with unresolved Accord suitability. Reuse common implementations and verify consequential differences. Claude remains outside 3.3 distribution and support. After the earlier cancellation, Claude, Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity are now possible 3.4 host candidates only. Adaptation remains undecided until after 3.3 publication, when the user explains the reasons and user and Agent discuss and decide together; other future plans remain unchanged. This does not activate those hosts or reinstate retired observers. Historical identity and vendor independence are preserved. Organize applicability by product or work form, execution location, access surface and operating system. IDE brands are integration instances, not automatically separate implementation projects. Reuse verified common mechanisms and retain consequential differences; preserving discovery IDs does not establish equivalence or remove necessary outcomes. On 2026-10-03 the user clarified that post-3.3 maintenance, updates or incremental releases may precede 3.4; the next release is not necessarily 3.4. Specific versions, scope and timing remain to be decided as needed. Other future plans and the candidate-only host list remain unchanged; this does not authorize other releases or alter the current 3.3 acceptance and progress boundary.",
+    "scopeRule": "Version 3.3 develops only the OpenAI adaptation. Select execution entries by real user value, a feasible end-to-end duty composition and lifecycle burden before binding a delivery commitment; verify actual behavior before making support claims. Web/cloud location, brand, plugin installation or Hook support alone cannot establish or rule out suitability. Ordinary Chat is not a default standalone deliverable; any auxiliary dialogue or transfer role needs a concrete use and its own accountability. Local-only Work and Remote retain their selected host-bound scope. Hosted Cloud and dependent routes are outside current 3.3 adaptation and release-before acceptance by the user decision of 2026-10-03; future suitability remains open. Reuse common implementations and verify consequential differences. Claude remains outside 3.3 distribution and support. After the earlier cancellation, Claude, Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity are now possible 3.4 host candidates only. Adaptation remains undecided until after 3.3 publication, when the user explains the reasons and user and Agent discuss and decide together; other future plans remain unchanged. This does not activate those hosts or reinstate retired observers. Historical identity and vendor independence are preserved. Organize applicability by product or work form, execution location, access surface and operating system. IDE brands are integration instances, not automatically separate implementation projects. Reuse verified common mechanisms and retain consequential differences; preserving discovery IDs does not establish equivalence or remove necessary outcomes. On 2026-10-03 the user clarified that post-3.3 maintenance, updates or incremental releases may precede 3.4; the next release is not necessarily 3.4. Specific versions, scope and timing remain to be decided as needed. Other future plans and the candidate-only host list remain unchanged; this does not authorize other releases or alter the current 3.3 acceptance and progress boundary. On 2026-10-03 the user subsequently directed removing Cloud adaptation entirely from the current 3.3 work and release-before acceptance scope, without permanently rejecting future support. This supersedes the earlier new-Cloud migration workflow. Hosted Codex Cloud (new and Legacy), Work Cloud and dependent external trigger/return routes are deferred; existing local selected entries, Linux/macOS CLI, general continuity, quality floors and historical evidence remain. No Cloud preparation, publication, investigation or business acceptance remains a current prerequisite. Future reuse and migration cost are unverified, and renewed adaptation requires a later user decision.",
     "sourceDecision": "Implement ordinary-input functional slices, including autonomous tool-failure recovery and correction of delivered artifacts, while retaining complete system, continuity, ecosystem and OS/host resource obligations. Across applicable capabilities the Agent owns need detection, timing, execution feedback, recovery, verification and exit; fork is only one example. Ordinary cases do not tell the Agent which tool to use. Unnecessary or premature invocation, missed needs and incomplete follow-through remain failures; always-on functionality is not the goal. Absorb applicable engineering principles across Agent tasks: internalize necessary judgment, contracts or feedback connections and reuse sufficient host execution/state capabilities. Evaluate both against the same outcomes; neither an existing host capability nor a custom component proves coverage. Adaptive practice does not remove domain-specific correctness checks. System coupling, failure propagation, shared-state ownership and non-compensable quality floors are implementation and acceptance obligations throughout, not a final polish stage. Before any change, the host Agent uses source and dependency evidence to assess whole-goal and consequential cross-boundary effects; Accord carries this duty through entry and recovery guidance. Changed assumptions, baselines, plans or acceptance criteria also reopen affected existing outputs and the current applicability of historical conclusions. Native task state or existing checkpoint unresolved conditions retain consequential unknowns; neither file matches nor a revised future plan closes them. Inspection depth follows actual risk, and discovery grants no new access or authority. Prioritize consequential weak dependencies and verify composed episodes as well as individual functions. Local checks are not ordinary-host acceptance; 3.3 publication is conditionally authorized by the latest user decision and remains dependent on full necessary acceptance. The user-confirmed N33-20260909 node in PLAN-v3.3.md owns current consensus, source consistency, dynamic evaluation and nonlinear procedures. Review source contradictions before dependent implementation; reconcile affected historical and current results. All editable or usable host UI, settings, commands and interfaces need discovered dispositions, including unknowns; coverage does not authorize enablement.",
     "claudeAdaptation": "candidate-for-v3.4",
     "futureAdaptationVersion": "3.4",
@@ -385,7 +385,7 @@
           "name": "Codex web / 云端任务",
           "officialSource": "https://learn.chatgpt.com/docs/environments/cloud-environments",
           "execution": "Codex托管执行者；与触发前端分开绑定",
-          "environment": "按实际控制者区分当前发布环境与Legacy容器：分别核发布快照/Install script/Start skill/任务文件恢复期限，或旧setup/maintenance/缓存；个人本机Skills不自动同步。绑定账户、仓库/ref、配置消费、原生输入/身份、权限与恢复/退出承担者，不与Work Cloud或本地采用混用。2026-09-30官方云环境来源补充只确定候选通道，Accord全链路仍待判。 2026-10-03用户决定后续项目Cloud工作使用新版；对应旧环境沿官方迁移入口进入新版准备，不将旧任务身份/权限/失败转为新环境证据，仍须核准备、保存/发布及新任务实际采用。",
+          "environment": "2026-10-03用户决定当前3.3移除托管Cloud适配：现阶段功能/扩展和可控性条件、额外接入与收尾成本不符合本版优先级。Codex Cloud新版/Legacy均后置，取消迁移/发布/接入/行为验收的活动依赖；保留真实准备结果、失败及未知后态，不作永久不适用或未来零迁移成本结论。重新纳入须届时用户决定及必要差异验收。 实际准备/环境字段仅保留其有日期的历史观察，不是当前支持或活动工序。",
           "observation": "2026-09-15复核官方云环境文档及现有账号设置页：环境/仓库均为yiheng8023/YIYUAN-Accord，目录/workspace/YIYUAN-Accord，3项历史任务；universal、自动初始化、Agent网络关闭、缓存开启，未见维护脚本。仅查看详情/编辑表单后退出，未保存、重置缓存、连接终端或启动任务。仓库检出和初始化是可利用的通道，当前包的实际加载、原生事件、恢复与生命周期仍未知。 2026-09-23经用户明确同意，在现有YIYUAN-Accord环境/main单次创建只读云任务，实际检出8e6015fd、/workspace/YIYUAN-Accord、平台work分支，结束时Git干净。可见命令回执确认/opt/codex/bin/codex为0.144.0-alpha.4、plugin list为空、MCP仅make_pr、系统Skill目录只有5项。该可执行文件版本不代指运行本任务的控制者版本。云端报告Node24.15.0及SQLite/WebSocket可用，这些正向值保留报告来源层级；未独立取得每项原始回执。没有安装、启用、增加信任或修改环境；现有Accord源码未实际装载不等于云端不可适配。原件和审查边界在accord-entry-route-review-20260923-01，继续按实际原生管理器/Hook信任及受限连接准备接入，不沿用本机0.156.x假设。 同日获单次可回滚接入授权后，在原云任务注册/安装74845成功，24文件与750f9ef8包身份匹配；可用0.144.0-alpha.4的hooks/list去重只返回两个SessionStart、UserPromptSubmit和Stop四项，未发现SessionEnd/Interrupt。按该次预绑六项门槛停止授信并回滚：原生插件/市场移除成功、两列表为空、config恢复为前态相同字节、仓库干净，所属AppServer PID4888自然exit0且后验不存在。目录结果均untrusted；执行者报告未写信任，但没有原始RPC请求流水，不能独立证明零写入/零新模型方法的精确次数。未进入原任务采用检查。六项是该次门槛，不是所有宿主的通用数量要求；缺失事件对应职责须按已有原生机制与状态回收路径评估，不能直接降门槛或排除整个入口。原件限制见accord-cloud-route-20260923-01。 后续精确官方0.144.0-alpha.4源码职责复核确认原生取消终止当前任务并记录TurnAborted，取消错误不经正常Stop续行；现有Accord下一原生输入/resume使旧绑定失效，显式retire支持有责任者的回收，缺失事件名本身不构成新运行时需求。7项既有本地定向检查通过，不能代验原控制者身份、实际采用、云端取消行为或无责任者的自动回收。9月24日用户确认新的四Hook方案后已执行并回滚：74845原生注册/安装/四项信任成立，同容器下一输入仍未获得Accord指导和状态工具，采用未成立。相邻两轮容器hostname与授信后配置相同；下一查原宿主装载/刷新和初始化时机，不循环安装。最终插件/市场/信任撤回、配置逐字节恢复前态、make_pr及Git保持，所属PID5455自然exit0且后验不存在。7个实际RPC请求/响应及1个通知关联已读回；公开流水未保存写入参数，expectedVersion具体值保持独立核验未知。准备目录缺失及配置检查器前缀误写分别保留为执行侧问题，不归为产品故障。原六项试验及其回滚不改标，完整结果见accord-cloud-route-20260923-01/cloud-adoption-result.json。 后续只读源码审查确认0.144的逐轮配置基于保存的会话配置、插件有进程缓存；原生安装/配置刷新只通知接收请求server自身线程。原云控制者身份/有效配置和支持连接仍未获得，不能将源码相符机制当唯一已证根因。官方setup/maintenance提供启动前准备候选但不保证legacy云加载。2026-09-24环境详情仍可读，点击官方编辑到/edit后返回403；未保存、更改设置或重新执行试验。2026-09-25经官方编辑按钮只读复查，编辑表单已正常显示，目录/workspace/YIYUAN-Accord、universal、自动初始化、Agent网络关闭及缓存开启保持，任务计数字段为8；不据该计数推断独立会话。未保存、连接终端、安装、授信或启动新任务，临时页面已关闭。旧403保留历史，当前不再等待用户重复核对；原控制者装载条件和实际采用仍未知，下一准备启动前接入与回滚，涉及新设置/信任/云任务须绑定相应授权。原件导航accord-readiness-review-20260925-01。随后用户批准一次启动前接入验证：临时setup已保存并逐字回读，唯一新任务task_e_6ab59bee8ac0832b8c4455c7279289ba在32秒后环境设置失败，脚本回显RuntimeError，尚未进入受测Agent。未重试或追加清理续作；环境已移除临时setup并恢复自动设置，网络/缓存等前态保持，任务历史保留。失败页无原容器回读入口，故具体失败断言、安装/信任及资源后态保持未知，不声称原容器完整回滚。恢复后官方诊断终端另见启动期默认/root/.codex配置不存在、已知CLI文件存在但PATH无codex，Node24.15.0路径可见且本次包目录不在该诊断容器；它不是原失败容器，不能代验其后态。已请求exit并关闭诊断页，远端shell退出未独立确认。启动期/运行期配置前提需先重新绑定，不重放本次试验；原案脚本及离线23项检查的有限范围保留于accord-cloud-startup-20260925-01/as-run。 随后复现原错误边界丢失诊断字段，并在独立repair稿要求显式目标CODEX_HOME和来源定位、允许目录内尚无config.toml、统一原生子进程与回滚绑定，公开固定守卫原因/阶段及目标效果未知边界，未知原生异常不输出内容。17项离线回归通过，两项独立阶段审查发现已修正；没有调用Codex/App Server、重新生成启动包或再次操作云端。来源定位字符串不证明实际Agent使用该目录，原失败原因和容器后态未据此改标。原脚本已使用绝对CLI路径，因此PATH现象不单独构成原故障解释。重复启动文件及测试临时目录已清理，实际投递源、旧检查与失败仍在as-run。 2026-10-03用户提供旧版环境迁移按钮截图并决定使用新版。Root在已登录官方网页确认对应Legacy环境、自动setup/禁用Agent网络/启用缓存/14项任务；新版设置的迁移按钮打开设置 yiheng8023/YIYUAN-Accord。原生read_thread确认新setup thread01a10010-60b2-761d-8915-a46b9008b085为durable控制者，绑定仓库/main；平台自动生成onboarding请求。准备者报告Python3.12.14/Node24.19.0、标准库工作流、三静态检查通过，实际面板已有start_skill、网络开关未选中、无环境变量/代理密钥；763项测试仍运行。发布、新任务采用和Accord指导/Hook/完整功能仍未验，不将报告当完整原始执行证明；未重放旧Cloud案例或修改本机安装/信任。",
           "currentEffect": "unverified"
         },
@@ -435,7 +435,7 @@
           "name": "Codex GitHub / GitLab / Linear / Slack 等触发入口",
           "officialSource": "https://learn.chatgpt.com/docs/cloud",
           "execution": "外部触发与结果回传；复用已绑定的云执行者",
-          "environment": "组织授权、连接和任务环境另验；入口目录不授权连接或发布。",
+          "environment": "2026-10-03随Cloud适配移出3.3：依赖新版/Legacy托管执行者的外部触发、审批、跟进和结果回传路线后置；不继续账户连接、环境准备或云业务取证。保留发现ID及历史不同触发/执行者的边界，未来按实际依赖重新判断。",
           "observation": "2026-09-15实读https://learn.chatgpt.com/docs/third-party/slack及https://learn.chatgpt.com/docs/third-party/linear：两者将消息/issue交给Codex云任务，依赖GitHub、云环境和各自连接/组织权限，回传进度与结果；Linear后续评论可继续同一chat。可复用云端执行与验收基础，另核输入来源/授权、仓库选择、续接及回传权限，不为每个前端复制执行器。本次未实测、连接或发送消息；GitHub/GitLab各自的触发语义不能由Slack/Linear资料代验。 2026-09-27复读Slack官方页：环境选择有歧义时可回退到最近环境，任务使用映射中首仓库默认分支；这不能替代用户目标中的精确环境/仓库/ref。结果回复受设置影响，须核回传范围；本次只形成该前端的必要核验点，不新建连接、发消息或外推其它前端。",
           "currentEffect": "unverified"
         },
@@ -5384,7 +5384,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud按2026-10-03用户决定从本版后置；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
@@ -5395,8 +5395,8 @@
                     "basis": "限定local-only Work：任务协调与工具执行均由本地宿主承担，复用同机现包。云协调器调用本机工具不在此已选路线内。下一实际交付仍核当前采用、真实Hook cwd、暂停/续作与退出；旧cwd错位不算正确联读。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5413,8 +5413,8 @@
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5423,16 +5423,16 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "待判：普通Chat辅助，Work Cloud按同一云协调器的实际能力和职责组合判断。纯云与有本机访问的组合、账号/策略及Hook边界见PLAN的2026-09-30核对；网页或本机安装、stdio MCP成功不等于云协调器采用，各UI须分别验。",
+                "status": "deferred",
+                "basis": "2026-10-03当前网页Work Cloud随Cloud适配后置，普通Chat仍仅作辅助而非独立全链路交付；保留完整模式处置。本地执行者的实际采用不能代验云协调器或网页界面。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   }
                 }
               },
@@ -5441,16 +5441,16 @@
                 "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
               },
               "cx-cloud": {
-                "status": "pending",
-                "basis": "待判（分别绑定云执行者）：当前Codex Cloud使用发布环境、Install script/Start skill、仓库Skills与任务独立文件状态；Legacy仍保留setup/maintenance容器路径。旧诊断只约束旧实例，不代验新环境。准备/文件续存不证明每轮入口、实际Agent配置消费、事件身份、未知效果恢复和退出责任；默认VM状态恢复期不等于永久保留。按PLAN的2026-09-30来源与实际可用入口确定下一实例，不重复旧安装/stdio诊断。"
+                "status": "deferred",
+                "basis": "2026-10-03用户决定当前3.3移除托管Cloud适配：现阶段功能/扩展和可控性条件、额外接入与收尾成本不符合本版优先级。Codex Cloud新版/Legacy均后置，取消迁移/发布/接入/行为验收的活动依赖；保留真实准备结果、失败及未知后态，不作永久不适用或未来零迁移成本结论。重新纳入须届时用户决定及必要差异验收。"
               },
               "cx-desktop": {
                 "status": "selected",
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-integrations": {
-                "status": "pending",
-                "basis": "待判（触发与回传）：先绑定具体云执行者；当前Slack/Teams可委派新版Codex Cloud，Code Review及Linear/GitHub仍有Legacy路径，不能共用一个未核控制者结论。Slack环境回退和首仓库默认分支须与目标对账；同一连接账号的跟进、审批与回传范围分别核，另一参与者不自动继承续作权限。未连接、发送或采用。"
+                "status": "deferred",
+                "basis": "2026-10-03随Cloud适配移出3.3：依赖新版/Legacy托管执行者的外部触发、审批、跟进和结果回传路线后置；不继续账户连接、环境准备或云业务取证。保留发现ID及历史不同触发/执行者的边界，未来按实际依赖重新判断。"
               },
               "cx-jetbrains": {
                 "status": "pending",
@@ -5518,7 +5518,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud按2026-10-03用户决定从本版后置；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
@@ -5529,8 +5529,8 @@
                     "basis": "限定local-only Work：任务协调与工具执行均由本地宿主承担，复用同机现包。云协调器调用本机工具不在此已选路线内。下一实际交付仍核当前采用、真实Hook cwd、暂停/续作与退出；旧cwd错位不算正确联读。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5547,8 +5547,8 @@
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5557,16 +5557,16 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "待判：普通Chat辅助，Work Cloud按同一云协调器的实际能力和职责组合判断。纯云与有本机访问的组合、账号/策略及Hook边界见PLAN的2026-09-30核对；网页或本机安装、stdio MCP成功不等于云协调器采用，各UI须分别验。",
+                "status": "deferred",
+                "basis": "2026-10-03当前网页Work Cloud随Cloud适配后置，普通Chat仍仅作辅助而非独立全链路交付；保留完整模式处置。本地执行者的实际采用不能代验云协调器或网页界面。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   }
                 }
               },
@@ -5575,16 +5575,16 @@
                 "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
               },
               "cx-cloud": {
-                "status": "pending",
-                "basis": "待判（分别绑定云执行者）：当前Codex Cloud使用发布环境、Install script/Start skill、仓库Skills与任务独立文件状态；Legacy仍保留setup/maintenance容器路径。旧诊断只约束旧实例，不代验新环境。准备/文件续存不证明每轮入口、实际Agent配置消费、事件身份、未知效果恢复和退出责任；默认VM状态恢复期不等于永久保留。按PLAN的2026-09-30来源与实际可用入口确定下一实例，不重复旧安装/stdio诊断。"
+                "status": "deferred",
+                "basis": "2026-10-03用户决定当前3.3移除托管Cloud适配：现阶段功能/扩展和可控性条件、额外接入与收尾成本不符合本版优先级。Codex Cloud新版/Legacy均后置，取消迁移/发布/接入/行为验收的活动依赖；保留真实准备结果、失败及未知后态，不作永久不适用或未来零迁移成本结论。重新纳入须届时用户决定及必要差异验收。"
               },
               "cx-desktop": {
                 "status": "selected",
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-integrations": {
-                "status": "pending",
-                "basis": "待判（触发与回传）：先绑定具体云执行者；当前Slack/Teams可委派新版Codex Cloud，Code Review及Linear/GitHub仍有Legacy路径，不能共用一个未核控制者结论。Slack环境回退和首仓库默认分支须与目标对账；同一连接账号的跟进、审批与回传范围分别核，另一参与者不自动继承续作权限。未连接、发送或采用。"
+                "status": "deferred",
+                "basis": "2026-10-03随Cloud适配移出3.3：依赖新版/Legacy托管执行者的外部触发、审批、跟进和结果回传路线后置；不继续账户连接、环境准备或云业务取证。保留发现ID及历史不同触发/执行者的边界，未来按实际依赖重新判断。"
               },
               "cx-jetbrains": {
                 "status": "pending",
@@ -5651,7 +5651,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud按2026-10-03用户决定从本版后置；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
@@ -5662,8 +5662,8 @@
                     "basis": "限定local-only Work：任务协调与工具执行均由本地宿主承担，复用同机现包。云协调器调用本机工具不在此已选路线内。下一实际交付仍核当前采用、真实Hook cwd、暂停/续作与退出；旧cwd错位不算正确联读。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5680,8 +5680,8 @@
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5690,16 +5690,16 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "待判：普通Chat辅助，Work Cloud按同一云协调器的实际能力和职责组合判断。纯云与有本机访问的组合、账号/策略及Hook边界见PLAN的2026-09-30核对；网页或本机安装、stdio MCP成功不等于云协调器采用，各UI须分别验。",
+                "status": "deferred",
+                "basis": "2026-10-03当前网页Work Cloud随Cloud适配后置，普通Chat仍仅作辅助而非独立全链路交付；保留完整模式处置。本地执行者的实际采用不能代验云协调器或网页界面。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   }
                 }
               },
@@ -5708,16 +5708,16 @@
                 "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
               },
               "cx-cloud": {
-                "status": "pending",
-                "basis": "待判（分别绑定云执行者）：当前Codex Cloud使用发布环境、Install script/Start skill、仓库Skills与任务独立文件状态；Legacy仍保留setup/maintenance容器路径。旧诊断只约束旧实例，不代验新环境。准备/文件续存不证明每轮入口、实际Agent配置消费、事件身份、未知效果恢复和退出责任；默认VM状态恢复期不等于永久保留。按PLAN的2026-09-30来源与实际可用入口确定下一实例，不重复旧安装/stdio诊断。"
+                "status": "deferred",
+                "basis": "2026-10-03用户决定当前3.3移除托管Cloud适配：现阶段功能/扩展和可控性条件、额外接入与收尾成本不符合本版优先级。Codex Cloud新版/Legacy均后置，取消迁移/发布/接入/行为验收的活动依赖；保留真实准备结果、失败及未知后态，不作永久不适用或未来零迁移成本结论。重新纳入须届时用户决定及必要差异验收。"
               },
               "cx-desktop": {
                 "status": "selected",
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-integrations": {
-                "status": "pending",
-                "basis": "待判（触发与回传）：先绑定具体云执行者；当前Slack/Teams可委派新版Codex Cloud，Code Review及Linear/GitHub仍有Legacy路径，不能共用一个未核控制者结论。Slack环境回退和首仓库默认分支须与目标对账；同一连接账号的跟进、审批与回传范围分别核，另一参与者不自动继承续作权限。未连接、发送或采用。"
+                "status": "deferred",
+                "basis": "2026-10-03随Cloud适配移出3.3：依赖新版/Legacy托管执行者的外部触发、审批、跟进和结果回传路线后置；不继续账户连接、环境准备或云业务取证。保留发现ID及历史不同触发/执行者的边界，未来按实际依赖重新判断。"
               },
               "cx-jetbrains": {
                 "status": "pending",
@@ -6762,7 +6762,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud按2026-10-03用户决定从本版后置；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
@@ -6773,8 +6773,8 @@
                     "basis": "限定local-only Work：任务协调与工具执行均由本地宿主承担，复用同机现包。云协调器调用本机工具不在此已选路线内。下一实际交付仍核当前采用、真实Hook cwd、暂停/续作与退出；旧cwd错位不算正确联读。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -6791,8 +6791,8 @@
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -6801,16 +6801,16 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "待判：普通Chat辅助，Work Cloud按同一云协调器的实际能力和职责组合判断。纯云与有本机访问的组合、账号/策略及Hook边界见PLAN的2026-09-30核对；网页或本机安装、stdio MCP成功不等于云协调器采用，各UI须分别验。",
+                "status": "deferred",
+                "basis": "2026-10-03当前网页Work Cloud随Cloud适配后置，普通Chat仍仅作辅助而非独立全链路交付；保留完整模式处置。本地执行者的实际采用不能代验云协调器或网页界面。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   }
                 }
               },
@@ -6819,16 +6819,16 @@
                 "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
               },
               "cx-cloud": {
-                "status": "pending",
-                "basis": "待判（分别绑定云执行者）：当前Codex Cloud使用发布环境、Install script/Start skill、仓库Skills与任务独立文件状态；Legacy仍保留setup/maintenance容器路径。旧诊断只约束旧实例，不代验新环境。准备/文件续存不证明每轮入口、实际Agent配置消费、事件身份、未知效果恢复和退出责任；默认VM状态恢复期不等于永久保留。按PLAN的2026-09-30来源与实际可用入口确定下一实例，不重复旧安装/stdio诊断。"
+                "status": "deferred",
+                "basis": "2026-10-03用户决定当前3.3移除托管Cloud适配：现阶段功能/扩展和可控性条件、额外接入与收尾成本不符合本版优先级。Codex Cloud新版/Legacy均后置，取消迁移/发布/接入/行为验收的活动依赖；保留真实准备结果、失败及未知后态，不作永久不适用或未来零迁移成本结论。重新纳入须届时用户决定及必要差异验收。"
               },
               "cx-desktop": {
                 "status": "selected",
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-integrations": {
-                "status": "pending",
-                "basis": "待判（触发与回传）：先绑定具体云执行者；当前Slack/Teams可委派新版Codex Cloud，Code Review及Linear/GitHub仍有Legacy路径，不能共用一个未核控制者结论。Slack环境回退和首仓库默认分支须与目标对账；同一连接账号的跟进、审批与回传范围分别核，另一参与者不自动继承续作权限。未连接、发送或采用。"
+                "status": "deferred",
+                "basis": "2026-10-03随Cloud适配移出3.3：依赖新版/Legacy托管执行者的外部触发、审批、跟进和结果回传路线后置；不继续账户连接、环境准备或云业务取证。保留发现ID及历史不同触发/执行者的边界，未来按实际依赖重新判断。"
               },
               "cx-jetbrains": {
                 "status": "pending",
@@ -7039,7 +7039,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud按2026-10-03用户决定从本版后置；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
@@ -7050,8 +7050,8 @@
                     "basis": "限定local-only Work：任务协调与工具执行均由本地宿主承担，复用同机现包。云协调器调用本机工具不在此已选路线内。下一实际交付仍核当前采用、真实Hook cwd、暂停/续作与退出；旧cwd错位不算正确联读。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -7068,8 +7068,8 @@
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -7078,16 +7078,16 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "待判：普通Chat辅助，Work Cloud按同一云协调器的实际能力和职责组合判断。纯云与有本机访问的组合、账号/策略及Hook边界见PLAN的2026-09-30核对；网页或本机安装、stdio MCP成功不等于云协调器采用，各UI须分别验。",
+                "status": "deferred",
+                "basis": "2026-10-03当前网页Work Cloud随Cloud适配后置，普通Chat仍仅作辅助而非独立全链路交付；保留完整模式处置。本地执行者的实际采用不能代验云协调器或网页界面。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   }
                 }
               },
@@ -7096,16 +7096,16 @@
                 "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
               },
               "cx-cloud": {
-                "status": "pending",
-                "basis": "待判（分别绑定云执行者）：当前Codex Cloud使用发布环境、Install script/Start skill、仓库Skills与任务独立文件状态；Legacy仍保留setup/maintenance容器路径。旧诊断只约束旧实例，不代验新环境。准备/文件续存不证明每轮入口、实际Agent配置消费、事件身份、未知效果恢复和退出责任；默认VM状态恢复期不等于永久保留。按PLAN的2026-09-30来源与实际可用入口确定下一实例，不重复旧安装/stdio诊断。"
+                "status": "deferred",
+                "basis": "2026-10-03用户决定当前3.3移除托管Cloud适配：现阶段功能/扩展和可控性条件、额外接入与收尾成本不符合本版优先级。Codex Cloud新版/Legacy均后置，取消迁移/发布/接入/行为验收的活动依赖；保留真实准备结果、失败及未知后态，不作永久不适用或未来零迁移成本结论。重新纳入须届时用户决定及必要差异验收。"
               },
               "cx-desktop": {
                 "status": "selected",
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-integrations": {
-                "status": "pending",
-                "basis": "待判（触发与回传）：先绑定具体云执行者；当前Slack/Teams可委派新版Codex Cloud，Code Review及Linear/GitHub仍有Legacy路径，不能共用一个未核控制者结论。Slack环境回退和首仓库默认分支须与目标对账；同一连接账号的跟进、审批与回传范围分别核，另一参与者不自动继承续作权限。未连接、发送或采用。"
+                "status": "deferred",
+                "basis": "2026-10-03随Cloud适配移出3.3：依赖新版/Legacy托管执行者的外部触发、审批、跟进和结果回传路线后置；不继续账户连接、环境准备或云业务取证。保留发现ID及历史不同触发/执行者的边界，未来按实际依赖重新判断。"
               },
               "cx-jetbrains": {
                 "status": "pending",
@@ -7261,7 +7261,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud继续待判；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
+                "basis": "限定纳入开发：协调与执行均在本地的Work Local复用同机现包，Remote经受支持桌面控制已选本地主机的既有任务；这不包含全部桌面模式或跨主机迁移。真实旧Work案仅证入口/Hook/MCP参与，原查询cwd错误仍保留。Work Cloud按2026-10-03用户决定从本版后置；桌面各已选模式的交互、权限、普通交付、恢复和生命周期仍须分别验收。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
@@ -7272,8 +7272,8 @@
                     "basis": "限定local-only Work：任务协调与工具执行均由本地宿主承担，复用同机现包。云协调器调用本机工具不在此已选路线内。下一实际交付仍核当前采用、真实Hook cwd、暂停/续作与退出；旧cwd错位不算正确联读。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -7290,8 +7290,8 @@
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   },
                   "remote": {
                     "status": "selected",
@@ -7300,16 +7300,16 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "待判：普通Chat辅助，Work Cloud按同一云协调器的实际能力和职责组合判断。纯云与有本机访问的组合、账号/策略及Hook边界见PLAN的2026-09-30核对；网页或本机安装、stdio MCP成功不等于云协调器采用，各UI须分别验。",
+                "status": "deferred",
+                "basis": "2026-10-03当前网页Work Cloud随Cloud适配后置，普通Chat仍仅作辅助而非独立全链路交付；保留完整模式处置。本地执行者的实际采用不能代验云协调器或网页界面。",
                 "modes": {
                   "chat": {
                     "status": "auxiliary",
                     "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
                   },
                   "work-cloud": {
-                    "status": "pending",
-                    "basis": "待判：按PLAN的2026-09-30云协调边界，分别核纯云/本机访问、账号/策略、Hook适用性、启动与退出承担者、回调失败及实际效果；本机工具成功不代验云协调器。各UI的输入/审批、暂停、结果权限和退出差异仍须独立核。"
+                    "status": "deferred",
+                    "basis": "2026-10-03随当前Cloud范围裁剪后置Work Cloud，包括纯云及云协调器调用本机工具的组合。保留模式ID、官方条件、历史观察和未验缺口；不将本地Work/Remote结果移作云证据，不继续云接入/业务验收。未来重新纳入需新的范围决定。"
                   }
                 }
               },
@@ -7318,16 +7318,16 @@
                 "basis": "纳入开发：普通本地执行与原生恢复已有有界证据；当前包安装态和完整职责仍须验收。"
               },
               "cx-cloud": {
-                "status": "pending",
-                "basis": "待判（分别绑定云执行者）：当前Codex Cloud使用发布环境、Install script/Start skill、仓库Skills与任务独立文件状态；Legacy仍保留setup/maintenance容器路径。旧诊断只约束旧实例，不代验新环境。准备/文件续存不证明每轮入口、实际Agent配置消费、事件身份、未知效果恢复和退出责任；默认VM状态恢复期不等于永久保留。按PLAN的2026-09-30来源与实际可用入口确定下一实例，不重复旧安装/stdio诊断。"
+                "status": "deferred",
+                "basis": "2026-10-03用户决定当前3.3移除托管Cloud适配：现阶段功能/扩展和可控性条件、额外接入与收尾成本不符合本版优先级。Codex Cloud新版/Legacy均后置，取消迁移/发布/接入/行为验收的活动依赖；保留真实准备结果、失败及未知后态，不作永久不适用或未来零迁移成本结论。重新纳入须届时用户决定及必要差异验收。"
               },
               "cx-desktop": {
                 "status": "selected",
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-integrations": {
-                "status": "pending",
-                "basis": "待判（触发与回传）：先绑定具体云执行者；当前Slack/Teams可委派新版Codex Cloud，Code Review及Linear/GitHub仍有Legacy路径，不能共用一个未核控制者结论。Slack环境回退和首仓库默认分支须与目标对账；同一连接账号的跟进、审批与回传范围分别核，另一参与者不自动继承续作权限。未连接、发送或采用。"
+                "status": "deferred",
+                "basis": "2026-10-03随Cloud适配移出3.3：依赖新版/Legacy托管执行者的外部触发、审批、跟进和结果回传路线后置；不继续账户连接、环境准备或云业务取证。保留发现ID及历史不同触发/执行者的边界，未来按实际依赖重新判断。"
               },
               "cx-jetbrains": {
                 "status": "pending",
@@ -8507,7 +8507,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "Follow N33-20260909 r34. Own suitable Skill choice under user delegation using actual supported host paths, preserving upstream sources and genuine selection provenance. Default explicit-only metadata is not a blanket ban on authorized coordination, and protocol loading alone is not ordinary autonomous selection.  Reuse the completed controlled finalize-receipt native-composition evidence: Windows and hosted Linux/macOS records independently verify reconciliation, finalization, target writer ownership and settled revision 19. Preserve the original failed fixture and all model/autonomous-timing/crash-recovery limits; this completed sub-scope is not a pending prerequisite or a reason to replay it before ordinary continuity. Align task-specific effort visibility and third-party Skill invocation boundaries within existing W02/W06/W08 and A02/A06/A08; static inventory and policy alignment do not establish adoption or acceptance.  For 3.3, internalize applicable public decision-model designs through existing host models, supported tools and necessary Accord components. Defer dedicated third-party decision-model provider integration and user deployment support to later versions; do not schedule more such trials or shadow integrations in the 3.3 workstream. Preserve ordinary ecosystem reuse and user-selected components; introduce no model-training program, model-hosting service or generic decision-engine project. Reduce unnecessary third-party dependencies without making self-authored implementation the default or rejecting mature capabilities. No separate evaluation-model account, fixed provider ladder, new training requirement or zero-resource-cost claim is introduced. Reconcile the source-checked external reports within existing W03-W08 duties: preserve state and shared invalidation evidence. Read-only status diagnostics now reuse the existing optimistic snapshot boundary, reject observed concurrent publication, changed sources and incompatible identity, and identify malformed/unreadable evidence without repair or erasure. Continue actual damaged-state recovery, input-size and lock-identity work where needed; status diagnostics are not recovery completion or ordinary-host acceptance. Never remove shared watermarks blindly or unlock from a TTL. Existing package-byte checks and required acceptance stay in place. Retain the historical Jev private trial, classifier-dev source reference and bounded Laya public-demo observations as research with their original limits. They are not current integration targets, proof of superior in-house performance or a release gate. Access delays do not block independent ready work; raw account, credential and restricted benchmark material stays private. Align the confirmed whole-task upstream, context-selected Skill details and bounded bootstrap/evolution duties. Supply the upstream through Accord-owned components and supported host connections without requiring changes to user AGENTS.md. Preserve per-input goal, authority, pause and unfinished-duty interpretation, simple direct handling and complex adaptive composition; do not lock Skill or other component counts or treat a fixed invocation sequence as coverage. Keep perception and continuity decisions independent of optional detailed Skill selection; supported host events and native mechanisms should carry sufficient responsibilities. All seventeen necessary scopes have definitions; eight have no active cases after the ended candidate-review and resource/environment instances were retained as history. Ten active cases remain. Their useful effects, original report defects and separate later corrections stay source-bound; all complete acceptance requirements remain open. New resource/environment work must be prebound within retained ceilings instead of replaying the ended CLI0.155.1/Terra batch. Definitions are not passed observations. Do not continue treating the closed definition gap as a prerequisite; bind real outcomes and current execution conditions for the remaining case and evidence gaps. Six OpenAI entry IDs have bounded selected development routes, five rows remain pending, and selected rows retain pending modes. Desktop Work Local and desktop/mobile Remote to an already selected local host are bounded development routes; hosted Work across all three UIs remains pending. Remote control does not include SSH execution or cross-host migration, and each control UI retains its own acceptance duties. Ordinary Chat is auxiliary with explicit transfer duties. selectionFinal is false; neither row counts nor resolved rows alone can finalize the mode set or admit parent cases. Reuse the completed public SDK lifecycle/scoped-exposure episodes within their original package and condition bounds, the cc3243ea CLI two-turn delivery and installed VS Code ordinary delivery within their actual limits, and the resolved marketplace/Hook/environment-name corrections. All complete A01-A08 requirements remain open. First close the reliable upstream-to-ordinary-delivery path on an execution entry whose necessary conditions can be established: current exact package and real entry participation, task-appropriate detail/capability use, execution feedback and correction, verified delivery and needed continuity. The brief entry is now the shared Hook guidance source, with four independently discoverable specialist Skills; transcript connection and recovery cues already exist; validate their adoption rather than treating them as unimplemented or equating injection with behavior. Keep time-bound shared installation, source projection and installed-candidate evidence distinct. Account for user, host and later-component changes across shared dependencies. Compose capabilities temporarily within existing interfaces and authority, then release task-local bindings and resources without retiring user-owned components or unfinished recovery responsibilities. In parallel, resolve independent entry differences, lifecycle/resource mechanisms, CI and existing evidence readback, then integrate at the real dependency boundary. Keep autonomous handoff in scope within continuous useful work. Close the entire loop with recoverable task and effect state, conditional transitions and a live authorized recovery trigger. Reuse host persistence and scoped Accord checkpoints; disconnection does not establish whether an effect occurred. Reconcile unknown effects, current authority, pauses and writer ownership before retry, compensation, completion or source release. State-machine semantics are necessary, but a single custom engine or fixed SOP is not prescribed. Stop repeating bounded hot-reload demonstrations after their mechanism evidence is closed; remaining host-upgrade differences must not displace the mainline. Bind missing behavioral scopes to actual work and complete system integration and impact gaps. Several related duties may share one sufficient episode; do not mechanically schedule a new model experiment per scope or replay completed small chains. Correct actual defects and preserve valid partial outcomes and original failures. Finish exact-candidate, documentation, independent review, hosted checks and publication closeout only after necessary acceptance. Maintain Plan/Goal independence and explicit activation authority. Use public standard CI by validation need; account quota pressure does not reduce acceptance or authorize new costs. Keep the 3.4 Claude, Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity candidates and plugin-eval comparison research out of 3.3 execution and release gates. Prepare truthful post-3.3 comparison materials on the actual supported host; Plugin eval is only one component of communication materials and cannot establish full Accord capability or value; Claude eval results cannot qualify Codex behavior. Keep host adaptation undecided until after 3.3 publication, when the user explains the reasons and user and Agent discuss and decide together. Other future plans remain unchanged. Candidate listing does not schedule adaptation or authorize installation, paid evaluation or publication.",
+    "work": "Follow N33-20260909 r35. Own suitable Skill choice under user delegation using actual supported host paths, preserving upstream sources and genuine selection provenance. Default explicit-only metadata is not a blanket ban on authorized coordination, and protocol loading alone is not ordinary autonomous selection.  Reuse the completed controlled finalize-receipt native-composition evidence: Windows and hosted Linux/macOS records independently verify reconciliation, finalization, target writer ownership and settled revision 19. Preserve the original failed fixture and all model/autonomous-timing/crash-recovery limits; this completed sub-scope is not a pending prerequisite or a reason to replay it before ordinary continuity. Align task-specific effort visibility and third-party Skill invocation boundaries within existing W02/W06/W08 and A02/A06/A08; static inventory and policy alignment do not establish adoption or acceptance.  For 3.3, internalize applicable public decision-model designs through existing host models, supported tools and necessary Accord components. Defer dedicated third-party decision-model provider integration and user deployment support to later versions; do not schedule more such trials or shadow integrations in the 3.3 workstream. Preserve ordinary ecosystem reuse and user-selected components; introduce no model-training program, model-hosting service or generic decision-engine project. Reduce unnecessary third-party dependencies without making self-authored implementation the default or rejecting mature capabilities. No separate evaluation-model account, fixed provider ladder, new training requirement or zero-resource-cost claim is introduced. Reconcile the source-checked external reports within existing W03-W08 duties: preserve state and shared invalidation evidence. Read-only status diagnostics now reuse the existing optimistic snapshot boundary, reject observed concurrent publication, changed sources and incompatible identity, and identify malformed/unreadable evidence without repair or erasure. Continue actual damaged-state recovery, input-size and lock-identity work where needed; status diagnostics are not recovery completion or ordinary-host acceptance. Never remove shared watermarks blindly or unlock from a TTL. Existing package-byte checks and required acceptance stay in place. Retain the historical Jev private trial, classifier-dev source reference and bounded Laya public-demo observations as research with their original limits. They are not current integration targets, proof of superior in-house performance or a release gate. Access delays do not block independent ready work; raw account, credential and restricted benchmark material stays private. Align the confirmed whole-task upstream, context-selected Skill details and bounded bootstrap/evolution duties. Supply the upstream through Accord-owned components and supported host connections without requiring changes to user AGENTS.md. Preserve per-input goal, authority, pause and unfinished-duty interpretation, simple direct handling and complex adaptive composition; do not lock Skill or other component counts or treat a fixed invocation sequence as coverage. Keep perception and continuity decisions independent of optional detailed Skill selection; supported host events and native mechanisms should carry sufficient responsibilities. All seventeen necessary scopes have definitions; eight have no active cases after the ended candidate-review and resource/environment instances were retained as history. Ten active cases remain. Their useful effects, original report defects and separate later corrections stay source-bound; all complete acceptance requirements remain open. New resource/environment work must be prebound within retained ceilings instead of replaying the ended CLI0.155.1/Terra batch. Definitions are not passed observations. Do not continue treating the closed definition gap as a prerequisite; bind real outcomes and current execution conditions for the remaining case and evidence gaps. Six OpenAI entry IDs have bounded selected development routes, five rows remain pending, and selected rows retain pending modes. Desktop Work Local and desktop/mobile Remote to an already selected local host are bounded development routes; hosted Work across all three UIs remains pending. Remote control does not include SSH execution or cross-host migration, and each control UI retains its own acceptance duties. Ordinary Chat is auxiliary with explicit transfer duties. selectionFinal is false; neither row counts nor resolved rows alone can finalize the mode set or admit parent cases. Reuse the completed public SDK lifecycle/scoped-exposure episodes within their original package and condition bounds, the cc3243ea CLI two-turn delivery and installed VS Code ordinary delivery within their actual limits, and the resolved marketplace/Hook/environment-name corrections. All complete A01-A08 requirements remain open. First close the reliable upstream-to-ordinary-delivery path on an execution entry whose necessary conditions can be established: current exact package and real entry participation, task-appropriate detail/capability use, execution feedback and correction, verified delivery and needed continuity. The brief entry is now the shared Hook guidance source, with four independently discoverable specialist Skills; transcript connection and recovery cues already exist; validate their adoption rather than treating them as unimplemented or equating injection with behavior. Keep time-bound shared installation, source projection and installed-candidate evidence distinct. Account for user, host and later-component changes across shared dependencies. Compose capabilities temporarily within existing interfaces and authority, then release task-local bindings and resources without retiring user-owned components or unfinished recovery responsibilities. In parallel, resolve independent entry differences, lifecycle/resource mechanisms, CI and existing evidence readback, then integrate at the real dependency boundary. Keep autonomous handoff in scope within continuous useful work. Close the entire loop with recoverable task and effect state, conditional transitions and a live authorized recovery trigger. Reuse host persistence and scoped Accord checkpoints; disconnection does not establish whether an effect occurred. Reconcile unknown effects, current authority, pauses and writer ownership before retry, compensation, completion or source release. State-machine semantics are necessary, but a single custom engine or fixed SOP is not prescribed. Stop repeating bounded hot-reload demonstrations after their mechanism evidence is closed; remaining host-upgrade differences must not displace the mainline. Bind missing behavioral scopes to actual work and complete system integration and impact gaps. Several related duties may share one sufficient episode; do not mechanically schedule a new model experiment per scope or replay completed small chains. Correct actual defects and preserve valid partial outcomes and original failures. Finish exact-candidate, documentation, independent review, hosted checks and publication closeout only after necessary acceptance. Maintain Plan/Goal independence and explicit activation authority. Use public standard CI by validation need; account quota pressure does not reduce acceptance or authorize new costs. Keep the 3.4 Claude, Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity candidates and plugin-eval comparison research out of 3.3 execution and release gates. Prepare truthful post-3.3 comparison materials on the actual supported host; Plugin eval is only one component of communication materials and cannot establish full Accord capability or value; Claude eval results cannot qualify Codex behavior. Keep host adaptation undecided until after 3.3 publication, when the user explains the reasons and user and Agent discuss and decide together. Other future plans remain unchanged. Candidate listing does not schedule adaptation or authorize installation, paid evaluation or publication. On 2026-10-03 the user subsequently directed removing Cloud adaptation entirely from the current 3.3 work and release-before acceptance scope, without permanently rejecting future support. This supersedes the earlier new-Cloud migration workflow. Hosted Codex Cloud (new and Legacy), Work Cloud and dependent external trigger/return routes are deferred; existing local selected entries, Linux/macOS CLI, general continuity, quality floors and historical evidence remain. No Cloud preparation, publication, investigation or business acceptance remains a current prerequisite. Future reuse and migration cost are unverified, and renewed adaptation requires a later user decision.",
     "requires": "On 2026-09-19 the user resumed work, authorizing a bounded Jev trial followed by alignment of verified external conclusions and applicable trial findings, then continued development. On 2026-09-20 the user obtained direct access and authorized the prepared private synthetic trial, which completed. The Jev results remain private. On 2026-09-22 the user decided that 3.3 should internalize applicable ideas using host capabilities and Accord components, while deferring dedicated third-party decision-model integration to future versions. This supersedes the earlier optional-provider trial/integration next step for 3.3, retains prior evidence and does not restrict ordinary ecosystem reuse, add training or hosting, or reduce acceptance. Recheck live repository, CI, authority and environment conditions; carry independent authorized work forward without treating access restrictions as product failure or acceptance. The trial does not authorize automatic top-up, payment-card enrollment or a mandatory paid dependency. Resume authorized development and integration in the bound main checkout, outside Goal mode, using isolated worktrees for independent writers. Complete and publish 3.3.0 after all necessary acceptance and exact-candidate checks, as requested on 2026-09-14; readiness remains false. Preserve user IDE/cloud/development conversations and immutable historical identity, and retire unneeded task-owned resources. New accounts, trust, data, meaningful cost and unrelated shared or external writes retain their separate boundaries. Prefer official and existing reliable sources before experiments; the plan and latest user decisions own authority. The user has no Mac/Xcode or JetBrains installation and does not intend to purchase them for this project. Use existing environments, official sources and standard hosted Linux/macOS CI for feasible shared work. Keep instance-specific unknowns explicit without turning them into procurement requirements or blocking independent ready work; new installation, accounts or paid resources require their actual authority."
   },
   "claimCeiling": {
@@ -8536,7 +8536,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r34",
+    "revision": "r35",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

@@ -1039,8 +1039,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "selected": ["chatgpt-desktop", "chatgpt-mobile", "cx-cli", "cx-desktop", "cx-sdk", "cx-vscode"],
             "selectedModes": {"chatgpt-desktop": ["remote", "work-local"],
                               "chatgpt-mobile": ["remote"], "chatgpt-web": []},
-            "pendingModes": {"chatgpt-desktop": ["work-cloud"], "chatgpt-mobile": ["work-cloud"],
-                             "chatgpt-web": ["work-cloud"]}})
+            "pendingModes": {"chatgpt-desktop": [], "chatgpt-mobile": [],
+                             "chatgpt-web": []}})
         applicability = report["openCoverage"]["v33-openai-entry-applicability"]
         self.assertEqual(applicability["entry"], "cx-desktop")
         self.assertEqual(set(applicability["subjectEntries"]), {
@@ -1357,7 +1357,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 if disposition["status"] == "pending":
                     disposition["status"] = "deferred"
                 for mode, value in disposition.get("modes", {}).items():
-                    if value["status"] == "pending" and (key, mode) != ("chatgpt-desktop", "work-cloud"):
+                    if (key, mode) == ("chatgpt-desktop", "work-cloud"):
+                        value["status"] = "pending"
+                    elif value["status"] == "pending":
                         value["status"] = "deferred"
         with self.history():
             self.commit(contract)

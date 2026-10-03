@@ -38,7 +38,7 @@
 
 Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和还缺什么条件，在获准范围内选择、组合宿主已有能力与 Accord 组件，随着情况变化调整做法，并检查实际结果。若条件不足或影响先前判断，Agent 应说明、修正受影响的工作，并保留尚未完成的事项以便继续。用户不必预先掌握工具协调、配置或任务交接。
 
-3.3当前聚焦 OpenAI 执行环境中具有实际交付价值、并有条件承担必要协作职责的入口；当前开发包是 Codex 适配。适不适用要看具体宿主和实际验收，不能只凭它在网页还是云端运行、能否安装插件或是否支持 Hook 来判断。普通 Chat 不是默认的独立交付项；Claude 不在3.3分发范围。这一阶段聚焦不改变项目的供应商中立定位。
+3.3当前继续已选本地OpenAI执行路线，包括CLI、桌面和IDE，开发包为Codex适配。托管Codex Cloud、Work Cloud及依赖其执行的路线不在3.3适配与发布前验收范围；未来是否适配另行决定。Linux/macOS CLI和通用连续性机制保留，各具体入口的支持仍须实际验收。普通Chat仅作辅助，Claude不在3.3分发范围；阶段聚焦不改变供应商中立定位。
 
 ### 哪些决定仍由你掌握
 
@@ -64,7 +64,7 @@ You do not need to learn plugins, commands, or model settings first. Tell the Ag
 
 Accord is designed to have the Agent start by understanding the goal, assess feasibility and missing conditions, choose and combine host capabilities and Accord components within its authorization, adapt as circumstances change, and check the actual result. If conditions are missing or earlier judgments are affected, the Agent should explain and correct the affected work, while preserving unfinished items for continuation. Users need not first learn tool coordination, configuration, or task handoff.
 
-The current 3.3 focus is OpenAI execution environments with practical delivery value and a feasible way to fulfill necessary collaboration duties. The current development package is the Codex adaptation. Suitability depends on the specific host and actual acceptance; it cannot be determined just by whether the environment is web-based or cloud-based, supports plugin installation, or supports Hooks. Ordinary Chat is not a default standalone deliverable, and Claude is outside the 3.3 distribution scope. This phase focus does not change the project's vendor-neutral position.
+Version 3.3 continues development on selected local OpenAI execution paths, including CLI, desktop and IDE; the development package is the Codex adaptation. Hosted Codex Cloud, Work Cloud and routes that depend on their execution are outside 3.3 adaptation and pre-release acceptance. Future adaptation is undecided. Linux/macOS CLI and shared continuity mechanisms remain, and each entry still needs actual acceptance. Ordinary Chat is auxiliary; Claude is outside 3.3 distribution. This focus preserves vendor independence.
 
 ### Decisions that remain yours
 
