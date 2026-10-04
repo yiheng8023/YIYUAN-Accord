@@ -1652,6 +1652,82 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         case["qualityAxes"] = case["qualityAxes"][:1]
         self.assertEqual(admission_contract_errors(contract), [])
 
+    def lifecycle_binding_contract(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract['acceptance']['admission']
+        scope = next(row for row in policy['scopes'] if row['id'] == 'v33-codex-lifecycle')
+        parent = next(row for row in policy['cases'] if row['scope'] == 'v33-admitted-entry-lifecycle')
+        case = copy.deepcopy(parent)
+        subjects = case.pop('subjectEntries')
+        modes = {key: [mode for mode, row in parent['conditions']['entryDispositions'][key].get('modes', {}).items()
+                       if row['status'] == 'selected'] for key in subjects}
+        case.update(id='fixture-host-lifecycle', scope=scope['id'],
+                    **{key: copy.deepcopy(scope[key]) for key in
+                       ('host', 'entry', 'duties', 'qualityAxes', 'scenarios', 'claims')},
+                    conditions={**copy.deepcopy(scope['conditions']), 'subjectEntries': subjects, 'selectedModes': modes},
+                    oracle='Synthetic source/selection binding only; not whole-host lifecycle adequacy or observations.')
+        policy['cases'].append(case)
+        return contract
+
+    def test_host_lifecycle_cannot_close_while_entry_selection_is_pending(self):
+        contract = self.lifecycle_binding_contract()
+        with self.history():
+            self.commit(contract)
+            report = self.assess(contract, self.observer)
+        self.assertEqual(report['errors'], [])
+        self.assertNotIn('fixture-host-lifecycle', report['acceptedCases'])
+        self.assertIn('v33-codex-lifecycle', report['acceptanceRequirements']['A06']['missingScopes']['package-lifecycle'])
+
+    def test_host_lifecycle_rejects_stale_subject_and_mode_bindings(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        contract = self.lifecycle_binding_contract()
+        self.assertEqual(admission_contract_errors(contract), [])
+        for variant in ('missing-subject', 'missing-mode', 'pending-mode', 'unknown-mode'):
+            changed = copy.deepcopy(contract)
+            case = changed['acceptance']['admission']['cases'][-1]
+            if variant == 'missing-subject':
+                case['conditions']['subjectEntries'].remove('cx-sdk')
+                case['conditions']['selectedModes'].pop('cx-sdk')
+            elif variant == 'missing-mode':
+                case['conditions']['selectedModes']['chatgpt-desktop'].remove('remote')
+            else:
+                case['conditions']['selectedModes']['chatgpt-desktop'].append('chat' if variant == 'pending-mode' else 'invented')
+            with self.subTest(variant=variant):
+                self.assertTrue(admission_contract_errors(changed))
+
+    def test_host_lifecycle_definition_depends_on_applicability_source(self):
+        from yiyuan_accord.admission import _definition
+        contract = self.lifecycle_binding_contract()
+        case = contract['acceptance']['admission']['cases'][-1]
+        old = _definition(contract, case)
+        changed = copy.deepcopy(contract)
+        for row in [*changed['acceptance']['admission']['scopes'], *changed['acceptance']['admission']['cases']]:
+            if 'entryDispositions' in row['conditions']:
+                row['conditions']['entryDispositions']['cx-cli']['basis'] += ' Changed supported source.'
+        self.assertNotEqual(_definition(changed, case), old)
+
+    def test_host_lifecycle_accepts_final_reordered_binding(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        contract = self.lifecycle_binding_contract()
+        policy = contract['acceptance']['admission']
+        for row in [*policy['scopes'], *policy['cases']]:
+            if 'entryDispositions' not in row['conditions']:
+                continue
+            row['conditions']['selectionFinal'] = True
+            for disposition in row['conditions']['entryDispositions'].values():
+                if disposition['status'] == 'pending': disposition['status'] = 'deferred'
+                for mode in disposition.get('modes', {}).values():
+                    if mode['status'] == 'pending': mode['status'] = 'deferred'
+        case = policy['cases'][-1]
+        case['conditions']['subjectEntries'].reverse()
+        for modes in case['conditions']['selectedModes'].values(): modes.reverse()
+        self.assertEqual(admission_contract_errors(contract), [])
+        with self.history():
+            self.commit(contract)
+            report = self.assess(contract, self.observer)
+        self.assertEqual(report['errors'], [])
+        self.assertIn(case['id'], report['acceptedCases'])
+
     def test_mode_declarations_reject_omission_drift_and_weakened_effects(self):
         from yiyuan_accord.admission import admission_contract_errors
         for kind in ("missing-mode", "unknown-mode", "no-modes", "foreign-modes", "empty-basis",
@@ -2029,6 +2105,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         policy = contract["acceptance"]["admission"]
         template = policy["cases"][0]
         coverage_template = next(case for case in policy["cases"] if case["scope"] == "v33-codex-entry-coverage")
+        lifecycle_template = self.lifecycle_binding_contract()['acceptance']['admission']['cases'][-1]
         parent_ids = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
                       "v33-admitted-entry-lifecycle"}
         parent_cases = {scope_id: copy.deepcopy(next(case for case in policy["cases"] if case["scope"] == scope_id))
@@ -2050,7 +2127,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     policy["cases"].append(parent_cases[scope_id])
                     policy["scopes"].append(parent_scopes[scope_id])
                     continue
-                case = copy.deepcopy(coverage_template if scope_id == "v33-codex-entry-coverage" else template)
+                case = copy.deepcopy(coverage_template if scope_id == "v33-codex-entry-coverage"
+                                     else lifecycle_template if scope_id == 'v33-codex-lifecycle' else template)
                 case.update(id="fixture-" + scope_id, scope=scope_id, claims=[claim],
                             duties=[r["id"] for r in contract["acceptance"]["duties"]],
                             qualityAxes=[r["id"] for r in contract["systemOptimization"]["qualityAxes"]])

@@ -32,6 +32,7 @@ _ENTRY_PARENT_SCOPES = {
     "v33-admitted-entry-lifecycle": "entryLifecycle",
 }
 _ENTRY_COVERAGE_SCOPE = "v33-codex-entry-coverage"
+_HOST_LIFECYCLE_SCOPE = "v33-codex-lifecycle"
 _ENTRY_COVERAGE_PREDICATES = {
     "discoveryDenominatorBound", "officialAndActualSourcesReconciled",
     "zeroUnexplainedOmissions", "capabilityDispositionsSupported",
@@ -201,9 +202,11 @@ def _entry_selection(policy, entries, mode_catalog=None):
     present = set(scopes) & set(_ENTRY_PARENT_SCOPES)
     coverage_cases = [row for row in policy["cases"]
                       if isinstance(row, dict) and row.get("scope") == _ENTRY_COVERAGE_SCOPE]
+    lifecycle_cases = [row for row in policy["cases"]
+                       if isinstance(row, dict) and row.get("scope") == _HOST_LIFECYCLE_SCOPE]
     if not present:
-        if coverage_cases:
-            raise ValueError("entry coverage case requires the applicability selection")
+        if coverage_cases or lifecycle_cases:
+            raise ValueError("selected-subject case requires the applicability selection")
         return None
     if present != set(_ENTRY_PARENT_SCOPES):
         raise ValueError("entry parent scopes must be declared together")
@@ -258,12 +261,21 @@ def _entry_selection(policy, entries, mode_catalog=None):
                        for row in expected.values())):
             raise ValueError("entry coverage case must preserve selected subjects, modes and necessary effects")
         _entry_mode_effects(expected, selected_modes, strict=True)
+    for case in lifecycle_cases:
+        declared = case["conditions"].get("subjectEntries")
+        declared_modes = case["conditions"].get("selectedModes")
+        if (not _refs(declared, set(entries)) or set(declared) != selected
+                or not isinstance(declared_modes, dict) or set(declared_modes) != selected
+                or any(not _refs(declared_modes[key], selected_modes[key])
+                       or set(declared_modes[key]) != selected_modes[key] for key in selected)):
+            raise ValueError("host lifecycle case must bind selected subjects and modes")
     pending = any(row["status"] == "pending" for row in dispositions.values())
     pending_modes = {key: sorted(mode for mode, value in values.items() if value["status"] == "pending")
                      for key, values in modes.items()}
     return {"final": final and not pending and not any(pending_modes.values()),
-            "scopeIds": set(_ENTRY_PARENT_SCOPES) | ({_ENTRY_COVERAGE_SCOPE} if coverage_cases else set()),
-            "caseIds": {row["id"] for row in [*cases, *coverage_cases]}, "selected": selected,
+            "scopeIds": (set(_ENTRY_PARENT_SCOPES) | ({_ENTRY_COVERAGE_SCOPE} if coverage_cases else set())
+                         | ({_HOST_LIFECYCLE_SCOPE} if lifecycle_cases else set())),
+            "caseIds": {row["id"] for row in [*cases, *coverage_cases, *lifecycle_cases]}, "selected": selected,
             "selectedModes": {key: sorted(mode for mode, value in values.items() if value["status"] == "selected")
                               for key, values in modes.items()}, "pendingModes": pending_modes}
 
@@ -416,7 +428,8 @@ def _definition(contract, case):
         "entryRule": contract["capabilityMap"]["entrySurfaces"]["rule"],
     }
     subjects = case.get("subjectEntries")
-    if contract["acceptance"]["admission"]["schema"] == CURRENT_SCHEMA and case["scope"] == _ENTRY_COVERAGE_SCOPE:
+    if (contract["acceptance"]["admission"]["schema"] == CURRENT_SCHEMA
+            and case["scope"] in {_ENTRY_COVERAGE_SCOPE, _HOST_LIFECYCLE_SCOPE}):
         subjects = case["conditions"]["subjectEntries"]
         definition["entrySelectionScope"] = selected(
             contract["acceptance"]["admission"]["scopes"], ["v33-openai-entry-applicability"])

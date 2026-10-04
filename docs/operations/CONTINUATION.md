@@ -35,6 +35,8 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 ## 剩余主线与当前切片
 
+生命周期必要源核对确认：整体宿主范围与逐入口集合/UI差异范围并非重复；已有逐入口case不能关闭无case的整体缺口。纯反例实测复现未来整体case可不依赖入口选择/模式及其来源的风险，当前正式15case没有因此误准入。最小修正复用v5选择守卫与定义指纹：未来整体case明确绑定selected subjects/modes，pending拒绝、错配拒绝、来源改变使指纹变；没有添加正式case、观察器或运行时。原RED六失败与修后首轮4项中1个错误测试期望分别保，后者误把声明缺口当证据缺口，定向修正该期望不改实际门槛。当前准入47项及历史v3/v4共35项回归全部通过（678.877/466.087秒）；三个静态有效，原15case及其定义指纹、分发包保持。独审、五份固定源及反例在accord-lifecycle-binding-20261005-01。实际采用、partial effects对账、失效入口外恢复actor及变更/退休后态仍是必要独立结果，不能从新源码或布尔旗标宣布完成；17scope/15case/F-A保持。
+
 新普通合成排考两阶段已闭，不追加业务轮次：原源最优目标`[2,60]`，R1容量/E人数/I2不可用三项更正后`[3,85]`；真实CLI均exit0、测试14/17通过。独立Astra/medium审查从每段原输入各枚举262144种，未读Root oracle，确认两份落盘解最优及旧结果在更正后失效。业务同一fresh native worker两turn_context均Sol/medium，主模型保持；判断质量/模型最优/净收益不由配置差异证明。原输入、Implement源/政策、现装25文件SHA及mtime保持，阶段一六件先于更正保全，阶段二七件和审查证据保留。task-owned命令已返回、scoped CIM未见本目录Python/Node活进程，native清单无活exam代理；不宣称全宿主空闲或历史句柄删除。1200秒仅计划估计，不是通过窗口；CLI“不改输入”仅在本任务分开的INPUT/OUTPUT用法下观察。
 
 本例受托显式选择只取得部分连接：Root真实代选`$implement`，不冒充用户亲选；启动未供应正文，worker有限目录枚举误判不可用，首次业务实现后Root补locator，trace第70行才实际读正文。fileRead和后续测试相容不证明原生激活、完整TDD或自主发现；封存代理消息不当独立明文重证。现有coordinate指导已覆盖“未知盘点不等于缺失、格式输入不等于采用”，不新增同义规则或改第三方政策。原生记录未见读Root oracle/prepare/plan/retained、提前读更正或越界写；这是已记录命令范围，不是系统全程取证。结果与精确限制见accord-w02-exam-schedule-20261005-01的FINAL-RESULT、native-source-audit-final、两阶段retained及independent-outcome-review。下一处理当前实际仍缺的显式承载/策略控制和完整组合，不为追求Skill成功重跑此业务；17scope/15case/13未验职责和F/A不晋。
