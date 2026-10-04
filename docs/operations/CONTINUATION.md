@@ -8,6 +8,7 @@
 Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享业务与仓库的唯一集成者。完成 3.3 必要功能、质量与完整验收后，按既有条件授权发布 3.3.0；目前没有发布资格。必要实现、修复、检查、提交和推送已授权。进度算到正式发布后态，之后传播、部署和治理不计入。
 
 - 普通“继续”和插话不取消原目标、不启 Plan/Goal、不解除真实暂停。保持用户主模型与模式；必要子代理按任务独立选择并由 Root 验收。
+- 2026-10-05用户允许充分使用当前项目已有原生订阅模型与必要并行，不因配额顾虑压缩必要验证。本轮两阶段新普通任务和独立审查在该权限内；它不新增账户、数据、安装/信任、主模型/模式或取消路线的权限。
 - 3.3 只保留已选本地 OpenAI 适配。已取消的 Cloud 候选、模式、验收项和专用准备已清除，不再调查或执行；账户界面两草稿不可删除，用户允许留置，它们不是产品工序或发布前提。未来是否适配另议。
 - 3.3 后可先有维护小版本；3.4 的 Claude、Pi、DeepSeek Harness、ZCode、Antigravity 仅为待讨论候选，其它后续计划保持，不是开工或发布授权。
 - 元指导原文默认纳入 3.3 已获仓库实现授权。4444 个 CRLF 字节、SHA `511861ec00a15e051c97221d9d62e9586856a5d659724eff2d2953f002f457bc` 保持；用户全局 AGENTS 与第三方 Skill 源/策略不改。
@@ -19,9 +20,9 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | 对象 | 已核事实及限制 |
 |---|---|
 | Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
-| 源码候选 | `3.3.0-dev.1+codex.20261005005348`，25文件/SHA `d2ce59c2135d2f3ece308929e10229e446f778ab97f9c73053947dd49edbd848`；本次只补现有生命周期Skill641字节及manifest版本，Hook/MCP/运行时/Meta原文保持。前候选8cb/20261004121454的CI37202339243已通过，新候选按其精确提交另核；未本机安装或行为验收。原现装24fa的[CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功；新旧身份不互代。 |
+| 源码候选 | `3.3.0-dev.1+codex.20261005005348`，25文件/SHA `d2ce59c2135d2f3ece308929e10229e446f778ab97f9c73053947dd49edbd848`；本次只补现有生命周期Skill641字节及manifest版本，Hook/MCP/运行时/Meta原文保持。前候选8cb/20261004121454的CI37202339243已通过；新源在测试修正后的精确75ce7b4d/CI37221366079已11/11通过，未本机安装或行为验收。原现装24fa的[CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功；新旧身份不互代。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
-| 当前源码 CI | `67512ba0`、`b40a1063`、`8cb96c40`及`6abfe6a4`的精确CI均成功。`fd6b6f5e`/37208099935保一处Chat pending旧期望失败；`6f5d2f21`/37216493190保三处coverage依赖/矩阵fixture漏同步，均9产品失败、2原生通过。后者直接Linux/Windows日志同三项，已定向修且整个当前准入类43项通过。`c30b32ab`/37219463927生命周期指导CI最后仍运行；本次测试修复的精确新CI另核，原失败不追认。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
+| 当前源码 CI | `67512ba0`、`b40a1063`、`8cb96c40`及`6abfe6a4`的精确CI均成功。`fd6b6f5e`/37208099935保一处Chat pending旧期望失败；`6f5d2f21`/37216493190保三处coverage依赖/矩阵fixture漏同步，均9产品失败、2原生通过。后者直接Linux/Windows日志同三项，已定向修且整个当前准入类43项通过。`c30b32ab`/37219463927已失败，不追认；测试修正的精确`75ce7b4d`/[CI37221366079](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37221366079)已11/11成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
 | 功能资格 | 17 必要 scope、15 case 定义；13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
 声明集合/ID 映射的复用摘要已只在副本规范化，原 definition 身份、输入和有序业务数组保持。七项定向、三项既有集成回归及三静态检查通过；该缺陷族已闭，不继续泛扩。此前交接释放未知的有限恢复修复也已集成，固定传输/SQLite 回归不代验普通自主交接或完整 A05/A08。
@@ -33,6 +34,10 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 1edb startup-repair实际一次进入，安装阶段已成功，之后Hook CAS前guard仍读取官方安装已退休的旧cache路径而FileNotFound；同SHA不可变副本和其它414原件保持。整体执行器失败不改判；hook-trust/native目录无，当前正确信任值形成机制未归因。原d10首次guard的RuntimeError及更早launcher错误也按原结果保留，不由当前后态反推。目标已正确，不再安装、授信或复活旧cache求绿。授权消费、POSTSTATE-FACTS、CURRENT-CONFIG及资源回执在accord-update09-poststate-reconcile-20261004-01和原startup-repair；完整旧工序见[cb95固定记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/cb95a53c4ed0ae34a07c002183e209d291e0a660/docs/operations/CONTINUATION.md)，不是待执行步骤。
 
 ## 剩余主线与当前切片
+
+新普通合成排考两阶段已闭，不追加业务轮次：原源最优目标`[2,60]`，R1容量/E人数/I2不可用三项更正后`[3,85]`；真实CLI均exit0、测试14/17通过。独立Astra/medium审查从每段原输入各枚举262144种，未读Root oracle，确认两份落盘解最优及旧结果在更正后失效。业务同一fresh native worker两turn_context均Sol/medium，主模型保持；判断质量/模型最优/净收益不由配置差异证明。原输入、Implement源/政策、现装25文件SHA及mtime保持，阶段一六件先于更正保全，阶段二七件和审查证据保留。task-owned命令已返回、scoped CIM未见本目录Python/Node活进程，native清单无活exam代理；不宣称全宿主空闲或历史句柄删除。1200秒仅计划估计，不是通过窗口；CLI“不改输入”仅在本任务分开的INPUT/OUTPUT用法下观察。
+
+本例受托显式选择只取得部分连接：Root真实代选`$implement`，不冒充用户亲选；启动未供应正文，worker有限目录枚举误判不可用，首次业务实现后Root补locator，trace第70行才实际读正文。fileRead和后续测试相容不证明原生激活、完整TDD或自主发现；封存代理消息不当独立明文重证。现有coordinate指导已覆盖“未知盘点不等于缺失、格式输入不等于采用”，不新增同义规则或改第三方政策。原生记录未见读Root oracle/prepare/plan/retained、提前读更正或越界写；这是已记录命令范围，不是系统全程取证。结果与精确限制见accord-w02-exam-schedule-20261005-01的FINAL-RESULT、native-source-audit-final、两阶段retained及independent-outcome-review。下一处理当前实际仍缺的显式承载/策略控制和完整组合，不为追求Skill成功重跑此业务；17scope/15case/13未验职责和F/A不晋。
 
 实际09失败中的通用约束已从现有CONTRIBUTING移入分发的生命周期Skill：不可变证据/恢复副本与获准替换或退休的活动路径分别核验；后置guard失败时先对账已完成、在途和未知效果，再决定恢复或重试。意外丢失、变字节及未知仍阻断对应动作，不复活旧cache求绿、不追认原执行器成功。本次只增641字节、更新完整25-member源身份，原件及来源对账在accord-lifecycle-evidence-boundary-20261005-01；旧09/现装/第三方保持，源码指导采用和实际防复发效果仍另验。
 
