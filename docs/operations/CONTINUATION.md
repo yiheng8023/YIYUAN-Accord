@@ -21,7 +21,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | Root 现装 | `3.3.0-dev.1+codex.20261002232312`；源 `5b34c3ccfb5ce983573c6b15bfb96431ac6f0205`，24 文件/SHA `5a247517dfb648da2b13afc258b55cc97a23ebc81b405da96ff5e7592f739c62`。当前 Root Hook/MCP 目录和缺参拒绝分支已观察；各存活 MCP 的准确加载路径/版本不明。 |
 | 源码候选 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`；[精确 CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11 成功。新增 Meta 正文和 SubagentStart 已实现，但尚未安装或在当前入口实际采用。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
-| 当前源码 CI | `19aed269` 的 CI37153251132 成功。`cb47c6f8f1eeb62b1db2cce75586bdf1564cd0a0` 的 [CI37157112594](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37157112594) 原 attempt 10 项成功、Windows/Python3.14 一项失败：Hook fixture 初始化超时 10 秒，未到 package-retirement 断言。同一定向测试本地通过；原因未定，无产品缺陷结论，仅请求重跑该失败 job，终态待核。 |
+| 当前源码 CI | `19aed269` 的 CI37153251132 成功。`cb47c6f8f1eeb62b1db2cce75586bdf1564cd0a0` 的 [CI37157112594](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37157112594) 原 attempt 10 项成功、Windows/Python3.14 一项失败：Hook fixture 初始化超时 10 秒，未到 package-retirement 断言。同一定向测试本地通过，仅重跑失败 job 后 attempt2 已 completed/success；原失败保持、原因未定，没有产品代码修补。接续精简源 `ce092d00` 的 CI37167644642 尚在运行，新记录提交的终态另核。 |
 | 功能资格 | 17 必要 scope、14 case 定义；13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
 声明集合/ID 映射的复用摘要已只在副本规范化，原 definition 身份、输入和有序业务数组保持。七项定向、三项既有集成回归及三静态检查通过；该缺陷族已闭，不继续泛扩。此前交接释放未知的有限恢复修复也已集成，固定传输/SQLite 回归不代验普通自主交接或完整 A05/A08。
@@ -40,7 +40,9 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 - `accord-consumer-reconcile-20261004-01`：一次完整 CIM 564 行实际识别桌面40464、AppServer5524/20096、exec-server27144 和五个相对 native-state MCP。MCP 准确版本、20096 队列/连接用途未知；这些实际相关 actor 存活时阻断写入。普通 python/git 血缘本身不是组件消费证据，不要求证明所有历史后代/全部文件读取者都不存在。
 - `accord-update09-root-review-20261004-01`：旧 grant 与新规则权限对比、原件复核和状态兼容审查。5b→24fa 的 MCP、recorder、handoff、connection、context、session、.mcp 七核心逐字节相同；checkpoint 变化限原文 entry 和长度门，没有 stored schema/CAS 恢复协议变化。只是源码兼容，不替实际采用或活消费者退出。
 
-当前只在新 `accord-update09-ready-20261004-01` 整理必要范围的条件方案：已知宿主、实际旧包/共享配置调用者及有依据的待写/恢复 actor；相关未知保持 hold。不得再要求完整历史祖先，也不得把 Root 项目未完变成永远禁止更新。需要完整 producer/调用图、纯正反控制及 Root 独立复审后，才可形成具体权限决定；执行仍另核 fresh OS 身份、同 socket loaded、恢复材料、配置/源/原件和精确许可。当前没有安装、信任、后台停止、业务模型或 Cloud 派发。
+新 `accord-update09-ready-20261004-01` 的必要范围/执行绑定准备已完成；独审发现其计龄会在后续核查结束时刷新旧CIM。Root保留原f961和红例，在独立 `accord-update09-executor-20261004-01` 改为扫描开始计龄，长延迟拒绝、短延迟正例保留；原13项（报告误写14）及新2项共15纯控制通过。11个实查host/组件/工具载体身份与固定CIM原件逐字段匹配，相关未知不排除，缺席只表示当前不执行；不要求历史任务结束或全宿主队列零。
+
+Root及独立限定终审已批准该完整条件方案，最终proposal `cba12dba3d7fec302e5bf5d1ff370c9afe5baff4d653062087205f43f418862f`、70冻结材料、313输入hash/mtime匹配；缺新授的实际入口已在原生调用/执行标记前拒绝，配置不变。源码准备完成不等执行就绪：新grant仍不存在，原1657仍未消费；新两后台留存条件须对应确认。执行用外部终端的 `Start-update.cmd`，原子标记只允许一次入口，失败留日志、不自动重试/回滚；每次写前仍核相关消费者退出、fresh OS/同socket idle、配置/源/恢复兼容和权限。当前没有安装、信任、后台停止、业务模型或Cloud派发。下一为具体条件决定及确认后的实时窗口，已闭调查不重开。
 
 ## 功能与必要验收未完项
 
