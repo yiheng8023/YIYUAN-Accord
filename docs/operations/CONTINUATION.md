@@ -48,6 +48,10 @@ Root及独立限定终审批准的源码方案为 `cba12dba3d7fec302e5bf5d1ff370
 
 ## 功能与必要验收未完项
 
+2026-10-04后续实际尝试已进入d10更新器，在首次实时guard拒绝并结束；execution-started存在，before/poststate/trust记录与新缓存都无，旧包24文件仍精确。原日志仅producer-unavailable:RuntimeError，原失败时配置和具体cause未留，故确切原因unknown，不由重开后的正常CIM/后台/恢复检查反推。此次单次执行已用，旧grant文件未自动登记消费不是新的执行权限，原marker/失败/grant均保全，禁止重放。
+
+已在新accord-update09-startup-repair-20261004-01限定修正两个确定机制缺口：ready的动态配置SHA未带入首次guard，以及具体producer阶段/cause被丢。checked_config_bytes(ready)的精确快照现在传入StartupExpectedConfig，后续同语义TOML的字节漂移也拒；私有记录保存采样SHA、失败阶段和有界脱敏cause。原共享写入段/hook/target25/三trust/NoStop/所有旧业务预算保持，复审查出的换行字节声明及遗漏actor来源已修正并实际解析四role验证。最终方案1edb346d1029a71a5b8995a7c6de36563c8f7ed22de689b59febb6959e78e2bb、60冻结源/415原件hashmtime核，10pure及独立终审通过；source reviewed、新grant/marker不存在，无live重跑。剩余是该修正执行器新的明确一次许可、关闭客户端后的实际窗口与安装采用核验，功能/发布资格未变。
+
 [F01–F08/A01–A08](ACCEPTANCE-v3.3.md) 和系统质量底线保持；不得删职责或降低判据来闭环。
 
 | 范围 | 下一必要结果 |
