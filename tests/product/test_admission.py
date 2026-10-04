@@ -1214,7 +1214,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 17, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 0, "coverageDefinedButUnverified": 17,
-            "coverageWithoutCases": 4, "coverageWithCaseBindingGaps": 7,
+            "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 7,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
         self.assertEqual(set(report['caseBindingGaps']),
@@ -1229,17 +1229,16 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     self.assertEqual(gap['missingDimensions']['duties'], ['recovery-and-rollback'])
                     self.assertEqual(gap['missingDimensions']['scenarios'], ['capability-loss'])
                 elif scope_id == 'v33-dynamic-model-routing':
-                    self.assertEqual(set(gap['caseIds']), {'v33-skill-glossary-01', 'v33-concept-relations-01'})
-                    self.assertEqual(gap['missingDimensions']['duties'],
-                                     ['environment-and-self-exposure', 'execution-configuration-and-code'])
-                    self.assertEqual(set(gap['missingDimensions']['scenarios']),
-                                     {'default-host-without-extra-extensions', 'capability-loss'})
+                    self.assertEqual(gap['caseIds'], [])
+                    self.assertIn('environment-and-self-exposure', gap['missingDimensions']['duties'])
+                    self.assertTrue({'default-host-without-extra-extensions', 'capability-loss'}
+                                    <= set(gap['missingDimensions']['scenarios']))
                 elif scope_id == 'v33-system-integration':
-                    self.assertEqual(gap['caseIds'], ['v33-state-client-decisions-01'])
+                    self.assertEqual(gap['caseIds'], [])
                     self.assertIn('recovery-and-rollback', gap['missingDimensions']['duties'])
                     self.assertIn('context-and-task-continuity', gap['missingDimensions']['duties'])
-                    self.assertEqual(set(gap['missingDimensions']['scenarios']),
-                                     {'mid-task-user-steering', 'capability-loss'})
+                    self.assertTrue({'mid-task-user-steering', 'capability-loss'}
+                                    <= set(gap['missingDimensions']['scenarios']))
                     self.assertTrue(gap['jointCaseMissing'])
                 else:
                     self.assertEqual(gap['caseIds'], [])
@@ -1311,6 +1310,43 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         case['conditions']['limits']['wholeWorkSeconds'] += 1
         self.assertTrue(admission_contract_errors(contract))
 
+    def test_ended_fixed_sdk_cases_preserve_original_definitions_and_scope_floors(self):
+        from yiyuan_accord.admission import _definition
+        record = next(row for row in self.contract['developmentObservations']
+                      if row['id'] == 'ended-fixed-sdk-case-disposition-20261005')
+        historical = json.loads(subprocess.check_output([
+            'git', '-C', str(self.root), 'show', record['declarations'][0]['declarationSnapshot']], timeout=30))
+        policy = self.contract['acceptance']['admission']
+        self.assertEqual(record['outcome'], 'not-admitted')
+        self.assertEqual(policy['requiredCoverage'], historical['acceptance']['admission']['requiredCoverage'])
+        self.assertEqual(policy['acceptanceRequirements'], historical['acceptance']['admission']['acceptanceRequirements'])
+        for declaration in record['declarations']:
+            with self.subTest(case=declaration['caseId']):
+                old = next(row for row in historical['acceptance']['admission']['cases']
+                           if row['id'] == declaration['caseId'])
+                digest = hashlib.sha256(json.dumps(old, sort_keys=True, separators=(',', ':'),
+                                                   ensure_ascii=False).encode()).hexdigest()
+                self.assertEqual(digest, declaration['caseObjectSha256'])
+                self.assertEqual(_definition(historical, old), declaration['definitionSha256'])
+                self.assertNotIn(old['id'], {row['id'] for row in policy['cases']})
+                self.assertEqual(declaration['attempts'], 1)
+                self.assertEqual(declaration['limits']['timeoutSeconds'], 600)
+                self.assertEqual(declaration['limits']['turnTimeoutSeconds'], 240)
+                self.assertEqual(declaration['limits']['recoveryTimeoutSeconds'], 20)
+                scope = next(row for row in policy['scopes'] if row['id'] == old['scope'])
+                self.assertEqual(scope, next(row for row in historical['acceptance']['admission']['scopes']
+                                             if row['id'] == old['scope']))
+                prior_fixture = subprocess.check_output(['git', '-C', str(self.root), 'show',
+                                                        record['declarations'][0]['declarationSnapshot'].split(':')[0]
+                                                        + ':' + declaration['caseFile']], timeout=30)
+                self.assertEqual((self.root / declaration['caseFile']).read_bytes(), prior_fixture)
+        report = self.assess()
+        self.assertFalse(report['functionalCompletion'])
+        self.assertFalse(report['candidateEligible'])
+        self.assertIn('v33-system-integration', report['acceptanceRequirements']['A08']['missingScopes']['function'])
+        self.assertEqual(report['caseBindingGaps']['v33-system-integration']['function']['caseIds'], [])
+        self.assertEqual(report['caseBindingGaps']['v33-dynamic-model-routing']['function']['caseIds'], [])
+
     def test_partial_allocation_case_keeps_uncovered_duties_and_scenarios_open(self):
         contract = copy.deepcopy(self.contract)
         policy = contract['acceptance']['admission']
@@ -1325,11 +1361,11 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         report = self.assess(contract)
         self.assertEqual(report['errors'], [])
         gap = report['caseBindingGaps'][scope['id']]['function']
-        self.assertEqual(set(gap['caseIds']), {'v33-skill-glossary-01', 'v33-concept-relations-01', case['id']})
+        self.assertEqual(set(gap['caseIds']), {case['id']})
         self.assertTrue(gap['missingDimensions']['duties'])
         self.assertIn('capability-loss', gap['missingDimensions']['scenarios'])
         self.assertIn('default-host-without-extra-extensions', gap['missingDimensions']['scenarios'])
-        self.assertEqual(report['progress']['coverageWithoutCases'], 4)
+        self.assertEqual(report['progress']['coverageWithoutCases'], 5)
         self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 7)
         self.assertEqual(report['acceptedCases'], [])
         self.assertFalse(report['functionalCompletion'])
@@ -1337,7 +1373,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def test_diagnostic_retains_unplanned_scope_and_scenario_gaps(self):
         report = self.assess(self.without_correction_and_user_environment_cases())
         self.assertEqual(report['errors'], [])
-        self.assertEqual(report['progress']['coverageWithoutCases'], 5)
+        self.assertEqual(report['progress']['coverageWithoutCases'], 7)
         self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 9)
         gaps = report['caseBindingGaps']
         self.assertEqual(set(gaps), {'v33-systemic-correction', 'v33-codex-cli-ordinary-delivery',

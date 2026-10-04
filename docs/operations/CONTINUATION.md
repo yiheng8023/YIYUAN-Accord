@@ -8,6 +8,7 @@
 Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享业务与仓库的唯一集成者。完成 3.3 必要功能、质量与完整验收后，按既有条件授权发布 3.3.0；目前没有发布资格。必要实现、修复、检查、提交和推送已授权。进度算到正式发布后态，之后传播、部署和治理不计入。
 
 - 普通“继续”和插话不取消原目标、不启 Plan/Goal、不解除真实暂停。保持用户主模型与模式；必要子代理按任务独立选择并由 Root 验收。
+- 子模型/推理强度按当前模型、账户、派发接口支持、用户限制和任务需要选择；不固定4档、6档或统一继承主代理。未显式配置时宿主可能继承，custom agent配置也可能覆盖请求，须核真实逐轮配置。已有Sol/medium、Luna/high、Astra/medium及新Astra/high实录；不把配置差异当最优选择或全入口自动生效。当前guide及运行时没有固定档数，不为此增加路由服务或同义规则。
 - 2026-10-05用户允许充分使用当前项目已有原生订阅模型与必要并行，不因配额顾虑压缩必要验证。本轮两阶段新普通任务和独立审查在该权限内；它不新增账户、数据、安装/信任、主模型/模式或取消路线的权限。
 - 3.3 只保留已选本地 OpenAI 适配。已取消的 Cloud 候选、模式、验收项和专用准备已清除，不再调查或执行；账户界面两草稿不可删除，用户允许留置，它们不是产品工序或发布前提。未来是否适配另议。
 - 3.3 后可先有维护小版本；3.4 的 Claude、Pi、DeepSeek Harness、ZCode、Antigravity 仅为待讨论候选，其它后续计划保持，不是开工或发布授权。
@@ -23,7 +24,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | 源码候选 | `3.3.0-dev.1+codex.20261005005348`，25文件/SHA `d2ce59c2135d2f3ece308929e10229e446f778ab97f9c73053947dd49edbd848`；本次只补现有生命周期Skill641字节及manifest版本，Hook/MCP/运行时/Meta原文保持。前候选8cb/20261004121454的CI37202339243已通过；新源在测试修正后的精确75ce7b4d/CI37221366079已11/11通过，未本机安装或行为验收。原现装24fa的[CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功；新旧身份不互代。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
 | 当前源码 CI | `67512ba0`、`b40a1063`、`8cb96c40`及`6abfe6a4`的精确CI均成功。`fd6b6f5e`/37208099935保一处Chat pending旧期望失败；`6f5d2f21`/37216493190保三处coverage依赖/矩阵fixture漏同步，均9产品失败、2原生通过。后者直接Linux/Windows日志同三项，已定向修且整个当前准入类43项通过。`c30b32ab`/37219463927已失败，不追认；测试修正的精确`75ce7b4d`/[CI37221366079](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37221366079)已11/11成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
-| 功能资格 | 17 必要 scope、15 case 定义；13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
+| 功能资格 | 17 必要 scope、12 活动 case；另三结束固定定义/失败留在历史。13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
 声明集合/ID 映射的复用摘要已只在副本规范化，原 definition 身份、输入和有序业务数组保持。七项定向、三项既有集成回归及三静态检查通过；该缺陷族已闭，不继续泛扩。此前交接释放未知的有限恢复修复也已集成，固定传输/SQLite 回归不代验普通自主交接或完整 A05/A08。
 
@@ -34,6 +35,8 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 1edb startup-repair实际一次进入，安装阶段已成功，之后Hook CAS前guard仍读取官方安装已退休的旧cache路径而FileNotFound；同SHA不可变副本和其它414原件保持。整体执行器失败不改判；hook-trust/native目录无，当前正确信任值形成机制未归因。原d10首次guard的RuntimeError及更早launcher错误也按原结果保留，不由当前后态反推。目标已正确，不再安装、授信或复活旧cache求绿。授权消费、POSTSTATE-FACTS、CURRENT-CONFIG及资源回执在accord-update09-poststate-reconcile-20261004-01和原startup-repair；完整旧工序见[cb95固定记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/cb95a53c4ed0ae34a07c002183e209d291e0a660/docs/operations/CONTINUATION.md)，不是待执行步骤。
 
 ## 剩余主线与当前切片
+
+源头可满足性核对已闭：“至少一个完整同episode”与按需/健康原生充分承担可以兼容，不能把按需扩大为禁止透明、有正当目的的恢复验收。具体错误是已结束的一次性词表/concept/stateclient仍被要求成为当前必过实例；三者都硬绑旧caller/SHA/attempts1，原源/预算/许可/失败保持。已将三个活动对象转历史，0df声明、对象/定义摘要及原case文件完全保全，其它12case指纹保持；17scope、必要职责与所有门槛未减。当前无case范围由4到6，新增dynamic-model-routing与system-integration，仍阻断必要功能与组合；全scope共同案例和独立后果还须实际完成。源审、固定前态、4项保全/负向验证及组合回归在accord-ended-case-disposition-20261005-01。不重开旧实例，不把移出、结构或新报告当通过。
 
 本机候选必要性比较已闭：现装24fa/3862的25文件字节与mtime仍匹配已核基线；05348/d2ce只改manifest版本及两份连续性/生命周期指南，其余22成员包括运行时、Hook、MCP、协调与Meta保持。当前仓库准入修正不依赖安装这两段新正文，暂缓新一轮本机更新，先推进必要功能及组合；这不称新候选已采用，也不豁免最终精确候选验收。未来确需采用时先将包/配置/恢复actor保在变化cache之外，分别核活动目标与不可变证据，并重新绑定真实消费者/权限。09失败与许可消费保持，不复跑或恢复retired cache求绿。两完整包、diff、判断和未来条件在accord-adoption10-source-20261005-01；没有执行包、grant或共享效果。
 
@@ -79,7 +82,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | W06/W07 | 环境/资源压力变化后必要续做、兼容采用、资产保护和资源退出；局部 Job0 不代验整个宿主。 |
 | W08 | 同一 episode 全链组合与独立净影响；A08 依赖 A01–A07，不能拼散案平均分。精确候选和发布后态另核。 |
 
-当前 OpenAI applicability 为9行：6selected/3pending；web聚合和三Chat mode按任务用途待判，不据界面名或可选截图晋全支持。六已选入口/当前有效模式保留；JetBrains/Xcode 内置集成仍待必要差异判断，不要求用户采购设备。宿主能力覆盖已有前瞻case、实际观察仍未验；其余四个无case范围见本切片首段，system-integration的case已结束未准入。完整清单与依赖以机器投影和计划为准。
+当前 OpenAI applicability 为9行：6selected/3pending；web聚合和三Chat mode按任务用途待判，不据界面名或可选截图晋全支持。六已选入口/当前有效模式保留；JetBrains/Xcode 内置集成仍待必要差异判断，不要求用户采购设备。宿主能力覆盖已有前瞻case、实际观察仍未验；六个无case范围是codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation、dynamic-model-routing及system-integration。结束实例留在历史，不作可重试步骤。完整清单与依赖以机器投影和计划为准。
 
 ## 原失败与历史证据
 
