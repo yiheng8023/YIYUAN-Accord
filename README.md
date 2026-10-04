@@ -14,7 +14,7 @@
   <a href="README.md">English</a> | <a href="README.zh-CN.md">简体中文</a>
 </p>
 
-**Our mission: Empower every dream.**
+**Our declaration: Empower every dream.**
 
 The 3.3 candidate includes the [original meta-guidance](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)
 as its value and judgment foundation. Supported, enabled and trusted entry hooks

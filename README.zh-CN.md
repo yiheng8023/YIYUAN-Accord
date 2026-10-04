@@ -14,7 +14,7 @@
   <a href="README.zh-CN.md">简体中文</a> | <a href="README.md">English</a>
 </p>
 
-**使命：助力每一个梦想。**
+**宣言：助力每一个梦想。**
 
 3.3候选已内置[元指导原文](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)，作为价值与判断依据。受支持、已启用且可信的入口Hook会连同任务协调指导传入，保持用户AGENTS.md独立。安装和实际加载仍需核验；它不提高宿主指令优先级，也不证明所有宿主、其它未选环境模式或子代理路径都已覆盖。
 
