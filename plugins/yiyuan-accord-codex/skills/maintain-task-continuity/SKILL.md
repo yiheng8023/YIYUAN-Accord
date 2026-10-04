@@ -50,6 +50,12 @@ For necessary user/external input, use `false` and retain unmet conditions.
 Active or unfinished is insufficient; `false` neither ends, cancels nor pauses
 the task, and preserves later user input.
 
+For truncated or damaged tool/file replies, recover the necessary missing spans
+from the original source or a supported bounded continuation. Check the recovered
+text before dependent effects; retain unaffected verified facts and leave only
+unresolved dependencies on hold. A successful read or valid JSON is not proof
+that instructions or evidence arrived completely and without character loss.
+
 Retrieve missing captured text through `read_task_input` or `read-native-input`;
 these contain Hook inputs, not full history, attachments or progress. Pass each
 returned `next` cursor with its `expectedReceiptEpoch`; reconcile changed receipts

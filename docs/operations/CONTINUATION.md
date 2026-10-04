@@ -19,9 +19,9 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | 对象 | 已核事实及限制 |
 |---|---|
 | Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
-| 源码候选 | 同现装24fa/25文件/3862；[精确 CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功。安装与本次有限entry收准不改变候选/发布资格。旧5b/24文件恢复副本在startup-repair的installed-before保持精确。 |
+| 源码候选 | `3.3.0-dev.1+codex.20261004121454`，25文件/SHA `67775eaca8b5b2eaab4c6c0679d7856b743e3d9728f4e296f21448611c20c1de`；只改连续性Skill正文及manifest版本，Hook/MCP/运行时/Meta原文保持。三项源静态检查通过；候选CI终态另核，未本机安装或行为验收。原现装24fa的[CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功；新旧身份不互代。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
-| 当前源码 CI | `355020b2769a7af5c287ae8e933dbc87b287eb6c` 的 [CI37183361882](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37183361882) 已 completed/success；前述cb95及后续记录CI也已成功。旧cb47初始化超时的原失败和attempt2成功均保留，原因未定，没有据此修产品或改超时。 |
+| 当前源码 CI | `67512ba0` 的 [CI37197889375](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37197889375) 已 completed/success；`b40a1063` 的CI37200707008尚在运行，新候选按其精确提交核终态。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
 | 功能资格 | 17 必要 scope、14 case 定义；13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
 声明集合/ID 映射的复用摘要已只在副本规范化，原 definition 身份、输入和有序业务数组保持。七项定向、三项既有集成回归及三静态检查通过；该缺陷族已闭，不继续泛扩。此前交接释放未知的有限恢复修复也已集成，固定传输/SQLite 回归不代验普通自主交接或完整 A05/A08。
@@ -33,6 +33,8 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 1edb startup-repair实际一次进入，安装阶段已成功，之后Hook CAS前guard仍读取官方安装已退休的旧cache路径而FileNotFound；同SHA不可变副本和其它414原件保持。整体执行器失败不改判；hook-trust/native目录无，当前正确信任值形成机制未归因。原d10首次guard的RuntimeError及更早launcher错误也按原结果保留，不由当前后态反推。目标已正确，不再安装、授信或复活旧cache求绿。授权消费、POSTSTATE-FACTS、CURRENT-CONFIG及资源回执在accord-update09-poststate-reconcile-20261004-01和原startup-repair；完整旧工序见[cb95固定记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/cb95a53c4ed0ae34a07c002183e209d291e0a660/docs/operations/CONTINUATION.md)，不是待执行步骤。
 
 ## 剩余主线与当前切片
+
+已将实际Tool/文件回复截断的恢复分支补进现有连续性Skill：从原source或受支持有界续读补必要缺段，核后再依赖动作，保未影响事实；read成功或JSON有效不当全文完整证明。原Hook captured-input恢复分支保持，两类来源不混用。原正文7994字节、补后8391，当前阶段单篇cap由8000调整9000留609余量；总体3300000字节/184文件/36000主指令及5%reserve、17scope/14case/F-A和旧预算/失败不变。独审无必改、开发/产品/Codex投影三静态通过；不新增读取器、runtime、服务或权限，不以新cap保证宿主无截断。源差异/原包/审查材料在accord-continuity-read-integrity-20261004-01，现装仍24fa，不为这项指导小改立即重复更新；未来真实恢复行为与采用另核。
 
 新W02离线备件盘点任务的两轮业务结果已独立核对：现装24fa/25文件逐字节核；fresh原生worker两轮turn_context均为gpt-6-luna/high，Root主模型保持Sol。原始需求无Skill名，实际记录显示worker自主读Spreadsheets并采用ArtifactTool构建、重算、查看两页、导出及重导入；第三方源/策略保持。按[官方Skill语义](https://learn.chatgpt.com/docs/build-skills)，这是本例原生隐式选择/实际采用与交付的正向观察；不将额外matcher/invoke RPC作为必要门槛。它不证明explicit-only路径、全部Skills或最优模型/净收益，读取仍有初次路径错误和正文截断，不能称首次无误或全文无损加载。
 
