@@ -81,6 +81,13 @@ python -B -X utf8 -m unittest discover -s tests/product -v
 CLI reports use UTF-8 on standard output, including redirected output. Decode
 captured report bytes as UTF-8; callers need not change their system locale.
 
+Generated executable entry points need a check through the target interpreter,
+using the actual delivered bytes and a harmless substitute target. Isolate PATH
+and user-data roots so a parsing error cannot dispatch a real tool or Agent;
+verify the called target and arguments as well as the exit code. Windows cmd
+launchers use ASCII control text and CRLF, with localization in separate prose;
+repository-wide LF conventions are not an executable-format guarantee.
+
 When an effect depends on a connection's source, bind peer observations to the
 same connection that carries its requests and receipts. Redirects, reconnects or
 proxy replacement can break that relationship even when the original peer check
