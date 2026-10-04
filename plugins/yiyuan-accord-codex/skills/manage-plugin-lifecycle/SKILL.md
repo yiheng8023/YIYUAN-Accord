@@ -23,6 +23,14 @@ invalidate them. An intentional repair, upgrade or verification retry retains it
 specific purpose and authority; it is not ordinary duplicate installation.
 
 Preserve prior source/state and a recovery actor outside the changed component.
+Separate immutable evidence and recovery copies from active paths that an
+authorized change may replace or retire. Bind preserved bytes outside that target
+before the effect; then check the intended new state and retained copies separately.
+Do not require an authorized retired path to remain present or recreate it to
+satisfy an obsolete guard. Unexpected loss or changed evidence still holds the
+affected route. After a later guard or procedure failure, reconcile completed,
+pending and unknown effects before choosing recovery or retry; preserve the failed
+procedure without inferring that an already correct target needs the same write.
 Reconcile requested and host-selected sources before mutation. If supported
 inspection proves the selected source invalid, reject that change, verify healthy
 state and report the blocker; do not continue unrelated exploration. Unknown
