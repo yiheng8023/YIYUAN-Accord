@@ -1502,6 +1502,34 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse({"v33-openai-entry-applicability-01", "v33-admitted-entry-delivery-01",
                           "v33-admitted-entry-lifecycle-01"} & set(report["acceptedCases"]))
 
+    def test_task_relative_chat_candidate_does_not_count_as_selected_delivery(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract["acceptance"]["admission"]
+        for row in [*policy["scopes"], *policy["cases"]]:
+            if "entryDispositions" not in row["conditions"]:
+                continue
+            row["conditions"]["selectionFinal"] = True
+            for key, disposition in row["conditions"]["entryDispositions"].items():
+                if disposition["status"] == "pending" and key != "chatgpt-web":
+                    disposition["status"] = "deferred"
+                for mode, value in disposition.get("modes", {}).items():
+                    if value["status"] == "pending" and mode != "chat":
+                        value["status"] = "deferred"
+        with self.history():
+            self.commit(contract)
+            report = self.assess(contract, self.observer)
+        self.assertEqual(report["errors"], [])
+        selection = report["entrySelection"]
+        self.assertFalse(selection["final"])
+        self.assertEqual(len(selection["selected"]), 6)
+        self.assertNotIn("chatgpt-web", selection["selected"])
+        for key in ("chatgpt-desktop", "chatgpt-mobile", "chatgpt-web"):
+            self.assertEqual(selection["pendingModes"][key], ["chat"])
+            self.assertNotIn("chat", selection["selectedModes"][key])
+        self.assertFalse({"v33-openai-entry-applicability-01", "v33-admitted-entry-delivery-01",
+                          "v33-admitted-entry-lifecycle-01"} & set(report["acceptedCases"]))
+        self.assertFalse(report["acceptanceRequirements"]["A02"]["complete"])
+
     def test_mode_declarations_reject_omission_drift_and_weakened_effects(self):
         from yiyuan_accord.admission import admission_contract_errors
         for kind in ("missing-mode", "unknown-mode", "no-modes", "foreign-modes", "empty-basis",

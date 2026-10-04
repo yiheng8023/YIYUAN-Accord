@@ -26,7 +26,7 @@
       "codex"
     ],
     "additionalHostAdaptation": "deferred",
-    "scopeRule": "Version 3.3 continues the selected local OpenAI execution paths: CLI, Desktop, IDE, local-only Work, Remote of selected local hosts and bounded SDK duties. Ordinary Chat is auxiliary; specific inner IDE integration differences remain unresolved. Actual loading, interaction, authority, continuity, recovery, verification and exit are all required for selected paths. Shared Linux/macOS CLI and standard hosted CI remain. Claude, Pi, DeepSeek Harness, ZCode and Antigravity remain future host candidates only; decisions follow 3.3 publication and discussion with the user. Small maintenance releases may precede 3.4; all other future plans remain unchanged.",
+    "scopeRule": "Version 3.3 continues the selected local OpenAI execution paths: CLI, Desktop, IDE, local-only Work, Remote of selected local hosts and bounded SDK duties. Ordinary Chat is assessed by task-required capabilities and results; independent research or content delivery remains a pending candidate, not verified support; specific inner IDE integration differences remain unresolved. Actual loading, interaction, authority, continuity, recovery, verification and exit are all required for selected paths. Shared Linux/macOS CLI and standard hosted CI remain. Claude, Pi, DeepSeek Harness, ZCode and Antigravity remain future host candidates only; decisions follow 3.3 publication and discussion with the user. Small maintenance releases may precede 3.4; all other future plans remain unchanged.",
     "sourceDecision": "Implement ordinary-input functional slices, including autonomous tool-failure recovery and correction of delivered artifacts, while retaining complete system, continuity, ecosystem and OS/host resource obligations. Across applicable capabilities the Agent owns need detection, timing, execution feedback, recovery, verification and exit; fork is only one example. Ordinary cases do not tell the Agent which tool to use. Unnecessary or premature invocation, missed needs and incomplete follow-through remain failures; always-on functionality is not the goal. Absorb applicable engineering principles across Agent tasks: internalize necessary judgment, contracts or feedback connections and reuse sufficient host execution/state capabilities. Evaluate both against the same outcomes; neither an existing host capability nor a custom component proves coverage. Adaptive practice does not remove domain-specific correctness checks. System coupling, failure propagation, shared-state ownership and non-compensable quality floors are implementation and acceptance obligations throughout, not a final polish stage. Before any change, the host Agent uses source and dependency evidence to assess whole-goal and consequential cross-boundary effects; Accord carries this duty through entry and recovery guidance. Changed assumptions, baselines, plans or acceptance criteria also reopen affected existing outputs and the current applicability of historical conclusions. Native task state or existing checkpoint unresolved conditions retain consequential unknowns; neither file matches nor a revised future plan closes them. Inspection depth follows actual risk, and discovery grants no new access or authority. Prioritize consequential weak dependencies and verify composed episodes as well as individual functions. Local checks are not ordinary-host acceptance; 3.3 publication is conditionally authorized by the latest user decision and remains dependent on full necessary acceptance. The user-confirmed N33-20260909 node in PLAN-v3.3.md owns current consensus, source consistency, dynamic evaluation and nonlinear procedures. Review source contradictions before dependent implementation; reconcile affected historical and current results. All editable or usable host UI, settings, commands and interfaces need discovered dispositions, including unknowns; coverage does not authorize enablement.",
     "claudeAdaptation": "candidate-for-v3.4",
     "futureAdaptationVersion": "3.4",
@@ -326,8 +326,8 @@
   },
   "capabilityMap": {
     "entrySurfaces": {
-      "reviewedAt": "2026-09-05T02:30:47Z",
-      "rule": "当前盘点按本版有效范围组织。六个已选本地执行/控制入口及全部必要职责不变；JetBrains/Xcode内置集成仍待判，普通Chat仅辅助。混合入口的当前模式由modeCatalog完整声明，不以历史固定数量强迫保留已取消路线，也不准遗漏声明模式、弱化结果或自动完成。日期和观察保留来源层级；机器结构检查不认证账号、启用、行为或范围决定的合理性。",
+      "reviewedAt": "2026-10-04T13:49:59.515551+00:00",
+      "rule": "按本版当前任务相对范围组织：六个已选本地执行/控制入口保持；Chat的研究/分析/内容等独立结果用途按必要职责候选待判，JetBrains/Xcode仍待判。modeCatalog不变；不以界面名、物理effects有无或Skill选择器判完整覆盖。每个任务所需来源/权限/状态/核验/恢复/资源责任仍须充分承担，机器结构不认证账号、启用、行为或范围合理性。",
       "rows": [
         {
           "id": "cx-cli",
@@ -384,9 +384,9 @@
           "host": "codex",
           "name": "ChatGPT 网页入口",
           "officialSource": "https://learn.chatgpt.com/docs/web",
-          "execution": "普通Chat仅提供辅助对话",
-          "environment": "不作为独立生产交付执行者；必要职责交由获准的已选执行组合承担。",
-          "observation": "范围决定：当前只保留辅助角色，不宣称独立执行、状态、恢复或交付已验证。",
+          "execution": "研究/分析/内容等task-bound结果可条件独立交付；外部操作需求另核实际能力/权限及获准执行组合。",
+          "environment": "当前独立用途pending、实际采用/交付未验；来源取得、分析、结果核验、反馈与必要状态/退路逐任务判断，不将所有任务强制交本地执行者。",
+          "observation": "2026-10-04按用户认可的任务相对原则，将此前普遍辅助/inapplicable处置改为pending；用户提供的是桌面Chat选择器截图，不能代验当前网页账号的可发现/加载/行为。本行不宣称当前完整支持，旧决定保留固定Git身份。",
           "currentEffect": "unverified"
         },
         {
@@ -394,9 +394,9 @@
           "host": "codex",
           "name": "ChatGPT 桌面 Chat / Work",
           "officialSource": "https://learn.chatgpt.com/docs/app",
-          "execution": "local-only Work或Remote控制已选本地主机；普通Chat仅辅助",
-          "environment": "Work本地子模式复用同主机现有包与原生持久任务。2026-09-27用户发起的projectless Work会话（codex_work_desktop、0.158.0-alpha.2.1）实际收到Accord入口指导并调用状态MCP一次；同轮原生身份及实际cwd输入回执已独立对账。Root诊断prompt指定的repo cwd与实际cwd不同，原查询未读到回执，不能将事后文件核对冒充正确cwd的MCP联读。",
-          "observation": "2026-09-06 复核 https://learn.chatgpt.com/docs/plugins 与 https://learn.chatgpt.com/docs/enterprise/skills：Chat、Work 与 Codex 支持插件并共享公共目录，但本地文件分发、工作区 Skill 和各入口安装/授权仍有边界。本机 26.901.5280.0 的 composer-work-home-plugins-control 与 plugin-picker-menu-content 接入插件选择及宿主路由。 用户随后提供同一客户端的 Chat 与 Work 插件选择器截图，两处均直接显示 YIYUAN Accord for Codex；本机两入口的可发现/可选状态已确认。截图不包含调用后结果，不能单独证明正文加载、Hook 执行或交付效果。 随后客户端更新为 26.901.6511.0，运行路径已核对；共享 Accord 已按后续用户方向卸载，旧截图仅保留历史可发现性。此次未调用 Chat/Work 候选，不把客户端升级或 App Server 诊断当成其当前加载/效果。 2026-09-27按官方Plugins/MCP/Work安全正文及当前26.924.2738.0安装代码复核，确定Work本地子模式复用现包的开发路线；静态源码不当作运行账户或实际采用证据。最小接入核验为同一root Work turn的UserPromptSubmit输入回执、MCP原生thread/session/turn元数据及一致cwd/状态目录；上下文读取另需Hook转录位于该CODEX_HOME/sessions。原件accord-work-entry-composition-20260927-01，未创建Work任务或改设置。 随后用户已在Work本地发出一次只读核验，原生01a0e34c-7118-7621-a149-4142d960438f/turn01a0e34c-879a-7761-b848-a59de3df1e00于200971ms完成。原生历史确认codex_work_desktop、Accord入口/UserPromptSubmit指导和一次inspect调用；保存MCP对象与原生事件一致。Root提示词固定repo cwd，实际新对话位于Documents/Codex生成目录；按session+真实cwd定位的输入回执存在且epoch/turn相符，repo对应键不存在。原报告的missing回执保持，路径归因由Root事后只读核对，不归责用户、不重试、不声称正确cwd工具联读或完整验收。两报告及native-evidence/actual-cwd-input/reconciliation原件保留同私有目录，未改状态、配置或第三方Skill。",
+          "execution": "已选local-only Work/Remote控制本地主机保持；普通Chat研究/分析/内容等task-bound用途pending。",
+          "environment": "Work本地子模式复用同主机现有包与原生持久任务。2026-09-27用户发起的projectless Work会话（codex_work_desktop、0.158.0-alpha.2.1）实际收到Accord入口指导并调用状态MCP一次；同轮原生身份及实际cwd输入回执已独立对账。Root诊断prompt指定的repo cwd与实际cwd不同，原查询未读到回执，不能将事后文件核对冒充正确cwd的MCP联读。 2026-10-04普通Chat独立结果候选按任务所需条件另判，不继承上述Work采用或状态证据。",
+          "observation": "2026-09-06 复核 https://learn.chatgpt.com/docs/plugins 与 https://learn.chatgpt.com/docs/enterprise/skills：Chat、Work 与 Codex 支持插件并共享公共目录，但本地文件分发、工作区 Skill 和各入口安装/授权仍有边界。本机 26.901.5280.0 的 composer-work-home-plugins-control 与 plugin-picker-menu-content 接入插件选择及宿主路由。 用户随后提供同一客户端的 Chat 与 Work 插件选择器截图，两处均直接显示 YIYUAN Accord for Codex；本机两入口的可发现/可选状态已确认。截图不包含调用后结果，不能单独证明正文加载、Hook 执行或交付效果。 随后客户端更新为 26.901.6511.0，运行路径已核对；共享 Accord 已按后续用户方向卸载，旧截图仅保留历史可发现性。此次未调用 Chat/Work 候选，不把客户端升级或 App Server 诊断当成其当前加载/效果。 2026-09-27按官方Plugins/MCP/Work安全正文及当前26.924.2738.0安装代码复核，确定Work本地子模式复用现包的开发路线；静态源码不当作运行账户或实际采用证据。最小接入核验为同一root Work turn的UserPromptSubmit输入回执、MCP原生thread/session/turn元数据及一致cwd/状态目录；上下文读取另需Hook转录位于该CODEX_HOME/sessions。原件accord-work-entry-composition-20260927-01，未创建Work任务或改设置。 随后用户已在Work本地发出一次只读核验，原生01a0e34c-7118-7621-a149-4142d960438f/turn01a0e34c-879a-7761-b848-a59de3df1e00于200971ms完成。原生历史确认codex_work_desktop、Accord入口/UserPromptSubmit指导和一次inspect调用；保存MCP对象与原生事件一致。Root提示词固定repo cwd，实际新对话位于Documents/Codex生成目录；按session+真实cwd定位的输入回执存在且epoch/turn相符，repo对应键不存在。原报告的missing回执保持，路径归因由Root事后只读核对，不归责用户、不重试、不声称正确cwd工具联读或完整验收。两报告及native-evidence/actual-cwd-input/reconciliation原件保留同私有目录，未改状态、配置或第三方Skill。 2026-10-04用户提供当前桌面Chat选择器截图，显示可选/已提及YIYUAN Accord；用户明确未尝试实际闭环。它只支持该UI可见性，实际加载、适用工具/权限、协调作用及任务闭环仍pending；不从界面标签排除研究或内容交付。",
           "currentEffect": "unverified"
         },
         {
@@ -404,8 +404,8 @@
           "host": "codex",
           "name": "ChatGPT iOS / Android",
           "officialSource": "https://help.openai.com/en/collections/3742473-chatgpt",
-          "execution": "普通Chat辅助、Work云执行、Remote连接主机执行分别核对",
-          "environment": "按Chat/Work云/Remote区分：Remote复用已纳入开发的Codex Desktop本地项目任务，手机不成为本地执行器；具体账户、配对、有效主机条件和控制面差异仍须核验。Work云不继承这一判断；不把同一chat的跨设备访问、跨主机搬运与fresh低继承接续混为一谈。",
+          "execution": "普通Chat按研究/内容等任务条件待判；Remote仍复用已选主机，分别核必要交付责任。",
+          "environment": "当前modeCatalog仅Chat/Remote。Remote复用已选Codex Desktop项目，手机不成为本地主机执行器；Chat是否能独立完成绑定研究/内容任务另核可用来源/工具、权限、结果、状态与退路。实际账号/配对未验，不混跨设备访问、主机搬运和fresh低继承接续，也不恢复取消的执行位置。",
           "observation": "2026-09-15实读https://learn.chatgpt.com/docs/remote-connections：iOS/Android的Remote可继续任务、补充/纠正、审批和查看结果，使用连接主机的工具/状态。其候选路线应复用已验证主机的执行链，再补远端输入、审批、断线/重连及后态差异；不能仅按普通Chat辅助对待，也不能推成手机加载本地Hook。尚未配对、启用远程访问或做当前Accord行为验收；未由文档宣称支持。 2026-09-27再读官方Remote页及Work执行/本地安全页，结合既有职责作出工程选择：上述限定Remote开发路线已定，整体mobile因其它模式未决仍pending，currentEffect仍unverified。当前未配对、启用、迁移或执行实例；断连后须核同一任务、暂停/撤权、已知及未知效果与执行者归属，不能重派发求确认。",
           "currentEffect": "unverified"
         },
@@ -5325,11 +5325,11 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定开发：local-only Work和Remote复用已选本地主机；实际包、配置、交互/权限、普通交付、恢复与退出差异仍须验收，原Work查询cwd错位保留原结果。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -5343,11 +5343,11 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5356,12 +5356,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "inapplicable",
-                "basis": "普通Chat仅有辅助角色，不是独立全链路生产交付入口；必要执行、状态和接续交由获准的已选组合承担。",
+                "status": "pending",
+                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   }
                 }
               },
@@ -5390,7 +5390,7 @@
                 "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
               }
             },
-            "sourceBasis": "当前PLAN与本地CLI/Desktop/IDE、local-only Work、Remote的有日期来源；modeCatalog绑定本版范围。共享核心不证明实际采用，历史契约按原版本读取，不自动承诺其它执行位置。",
+            "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "只读审查和既有有界开发权限；不增加账号、安装、启用、信任、数据、费用或共享/外部写入权限。"
           },
@@ -5439,11 +5439,11 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定开发：local-only Work和Remote复用已选本地主机；实际包、配置、交互/权限、普通交付、恢复与退出差异仍须验收，原Work查询cwd错位保留原结果。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -5457,11 +5457,11 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5470,12 +5470,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "inapplicable",
-                "basis": "普通Chat仅有辅助角色，不是独立全链路生产交付入口；必要执行、状态和接续交由获准的已选组合承担。",
+                "status": "pending",
+                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   }
                 }
               },
@@ -5504,7 +5504,7 @@
                 "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
               }
             },
-            "sourceBasis": "当前PLAN与本地CLI/Desktop/IDE、local-only Work、Remote的有日期来源；modeCatalog绑定本版范围。共享核心不证明实际采用，历史契约按原版本读取，不自动承诺其它执行位置。",
+            "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "只读审查和既有有界开发权限；不增加账号、安装、启用、信任、数据、费用或共享/外部写入权限。"
           },
@@ -5552,11 +5552,11 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定开发：local-only Work和Remote复用已选本地主机；实际包、配置、交互/权限、普通交付、恢复与退出差异仍须验收，原Work查询cwd错位保留原结果。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -5570,11 +5570,11 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5583,12 +5583,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "inapplicable",
-                "basis": "普通Chat仅有辅助角色，不是独立全链路生产交付入口；必要执行、状态和接续交由获准的已选组合承担。",
+                "status": "pending",
+                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   }
                 }
               },
@@ -5617,7 +5617,7 @@
                 "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
               }
             },
-            "sourceBasis": "当前PLAN与本地CLI/Desktop/IDE、local-only Work、Remote的有日期来源；modeCatalog绑定本版范围。共享核心不证明实际采用，历史契约按原版本读取，不自动承诺其它执行位置。",
+            "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "只读审查和既有有界开发权限；不增加账号、安装、启用、信任、数据、费用或共享/外部写入权限。"
           },
@@ -6631,11 +6631,11 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定开发：local-only Work和Remote复用已选本地主机；实际包、配置、交互/权限、普通交付、恢复与退出差异仍须验收，原Work查询cwd错位保留原结果。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -6649,11 +6649,11 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "remote": {
                     "status": "selected",
@@ -6662,12 +6662,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "inapplicable",
-                "basis": "普通Chat仅有辅助角色，不是独立全链路生产交付入口；必要执行、状态和接续交由获准的已选组合承担。",
+                "status": "pending",
+                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   }
                 }
               },
@@ -6696,7 +6696,7 @@
                 "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
               }
             },
-            "sourceBasis": "当前PLAN与本地CLI/Desktop/IDE、local-only Work、Remote的有日期来源；modeCatalog绑定本版范围。共享核心不证明实际采用，历史契约按原版本读取，不自动承诺其它执行位置。",
+            "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "只读审查和既有有界开发权限；不增加账号、安装、启用、信任、数据、费用或共享/外部写入权限。"
           },
@@ -6860,11 +6860,11 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定开发：local-only Work和Remote复用已选本地主机；实际包、配置、交互/权限、普通交付、恢复与退出差异仍须验收，原Work查询cwd错位保留原结果。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -6878,11 +6878,11 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "remote": {
                     "status": "selected",
@@ -6891,12 +6891,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "inapplicable",
-                "basis": "普通Chat仅有辅助角色，不是独立全链路生产交付入口；必要执行、状态和接续交由获准的已选组合承担。",
+                "status": "pending",
+                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   }
                 }
               },
@@ -6925,7 +6925,7 @@
                 "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
               }
             },
-            "sourceBasis": "当前PLAN与本地CLI/Desktop/IDE、local-only Work、Remote的有日期来源；modeCatalog绑定本版范围。共享核心不证明实际采用，历史契约按原版本读取，不自动承诺其它执行位置。",
+            "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "只读审查和既有有界开发权限；不增加账号、安装、启用、信任、数据、费用或共享/外部写入权限。"
           },
@@ -7062,11 +7062,11 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "限定开发：local-only Work和Remote复用已选本地主机；实际包、配置、交互/权限、普通交付、恢复与退出差异仍须验收，原Work查询cwd错位保留原结果。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -7080,11 +7080,11 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "限定纳入开发：Remote控制已选Codex Desktop本地项目任务，执行/状态/插件/权限仍由连接主机承担；不是手机执行器或全部手机模式支持。按modes保留托管Work与普通Chat的分别责任；当前配对及实际行为未验收。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   },
                   "remote": {
                     "status": "selected",
@@ -7093,12 +7093,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "inapplicable",
-                "basis": "普通Chat仅有辅助角色，不是独立全链路生产交付入口；必要执行、状态和接续交由获准的已选组合承担。",
+                "status": "pending",
+                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
                 "modes": {
                   "chat": {
-                    "status": "auxiliary",
-                    "basis": "普通Chat仅作辅助，必要执行、状态和接续须明确交由获准的执行组合承担；不据此宣称独立完整支持。"
+                    "status": "pending",
+                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
                   }
                 }
               },
@@ -7127,7 +7127,7 @@
                 "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
               }
             },
-            "sourceBasis": "当前PLAN与本地CLI/Desktop/IDE、local-only Work、Remote的有日期来源；modeCatalog绑定本版范围。共享核心不证明实际采用，历史契约按原版本读取，不自动承诺其它执行位置。",
+            "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
             "evidenceUse": "Inspect current immutable candidate and affected sources; reuse common execution facts only with exact dependency and entry-difference checks. A coherent episode may contribute without duplicate business execution.",
             "authority": "只读审查和既有有界开发权限；不增加账号、安装、启用、信任、数据、费用或共享/外部写入权限。"
           },
@@ -8288,7 +8288,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "Follow N33-20260909 r36. Own suitable Skill choice under user delegation using actual supported host paths, preserving upstream sources and genuine selection provenance. Default explicit-only metadata is not a blanket ban on authorized coordination, and protocol loading alone is not ordinary autonomous selection.  Reuse the completed controlled finalize-receipt native-composition evidence: Windows and hosted Linux/macOS records independently verify reconciliation, finalization, target writer ownership and settled revision 19. Preserve the original failed fixture and all model/autonomous-timing/crash-recovery limits; this completed sub-scope is not a pending prerequisite or a reason to replay it before ordinary continuity. Align task-specific effort visibility and third-party Skill invocation boundaries within existing W02/W06/W08 and A02/A06/A08; static inventory and policy alignment do not establish adoption or acceptance.  For 3.3, internalize applicable public decision-model designs through existing host models, supported tools and necessary Accord components. Defer dedicated third-party decision-model provider integration and user deployment support to later versions; do not schedule more such trials or shadow integrations in the 3.3 workstream. Preserve ordinary ecosystem reuse and user-selected components; introduce no model-training program, model-hosting service or generic decision-engine project. Reduce unnecessary third-party dependencies without making self-authored implementation the default or rejecting mature capabilities. No separate evaluation-model account, fixed provider ladder, new training requirement or zero-resource-cost claim is introduced. Reconcile the source-checked external reports within existing W03-W08 duties: preserve state and shared invalidation evidence. Read-only status diagnostics now reuse the existing optimistic snapshot boundary, reject observed concurrent publication, changed sources and incompatible identity, and identify malformed/unreadable evidence without repair or erasure. Continue actual damaged-state recovery, input-size and lock-identity work where needed; status diagnostics are not recovery completion or ordinary-host acceptance. Never remove shared watermarks blindly or unlock from a TTL. Existing package-byte checks and required acceptance stay in place. Retain the historical Jev private trial, classifier-dev source reference and bounded Laya public-demo observations as research with their original limits. They are not current integration targets, proof of superior in-house performance or a release gate. Access delays do not block independent ready work; raw account, credential and restricted benchmark material stays private. Align the confirmed whole-task upstream, context-selected Skill details and bounded bootstrap/evolution duties. Supply the upstream through Accord-owned components and supported host connections without requiring changes to user AGENTS.md. Preserve per-input goal, authority, pause and unfinished-duty interpretation, simple direct handling and complex adaptive composition; do not lock Skill or other component counts or treat a fixed invocation sequence as coverage. Keep perception and continuity decisions independent of optional detailed Skill selection; supported host events and native mechanisms should carry sufficient responsibilities. All seventeen necessary scopes have definitions; eight have no active cases after the ended candidate-review and resource/environment instances were retained as history. Ten active cases remain. Their useful effects, original report defects and separate later corrections stay source-bound; all complete acceptance requirements remain open. New resource/environment work must be prebound within retained ceilings instead of replaying the ended CLI0.155.1/Terra batch. Definitions are not passed observations. Do not continue treating the closed definition gap as a prerequisite; bind real outcomes and current execution conditions for the remaining case and evidence gaps. Six OpenAI entry IDs have bounded selected development routes, five rows remain pending, and selected rows retain pending modes. Desktop Work Local and desktop/mobile Remote to an already selected local host are bounded development routes; hosted Work across all three UIs remains pending. Remote control does not include SSH execution or cross-host migration, and each control UI retains its own acceptance duties. Ordinary Chat is auxiliary with explicit transfer duties. selectionFinal is false; neither row counts nor resolved rows alone can finalize the mode set or admit parent cases. Reuse the completed public SDK lifecycle/scoped-exposure episodes within their original package and condition bounds, the cc3243ea CLI two-turn delivery and installed VS Code ordinary delivery within their actual limits, and the resolved marketplace/Hook/environment-name corrections. All complete A01-A08 requirements remain open. First close the reliable upstream-to-ordinary-delivery path on an execution entry whose necessary conditions can be established: current exact package and real entry participation, task-appropriate detail/capability use, execution feedback and correction, verified delivery and needed continuity. The brief entry is now the shared Hook guidance source, with four independently discoverable specialist Skills; transcript connection and recovery cues already exist; validate their adoption rather than treating them as unimplemented or equating injection with behavior. Keep time-bound shared installation, source projection and installed-candidate evidence distinct. Account for user, host and later-component changes across shared dependencies. Compose capabilities temporarily within existing interfaces and authority, then release task-local bindings and resources without retiring user-owned components or unfinished recovery responsibilities. In parallel, resolve independent entry differences, lifecycle/resource mechanisms, CI and existing evidence readback, then integrate at the real dependency boundary. Keep autonomous handoff in scope within continuous useful work. Close the entire loop with recoverable task and effect state, conditional transitions and a live authorized recovery trigger. Reuse host persistence and scoped Accord checkpoints; disconnection does not establish whether an effect occurred. Reconcile unknown effects, current authority, pauses and writer ownership before retry, compensation, completion or source release. State-machine semantics are necessary, but a single custom engine or fixed SOP is not prescribed. Stop repeating bounded hot-reload demonstrations after their mechanism evidence is closed; remaining host-upgrade differences must not displace the mainline. Bind missing behavioral scopes to actual work and complete system integration and impact gaps. Several related duties may share one sufficient episode; do not mechanically schedule a new model experiment per scope or replay completed small chains. Correct actual defects and preserve valid partial outcomes and original failures. Finish exact-candidate, documentation, independent review, hosted checks and publication closeout only after necessary acceptance. Maintain Plan/Goal independence and explicit activation authority. Use public standard CI by validation need; account quota pressure does not reduce acceptance or authorize new costs. Keep the 3.4 Claude, Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity candidates and plugin-eval comparison research out of 3.3 execution and release gates. Prepare truthful post-3.3 comparison materials on the actual supported host; Plugin eval is only one component of communication materials and cannot establish full Accord capability or value; Claude eval results cannot qualify Codex behavior. Keep host adaptation undecided until after 3.3 publication, when the user explains the reasons and user and Agent discuss and decide together. Other future plans remain unchanged. Candidate listing does not schedule adaptation or authorize installation, paid evaluation or publication.",
+    "work": "Follow N33-20260909 r37 in docs/operations/PLAN-v3.3.md and the brief docs/operations/CONTINUATION.md. The plan owns current goals and dispositions; this projection is not a second authority. Judge entry applicability by the bound task, actual capabilities, verifiable result and necessary authority/state/recovery/resources. Research, argument and content may be complete results. Keep six selected local execution/control entries; the three Chat modes and web aggregate are pending task-bound candidates, not proven support. Keep the current modeCatalog and cancelled execution-route disposition. Selector visibility or Skill reading alone is not adoption. Reuse the exact native implicit Skill-use and corrected-delivery episode, and the original explicit-retro path only within its unchanged historical conditions; neither proves all policies, hosts or complete F/A. Advance the next necessary ordinary outcome with valid delegated capability selection, verified effects and attributable closure; preserve failed windows and unknown effects without replay. W05 still requires timely continuity, inheritance, single-writer takeover and failure recovery where needed; W06/W07 and W08 keep environment/resource and connected-system/value duties. Native/direct work and sufficient host responsibilities may be used without another controller or an invented generic invoke RPC. Internalize applicable decision designs through existing models/tools; third-party model-provider integration, training or a separate decision service remains deferred. Bind sourced current context and reserve before long work; restore necessary truncated/damaged source spans before dependent effects. Preserve user main model/mode, third-party policies and exact original meta-guidance. New business model runs or installation/trust/account/data/meaningful-cost/external effects need a concrete scoped authorized route; existing delegation does not need per-use Skill permission. Source/static checks, installation/adoption, behavior, admission and release remain distinct. Keep seventeen scopes, fourteen formal cases, all necessary F/A/quality floors and candidate flags; bindings and counts are not completion. Hosted CI is read at material terminal changes, and current push runs have immutable SHA groups. No new Cloud execution, account connection, unbound replay or automatic publication is scheduled.",
     "requires": "On 2026-09-19 the user resumed work, authorizing a bounded Jev trial followed by alignment of verified external conclusions and applicable trial findings, then continued development. On 2026-09-20 the user obtained direct access and authorized the prepared private synthetic trial, which completed. The Jev results remain private. On 2026-09-22 the user decided that 3.3 should internalize applicable ideas using host capabilities and Accord components, while deferring dedicated third-party decision-model integration to future versions. This supersedes the earlier optional-provider trial/integration next step for 3.3, retains prior evidence and does not restrict ordinary ecosystem reuse, add training or hosting, or reduce acceptance. Recheck live repository, CI, authority and environment conditions; carry independent authorized work forward without treating access restrictions as product failure or acceptance. The trial does not authorize automatic top-up, payment-card enrollment or a mandatory paid dependency. Resume authorized development and integration in the bound main checkout, outside Goal mode, using isolated worktrees for independent writers. Complete and publish 3.3.0 after all necessary acceptance and exact-candidate checks, as requested on 2026-09-14; readiness remains false. Preserve user IDE/development conversations and immutable historical identity, and retire unneeded task-owned resources. New accounts, trust, data, meaningful cost and unrelated shared or external writes retain their separate boundaries. Prefer official and existing reliable sources before experiments; the plan and latest user decisions own authority. The user has no Mac/Xcode or JetBrains installation and does not intend to purchase them for this project. Use existing environments, official sources and standard hosted Linux/macOS CI for feasible shared work. Keep instance-specific unknowns explicit without turning them into procurement requirements or blocking independent ready work; new installation, accounts or paid resources require their actual authority."
   },
   "claimCeiling": {
@@ -8317,7 +8317,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r36",
+    "revision": "r37",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",
