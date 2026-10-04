@@ -34,13 +34,17 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 ## 剩余主线与当前切片
 
-新W02离线备件盘点任务的两轮业务结果已独立核对：现装24fa/25文件逐字节核；fresh原生worker两轮turn_context均为gpt-6-luna/high，Root主模型保持Sol。原始需求无Skill名，实际记录显示worker自主读Spreadsheets并采用ArtifactTool构建、重算、查看两页、导出及重导入；第三方源/策略保持。这证明本例的语义选择/采用与结果，不证明native implicit matcher RPC、explicit-only路径、全部Skills或最优模型/净收益。
+新W02离线备件盘点任务的两轮业务结果已独立核对：现装24fa/25文件逐字节核；fresh原生worker两轮turn_context均为gpt-6-luna/high，Root主模型保持Sol。原始需求无Skill名，实际记录显示worker自主读Spreadsheets并采用ArtifactTool构建、重算、查看两页、导出及重导入；第三方源/策略保持。按[官方Skill语义](https://learn.chatgpt.com/docs/build-skills)，这是本例原生隐式选择/实际采用与交付的正向观察；不将额外matcher/invoke RPC作为必要门槛。它不证明explicit-only路径、全部Skills或最优模型/净收益，读取仍有初次路径错误和正文截断，不能称首次无误或全文无损加载。
 
 初始合计71/差异2/未盘点1/需补充4，更正后72/1/1/3。Root分别按原源/明确四项更正核JSON和XLSX66格、36公式；每阶段独立导入副本，改流水D2 5→6后实际重算/导出，66格及工作簿汇总均随源吻合，两页可读。source.json/keep.txt字节及mtime不变，现装/原件/原失败保留；没有SDK、CLI、安装、信任、Cloud或第三轮。资料在accord-w02-spares-workbook-20261004-01的FINAL-RESULT、TWO-TURN-CONFIGURATION、WORKER-PROVENANCE及retained-initial/final。
 
 原480秒工作窗口仍未完成：首轮final为10:40:28 UTC、原deadline10:40:31，Root独立核验10:41:11已迟，不能追认计时通过。Root曾据此停止第二轮，复核用户许可仍含两轮且480为计划值后，保原窗口失败与首轮全产物，用原worker仅完成尚未发送的冻结更正；无重放initial、复制新grant或追加业务轮次。这是已授权结果的恢复，不是原限额试验通过。原预算/响应不足、工具小错误及修正保留在PARTIAL-RESULT/remaining-work-disposition与原生trace；工程指导已纳入计划估计、硬边界和试验窗口的区分及完整总负担。
 
 本任务有归属的Node/Python命令无活进程观察，原生worker完成；没有据此宣称全宿主资源零或卸载所有历史。14份final材料保全后仅清理active输出中的12份构建/预览重复，业务两件保持；task-owned node_modules junction已精确移除，bundled依赖目标保留。该普通交付事实进入机器localObservations，14正式case、17范围、13未验职责及F/A/发布资格未变。下一仍按实际必要性推进explicit-only/禁用与变策略、判断内化、连续性和完整组合，复用本例成果，不为填数重跑本业务。
+
+2026-10-04有限政策复核及独审已闭：官方描述按任务/description选择后读取正文的隐式路径，typed Skill数组是接口特定的一种显式承载，不是全入口的通用必要条件。既有计划/基线/验收已是形态中立，无universalarray规则，不为本次纠正改写它们或旧case判据。只纠正当前观察里的额外RPC未知门；[API文件型方式](https://developers.openai.com/api/docs/guides/tools-skills)不能代验本地false/disabled政策。当前retro/implement的false及另四份未含false的metadata按各自真实政策处理，第三方字节/mtime未改；没有由metadata缺字段认定所有入口都启用。
+
+旧retro在原精确条件下有首工具前native正文加载和部分有源诊断/排序采用，原consequence-mismatch保持；这条历史显式路径不代验当前所有目标、worker自主选择或完整结果。协调者的真实委托/选者、目标控制、当前启用/政策及支持路径/实际效果仍为必要条件，任意文件读取不能冒充显式激活。本段没有业务/CLI/SDK/信任或新模型，facts/review与六份政策摘要在accord-skill-path-semantics-20261004-01；资料足够后停止该调查，不再以未看到额外RPC阻断已证实例。
 
 本次另纠正当前接续资料的运输损坏：Python默认GBK stdout经UTF-8工具解码后，七段unresolved被重新绑定成乱码；原生revision245完整字段与损坏251保全，只恢复这七段，其余五段最新事实不改。实际GBK红例/UTF-8正例已核，252恢复后零替换字符。读取/再绑定指导已进入CONTRIBUTING，原件与FACTS在accord-unicode-state-repair-20261004-01；不是插件JSON写入故障，不据此增运行时或改验收。
 

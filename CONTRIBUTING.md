@@ -95,6 +95,14 @@ window stays missed. Reconcile whether verified partial results and remaining
 outcome work are still authorized before recovery; completing that work cannot
 retroactively pass the failed window or authorize a replay, extra call or new cost.
 
+Judge Skill invocation against the supported host route and actual use. Selecting
+from the supplied metadata, reading instructions and applying them can be a normal
+implicit route; require no invented generic invoke RPC or universal typed-array
+transport. Reading alone does not prove authority, activation or delivery. Preserve
+explicit-only and disabled policies, real selector provenance and target control;
+an API example does not establish a local policy bypass. Keep failed reads and
+truncated instructions distinct from complete loading and verified task results.
+
 Generated executable entry points need a check through the target interpreter,
 using the actual delivered bytes and a harmless substitute target. Isolate PATH
 and user-data roots so a parsing error cannot dispatch a real tool or Agent;
