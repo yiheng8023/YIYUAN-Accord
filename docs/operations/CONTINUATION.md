@@ -42,7 +42,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 新 `accord-update09-ready-20261004-01` 的必要范围/执行绑定准备已完成；独审发现其计龄会在后续核查结束时刷新旧CIM。Root保留原f961和红例，在独立 `accord-update09-executor-20261004-01` 改为扫描开始计龄，长延迟拒绝、短延迟正例保留；原13项（报告误写14）及新2项共15纯控制通过。11个实查host/组件/工具载体身份与固定CIM原件逐字段匹配，相关未知不排除，缺席只表示当前不执行；不要求历史任务结束或全宿主队列零。
 
-Root及独立限定终审批准的源码方案为 `cba12dba3d7fec302e5bf5d1ff370c9afe5baff4d653062087205f43f418862f`、70冻结材料、313输入；用户已明确“同意”，新一次许可登记、尚未消费，原1657未继承或改签。实际启动未进入更新器：UTF-8中文/LF的旧cmd被真实Windows解析错位，提示中的Codex误作命令，进入截图CLI；原execution.log/脚本/受控红例保留。最初无害目标替换的重现也误调用了Codex，因无TTY/TERM=dumb被拒，stderr保全；随后PATH与用户数据根隔离的重现拦获该误调用。旧包24字节身份保持、目标缓存及执行/before/poststate标记均不存在，不能称安装失败或许可已消费。
+Root及独立限定终审批准的源码方案为 `cba12dba3d7fec302e5bf5d1ff370c9afe5baff4d653062087205f43f418862f`、70冻结材料、313输入；用户已明确“同意”，新一次许可登记、尚未消费，原1657未继承或改签。实际启动未进入更新器：UTF-8中文/LF的旧cmd被真实Windows解析错位，提示中的Codex误作命令，进入截图CLI；原execution.log/脚本/受控红例保留。最初无害目标替换的重现也误调用了Codex，因无TTY/TERM=dumb被拒，stderr保全；随后PATH与用户数据根隔离的重现拦获该误调用。旧包24文件的字节身份保持、目标缓存及执行/before/poststate标记均不存在，不能称安装失败或许可已消费。
 
 新 `Run-authorized-update.cmd` 仅作ASCII/CRLF外部传输入口，实际cmd验证调用正确的无害Python目标/唯一原参数、无误发CLI；冻结70源及原更新器/目标/三trust/NoStop条件不改，旧错误入口不再使用。当前配置仅SKY_CUA_NATIVE_PIPE_DIRECTORY一字段相对重开前变化；按原“保留当前稳定设置”规则核新字节后只刷新plan的configSha256，proposal为 `d10c70dc476426c32d460d10f5ccb48b288236103e71fde476ff228116efb417`。原cba plan/grant保全，权限兼容判定及新精确投影在LAUNCHER-CONFIG-RECONCILIATION，实际配置未回写；同一次明确授权及所有作用域不变，不再次申请。静态预检通过，仍待关闭桌面及截图中的CLI后一次外部执行；每写前的实时退出/空闲/源配置/恢复/权限门和原子一次标记保持，不自动重试或回滚。原错误、隔离测试与修正源在accord-launcher-diagnosis-20261004-01，原状态/未验功能保持；生成可执行载体的实际解释器、字节格式、隔离目标及参数核验已进入贡献指导。
 
