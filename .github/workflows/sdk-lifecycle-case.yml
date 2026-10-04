@@ -135,7 +135,7 @@ jobs:
       - name: Retain binding and raw source evidence
         if: always() && steps.storage.outcome == 'success'
         id: evidence
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: sdk-lifecycle-case-windows-${{ github.sha }}
           retention-days: 14
@@ -221,7 +221,7 @@ jobs:
         run: python -B -m unittest tests.product.test_codex_lifecycle.CodexLifecycleTests.test_legacy_native_config_preflight_close
       - name: Retain raw requests, responses and resource observations
         if: always() && env.ACCORD_LEGACY_CLOSE_EVIDENCE != ''
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: legacy-stdio-close-${{ github.sha }}
           path: ${{ env.ACCORD_LEGACY_CLOSE_EVIDENCE }}

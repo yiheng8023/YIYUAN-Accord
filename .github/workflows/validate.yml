@@ -140,7 +140,7 @@ jobs:
           sys.exit(result.returncode)
       - name: Retain bounded native diagnostics
         if: always() && steps.prepare.outcome == 'success'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-lifecycle-${{ matrix.os }}-${{ github.sha }}
           retention-days: 14
@@ -165,7 +165,7 @@ jobs:
               "--native-codex", manifest["codex"], "--evidence", str(root / "carrier")], check=True)
       - name: Retain carrier protocol evidence
         if: always() && steps.storage.outcome == 'success'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-carrier-${{ matrix.os }}-${{ github.sha }}
           retention-days: 14
@@ -247,7 +247,7 @@ jobs:
           sys.exit(result.returncode)
       - name: Retain native finalization evidence
         if: always() && steps.storage.outcome == 'success'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-carrier-finalization-${{ matrix.os }}-${{ github.sha }}
           retention-days: 14
@@ -314,7 +314,7 @@ jobs:
           sys.exit(result.returncode)
       - name: Retain SDK restoration evidence
         if: always() && steps.storage.outcome == 'success'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-sdk-restore-${{ matrix.os }}-${{ github.sha }}
           retention-days: 14
@@ -328,7 +328,7 @@ jobs:
             ${{ env.ACCORD_NATIVE_ROOT }}/sdk-session-restore/workspace
       - name: Retain SDK native protocol evidence
         if: always() && steps.storage.outcome == 'success'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-sdk-session-${{ matrix.os }}-${{ github.sha }}
           retention-days: 14
@@ -382,7 +382,7 @@ jobs:
           sys.exit(any(results))
       - name: Retain ordinary source restoration evidence
         if: always() && steps.storage.outcome == 'success'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-sdk-source-restore-${{ matrix.os }}-${{ github.sha }}
           retention-days: 14
@@ -401,7 +401,7 @@ jobs:
             ${{ env.ACCORD_NATIVE_ROOT }}/sdk-source-restore/workspace
       - name: Retain native carrier recovery evidence
         if: always() && steps.storage.outcome == 'success'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-carrier-recovery-${{ matrix.os }}-${{ github.sha }}
           retention-days: 14
@@ -413,7 +413,7 @@ jobs:
             ${{ env.ACCORD_NATIVE_ROOT }}/carrier-recovery/retained
       - name: Retain native MCP state evidence
         if: always() && steps.storage.outcome == 'success'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-state-mcp-${{ matrix.os }}-${{ github.sha }}
           retention-days: 14
@@ -440,7 +440,7 @@ jobs:
           sys.exit(result.returncode)
       - name: Retain host upgrade evidence
         if: always() && steps.prepare_upgrade.outcome == 'success'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-host-upgrade-${{ matrix.os }}-${{ github.sha }}
           retention-days: 14

@@ -35,6 +35,10 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 ## 剩余主线与当前切片
 
+本机候选必要性比较已闭：现装24fa/3862的25文件字节与mtime仍匹配已核基线；05348/d2ce只改manifest版本及两份连续性/生命周期指南，其余22成员包括运行时、Hook、MCP、协调与Meta保持。当前仓库准入修正不依赖安装这两段新正文，暂缓新一轮本机更新，先推进必要功能及组合；这不称新候选已采用，也不豁免最终精确候选验收。未来确需采用时先将包/配置/恢复actor保在变化cache之外，分别核活动目标与不可变证据，并重新绑定真实消费者/权限。09失败与许可消费保持，不复跑或恢复retired cache求绿。两完整包、diff、判断和未来条件在accord-adoption10-source-20261005-01；没有执行包、grant或共享效果。
+
+新CI观察到旧artifact Action的Node20声明被强制以Node24执行。按[GitHub当前迁移说明](https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/)及官方v7.0.1固定源码，两个现有workflow共11处upload-artifact已前瞻绑定`043fb46d1a93c77aae656e7c1c64a875d1fc6a0a`。该固定action使用Node24、archive默认true；现有输入/ZIP用途、路径、隐藏文件处置、14天保留及步骤条件逐字节保持，未改分发包或新增CI任务。actionlint和开发静态检查通过，真正上传仍须新精确CI观察。原工作流、官方ref/action/README及准备拒绝记录在accord-ci-artifact-node24-20261005-01；原4fc运行保留，不取消或追认新依赖通过。
+
 生命周期必要源核对确认：整体宿主范围与逐入口集合/UI差异范围并非重复；已有逐入口case不能关闭无case的整体缺口。纯反例实测复现未来整体case可不依赖入口选择/模式及其来源的风险，当前正式15case没有因此误准入。最小修正复用v5选择守卫与定义指纹：未来整体case明确绑定selected subjects/modes，pending拒绝、错配拒绝、来源改变使指纹变；没有添加正式case、观察器或运行时。原RED六失败与修后首轮4项中1个错误测试期望分别保，后者误把声明缺口当证据缺口，定向修正该期望不改实际门槛。当前准入47项及历史v3/v4共35项回归全部通过（678.877/466.087秒）；三个静态有效，原15case及其定义指纹、分发包保持。独审、五份固定源及反例在accord-lifecycle-binding-20261005-01。实际采用、partial effects对账、失效入口外恢复actor及变更/退休后态仍是必要独立结果，不能从新源码或布尔旗标宣布完成；17scope/15case/F-A保持。
 
 新普通合成排考两阶段已闭，不追加业务轮次：原源最优目标`[2,60]`，R1容量/E人数/I2不可用三项更正后`[3,85]`；真实CLI均exit0、测试14/17通过。独立Astra/medium审查从每段原输入各枚举262144种，未读Root oracle，确认两份落盘解最优及旧结果在更正后失效。业务同一fresh native worker两turn_context均Sol/medium，主模型保持；判断质量/模型最优/净收益不由配置差异证明。原输入、Implement源/政策、现装25文件SHA及mtime保持，阶段一六件先于更正保全，阶段二七件和审查证据保留。task-owned命令已返回、scoped CIM未见本目录Python/Node活进程，native清单无活exam代理；不宣称全宿主空闲或历史句柄删除。1200秒仅计划估计，不是通过窗口；CLI“不改输入”仅在本任务分开的INPUT/OUTPUT用法下观察。
