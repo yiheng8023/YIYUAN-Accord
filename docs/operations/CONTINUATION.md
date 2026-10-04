@@ -21,7 +21,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
 | 源码候选 | 同现装24fa/25文件/3862；[精确 CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功。安装与本次有限entry收准不改变候选/发布资格。旧5b/24文件恢复副本在startup-repair的installed-before保持精确。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
-| 当前源码 CI | `cb95a53c4ed0ae34a07c002183e209d291e0a660` 的 [CI37178456180](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37178456180) 已 completed/success；bed690ae/e2cbbf94/02198897/f6f17599 的后续CI也已成功。旧cb47初始化超时的原失败和attempt2成功均保留，原因未定，没有据此修产品或改超时。 |
+| 当前源码 CI | `355020b2769a7af5c287ae8e933dbc87b287eb6c` 的 [CI37183361882](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37183361882) 已 completed/success；前述cb95及后续记录CI也已成功。旧cb47初始化超时的原失败和attempt2成功均保留，原因未定，没有据此修产品或改超时。 |
 | 功能资格 | 17 必要 scope、14 case 定义；13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
 声明集合/ID 映射的复用摘要已只在副本规范化，原 definition 身份、输入和有序业务数组保持。七项定向、三项既有集成回归及三静态检查通过；该缺陷族已闭，不继续泛扩。此前交接释放未知的有限恢复修复也已集成，固定传输/SQLite 回归不代验普通自主交接或完整 A05/A08。
@@ -34,9 +34,13 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 ## 剩余主线与当前切片
 
-已具体准备新的W02离线备件盘点工作簿任务：透明合成资料、六SKU/七流水、初始交付及四项更正，Root按源算术、保存的XLSX/JSON、独立副本输入变化重算和页面检查验收。拟由一个fresh Luna/high原生worker执行两轮，用户主模型/模式保持，实际模型须由原生metadata观察，effort/费用缺项仍未知。原始需求无Skill名，观察当前适用表格能力的实际选择、采用和交付；它不代验explicit-only链、全W02/W05或F/A，14正式case与17范围未变。
+新W02离线备件盘点任务的两轮业务结果已独立核对：现装24fa/25文件逐字节核；fresh原生worker两轮turn_context均为gpt-6-luna/high，Root主模型保持Sol。原始需求无Skill名，实际记录显示worker自主读Spreadsheets并采用ArtifactTool构建、重算、查看两页、导出及重导入；第三方源/策略保持。这证明本例的语义选择/采用与结果，不证明native implicit matcher RPC、explicit-only路径、全部Skills或最优模型/净收益。
 
-材料在accord-w02-spares-workbook-20261004-01，业务原件、两轮输入、独立oracle和Root副本重算入口前绑。2正向/4反例纯检查通过，独审所指路径/缺失值显示/实际重算条件在派发前修正。当前仅准备，模型业务未授、未派发，首轮实质失败即停、不重放旧案；一次对应许可成熟后才进入实际原生轮次。
+初始合计71/差异2/未盘点1/需补充4，更正后72/1/1/3。Root分别按原源/明确四项更正核JSON和XLSX66格、36公式；每阶段独立导入副本，改流水D2 5→6后实际重算/导出，66格及工作簿汇总均随源吻合，两页可读。source.json/keep.txt字节及mtime不变，现装/原件/原失败保留；没有SDK、CLI、安装、信任、Cloud或第三轮。资料在accord-w02-spares-workbook-20261004-01的FINAL-RESULT、TWO-TURN-CONFIGURATION、WORKER-PROVENANCE及retained-initial/final。
+
+原480秒工作窗口仍未完成：首轮final为10:40:28 UTC、原deadline10:40:31，Root独立核验10:41:11已迟，不能追认计时通过。Root曾据此停止第二轮，复核用户许可仍含两轮且480为计划值后，保原窗口失败与首轮全产物，用原worker仅完成尚未发送的冻结更正；无重放initial、复制新grant或追加业务轮次。这是已授权结果的恢复，不是原限额试验通过。原预算/响应不足、工具小错误及修正保留在PARTIAL-RESULT/remaining-work-disposition与原生trace；工程指导已纳入计划估计、硬边界和试验窗口的区分及完整总负担。
+
+本任务有归属的Node/Python命令无活进程观察，原生worker完成；没有据此宣称全宿主资源零或卸载所有历史。14份final材料保全后仅清理active输出中的12份构建/预览重复，业务两件保持；task-owned node_modules junction已精确移除，bundled依赖目标保留。该普通交付事实进入机器localObservations，14正式case、17范围、13未验职责及F/A/发布资格未变。下一仍按实际必要性推进explicit-only/禁用与变策略、判断内化、连续性和完整组合，复用本例成果，不为填数重跑本业务。
 
 本次另纠正当前接续资料的运输损坏：Python默认GBK stdout经UTF-8工具解码后，七段unresolved被重新绑定成乱码；原生revision245完整字段与损坏251保全，只恢复这七段，其余五段最新事实不改。实际GBK红例/UTF-8正例已核，252恢复后零替换字符。读取/再绑定指导已进入CONTRIBUTING，原件与FACTS在accord-unicode-state-repair-20261004-01；不是插件JSON写入故障，不据此增运行时或改验收。
 

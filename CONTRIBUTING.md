@@ -87,6 +87,14 @@ preserve the damaged record and restore only source-backed fields from an intact
 original; retain newer unaffected facts. Successful JSON parsing does not prove
 that its strings survived the transport.
 
+Distinguish a planning estimate from a user-bound execution limit or an immutable
+test window. Include setup, model work, review and recovery in the relevant total;
+model reminders and occasional clock reads are not automatic deadline enforcement.
+Use supported action-boundary guards when a hard limit matters. A missed test
+window stays missed. Reconcile whether verified partial results and remaining
+outcome work are still authorized before recovery; completing that work cannot
+retroactively pass the failed window or authorize a replay, extra call or new cost.
+
 Generated executable entry points need a check through the target interpreter,
 using the actual delivered bytes and a harmless substitute target. Isolate PATH
 and user-data roots so a parsing error cannot dispatch a real tool or Agent;
