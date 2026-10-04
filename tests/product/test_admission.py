@@ -1965,7 +1965,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 if request["phase"] == "observe": result["records"] = retained
                 return result
             parents = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
-                       "v33-admitted-entry-lifecycle"}
+                       "v33-admitted-entry-lifecycle", "v33-codex-entry-coverage"}
             expected = sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]
                               if locator not in case["oracleFiles"] and case["scope"] not in parents)
             self.assertEqual(self.assess(observer=replay)["acceptedCases"], expected)
@@ -1978,7 +1978,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             if request["phase"] == "observe": retained = copy.deepcopy(result["records"])
             return result
         parents = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
-                   "v33-admitted-entry-lifecycle"}
+                   "v33-admitted-entry-lifecycle", "v33-codex-entry-coverage"}
         expected = sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]
                           if case["scope"] not in parents)
         self.assertEqual(self.assess(observer=capture)["acceptedCases"], expected)
@@ -2028,6 +2028,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         contract = copy.deepcopy(self.contract)
         policy = contract["acceptance"]["admission"]
         template = policy["cases"][0]
+        coverage_template = next(case for case in policy["cases"] if case["scope"] == "v33-codex-entry-coverage")
         parent_ids = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
                       "v33-admitted-entry-lifecycle"}
         parent_cases = {scope_id: copy.deepcopy(next(case for case in policy["cases"] if case["scope"] == scope_id))
@@ -2049,7 +2050,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     policy["cases"].append(parent_cases[scope_id])
                     policy["scopes"].append(parent_scopes[scope_id])
                     continue
-                case = copy.deepcopy(template)
+                case = copy.deepcopy(coverage_template if scope_id == "v33-codex-entry-coverage" else template)
                 case.update(id="fixture-" + scope_id, scope=scope_id, claims=[claim],
                             duties=[r["id"] for r in contract["acceptance"]["duties"]],
                             qualityAxes=[r["id"] for r in contract["systemOptimization"]["qualityAxes"]])

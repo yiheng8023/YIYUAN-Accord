@@ -21,7 +21,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
 | 源码候选 | `3.3.0-dev.1+codex.20261005005348`，25文件/SHA `d2ce59c2135d2f3ece308929e10229e446f778ab97f9c73053947dd49edbd848`；本次只补现有生命周期Skill641字节及manifest版本，Hook/MCP/运行时/Meta原文保持。前候选8cb/20261004121454的CI37202339243已通过，新候选按其精确提交另核；未本机安装或行为验收。原现装24fa的[CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功；新旧身份不互代。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
-| 当前源码 CI | `67512ba0`、`b40a1063`、`8cb96c40`及`6abfe6a4`的精确CI均成功；`fd6b6f5e`/CI37208099935终态failure，9产品job失败、2原生job通过。三平台原日志均为一处旧测试未同步Chat pending模式期望，已修fixture并加入全套前快速门；原失败保留，修后精确新提交另核。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
+| 当前源码 CI | `67512ba0`、`b40a1063`、`8cb96c40`及`6abfe6a4`的精确CI均成功。`fd6b6f5e`/37208099935保一处Chat pending旧期望失败；`6f5d2f21`/37216493190保三处coverage依赖/矩阵fixture漏同步，均9产品失败、2原生通过。后者直接Linux/Windows日志同三项，已定向修且整个当前准入类43项通过。`c30b32ab`/37219463927生命周期指导CI最后仍运行；本次测试修复的精确新CI另核，原失败不追认。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
 | 功能资格 | 17 必要 scope、15 case 定义；13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
 声明集合/ID 映射的复用摘要已只在副本规范化，原 definition 身份、输入和有序业务数组保持。七项定向、三项既有集成回归及三静态检查通过；该缺陷族已闭，不继续泛扩。此前交接释放未知的有限恢复修复也已集成，固定传输/SQLite 回归不代验普通自主交接或完整 A05/A08。
@@ -35,6 +35,8 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 ## 剩余主线与当前切片
 
 实际09失败中的通用约束已从现有CONTRIBUTING移入分发的生命周期Skill：不可变证据/恢复副本与获准替换或退休的活动路径分别核验；后置guard失败时先对账已完成、在途和未知效果，再决定恢复或重试。意外丢失、变字节及未知仍阻断对应动作，不复活旧cache求绿、不追认原执行器成功。本次只增641字节、更新完整25-member源身份，原件及来源对账在accord-lifecycle-evidence-boundary-20261005-01；旧09/现装/第三方保持，源码指导采用和实际防复发效果仍另验。
+
+前一接入段的CI进一步暴露三处旧fixture未联动：两个复用/导航测试仍把coverage列为不依赖final的可准入项，完整合成链仍用普通template重建新scope而缺subject/mode矩阵。仅同步fixture的声明/期望，原判据与生产检查保持；三定向方法及整个CurrentDevelopmentEvidenceTests共43项通过，642.977秒。原CI日志、修正与扩大验证结果在上述私有目录。不因局部源/测试通过宣称实际功能或全平台验收。
 
 中断后已按新原生输入接续，main与已有产物对账完成，没有重放业务。新增宿主能力覆盖case及确定性集合/mode保护，关联已有pending终审和适用性来源指纹；原14case逐字段保持。当前尚无case的范围由五到四：codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。独立源审及实现补审已闭，原v1字段拒绝、真实红例和两处需要重绑选择的旧fixture失败保持；18项相关方法已通过，三个静态检查及workflow检查通过。准备、原件、审查及CI失败原日志在accord-w02-entry-coverage-draft-20261004-01。本段只有源码与纯验证，未作真实能力覆盖观察、安装、授信、CLI/SDK或模型业务；现有源码包与实际现装身份保持分开。
 
