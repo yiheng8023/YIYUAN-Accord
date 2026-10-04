@@ -18,8 +18,8 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 | 对象 | 已核事实及限制 |
 |---|---|
-| Root 现装 | `3.3.0-dev.1+codex.20261002232312`；源 `5b34c3ccfb5ce983573c6b15bfb96431ac6f0205`，24 文件/SHA `5a247517dfb648da2b13afc258b55cc97a23ebc81b405da96ff5e7592f739c62`。当前 Root Hook/MCP 目录和缺参拒绝分支已观察；各存活 MCP 的准确加载路径/版本不明。 |
-| 源码候选 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`；[精确 CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11 成功。新增 Meta 正文和 SubagentStart 已实现，但尚未安装或在当前入口实际采用。 |
+| Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
+| 源码候选 | 同现装24fa/25文件/3862；[精确 CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功。安装与本次有限entry收准不改变候选/发布资格。旧5b/24文件恢复副本在startup-repair的installed-before保持精确。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
 | 当前源码 CI | `19aed269` 的 CI37153251132 成功。`cb47c6f8f1eeb62b1db2cce75586bdf1564cd0a0` 的 [CI37157112594](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37157112594) 原 attempt 10 项成功、Windows/Python3.14 一项失败：Hook fixture 初始化超时 10 秒，未到 package-retirement 断言。同一定向测试本地通过，仅重跑失败 job 后 attempt2 已 completed/success；原失败保持、原因未定，没有产品代码修补。接续精简源 `ce092d00` 的 CI37167644642 尚在运行，新记录提交的终态另核。 |
 | 功能资格 | 17 必要 scope、14 case 定义；13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
@@ -47,6 +47,10 @@ Root及独立限定终审批准的源码方案为 `cba12dba3d7fec302e5bf5d1ff370
 新 `Run-authorized-update.cmd` 仅作ASCII/CRLF外部传输入口，实际cmd验证调用正确的无害Python目标/唯一原参数、无误发CLI；冻结70源及原更新器/目标/三trust/NoStop条件不改，旧错误入口不再使用。当前配置仅SKY_CUA_NATIVE_PIPE_DIRECTORY一字段相对重开前变化；按原“保留当前稳定设置”规则核新字节后只刷新plan的configSha256，proposal为 `d10c70dc476426c32d460d10f5ccb48b288236103e71fde476ff228116efb417`。原cba plan/grant保全，权限兼容判定及新精确投影在LAUNCHER-CONFIG-RECONCILIATION，实际配置未回写；同一次明确授权及所有作用域不变，不再次申请。静态预检通过，仍待关闭桌面及截图中的CLI后一次外部执行；每写前的实时退出/空闲/源配置/恢复/权限门和原子一次标记保持，不自动重试或回滚。原错误、隔离测试与修正源在accord-launcher-diagnosis-20261004-01，原状态/未验功能保持；生成可执行载体的实际解释器、字节格式、隔离目标及参数核验已进入贡献指导。
 
 ## 功能与必要验收未完项
+
+2026-10-04用户确认后，1edb修正执行器已实际安装24fa新版：四条native命令和五次同socket只读Python均exit0/nonforced/所属Job0。随后在Hook CAS创建前的守卫因FileNotFoundError停止；根因是SOURCES仍冻结本次官方安装已移除的旧cache/task-checkpoint.cjs定位项。差集只此一文件，所有其它原件无变，installed-before与references保存同SHA的原字节。此次守卫将可合法退休的运行路径误列为必须永存的证据，不恢复共享旧cache或重跑更新来求通过。
+
+Root及独立只读复核确认当前后态：新25文件/固定源登记/enabled、七项信任Hash（含原定三项）匹配；四其它信任与无关配置保留，仅宿主pipe另变。当前正确信任值的形成机制尚未归因；原hook-trust/native目录无，不冒称本程序CAS成功，3091失败时配置Hash也未由当前快照重建成功。主Root新resume/input及一新原生子代理直接收到完整Meta指导，子审未操作父状态且父checkpoint前后Hash相同；这是两个entry的实际注入/收到，不代验全host/MCP刷新或业务行为。POSTSTATE-FACTS、原失败、9份自然退出回执及CURRENT-CONFIG在accord-update09-poststate-reconcile-20261004-01与原startup-repair；目标已正确，无需再安装/授信或申请同目标权限。原执行整体失败保留，按真实后态完成本机有限采用核对，继续W02/W05等未验主线。
 
 2026-10-04后续实际尝试已进入d10更新器，在首次实时guard拒绝并结束；execution-started存在，before/poststate/trust记录与新缓存都无，旧包24文件仍精确。原日志仅producer-unavailable:RuntimeError，原失败时配置和具体cause未留，故确切原因unknown，不由重开后的正常CIM/后台/恢复检查反推。此次单次执行已用，旧grant文件未自动登记消费不是新的执行权限，原marker/失败/grant均保全，禁止重放。
 

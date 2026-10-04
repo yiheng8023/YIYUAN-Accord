@@ -88,6 +88,13 @@ verify the called target and arguments as well as the exit code. Windows cmd
 launchers use ASCII control text and CRLF, with localization in separate prose;
 repository-wide LF conventions are not an executable-format guarantee.
 
+Separate immutable evidence copies from runtime paths that an authorized effect
+may replace or retire. Bind preserved bytes outside the changed component before
+that effect, then verify the applicable new state and recovery copy. Requiring a
+retired cache path to remain present is not evidence preservation. Keep the failed
+procedure and the observed post-state distinct; an already correct target does
+not justify repeating an installation or trust write.
+
 When an effect depends on a connection's source, bind peer observations to the
 same connection that carries its requests and receipts. Redirects, reconnects or
 proxy replacement can break that relationship even when the original peer check
