@@ -23,10 +23,12 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
 | 源码候选 | `3.3.0-dev.1+codex.20261005005348`，25文件/SHA `d2ce59c2135d2f3ece308929e10229e446f778ab97f9c73053947dd49edbd848`；本次只补现有生命周期Skill641字节及manifest版本，Hook/MCP/运行时/Meta原文保持。前候选8cb/20261004121454的CI37202339243已通过；新源在测试修正后的精确75ce7b4d/CI37221366079已11/11通过，未本机安装或行为验收。原现装24fa的[CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功；新旧身份不互代。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
-| 当前源码 CI | `67512ba0`、`b40a1063`、`8cb96c40`及`6abfe6a4`的精确CI均成功。`fd6b6f5e`/37208099935保一处Chat pending旧期望失败；`6f5d2f21`/37216493190保三处coverage依赖/矩阵fixture漏同步，均9产品失败、2原生通过。后者直接Linux/Windows日志同三项，已定向修且整个当前准入类43项通过。`c30b32ab`/37219463927已失败，不追认；测试修正的精确`75ce7b4d`/[CI37221366079](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37221366079)已11/11成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
+| 源码 CI | `0263ea94`/[CI37236290303](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37236290303)、上传依赖修正`0dfb87f4`/[CI37232182046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37232182046)与准入保护`4fc85088`/[CI37229271048](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37229271048)均已精确回读11/11成功。本轮历史快照读取优化另绑定提交后的精确CI，尚不继承这些结果。旧`fd6b6f5e`/37208099935及`6f5d2f21`/37216493190的fixture失败、`c30b32ab`/37219463927失败保持，不追认；75ce修正及更早已核CI保原提交成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
 | 功能资格 | 17 必要 scope、12 活动 case；另三结束固定定义/失败留在历史。13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
 声明集合/ID 映射的复用摘要已只在副本规范化，原 definition 身份、输入和有序业务数组保持。七项定向、三项既有集成回归及三静态检查通过；该缺陷族已闭，不继续泛扩。此前交接释放未知的有限恢复修复也已集成，固定传输/SQLite 回归不代验普通自主交接或完整 A05/A08。
+
+历史快照校验的重复Git读取已作有界优化：只在当前校验scope复用已绑定的完整树与固定blob，保无scope/异常包名fallback、包根和非普通文件拒绝、字节/总量上限、原排序摘要及下一轮新鲜读取。原突变方法正文SHA保持，21次完整verify及全部断言通过；相同本机profiling条件下870.958→640.713秒，Git调用9487→5980。不是普通运行或全CI加速承诺。九项不同的缓存/边界/历史法律文件回归及三静态检查通过，独审无必改；原件、红例、错误的12调用预估及初次余量不足保留于accord-ci-performance-20261005-01。新增测试合并重复写法后，3300000字节上限及5%余量保持；分发包/现装/17scope/12case/F-A不改。下一回到仍缺的前置Skill取得/采用及完整组合结果，等待CI不阻断独立准备。
 
 ## 更新 09：有限采用对账已闭
 
@@ -40,7 +42,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 本机候选必要性比较已闭：现装24fa/3862的25文件字节与mtime仍匹配已核基线；05348/d2ce只改manifest版本及两份连续性/生命周期指南，其余22成员包括运行时、Hook、MCP、协调与Meta保持。当前仓库准入修正不依赖安装这两段新正文，暂缓新一轮本机更新，先推进必要功能及组合；这不称新候选已采用，也不豁免最终精确候选验收。未来确需采用时先将包/配置/恢复actor保在变化cache之外，分别核活动目标与不可变证据，并重新绑定真实消费者/权限。09失败与许可消费保持，不复跑或恢复retired cache求绿。两完整包、diff、判断和未来条件在accord-adoption10-source-20261005-01；没有执行包、grant或共享效果。
 
-新CI观察到旧artifact Action的Node20声明被强制以Node24执行。按[GitHub当前迁移说明](https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/)及官方v7.0.1固定源码，两个现有workflow共11处upload-artifact已前瞻绑定`043fb46d1a93c77aae656e7c1c64a875d1fc6a0a`。该固定action使用Node24、archive默认true；现有输入/ZIP用途、路径、隐藏文件处置、14天保留及步骤条件逐字节保持，未改分发包或新增CI任务。actionlint和开发静态检查通过，真正上传仍须新精确CI观察。原工作流、官方ref/action/README及准备拒绝记录在accord-ci-artifact-node24-20261005-01；原4fc运行保留，不取消或追认新依赖通过。
+新CI观察到旧artifact Action的Node20声明被强制以Node24执行。按[GitHub当前迁移说明](https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/)及官方v7.0.1固定源码，两个现有workflow共11处upload-artifact已前瞻绑定`043fb46d1a93c77aae656e7c1c64a875d1fc6a0a`。该固定action使用Node24、archive默认true；现有输入/ZIP用途、路径、隐藏文件处置、14天保留及步骤条件逐字节保持，未改分发包或新增CI任务。actionlint/静态及0df精确CI11/11通过，两个native job实际保18个新SHA产物；一项MCP产物下载/解包51文件含隐藏.mcp正常。手动workflow的两个上传调用仅源/语法核，不冒实际执行。原工作流、官方ref/action/README及准备拒绝记录在accord-ci-artifact-node24-20261005-01；原4fc完整成功保其旧pin边界，不追认新依赖通过。
 
 生命周期必要源核对确认：整体宿主范围与逐入口集合/UI差异范围并非重复；已有逐入口case不能关闭无case的整体缺口。纯反例实测复现未来整体case可不依赖入口选择/模式及其来源的风险，当前正式15case没有因此误准入。最小修正复用v5选择守卫与定义指纹：未来整体case明确绑定selected subjects/modes，pending拒绝、错配拒绝、来源改变使指纹变；没有添加正式case、观察器或运行时。原RED六失败与修后首轮4项中1个错误测试期望分别保，后者误把声明缺口当证据缺口，定向修正该期望不改实际门槛。当前准入47项及历史v3/v4共35项回归全部通过（678.877/466.087秒）；三个静态有效，原15case及其定义指纹、分发包保持。独审、五份固定源及反例在accord-lifecycle-binding-20261005-01。实际采用、partial effects对账、失效入口外恢复actor及变更/退休后态仍是必要独立结果，不能从新源码或布尔旗标宣布完成；17scope/15case/F-A保持。
 

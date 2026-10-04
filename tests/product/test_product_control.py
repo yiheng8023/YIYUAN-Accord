@@ -2618,6 +2618,107 @@ class ProductControlTests(unittest.TestCase):
         self.ale(len([call for call in calls if call and call[0] in
                       {'ls-tree', 'show', 'cat-file'}]), 35)
 
+    def test_revision_packages_reuse_reads_only_within_the_snapshot_scope(self):
+        documents = _snapshot_documents(ROOT, HISTORICAL_REVIEW_CUT)
+        calls, bounded_git = [], product_control._bounded_git_bytes
+
+        def capture(root, arguments, limit=262_144, input_bytes=None):
+            calls.append(tuple(arguments))
+            return bounded_git(root, arguments, limit, input_bytes)
+
+        @product_control._snapshot_read_scope
+        def validate_twice():
+            counts = [len(calls)]
+            for _ in range(2):
+                self.ae(_snapshot_v1_projection_package_errors(
+                    ROOT, documents[1], documents[0], HISTORICAL_REVIEW_CUT,
+                ), [])
+                counts.append(len(calls))
+            self.ae(counts[2], counts[1])
+            return counts[1] - counts[0]
+
+        with patch(CBG, side_effect=capture):
+            first_count = validate_twice()
+            self.ale(first_count, 14)
+            self.an(product_control._SNAPSHOT_READ_CACHE.get())
+            second_count = validate_twice()
+            self.ae(second_count, first_count)
+
+    def test_scoped_revision_packages_preserve_tree_rejections_and_siblings(self):
+        documents = _snapshot_documents(ROOT, HISTORICAL_REVIEW_CUT)
+        program = _clone(documents[1])
+        program['hostProjections'] = program['hostProjections'][:1]
+        package_root = 'plugins/' + program['hostProjections'][0]['packageId']
+
+        scoped = product_control._snapshot_read_scope(
+            _snapshot_v1_projection_package_errors,
+        )
+
+        with _indexed(HISTORICAL_REVIEW_CUT) as root:
+            blob = _git(root, 'rev-parse',
+                        HISTORICAL_REVIEW_CUT + ':AGENTS.md', text=True).strip()
+            owned = _git(root, 'ls-tree', '-r', '--name-only',
+                         HISTORICAL_REVIEW_CUT, '--', package_root,
+                         text=True).splitlines()
+            for name, at_root, mode, locator, expected in (
+                ('root-file', True, '100644', package_root, 'package is unavailable'),
+                ('root-link', True, '120000', package_root, 'package is unavailable'),
+                ('root-gitlink', True, '160000', package_root, 'package is unavailable'),
+                ('inner-link', False, '120000', package_root + '/link',
+                 'package is unavailable'),
+                ('inner-gitlink', False, '160000', package_root + '/module',
+                 'package is unavailable'),
+                ('extra', False, '100644', package_root + '/extra',
+                 'package file set is invalid'),
+                ('missing', True, None, None, 'package is unavailable'),
+                ('sibling', False, '100644', package_root + '-extra/file', None),
+            ):
+                with self.subTest(tree=name):
+                    _git(root, 'read-tree', HISTORICAL_REVIEW_CUT)
+                    if at_root:
+                        _git(root, 'update-index', '--force-remove', '--', *owned)
+                    if mode is not None:
+                        object_id = HISTORICAL_REVIEW_CUT if mode == '160000' else blob
+                        _git(root, 'update-index', '--add', '--cacheinfo',
+                             f'{mode},{object_id},{locator}')
+                    tree = _git(root, 'write-tree', text=True).strip()
+                    direct = _snapshot_v1_projection_package_errors(
+                        root, program, documents[0], tree,
+                    )
+                    cached = scoped(root, program, documents[0], tree)
+                    self.ae(cached, direct)
+                    if expected is None:
+                        self.ae(cached, [])
+                    else:
+                        self.has(cached, expected)
+
+    def test_bulk_snapshot_reads_preserve_limits_and_failed_batches(self):
+        object_id = '1' * 40
+        listing = b''.join(
+            b'100644 blob ' + object_id.encode() + b'\t' + locator + b'\0'
+            for locator in (b'a', b'b')
+        )
+        for contents, capacity, expected in (
+            ([None], 2, 'snapshot blob is unavailable'),
+            ([b'xy'], 1, 'snapshot blob cache aggregate bound is invalid'),
+            ([b'xy'], 2, None),
+        ):
+            cache = product_control._SnapshotBlobCache()
+            with self.subTest(contents=contents), patch(CBG, return_value=listing), \
+                    patch.object(product_control, '_snapshot_batch_blobs',
+                                 return_value=contents) as batch, patch.object(
+                        product_control, '_SNAPSHOT_V1_BLOB_CACHE_BYTES', capacity,
+                    ):
+                if expected is not None:
+                    with self.assertRaisesRegex(ValueError, expected):
+                        cache.read_many(ROOT, ('a', 'b'), HISTORICAL_REVIEW_CUT)
+                    self.ae(cache._blobs, {})
+                else:
+                    self.ae(cache.read_many(ROOT, ('a', 'b'), HISTORICAL_REVIEW_CUT),
+                            {'a': b'xy', 'b': b'xy'})
+                self.ae(batch.call_args.args[1], [object_id])
+                self.ae(cache._blob_bytes, 0 if expected else 2)
+
     def test_exact_package_evidence_fails_closed_on_drift(self):
         with _indexed() as root:
             program = _read(root, P)

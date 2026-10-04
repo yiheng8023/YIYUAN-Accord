@@ -1743,10 +1743,25 @@ def _snapshot_v1_projection_package_errors(
         except _SNAPSHOT_V1_FAILURES:
             errors.append(f"{prefix} revision skill is unavailable")
         try:
-            listing = _bounded_git_bytes(
-                root, ["ls-tree", "-r", "-z", revision, "--", package_root],
-                1_048_576,
-            )
+            cache = _SNAPSHOT_READ_CACHE.get()
+            if cache is None or _SNAPSHOT_V1_PACKAGE_ID_RE.fullmatch(
+                package_id
+            ) is None:
+                listing = _bounded_git_bytes(
+                    root, ["ls-tree", "-r", "-z", revision, "--", package_root],
+                    _SNAPSHOT_V1_TREE_BYTES,
+                )
+            else:
+                tree, _ = cache._tree(root, revision)
+                listing = b"".join(
+                    b" ".join((mode, kind, object_id.encode("ascii")))
+                    + b"\t" + locator.encode("utf-8") + b"\0"
+                    for locator, (mode, kind, object_id) in tree.items()
+                    if locator == package_root
+                    or locator.startswith(f"{package_root}/")
+                )
+                if len(listing) > _SNAPSHOT_V1_TREE_BYTES:
+                    raise ValueError("revision package tree bound is invalid")
             actual = set()
             for record in (item for item in listing.split(b"\0") if item):
                 metadata, separator, raw_locator = record.partition(b"\t")
@@ -1763,8 +1778,11 @@ def _snapshot_v1_projection_package_errors(
             declared = set(locators)
             if actual != declared:
                 errors.append(f"{prefix} revision package file set is invalid")
+            ordered = sorted(declared)
+            if cache is not None:
+                cache.read_many(root, ordered, revision)
             digest = sha256()
-            for locator in sorted(declared):
+            for locator in ordered:
                 digest.update(locator.encode("utf-8"))
                 digest.update(b"\0")
                 digest.update(sha256(
