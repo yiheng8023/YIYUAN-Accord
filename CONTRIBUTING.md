@@ -80,6 +80,12 @@ python -B -X utf8 -m unittest discover -s tests/product -v
 
 CLI reports use UTF-8 on standard output, including redirected output. Decode
 captured report bytes as UTF-8; callers need not change their system locale.
+For ad hoc Python JSON reads, use `-X utf8` or an explicit UTF-8 stdout encoding;
+ASCII-escaped JSON is also lossless across a text transport. Check received text
+before rebinding it as recovery state. If transport has replaced characters,
+preserve the damaged record and restore only source-backed fields from an intact
+original; retain newer unaffected facts. Successful JSON parsing does not prove
+that its strings survived the transport.
 
 Generated executable entry points need a check through the target interpreter,
 using the actual delivered bytes and a harmless substitute target. Isolate PATH
