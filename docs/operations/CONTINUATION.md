@@ -30,6 +30,8 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 历史快照校验的重复Git读取已作有界优化：只在当前校验scope复用已绑定的完整树与固定blob，保无scope/异常包名fallback、包根和非普通文件拒绝、字节/总量上限、原排序摘要及下一轮新鲜读取。原突变方法正文SHA保持，21次完整verify及全部断言通过；相同本机profiling条件下870.958→640.713秒，Git调用9487→5980。不是普通运行或全CI加速承诺。九项不同的缓存/边界/历史法律文件回归及三静态检查通过，独审无必改；原件、红例、错误的12调用预估及初次余量不足保留于accord-ci-performance-20261005-01。新增测试合并重复写法后，3300000字节上限及5%余量保持；分发包/现装/17scope/12case/F-A不改。下一回到仍缺的前置Skill取得/采用及完整组合结果，等待CI不阻断独立准备。
 
+普通维护源审补得有限前置连接：Root真实选择Codebase Design并供应精确locator/来源；新原生Sol/high在trace16读指导，20收到完整正文，26才读业务facts/source。评审按私有Interface深度及调用成本，建议保留已经复用六处的夹具；Root核source spans、360字节毛上界及Goal/保留失败的不同语义，确认不作无净收益改动。当前development3300000预算与旧program960000已分清，第三方/原件保持。该事实已入localObservations，资料在accord-test-fixture-preparation-20261005-01；它不是native activation、explicit-only/disabled/变政策或完整W02/F-A证明。此前Implement迟读与旧失败保持；下一针对仍缺的真实政策/目标控制和完整组合，不再笼统以未见前置正文阻断这条已观察路径。
+
 ## 更新 09：有限采用对账已闭
 
 本机目标后态已核：24fa新25文件、固定登记/enabled和当前七项信任Hash匹配，旧24文件精确恢复副本与原Meta保全；除目标和宿主pipe外无关配置保持。原Root resume/input和一个fresh原生只读child实际收到完整Meta；四CLI与五reader有自然exit0/Job0回执。这只成立于本次本机/两个entry，完整行为及其它宿主/MCP采用仍未知。
