@@ -1158,17 +1158,17 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def test_current_case_can_be_admitted_without_closing_missing_requirements(self):
         report = self.assess(observer=self.observer)
         self.assertEqual(report["errors"], [])
-        parent_scopes = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
-                         "v33-admitted-entry-lifecycle"}
+        selection_dependent_scopes = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
+                                      "v33-admitted-entry-lifecycle", "v33-codex-entry-coverage"}
         self.assertEqual(report["acceptedCases"], sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]
-                                                          if case["scope"] not in parent_scopes))
+                                                          if case["scope"] not in selection_dependent_scopes))
         self.assertEqual(report["entrySelection"], {
             "final": False,
             "selected": ["chatgpt-desktop", "chatgpt-mobile", "cx-cli", "cx-desktop", "cx-sdk", "cx-vscode"],
             "selectedModes": {"chatgpt-desktop": ["remote", "work-local"],
                               "chatgpt-mobile": ["remote"], "chatgpt-web": []},
-            "pendingModes": {"chatgpt-desktop": [], "chatgpt-mobile": [],
-                             "chatgpt-web": []}})
+            "pendingModes": {"chatgpt-desktop": ["chat"], "chatgpt-mobile": ["chat"],
+                             "chatgpt-web": ["chat"]}})
         applicability = report["openCoverage"]["v33-openai-entry-applicability"]
         self.assertEqual(applicability["entry"], "cx-desktop")
         self.assertEqual(set(applicability["subjectEntries"]), {
@@ -1214,12 +1214,12 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 17, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 0, "coverageDefinedButUnverified": 17,
-            "coverageWithoutCases": 5, "coverageWithCaseBindingGaps": 8,
+            "coverageWithoutCases": 4, "coverageWithCaseBindingGaps": 7,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
         self.assertEqual(set(report['caseBindingGaps']),
                          {'v33-dynamic-model-routing', 'v33-autonomous-continuity',
-                          'v33-codex-entry-coverage', 'v33-system-integration',
+                          'v33-system-integration',
                           'v33-codex-lifecycle', 'v33-system-impact-assessment',
                           'v33-resource-pressure-and-exit', 'v33-environment-adaptation'})
         for scope_id, claims in report['caseBindingGaps'].items():
@@ -1329,20 +1329,20 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertTrue(gap['missingDimensions']['duties'])
         self.assertIn('capability-loss', gap['missingDimensions']['scenarios'])
         self.assertIn('default-host-without-extra-extensions', gap['missingDimensions']['scenarios'])
-        self.assertEqual(report['progress']['coverageWithoutCases'], 5)
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 8)
+        self.assertEqual(report['progress']['coverageWithoutCases'], 4)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 7)
         self.assertEqual(report['acceptedCases'], [])
         self.assertFalse(report['functionalCompletion'])
 
     def test_diagnostic_retains_unplanned_scope_and_scenario_gaps(self):
         report = self.assess(self.without_correction_and_user_environment_cases())
         self.assertEqual(report['errors'], [])
-        self.assertEqual(report['progress']['coverageWithoutCases'], 6)
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 10)
+        self.assertEqual(report['progress']['coverageWithoutCases'], 5)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 9)
         gaps = report['caseBindingGaps']
         self.assertEqual(set(gaps), {'v33-systemic-correction', 'v33-codex-cli-ordinary-delivery',
                                     'v33-dynamic-model-routing', 'v33-autonomous-continuity',
-                                    'v33-codex-entry-coverage', 'v33-system-integration',
+                                    'v33-system-integration',
                                     'v33-codex-lifecycle', 'v33-system-impact-assessment',
                                     'v33-resource-pressure-and-exit', 'v33-environment-adaptation'})
         correction = gaps['v33-systemic-correction']['function']
@@ -1361,7 +1361,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         report = self.assess(contract)
         self.assertEqual(report['errors'], [])
         self.assertNotIn('v33-codex-cli-ordinary-delivery', report['caseBindingGaps'])
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 9)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 8)
         for scope in ('v33-resource-pressure-and-exit', 'v33-environment-adaptation'):
             self.assertEqual(report['caseBindingGaps'][scope]['function']['caseIds'], [])
         self.assertEqual(report['progress']['coverageVerified'], 0)
@@ -1473,6 +1473,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report["errors"], [])
         self.assertTrue(report["entrySelection"]["final"])
         self.assertTrue(parent_cases <= set(report["acceptedCases"]))
+        self.assertIn("v33-codex-entry-coverage-01", report["acceptedCases"])
 
     def test_selected_entry_pending_mode_still_blocks_all_parent_admission(self):
         contract = copy.deepcopy(self.contract)
@@ -1492,6 +1493,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             if row.get("scope") in {"v33-admitted-entry-delivery", "v33-admitted-entry-lifecycle"}:
                 for mapping in row["expected"]["effect"].values():
                     mapping["chatgpt-desktop"]["modes"].pop("work-local")
+        for case in policy["cases"]:
+            if case["scope"] == "v33-codex-entry-coverage":
+                case["conditions"]["selectedModes"]["chatgpt-desktop"].remove("work-local")
+                case["expected"]["effect"]["entryCapabilityCoverage"]["chatgpt-desktop"]["modes"].pop("work-local")
         with self.history():
             self.commit(contract)
             report = self.assess(contract, self.observer)
@@ -1500,7 +1505,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report["entrySelection"]["pendingModes"]["chatgpt-desktop"], ["work-local"])
         self.assertEqual(report["entrySelection"]["selectedModes"]["chatgpt-desktop"], ["remote"])
         self.assertFalse({"v33-openai-entry-applicability-01", "v33-admitted-entry-delivery-01",
-                          "v33-admitted-entry-lifecycle-01"} & set(report["acceptedCases"]))
+                          "v33-admitted-entry-lifecycle-01", "v33-codex-entry-coverage-01"}
+                         & set(report["acceptedCases"]))
 
     def test_task_relative_chat_candidate_does_not_count_as_selected_delivery(self):
         contract = copy.deepcopy(self.contract)
@@ -1529,6 +1535,122 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse({"v33-openai-entry-applicability-01", "v33-admitted-entry-delivery-01",
                           "v33-admitted-entry-lifecycle-01"} & set(report["acceptedCases"]))
         self.assertFalse(report["acceptanceRequirements"]["A02"]["complete"])
+
+    def entry_coverage_contract(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract["acceptance"]["admission"]
+        if any(case["scope"] == "v33-codex-entry-coverage" for case in policy["cases"]):
+            return contract
+        scope = next(row for row in policy["scopes"] if row["id"] == "v33-codex-entry-coverage")
+        parent = next(row for row in policy["cases"] if row["scope"] == "v33-admitted-entry-delivery")
+        facets = ("discoveryDenominatorBound", "officialAndActualSourcesReconciled",
+                  "zeroUnexplainedOmissions", "capabilityDispositionsSupported",
+                  "necessaryCapabilityUseVerified", "authorityAndExitPathsAccounted",
+                  "unavailableAndSufficientNativeCounterexamplesPreserved", "changedUserOrHostStateReconciled")
+        subjects = list(parent["subjectEntries"])
+        modes = {key: [mode for mode, row in parent["conditions"]["entryDispositions"][key].get("modes", {}).items()
+                       if row["status"] == "selected"] for key in subjects}
+        matrix = {key: {facet: True for facet in facets} for key in subjects}
+        for key, values in modes.items():
+            if values:
+                matrix[key]["modes"] = {mode: {facet: True for facet in facets} for mode in values}
+        policy["cases"].append({
+            "id": "v33-codex-entry-coverage-01", "scope": scope["id"],
+            **{key: scope[key] for key in ("host", "entry", "duties", "qualityAxes", "scenarios", "claims")},
+            "conditions": {**scope["conditions"], "subjectEntries": subjects, "selectedModes": modes},
+            "oracle": "Independently reconcile bound sources, actual subjects and necessary capability use.",
+            "oracleFiles": ["docs/operations/PLAN-v3.3.md", "docs/operations/ACCEPTANCE-v3.3.md"],
+            "maxAgeSeconds": 86400,
+            "expected": {"effect": {"entryCapabilityCoverage": matrix},
+                         "authority": {"currentSelectionRespected": True},
+                         "poststate": {"selectionFinal": True},
+                         "cleanup": {"unrelatedStateUnchanged": True}},
+        })
+        return contract
+
+    def test_entry_coverage_rejects_missing_stale_and_weakened_matrices(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        contract = self.entry_coverage_contract()
+        self.assertEqual(admission_contract_errors(contract), [])
+        for variant in ("missing-effect", "shrunk-both", "missing-mode", "pending-chat",
+                        "pending-web", "weakened-facet", "stale-source"):
+            changed = copy.deepcopy(contract)
+            policy = changed["acceptance"]["admission"]
+            case = next(row for row in policy["cases"] if row["scope"] == "v33-codex-entry-coverage")
+            rows = case["expected"]["effect"]["entryCapabilityCoverage"]
+            if variant in ("missing-effect", "shrunk-both"):
+                rows.pop("cx-sdk")
+                if variant == "shrunk-both":
+                    case["conditions"]["subjectEntries"].remove("cx-sdk")
+                    case["conditions"]["selectedModes"].pop("cx-sdk")
+            elif variant == "missing-mode":
+                rows["chatgpt-desktop"]["modes"].pop("remote")
+            elif variant == "pending-chat":
+                case["conditions"]["selectedModes"]["chatgpt-desktop"].append("chat")
+                rows["chatgpt-desktop"]["modes"]["chat"] = {"discoveryDenominatorBound": True}
+            elif variant == "pending-web":
+                case["conditions"]["subjectEntries"].append("chatgpt-web")
+                case["conditions"]["selectedModes"]["chatgpt-web"] = []
+                rows["chatgpt-web"] = copy.deepcopy(rows["cx-cli"])
+            elif variant == "weakened-facet":
+                for row in rows.values():
+                    row.pop("necessaryCapabilityUseVerified")
+                    for value in row.get("modes", {}).values():
+                        value.pop("necessaryCapabilityUseVerified")
+            else:
+                for row in [*policy["scopes"], *policy["cases"]]:
+                    if "entryDispositions" not in row["conditions"]:
+                        continue
+                    row["conditions"]["entryDispositions"]["cx-sdk"]["status"] = "deferred"
+                    if row.get("scope", row.get("id")) != "v33-openai-entry-applicability":
+                        row["subjectEntries"].remove("cx-sdk")
+                    if row.get("scope") in ("v33-admitted-entry-delivery", "v33-admitted-entry-lifecycle"):
+                        next(iter(row["expected"]["effect"].values())).pop("cx-sdk")
+            with self.subTest(variant=variant):
+                self.assertTrue(admission_contract_errors(changed))
+
+    def test_entry_coverage_waits_for_selection_and_binds_its_source(self):
+        from yiyuan_accord.admission import _definition
+        contract = self.entry_coverage_contract()
+        case = next(row for row in contract["acceptance"]["admission"]["cases"]
+                    if row["scope"] == "v33-codex-entry-coverage")
+        before = _definition(contract, case)
+        changed = copy.deepcopy(contract)
+        for row in [*changed["acceptance"]["admission"]["scopes"], *changed["acceptance"]["admission"]["cases"]]:
+            if "entryDispositions" in row["conditions"]:
+                row["conditions"]["entryDispositions"]["cx-cli"]["basis"] += " Updated supported source."
+        self.assertNotEqual(before, _definition(changed, case))
+        with self.history():
+            self.commit(contract)
+            report = self.assess(contract, self.observer)
+        self.assertEqual(report["errors"], [])
+        self.assertNotIn(case["id"], report["acceptedCases"])
+
+    def test_entry_coverage_accepts_reordered_and_rebound_selection(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        contract = self.entry_coverage_contract()
+        policy = contract["acceptance"]["admission"]
+        case = next(row for row in policy["cases"] if row["scope"] == "v33-codex-entry-coverage")
+        case["conditions"]["subjectEntries"].reverse()
+        for values in case["conditions"]["selectedModes"].values():
+            values.reverse()
+        self.assertEqual(admission_contract_errors(contract), [])
+        for row in [*policy["scopes"], *policy["cases"]]:
+            if "entryDispositions" not in row["conditions"]:
+                continue
+            row["conditions"]["entryDispositions"]["cx-sdk"]["status"] = "deferred"
+            if row.get("scope", row.get("id")) != "v33-openai-entry-applicability":
+                row["subjectEntries"].remove("cx-sdk")
+            if row.get("scope") in ("v33-admitted-entry-delivery", "v33-admitted-entry-lifecycle"):
+                next(iter(row["expected"]["effect"].values())).pop("cx-sdk")
+        self.assertTrue(admission_contract_errors(contract))
+        case["conditions"]["subjectEntries"].remove("cx-sdk")
+        case["conditions"]["selectedModes"].pop("cx-sdk")
+        case["expected"]["effect"]["entryCapabilityCoverage"].pop("cx-sdk")
+        self.assertEqual(admission_contract_errors(contract), [])
+        case["duties"] = case["duties"][:1]
+        case["qualityAxes"] = case["qualityAxes"][:1]
+        self.assertEqual(admission_contract_errors(contract), [])
 
     def test_mode_declarations_reject_omission_drift_and_weakened_effects(self):
         from yiyuan_accord.admission import admission_contract_errors
@@ -1577,6 +1699,14 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     for key in list(effects):
                         effects[key].pop("modes", None)
                         if key not in row["subjectEntries"]: effects.pop(key)
+        for case in policy["cases"]:
+            if case["scope"] == "v33-codex-entry-coverage":
+                subjects = [key for key in case["conditions"]["subjectEntries"] if not key.startswith("chatgpt-")]
+                case["conditions"]["subjectEntries"] = subjects
+                case["conditions"]["selectedModes"] = {key: [] for key in subjects}
+                matrix = case["expected"]["effect"]["entryCapabilityCoverage"]
+                for key in set(matrix) - set(subjects):
+                    matrix.pop(key)
         entries = {row["id"]: row["host"] for row in contract["capabilityMap"]["entrySurfaces"]["rows"]}
         self.assertEqual(admission_contract_errors(contract), [])
         self.assertFalse(_entry_selection(policy, entries)["final"])

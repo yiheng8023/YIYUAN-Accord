@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-10-04 · N33-20260909 / r37。本页只保留当前责任、下一依赖和证据入口；实时 Git、原生输入和受影响资源优先于保存的观察。
+更新：2026-10-05 · N33-20260909 / r37。本页只保留当前责任、下一依赖和证据入口；实时 Git、原生输入和受影响资源优先于保存的观察。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识与路线，[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)和[机器投影](../../product/development.json)分别展开结果、判据与验证投影。旧全文见末尾固定提交，不作为当前步骤。
 
 ## 目标与权限
@@ -21,8 +21,8 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
 | 源码候选 | `3.3.0-dev.1+codex.20261004121454`，25文件/SHA `67775eaca8b5b2eaab4c6c0679d7856b743e3d9728f4e296f21448611c20c1de`；只改连续性Skill正文及manifest版本，Hook/MCP/运行时/Meta原文保持。三项源静态检查及精确8cb提交的[CI37202339243](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37202339243)已通过，未本机安装或行为验收。原现装24fa的[CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功；新旧身份不互代。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
-| 当前源码 CI | `67512ba0`、`b40a1063`、`8cb96c40`的CI分别为37197889375、37200707008、37202339243，均completed/success；宣言标签`6abfe6a4`的CI37205490373仍in_progress。本轮r37对齐按新提交另核。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
-| 功能资格 | 17 必要 scope、14 case 定义；13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
+| 当前源码 CI | `67512ba0`、`b40a1063`、`8cb96c40`及`6abfe6a4`的精确CI均成功；`fd6b6f5e`/CI37208099935终态failure，9产品job失败、2原生job通过。三平台原日志均为一处旧测试未同步Chat pending模式期望，已修fixture并加入全套前快速门；原失败保留，修后精确新提交另核。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
+| 功能资格 | 17 必要 scope、15 case 定义；13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
 声明集合/ID 映射的复用摘要已只在副本规范化，原 definition 身份、输入和有序业务数组保持。七项定向、三项既有集成回归及三静态检查通过；该缺陷族已闭，不继续泛扩。此前交接释放未知的有限恢复修复也已集成，固定传输/SQLite 回归不代验普通自主交接或完整 A05/A08。
 
@@ -33,6 +33,8 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 1edb startup-repair实际一次进入，安装阶段已成功，之后Hook CAS前guard仍读取官方安装已退休的旧cache路径而FileNotFound；同SHA不可变副本和其它414原件保持。整体执行器失败不改判；hook-trust/native目录无，当前正确信任值形成机制未归因。原d10首次guard的RuntimeError及更早launcher错误也按原结果保留，不由当前后态反推。目标已正确，不再安装、授信或复活旧cache求绿。授权消费、POSTSTATE-FACTS、CURRENT-CONFIG及资源回执在accord-update09-poststate-reconcile-20261004-01和原startup-repair；完整旧工序见[cb95固定记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/cb95a53c4ed0ae34a07c002183e209d291e0a660/docs/operations/CONTINUATION.md)，不是待执行步骤。
 
 ## 剩余主线与当前切片
+
+中断后已按新原生输入接续，main与已有产物对账完成，没有重放业务。新增宿主能力覆盖case及确定性集合/mode保护，关联已有pending终审和适用性来源指纹；原14case逐字段保持。当前尚无case的范围由五到四：codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation。独立源审及实现补审已闭，原v1字段拒绝、真实红例和两处需要重绑选择的旧fixture失败保持；18项相关方法已通过，三个静态检查及workflow检查通过。准备、原件、审查及CI失败原日志在accord-w02-entry-coverage-draft-20261004-01。本段只有源码与纯验证，未作真实能力覆盖观察、安装、授信、CLI/SDK或模型业务；现有源码包与实际现装身份保持分开。
 
 本轮r37已纠正把普通Chat一律辅助、网页一律排除的当前映射：研究/论证/内容报告按具体需求可成为完整成果；三Chat模式及web聚合均为pending，六已选执行/控制入口保持。README、基线、计划、验收及三个父scope/case的当前定义已对齐；截图只证可选，未证明实际加载、交付或全入口支持。三项静态检查、四项入口准入回归通过，新回归确认即便其它条件及观察均为正向，pending Chat仍阻止父范围和A02完成。现有准入实现无需改动，未启动新业务、改旧结果或恢复取消路线；差异及审查材料在accord-chat-task-relative-20261004-01。
 
@@ -62,7 +64,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | W06/W07 | 环境/资源压力变化后必要续做、兼容采用、资产保护和资源退出；局部 Job0 不代验整个宿主。 |
 | W08 | 同一 episode 全链组合与独立净影响；A08 依赖 A01–A07，不能拼散案平均分。精确候选和发布后态另核。 |
 
-当前 OpenAI applicability 为9行：6selected/3pending；web聚合和三Chat mode按任务用途待判，不据界面名或可选截图晋全支持。六已选入口/当前有效模式保留；JetBrains/Xcode 内置集成仍待必要差异判断，不要求用户采购设备。五个无 case 定义的范围仍为 codex-entry-coverage、codex-lifecycle、system-impact-assessment、resource-pressure-and-exit、environment-adaptation；system-integration 的 case 已结束未准入。完整清单与依赖以机器投影和计划为准。
+当前 OpenAI applicability 为9行：6selected/3pending；web聚合和三Chat mode按任务用途待判，不据界面名或可选截图晋全支持。六已选入口/当前有效模式保留；JetBrains/Xcode 内置集成仍待必要差异判断，不要求用户采购设备。宿主能力覆盖已有前瞻case、实际观察仍未验；其余四个无case范围见本切片首段，system-integration的case已结束未准入。完整清单与依赖以机器投影和计划为准。
 
 ## 原失败与历史证据
 

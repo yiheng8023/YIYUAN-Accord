@@ -8111,7 +8111,200 @@
             "userTaskNotArchivedOrDeleted": true
           }
         }
-      }
+      },
+        {
+          "id": "v33-codex-entry-coverage-01",
+          "scope": "v33-codex-entry-coverage",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "environment-and-self-exposure",
+            "research-learning-and-reuse",
+            "relations-routing-and-form",
+            "execution-configuration-and-code",
+            "premise-and-consistency",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "native-sufficient",
+            "default-host-without-extra-extensions",
+            "effective-user-environment",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review. The entry label identifies that observer, not adoption or execution by a subject entry. Case and execution entry bindings must match the actual observer; separately establish subject actors and roles without relabelling old CLI/SDK executions.",
+            "subjectCoverage": "Use the applicable selected OpenAI entries and actual responsibilities established by v33-openai-entry-applicability. Preserve pending dispositions and unknown differences; this definition neither finalizes the support set nor activates another host.",
+            "executionBinding": "Before effects, bind the real outcome and inputs, exact host/entry/package/candidate and observer sources, actual actor identities and permissions, protected material and writer ownership, repetition count, time/usage/resource limits and recovery conditions. Definitions do not supply executable cases or new authority.",
+            "evidenceBoundary": "Use independent source observations and consequential post-state at their actual subject, time and conditions. Keep fixed-response checks, method failures, human assistance and ordinary Agent behavior distinct; valid historical or child-scope evidence contributes only at its bound scope.",
+            "inventory": "Reconcile all editable, configurable and usable surfaces of each bound target version/entry, including UI-only buttons, menus, settings and shortcuts, native commands, modes, Skills, MCP, plugins, Apps and relevant ecosystem routes. Current installed tools or CLI help are not the discovery boundary; non-business features may remain inactive but cannot silently disappear.",
+            "denominator": "Bind discovery sources, date/version, native identifiers and aliases, config/account layer, visibility/callability/execution/effect distinctions, relevant duties, side effects, authority and exit route. Compare official sources with actual supported observations; unexplained differences or unfinished discovery leave coverage unknown, not 100 percent.",
+            "useAndDisposition": "Give each discovered item an evidenced disposition and usable path or actual limitation. Discovery does not enable it. Necessary selected capabilities must participate in real work with verified effects; healthy native handling needs no forced extra mechanism. UI/config changes, late results and user choices require affected-state reconciliation.",
+            "scopeDistinction": "Entry applicability chooses and justifies the support set; this scope covers capabilities and actual necessary use within bound entries. Admitted-entry delivery separately proves outcomes. Neither this inventory nor a shared backend closes pending entry dispositions or unobserved cross-entry behavior.",
+            "selectedSetSource": "v33-openai-entry-applicability; current selected subjects and selected modes only",
+            "selectedModes": {
+              "chatgpt-desktop": [
+                "work-local",
+                "remote"
+              ],
+              "chatgpt-mobile": [
+                "remote"
+              ],
+              "cx-cli": [],
+              "cx-desktop": [],
+              "cx-sdk": [],
+              "cx-vscode": []
+            },
+            "prospectiveBinding": "Resolve the actual applicability decision before parent admission; rebind this case when subjects, modes, version or responsibilities change. No current definition, visibility or expected value constitutes observation.",
+            "ordinaryUse": "Use a prospectively bound necessary ordinary task and actual actor/entry. Do not activate every discovered feature, force delegation or redo ended business to obtain coverage.",
+            "authority": "Source preparation only. Actual capability changes, trust, accounts, meaningful cost, installation, external writes or model-business dispatch retain their own corresponding authority.",
+            "subjectEntries": [
+              "chatgpt-desktop",
+              "chatgpt-mobile",
+              "cx-cli",
+              "cx-desktop",
+              "cx-sdk",
+              "cx-vscode"
+            ]
+          },
+          "oracle": "Before observation, bind the exact candidate/package, target versions, actual subject actors and selected modes, discovery sources, native IDs/aliases, config/account layers, current permissions, input/writer ownership, finite work/usage/resource limits and recovery actor. Independently reconcile official sources with actual supported UI/command/settings/Skill/MCP/plugin/App/ecosystem observations. CLI help or installed tools alone cannot supply the denominator; unobserved surfaces remain unknown. Each capability needs an evidenced disposition, necessary use and exit/hold route. Correlate genuine selection, actual use and consequential outcomes, including sufficient native handling, unavailable/disabled paths and changes. Check effects and exact owned-resource post-state; do not infer that no relevant resource exists. Parent entry or mode pending prevents final scope closure. The observer carrier is not the subject. Expected predicates are never observation data; source/model claims, synthetic positive flags or agreement between reports cannot establish adoption or all-entry coverage. Keep original failures, pauses and unrelated state; reject missing, stale, mismatched or incomplete evidence without rerun or evaluator rescue.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md",
+            "yiyuan_accord/admission.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "entryCapabilityCoverage": {
+                "chatgpt-desktop": {
+                  "discoveryDenominatorBound": true,
+                  "officialAndActualSourcesReconciled": true,
+                  "zeroUnexplainedOmissions": true,
+                  "capabilityDispositionsSupported": true,
+                  "necessaryCapabilityUseVerified": true,
+                  "authorityAndExitPathsAccounted": true,
+                  "unavailableAndSufficientNativeCounterexamplesPreserved": true,
+                  "changedUserOrHostStateReconciled": true,
+                  "modes": {
+                    "work-local": {
+                      "discoveryDenominatorBound": true,
+                      "officialAndActualSourcesReconciled": true,
+                      "zeroUnexplainedOmissions": true,
+                      "capabilityDispositionsSupported": true,
+                      "necessaryCapabilityUseVerified": true,
+                      "authorityAndExitPathsAccounted": true,
+                      "unavailableAndSufficientNativeCounterexamplesPreserved": true,
+                      "changedUserOrHostStateReconciled": true
+                    },
+                    "remote": {
+                      "discoveryDenominatorBound": true,
+                      "officialAndActualSourcesReconciled": true,
+                      "zeroUnexplainedOmissions": true,
+                      "capabilityDispositionsSupported": true,
+                      "necessaryCapabilityUseVerified": true,
+                      "authorityAndExitPathsAccounted": true,
+                      "unavailableAndSufficientNativeCounterexamplesPreserved": true,
+                      "changedUserOrHostStateReconciled": true
+                    }
+                  }
+                },
+                "chatgpt-mobile": {
+                  "discoveryDenominatorBound": true,
+                  "officialAndActualSourcesReconciled": true,
+                  "zeroUnexplainedOmissions": true,
+                  "capabilityDispositionsSupported": true,
+                  "necessaryCapabilityUseVerified": true,
+                  "authorityAndExitPathsAccounted": true,
+                  "unavailableAndSufficientNativeCounterexamplesPreserved": true,
+                  "changedUserOrHostStateReconciled": true,
+                  "modes": {
+                    "remote": {
+                      "discoveryDenominatorBound": true,
+                      "officialAndActualSourcesReconciled": true,
+                      "zeroUnexplainedOmissions": true,
+                      "capabilityDispositionsSupported": true,
+                      "necessaryCapabilityUseVerified": true,
+                      "authorityAndExitPathsAccounted": true,
+                      "unavailableAndSufficientNativeCounterexamplesPreserved": true,
+                      "changedUserOrHostStateReconciled": true
+                    }
+                  }
+                },
+                "cx-cli": {
+                  "discoveryDenominatorBound": true,
+                  "officialAndActualSourcesReconciled": true,
+                  "zeroUnexplainedOmissions": true,
+                  "capabilityDispositionsSupported": true,
+                  "necessaryCapabilityUseVerified": true,
+                  "authorityAndExitPathsAccounted": true,
+                  "unavailableAndSufficientNativeCounterexamplesPreserved": true,
+                  "changedUserOrHostStateReconciled": true
+                },
+                "cx-desktop": {
+                  "discoveryDenominatorBound": true,
+                  "officialAndActualSourcesReconciled": true,
+                  "zeroUnexplainedOmissions": true,
+                  "capabilityDispositionsSupported": true,
+                  "necessaryCapabilityUseVerified": true,
+                  "authorityAndExitPathsAccounted": true,
+                  "unavailableAndSufficientNativeCounterexamplesPreserved": true,
+                  "changedUserOrHostStateReconciled": true
+                },
+                "cx-sdk": {
+                  "discoveryDenominatorBound": true,
+                  "officialAndActualSourcesReconciled": true,
+                  "zeroUnexplainedOmissions": true,
+                  "capabilityDispositionsSupported": true,
+                  "necessaryCapabilityUseVerified": true,
+                  "authorityAndExitPathsAccounted": true,
+                  "unavailableAndSufficientNativeCounterexamplesPreserved": true,
+                  "changedUserOrHostStateReconciled": true
+                },
+                "cx-vscode": {
+                  "discoveryDenominatorBound": true,
+                  "officialAndActualSourcesReconciled": true,
+                  "zeroUnexplainedOmissions": true,
+                  "capabilityDispositionsSupported": true,
+                  "necessaryCapabilityUseVerified": true,
+                  "authorityAndExitPathsAccounted": true,
+                  "unavailableAndSufficientNativeCounterexamplesPreserved": true,
+                  "changedUserOrHostStateReconciled": true
+                }
+              }
+            },
+            "authority": {
+              "currentSelectionRespected": true,
+              "noInferredAccessOrEffects": true,
+              "noUnrequestedModeActivation": true,
+              "disabledAndPinnedChoicesRespected": true
+            },
+            "poststate": {
+              "selectionFinal": true,
+              "pendingEntries": 0,
+              "pendingModes": 0,
+              "sourceAndCurrentConditionsRechecked": true,
+              "evidenceLimitsPreserved": true
+            },
+            "cleanup": {
+              "unrelatedStateUnchanged": true,
+              "ownedTemporaryResourcesReleased": true
+            }
+          }
+        }
       ]
     },
     "coverageRule": "The inherited responsibilities below are a review inventory, not an immutable feature list. Review necessity against the user's actual goal: retain, delegate to the host, merge, retire or fill a demonstrated gap. Record retired/merged responsibilities and their changed acceptance explicitly rather than silently dropping coverage. Preserve the outcomes that remain necessary, not every historical implementation or test. Decomposition and test identifiers are revisable mappings. Actively discover unlisted design defects, broken cross-function relations, entry/configuration blind spots and unnecessary mechanisms through task-relevant official changes, realistic normal-entry work, counterexamples and failure observations. Known findings seed but never bound the review. Prioritize consequences and affected dependencies; end a research branch when sufficient evidence supports the next safe implementation or validation. Complete outcomes and independently observed value, not counts of documents, tests, rules or components, determine completeness. Within existing A02/A06/A08 scopes, verify default versus user-exposed reasoning options and actual main/subagent dispatch separately. Include applicable native-implicit selection, explicit-only with valid delegated selection, missing delegation or supported route, disabled/excluded components, explicit human selection and changed-policy cases. Require original files/management preservation, true selection provenance and valid target control. Native explicit loading alone does not prove semantic choice. Forged human selection/delegation, bypass of disabled/excluded components, duplicate installation, unnecessary per-use approval within existing scoped delegation, forced workflows and treating visibility or eligibility as adoption fail; preserve unverified outcomes and unaffected historical evidence.",

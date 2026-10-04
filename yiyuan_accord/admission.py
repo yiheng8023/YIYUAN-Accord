@@ -31,6 +31,13 @@ _ENTRY_PARENT_SCOPES = {
     "v33-admitted-entry-delivery": "entryDelivery",
     "v33-admitted-entry-lifecycle": "entryLifecycle",
 }
+_ENTRY_COVERAGE_SCOPE = "v33-codex-entry-coverage"
+_ENTRY_COVERAGE_PREDICATES = {
+    "discoveryDenominatorBound", "officialAndActualSourcesReconciled",
+    "zeroUnexplainedOmissions", "capabilityDispositionsSupported",
+    "necessaryCapabilityUseVerified", "authorityAndExitPathsAccounted",
+    "unavailableAndSufficientNativeCounterexamplesPreserved", "changedUserOrHostStateReconciled",
+}
 _ENTRY_DISPOSITIONS = {"selected", "pending", "deferred", "inapplicable"}
 _ENTRY_MODES = {
     "chatgpt-desktop": {"chat", "work-local", "work-cloud", "remote"},
@@ -175,11 +182,28 @@ def _entry_modes(dispositions, catalog=None):
     return modes
 
 
+def _entry_mode_effects(expected, required_modes, *, strict=False):
+    for key, required in required_modes.items():
+        if not required and not strict:
+            continue
+        effects = expected[key].get("modes", {} if not required else None)
+        predicates = {name: value for name, value in expected[key].items() if name != "modes"}
+        if (not isinstance(effects, dict) or set(effects) != required
+                or not predicates or any(not isinstance(value, dict)
+                    or any(name not in value or _json(value[name]) != _json(predicate)
+                           for name, predicate in predicates.items()) for value in effects.values())):
+            raise ValueError("entry case must bind per-mode expected effects")
+
+
 def _entry_selection(policy, entries, mode_catalog=None):
     """Validate and return the current v5 multi-entry parent selection."""
     scopes = {row["id"]: row for row in policy["scopes"] if isinstance(row, dict) and _text(row.get("id"))}
     present = set(scopes) & set(_ENTRY_PARENT_SCOPES)
+    coverage_cases = [row for row in policy["cases"]
+                      if isinstance(row, dict) and row.get("scope") == _ENTRY_COVERAGE_SCOPE]
     if not present:
+        if coverage_cases:
+            raise ValueError("entry coverage case requires the applicability selection")
         return None
     if present != set(_ENTRY_PARENT_SCOPES):
         raise ValueError("entry parent scopes must be declared together")
@@ -214,23 +238,32 @@ def _entry_selection(policy, entries, mode_catalog=None):
                 or set(expected) != set(case["subjectEntries"])
                 or any(not isinstance(value, dict) or not value for value in expected.values())):
             raise ValueError("entry parent case must bind per-entry expected effects")
-        for key, values in modes.items():
-            required = {mode for mode, value in values.items()
-                        if case["scope"] == "v33-openai-entry-applicability" or value["status"] == "selected"}
-            if not required:
-                continue
-            effects = expected.get(key, {}).get("modes")
-            predicates = {name: value for name, value in expected[key].items() if name != "modes"}
-            if (not isinstance(effects, dict) or set(effects) != required
-                    or not predicates or any(not isinstance(value, dict)
-                        or any(name not in value or _json(value[name]) != _json(predicate)
-                               for name, predicate in predicates.items()) for value in effects.values())):
-                raise ValueError("entry parent case must bind per-mode expected effects")
+        required_modes = {key: {mode for mode, value in values.items()
+                               if case["scope"] == "v33-openai-entry-applicability" or value["status"] == "selected"}
+                          for key, values in modes.items()}
+        _entry_mode_effects(expected, required_modes)
+    selected_modes = {key: {mode for mode, value in modes.get(key, {}).items()
+                            if value["status"] == "selected"} for key in selected}
+    for case in coverage_cases:
+        declared = case["conditions"].get("subjectEntries")
+        declared_modes = case["conditions"].get("selectedModes")
+        expected = case.get("expected", {}).get("effect", {}).get("entryCapabilityCoverage")
+        if (not _refs(declared, set(entries)) or set(declared) != selected
+                or not isinstance(declared_modes, dict) or set(declared_modes) != selected
+                or any(not _refs(declared_modes[key], selected_modes[key])
+                       or set(declared_modes[key]) != selected_modes[key] for key in selected)
+                or not isinstance(expected, dict) or set(expected) != selected
+                or any(not isinstance(row, dict)
+                       or any(row.get(key) is not True for key in _ENTRY_COVERAGE_PREDICATES)
+                       for row in expected.values())):
+            raise ValueError("entry coverage case must preserve selected subjects, modes and necessary effects")
+        _entry_mode_effects(expected, selected_modes, strict=True)
     pending = any(row["status"] == "pending" for row in dispositions.values())
     pending_modes = {key: sorted(mode for mode, value in values.items() if value["status"] == "pending")
                      for key, values in modes.items()}
     return {"final": final and not pending and not any(pending_modes.values()),
-            "scopeIds": set(_ENTRY_PARENT_SCOPES), "caseIds": {row["id"] for row in cases}, "selected": selected,
+            "scopeIds": set(_ENTRY_PARENT_SCOPES) | ({_ENTRY_COVERAGE_SCOPE} if coverage_cases else set()),
+            "caseIds": {row["id"] for row in [*cases, *coverage_cases]}, "selected": selected,
             "selectedModes": {key: sorted(mode for mode, value in values.items() if value["status"] == "selected")
                               for key, values in modes.items()}, "pendingModes": pending_modes}
 
@@ -382,12 +415,17 @@ def _definition(contract, case):
         "entry": selected(contract["capabilityMap"]["entrySurfaces"]["rows"], [case["entry"]]),
         "entryRule": contract["capabilityMap"]["entrySurfaces"]["rule"],
     }
-    if "subjectEntries" in case:
+    subjects = case.get("subjectEntries")
+    if contract["acceptance"]["admission"]["schema"] == CURRENT_SCHEMA and case["scope"] == _ENTRY_COVERAGE_SCOPE:
+        subjects = case["conditions"]["subjectEntries"]
+        definition["entrySelectionScope"] = selected(
+            contract["acceptance"]["admission"]["scopes"], ["v33-openai-entry-applicability"])
+    if subjects is not None:
         definition["subjectEntries"] = selected(
-            contract["capabilityMap"]["entrySurfaces"]["rows"], case["subjectEntries"])
+            contract["capabilityMap"]["entrySurfaces"]["rows"], subjects)
         if (catalog := contract["capabilityMap"]["entrySurfaces"].get("modeCatalog")) is not None:
             definition["subjectModeCatalog"] = {key: value for key, value in catalog.items()
-                                               if key in case["subjectEntries"]}
+                                               if key in subjects}
     return _hash(definition)
 
 
