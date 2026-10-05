@@ -2,6 +2,8 @@
 
 ## 自主源调用者落地与独立复核（2026-10-06）
 
+随后用户明确授权一次实际执行。原ready配置不改，激活副本绑定最新native输入及新grant；源线程01a10e58/turn01a10e59的实际turn_context为gpt-6.1-sol/medium/default、never/read-only、CLI0.160.1。一次accord_inspect_context真实调用返回unknown，未编容量；无handoff proposal或target。单轮762.087秒、控制者S819.219自然exit0、reader/streams关闭和Windows Job0；54冻结来源/配置不变。17范围/12案例和引文检查通过，Root独立复算缺case范围及连续性覆盖缺项，并在S1065.412接受七项有源发现。主仓另修三处旧分母/包身份当前口吻，建议只作规划，不重放历史或强迫机制。原报告、协议流、实际时钟、资源与ROOT-RESULT保于同目录。一次许可消费，当前只读任务闭合；正向自主交接、完整F/A和发布仍未验。
+
 已结束对同一context/proposal/session链的反复来源调查。新增私有实际调用者复用原生连接、持久记录器和source-session，不修改交接core或增服务。绑定的真实维护任务为固定13243a73七份发布材料的范围/案例/证据核对；模型正常完成有效，不能强迫handoff制造自主证据。新源控制者/目标至多一个，模型请求Sol/medium，work1200+cleanup30仅为新提案，旧窗口不变；原安装和用户主模型保持。独立CLI安装包0.160.1与桌面0.160.0分别绑定，不由initialize.userAgent推断实际模型或裸版本。
 
 离线caller21、Python7、Node4场景、Root policy6与oracle3类检查通过；定向独审发现并修复授权/配置/合同在启动后变更漏核、异常路径误报未创建进程、关闭期stdout未排空。旧顺序纯流反例留下17字节未读，修后回执完整/未读0/EOF到达；正常提前结束不再可能等待整个工作窗口才退出。Root固定事实检查自动执行，语义只留实际设置、真实proposal、目标继承与结果，worker获得真实起点/截止/剩余秒数。请求/原始回执/效果未知/失败cause保留，不伪造独立通过。

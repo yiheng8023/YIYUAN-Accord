@@ -19,9 +19,11 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 ## 当前事实
 
-2026-10-06自主择时源链诊断已结束：已有owned source-session能承接真实proposal并驱动接管，固定provider试验不证明模型判断，普通Desktop主线程attach仍未建立。Root前轮重复分析造成长时间无有效执行，已关闭该诊断的自动续轮，保留主线而不重复调查。新选的实际结果是核对固定13243a73的七份发布材料，完整映射17必要范围/12活动案例、核证据与声明并提出下一步。私有accord-autonomous-live-20261006-01已具实际session调用者、Windows Job启动/退出连接、Root有限语义裁决及独立报告检查器；caller21、Python7、Node4场景、policy6、oracle3类离线检查通过，独审三项发现均修正。最终config.ready.json SHA f91281015e8ce814abdd668fb0a25b24f53e7a852725ee9e2b8992f346c29279绑定54源且默认未授，run未创建；不是模型行为或完整验收通过。下一是该具体一次执行的权限与实时条件核对，不再新增一般来源准备。原始需求不命令交接，正常完成与真实自主proposal分开判；复用既有trusted主仓的只读工作目录，无新信任、安装或用户设置变动。源runtime132与现装24fa各自绑定，不冒整包当前采用。
+2026-10-06本次一次许可已执行并消费：真实owned App Server source `01a10e58-fb28-7531-8c66-45cfc0ce1468`、turn `01a10e59-d0da-72b1-ba1a-62db2c1be9ed` 在CLI0.160.1/Sol-medium/default、never/read-only下完成固定13243a73发布材料审查。原生turn_context与创建回执分别核，模型一次主动context查询返回fresh-post-change-usage-unavailable/unknown；没有proposal或target。单轮762.087秒、控制者S819.219自然退出，reader/streams关闭、所属Windows Job活动进程0。报告17范围/12案例映射、全部引文及七发现经独立结构检查和Root语义复核，Root在S1065.412完成新1200窗口内判定；54受保护源/配置保持。原报告/原始协议/资源/ROOT-RESULT保于accord-autonomous-live-20261006-01，不重跑。结果只支持SDK正常完成分支及实际只读审查，不算正向自主交接、全部Skills政策、GUI接入或F/A通过。审查确认六范围无活动case、连续性case缺recovery-and-rollback/capability-loss；三处PLAN/BASELINE旧数量与包身份的当前口吻已另作明确历史化修正。建议是后续规划，不授权重放旧业务、沿用旧grant或在普通任务中强迫所有机制。
 
-同段版本核对：当前桌面metadata为gpt-6-astra/0.160.0/default；独立CLI的两个已安装npm包分别为0.160.1与0.160.1-win32-x64，新的可执行文件SHA已绑定，尚未执行它来声称运行期版本/设置。源修复132的CI37370376950原attempt1为4success/7cancelled，取消项无runner/步骤，原因未知；已仅重跑未成功项。attempt2最新回读10/11success，macOS/Python3.14仍运行，未宣布全部通过。准备材料与旧失败保留，17/12/13、F/A及发布资格不变；当前只更新接续和试验事实，不改规范、机器判据或包身份。
+本次执行前态保留：已有owned source-session承接proposal的代码链，固定provider试验不证明模型判断，普通Desktop主线程attach仍未建立。Root先前重复分析造成长时间无有效执行，已结束该诊断自动续轮。私有执行包复用原有session、连接和Windows Job，无新控制服务；caller21、Python7、Node4场景、policy6、oracle3类离线检查及独审通过。原config.ready.json f9128101默认未授保持，收到明确许可后仅按已审激活差分绑定新输入、execution config97bab73d和grant0ee51355；不改旧源或许可。实际执行结果以前段为准，不能再把该方案写成待授权或未启动。
+
+同段版本核对：当前桌面metadata为gpt-6-astra/0.160.0/default；独立CLI的两个已安装npm包分别为0.160.1与0.160.1-win32-x64，新的可执行文件SHA已绑定，尚未执行它来声称运行期版本/设置。源修复132的CI37370376950原attempt1为4success/7cancelled，取消项无runner/步骤，原因未知；已仅重跑未成功项。attempt2已按精确13243a73回读11/11success；这只确认该源码提交的托管检查，不代验新观察记录、现装采用或功能发布资格。准备材料与旧失败保留，17/12/13、F/A及发布资格不变；当前只更新接续和试验事实，不改规范、机器判据或包身份。
 
 2026-10-06用户核对Stop、Skills与自主择时的状态后，Root纠正路线：已准备但未授的“两子任务/三阶段”只验证受控子范围，不能证明自主触发，暂缓该方案且不再以它等待用户；保留全部源准备、不执行模型业务，不属于用户暂停主目标。原生隐式Skills在备件实例有实证，Root明确代选/正文采用也有有限结果；explicit-only的系统动态协调、禁用/变策略与全部入口仍未闭。自主择时当前未验收通过，已有context/proposal/session连接不等于普通Desktop已具备自主主线程迁移，不能把受控接管或更多准备文件当突破。
 

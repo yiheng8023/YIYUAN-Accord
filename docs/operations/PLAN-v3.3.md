@@ -178,7 +178,7 @@ VS Code兼容编辑器优先作为同一扩展适配族，Xcode、JetBrains等�
 | Xcode内置Codex | [专用配置与组件导入](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/)作用于Xcode启动的Agent | 保持待判。需具体构建的入口/事件、MCP身份、转录及恢复契约；配置根不证明这些条件，不能借用普通CLI或macOS CI |
 | 外部Codex使用IDE工具 | [JetBrains IDE MCP](https://www.jetbrains.com/help/idea/mcp-server.html)与[Apple mcpbridge](https://developer.apple.com/documentation/xcode/giving-external-agents-access-to-xcode/)均提供官方连接路线 | 确定复用已有Codex执行链的组合开发路线：Accord与任务接续留在外部执行者，IDE提供获准项目工具。实际连接、目标、效果和退出仍待验证，不改变两项内置入口的pending状态 |
 
-这项选择不新增IDE控制器、身份合成或Hook转换层。内置入口缺失的职责可由充分原生机制承担，但须有明确对应；外部组合不绕过内置的不确定性，也不要求先完成整项验收才能开发。IDE MCP的启动cwd与业务项目分别绑定；启用或自动配置会启动服务、改变连接或客户端设置，需具体授权和恢复责任，不能用当前来源审查代替。项目工具暴露和执行确认保留用户选择；停止客户端或回滚文件不自动撤销IDE内已发生的全部效果。用户没有Mac/JetBrains仍沿官方契约和可靠既有证据推进，不要求采购或为取证安装。本次仅收敛工程路线，4selected/7pending、父级集合和既有质量底线不变。
+这项选择不新增IDE控制器、身份合成或Hook转换层。内置入口缺失的职责可由充分原生机制承担，但须有明确对应；外部组合不绕过内置的不确定性，也不要求先完成整项验收才能开发。IDE MCP的启动cwd与业务项目分别绑定；启用或自动配置会启动服务、改变连接或客户端设置，需具体授权和恢复责任，不能用当前来源审查代替。项目工具暴露和执行确认保留用户选择；停止客户端或回滚文件不自动撤销IDE内已发生的全部效果。用户没有Mac/JetBrains仍沿官方契约和可靠既有证据推进，不要求采购或为取证安装。该段保留2026-09-27工程路线核对的历史观察，当时为4selected/7pending；当前集合以r37的9行（6selected/3pending）及modeCatalog处置为准，不能沿用旧分母。父范围和必要质量仍分别验收。
 
 ## 跨项目与执行位置的连续性
 
