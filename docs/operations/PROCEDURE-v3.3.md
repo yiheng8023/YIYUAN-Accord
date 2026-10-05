@@ -1,5 +1,11 @@
 # 3.3 历史试验记录（原工序文件）
 
+## UTF8后置软件验收与系统性纠偏（2026-10-06）
+
+原native Sol/medium产出四实物及12本地测试，但Root错过原S980 QA入场，原1200窗口未通过，许可消费和禁止重放保持。私有QA v2把许可锁到最后一句、把RED失败终态或Root报告一律当未收束；v3定向修源与独审不追认原窗。全系统影响审查核thin kernel/协调入口/PLAN r37/机器投影已有可检验、动态修订与多轮边界，因此只对齐实际caller和记录，无新全局规则/服务或无现场依据的Stop改动。
+
+用户另授一次POST-DELIVERY-QA/v1，Root在新目录复用已审generic WindowsJob，21实际Python命令核4手算/92边界/19拒绝；两正例匹配、负例exit1且输出不变。Programme15.338秒、owner自然exit0/readerStopped/Job0；Root161.647秒完成新600/660/720范围判定。Root核argv/回执摘要、四原记录、写集、复制输入和escape sentinel，29原件SHA/mtime、四实物及419冻结源不变。正向中间输出复用未逐份留存，实际固定checker现场比较与raw保留；没有重放补材料。结果只证明该软件后置验收，不给原episode、W02/W08/A08/13职责/F-A或发布准入。资料在accord-w02-w08-prospective-20261005-01/post-delivery-qa-preparation/ROOT-POST-DELIVERY-RESULT.json及21command/owner回执。
+
 记录用途：保留已发生的观察、控制条件、失败和有限结论。这里的“本轮”“当前”“下一步”及当时宿主范围均指各条记录的历史时点，不是现在的行动指令或 3.3 验收。
 
 **当前工序 S0–S5 已并入 [共识节点与计划](PLAN-v3.3.md#工序与依赖)，不在本文件单独维护。** F01–F08 详细结果见 [基线](BASELINE-v3.3.md)，A01–A08 判据见 [验收](ACCEPTANCE-v3.3.md)。本记录保留旧版本称谓与失败事实，不构成当前分发或支持声明。
