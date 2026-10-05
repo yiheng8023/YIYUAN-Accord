@@ -23,7 +23,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
 | 源码候选 | `3.3.0-dev.1+codex.20261005005348`，25文件/SHA `d2ce59c2135d2f3ece308929e10229e446f778ab97f9c73053947dd49edbd848`；本次只补现有生命周期Skill641字节及manifest版本，Hook/MCP/运行时/Meta原文保持。前候选8cb/20261004121454的CI37202339243已通过；新源在测试修正后的精确75ce7b4d/CI37221366079已11/11通过，未本机安装或行为验收。原现装24fa的[CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功；新旧身份不互代。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
-| 源码 CI | 性能修正`1750168e`/[CI37242988258](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37242988258)已按全部11个job精确回读success；`0263ea94`/37236290303、上传依赖修正`0dfb87f4`/37232182046与准入保护`4fc85088`/37229271048也均11/11成功。后续观察记录不冒充该精确SHA托管通过。旧`fd6b6f5e`/37208099935及`6f5d2f21`/37216493190的fixture失败、`c30b32ab`/37219463927失败保持，不追认；75ce修正及更早已核CI保原提交成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
+| 源码 CI | 最新记录`a29320bf`/[CI37254227626](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37254227626)与性能修正`1750168e`/37242988258均按11个job精确回读success；`0263ea94`/37236290303、`0dfb87f4`/37232182046与准入保护`4fc85088`/37229271048也均11/11成功。后续变更不冒充这些精确SHA托管通过。旧`fd6b6f5e`/37208099935及`6f5d2f21`/37216493190的fixture失败、`c30b32ab`/37219463927失败保持，不追认；75ce修正及更早已核CI保原提交成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
 | 功能资格 | 17 必要 scope、12 活动 case；另三结束固定定义/失败留在历史。13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
 声明集合/ID 映射的复用摘要已只在副本规范化，原 definition 身份、输入和有序业务数组保持。七项定向、三项既有集成回归及三静态检查通过；该缺陷族已闭，不继续泛扩。此前交接释放未知的有限恢复修复也已集成，固定传输/SQLite 回归不代验普通自主交接或完整 A05/A08。
@@ -41,6 +41,14 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 1edb startup-repair实际一次进入，安装阶段已成功，之后Hook CAS前guard仍读取官方安装已退休的旧cache路径而FileNotFound；同SHA不可变副本和其它414原件保持。整体执行器失败不改判；hook-trust/native目录无，当前正确信任值形成机制未归因。原d10首次guard的RuntimeError及更早launcher错误也按原结果保留，不由当前后态反推。目标已正确，不再安装、授信或复活旧cache求绿。授权消费、POSTSTATE-FACTS、CURRENT-CONFIG及资源回执在accord-update09-poststate-reconcile-20261004-01和原startup-repair；完整旧工序见[cb95固定记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/cb95a53c4ed0ae34a07c002183e209d291e0a660/docs/operations/CONTINUATION.md)，不是待执行步骤。
 
 ## 剩余主线与当前切片
+
+当前工序优先已按用户澄清转到Skills系统动态按需自动协调未验链路：人不点名，协调者按实际需求代选；explicit-only组件走真实支持的显式承载，不能把原生隐式匹配当所有Skill必需，也不改第三方false政策或调用停用项。先核当前inventory/policy、真实选者、target控制、调用承载与首依赖动作前指导，之后核实际结果/反馈。已有工作簿与前置fileRead样本保留，不代验native explicit-only激活或完整W02；全部17scope/12case/F-A保持。尚未派发的泛化guide准备已superseded保原件，可选性能和一般源调查不抢占此项。
+
+当前新调用者离线构建及独立复审已闭：保留原候选，在新派生副本修正异步发现后的来源漂移、关闭期失败/末条用量遗漏、当前目标模型reroute漏判及父Python导入缓存。五项Node反例与原导入副作用保留；修后26项Node、5项Python及零缓存纯导入通过，独立源码复查关闭四项原发现。材料在私有accord-system-skill-coordination-20261005-01。作者源/false策略/受管别名与三个业务保护源保持，没有真实AppServer、模型或业务派发；对应两文件integration准入修正尚未实现。下一仅补必要协议/写入网络期待值及实际预算绑定：240/900为配置分配，实际工作截止min(启动+1140,owner当时+900)，外层收尾1365/释放1440；2700未由该程序强制覆盖Root后置QA，不能称全程硬限。未成熟不申请执行许可。名称不代替Skill来源/适用职责，Stop事件不代替处理器身份，已有仲裁/去冗余职责不因同名而删改第三方。
+
+上述配置源核已闭：固定0.160九份必要来源及字段映射经Root哈希/关键段复核；本轮显式workspace-write覆盖全局模式，关闭业务网络并显式排除两种临时目录额外授权，ACK额外writableRoots仅两任务目录，cwd仍隐含可写且不能当两文件ACL。未知现场约束由实际全对象ACK拒绝门处理，不从回执生成期待。Root后置QA已准备固定Python全类命令与现Job helper边界，8项纯stub经Root复核；共同起点及outer SHA连接仍未接线、没有实际配置/QA执行。下一只在新有限派生中整合已审字段与真实起点/QA接口，保原7文件；成熟包及对应实际许可前不派发、不重旧业务。两个source写者均已完成。
+
+该离线整合和静态前绑现已闭：新executor-final/clock/outer/QA接口在独立16文件冻结包中完成，Root28+11+13纯控制复核及独立耦合审查限定源码通过；原owner及所有旧失败保持。新静态提案填28源SHA、184guard/244完整workspace成员及现装25成员，Root实际shape/源哈希/默认未授拒绝读回均核。新版readonly oracle修正同一管理器logical/canonical作者路径误拒，Root仅文件门和AST核，未执行业务。可审TASK-READY.md在同一私有根，本轮一次SDK/Astra-high源码修复及后置copy QA/oracle的新权限已呈请、尚未收到；新Trust/安装/主模型/Cloud/发布不在申请内。实际业务、Skill正文采用、资源退出和W02仍未验；不把52pure或准备用量上限当通过。批准后只刷新当前input/逐效果权限，再以同连接真实库存/完整ACK为门派发一次；Root先审独立copy结果再整合main。
 
 源头可满足性核对已闭：“至少一个完整同episode”与按需/健康原生充分承担可以兼容，不能把按需扩大为禁止透明、有正当目的的恢复验收。具体错误是已结束的一次性词表/concept/stateclient仍被要求成为当前必过实例；三者都硬绑旧caller/SHA/attempts1，原源/预算/许可/失败保持。已将三个活动对象转历史，0df声明、对象/定义摘要及原case文件完全保全，其它12case指纹保持；17scope、必要职责与所有门槛未减。当前无case范围由4到6，新增dynamic-model-routing与system-integration，仍阻断必要功能与组合；全scope共同案例和独立后果还须实际完成。源审、固定前态、4项保全/负向验证及组合回归在accord-ended-case-disposition-20261005-01。不重开旧实例，不把移出、结构或新报告当通过。
 
