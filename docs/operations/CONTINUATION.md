@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-10-05 · N33-20260909 / r37。本页只保留当前责任、下一依赖和证据入口；实时 Git、原生输入和受影响资源优先于保存的观察。
+更新：2026-10-06 · N33-20260909 / r37。本页只保留当前责任、下一依赖和证据入口；实时 Git、原生输入和受影响资源优先于保存的观察。
 [计划与工序](PLAN-v3.3.md#当前推进顺序)拥有共识与路线，[基线](BASELINE-v3.3.md)、[验收](ACCEPTANCE-v3.3.md)和[机器投影](../../product/development.json)分别展开结果、判据与验证投影。旧全文见末尾固定提交，不作为当前步骤。
 
 ## 目标与权限
@@ -8,6 +8,7 @@
 Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享业务与仓库的唯一集成者。完成 3.3 必要功能、质量与完整验收后，按既有条件授权发布 3.3.0；目前没有发布资格。必要实现、修复、检查、提交和推送已授权。进度算到正式发布后态，之后传播、部署和治理不计入。
 
 - 普通“继续”和插话不取消原目标、不启 Plan/Goal、不解除真实暂停。保持用户主模型与模式；必要子代理按任务独立选择并由 Root 验收。
+- 2026-10-06用户澄清的调整覆盖整个Accord的判断、假设、Skills、MCP、Hooks、工序与验收，不仅是Stop或客户端更新。沿当前计划和机器投影已有的动态修订规则，保持价值方向、权限、真实性和必要质量；方法、职责分解及案例映射可按实际证据和对应权限修订、替换或退役。需求不预设合理，单轮不必闭环；多轮须有具体可行且已授权的下一动作。只重核受影响依赖，不逐轮强制全审，也不以机制失败降低原判据。当前17/12/13是事实映射，不是永恒数量或完成率。
 - 子模型/推理强度按当前模型、账户、派发接口支持、用户限制和任务需要选择；不固定4档、6档或统一继承主代理。未显式配置时宿主可能继承，custom agent配置也可能覆盖请求，须核真实逐轮配置。已有Sol/medium、Luna/high、Astra/medium及新Astra/high实录；不把配置差异当最优选择或全入口自动生效。当前guide及运行时没有固定档数，不为此增加路由服务或同义规则。
 - 2026-10-05用户允许充分使用当前项目已有原生订阅模型与必要并行，不因配额顾虑压缩必要验证。本轮两阶段新普通任务和独立审查在该权限内；它不新增账户、数据、安装/信任、主模型/模式或取消路线的权限。
 - 3.3 只保留已选本地 OpenAI 适配。已取消的 Cloud 候选、模式、验收项和专用准备已清除，不再调查或执行；账户界面两草稿不可删除，用户允许留置，它们不是产品工序或发布前提。未来是否适配另议。
@@ -18,12 +19,18 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 ## 当前事实
 
+2026-10-06中断接续及系统影响核对已完成：原后置QA准备turn中断且没有产物目录，已在新私有目录恢复源码准备。当前薄核/协调入口、PLAN r37及development的changePolicy/coverageRule已有可质疑、检验和演化职责；本次不新增同义全局规则、服务或无现场反例的Stop实现。实际误门属于私有QA调用者：授权不能被最后一句讨论覆盖，failed/exit1终态不能冒成功或一律当未收束，Root父报告与其它效果分开；v3定向修源和原失败均保。新POST-DELIVERY-QA/v1候选14文件、17源引用和四实物SHA经Root复核，独审30纯测试通过；work600/close660/Root720实参核对，默认未授，未运行软件矩阵、未建实际binding/anchor/qa-run。具体新后置软件验收范围在私有POST-DELIVERY-QA-READY.md；运行前须对应新许可、最新输入/暂停撤权、单写者及真实资源条件。它仅可验证既有实物，不补原episode的时序、自主协调或完整系统通过。未改规范、定义、包及已绑定判据，因此本次只更新受影响接续，基线/计划修订号/验收/机器投影保持；新证据改变这些依赖时再同步。
+
+2026-10-06 本次已授 native UTF8 实际业务已结束，整体验收保持 HELD：fresh worker/turn `01a10d22-256f-7a53-84d1-6993db5cea0d`/`01a10d22-26fe-76a1-a3e1-57322de25336` 的真实上下文为 Sol/medium。Root代选原文在首次业务写前实际读取，预定TDD先red后green，12测试与positive导出exit0；Root回读四文件SHA、stdlib代码/用法、29原件SHA/mtime不变，官方idle/completed，源在原S+507.196自然结束。原始source/metadata/官方完成/raw与Root判定在NATIVE-ACTUAL-RESULT.json/md。v2错误把授权绑定最新一句prompt，跟进Hook讨论没有撤权却触发阻断；TDD失败终态和已授权Root父报告也需窄类型区分。新v3按当前receipt保全exact历史许可/最新暂停撤权照核、失败不冒成功、父报告限Root，47pure及独审通过，原源/RED保。source修正与审查错过QA最晚S980（work1100/minimum120），Root未建actual QA binding/anchor、未运行4/92/19 programme oracle；S+1194.642记录原窗未通过，不重计S或追加attempt。四实物/local12tests只是部分交付证据，不关W02/W08/13/F-A/发布。一次许可已消费，保独立QA未完责任，后续仅据既有实物准备明确后置验收范围，不重放源业务、不改旧失败定义。用户最新要求把Stop Hook按需改进纳入，需求合理性/可行性和多轮阶段闭环须保；不能把全项目未完当永久续轮或把一轮必闭合推广为通用规则。
+
+2026-10-06 ordinary-native UTF8 前绑的保全前态（该阶段已闭，后续授权与实际后态以上段为准）：原需求/29原件/4+92+19 oracle不改，Root明确代选Implement；author6d3f/8970、当前user配置bd6b与官方显式策略分别核，wholeHostEnabled/nativeActivation仍unknown，实际disabled/denial停，不填全host true。真实source-preparer task/turn/Sol-high、官方read_thread和scoped原始rollout仅格式来源，不代future medium业务；原生实际读取采用及工具收束需本episode取得。新native QA复用generic programme/WindowsJob并绑定真实native入场，未走SDK gate。v1独审真反例发现QA尝试后异常虚报未启动及brief过宽enabled/CLI禁令；新v2按phase保unknown/raw，限定scoped明确采用，允许离线Python而禁止新增Codex运行路线。作者/独审/Root各36pure通过、默认真实拒绝未授、18v2/旧v1/323既存/29原件保持；actual worker/四产物/QA/bindings/anchor/S均未产生。具体一次1200窗口与source840/900、QA1100/1140及Root判据在私有TASK-NATIVE-READY.md，动态回执只获准后取得。原源码/RED/SDK held/旧授予失败保，17/12/13/F-A/所有验收底线不晋；不得把配方或文本采用冒native激活、源码通过冒业务完成。当前仅本页更新，机器投影/基线/验收资格未改变。
+
 | 对象 | 已核事实及限制 |
 |---|---|
 | Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
 | 源码候选 | `3.3.0-dev.1+codex.20261005005348`，25文件/SHA `d2ce59c2135d2f3ece308929e10229e446f778ab97f9c73053947dd49edbd848`；本次只补现有生命周期Skill641字节及manifest版本，Hook/MCP/运行时/Meta原文保持。前候选8cb/20261004121454的CI37202339243已通过；新源在测试修正后的精确75ce7b4d/CI37221366079已11/11通过，未本机安装或行为验收。原现装24fa的[CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功；新旧身份不互代。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
-| 源码 CI | 最新记录`a29320bf`/[CI37254227626](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37254227626)与性能修正`1750168e`/37242988258均按11个job精确回读success；`0263ea94`/37236290303、`0dfb87f4`/37232182046与准入保护`4fc85088`/37229271048也均11/11成功。后续变更不冒充这些精确SHA托管通过。旧`fd6b6f5e`/37208099935及`6f5d2f21`/37216493190的fixture失败、`c30b32ab`/37219463927失败保持，不追认；75ce修正及更早已核CI保原提交成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
+| 源码 CI | 新源码`4dd1f0ab`/[CI37305239851](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37305239851)已按精确SHA回读11/11success；原记录`a29320bf`/[CI37254227626](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37254227626)与性能修正`1750168e`/37242988258均按11个job精确回读success；`0263ea94`/37236290303、`0dfb87f4`/37232182046与准入保护`4fc85088`/37229271048也均11/11成功。后续变更不冒充这些精确SHA托管通过。旧`fd6b6f5e`/37208099935及`6f5d2f21`/37216493190的fixture失败、`c30b32ab`/37219463927失败保持，不追认；75ce修正及更早已核CI保原提交成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
 | 功能资格 | 17 必要 scope、12 活动 case；另三结束固定定义/失败留在历史。13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
 声明集合/ID 映射的复用摘要已只在副本规范化，原 definition 身份、输入和有序业务数组保持。七项定向、三项既有集成回归及三静态检查通过；该缺陷族已闭，不继续泛扩。此前交接释放未知的有限恢复修复也已集成，固定传输/SQLite 回归不代验普通自主交接或完整 A05/A08。
@@ -57,6 +64,16 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 普通仓库integration源码修复随后已闭：未来完整系统案例复用现有selected subject/mode校验、pending拒绝和适用性来源指纹；缺绑定不得准入。历史未含新字段的三个结束SDK定义保原摘要，合法集合重排只在reuse副本规范化，业务动作顺序仍具意义。Root独立源oracle六项原缺口转正；首候选完整51项有一处历史KeyError，独审另发现合法重排误失效，原失败均保。定向纠正后最终52项完整回归通过（538.827秒），独立复审无必改，三静态有效；不是旧SDK重跑、原生Skill采用或F/A通过。
 
 该两文件修复净增7805字节，实测3142774；本阶段源码容量从3300000调至3310000，余167226高于原5%所需165500。184文件、36000主指令、17scope/12活动case/13未验职责及旧预算/失败保持，原12活动与3结束定义逐项一致；包d2ce、现装24fa、作者源/策略与主模型不变。原件、两版补丁/失败、Root独立副本QA与复审在accord-integration-binding-20261005-01。下一回到系统自动协调的实际正向连接与同episode完整交付，不用局部源码通过替代它们，也不复用已消费SDK许可。
+
+以下四段保留UTF8实际派发前的源码准备观察，其中“尚未启动”“空WORKSPACE”“下一步”等只描述当时状态，不是当前待执行指令。当前实际四产物、原窗失败及新后置验收依赖以本页“当前事实”为准；原SDK路线保持HELD，不重放。
+
+W02当时选定的代表任务为明示合成的UTF-8字节区间批注导出器，以发布前维护者验收为消费者目的，不预设生产缺陷、不为Skill或切模型制造需要。新私有输入/软件合同与Root执行准备状态分开冻结；手算4记录与独立前缀枚举一致，92合法区间及19拒绝manifest已准备，29保护件SHA/mtime核。只是fixture/oracle准备，programme、SDK和业务模型尚未启动，没有新增正式case、源码功能通过或whole13/A08结论。已知SDK原生input数组及ownerRequest seam保源级事实，当前实际actor/模型/启用政策/承载/期限/用量/退出及新权限仍未绑；原一次source失败/未知效果和消费许可不变。资料在accord-w02-w08-prospective-20261005-01，原not-selected维护路线与后来透明代表任务取舍分别保留；相关旧resource scope限额不是这项W02局部提案的通用预算，不能复制旧grant或把计划时长当enforcement。下一只完善最小执行绑定，成熟之前不派发或申请半成品许可。
+
+该执行绑定source段目前HELD：仅纯owner检查和硬拒绝入口，作者及Root各自8 Node/1 Python纯测试通过，不含transport、SDK/model或live adapter；假写granted也不能启动。明确SDK work840/close900与整个拟定1200、QA独立Job/1140界限的区别，旧helper885升级不能冒840强杀。新来源核出recorder支持明确新SQLite路径，checkpoint支持仅owned-process环境YIYUAN_ACCORD_TASK_STATE_DIR指向本任务目录；均只提案未应用。task-state实际actor/路径、当前controls/policy、Root QA具体入口/Job及真实beforeEffect/ticker接线尚缺；oracle禁读是权限/输入隔离及trace/code审查，未声称OS读取隔离，也不据其缺失增加强制ACL/账户门。29原件、21只读来源及空WORKSPACE保持，旧SDK/许可/故障不改。最小源码、source索引/日志、storage-binding-proposal和ROOT-BINDING-REVIEW在同私有根；下一只补QA和必要接线，不新增模拟服务或以纯函数通过宣布ready。
+
+真实source接线与独立QA接口现已闭合源码复审：SDK wire-v3接受session/connection/recorder真接口和单次bootstrap Job，Root QA-v2固定独立副本、generic raw命令/Job回执及4/92/19 oracle。原wrapper错误传播、异步actual-write漏当前门、全量hash后过期仍发、QA运行中/末端暂停和实际副本/oracle漂移都以具体反例修正，原v1/v2冻结源/RED与报告保留。Root独立14 Node+12 Python SDK/wrapper及8 QA纯检查通过；fixed SDK40/QA4源哈希及耦合独审无新must项，29原件/空WORKSPACE保持。写前期限与Job有限退出不当瞬时撤销或byte硬配额，Root人工审查耗原S1200而不强杀客户端；旧case/grant/时限不复用。后续静态装配结论见下段，4dd及CI11/11保持，无新功能或发布资格。
+
+UTF8静态装配段已闭：146份来源/25现装/29原件和默认未授拒绝先核；独审STATIC-01发现caller版本标签被误当实际宿主观察，且协议/schema/package未进入实际前门。在新的execution-pinned-source/qa-pinned-source完成最小派生：两guard真核二进制、两份包版本声明、固定协议源与schema；connection UUID授权后局部生成，不回填已hash配置；expected版本与未知actual版本分开。候选startup前两memory=false、SQLite仅child env，QA代码仅两locator变化。作者49、独审40、Root15项纯检查分别通过，原93文件与29原件保持；纯检查范围不当实际业务。正常native持久态以有限类别/根/操作/保护对象绑定，不要求提前枚举随机UUID文件，也不授写全部home。Windows本地12路径有限核对和固定配置源证明动态managed要求仍可覆写私有SQLite/认证存储，所以这条额外SDK隔离路线仍HELD；不是W02/UTF8全部路线的普遍必要门，不要求人改设置或绕宿主管理。普通native明确协调读取/采用是条件可行替代，仍须核当前启用/作者显式政策/目标与实际采用，并更换QA入场事实，不能冒native activation或伪造SDK回执。所有actual cfg/grant/run/S及四业务产物均无，anchor=null；来源/反例/报告在accord-w02-w08-prospective-20261005-01。下一仅绑定足够的有效路线，不继续泛查远端策略或重跑旧SDK；17/12/13/F-A不晋。
 
 源头可满足性核对已闭：“至少一个完整同episode”与按需/健康原生充分承担可以兼容，不能把按需扩大为禁止透明、有正当目的的恢复验收。具体错误是已结束的一次性词表/concept/stateclient仍被要求成为当前必过实例；三者都硬绑旧caller/SHA/attempts1，原源/预算/许可/失败保持。已将三个活动对象转历史，0df声明、对象/定义摘要及原case文件完全保全，其它12case指纹保持；17scope、必要职责与所有门槛未减。当前无case范围由4到6，新增dynamic-model-routing与system-integration，仍阻断必要功能与组合；全scope共同案例和独立后果还须实际完成。源审、固定前态、4项保全/负向验证及组合回归在accord-ended-case-disposition-20261005-01。不重开旧实例，不把移出、结构或新报告当通过。
 
