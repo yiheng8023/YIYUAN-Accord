@@ -2941,6 +2941,73 @@ fs.renameSync = function(from, to) {
         self.assertEqual(self.event("Stop", stop_hook_active=True)["decision"], "block")
         self.assertNotIn("decision", self.event("Stop", stop_hook_active=True))
 
+    def test_stop_uses_declared_output_meaning_and_explicit_next_action(self):
+        self.bind()
+        output = self.work / 'summary.json'
+        output.write_text('{"total":50,"note":"pending"}', encoding='utf-8')
+        self.assertEqual(self.event('Stop')['decision'], 'block')
+        # A fresh raw fingerprint is still reported; formatting and key order
+        # do not supply new JSON content for another automatic attempt.
+        before = self.status()['inspection']['outputs'][0]['current']['sha256']
+        output.write_text('{\n "note":"pending", "total":50\n}', encoding='utf-8')
+        after = self.status()['inspection']['outputs'][0]['current']['sha256']
+        self.assertNotEqual(before, after)
+        self.assertNotIn('decision', self.event('Stop', stop_hook_active=True))
+        output.write_text('{"total":51,"note":"pending"}', encoding='utf-8')
+        self.assertEqual(self.event('Stop', stop_hook_active=True)['decision'], 'block')
+        self.assertNotIn('decision', self.event('Stop', stop_hook_active=True))
+        self.bind(nextAction='Use the changed source to correct the remaining total.')
+        self.assertEqual(self.event('Stop', stop_hook_active=True)['decision'], 'block')
+        self.assertNotIn('decision', self.event('Stop', stop_hook_active=True))
+
+    def test_stop_keeps_byte_requirements_and_unknown_json_observations(self):
+        for contract in ('exists', 'bytes', 'malformed', 'nonfinite', 'input'):
+            with self.subTest(contract=contract):
+                self.session = 'stop-observation-' + contract
+                self.event('UserPromptSubmit', prompt='A new isolated bound observation: ' + contract)
+                output = self.work / 'summary.json'
+                output.write_text('{"total":50}', encoding='utf-8')
+                predicate = {'path': 'summary.json'}
+                if contract != 'exists':
+                    predicate['json'] = {'/total': 60}
+                if contract == 'bytes':
+                    predicate['sha256'] = hashlib.sha256(b'{"total":60}').hexdigest()
+                if contract == 'malformed':
+                    output.write_text('{broken', encoding='utf-8')
+                if contract == 'nonfinite':
+                    output.write_text('{"total":1e400}', encoding='utf-8')
+                self.bind(outputs=[predicate, {'path': 'details.csv'}])
+                self.assertEqual(self.event('Stop')['decision'], 'block')
+                if contract == 'input':
+                    (self.work / 'source.json').write_text('{ "units":60 }', encoding='utf-8')
+                elif contract == 'malformed':
+                    output.write_text('{broken ', encoding='utf-8')
+                elif contract == 'nonfinite':
+                    output.write_text('{ "total":1e400 }', encoding='utf-8')
+                else:
+                    output.write_text('{ "total":50 }', encoding='utf-8')
+                repeated = self.event('Stop', stop_hook_active=True)
+                if contract == 'exists':
+                    self.assertNotIn('decision', repeated)
+                else:
+                    self.assertEqual(repeated['decision'], 'block')
+
+    def test_nonfinite_json_output_does_not_match_a_null_predicate(self):
+        self.bind(outputs=[{'path': 'summary.json', 'json': {'/total': None}}])
+        (self.work / 'summary.json').write_text('{"total":1e400}', encoding='utf-8')
+        self.assertFalse(self.status()['inspection']['outputs'][0]['matched'])
+        self.assertEqual(self.event('Stop')['decision'], 'block')
+
+    def test_deep_unrelated_json_keeps_shallow_predicates_and_raw_retry(self):
+        self.bind()
+        output = self.work / 'summary.json'
+        deep = '[' * 4000 + '0' + ']' * 4000
+        output.write_text('{"total":50,"nested":' + deep + '}', encoding='utf-8')
+        self.assertEqual(self.status()['inspection']['status'], 'incomplete')
+        self.assertEqual(self.event('Stop')['decision'], 'block')
+        output.write_text('{ "total":50,"nested":' + deep + '}', encoding='utf-8')
+        self.assertEqual(self.event('Stop', stop_hook_active=True)['decision'], 'block')
+
     def test_pause_does_not_reconcile_an_old_output_contract_with_new_requirements(self):
         self.bind()
         self.write_outputs()

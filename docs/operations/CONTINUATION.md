@@ -19,6 +19,12 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 ## 当前事实
 
+2026-10-06用户核对Stop、Skills与自主择时的状态后，Root纠正路线：已准备但未授的“两子任务/三阶段”只验证受控子范围，不能证明自主触发，暂缓该方案且不再以它等待用户；保留全部源准备、不执行模型业务，不属于用户暂停主目标。原生隐式Skills在备件实例有实证，Root明确代选/正文采用也有有限结果；explicit-only的系统动态协调、禁用/变策略与全部入口仍未闭。自主择时当前未验收通过，已有context/proposal/session连接不等于普通Desktop已具备自主主线程迁移，不能把受控接管或更多准备文件当突破。
+
+同段Stop风险已从静态假设转为隔离真实反例：JSON值50不变，仅空白/key顺序变化会再次block。源码现按绑定含义去重：JSON-only以完整解析内容比较，exists-only只看存在；显式SHA、保护输入和未知/畸形JSON保字节，结果/下一动作是caller陈述而非权限或语义进展证明。只改变续轮判重，原始SHA读回、匹配/漂移/暂停/新输入及CanContinue门保持。并拒绝溢出非有限JSON数误匹配null；独审初版发现递归reviver使4000层合法JSON检查失败，已改显式栈遍历、编码深度未知保raw，原P2与RED不抹去。初次164、修后四定向及最终完整165测试均通过，独审11纯断言无剩余P1/P2；新托管结果另核；这是源码修正，现装24fa尚未采用。
+
+本次源候选为20261005202125，25成员/SHA c31792d0f4ad455d490c656f01615885531de6ad6bf292a7db2fb310eb8738c6，只更新已有task-checkpoint两份镜像、manifest和测试/当前身份；没有新runtime、服务、第三方或主模型变动。必要源码/回归容量上限3310000→3320000，184文件/36000主指令与5%余量、全部17/12/13和F/A底线保持。前源d2ce/05348及精确5c/CI37360605669的11/11成功保原提交，不外推新修正托管或行为通过。复现/原版补丁/P2/修后审查及测试材料在accord-stop-progress-repro-20261006-01。随后直接核“源代理判断→主动proposal→真实接管→首次续作”的关键链，不重做已闭业务或一般入口盘点。
+
 2026-10-06新授权POST-DELIVERY-QA/v1已一次执行并由Root判定软件验收通过：两个正向命令分别匹配4手算/92边界，19拒绝均exit1且输出字节不变；共21命令及owner自然退出、readerStopped、Job0，programme15.338秒，Root161.647秒内完成新720秒判定。Root核实际argv/原始回执摘要、原4记录、copy写集/26输入/escape sentinel，29原件SHA/mtime、四原产物与419冻结准备源不变。中间正向输出由固定独立checker现场比对，文件复用而未逐份留存；保实际raw及该证据限制，不重跑补材料。新许可消费、资源已收束、原S980/1200未启动QA失败保；这是既有软件正确性的新后置结论，不补原episode协作、自主择时、native激活、全政策或W02/W08/13/F-A/发布资格。结果在私有post-delivery-qa-preparation/ROOT-POST-DELIVERY-RESULT.json及21命令/owner原件；机器仅追加有限观察，其它判据保持。
 
 后置QA准备阶段的保留观察（该阶段已闭，授权和执行后态以前段为准）：2026-10-06中断接续及系统影响核对已完成，原后置QA准备turn中断且没有产物目录，已在新私有目录恢复源码准备。当前薄核/协调入口、PLAN r37及development的changePolicy/coverageRule已有可质疑、检验和演化职责；本次不新增同义全局规则、服务或无现场反例的Stop实现。实际误门属于私有QA调用者：授权不能被最后一句讨论覆盖，failed/exit1终态不能冒成功或一律当未收束，Root父报告与其它效果分开；v3定向修源和原失败均保。新POST-DELIVERY-QA/v1候选14文件、17源引用和四实物SHA经Root复核，独审30纯测试通过；work600/close660/Root720实参核对，当时默认未授、未运行软件矩阵、未建实际binding/anchor/qa-run。具体范围在私有POST-DELIVERY-QA-READY.md；运行前须对应新许可、最新输入/暂停撤权、单写者及真实资源条件。它仅可验证既有实物，不补原episode的时序、自主协调或完整系统通过。未改规范、定义、包及已绑定判据，本阶段只更新受影响接续；新实际观察仅补机器事实，不改基线/计划修订号/验收资格，依赖有实质改变时再同步。
@@ -30,7 +36,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | 对象 | 已核事实及限制 |
 |---|---|
 | Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
-| 源码候选 | `3.3.0-dev.1+codex.20261005005348`，25文件/SHA `d2ce59c2135d2f3ece308929e10229e446f778ab97f9c73053947dd49edbd848`；本次只补现有生命周期Skill641字节及manifest版本，Hook/MCP/运行时/Meta原文保持。前候选8cb/20261004121454的CI37202339243已通过；新源在测试修正后的精确75ce7b4d/CI37221366079已11/11通过，未本机安装或行为验收。原现装24fa的[CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功；新旧身份不互代。 |
+| 源码候选 | `3.3.0-dev.1+codex.20261005202125`，25成员/SHA `c31792d0f4ad455d490c656f01615885531de6ad6bf292a7db2fb310eb8738c6`；本次修正已有Stop helper的有效观察判重及JSON有限数检查，原始诊断/保护门保持，未本机安装或行为验收。前05348/d2ce、75ce及5c已核CI只保原提交成功，不外推本候选。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
 | 源码 CI | 新源码`4dd1f0ab`/[CI37305239851](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37305239851)已按精确SHA回读11/11success；原记录`a29320bf`/[CI37254227626](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37254227626)与性能修正`1750168e`/37242988258均按11个job精确回读success；`0263ea94`/37236290303、`0dfb87f4`/37232182046与准入保护`4fc85088`/37229271048也均11/11成功。后续变更不冒充这些精确SHA托管通过。旧`fd6b6f5e`/37208099935及`6f5d2f21`/37216493190的fixture失败、`c30b32ab`/37219463927失败保持，不追认；75ce修正及更早已核CI保原提交成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
 | 功能资格 | 17 必要 scope、12 活动 case；另三结束固定定义/失败留在历史。13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |

@@ -291,7 +291,7 @@ function validateOutputCheck(output) {
   for (const key of Object.keys(output.json || {})) pointer({}, key);
 }
 
-function inspect(where, state) {
+function inspect(where, state, progress = null) {
   const unresolved = savedUnresolved(state);
   const inputs = state.inputs.map((input) => {
     const current = fingerprint(where.root, input.path);
@@ -299,12 +299,36 @@ function inspect(where, state) {
   });
   const outputs = state.outputs.map((output) => {
     const {current, bytes} = snapshot(where.root, output.path);
+    let relevant = current;
+    if (!output.sha256 && !output.json) relevant = {present: current.present};
     let matched = current.present;
     if (matched && output.sha256) matched = current.sha256 === output.sha256;
     if (matched && output.json) {
       try {
+        let finite = true;
         const parsed = JSON.parse(bytes.toString('utf8'));
-        matched = Object.entries(output.json).every(([key, expected]) => {
+        const pending = [parsed];
+        while (pending.length && finite) {
+          const value = pending.pop();
+          if (typeof value === 'number') finite = Number.isFinite(value);
+          else if (value && typeof value === 'object') {
+            for (const key of Object.keys(value)) pending.push(value[key]);
+          }
+        }
+        if (progress && !output.sha256 && finite) {
+          // Only the declared JSON meaning participates in retry suppression.
+          // Keep the original raw fingerprint for status, byte contracts and
+          // drift checks; unsupported numbers/depth retain the raw signal.
+          try {
+            const encoded = JSON.stringify(parsed, (_key, value) => {
+              if (typeof value === 'number' && !Number.isFinite(value)) throw new TypeError('nonfinite-json');
+              return value && typeof value === 'object' && !Array.isArray(value)
+                ? Object.fromEntries(Object.keys(value).sort().map((key) => [key, value[key]])) : value;
+            });
+            relevant = {present: true, jsonSha256: sha(encoded)};
+          } catch (_) { /* Unknown JSON meaning keeps its byte observation. */ }
+        }
+        matched = finite && Object.entries(output.json).every(([key, expected]) => {
           const found = pointer(parsed, key);
           return found.present && canonical(found.value) === canonical(expected);
         });
@@ -313,6 +337,7 @@ function inspect(where, state) {
         else throw error;
       }
     }
+    if (progress) progress.set(output.path, relevant);
     return {path: output.path, current, matched};
   });
   // Hashes and predicates describe one read per file. Recheck after collection
@@ -1217,9 +1242,15 @@ function handleHook(event) {
     };
     if (!state || state.mode !== 'active' || !state.canContinue || input.interrupted || needsInput(input) ||
         state.epoch !== input.epoch) return {};
-    const result = inspect(where, state);
+    const progress = new Map();
+    const result = inspect(where, state, progress);
     if (result.status === 'verified-local') return {};
-    const key = sha(canonical(result));
+    // Caller result/action changes may justify a different next step, but are
+    // neither independent progress proof nor renewed authority.
+    const key = sha(canonical({schema: 'yiyuan-accord-continuation-progress/v1',
+      ...result, outputs: result.outputs.map((output) => ({...output,
+        current: output.stable ? progress.get(output.path) : output.current})),
+      result: state.result, nextAction: state.nextAction}));
     if (state.lastBlock === key) return {systemMessage:
       'Accord: required local results remain unmet with unchanged observations. Reassess the method or report the actual blocker; no further automatic retry was requested.'};
     const reason = `Accord continuation ${crypto.randomUUID()}: ${result.status}. ` +
