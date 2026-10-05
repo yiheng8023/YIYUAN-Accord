@@ -19,6 +19,10 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 ## 当前事实
 
+2026-10-06自主择时源链诊断已结束：已有owned source-session能承接真实proposal并驱动接管，固定provider试验不证明模型判断，普通Desktop主线程attach仍未建立。Root前轮重复分析造成长时间无有效执行，已关闭该诊断的自动续轮，保留主线而不重复调查。新选的实际结果是核对固定13243a73的七份发布材料，完整映射17必要范围/12活动案例、核证据与声明并提出下一步。私有accord-autonomous-live-20261006-01已具实际session调用者、Windows Job启动/退出连接、Root有限语义裁决及独立报告检查器；caller21、Python7、Node4场景、policy6、oracle3类离线检查通过，独审三项发现均修正。最终config.ready.json SHA f91281015e8ce814abdd668fb0a25b24f53e7a852725ee9e2b8992f346c29279绑定54源且默认未授，run未创建；不是模型行为或完整验收通过。下一是该具体一次执行的权限与实时条件核对，不再新增一般来源准备。原始需求不命令交接，正常完成与真实自主proposal分开判；复用既有trusted主仓的只读工作目录，无新信任、安装或用户设置变动。源runtime132与现装24fa各自绑定，不冒整包当前采用。
+
+同段版本核对：当前桌面metadata为gpt-6-astra/0.160.0/default；独立CLI的两个已安装npm包分别为0.160.1与0.160.1-win32-x64，新的可执行文件SHA已绑定，尚未执行它来声称运行期版本/设置。源修复132的CI37370376950原attempt1为4success/7cancelled，取消项无runner/步骤，原因未知；已仅重跑未成功项。attempt2最新回读10/11success，macOS/Python3.14仍运行，未宣布全部通过。准备材料与旧失败保留，17/12/13、F/A及发布资格不变；当前只更新接续和试验事实，不改规范、机器判据或包身份。
+
 2026-10-06用户核对Stop、Skills与自主择时的状态后，Root纠正路线：已准备但未授的“两子任务/三阶段”只验证受控子范围，不能证明自主触发，暂缓该方案且不再以它等待用户；保留全部源准备、不执行模型业务，不属于用户暂停主目标。原生隐式Skills在备件实例有实证，Root明确代选/正文采用也有有限结果；explicit-only的系统动态协调、禁用/变策略与全部入口仍未闭。自主择时当前未验收通过，已有context/proposal/session连接不等于普通Desktop已具备自主主线程迁移，不能把受控接管或更多准备文件当突破。
 
 同段Stop风险已从静态假设转为隔离真实反例：JSON值50不变，仅空白/key顺序变化会再次block。源码现按绑定含义去重：JSON-only以完整解析内容比较，exists-only只看存在；显式SHA、保护输入和未知/畸形JSON保字节，结果/下一动作是caller陈述而非权限或语义进展证明。只改变续轮判重，原始SHA读回、匹配/漂移/暂停/新输入及CanContinue门保持。并拒绝溢出非有限JSON数误匹配null；独审初版发现递归reviver使4000层合法JSON检查失败，已改显式栈遍历、编码深度未知保raw，原P2与RED不抹去。初次164、修后四定向及最终完整165测试均通过，独审11纯断言无剩余P1/P2；新托管结果另核；这是源码修正，现装24fa尚未采用。
@@ -37,7 +41,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 |---|---|
 | Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
 | 源码候选 | `3.3.0-dev.1+codex.20261005202125`，25成员/SHA `c31792d0f4ad455d490c656f01615885531de6ad6bf292a7db2fb310eb8738c6`；本次修正已有Stop helper的有效观察判重及JSON有限数检查，原始诊断/保护门保持，未本机安装或行为验收。前05348/d2ce、75ce及5c已核CI只保原提交成功，不外推本候选。 |
-| 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
+| 宿主 | 当前桌面原生 metadata 为 `gpt-6-astra`、0.160.0/default；独立CLI安装包0.160.1分别记账；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
 | 源码 CI | 新源码`4dd1f0ab`/[CI37305239851](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37305239851)已按精确SHA回读11/11success；原记录`a29320bf`/[CI37254227626](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37254227626)与性能修正`1750168e`/37242988258均按11个job精确回读success；`0263ea94`/37236290303、`0dfb87f4`/37232182046与准入保护`4fc85088`/37229271048也均11/11成功。后续变更不冒充这些精确SHA托管通过。旧`fd6b6f5e`/37208099935及`6f5d2f21`/37216493190的fixture失败、`c30b32ab`/37219463927失败保持，不追认；75ce修正及更早已核CI保原提交成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
 | 功能资格 | 17 必要 scope、12 活动 case；另三结束固定定义/失败留在历史。13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
