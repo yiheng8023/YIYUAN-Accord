@@ -2536,3 +2536,15 @@ Root最终回读45份原输入/政策/现装/阶段保留件，原件哈希及mt
 评审建议保留retained_scoped_fixture的已有私有Interface，六调用760/784/850/873/897/923及两待合并片段360字节毛上界由Root逐span核实；Goal回执/清理与保留读取失败的语义不同，额外配置层净收益不足。Root据此不修改源码，不把无效修改计成进展。冻结program的960000是历史目标，当前development为3300000；Root补充当前源身份而不改原三冻结件。正文/业务source/报告/配置与root-review保于accord-test-fixture-preparation-20261005-01。
 
 本例支持真实协调者代选、指导在依赖动作前取得及有源判断采用；不提供explicit-only/disabled/变政策、全部入口、完整W02/F-A或发布证明。只追加机器localObservations与对应接续，十二case的definition、全部必要范围/职责/质量/场景、候选与现装身份及原失败保持；不修订基线、计划和验收判据，也不重跑该源评估或旧业务。
+
+## 真实CI后果对比与有界纠偏（2026-10-05）
+
+1750168e/CI37242988258已按11个job全部success回读，托管责任闭合。Root为新需要的CI后果结果固定最近前态0263/37236290303与后态175的四份实际GitHub输入、成功身份/终态、第三方Implement原源及独立数值oracle；只授权五份私有工具/测试/报告输出。它不是旧retro、词表、排考或SDK实例重放。Root按当前可用性和任务需要请求Astra/medium；原生01a109bc的turn_context8同值，主模型/模式保持。
+
+当前官方0.160源码已核：[frontmatter解析](https://github.com/openai/codex/blob/rust-v0.160.0/codex-rs/skills/src/parser.rs)字段没有disable-model-invocation；[显式选择](https://github.com/openai/codex/blob/rust-v0.160.0/codex-rs/skills/src/selection.rs)按enabled lookup解析结构化Skill及文本$提及、跳过disabled_paths。[官方文档](https://learn.chatgpt.com/docs/build-skills)仍区分false隐式政策与停用。来源不足时不能从旧frontmatter字段或文件存在推启用/禁止，实际宿主行为另核。原两个loader路径404及旧路径资料保持为取源失败，不作能力不存在判断；以已解析tag与现skills/src/parser/model/invocation/selection源为本次窄依据，不执行任何示例或修改政策。当前配置only一旧PDF路径disabled，未改变第三方设置。
+
+Root真实受托选择Implement并供应文档支持的显式cue/精确路径，但原生启动未提供其正文；call14先读请求/正文与hash，output17得到完整正文，call26才读业务数据，42才写代码。原生消息封存不作独立明文证；已记录fileRead/实际TDD相容动作支持前置指导取得与结果，仍不冒native activation或完整explicit-only/disabled/变政策/全W02。输入大段初次被截断已以必需字段投影补核，原过程错误保留。
+
+原工具6测试方法（含23类拒绝等子用例）及唯一一次真实PythonCLI退出0；Root按源独立计算11对/9验证中位数，JSON/CSV一致。中位数1005→959秒、差-46秒、观察变化4.5771%，各job有升有降；新增测试和不同托管runner不构成严格因果或费用对照。Root按code-review两独立轴审查：Standards1为写失败残留新目录，Spec1为接受旧空/外来目录。冻结原件不改；Root-owned新派生只修目录拒绝/归属清理，原件新回归3拒绝断言失败，修后8方法5.892秒及最终2隔离guard0.396秒通过；派生真实CLI退出0，JSON/CSV/报告与原正确数值字节全等。两轴静态复查均关闭，不把Root救场追认原作者首次完整通过。
+
+初始工具不存在/校验缺失红例、原子用例目录复用错误、Root初patch定位失败（无写）与首红harness连带目录错误均保。原六保护路径SHA/mtime、五初产物与派生identity核；全部任务命令返回，范围限定OS观察未见本私有目录Python/Node，无全宿主归零声明。资料在accord-w02-ci-durations-20261005-01的inputs/protected/retained/Root派生/red-green/两轴reviews/nativeaudit/FINAL-RESULT。源码只追加localObservation与当前记录，全部十二case的definition、规范/预算/质量、17scope/F-A与包身份保持，不将私有工具加入分发或制造新服务；完整政策/目标控制与组合责任仍未验。

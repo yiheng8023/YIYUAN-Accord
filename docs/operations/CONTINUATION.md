@@ -23,7 +23,7 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 | Root 现装 | `3.3.0-dev.1+codex.20261003094159`；源 `24fa60e1833c39451648ee0ab3af7f7c7a0ef132`，25 文件/SHA `3862a07ccb34e6fc42a3d3d19bc2d41060029de7437fb4a0d1f6932c2b592171`。新包逐字节、登记/enabled及当前七项trusted_hash已核；当前Root和一个新原生只读子代理实际收到完整Meta。其它宿主/MCP实例及完整行为未验。 |
 | 源码候选 | `3.3.0-dev.1+codex.20261005005348`，25文件/SHA `d2ce59c2135d2f3ece308929e10229e446f778ab97f9c73053947dd49edbd848`；本次只补现有生命周期Skill641字节及manifest版本，Hook/MCP/运行时/Meta原文保持。前候选8cb/20261004121454的CI37202339243已通过；新源在测试修正后的精确75ce7b4d/CI37221366079已11/11通过，未本机安装或行为验收。原现装24fa的[CI37094406186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37094406186) 11/11成功；新旧身份不互代。 |
 | 宿主 | 本轮原生 metadata 为 `gpt-6.1-sol`、0.160.0/default；当前 effort/Fast 未独立观察，不继承旧轮配置。 |
-| 源码 CI | `0263ea94`/[CI37236290303](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37236290303)、上传依赖修正`0dfb87f4`/[CI37232182046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37232182046)与准入保护`4fc85088`/[CI37229271048](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37229271048)均已精确回读11/11成功。本轮历史快照读取优化另绑定提交后的精确CI，尚不继承这些结果。旧`fd6b6f5e`/37208099935及`6f5d2f21`/37216493190的fixture失败、`c30b32ab`/37219463927失败保持，不追认；75ce修正及更早已核CI保原提交成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
+| 源码 CI | 性能修正`1750168e`/[CI37242988258](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37242988258)已按全部11个job精确回读success；`0263ea94`/37236290303、上传依赖修正`0dfb87f4`/37232182046与准入保护`4fc85088`/37229271048也均11/11成功。后续观察记录不冒充该精确SHA托管通过。旧`fd6b6f5e`/37208099935及`6f5d2f21`/37216493190的fixture失败、`c30b32ab`/37219463927失败保持，不追认；75ce修正及更早已核CI保原提交成功。push按SHA独立分组，不取消旧有效运行。旧cb47原超时/attempt2成功及原因未知保持。 |
 | 功能资格 | 17 必要 scope、12 活动 case；另三结束固定定义/失败留在历史。13 职责仍 unverified，`selectionFinal`、`functionalCompletion`、`candidateEligible` 均 false。定义/安装/测试数不计功能通过数，不编总百分比。 |
 
 声明集合/ID 映射的复用摘要已只在副本规范化，原 definition 身份、输入和有序业务数组保持。七项定向、三项既有集成回归及三静态检查通过；该缺陷族已闭，不继续泛扩。此前交接释放未知的有限恢复修复也已集成，固定传输/SQLite 回归不代验普通自主交接或完整 A05/A08。
@@ -31,6 +31,8 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 历史快照校验的重复Git读取已作有界优化：只在当前校验scope复用已绑定的完整树与固定blob，保无scope/异常包名fallback、包根和非普通文件拒绝、字节/总量上限、原排序摘要及下一轮新鲜读取。原突变方法正文SHA保持，21次完整verify及全部断言通过；相同本机profiling条件下870.958→640.713秒，Git调用9487→5980。不是普通运行或全CI加速承诺。九项不同的缓存/边界/历史法律文件回归及三静态检查通过，独审无必改；原件、红例、错误的12调用预估及初次余量不足保留于accord-ci-performance-20261005-01。新增测试合并重复写法后，3300000字节上限及5%余量保持；分发包/现装/17scope/12case/F-A不改。下一回到仍缺的前置Skill取得/采用及完整组合结果，等待CI不阻断独立准备。
 
 普通维护源审补得有限前置连接：Root真实选择Codebase Design并供应精确locator/来源；新原生Sol/high在trace16读指导，20收到完整正文，26才读业务facts/source。评审按私有Interface深度及调用成本，建议保留已经复用六处的夹具；Root核source spans、360字节毛上界及Goal/保留失败的不同语义，确认不作无净收益改动。当前development3300000预算与旧program960000已分清，第三方/原件保持。该事实已入localObservations，资料在accord-test-fixture-preparation-20261005-01；它不是native activation、explicit-only/disabled/变政策或完整W02/F-A证明。此前Implement迟读与旧失败保持；下一针对仍缺的真实政策/目标控制和完整组合，不再笼统以未见前置正文阻断这条已观察路径。
+
+新真实CI对比结果已闭：Root前绑0263与175两次实际11-success输入及独立oracle，Astra/medium实现可复用离线Python工具、测试和JSON/CSV/报告。Root选择Implement并给支持的显式cue/精确路径，native14读请求与指导、17收到完整正文、26读数据、42才写代码；没有startup正文，故保native activation/完整explicit-only未知。原6测试及CLI通过，11行/9项验证中位数1005→959秒逐项独立匹配；托管变化非因果收益。两轴分别检出目录清理缺口与接受旧空目录，Root保原件另派生修正，原3红断言/修后8测试及真实派生CLI通过、结果全等，两轴复查关闭。六保护源SHA/mtime与原产物保持，范围限定Python/Node未见活进程。机器只追加有限观察，17scope/12case/F-A不晋；资料在accord-w02-ci-durations-20261005-01，不重跑该业务制造原生装载通过。
 
 ## 更新 09：有限采用对账已闭
 
