@@ -1688,10 +1688,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         case["qualityAxes"] = case["qualityAxes"][:1]
         self.assertEqual(admission_contract_errors(contract), [])
 
-    def lifecycle_binding_contract(self):
+    def lifecycle_binding_contract(self, scope_id='v33-codex-lifecycle'):
         contract = copy.deepcopy(self.contract)
         policy = contract['acceptance']['admission']
-        scope = next(row for row in policy['scopes'] if row['id'] == 'v33-codex-lifecycle')
+        scope = next(row for row in policy['scopes'] if row['id'] == scope_id)
         parent = next(row for row in policy['cases'] if row['scope'] == 'v33-admitted-entry-lifecycle')
         case = copy.deepcopy(parent)
         subjects = case.pop('subjectEntries')
@@ -1704,6 +1704,110 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     oracle='Synthetic source/selection binding only; not whole-host lifecycle adequacy or observations.')
         policy['cases'].append(case)
         return contract
+
+    def test_integration_rejects_incomplete_or_stale_selection(self):
+        from yiyuan_accord.admission import _entry_selection, admission_contract_errors
+        contract = self.lifecycle_binding_contract('v33-system-integration')
+        self.assertEqual(admission_contract_errors(contract), [])
+        for variant in ('missing-subject', 'missing-modes', 'missing-mode', 'unknown-mode', 'pending-mode',
+                        'missing-applicability'):
+            changed = copy.deepcopy(contract)
+            policy = changed['acceptance']['admission']
+            conditions = policy['cases'][-1]['conditions']
+            if variant == 'missing-subject':
+                conditions['subjectEntries'].remove('cx-sdk')
+                conditions['selectedModes'].pop('cx-sdk')
+            elif variant == 'missing-modes':
+                conditions.pop('selectedModes')
+            elif variant == 'missing-mode':
+                conditions['selectedModes']['chatgpt-desktop'].remove('remote')
+            elif variant == 'missing-applicability':
+                policy['scopes'] = []
+                policy['cases'] = [policy['cases'][-1]]
+                with self.assertRaisesRegex(ValueError, 'requires the applicability selection'):
+                    _entry_selection(policy, {})
+                continue
+            else:
+                conditions['selectedModes']['chatgpt-desktop'].append(
+                    'chat' if variant == 'pending-mode' else 'invented')
+            with self.subTest(variant=variant):
+                self.assertTrue(admission_contract_errors(changed))
+
+    def test_integration_definition_binds_selection_sources(self):
+        from yiyuan_accord.admission import _definition, _reuse_definition, admission_contract_errors
+        contract = self.lifecycle_binding_contract('v33-system-integration')
+        case = contract['acceptance']['admission']['cases'][-1]
+        original = _definition(contract, case)
+        for source in ('basis', 'subject', 'mode-catalog'):
+            changed = copy.deepcopy(contract)
+            surfaces = changed['capabilityMap']['entrySurfaces']
+            if source == 'basis':
+                policy = changed['acceptance']['admission']
+                for row in [*policy['scopes'], *policy['cases']]:
+                    if 'entryDispositions' in row['conditions']:
+                        row['conditions']['entryDispositions']['cx-cli']['basis'] += ' Revised source.'
+            elif source == 'subject':
+                next(row for row in surfaces['rows'] if row['id'] == 'chatgpt-desktop')['execution'] += ' Revised source.'
+            else:
+                surfaces['modeCatalog']['chatgpt-desktop'].reverse()
+            with self.subTest(source=source):
+                self.assertEqual(admission_contract_errors(changed), [])
+                self.assertNotEqual(original, _definition(changed, case))
+                if source == 'mode-catalog':
+                    self.assertEqual(_reuse_definition(contract, case), _reuse_definition(changed, case))
+
+    def test_integration_complete_evidence_waits_for_final_selection(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        contract = self.lifecycle_binding_contract('v33-system-integration')
+        policy = contract['acceptance']['admission']
+        case = policy['cases'][-1]
+        case['conditions']['subjectEntries'].reverse()
+        for modes in case['conditions']['selectedModes'].values(): modes.reverse()
+        for final, pending in ((False, False), (True, True), (True, False)):
+            for row in [*policy['scopes'], *policy['cases']]:
+                if 'entryDispositions' not in row['conditions']: continue
+                row['conditions']['selectionFinal'] = final
+                for disposition in row['conditions']['entryDispositions'].values():
+                    if disposition['status'] == 'pending': disposition['status'] = 'deferred'
+                    for mode in disposition.get('modes', {}).values():
+                        if mode['status'] == 'pending': mode['status'] = 'deferred'
+                row['conditions']['entryDispositions']['chatgpt-desktop']['modes']['chat']['status'] = (
+                    'pending' if pending else 'deferred')
+            with self.subTest(final=final, pending=pending), self.history():
+                self.assertEqual(admission_contract_errors(contract), [])
+                self.commit(contract)
+                report = self.assess(contract, self.observer)
+                self.assertEqual(report['errors'], [])
+                self.assertEqual(case['id'] in report['acceptedCases'], final and not pending)
+                self.assertEqual(report['entrySelection']['final'], final and not pending)
+                self.assertEqual(report['caseRejections'].get(case['id'], []),
+                                 [] if final and not pending else ['entry-selection-pending'])
+
+    def test_integration_reuse_preserves_set_meaning_and_business_order(self):
+        from yiyuan_accord.admission import _definition, _reuse_definition, admission_contract_errors
+        contract = self.lifecycle_binding_contract('v33-system-integration')
+        case = contract['acceptance']['admission']['cases'][-1]
+        case['conditions']['actions'] = ['inspect', 'deliver']
+        original = copy.deepcopy(contract)
+        stored, reusable = _definition(contract, case), _reuse_definition(contract, case)
+        for variant in ('subjects-reordered', 'modes-reordered', 'subject-removed', 'mode-removed', 'actions-reordered'):
+            changed = copy.deepcopy(contract)
+            target = changed['acceptance']['admission']['cases'][-1]
+            conditions = target['conditions']
+            if variant == 'subjects-reordered': conditions['subjectEntries'].reverse()
+            elif variant == 'modes-reordered': conditions['selectedModes']['chatgpt-desktop'].reverse()
+            elif variant == 'subject-removed':
+                conditions['subjectEntries'].remove('cx-sdk')
+                conditions['selectedModes'].pop('cx-sdk')
+            elif variant == 'mode-removed': conditions['selectedModes']['chatgpt-desktop'].remove('remote')
+            else: conditions['actions'].reverse()
+            with self.subTest(variant=variant):
+                self.assertNotEqual(stored, _definition(changed, target))
+                self.assertEqual(bool(admission_contract_errors(changed)), variant.endswith('-removed'))
+                self.assertEqual(reusable == _reuse_definition(changed, target),
+                                 variant in ('subjects-reordered', 'modes-reordered'))
+        self.assertEqual(contract, original)
+        self.assertEqual(_definition(contract, case), stored)
 
     def test_host_lifecycle_cannot_close_while_entry_selection_is_pending(self):
         contract = self.lifecycle_binding_contract()
@@ -2168,6 +2272,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 case.update(id="fixture-" + scope_id, scope=scope_id, claims=[claim],
                             duties=[r["id"] for r in contract["acceptance"]["duties"]],
                             qualityAxes=[r["id"] for r in contract["systemOptimization"]["qualityAxes"]])
+                if scope_id == 'v33-system-integration':
+                    for key in ('subjectEntries', 'selectedModes'):
+                        case['conditions'][key] = copy.deepcopy(lifecycle_template['conditions'][key])
                 if claim == "impact-assessment": case["expected"]["comparison"] = {"fixtureAssessment": True}
                 policy["cases"].append(case)
                 policy["scopes"].append({**{k: copy.deepcopy(case[k]) for k in

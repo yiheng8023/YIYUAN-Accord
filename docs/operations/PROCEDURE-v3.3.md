@@ -2548,3 +2548,22 @@ Root真实受托选择Implement并供应文档支持的显式cue/精确路径，
 原工具6测试方法（含23类拒绝等子用例）及唯一一次真实PythonCLI退出0；Root按源独立计算11对/9验证中位数，JSON/CSV一致。中位数1005→959秒、差-46秒、观察变化4.5771%，各job有升有降；新增测试和不同托管runner不构成严格因果或费用对照。Root按code-review两独立轴审查：Standards1为写失败残留新目录，Spec1为接受旧空/外来目录。冻结原件不改；Root-owned新派生只修目录拒绝/归属清理，原件新回归3拒绝断言失败，修后8方法5.892秒及最终2隔离guard0.396秒通过；派生真实CLI退出0，JSON/CSV/报告与原正确数值字节全等。两轴静态复查均关闭，不把Root救场追认原作者首次完整通过。
 
 初始工具不存在/校验缺失红例、原子用例目录复用错误、Root初patch定位失败（无写）与首红harness连带目录错误均保。原六保护路径SHA/mtime、五初产物与派生identity核；全部任务命令返回，范围限定OS观察未见本私有目录Python/Node，无全宿主归零声明。资料在accord-w02-ci-durations-20261005-01的inputs/protected/retained/Root派生/red-green/两轴reviews/nativeaudit/FINAL-RESULT。源码只追加localObservation与当前记录，全部十二case的definition、规范/预算/质量、17scope/F-A与包身份保持，不将私有工具加入分发或制造新服务；完整政策/目标控制与组合责任仍未验。
+
+
+## 2026-10-05 系统协调准备的 SDK 失败与记录保全
+
+accord-system-skill-coordination-20261005-01 的一次许可已授予并实际消费，6.620834秒结束。outer自然exit1、inner自然exit0，所属Job activeProcesses0/released；同连接model/list支持Astra/high、skills/list显示Implement enabled与canonical路径，但没有thread/start ACK或turn/start。SOURCE_START_UNKNOWN包装错误的cause为owned connection is closed；部分source创建效果、具体断连原因未知，不能从SQLite空行断言无效果。工作副本未产生业务输出，后置QA/oracle没有运行，旧grant不可重用。
+
+28个前绑源中仅settings发生SHA漂移，2d00bc2…至bd6b5ec…；原件缺exact before字节副本，具体更改者/键未知，不恢复未知用户配置。现装25成员、主仓三源、244副本及作者Skill/策略保持。后续只在新的private executor-observation派生修局部fatal被wrapper遮蔽的记录问题：独立firstFatal无观察为null，关联因果保unknown；未来Popen前保private settings字节与SHA/mtime，读回变化拒绝。不据此称实际断连修复，未派发新的SDK。
+
+真实库与mock seam原RED3失败、作者相关GREEN9/10和Root独立7/14纯检查分别保留。现SDK库已有cause接口、现指导已有未知/失败次序要求，因此没有往产品核心或Skills再添同义规则、服务或作者改动。原始raw/clock/outer、ACTUAL-RESULT、AUTHORIZATION-CONSUMED、SETTINGS-DRIFT及派生源码/日志保全。
+
+## 2026-10-05 系统集成选择依赖修复与独立纠偏
+
+在新的accord-integration-binding-20261005-01普通仓库隔离副本中修两文件，不重放已闭SDK或原业务。未来v33-system-integration完整案例须沿用当前applicability的selected subjectEntries/selectedModes；pending选择仍拒绝准入，适用性来源变化使绑定失效。这是既有W08/A08语义的源码接入，没有新增正式活动case、选择器、运行时或服务。
+
+Root独立source oracle先复现三项缺绑定拒绝缺失、pending case/scope未纳入及basis-only变更不失效，共六项缺口；作者新增三项回归RED为11个失败，修后新三项及近邻十项通过。首候选Root完整51项仍有一处结束历史case KeyError；独立源审另发现新条件合法集合重排误使reuse失效。两处实际反例、v1完整源码/补丁/报告/日志保留，不追认成功。
+
+最终纠正只给具完整新绑定的当前integration案例扩展来源摘要，当前选择校验仍先拒缺字段；历史未含这些字段的定义保持原算法与摘要。仅reuse深拷贝排序两种已验证引用集合，原stored definition和业务有序数组不改。作者两项RED分别为一处历史error和两处reuse失败，修后五项定向通过。Root最终独立副本完整CurrentDevelopmentEvidenceTests 52项通过，538.827秒；独立source复审无新阻断，开发/产品/Codex三静态有效，原12活动和3结束definition保持。
+
+实测两文件净增7805字节，总3142774。旧3300000上限余157226，不足原5%所需的165000余量；本阶段3310000上限余167226，对所需165500仍充分。只调源码容量与说明，184文件、36000主指令、5%底线、17scope/12活动case/13未验职责、全F/A和旧执行窗口保持。机器其它字段深等，候选包d2ce、现装24fa、Meta原文5118、作者源/策略及用户主模型保持；不把pure/source通过晋为实际Skill采用、完整功能或发布资格。

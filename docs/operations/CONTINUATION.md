@@ -50,6 +50,14 @@ Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 继续开发，是共享�
 
 该离线整合和静态前绑现已闭：新executor-final/clock/outer/QA接口在独立16文件冻结包中完成，Root28+11+13纯控制复核及独立耦合审查限定源码通过；原owner及所有旧失败保持。新静态提案填28源SHA、184guard/244完整workspace成员及现装25成员，Root实际shape/源哈希/默认未授拒绝读回均核。新版readonly oracle修正同一管理器logical/canonical作者路径误拒，Root仅文件门和AST核，未执行业务。可审TASK-READY.md在同一私有根，本轮一次SDK/Astra-high源码修复及后置copy QA/oracle的新权限已呈请、尚未收到；新Trust/安装/主模型/Cloud/发布不在申请内。实际业务、Skill正文采用、资源退出和W02仍未验；不把52pure或准备用量上限当通过。批准后只刷新当前input/逐效果权限，再以同连接真实库存/完整ACK为门派发一次；Root先审独立copy结果再整合main。
 
+该单次许可随后已明确授予并实际消费：本轮6.620834秒结束，outer1/nonforced、inner自然0，Job范围activeProcesses0/released；没有source ACK或turn/start，部分source创建效果unknown，不重跑。实际同连接model/list支持Astra/high、Implement enabled及canonical路径已核；它们不是正文交付/业务采用。28源仅settings从2d00bc2…漂移至bd6b5ec…，具体更改者/键及断连根因unknown；无exact before副本，不还原未知用户设置。所有244workspace/主仓3原件/现装25/作者源保持，8项真实clock/config/outer/raw关联核。source成功门未达到，后置QA/oracle没有运行，业务修正未实现。ACTUAL-RESULT/SETTINGS-DRIFT/AUTHORIZATION-CONSUMED保于同私有根；旧静态granted不授权重放。源码核暴露局部fatal会被已有SOURCE_START_UNKNOWN上层failure遮住，下一只做必要失败来源保全/配置前态取证的有界源码诊断，不新SDK、权限、业务或一般入口调查，也不把项目未完当永久续轮。
+
+该有界记录纠偏现已闭：executor-observation私有派生保wrapper failure与独立firstFatal（无观察为null、因果unknown），未来launcher在Popen前保配置原始字节及SHA/mtime并复核变动，原SDK实例/全部失败不改。真实库+mock seam原RED3/3，相关GREEN由作者9/10与Root7/14分开计数，Root七源SHA及实际报告SHA复核保持；无新SDK/model/业务/产品核心或作者改动。现库已有cause接口、现指导已有保未知/失败次序，未确认需要追加产品全局规则或service。具体角色/源hash/未来权限未绑，源码检查不判原断连已修复；不能继续为已闭caller盘点或改写原失败。
+
+普通仓库integration源码修复随后已闭：未来完整系统案例复用现有selected subject/mode校验、pending拒绝和适用性来源指纹；缺绑定不得准入。历史未含新字段的三个结束SDK定义保原摘要，合法集合重排只在reuse副本规范化，业务动作顺序仍具意义。Root独立源oracle六项原缺口转正；首候选完整51项有一处历史KeyError，独审另发现合法重排误失效，原失败均保。定向纠正后最终52项完整回归通过（538.827秒），独立复审无必改，三静态有效；不是旧SDK重跑、原生Skill采用或F/A通过。
+
+该两文件修复净增7805字节，实测3142774；本阶段源码容量从3300000调至3310000，余167226高于原5%所需165500。184文件、36000主指令、17scope/12活动case/13未验职责及旧预算/失败保持，原12活动与3结束定义逐项一致；包d2ce、现装24fa、作者源/策略与主模型不变。原件、两版补丁/失败、Root独立副本QA与复审在accord-integration-binding-20261005-01。下一回到系统自动协调的实际正向连接与同episode完整交付，不用局部源码通过替代它们，也不复用已消费SDK许可。
+
 源头可满足性核对已闭：“至少一个完整同episode”与按需/健康原生充分承担可以兼容，不能把按需扩大为禁止透明、有正当目的的恢复验收。具体错误是已结束的一次性词表/concept/stateclient仍被要求成为当前必过实例；三者都硬绑旧caller/SHA/attempts1，原源/预算/许可/失败保持。已将三个活动对象转历史，0df声明、对象/定义摘要及原case文件完全保全，其它12case指纹保持；17scope、必要职责与所有门槛未减。当前无case范围由4到6，新增dynamic-model-routing与system-integration，仍阻断必要功能与组合；全scope共同案例和独立后果还须实际完成。源审、固定前态、4项保全/负向验证及组合回归在accord-ended-case-disposition-20261005-01。不重开旧实例，不把移出、结构或新报告当通过。
 
 本机候选必要性比较已闭：现装24fa/3862的25文件字节与mtime仍匹配已核基线；05348/d2ce只改manifest版本及两份连续性/生命周期指南，其余22成员包括运行时、Hook、MCP、协调与Meta保持。当前仓库准入修正不依赖安装这两段新正文，暂缓新一轮本机更新，先推进必要功能及组合；这不称新候选已采用，也不豁免最终精确候选验收。未来确需采用时先将包/配置/恢复actor保在变化cache之外，分别核活动目标与不可变证据，并重新绑定真实消费者/权限。09失败与许可消费保持，不复跑或恢复retired cache求绿。两完整包、diff、判断和未来条件在accord-adoption10-source-20261005-01；没有执行包、grant或共享效果。
