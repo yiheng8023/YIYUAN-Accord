@@ -6,7 +6,7 @@
 
 真实受控能力丢失组合已跑通：源成功保存检查点后，其任务写工具 lease 实际撤销；源收到无写入的拒绝后自行提出接管，Root核定，目标读原任务/检查点及受托明确选择的原版Implement，接收后才取得recorder唯一写者并完成三产物。三轮实际均为Sol/medium；19项模型测试和独立18合法/34拒绝均通过，源订阅释放、恢复原件保留，原生与QA Job均0，558.624秒内完成。它提供受控条件下自主判断到实用续作的正向证据，不是所有自主择时或完整A05通过。
 
-F05/A05映射已闭：C02支持受控能力丢失后的自主提议、实际继承、单写者有用续作、独立结果与退出；普通无机制提示择时、上下文变化、实际交接故障恢复及跨入口仍未覆盖。C02未在执行前登记为正式case，且与旧catalog任务/版本/预算/产物不同，不后补id追认或重跑求格式。下一优先核存活恢复者在在途/缺ACK时的实际证据路线，结合已见0.160.1完整历史读取限制，先定位必要依赖再选最小补正。
+F05/A05映射和历史来源核对已闭。官方App read_thread可读C02目标的两轮completed及完整输入，均逐字匹配前绑；当前notLoaded、无下一页。它与独立App Server响应/控制权限分开，不能伪装成thread/read回执或据此恢复已闭case。下一先核现有原生路径在已执行轮次后是否可读完整历史，避免提前增加接口；如确有缺口，再比较怎样用已证的官方观察保留exact轮次/输入、完整性与当前控制核验。不得把首turn前失败推为全部历史不可用，也不盲去includeTurns求绿。
 每段工作以可核结果或具体反例收束。必要的机制验证和受控决策试验本身可以服务发布验收，不需要捏造另一项业务为调用工具找理由；如用合成数据或人为控制条件，事前标明，结论限于该条件。模型自主判断不能由固定响应、明确要求迁移或回执格式替代。
 
 ## 目标与权限
@@ -47,6 +47,7 @@ F05/A05映射已闭：C02支持受控能力丢失后的自主提议、实际继�
 
 只有处理对应结果、恢复或比较时才读取下列原件；它们不是下一轮命令。私有目录均在 `C:\Users\15521\.codex\backups\`。
 
+- 已执行历史只读来源：`accord-native-history-readonly-20261006-01/FACTS.json`（SHA `fce520537121096d41cfd418bedc35896d635f3aef3ee610473d1803477db16a`）及两份原始官方read_thread结果；02:39:33 UTC读回两轮输入与前绑一致，未续跑。此观察不含SDK连接/写者/权限/ephemeral，当前SDK恢复接线仍未证。
 - F05条件映射：`accord-f05-evidence-mapping-20261006-01/MAPPING.json`（SHA `1ad98ceb94c09b0af9bd1cb1b54162c7c7dd2056d1a74901f43978f470644286`）及`MAPPING.md`；明确可复用正向、不可顶替catalog和实际恢复缺口。`USAGE.json`从旧实录每线程取最后累计一次：total1109225、cached937856、uncached165381、output5988；不是占用、价款或净收益。
 - 输入隔离对账：`accord-input-isolation-diagnosis-20261006-01/FACTS.json`（SHA `b0a196c2651e12eef1906412de5a0a64106f39ee42ca72e63f5adf6a9646b70e`）；三当前文本完整，原marker/两receipt字节未动，原归属未知，停止同标记调查。
 - 本次受控组合：`accord-controlled-capability-loss-20261006-02/ROOT-RESULT.json`及原生stream、Root各门、工具写记录和独立QA；`accord-controlled-capability-loss-20261006-01/ROOT-RESULT.json`保首turn前失败。01仅因额外`includeTurns`要求失配，02复用最小元数据与真实stream，未伪造完整历史；已闭不重跑。
