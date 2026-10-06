@@ -9,6 +9,7 @@ import tempfile
 import unittest
 import copy
 import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
 
@@ -2941,7 +2942,175 @@ fs.renameSync = function(from, to) {
         self.assertEqual(self.event("Stop", stop_hook_active=True)["decision"], "block")
         self.assertNotIn("decision", self.event("Stop", stop_hook_active=True))
 
+    def stop_budget(self):
+        cwd = str(self.work).lower() if os.name == 'nt' else str(self.work)
+        identity = json.dumps({'session': getattr(self, 'session', 'test-session'), 'cwd': cwd},
+                              sort_keys=True, separators=(',', ':'))
+        receipt = self.state / (hashlib.sha256(identity.encode()).hexdigest() + '.input.json')
+        return json.loads(receipt.read_text(encoding='utf-8')).get('stopBudget')
+
+    def set_stop_clock(self, now):
+        self.preload = self.root / 'stop-clock.cjs'
+        self.preload.write_text(f'Date.now = () => {now};', encoding='utf-8')
+
+    def test_stop_default_budget_bounds_metadata_only_changes_and_rebind(self):
+        self.assertEqual(self.stop_budget()['maxContinuations'], 2)
+        self.assertEqual(self.stop_budget()['maxElapsedMs'], 1800000)
+        original = self.stop_budget()['startedAtMs']
+        for index in range(6):
+            self.bind(result=f'Unmet result revision {index}', nextAction=f'Reconsider attempt {index}')
+            result = self.event('Stop')
+            self.assertEqual(result.get('decision') == 'block', index < 2)
+        self.assertEqual(self.stop_budget()['consumedContinuations'], 2)
+        self.assertEqual(self.stop_budget()['startedAtMs'], original)
+        self.assertEqual(self.status()['inspection']['status'], 'incomplete')
+        self.assertFalse((self.work / 'summary.json').exists())
+
+    def test_stop_budget_freezes_configuration_until_real_new_input(self):
+        original = self.stop_budget()
+        self.environment['YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS'] = '5'
+        self.environment['YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS'] = '90000'
+        self.bind()
+        self.event('Stop')
+        self.assertEqual(self.stop_budget()['maxContinuations'], original['maxContinuations'])
+        self.set_stop_clock(original['startedAtMs'] + 1000)
+        self.event('UserPromptSubmit', prompt='A genuine new decision.')
+        budget = self.stop_budget()
+        self.assertEqual(budget['maxContinuations'], 5)
+        self.assertEqual(budget['maxElapsedMs'], 90000)
+        self.assertEqual(budget['startedAtMs'], original['startedAtMs'] + 1000)
+        self.assertEqual(budget['consumedContinuations'], 0)
+
+    def test_stop_budget_time_deadline_and_clock_rollback_preserve_unfinished(self):
+        for kind in ('deadline', 'rollback'):
+            with self.subTest(kind=kind):
+                self.session = 'budget-' + kind
+                self.set_stop_clock(10000000)
+                self.event('UserPromptSubmit', prompt='Deliver approved work.')
+                self.bind()
+                self.set_stop_clock(10000001)
+                self.assertEqual(self.event('Stop')['decision'], 'block')
+                self.set_stop_clock(10000003)
+                self.assertNotIn('decision', self.event('Stop'))
+                self.bind(nextAction='Reconsider unmet work.')
+                self.set_stop_clock(11800000 if kind == 'deadline' else 10000002)
+                self.assertNotIn('decision', self.event('Stop'))
+                self.assertEqual(self.status()['inspection']['status'], 'incomplete')
+                self.assertEqual(self.stop_budget()['consumedContinuations'], 1)
+                self.set_stop_clock(10000004)
+                self.assertNotIn('decision', self.event('Stop'), 'a later clock recovery cannot reopen the budget')
+
+    def test_stop_budget_compact_host_drift_resume_and_replay_do_not_renew(self):
+        self.bind()
+        reason = self.event('Stop')['reason']
+        original = self.stop_budget()
+        self.event('SessionStart', source='compact')
+        self.assertEqual(self.stop_budget(), original)
+        self.event('UserPromptSubmit', prompt=reason, model='changed-model', turn_id='host-turn')
+        self.assertEqual(self.stop_budget(), original)
+        self.bind()
+        reason = self.event('Stop')['reason']
+        self.event('SessionStart', source='resume')
+        self.event('UserPromptSubmit', prompt=reason, recovery_epoch=self.status()['epoch'])
+        self.assertEqual(self.stop_budget()['startedAtMs'], original['startedAtMs'])
+        self.assertEqual(self.stop_budget()['consumedContinuations'], 2)
+        self.bind(nextAction='Still unmet after recovery.')
+        self.assertNotIn('decision', self.event('Stop'))
+
+    def test_stop_budget_old_callback_survives_metadata_rebind_and_resume(self):
+        self.bind()
+        reason = self.event('Stop')['reason']
+        original = self.stop_budget()
+        self.bind(nextAction='Reassess using a distinct method.')
+        self.event('UserPromptSubmit', prompt=reason)
+        self.assertEqual(self.stop_budget(), original)
+        self.assertEqual(self.status()['inputSource'], 'host-continuation')
+        self.event('SessionStart', source='resume')
+        self.event('UserPromptSubmit', prompt=reason)
+        self.assertEqual(self.stop_budget(), original)
+        self.assertTrue(self.status()['needsResumeReconciliation'])
+
+    def test_stop_budget_late_old_callback_cannot_renew_or_alter_new_user_input(self):
+        self.bind()
+        reason = self.event('Stop')['reason']
+        self.event('UserPromptSubmit', prompt='A genuine new user input.', turn_id='new-human-turn')
+        self.bind()
+        before = self.stop_budget()
+        current = self.status()
+        self.event('UserPromptSubmit', prompt=reason, turn_id='late-internal-turn', model='old-model')
+        self.assertEqual(self.stop_budget(), before)
+        self.assertEqual(self.status(), current)
+
+    def test_stop_budget_state_publication_failure_consumes_without_redispatch(self):
+        self.bind()
+        self.preload = self.root / 'state-publication-failure.cjs'
+        self.preload.write_text(
+            "const fs=require('node:fs'),rename=fs.renameSync;"
+            "fs.renameSync=function(from,to){if(String(to).endsWith('.json')&&!String(to).endsWith('.input.json'))"
+            "throw new Error('fixture-state-publication-failure');return rename.call(this,from,to);};",
+            encoding='utf-8')
+        self.assertIn('fixture-state-publication-failure', self.invoke({'hook_event_name':'Stop'}, hook=True, success=False))
+        del self.preload
+        self.assertEqual(self.stop_budget()['consumedContinuations'], 1)
+        self.assertNotIn('decision', self.event('Stop'))
+        self.assertEqual(self.stop_budget()['consumedContinuations'], 1)
+
+    def test_stop_budget_legacy_invalid_and_zero_configuration_do_not_continue(self):
+        for field, raw in ((None, None), ('YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS', '-1'),
+                           ('YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS', '2.5'),
+                           ('YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS', '0'),
+                           ('YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS', '9007199254740992'),
+                           ('YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS', '0')):
+            with self.subTest(field=field, raw=raw):
+                self.environment.pop('YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS', None)
+                self.environment.pop('YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS', None)
+                if field:
+                    self.environment[field] = raw
+                self.event('UserPromptSubmit', prompt='Fresh bounded input.')
+                if field is None:
+                    receipt = next(self.state.glob('*.input.json'))
+                    saved = json.loads(receipt.read_text(encoding='utf-8'))
+                    saved.pop('stopBudget')
+                    receipt.write_text(json.dumps(saved), encoding='utf-8')
+                    self.event('SessionStart', source='resume')
+                    self.event('UserPromptSubmit', prompt='Fresh bounded input.', recovery_epoch=self.status()['epoch'])
+                    self.assertIsNone(self.stop_budget())
+                self.bind()
+                self.assertNotIn('decision', self.event('Stop'))
+                self.assertEqual(self.status()['inspection']['status'], 'incomplete')
+
+    def test_stop_budget_concurrent_dispatches_do_not_overspend(self):
+        self.bind()
+        request = dict(session_id='test-session', cwd=str(self.work), hook_event_name='Stop')
+        def stop():
+            run = subprocess.run([self.node, str(RUNTIME), '--hook', 'Stop'], input=json.dumps(request),
+                text=True, capture_output=True, env=self.environment, cwd=self.work, timeout=10)
+            return json.loads(run.stdout) if run.returncode == 0 else {}
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            results = list(pool.map(lambda _: stop(), range(8)))
+        self.assertEqual(sum(result.get('decision') == 'block' for result in results), 1)
+        self.assertEqual(self.stop_budget()['consumedContinuations'], 1)
+        self.bind(nextAction='Second distinct attempt.')
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            results = list(pool.map(lambda _: stop(), range(8)))
+        self.assertEqual(sum(result.get('decision') == 'block' for result in results), 1)
+        self.assertEqual(self.stop_budget()['consumedContinuations'], 2)
+        self.bind(nextAction='Third attempt exceeds allowance.')
+        self.assertNotIn('decision', self.event('Stop'))
+
+    def test_stop_budget_guards_do_not_spend_on_pause_or_unsafe_continuation(self):
+        self.bind(canContinue=False)
+        self.assertEqual(self.event('Stop'), {})
+        self.assertEqual(self.stop_budget()['consumedContinuations'], 0)
+        self.bind()
+        self.pause()
+        self.assertEqual(self.event('Stop'), {})
+        self.assertEqual(self.stop_budget()['consumedContinuations'], 0)
+
     def test_stop_uses_declared_output_meaning_and_explicit_next_action(self):
+        # This observation test intentionally exercises three distinct attempts.
+        self.environment['YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS'] = '3'
+        self.event('UserPromptSubmit', prompt='Exercise three approved observation attempts.')
         self.bind()
         output = self.work / 'summary.json'
         output.write_text('{"total":50,"note":"pending"}', encoding='utf-8')

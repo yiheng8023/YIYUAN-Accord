@@ -26,6 +26,40 @@ const text = (value) => typeof value === 'string' && value.trim().length > 0;
 const needsInput = (input) => input?.needsNativeReplay || input?.needsResumeReconciliation;
 const INPUT_RECEIPT_LIMIT = 8 * 1024 * 1024;
 
+// Frozen by genuine native user input, never by binding or host recovery.
+// This bounds Stop dispatches, not tools already running in the host.
+function newStopBudget() {
+  const setting = (name, fallback, minimum) => {
+    const raw = process.env[name];
+    if (raw === undefined) return fallback;
+    if (!/^(0|[1-9]\d*)$/.test(raw)) return null;
+    const number = Number(raw);
+    return Number.isSafeInteger(number) && number >= minimum ? number : null;
+  };
+  const maxContinuations = setting('YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS', 2, 0);
+  const maxElapsedMs = setting('YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS', 1800000, 1);
+  const startedAtMs = Date.now();
+  return {schema: 1, inputId: crypto.randomUUID(), startedAtMs, lastObservedAtMs: startedAtMs,
+    maxContinuations, maxElapsedMs, consumedContinuations: 0};
+}
+
+function stopBudgetHold(budget, now) {
+  if (!budget || budget.schema !== 1 || !text(budget.inputId) || budget.blockedReason ||
+      ![budget.startedAtMs, budget.lastObservedAtMs, budget.maxContinuations,
+        budget.maxElapsedMs, budget.consumedContinuations, now].every(Number.isSafeInteger) ||
+      budget.startedAtMs < 0 || budget.lastObservedAtMs < budget.startedAtMs ||
+      budget.maxContinuations < 0 || budget.maxElapsedMs <= 0 || budget.consumedContinuations < 0 ||
+      (budget.continuationPromptHashes !== undefined &&
+        (!Array.isArray(budget.continuationPromptHashes) ||
+          budget.continuationPromptHashes.length > budget.consumedContinuations ||
+          !budget.continuationPromptHashes.every((hash) => typeof hash === 'string' && /^[a-f0-9]{64}$/.test(hash)))))
+    return 'missing-or-invalid-stop-budget';
+  if (now < budget.lastObservedAtMs) return 'stop-budget-clock-rollback';
+  if (now - budget.startedAtMs >= budget.maxElapsedMs) return 'stop-budget-time-exhausted';
+  if (budget.consumedContinuations >= budget.maxContinuations) return 'stop-budget-count-exhausted';
+  return null;
+}
+
 function present(file) {
   try { fs.lstatSync(file); return true; }
   catch (error) { if (error.code === 'ENOENT') return false; throw error; }
@@ -1175,8 +1209,15 @@ function handleHook(event) {
         : event.recovery_epoch !== null)) fail('native-replay-conflict');
     // Codex may deliver our Stop reason as a continuation prompt. Its exact
     // receipt must never be mistaken for fresh human authority.
-    if (prior?.continuation === event.prompt) {
-      if (needsInput(previous) || prior.epoch !== previous?.epoch) return {};
+    const historicalContinuation = Array.isArray(previous?.stopContinuationHistory)
+      ? previous.stopContinuationHistory.find((entry) => entry.promptSha256 === sha(event.prompt)) : null;
+    const recognizedContinuation = historicalContinuation || prior?.continuation === event.prompt ||
+      (Array.isArray(previous?.stopBudget?.continuationPromptHashes) &&
+        previous.stopBudget.continuationPromptHashes.includes(sha(event.prompt)));
+    if (recognizedContinuation && !Object.hasOwn(event, 'recovery_epoch')) {
+      // Late callbacks from an older human input cannot alter the newer input.
+      if (historicalContinuation && historicalContinuation.inputId !== previous?.stopBudget?.inputId) return {};
+      if (needsInput(previous) || prior?.epoch !== previous?.epoch) return {};
       const hostObservation = observeNativeHost(event, previous);
       const changed = canonical(hostObservation.values) !== canonical(previous.hostObservation?.values || {model: null, permissionMode: null});
       // Condition drift obsoletes the old continuation decision. Preserve the
@@ -1194,6 +1235,13 @@ function handleHook(event) {
       turnId: event.turn_id || null, continuation: null, failures: previous?.failures || {},
       inputSource: 'native-input-event', hostObservation: observeNativeHost(event, previous),
       nativeContextSource: nativeContextSource(event)};
+    if (Array.isArray(previous?.stopContinuationHistory)) input.stopContinuationHistory = previous.stopContinuationHistory;
+    // Replaying retained input acknowledges recovery; it is not fresh user
+    // input and cannot refresh the time origin, configuration or allowance.
+    if (Object.hasOwn(event, 'recovery_epoch')) {
+      input.inputSource = 'retained-native-replay';
+      if (Object.hasOwn(previous || {}, 'stopBudget')) input.stopBudget = previous.stopBudget;
+    } else input.stopBudget = newStopBudget();
     if (quarantined) {
       // Preserve readable native text without acknowledging the earlier loss.
       // A later failure marker still invalidates this newly published epoch.
@@ -1251,12 +1299,34 @@ function handleHook(event) {
       ...result, outputs: result.outputs.map((output) => ({...output,
         current: output.stable ? progress.get(output.path) : output.current})),
       result: state.result, nextAction: state.nextAction}));
-    if (state.lastBlock === key) return {systemMessage:
-      'Accord: required local results remain unmet with unchanged observations. Reassess the method or report the actual blocker; no further automatic retry was requested.'};
     const reason = `Accord continuation ${crypto.randomUUID()}: ${result.status}. ` +
       `Recheck the bound task with ${__filename}; then ${state.nextAction}. ` +
       'Reconcile stale inputs before dependent effects. This callback grants no new authority; honor user changes or stop.';
     return inputLocked(where, () => {
+      if (!sameInput()) return {};
+      const current = readInput(where);
+      const now = Date.now();
+      const hold = stopBudgetHold(current.stopBudget, now);
+      if (hold) {
+        if (hold === 'stop-budget-clock-rollback' || hold === 'stop-budget-time-exhausted')
+          publishInput(where, {...current, stopBudget: {...current.stopBudget, blockedReason: hold}});
+        return {systemMessage: `Accord: unfinished work is preserved; ${hold}. No automatic continuation was requested. Reconcile the bound task and report its actual boundary.`};
+      }
+      if (state.lastBlock === key || current.stopBudget.lastDispatchKey === key && current.stopBudget.lastDispatchEpoch === input.epoch) {
+        if (now !== current.stopBudget.lastObservedAtMs)
+          publishInput(where, {...current, stopBudget: {...current.stopBudget, lastObservedAtMs: now}});
+        return {systemMessage:
+          'Accord: required local results remain unmet with unchanged observations or an already consumed attempt. Reassess the method or report the actual blocker; no further automatic retry was requested.'};
+      }
+      // Spend before publishing the dispatch. A failed later state write or
+      // freshness check keeps this consumption, preventing duplicate dispatch.
+      publishInput(where, {...current,
+        stopContinuationHistory: [...(current.stopContinuationHistory || []),
+          {promptSha256: sha(reason), inputId: current.stopBudget.inputId}],
+        stopBudget: {...current.stopBudget,
+        lastObservedAtMs: now, consumedContinuations: current.stopBudget.consumedContinuations + 1,
+        lastDispatchKey: key, lastDispatchEpoch: input.epoch,
+        continuationPromptHashes: [...(current.stopBudget.continuationPromptHashes || []), sha(reason)]}});
       if (!sameInput()) return {};
       atomic(where.state, {...state, lastBlock: key, continuation: reason});
       if (!sameInput()) return {};
@@ -1292,6 +1362,7 @@ const HELP = {
   scope: 'Root-task file evidence and supported native Stop continuation; no command, archive or handoff executor. Native subagent events carry agent_id because session_id is shared with the root. They leave root state unchanged; subagent continuation uses native task state. This helper does not provide independent subagent checkpoints or enforce caller authorization.',
   input: 'One JSON object on piped stdin, not an interactive terminal. In PowerShell, pipe $request through ConvertTo-Json -Depth 8 -Compress to node <helper-path>. Use --hook only for native events; other calls need the current native session/cwd receipt.',
   storage: 'YIYUAN_ACCORD_TASK_STATE_DIR selects an explicit scoped directory. Otherwise use ~/.yiyuan-accord/task-state. Exact-session legacy temporary records remain at their original location; competing locations fail without merge. status.storage reports the selected path and kind. No automatic migration, cross-session adoption, scheduler or power-loss guarantee. State file contents are flushed before atomic replacement; filesystem and directory-entry durability need separate validation.',
+  stopBudget: 'The actual user input freezes YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS (default 2, nonnegative integer) and YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS (default 1800000, positive integer). The receipt owns its start, consumed count and issued callbacks. Bind, changed result/nextAction, compaction, host-continuation epochs and native replay do not renew it. Legacy/invalid/backward-clock budgets suppress automatic continuation while preserving unfinished work. This gates new Stop requests; it does not interrupt an already running model/tool or enable Goal.',
   operations: ['status', 'read-native-input', 'observe-context', 'assess-context', 'bind', 'pause', 'retire', 'recover-lock'],
   nativeMutationIdentity: 'A native caller may supply nativeTurnId for bind/pause/retire. It must match the current input host observation at initial read and final publication/deletion, including a new host-continuation turn with unchanged human-input epoch. The MCP writer supplies it from native metadata; legacy callers without it retain their existing identity responsibility. This is local correlation, not authentication or user authority.',
   nativeContext: {

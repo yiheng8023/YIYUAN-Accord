@@ -28,6 +28,13 @@ Choose work spans using uncertainty, consequence, feedback and the user's intend
 participation. Continue safe authorized work, shorten spans when premises change,
 keep progress visible and return only necessary decisions to the user. A completed
 task does not become new work; ordinary continuation needs no routine reminders.
+For ordinary interaction, choose one finite useful work package and its exit
+condition. Save remaining duties and return a verifiable result at that boundary;
+an unfinished project does not keep this turn running. Accord's Stop budget is
+frozen by the actual user input, defaults to two automatic continuations within
+30 minutes, and is not renewed by rebind, changed wording or compaction. It limits
+new Stop continuation requests, not an already running model or tool. Use the
+host's explicit long-running controls only when the user chooses them.
 
 Before any change, assess its effect on the whole goal within the accepted task
 and its authorized dependencies, including assumptions, baselines, acceptance
