@@ -1021,8 +1021,15 @@ class EntryTests(unittest.TestCase):
                         handler["command"] = ("& " if projection["shellKind"] == "powershell" else "") + '"' + Path(manifest["node"]).as_posix() + '"' + handler["command"][len("node"):].replace("${PLUGIN_ROOT}", Path(manifest["package"]).as_posix())
             self.assertEqual(projection["definition"], definition)
             self.assertEqual(projection["hooks"], expected)
+            self.assertEqual(set(expected), {
+                "SessionStart", "UserPromptSubmit", "SubagentStart", "SessionEnd", "Interrupt"})
+            self.assertNotIn("Stop", expected)
+            self.assertEqual({event: sum(len(row["hooks"]) for row in rows)
+                              for event, rows in expected.items()}, {
+                "SessionStart": 2, "UserPromptSubmit": 1, "SubagentStart": 1,
+                "SessionEnd": 1, "Interrupt": 1})
             self.assertEqual(len(expected["SessionStart"]), 2)
-            self.assertEqual(sum(len(r["hooks"]) for rows in expected.values() for r in rows), 7)
+            self.assertEqual(sum(len(r["hooks"]) for rows in expected.values() for r in rows), 6)
             self.assertEqual(len(expected["SubagentStart"]), 1)
             child = expected["SubagentStart"][0]["hooks"]
             self.assertEqual(len(child), 1)
@@ -1081,13 +1088,13 @@ class EntryTests(unittest.TestCase):
                 elif change == "mcp":
                     (package / ".mcp.json").write_text("{}", encoding="utf-8")
                 elif change == "prompt-handler":
-                    altered["hooks"]["Stop"][0]["hooks"][0]["type"] = "prompt"
+                    altered["hooks"]["Interrupt"][0]["hooks"][0]["type"] = "prompt"
                 elif change == "shell-command":
-                    altered["hooks"]["Stop"][0]["hooks"][0]["command"] += "; echo forged"
+                    altered["hooks"]["Interrupt"][0]["hooks"][0]["command"] += "; echo forged"
                 elif change == "null-field":
-                    altered["hooks"]["Stop"][0]["hooks"][0]["extra"] = None
+                    altered["hooks"]["Interrupt"][0]["hooks"][0]["extra"] = None
                 elif change == "unknown-event":
-                    altered["hooks"]["Unknown"] = altered["hooks"]["Stop"]
+                    altered["hooks"]["Unknown"] = altered["hooks"]["Interrupt"]
                 entry.save(hooks_path, altered)
                 with self.subTest(change=change), self.assertRaises(ValueError):
                     entry._native_hook_projection(package, manifest["node"])

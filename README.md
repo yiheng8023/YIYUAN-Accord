@@ -32,6 +32,8 @@ The project is open source and not driven by profit. It aims for industrial and 
 >
 > The [3.3 consensus node and plan](docs/operations/PLAN-v3.3.md) is the current entry for design, the system diagram, historical disposition, outstanding work and completion criteria. [v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1) remains a historical release baseline; its exact tag defines its scope and evidence, not 3.3 support.
 
+Accord preserves task responsibility, recovery and handoff within the normal host interaction. Development-only Stop auto-continuation is excluded from the3.3 candidate; it does not add conversation turns.
+
 ## What problem it addresses
 
 An Agent may do substantial work while losing the goal, overlooking part of a message, dropping unfinished responsibilities after interruption, or treating local test success as completed delivery. Users then become tool coordinators and recovery operators.
@@ -84,11 +86,9 @@ Managing the ecosystem is also a core duty: plugins, Apps, Skills and MCP capabi
 
 ## Capability limits and current evidence
 
-### Understanding Hook status
+### Task state and ordinary interaction
 
-A Stop Hook marked “blocked” requires reading its feedback. An Accord continuation request holds the end of the current turn so the Agent can advance a concrete, authorized and safe work span. This differs from a Hook failure or exit error. “Blocked” alone proves neither a fault nor that the continuation decision was appropriate.
-
-Do not request automatic continuation when a necessary decision, user or on-site observation, or permission cannot be obtained within the Agent's authority and no concrete safe work remains, or when only an external wait remains. Obtain facts the Agent can inspect; a missing condition holds only dependent actions. Retain unfinished responsibility; ordinary continuation enables no Goal/Plan. Unchanged observations must not produce endless retries. The Agent should explain the callback, check actual state, and correct mistakes or changed conditions.
+Accord does not register a Stop auto-continuation hook in the current3.3 candidate. Task state preserves unmet duties, pauses and source observations without adding user turns. The Agent executes and verifies within the normal host task flow, and uses recovery or handoff when justified. A historical development Hook marked blocked is not a current product requirement or a completion verdict.
 
 3.3 has bounded observations for ordinary tasks, input correction, file state, context assessment and controlled takeover. Complete ordinary-entry behavior, autonomous continuity, recovery, environment changes and system impact remain unaccepted. One entry, version or configuration cannot validate another; development scripts, controller assistance and explicit prompts do not demonstrate ordinary autonomous use.
 

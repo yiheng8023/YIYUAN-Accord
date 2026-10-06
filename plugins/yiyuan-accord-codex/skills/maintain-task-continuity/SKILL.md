@@ -45,7 +45,8 @@ Reasons and local file matches do not prove user permission or whole-task comple
 Inspect uncertain effects before retry. Honor host approval; do not bypass denial.
 If absent, use helper `--help`; replay and lock recovery stay separate.
 
-`canContinue` requests an extra Stop turn for concrete safe authorized work.
+`canContinue` records whether concrete safe authorized work remains; it never
+requests a new turn or dispatches work.
 For necessary user/external input, use `false` and retain unmet conditions.
 Active or unfinished is insufficient; `false` neither ends, cancels nor pauses
 the task, and preserves later user input.

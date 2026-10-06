@@ -24,13 +24,12 @@
     ],
     "nativeEvents": [
       "UserPromptSubmit",
-      "Stop",
       "SessionEnd",
       "Interrupt",
       "SessionStart"
     ],
     "scope": "session-and-workspace-bound-file-predicates",
-    "effect": "inspect-local-results-and-request-supported-stop-continuation",
+    "effect": "inspect-local-results-and-preserve-unfinished-state",
     "verification": "same-byte-predicates-and-post-collection-stability; no-external-writer-lock",
     "recovery": "input-failure-watermarks-outside-lock; current-native-replay-with-derived-epoch; unpersistable-loss-remains-unknown",
     "state": "input-hooks-maintain-receipts-even-without-binding; checkpoints-and-failure-watermarks",

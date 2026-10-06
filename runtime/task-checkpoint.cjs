@@ -1,6 +1,6 @@
 'use strict';
 
-// Local task evidence and a scoped continuation callback. This neither grants
+// Local task evidence and native input recovery. This neither grants
 // authority nor supplies the host's executor, semantic judgment or sandbox.
 const fs = require('node:fs');
 const path = require('node:path');
@@ -25,40 +25,6 @@ const fail = (message) => { throw new Error(message); };
 const text = (value) => typeof value === 'string' && value.trim().length > 0;
 const needsInput = (input) => input?.needsNativeReplay || input?.needsResumeReconciliation;
 const INPUT_RECEIPT_LIMIT = 8 * 1024 * 1024;
-
-// Frozen by genuine native user input, never by binding or host recovery.
-// This bounds Stop dispatches, not tools already running in the host.
-function newStopBudget() {
-  const setting = (name, fallback, minimum) => {
-    const raw = process.env[name];
-    if (raw === undefined) return fallback;
-    if (!/^(0|[1-9]\d*)$/.test(raw)) return null;
-    const number = Number(raw);
-    return Number.isSafeInteger(number) && number >= minimum ? number : null;
-  };
-  const maxContinuations = setting('YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS', 2, 0);
-  const maxElapsedMs = setting('YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS', 1800000, 1);
-  const startedAtMs = Date.now();
-  return {schema: 1, inputId: crypto.randomUUID(), startedAtMs, lastObservedAtMs: startedAtMs,
-    maxContinuations, maxElapsedMs, consumedContinuations: 0};
-}
-
-function stopBudgetHold(budget, now) {
-  if (!budget || budget.schema !== 1 || !text(budget.inputId) || budget.blockedReason ||
-      ![budget.startedAtMs, budget.lastObservedAtMs, budget.maxContinuations,
-        budget.maxElapsedMs, budget.consumedContinuations, now].every(Number.isSafeInteger) ||
-      budget.startedAtMs < 0 || budget.lastObservedAtMs < budget.startedAtMs ||
-      budget.maxContinuations < 0 || budget.maxElapsedMs <= 0 || budget.consumedContinuations < 0 ||
-      (budget.continuationPromptHashes !== undefined &&
-        (!Array.isArray(budget.continuationPromptHashes) ||
-          budget.continuationPromptHashes.length > budget.consumedContinuations ||
-          !budget.continuationPromptHashes.every((hash) => typeof hash === 'string' && /^[a-f0-9]{64}$/.test(hash)))))
-    return 'missing-or-invalid-stop-budget';
-  if (now < budget.lastObservedAtMs) return 'stop-budget-clock-rollback';
-  if (now - budget.startedAtMs >= budget.maxElapsedMs) return 'stop-budget-time-exhausted';
-  if (budget.consumedContinuations >= budget.maxContinuations) return 'stop-budget-count-exhausted';
-  return null;
-}
 
 function present(file) {
   try { fs.lstatSync(file); return true; }
@@ -325,7 +291,7 @@ function validateOutputCheck(output) {
   for (const key of Object.keys(output.json || {})) pointer({}, key);
 }
 
-function inspect(where, state, progress = null) {
+function inspect(where, state) {
   const unresolved = savedUnresolved(state);
   const inputs = state.inputs.map((input) => {
     const current = fingerprint(where.root, input.path);
@@ -333,8 +299,6 @@ function inspect(where, state, progress = null) {
   });
   const outputs = state.outputs.map((output) => {
     const {current, bytes} = snapshot(where.root, output.path);
-    let relevant = current;
-    if (!output.sha256 && !output.json) relevant = {present: current.present};
     let matched = current.present;
     if (matched && output.sha256) matched = current.sha256 === output.sha256;
     if (matched && output.json) {
@@ -349,19 +313,6 @@ function inspect(where, state, progress = null) {
             for (const key of Object.keys(value)) pending.push(value[key]);
           }
         }
-        if (progress && !output.sha256 && finite) {
-          // Only the declared JSON meaning participates in retry suppression.
-          // Keep the original raw fingerprint for status, byte contracts and
-          // drift checks; unsupported numbers/depth retain the raw signal.
-          try {
-            const encoded = JSON.stringify(parsed, (_key, value) => {
-              if (typeof value === 'number' && !Number.isFinite(value)) throw new TypeError('nonfinite-json');
-              return value && typeof value === 'object' && !Array.isArray(value)
-                ? Object.fromEntries(Object.keys(value).sort().map((key) => [key, value[key]])) : value;
-            });
-            relevant = {present: true, jsonSha256: sha(encoded)};
-          } catch (_) { /* Unknown JSON meaning keeps its byte observation. */ }
-        }
         matched = finite && Object.entries(output.json).every(([key, expected]) => {
           const found = pointer(parsed, key);
           return found.present && canonical(found.value) === canonical(expected);
@@ -371,7 +322,6 @@ function inspect(where, state, progress = null) {
         else throw error;
       }
     }
-    if (progress) progress.set(output.path, relevant);
     return {path: output.path, current, matched};
   });
   // Hashes and predicates describe one read per file. Recheck after collection
@@ -779,7 +729,8 @@ function binding(request, where, prior, currentInput) {
     inputs, outputs, unresolved, inputRevisions: inputRevisions.length ? inputRevisions : prior?.inputRevisions || [],
     nextAction: request.nextAction, canContinue: request.canContinue,
     revisionReason: request.revisionReason || null,
-    lastBlock: prior?.epoch === currentInput.epoch ? prior.lastBlock : null};
+    // Retain a previously issued callback only for recognition, never execution.
+    ...(text(prior?.continuation) ? {continuation: prior.continuation} : {})};
 }
 
 function operate(request) {
@@ -1168,6 +1119,8 @@ function compactHint(event, where) {
 function handleHook(event) {
   const name = event.hook_event_name;
   if (!['UserPromptSubmit', 'Stop', 'Interrupt', 'SessionEnd', 'SessionStart'].includes(name)) fail('unsupported-hook-event');
+  // Legacy Stop callers remain compatible without requesting turns or changing state.
+  if (name === 'Stop') return {};
   // Codex descendants share the root session_id; agent_id identifies their actor.
   // This checkpoint belongs to the root task, not to a descendant's native state.
   if (Object.hasOwn(event, 'agent_id') || Object.hasOwn(event, 'agent_type')) {
@@ -1207,26 +1160,15 @@ function handleHook(event) {
     if (Object.hasOwn(event, 'recovery_epoch') && (previous
         ? !needsInput(previous) || event.recovery_epoch !== previous.epoch
         : event.recovery_epoch !== null)) fail('native-replay-conflict');
-    // Codex may deliver our Stop reason as a continuation prompt. Its exact
+    // A legacy runtime may have issued a Stop continuation prompt. Its exact
     // receipt must never be mistaken for fresh human authority.
     const historicalContinuation = Array.isArray(previous?.stopContinuationHistory)
       ? previous.stopContinuationHistory.find((entry) => entry.promptSha256 === sha(event.prompt)) : null;
     const recognizedContinuation = historicalContinuation || prior?.continuation === event.prompt ||
       (Array.isArray(previous?.stopBudget?.continuationPromptHashes) &&
         previous.stopBudget.continuationPromptHashes.includes(sha(event.prompt)));
-    if (recognizedContinuation && !Object.hasOwn(event, 'recovery_epoch')) {
-      // Late callbacks from an older human input cannot alter the newer input.
-      if (historicalContinuation && historicalContinuation.inputId !== previous?.stopBudget?.inputId) return {};
-      if (needsInput(previous) || prior?.epoch !== previous?.epoch) return {};
-      const hostObservation = observeNativeHost(event, previous);
-      const changed = canonical(hostObservation.values) !== canonical(previous.hostObservation?.values || {model: null, permissionMode: null});
-      // Condition drift obsoletes the old continuation decision. Preserve the
-      // original prompt identity: a host callback cannot create user authority.
-      const refreshed = {...previous, hostObservation, inputSource: 'host-continuation', nativeContextSource: nativeContextSource(event),
-        ...(changed ? {epoch: crypto.randomUUID(), continuation: null} : {})};
-      publishInput(where, refreshed);
-      return hint(event, where, refreshed, prior);
-    }
+    // All historical callbacks are inert, including after rebind, new input or resume.
+    if (recognizedContinuation && !Object.hasOwn(event, 'recovery_epoch')) return {};
     const quarantined = previous?.needsNativeReplay && !Object.hasOwn(event, 'recovery_epoch');
     // Validate the original receipt, not the token derived from its watermarks:
     // derivation replaces epoch/needsNativeReplay and must not hide corruption.
@@ -1236,12 +1178,9 @@ function handleHook(event) {
       inputSource: 'native-input-event', hostObservation: observeNativeHost(event, previous),
       nativeContextSource: nativeContextSource(event)};
     if (Array.isArray(previous?.stopContinuationHistory)) input.stopContinuationHistory = previous.stopContinuationHistory;
-    // Replaying retained input acknowledges recovery; it is not fresh user
-    // input and cannot refresh the time origin, configuration or allowance.
-    if (Object.hasOwn(event, 'recovery_epoch')) {
-      input.inputSource = 'retained-native-replay';
-      if (Object.hasOwn(previous || {}, 'stopBudget')) input.stopBudget = previous.stopBudget;
-    } else input.stopBudget = newStopBudget();
+    // Preserve old receipt metadata without renewing or consuming it.
+    if (Object.hasOwn(previous || {}, 'stopBudget')) input.stopBudget = previous.stopBudget;
+    if (Object.hasOwn(event, 'recovery_epoch')) input.inputSource = 'retained-native-replay';
     if (quarantined) {
       // Preserve readable native text without acknowledging the earlier loss.
       // A later failure marker still invalidates this newly published epoch.
@@ -1279,59 +1218,7 @@ function handleHook(event) {
       });
       return {}; // Keep unfinished work for an explicitly bound resume/recovery.
     }
-    // A continuation can keep human authority while entering a new native turn.
-    const turnOf = (value) => value?.hostObservation?.turnId ??
-      (value?.inputSource === 'host-continuation' ? null : value?.turnId);
-    const currentTurn = turnOf(input);
-    if (text(event.turn_id) && text(currentTurn) && event.turn_id !== currentTurn) return {};
-    const sameInput = () => {
-      const current = readInput(where);
-      return current?.epoch === input.epoch && turnOf(current) === currentTurn;
-    };
-    if (!state || state.mode !== 'active' || !state.canContinue || input.interrupted || needsInput(input) ||
-        state.epoch !== input.epoch) return {};
-    const progress = new Map();
-    const result = inspect(where, state, progress);
-    if (result.status === 'verified-local') return {};
-    // Caller result/action changes may justify a different next step, but are
-    // neither independent progress proof nor renewed authority.
-    const key = sha(canonical({schema: 'yiyuan-accord-continuation-progress/v1',
-      ...result, outputs: result.outputs.map((output) => ({...output,
-        current: output.stable ? progress.get(output.path) : output.current})),
-      result: state.result, nextAction: state.nextAction}));
-    const reason = `Accord continuation ${crypto.randomUUID()}: ${result.status}. ` +
-      `Recheck the bound task with ${__filename}; then ${state.nextAction}. ` +
-      'Reconcile stale inputs before dependent effects. This callback grants no new authority; honor user changes or stop.';
-    return inputLocked(where, () => {
-      if (!sameInput()) return {};
-      const current = readInput(where);
-      const now = Date.now();
-      const hold = stopBudgetHold(current.stopBudget, now);
-      if (hold) {
-        if (hold === 'stop-budget-clock-rollback' || hold === 'stop-budget-time-exhausted')
-          publishInput(where, {...current, stopBudget: {...current.stopBudget, blockedReason: hold}});
-        return {systemMessage: `Accord: unfinished work is preserved; ${hold}. No automatic continuation was requested. Reconcile the bound task and report its actual boundary.`};
-      }
-      if (state.lastBlock === key || current.stopBudget.lastDispatchKey === key && current.stopBudget.lastDispatchEpoch === input.epoch) {
-        if (now !== current.stopBudget.lastObservedAtMs)
-          publishInput(where, {...current, stopBudget: {...current.stopBudget, lastObservedAtMs: now}});
-        return {systemMessage:
-          'Accord: required local results remain unmet with unchanged observations or an already consumed attempt. Reassess the method or report the actual blocker; no further automatic retry was requested.'};
-      }
-      // Spend before publishing the dispatch. A failed later state write or
-      // freshness check keeps this consumption, preventing duplicate dispatch.
-      publishInput(where, {...current,
-        stopContinuationHistory: [...(current.stopContinuationHistory || []),
-          {promptSha256: sha(reason), inputId: current.stopBudget.inputId}],
-        stopBudget: {...current.stopBudget,
-        lastObservedAtMs: now, consumedContinuations: current.stopBudget.consumedContinuations + 1,
-        lastDispatchKey: key, lastDispatchEpoch: input.epoch,
-        continuationPromptHashes: [...(current.stopBudget.continuationPromptHashes || []), sha(reason)]}});
-      if (!sameInput()) return {};
-      atomic(where.state, {...state, lastBlock: key, continuation: reason});
-      if (!sameInput()) return {};
-      return {decision: 'block', reason};
-    });
+    return {};
   });
 }
 
@@ -1359,10 +1246,9 @@ function hook(event) {
 }
 
 const HELP = {
-  scope: 'Root-task file evidence and supported native Stop continuation; no command, archive or handoff executor. Native subagent events carry agent_id because session_id is shared with the root. They leave root state unchanged; subagent continuation uses native task state. This helper does not provide independent subagent checkpoints or enforce caller authorization.',
+  scope: 'Root-task file evidence and native input recovery; no automatic turn, command, archive or handoff executor. Legacy Stop calls are no-ops. Native subagent events carry agent_id because session_id is shared with the root. They leave root state unchanged; subagent continuation uses native task state. This helper does not provide independent subagent checkpoints or enforce caller authorization.',
   input: 'One JSON object on piped stdin, not an interactive terminal. In PowerShell, pipe $request through ConvertTo-Json -Depth 8 -Compress to node <helper-path>. Use --hook only for native events; other calls need the current native session/cwd receipt.',
   storage: 'YIYUAN_ACCORD_TASK_STATE_DIR selects an explicit scoped directory. Otherwise use ~/.yiyuan-accord/task-state. Exact-session legacy temporary records remain at their original location; competing locations fail without merge. status.storage reports the selected path and kind. No automatic migration, cross-session adoption, scheduler or power-loss guarantee. State file contents are flushed before atomic replacement; filesystem and directory-entry durability need separate validation.',
-  stopBudget: 'The actual user input freezes YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS (default 2, nonnegative integer) and YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS (default 1800000, positive integer). The receipt owns its start, consumed count and issued callbacks. Bind, changed result/nextAction, compaction, host-continuation epochs and native replay do not renew it. Legacy/invalid/backward-clock budgets suppress automatic continuation while preserving unfinished work. This gates new Stop requests; it does not interrupt an already running model/tool or enable Goal.',
   operations: ['status', 'read-native-input', 'observe-context', 'assess-context', 'bind', 'pause', 'retire', 'recover-lock'],
   nativeMutationIdentity: 'A native caller may supply nativeTurnId for bind/pause/retire. It must match the current input host observation at initial read and final publication/deletion, including a new host-continuation turn with unchanged human-input epoch. The MCP writer supplies it from native metadata; legacy callers without it retain their existing identity responsibility. This is local correlation, not authentication or user authority.',
   nativeContext: {
@@ -1375,7 +1261,7 @@ const HELP = {
   retainedInputs: {
     read: {op: 'read-native-input', session_id: 'native-session-id', cwd: 'absolute-workspace', index: 0, offset: 0, maxChars: 4000},
     paging: 'Defaults read from the first captured event, with at most 4000 Unicode code points and 20 entries. maxChars may be 1..16000. Pass returned next.index and next.offset unchanged for the next page; null means the captured end, not the end of all task history. Text hashes cover full original strings, not fragments. Legacy receipts report unavailable instead of inventing text. Reads create no locks or files; observed publication locks or changed input/failure evidence reject the read. A stable snapshot does not establish later freshness or permission to act.',
-    scope: 'Retains parsed native input-event text and explicitly identified native replays in the existing local receipt. Input received during prior loss is marked quarantined-native-input with needsNativeReplay still true; readable text is not a ready input basis. A later failed capture may make the last stored entry older than the actual current input. Reconcile source and current input, then read status for the current recovery token before authorized replay. Replay entries preserve the consumed recoveryEpoch; missing is unknown, while null denotes an explicit replay without a prior receipt. Our recognized Stop continuation does not add a user input. Events and embedded quotations are not automatically new human decisions. Capture is not complete conversation, attachment content, model reasoning, a semantic checkpoint or an access grant. Reads preserve pause, quarantine and checkpoint state.',
+    scope: 'Retains parsed native input-event text and explicitly identified native replays in the existing local receipt. Input received during prior loss is marked quarantined-native-input with needsNativeReplay still true; readable text is not a ready input basis. A later failed capture may make the last stored entry older than the actual current input. Reconcile source and current input, then read status for the current recovery token before authorized replay. Replay entries preserve the consumed recoveryEpoch; missing is unknown, while null denotes an explicit replay without a prior receipt. Recognized historical Stop callbacks do not add a user input. Events and embedded quotations are not automatically new human decisions. Capture is not complete conversation, attachment content, model reasoning, a semantic checkpoint or an access grant. Reads preserve pause, quarantine and checkpoint state.',
     lifecycle: 'Input receipts, including captured text, are bounded to 8 MiB and never silently truncated; full storage fails capture and preserves existing failure/replay protection. Named --hook UserPromptSubmit transport accepts up to 8 MiB of JSON for both native capture and token-bound replay; receipt metadata and existing history still count against the same 8 MiB storage limit. Other command transport and bound checkpoint JSON remain limited to 128 KiB. Existing scoped storage and retirement apply: bound work retains the receipt at session end; reconciled unbound receipts end with SessionEnd or verified caller retirement. No new service, transcript scan or model call. Preserve a compatible executor; older versions may not retain or expose text. This local copy may contain sensitive user text and must not be published as routine evidence.'
   },
   contextBudget: {
@@ -1392,15 +1278,15 @@ const HELP = {
     output: 'The native window, last-response-boundary occupancy when reported, optional tighter native remaining budget, condition generation and observationId. New turn, reroute, compaction, later model-visible output or unknown capacity invalidates affected evidence; obtain a matching observation after change. Disconnection, expiry or missing data stays unknown. Never restamp historical events. A reconnection gets a new connectionId.',
     integration: 'The owning App Server client may expose this through native dynamic tools. For assess-context pass signals containing the current observation request and assessment.observationId from the earlier query; the helper re-observes and rejects changed/unavailable evidence. Keep current input epoch and independently inspected integrity/forecasts. The helper does not subscribe itself, authenticate supplied transport records or establish an efficiency range. No installed Desktop event integration is implied.',
   },
-  readback: 'status is read-only and returns the saved contract or null only from a stable observed snapshot. It rejects observed publication/recovery locks, changed source bytes, invalid JSON (with its source role) and incompatible checkpoint identity/checks without repairing or deleting evidence. Host observations and input-revision metadata expose only declared fields; schema validation is not source authentication. Snapshot-file I/O failures identify the source role and error code; failures have a nonzero exit, never an unbound success. Its epoch belongs to the current input; checkpoint.epoch belongs to the old binding. Readback grants no authority, does not reconcile input, resume paused work or clear quarantine. Stored canContinue is a historical caller decision, not current permission; verify current user and host authority before effects. Never reconstruct missing user input from the contract.',
-  hostObservation: 'UserPromptSubmit model and permission_mode are bounded event observations. Missing fields become unknown; resume, interruption or input loss makes stored observations historical. Condition changes on our host continuation invalidate old readiness without creating a new user decision. Other settings, collaboration mode and mid-turn effects are not inferred; the caller checks intent and affected results within current authority.',
+  readback: 'status is read-only and returns the saved contract or null only from a stable observed snapshot. It rejects observed publication/recovery locks, changed source bytes, invalid JSON (with its source role) and incompatible checkpoint identity/checks without repairing or deleting evidence. Host observations and input-revision metadata expose only declared fields; schema validation is not source authentication. Snapshot-file I/O failures identify the source role and error code; failures have a nonzero exit, never an unbound success. Its epoch belongs to the current input; checkpoint.epoch belongs to the old binding. Readback grants no authority, does not reconcile input, resume paused work or clear quarantine. Stored canContinue records caller feasibility, never requests a turn or drives automatic execution, and is not current permission; verify current user and host authority before effects. Never reconstruct missing user input from the contract.',
+  hostObservation: 'UserPromptSubmit model and permission_mode are bounded event observations. Missing fields become unknown; resume, interruption or input loss makes stored observations historical. Historical Stop callbacks never refresh input or host observations and never create a new user decision. Other settings, collaboration mode and mid-turn effects are not inferred; the caller checks intent and affected results within current authority.',
   references: 'bind.inputs are workspace-relative path strings; each outputs.path is workspace-relative too. Input fingerprints are observed by the helper. cwd alone is absolute.',
   bind: {op: 'bind', session_id: 'native-session-id', cwd: 'absolute-workspace', epoch: 'from-status', expectedRevision: 0,
     result: 'latest authorized result', inputs: ['source.json'],
     outputs: [{path: 'summary.json', json: {'/total': 60}}, {path: 'details.csv'}],
     nextAction: 'finish and verify both affected files', canContinue: true},
   revisions: {op: 'bind', rules: 'bind rechecks inputs; changed output checks require revisionReason. Changed or removed existing inputs additionally require inputRevisions, one {path, observed, reason} per affected input. observed must exactly match its current status.inspection.inputs[].current fingerprint; for a removed reference it may be {present:false}. No extra or duplicate dispositions; each reason is nonempty and at most 2048 characters. Initial binding and added protections need no inputRevisions. Explicit dispositions are caller claims, not human authorization: check the actual user decision and affected scope first. The latest accepted dispositions, including prior fingerprints and their input epoch, remain in status.checkpoint.inputRevisions; this is not full revision history. Failed or drifting revisions preserve the prior checkpoint. Older helpers may silently rebaseline inputs. Pause and its reason survive rebinding unless an authorized resumeReason (nonempty, at most 2048 characters) explicitly lifts it. bind returns mode; status.checkpoint exposes resumeReason, not proof of authority. Inspect the installed interface.'},
-  unresolved: 'Optional bind.unresolved is a list of up to 32 distinct nonempty strings, each at most 2048 characters, describing known unmet result or fact conditions. Omission inherits existing conditions; an explicit list replaces them, and removing or rewording a prior condition requires revisionReason. status.checkpoint and inspection expose them independently of matched files; any remaining condition prevents verified-local and successful retirement. canContinue means safe authorized work remains, not that the gap is resolved; use false or pause for a necessary external wait. Existing pause, input freshness and bounded Stop retry rules still apply. The caller must verify the evidence or authorized scope change behind a disposition; a reason is not proof. This neither discovers undeclared gaps nor validates semantics. Older helpers do not enforce this field; retain the compatible executor for unfinished state.',
+  unresolved: 'Optional bind.unresolved is a list of up to 32 distinct nonempty strings, each at most 2048 characters, describing known unmet result or fact conditions. Omission inherits existing conditions; an explicit list replaces them, and removing or rewording a prior condition requires revisionReason. status.checkpoint and inspection expose them independently of matched files; any remaining condition prevents verified-local and successful retirement. canContinue means safe authorized work remains, not that the gap is resolved; use false or pause for a necessary external wait. Existing pause and input freshness protections still apply; no automatic turn is requested. The caller must verify the evidence or authorized scope change behind a disposition; a reason is not proof. This neither discovers undeclared gaps nor validates semantics. Older helpers do not enforce this field; retain the compatible executor for unfinished state.',
   pause: 'op=pause with current epoch/revision and reason; preserve pending work without continuation.',
   retire: 'op=retire requires verified local predicates and a resolved pause, or explicit user-cancelled disposition plus reason. Without a checkpoint, use current epoch, expectedRevision=0 and reason to retire only the receipt, including after verified exit without an end Hook. Removes only checkpoint files; does not prove task completion.',
   recovery: 'op=recover-lock with lock=state or input requires a provably dead owner. Input recovery invalidates an existing receipt because native input may have been lost. A surviving caller must replay the actual current native input before binding or continuation; do not ask for repeated user input when the host retains it. Uncertain or live ownership is preserved. Cooperating recovery callers share a .lock.recovery gate; all copies recovering the same session must honor it, or the caller must establish exclusive maintenance. A leftover gate is not automatically reclaimed, even with a dead PID: preserve it until a caller establishes quiescence and bounded maintenance authority. Normal task operations do not acquire this recovery gate.',

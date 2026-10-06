@@ -47,17 +47,6 @@
         ]
       }
     ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${PLUGIN_ROOT}/runtime/task-checkpoint.cjs\" --hook Stop",
-            "timeout": 3
-          }
-        ]
-      }
-    ],
     "SessionEnd": [
       {
         "hooks": [

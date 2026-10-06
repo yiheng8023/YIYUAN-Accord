@@ -98,7 +98,7 @@ const MANAGE_TOOL = Object.freeze({
     nextAction: {type: 'string', minLength: 1, maxLength: 16384,
       description: 'Required for bind: the next concrete action within current authority; explicitly supply it on every bind.'},
     canContinue: {type: 'boolean',
-      description: 'Required for bind: explicitly supply true or false on every bind. Caller judgment on requesting an additional automatic continuation turn from Stop. '
+      description: 'Required for bind: explicitly supply true or false on every bind. Caller observation that the next safe work is feasible; this records feasibility and never requests a turn or drives automatic execution. '
         + 'Set true only when the next concrete work can proceed safely within current authority. '
         + 'Set false while waiting for necessary user observation, decision, authorization or external conditions, preserving unfinished conditions. '
         + 'An unfinished project or mode=active alone does not justify true. '

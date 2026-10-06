@@ -1017,8 +1017,14 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertIn("supported-native-task-hooks", current["ordinaryPrerequisites"])
         self.assertIn("enabled-currently-trusted-input-hook", current["ordinaryPrerequisites"])
         current_checkpoint = dict(current["optionalTaskCheckpoint"])
+        self.assertNotIn("Stop", current_checkpoint["nativeEvents"])
+        self.assertEqual(current_checkpoint["effect"], "inspect-local-results-and-preserve-unfinished-state")
+        self.assertIn("Stop", previous["optionalTaskCheckpoint"]["nativeEvents"])
         self.assertEqual(current_checkpoint["nativeEvents"][-1], "SessionStart")
-        current_checkpoint["nativeEvents"] = current_checkpoint["nativeEvents"][:-1]
+        self.assertEqual(current_checkpoint["nativeEvents"][:-1], [
+            event for event in previous["optionalTaskCheckpoint"]["nativeEvents"] if event != "Stop"])
+        current_checkpoint["nativeEvents"] = previous["optionalTaskCheckpoint"]["nativeEvents"]
+        current_checkpoint["effect"] = previous["optionalTaskCheckpoint"]["effect"]
         self.assertIn("caller-rechecks-authority", current_checkpoint.pop("resumeReconciliation"))
         self.assertIn("native-window-not-occupancy", current_checkpoint.pop("contextAssessment"))
         self.assertIn("connection-and-turn-bound", current_checkpoint.pop("contextSignals"))
@@ -1273,6 +1279,27 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         hooks["hooks"]["SessionStart"][1]["matcher"] = "resume"
         with self.changed(locator, json.dumps(hooks).encode()):
             self.assertTrue(any("activation mechanism contract" in error for error in self.report()["errors"]))
+
+    def test_current_product_rejects_reintroduced_stop_continuation(self):
+        locator = "plugins/yiyuan-accord-codex/hooks/hooks.json"
+        hooks = json.loads((self.root / locator).read_text(encoding="utf-8"))
+        self.assertNotIn("Stop", hooks["hooks"])
+        hooks["hooks"]["Stop"] = [{"hooks": [{"type": "command",
+            "command": 'node "${PLUGIN_ROOT}/runtime/task-checkpoint.cjs" --hook Stop',
+            "timeout": 3}]}]
+        with self.changed(locator, json.dumps(hooks).encode()):
+            self.assertTrue(any("activation mechanism contract" in error
+                                for error in self.report()["errors"]))
+
+    def test_current_adapter_rejects_stop_dispatch_effect(self):
+        locator = "plugins/yiyuan-accord-codex/adapter.json"
+        adapter = json.loads((self.root / locator).read_text(encoding="utf-8"))
+        checkpoint = adapter["optionalTaskCheckpoint"]
+        self.assertEqual(checkpoint["effect"], "inspect-local-results-and-preserve-unfinished-state")
+        checkpoint["effect"] = "inspect-local-results-and-request-supported-stop-continuation"
+        with self.changed(locator, json.dumps(adapter).encode()):
+            self.assertTrue(any("contract does not match declared authority" in error
+                                for error in self.report()["errors"]))
 
     def test_current_delivery_never_inherits_predecessor_behavior_or_review(self):
         from yiyuan_accord import control

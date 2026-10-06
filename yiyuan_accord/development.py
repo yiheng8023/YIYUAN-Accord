@@ -158,7 +158,9 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
             "host-path-node", "supported-native-task-hooks",
             "enabled-currently-trusted-input-hook",
         ]
-        contract["optionalTaskCheckpoint"]["nativeEvents"].append("SessionStart")
+        contract["optionalTaskCheckpoint"]["nativeEvents"] = [
+            "UserPromptSubmit", "SessionEnd", "Interrupt", "SessionStart"]
+        contract["optionalTaskCheckpoint"]["effect"] = "inspect-local-results-and-preserve-unfinished-state"
         contract["optionalTaskCheckpoint"]["resumeReconciliation"] = "SessionStart/resume-gates-old-binding; new-native-input-or-retained-input-replay; caller-rechecks-authority-effects-and-writer; input-loss-replay-remains-strict"
         contract["optionalTaskCheckpoint"]["contextAssessment"] = "assess-context: read-only caller-bound forecasts; native-window-not-occupancy; reserve-takeover-and-recovery; unknown-without-evidence; no-dispatch-or-release-authority"
         contract["optionalTaskCheckpoint"]["contextSignals"] = "--context-signals: caller-owned App Server notifications; connection-and-turn-bound capacity; invalidate-on-reroute-compaction-disconnect-expiry; no-live-occupancy-inference"

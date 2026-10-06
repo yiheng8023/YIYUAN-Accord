@@ -441,7 +441,7 @@ def activation_mechanism_errors(
     task_checkpoint=False, tool_batch_feedback=False, retained_checkpoint_revision=None,
     resume_reconciliation=False, context_reentry=False, native_context=False,
     startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False,
-    meta_guidance=False,
+    meta_guidance=False, checkpoint_native_events=None,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -584,7 +584,13 @@ def activation_mechanism_errors(
                 "command": f'node "${{{root_variable}}}/runtime/task-checkpoint.cjs" --hook SessionStart',
                 "timeout": 3,
             }]})
-        for event in ["UserPromptSubmit", "Stop", "SessionEnd"] + (["Interrupt"] if adapter_id == "codex" else []):
+        # The trusted versioned adapter definition owns the event surface;
+        # retained predecessors keep their original Stop registration.
+        events = (checkpoint_native_events if checkpoint_native_events is not None else
+                  ["UserPromptSubmit", "Stop", "SessionEnd"] + (["Interrupt"] if adapter_id == "codex" else []))
+        for event in events:
+            if event == "SessionStart":
+                continue  # Resume reconciliation is registered above.
             expected_value["hooks"][event] = [{"hooks": [{
                 "type": "command",
                 "command": f'node "${{{root_variable}}}/runtime/task-checkpoint.cjs" --hook {event}',
@@ -893,6 +899,8 @@ def validate_host_projection(
         ] if isinstance(manifest_locator, str) and expected_contract
         and "optionalUpdateInspection" in expected_contract else (),
         task_checkpoint=bool(expected_contract and "optionalTaskCheckpoint" in expected_contract),
+        checkpoint_native_events=(expected_contract.get("optionalTaskCheckpoint", {}).get("nativeEvents")
+                                  if expected_contract else None),
         tool_batch_feedback=bool(expected_contract and "optionalToolBatchFeedback" in expected_contract),
         retained_checkpoint_revision=retained_checkpoint_revision,
         resume_reconciliation=bool(expected_contract and expected_contract.get("optionalTaskCheckpoint", {}).get("resumeReconciliation")),

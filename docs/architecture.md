@@ -196,13 +196,14 @@ Standalone startup resolves configured state/session/home/temp paths against its
 original cwd, then leaves the plugin cache directory before serving. This avoids
 pinning a Windows cache directory during native replacement without rebinding
 relative state paths. It does not itself reload code already held by an old process.
-The checkpoint connects UserPromptSubmit, Stop, SessionEnd and Interrupt. These
+The checkpoint connects UserPromptSubmit, SessionStart, SessionEnd and Interrupt.
+The development-only Stop continuation was withdrawn from the product. These
 connections establish available mechanisms, not demonstrated ordinary-task adoption
 or end-to-end completion. The Agent binds necessary file inputs, output predicates and
 the next authorized action against the current native input receipt. The helper
 checks actual file hashes and specified JSON facts, detects stale inputs, and
-can request native continuation when results remain unmet. An unchanged failure
-does not request endless retries. Fresh user input invalidates an unreconciled
+preserves unmet results for the next legitimately initiated task operation.
+It never requests a new conversation turn, even when results remain unmet. Fresh user input invalidates an unreconciled
 old continuation; receipt publication and retirement protect concurrent input.
 All predicates on a file use the same observed bytes, followed by output and
 input stability checks. External writers remain independent; these observations
@@ -229,7 +230,7 @@ input lock with session/workspace generation watermarks, including malformed or
 oversized transport whose session cannot be bound. The epoch combines the receipt
 and current failures. The surviving caller must reconcile and replay the actual
 current native input using that recovery epoch; an old replay cannot acknowledge
-a newer loss. Stop rechecks freshness after state publication. Retirement checks
+a newer loss. State mutation rechecks freshness after publication. Retirement checks
 failure generations after deletion and restores its missing checkpoint/receipt
 before rejecting a concurrent input failure; partial deletion is also compensated.
 These operations preserve failure watermarks and are not an external-writer
@@ -237,7 +238,7 @@ transaction. If failure storage or compensation itself cannot work, the native
 caller must hold and recover through sufficient means; cross-process protection
 is unknown. Transport and bound checkpoint JSON remain bounded to 128 KiB.
 The root-task input receipt retains successfully captured native input text and its hash
-in event order, bounded to 8 MiB without silent truncation. Recognized own Stop
+in event order, bounded to 8 MiB without silent truncation. Recognized historical development Stop
 callbacks are not appended as user input; explicit recovery replays remain labeled.
 `read-native-input` returns bounded Unicode-safe pages only when requested, with
 original hashes and a continuation cursor. It creates no files or locks: observed
@@ -298,7 +299,7 @@ Codex `rust-v0.144.0-alpha.4` lacks Interrupt and SessionEnd Hook events, but it
 [native cancellation path](https://github.com/openai/codex/blob/049586f41571e74b44c841868bca3a2233214a71/codex-rs/core/src/tasks/mod.rs#L829)
 cancels and aborts the running task and emits TurnAborted; its
 [turn loop](https://github.com/openai/codex/blob/049586f41571e74b44c841868bca3a2233214a71/codex-rs/core/src/session/turn.rs#L372)
-does not route cancellation errors through normal Stop continuation. A retained
+does not route cancellation errors into new automatic turns. A retained
 checkpoint cannot start execution. Without Interrupt, that receipt remains
 historical until the next native input or resume invalidates its old binding;
 inspect prior effects and writers before dependent work. Native cancellation

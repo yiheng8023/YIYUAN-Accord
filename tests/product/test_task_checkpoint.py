@@ -46,6 +46,57 @@ class TaskCheckpointTests(unittest.TestCase):
     def event(self, name, **fields):
         return self.invoke({"hook_event_name": name, **fields}, hook=True)
 
+    def legacy_callback(self):
+        """Seed a pre-withdrawal state for historical compatibility checks only."""
+        file = next(self.state.glob('*.state.json'))
+        state = json.loads(file.read_text(encoding='utf-8'))
+        reason = 'Historical Accord continuation callback fixture.'
+        state['continuation'] = reason
+        file.write_text(json.dumps(state), encoding='utf-8')
+        return reason
+
+    def test_legacy_stop_is_noop_even_with_safe_unfinished_work_and_old_env(self):
+        self.environment['YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS'] = '99'
+        self.environment['YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS'] = '99999999'
+        self.event('UserPromptSubmit', prompt='Deliver the approved files.')
+        self.bind(canContinue=True)
+        for total in (None, 50, 51, 60):
+            if total is not None:
+                self.write_outputs(total=total)
+            before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+            for fields in ({}, {'stop_hook_active': True}, {'turn_id': 'a-different-turn'}):
+                self.assertEqual(self.event('Stop', **fields), {})
+            self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+        receipt = json.loads(next(self.state.glob('*.input.json')).read_text(encoding='utf-8'))
+        self.assertNotIn('stopBudget', receipt)
+        self.assertNotIn('stopContinuationHistory', receipt)
+        self.assertNotIn('continuation', self.status()['checkpoint'])
+
+    def test_historical_stop_metadata_is_preserved_without_execution_or_user_authority(self):
+        self.bind()
+        receipt_file = next(self.state.glob('*.input.json'))
+        receipt = json.loads(receipt_file.read_text(encoding='utf-8'))
+        reason = 'A callback issued by a historical runtime.'
+        old_budget = {'schema': 1, 'inputId': 'historical', 'consumedContinuations': 2,
+                      'continuationPromptHashes': [hashlib.sha256(reason.encode()).hexdigest()]}
+        receipt['stopBudget'] = old_budget
+        receipt['stopContinuationHistory'] = [{'promptSha256': hashlib.sha256(reason.encode()).hexdigest(),
+                                               'inputId': 'historical'}]
+        receipt_file.write_text(json.dumps(receipt), encoding='utf-8')
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.assertEqual(self.event('UserPromptSubmit', prompt=reason, turn_id='old-callback'), {})
+        self.assertEqual(self.event('Stop'), {})
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+        self.event('UserPromptSubmit', prompt='A genuine new decision.', turn_id='human-turn')
+        current = self.status()
+        after = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.assertEqual(self.event('UserPromptSubmit', prompt=reason), {})
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, after)
+        self.assertEqual(self.status(), current)
+        saved = json.loads(receipt_file.read_text(encoding='utf-8'))
+        self.assertEqual(saved['stopBudget'], old_budget)
+        self.assertEqual(saved['stopContinuationHistory'], receipt['stopContinuationHistory'])
+
     def status(self):
         return self.invoke({"op": "status"})
 
@@ -896,7 +947,7 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
 
     def test_host_continuation_is_not_retained_as_a_new_user_request(self):
         self.bind()
-        continuation = self.event('Stop')['reason']
+        continuation = self.legacy_callback()
         original = self.invoke({'op': 'read-native-input'})['entries']
         self.event('UserPromptSubmit', prompt=continuation)
         self.assertEqual(self.invoke({'op': 'read-native-input'})['entries'], original)
@@ -1287,8 +1338,8 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.assertIn('unmet-output-cannot-retire', self.invoke(dict(op='retire', epoch=current['epoch'],
                        expectedRevision=current['revision']), success=False))
         first = self.event('Stop')
-        self.assertEqual(first['decision'], 'block')
-        self.assertNotIn('decision', self.event('Stop'), 'unchanged unknowns must not cause endless retries')
+        self.assertEqual(first, {})
+        self.assertNotIn('decision', self.event('Stop'), 'recorded unknowns never dispatch a turn')
         self.assertEqual(self.status()['checkpoint']['unresolved'], [question])
 
     def test_global_impact_duty_survives_reentry_and_keeps_declared_gap_open(self):
@@ -1421,19 +1472,30 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.assertEqual(observed['comparison'], 'no-current-prior-observation')
         self.assertFalse(any(row['kind'] == 'changed' for row in observed['changes']))
 
-    def test_automatic_continuation_host_change_invalidates_old_conditions_not_user_goal(self):
-        self.event('UserPromptSubmit', prompt='Deliver the files.', model='before', permission_mode='default')
+    def test_historical_callback_never_changes_input_after_rebind_new_input_or_resume(self):
+        self.event('UserPromptSubmit', prompt='Deliver the files.', model='before', turn_id='user-turn')
         self.bind()
-        old = self.status()
-        reason = self.event('Stop')['reason']
-        reply = self.event('UserPromptSubmit', prompt=reason, model='after', permission_mode='default')
-        current = self.status()
-        self.assertNotEqual(current['epoch'], old['epoch'])
-        self.assertEqual(current['inputSource'], 'host-continuation')
-        self.assertFalse(current['currentInputReconciled'])
-        self.assertEqual(current['checkpoint'], old['checkpoint'])
-        self.assertIn('not a new user decision', reply['hookSpecificOutput']['additionalContext'])
-        self.assertEqual(self.event('Stop'), {})
+        reason = self.legacy_callback()  # Old state-only userdata, no receipt history.
+        for transition in ('metadata-bind', 'new-input-bind', 'resume', 'recovery-bind'):
+            with self.subTest(transition=transition):
+                if transition == 'metadata-bind':
+                    self.bind(nextAction='Recheck the existing result.')
+                elif transition == 'new-input-bind':
+                    self.event('UserPromptSubmit', prompt='A real new decision.', turn_id='new-user-turn')
+                    self.bind()
+                elif transition == 'resume':
+                    self.event('SessionStart', source='resume')
+                else:
+                    self.event('UserPromptSubmit', prompt='Actual retained user input.',
+                               recovery_epoch=self.status()['epoch'])
+                    self.bind()
+                before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+                current = self.status()
+                self.assertEqual(self.event('UserPromptSubmit', prompt=reason,
+                                           model='after', turn_id='late-callback'), {})
+                self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+                self.assertEqual(self.status(), current)
+                self.assertEqual(self.event('Stop'), {})
 
     def test_late_stop_cannot_consume_a_new_user_turn_continuation(self):
         self.event('UserPromptSubmit', prompt='Deliver the original request.', turn_id='old-turn')
@@ -1443,12 +1505,12 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         before = {p.name: p.read_bytes() for p in self.state.iterdir()}
         self.assertEqual(self.event('Stop', turn_id='old-turn'), {})
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
-        self.assertEqual(self.event('Stop', turn_id='new-turn')['decision'], 'block')
+        self.assertEqual(self.event('Stop', turn_id='new-turn'), {})
 
-    def test_stop_correlates_to_host_continuation_turn_without_new_user_authority(self):
+    def test_legacy_stop_is_noop_for_historical_and_current_host_turns(self):
         self.event('UserPromptSubmit', prompt='Deliver the approved result.', turn_id='user-turn')
         self.bind()
-        reason = self.event('Stop', turn_id='user-turn')['reason']
+        reason = self.legacy_callback()
         retained = self.invoke({'op': 'read-native-input'})['entries']
         self.event('UserPromptSubmit', prompt=reason, turn_id='continuation-turn')
         self.write_outputs(total=59)
@@ -1456,7 +1518,7 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.assertEqual(self.event('Stop', turn_id='user-turn'), {})
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
         self.assertEqual(self.invoke({'op': 'read-native-input'})['entries'], retained)
-        self.assertEqual(self.event('Stop', turn_id='continuation-turn')['decision'], 'block')
+        self.assertEqual(self.event('Stop', turn_id='continuation-turn'), {})
 
     def test_native_mutation_guard_rejects_wrong_turn_without_changing_state(self):
         self.event('UserPromptSubmit', prompt='Deliver the approved result.', turn_id='current-turn')
@@ -1481,9 +1543,13 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
     def test_native_mutation_guard_uses_continuation_turn_with_same_human_epoch(self):
         self.event('UserPromptSubmit', prompt='Deliver the approved result.', turn_id='user-turn')
         self.bind(nativeTurnId='user-turn')
-        reason = self.event('Stop', turn_id='user-turn')['reason']
         original = self.status()
-        self.event('UserPromptSubmit', prompt=reason, turn_id='continuation-turn')
+        # Independent native turn correlation fixture, not a Stop callback.
+        receipt = next(self.state.glob('*.input.json'))
+        saved = json.loads(receipt.read_text(encoding='utf-8'))
+        saved['hostObservation']['turnId'] = 'continuation-turn'
+        saved['inputSource'] = 'host-continuation'
+        receipt.write_text(json.dumps(saved), encoding='utf-8')
         self.assertEqual(self.status()['epoch'], original['epoch'])
         self.assertIn('native-call-turn-conflict', self.invoke(dict(op='pause',
             epoch=original['epoch'], expectedRevision=original['revision'],
@@ -1535,7 +1601,7 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.assertTrue(receipt.exists())
         self.assertEqual(self.status()['hostObservation']['turnId'], 'new-turn')
 
-    def test_stop_rechecks_execution_turn_before_publishing_continuation(self):
+    def test_legacy_stop_does_not_read_outputs_or_publish_any_turn(self):
         self.event('UserPromptSubmit', prompt='Deliver the approved result.', turn_id='old-turn')
         self.bind()
         receipt = next(self.state.glob('*.input.json'))
@@ -1552,8 +1618,8 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.assertEqual(self.event('Stop', turn_id='old-turn'), {})
         del self.preload
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir() if p != receipt})
-        self.assertEqual(json.loads(receipt.read_text(encoding='utf-8'))['hostObservation']['turnId'], 'new-turn')
-        self.assertEqual(self.event('Stop', turn_id='new-turn')['decision'], 'block')
+        self.assertEqual(json.loads(receipt.read_text(encoding='utf-8'))['hostObservation']['turnId'], 'old-turn')
+        self.assertEqual(self.event('Stop', turn_id='new-turn'), {})
 
     def context_request(self):
         current = self.status()
@@ -2080,7 +2146,7 @@ process.kill(process.pid, 'SIGKILL');
         self.assertEqual(restored['checkpoint']['result'], 'Deliver both files')
         self.assertEqual(restored['inspection']['status'], 'incomplete')
         self.assertEqual(restored['storage']['kind'], 'durable-user-data')
-        self.assertEqual(self.event('Stop')['decision'], 'block')
+        self.assertEqual(self.event('Stop'), {})
         self.assertIn('native-user-input-receipt-missing', self.invoke({'op':'status','session_id':'foreign'}, success=False))
         self.write_outputs()
         latest = self.status()
@@ -2119,7 +2185,7 @@ process.kill(process.pid, 'SIGKILL');
                    recovery_epoch=restored['epoch'])
         self.assertEqual(self.event('Stop'), {})
         self.bind()
-        self.assertEqual(self.event('Stop')['decision'], 'block')
+        self.assertEqual(self.event('Stop'), {})
         self.write_outputs()
         current = self.status()
         self.invoke({'op':'retire','epoch':current['epoch'],'expectedRevision':current['revision']})
@@ -2312,12 +2378,12 @@ catch(e){process.stdout.write(e.message);}
         self.assertIn('paused checkpoint remains', response['hookSpecificOutput']['additionalContext'])
         self.assertEqual(self.event('Stop'), {})
 
-    def test_missing_delivery_continues_then_real_files_allow_retirement(self):
+    def test_missing_delivery_stop_is_noop_then_real_files_allow_retirement(self):
         self.assertEqual(self.bind()["inspection"]["status"], "incomplete")
         stop = self.event("Stop", stop_hook_active=False)
-        self.assertEqual(stop["decision"], "block")
+        self.assertEqual(stop, {})
         epoch = self.status()["epoch"]
-        self.event("UserPromptSubmit", prompt=stop["reason"])
+        self.event("UserPromptSubmit", prompt=self.legacy_callback())
         self.assertEqual(self.status()["epoch"], epoch, "our callback cannot become new human authority")
         self.write_outputs()
         self.assertEqual(self.event("Stop", stop_hook_active=True), {})
@@ -2568,7 +2634,7 @@ catch(e){process.stdout.write(e.message);}
     def test_contract_remains_readable_when_files_are_uninspectable_without_state_writes(self):
         self.bind()
         contract = self.status()['checkpoint']
-        self.event('Stop')  # Exercise internal continuation fields excluded from readback.
+        self.legacy_callback()  # Historical internal fields remain excluded from readback.
         (self.work / 'summary.json').mkdir()
         before = {p.name:p.read_bytes() for p in self.state.iterdir()}
         for _ in range(2):
@@ -2587,7 +2653,7 @@ catch(e){process.stdout.write(e.message);}
         self.assertEqual(current["inspection"]["status"], "stale-inputs")
         self.assertIn("unmet-output", self.invoke({"op": "retire", "epoch": current["epoch"],
                       "expectedRevision": current["revision"]}, success=False))
-        self.assertEqual(self.event("Stop", stop_hook_active=False)["decision"], "block")
+        self.assertEqual(self.event("Stop", stop_hook_active=False), {})
         self.event('UserPromptSubmit', prompt='I intentionally replaced source.json with the 70-unit source; use this version and preserve keep.txt.')
         changed = [{"path": "summary.json", "json": {"/total": 70}}, {"path": "details.csv"}]
         self.bind(outputs=changed, revisionReason="Both outputs must use the explicitly updated source.",
@@ -2884,7 +2950,7 @@ process.stdout.write(JSON.stringify({injected}));
                 self.assertNotEqual(self.status()['epoch'], before)
                 self.assertEqual(self.event('Stop'), {})
 
-    def test_input_failure_during_stop_publication_suppresses_old_continuation(self):
+    def test_legacy_stop_never_publishes_or_contends_with_new_input(self):
         self.bind()
         script = r'''
 const fs = require('node:fs'), child = require('node:child_process');
@@ -2906,9 +2972,9 @@ process.stdout.write(JSON.stringify({injected, output}));
         result = subprocess.run([self.node, '-e', script, str(RUNTIME), str(self.work)],
             env=self.environment, cwd=self.work, text=True, encoding='utf-8', capture_output=True, timeout=10)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(json.loads(result.stdout), {'injected': True, 'output': {}})
-        self.assertTrue(self.status()['needsNativeReplay'])
-        self.assertFalse(self.status()['currentInputReconciled'])
+        self.assertEqual(json.loads(result.stdout), {'injected': False, 'output': {}})
+        self.assertFalse(self.status()['needsNativeReplay'])
+        self.assertTrue(self.status()['currentInputReconciled'])
 
     def test_unpersistable_input_failure_is_reported_unknown_not_durably_protected(self):
         self.bind()
@@ -2934,248 +3000,98 @@ fs.renameSync = function(from, to) {
         self.assertIn('freshness is unknown', result.stderr)
         self.assertFalse(list(self.state.glob('*.input-failure.json')))
 
-    def test_unchanged_failure_does_not_loop_but_changed_observation_can_continue(self):
+    def test_legacy_stop_is_noop_for_unchanged_and_changed_observations(self):
         self.bind()
-        self.assertEqual(self.event("Stop", stop_hook_active=False)["decision"], "block")
+        self.assertEqual(self.event("Stop", stop_hook_active=False), {})
         self.assertNotIn("decision", self.event("Stop", stop_hook_active=True))
         (self.work / "summary.json").write_text('{"total":60}', encoding="utf-8")
-        self.assertEqual(self.event("Stop", stop_hook_active=True)["decision"], "block")
+        self.assertEqual(self.event("Stop", stop_hook_active=True), {})
         self.assertNotIn("decision", self.event("Stop", stop_hook_active=True))
 
-    def stop_budget(self):
-        cwd = str(self.work).lower() if os.name == 'nt' else str(self.work)
-        identity = json.dumps({'session': getattr(self, 'session', 'test-session'), 'cwd': cwd},
-                              sort_keys=True, separators=(',', ':'))
-        receipt = self.state / (hashlib.sha256(identity.encode()).hexdigest() + '.input.json')
-        return json.loads(receipt.read_text(encoding='utf-8')).get('stopBudget')
 
-    def set_stop_clock(self, now):
-        self.preload = self.root / 'stop-clock.cjs'
-        self.preload.write_text(f'Date.now = () => {now};', encoding='utf-8')
 
-    def test_stop_default_budget_bounds_metadata_only_changes_and_rebind(self):
-        self.assertEqual(self.stop_budget()['maxContinuations'], 2)
-        self.assertEqual(self.stop_budget()['maxElapsedMs'], 1800000)
-        original = self.stop_budget()['startedAtMs']
-        for index in range(6):
-            self.bind(result=f'Unmet result revision {index}', nextAction=f'Reconsider attempt {index}')
-            result = self.event('Stop')
-            self.assertEqual(result.get('decision') == 'block', index < 2)
-        self.assertEqual(self.stop_budget()['consumedContinuations'], 2)
-        self.assertEqual(self.stop_budget()['startedAtMs'], original)
-        self.assertEqual(self.status()['inspection']['status'], 'incomplete')
-        self.assertFalse((self.work / 'summary.json').exists())
 
-    def test_stop_budget_freezes_configuration_until_real_new_input(self):
-        original = self.stop_budget()
-        self.environment['YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS'] = '5'
-        self.environment['YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS'] = '90000'
-        self.bind()
-        self.event('Stop')
-        self.assertEqual(self.stop_budget()['maxContinuations'], original['maxContinuations'])
-        self.set_stop_clock(original['startedAtMs'] + 1000)
-        self.event('UserPromptSubmit', prompt='A genuine new decision.')
-        budget = self.stop_budget()
-        self.assertEqual(budget['maxContinuations'], 5)
-        self.assertEqual(budget['maxElapsedMs'], 90000)
-        self.assertEqual(budget['startedAtMs'], original['startedAtMs'] + 1000)
-        self.assertEqual(budget['consumedContinuations'], 0)
 
-    def test_stop_budget_time_deadline_and_clock_rollback_preserve_unfinished(self):
-        for kind in ('deadline', 'rollback'):
-            with self.subTest(kind=kind):
-                self.session = 'budget-' + kind
-                self.set_stop_clock(10000000)
-                self.event('UserPromptSubmit', prompt='Deliver approved work.')
-                self.bind()
-                self.set_stop_clock(10000001)
-                self.assertEqual(self.event('Stop')['decision'], 'block')
-                self.set_stop_clock(10000003)
-                self.assertNotIn('decision', self.event('Stop'))
-                self.bind(nextAction='Reconsider unmet work.')
-                self.set_stop_clock(11800000 if kind == 'deadline' else 10000002)
-                self.assertNotIn('decision', self.event('Stop'))
-                self.assertEqual(self.status()['inspection']['status'], 'incomplete')
-                self.assertEqual(self.stop_budget()['consumedContinuations'], 1)
-                self.set_stop_clock(10000004)
-                self.assertNotIn('decision', self.event('Stop'), 'a later clock recovery cannot reopen the budget')
 
-    def test_stop_budget_compact_host_drift_resume_and_replay_do_not_renew(self):
-        self.bind()
-        reason = self.event('Stop')['reason']
-        original = self.stop_budget()
-        self.event('SessionStart', source='compact')
-        self.assertEqual(self.stop_budget(), original)
-        self.event('UserPromptSubmit', prompt=reason, model='changed-model', turn_id='host-turn')
-        self.assertEqual(self.stop_budget(), original)
-        self.bind()
-        reason = self.event('Stop')['reason']
-        self.event('SessionStart', source='resume')
-        self.event('UserPromptSubmit', prompt=reason, recovery_epoch=self.status()['epoch'])
-        self.assertEqual(self.stop_budget()['startedAtMs'], original['startedAtMs'])
-        self.assertEqual(self.stop_budget()['consumedContinuations'], 2)
-        self.bind(nextAction='Still unmet after recovery.')
-        self.assertNotIn('decision', self.event('Stop'))
 
-    def test_stop_budget_old_callback_survives_metadata_rebind_and_resume(self):
-        self.bind()
-        reason = self.event('Stop')['reason']
-        original = self.stop_budget()
-        self.bind(nextAction='Reassess using a distinct method.')
-        self.event('UserPromptSubmit', prompt=reason)
-        self.assertEqual(self.stop_budget(), original)
-        self.assertEqual(self.status()['inputSource'], 'host-continuation')
-        self.event('SessionStart', source='resume')
-        self.event('UserPromptSubmit', prompt=reason)
-        self.assertEqual(self.stop_budget(), original)
-        self.assertTrue(self.status()['needsResumeReconciliation'])
 
-    def test_stop_budget_late_old_callback_cannot_renew_or_alter_new_user_input(self):
-        self.bind()
-        reason = self.event('Stop')['reason']
-        self.event('UserPromptSubmit', prompt='A genuine new user input.', turn_id='new-human-turn')
-        self.bind()
-        before = self.stop_budget()
-        current = self.status()
-        self.event('UserPromptSubmit', prompt=reason, turn_id='late-internal-turn', model='old-model')
-        self.assertEqual(self.stop_budget(), before)
-        self.assertEqual(self.status(), current)
 
-    def test_stop_budget_state_publication_failure_consumes_without_redispatch(self):
-        self.bind()
-        self.preload = self.root / 'state-publication-failure.cjs'
-        self.preload.write_text(
-            "const fs=require('node:fs'),rename=fs.renameSync;"
-            "fs.renameSync=function(from,to){if(String(to).endsWith('.json')&&!String(to).endsWith('.input.json'))"
-            "throw new Error('fixture-state-publication-failure');return rename.call(this,from,to);};",
-            encoding='utf-8')
-        self.assertIn('fixture-state-publication-failure', self.invoke({'hook_event_name':'Stop'}, hook=True, success=False))
-        del self.preload
-        self.assertEqual(self.stop_budget()['consumedContinuations'], 1)
-        self.assertNotIn('decision', self.event('Stop'))
-        self.assertEqual(self.stop_budget()['consumedContinuations'], 1)
 
-    def test_stop_budget_legacy_invalid_and_zero_configuration_do_not_continue(self):
-        for field, raw in ((None, None), ('YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS', '-1'),
-                           ('YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS', '2.5'),
-                           ('YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS', '0'),
-                           ('YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS', '9007199254740992'),
-                           ('YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS', '0')):
-            with self.subTest(field=field, raw=raw):
-                self.environment.pop('YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS', None)
-                self.environment.pop('YIYUAN_ACCORD_STOP_MAX_ELAPSED_MS', None)
-                if field:
-                    self.environment[field] = raw
-                self.event('UserPromptSubmit', prompt='Fresh bounded input.')
-                if field is None:
-                    receipt = next(self.state.glob('*.input.json'))
-                    saved = json.loads(receipt.read_text(encoding='utf-8'))
-                    saved.pop('stopBudget')
-                    receipt.write_text(json.dumps(saved), encoding='utf-8')
-                    self.event('SessionStart', source='resume')
-                    self.event('UserPromptSubmit', prompt='Fresh bounded input.', recovery_epoch=self.status()['epoch'])
-                    self.assertIsNone(self.stop_budget())
-                self.bind()
-                self.assertNotIn('decision', self.event('Stop'))
-                self.assertEqual(self.status()['inspection']['status'], 'incomplete')
 
-    def test_stop_budget_concurrent_dispatches_do_not_overspend(self):
-        self.bind()
-        request = dict(session_id='test-session', cwd=str(self.work), hook_event_name='Stop')
-        def stop():
-            run = subprocess.run([self.node, str(RUNTIME), '--hook', 'Stop'], input=json.dumps(request),
-                text=True, capture_output=True, env=self.environment, cwd=self.work, timeout=10)
-            return json.loads(run.stdout) if run.returncode == 0 else {}
-        with ThreadPoolExecutor(max_workers=4) as pool:
-            results = list(pool.map(lambda _: stop(), range(8)))
-        self.assertEqual(sum(result.get('decision') == 'block' for result in results), 1)
-        self.assertEqual(self.stop_budget()['consumedContinuations'], 1)
-        self.bind(nextAction='Second distinct attempt.')
-        with ThreadPoolExecutor(max_workers=4) as pool:
-            results = list(pool.map(lambda _: stop(), range(8)))
-        self.assertEqual(sum(result.get('decision') == 'block' for result in results), 1)
-        self.assertEqual(self.stop_budget()['consumedContinuations'], 2)
-        self.bind(nextAction='Third attempt exceeds allowance.')
-        self.assertNotIn('decision', self.event('Stop'))
 
-    def test_stop_budget_guards_do_not_spend_on_pause_or_unsafe_continuation(self):
-        self.bind(canContinue=False)
-        self.assertEqual(self.event('Stop'), {})
-        self.assertEqual(self.stop_budget()['consumedContinuations'], 0)
-        self.bind()
-        self.pause()
-        self.assertEqual(self.event('Stop'), {})
-        self.assertEqual(self.stop_budget()['consumedContinuations'], 0)
 
-    def test_stop_uses_declared_output_meaning_and_explicit_next_action(self):
-        # This observation test intentionally exercises three distinct attempts.
+    def test_output_meaning_and_next_action_never_dispatch_a_turn(self):
+        # Historical environment settings cannot enable automatic execution.
         self.environment['YIYUAN_ACCORD_STOP_MAX_CONTINUATIONS'] = '3'
         self.event('UserPromptSubmit', prompt='Exercise three approved observation attempts.')
         self.bind()
         output = self.work / 'summary.json'
         output.write_text('{"total":50,"note":"pending"}', encoding='utf-8')
-        self.assertEqual(self.event('Stop')['decision'], 'block')
+        self.assertEqual(self.event('Stop'), {})
         # A fresh raw fingerprint is still reported; formatting and key order
-        # do not supply new JSON content for another automatic attempt.
+        # remain distinct from content predicate satisfaction.
         before = self.status()['inspection']['outputs'][0]['current']['sha256']
         output.write_text('{\n "note":"pending", "total":50\n}', encoding='utf-8')
         after = self.status()['inspection']['outputs'][0]['current']['sha256']
         self.assertNotEqual(before, after)
         self.assertNotIn('decision', self.event('Stop', stop_hook_active=True))
         output.write_text('{"total":51,"note":"pending"}', encoding='utf-8')
-        self.assertEqual(self.event('Stop', stop_hook_active=True)['decision'], 'block')
+        self.assertEqual(self.event('Stop', stop_hook_active=True), {})
         self.assertNotIn('decision', self.event('Stop', stop_hook_active=True))
         self.bind(nextAction='Use the changed source to correct the remaining total.')
-        self.assertEqual(self.event('Stop', stop_hook_active=True)['decision'], 'block')
+        self.assertEqual(self.event('Stop', stop_hook_active=True), {})
         self.assertNotIn('decision', self.event('Stop', stop_hook_active=True))
 
-    def test_stop_keeps_byte_requirements_and_unknown_json_observations(self):
-        for contract in ('exists', 'bytes', 'malformed', 'nonfinite', 'input'):
+    def test_output_and_input_safety_floors_refuse_retirement_independently_of_stop(self):
+        for contract in ('missing', 'bytes', 'malformed', 'nonfinite', 'input'):
             with self.subTest(contract=contract):
-                self.session = 'stop-observation-' + contract
-                self.event('UserPromptSubmit', prompt='A new isolated bound observation: ' + contract)
+                self.session = 'inspection-floor-' + contract
+                self.event('UserPromptSubmit', prompt='Verify the declared output contract: ' + contract)
                 output = self.work / 'summary.json'
-                output.write_text('{"total":50}', encoding='utf-8')
-                predicate = {'path': 'summary.json'}
-                if contract != 'exists':
-                    predicate['json'] = {'/total': 60}
+                output.write_text('{"total":60}', encoding='utf-8')
+                (self.work / 'details.csv').write_text('units,60', encoding='utf-8')
+                predicate = {'path': 'summary.json', 'json': {'/total': 60}}
                 if contract == 'bytes':
                     predicate['sha256'] = hashlib.sha256(b'{"total":60}').hexdigest()
-                if contract == 'malformed':
-                    output.write_text('{broken', encoding='utf-8')
-                if contract == 'nonfinite':
-                    output.write_text('{"total":1e400}', encoding='utf-8')
                 self.bind(outputs=[predicate, {'path': 'details.csv'}])
-                self.assertEqual(self.event('Stop')['decision'], 'block')
-                if contract == 'input':
-                    (self.work / 'source.json').write_text('{ "units":60 }', encoding='utf-8')
+                self.assertEqual(self.status()['inspection']['status'], 'verified-local')
+                if contract == 'missing':
+                    output.unlink()
+                elif contract == 'bytes':
+                    output.write_text('{ "total":60 }', encoding='utf-8')
                 elif contract == 'malformed':
-                    output.write_text('{broken ', encoding='utf-8')
+                    output.write_text('{broken', encoding='utf-8')
                 elif contract == 'nonfinite':
-                    output.write_text('{ "total":1e400 }', encoding='utf-8')
+                    output.write_text('{"total":60,"unrelated":1e400}', encoding='utf-8')
                 else:
-                    output.write_text('{ "total":50 }', encoding='utf-8')
-                repeated = self.event('Stop', stop_hook_active=True)
-                if contract == 'exists':
-                    self.assertNotIn('decision', repeated)
-                else:
-                    self.assertEqual(repeated['decision'], 'block')
+                    (self.work / 'source.json').write_text('{ "units":60 }', encoding='utf-8')
+                current = self.status()
+                inspection = current['inspection']
+                self.assertEqual(inspection['status'], 'stale-inputs' if contract == 'input' else 'incomplete')
+                self.assertEqual(inspection['outputs'][0]['matched'], contract == 'input')
+                if contract == 'input':
+                    self.assertFalse(inspection['inputs'][0]['unchanged'])
+                before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+                self.assertIn('unmet-output-cannot-retire', self.invoke(dict(op='retire',
+                    epoch=current['epoch'], expectedRevision=current['revision']), success=False))
+                self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+                self.assertEqual(self.event('Stop'), {})
 
     def test_nonfinite_json_output_does_not_match_a_null_predicate(self):
         self.bind(outputs=[{'path': 'summary.json', 'json': {'/total': None}}])
         (self.work / 'summary.json').write_text('{"total":1e400}', encoding='utf-8')
         self.assertFalse(self.status()['inspection']['outputs'][0]['matched'])
-        self.assertEqual(self.event('Stop')['decision'], 'block')
+        self.assertEqual(self.event('Stop'), {})
 
-    def test_deep_unrelated_json_keeps_shallow_predicates_and_raw_retry(self):
+    def test_deep_unrelated_json_keeps_shallow_predicates_without_dispatch(self):
         self.bind()
         output = self.work / 'summary.json'
         deep = '[' * 4000 + '0' + ']' * 4000
         output.write_text('{"total":50,"nested":' + deep + '}', encoding='utf-8')
         self.assertEqual(self.status()['inspection']['status'], 'incomplete')
-        self.assertEqual(self.event('Stop')['decision'], 'block')
+        self.assertEqual(self.event('Stop'), {})
         output.write_text('{ "total":50,"nested":' + deep + '}', encoding='utf-8')
-        self.assertEqual(self.event('Stop', stop_hook_active=True)['decision'], 'block')
+        self.assertEqual(self.event('Stop', stop_hook_active=True), {})
 
     def test_pause_does_not_reconcile_an_old_output_contract_with_new_requirements(self):
         self.bind()
@@ -3563,7 +3479,7 @@ fs.renameSync = function(from, to) {
         self.assertIn('EPERM', result.stderr)
         self.assertTrue(list(self.state.glob('*.input.json.lock')))
         self.assertIn('recovery-read-busy', self.invoke({'op': 'status'}, success=False))
-        self.assertIn('EEXIST', self.invoke({'hook_event_name': 'Stop'}, hook=True, success=False))
+        self.assertEqual(self.event('Stop'), {})
         self.invoke({'op': 'recover-lock', 'lock': 'input'})
         current = self.status()
         self.assertTrue(current['needsNativeReplay'])

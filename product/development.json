@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261006080827",
+    "version": "3.3.0-dev.1+codex.20261006123921",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261006080827",
-        "packageSha256": "4706279cb86716f60f8ff9ca7ad3847f97b74d069a35c725864faadd8842d60c",
+        "packageVersion": "3.3.0-dev.1+codex.20261006123921",
+        "packageSha256": "941bc89eb1fe711dea4150507974cef654fde68454fe32ee80896b22a6966c33",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -1238,9 +1238,17 @@
   },
   "developmentObservations": [
     {
+      "id": "development-only-stop-product-withdrawal-20261006",
+      "source": "Latest user clarified temporary development requirement; closed-loop delivery does not require added user turns.",
+      "effect": "Remove product Stop registration/dispatch and its budget/env/parser chain; compatibility canContinue is only a recorded feasibility judgment. Preserve input/state/CAS/pause/recovery/completion safeguards and native handoff.",
+      "verification": "Checkpoint167, MCP45, entry104 local tests pass; global consumers/delivery checks and new package adoption remain in progress. Legacy state-only callback and direct inspection/retire regressions preserve safety after dispatch withdrawal.",
+      "claimLimit": "Not a reduction of F01-F08/A01-A08 responsibility or replay of prior cases. Previous budget and failed installers remain historical, not current launchers.",
+      "privateEvidence": "accord-remove-product-continuation-20261006-01"
+    },
+    {
       "id": "bounded-stop-runtime-20261006",
       "scope": "ordinary-interaction-continuation-control",
-      "state": "source-fixed-awaiting-local-adoption",
+      "state": "withdrawn-development-only-design",
       "defaults": {
         "maxContinuations": 2,
         "maxElapsedMs": 1800000
@@ -1248,7 +1256,8 @@
       "behavior": "Actual user input freezes budget in the existing receipt; callback identity survives rebind/resume and late callbacks cannot renew a newer input. Metadata changes, compaction and replay do not extend it. Invalid/legacy/backward-clock state preserves unfinished work without automatic continuation.",
       "verification": "175 complete TaskCheckpointTests and9 budget tests pass; independent review passes. Root HELP integration targeted4 tests passed. Actual installed adoption remains pending.",
       "claimLimit": "Limits new Accord Stop continuation requests only, not running model/tool cancellation or other host schedulers. No Goal activation, new service or third-party change.",
-      "privateEvidence": "accord-stop-budget-implementation-20261006-01/REVIEW.md"
+      "privateEvidence": "accord-stop-budget-implementation-20261006-01/REVIEW.md",
+      "disposition": "User clarified automatic Stop continuation was a temporary development request, not Accord product scope. Keep15af implementation/results as history; exclude it and its budgets from the active distribution."
     },
     {
       "id": "ended-release-ack-case-disposition-20261006",
@@ -8261,7 +8270,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "work": "Execute the finite R1-R4 release closeout in PLAN-v3.3.md: R1 bounded ordinary Stop and actual installed adoption; R2 remaining capability/continuity changes using existing positive facts; R3 promised-entry and representative joined system acceptance, including resource/value consequences; R4 exact candidate hosted review and publication. R2/R3 may share one necessary episode; do not create cases or calls merely for count/form. Each ordinary user input gets a finite work package and exit condition, with the Stop budget held across metadata/rebind/compaction. Retain17 scopes,12 active declarations and all A01-A08/quality floors; preserve original failures and consumed one-use grants. Reuse unaltered sufficient evidence; only material changes reopen affected checks. Optional optimization, promotion and future-host decisions follow3.3. Source/install/adoption/behavior/release remain separate. New trust/account/data/cost/externally shared effects need their actual authority; routine authorized implementation and delegate choices do not require repeated permission. No cancelled Cloud route, unrequested Goal, user main-model change or third-party policy modification.",
+    "work": "Follow finite R1-R4 closeout in PLAN-v3.3.md. R1 withdraw development-only Stop auto-continuation and restore normal host conversation/task flow, preserve input/state/recovery/handoff duties, and verify actual new-package adoption. R2 close material remaining capability/continuity changes using existing positive evidence. R3 verify promised selected entries and representative joined outcomes, resources and value without forcing every mechanism. R4 exact candidate independent/hosted checks and conditional3.3 publication. No Stop budget or automatic added turns is a product requirement. canContinue does not dispatch. Retain17 scopes,12 active declarations, all F/A and quality floors, exact old failures and consumed grants. Reuse unchanged sufficient evidence; reopen only affected dependencies. Optional optimization, promotion, future-host decisions and cancelled Cloud remain outside this release work. Preserve user main-model/mode, original meta-guidance and third-party choices; ordinary authorized implementation/delegation is not a new permission gate.",
     "requires": "On 2026-09-19 the user resumed work, authorizing a bounded Jev trial followed by alignment of verified external conclusions and applicable trial findings, then continued development. On 2026-09-20 the user obtained direct access and authorized the prepared private synthetic trial, which completed. The Jev results remain private. On 2026-09-22 the user decided that 3.3 should internalize applicable ideas using host capabilities and Accord components, while deferring dedicated third-party decision-model integration to future versions. This supersedes the earlier optional-provider trial/integration next step for 3.3, retains prior evidence and does not restrict ordinary ecosystem reuse, add training or hosting, or reduce acceptance. Recheck live repository, CI, authority and environment conditions; carry independent authorized work forward without treating access restrictions as product failure or acceptance. The trial does not authorize automatic top-up, payment-card enrollment or a mandatory paid dependency. Resume authorized development and integration in the bound main checkout, outside Goal mode, using isolated worktrees for independent writers. Complete and publish 3.3.0 after all necessary acceptance and exact-candidate checks, as requested on 2026-09-14; readiness remains false. Preserve user IDE/development conversations and immutable historical identity, and retire unneeded task-owned resources. New accounts, trust, data, meaningful cost and unrelated shared or external writes retain their separate boundaries. Prefer official and existing reliable sources before experiments; the plan and latest user decisions own authority. The user has no Mac/Xcode or JetBrains installation and does not intend to purchase them for this project. Use existing environments, official sources and standard hosted Linux/macOS CI for feasible shared work. Keep instance-specific unknowns explicit without turning them into procurement requirements or blocking independent ready work; new installation, accounts or paid resources require their actual authority."
   },
   "claimCeiling": {

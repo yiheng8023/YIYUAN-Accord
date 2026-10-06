@@ -1066,6 +1066,9 @@ class NativeStateMcpTests(unittest.TestCase):
         for field in ('result', 'inputs', 'outputs', 'nextAction', 'canContinue'):
             self.assertIn('Required for bind',
                           manage_tool['inputSchema']['properties'][field]['description'])
+        feasibility = manage_tool['inputSchema']['properties']['canContinue']['description']
+        self.assertIn('never requests a turn or drives automatic execution', feasibility)
+        self.assertNotIn('additional automatic continuation', feasibility)
         self.assertIn('no protected inputs', manage_tool['inputSchema']['properties']['inputs']['description'])
         self.assertIn('not inherited', manage_tool['inputSchema']['properties']['outputs']['description'])
         self.assertEqual(rows[3]['result']['structuredContent']['source']['threadId'], 'current-thread')

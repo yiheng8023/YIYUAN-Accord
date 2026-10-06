@@ -20,7 +20,7 @@
 
 ## bind：每次完整绑定当前合同
 
-五字段每次必填且不默认继承：`result` 是当前授权结果；`inputs` 是完整受保护输入列表（无保护输入时 `[]` 合法）；`outputs` 是完整非空输出谓词列表；`nextAction` 是具体下一动作；`canContinue` 是当前安全且已授权工作是否可申请额外 Stop 自动续轮的判断。输入与输出合计最多 100 项；path-only 输出仅检查文件，精确要求用 sha256 或 JSON Pointer 值谓词表达。[schema 73–105](../runtime/native-state-mcp.cjs#L73)、[bind guard 330–360](../runtime/native-state-mcp.cjs#L330)。
+五字段每次必填且不默认继承：`result` 是当前授权结果；`inputs` 是完整受保护输入列表（无保护输入时 `[]` 合法）；`outputs` 是完整非空输出谓词列表；`nextAction` 是具体下一动作；`canContinue` 兼容保留为当前安全且已授权工作是否仍可进行的判断记录，不触发新回合或执行。输入与输出合计最多 100 项；path-only 输出仅检查文件，精确要求用 sha256 或 JSON Pointer 值谓词表达。[schema 73–105](../runtime/native-state-mcp.cjs#L73)、[bind guard 330–360](../runtime/native-state-mcp.cjs#L330)。
 
 以下三段是调用参数模板：只生成 MCP tools/call 的 params，不连接、不调用工具、不自动判断 permission。`latest` 必须是真实最新 inspect 结果的 structuredContent（或宿主规范化结果中已解析的同一对象）；所有文字、路径、布尔判断由接入者按当前任务证据填入。准备参数后若输入或状态变化，重新 inspect 并审查。禁止用本指南里的占位名称当任务事实。
 
@@ -39,7 +39,7 @@ function bindParams(latest, absoluteWorkspace, reviewedContract) {
 }
 ```
 
-`reviewedContract` 必须含已审查的全部五字段：inputs 是完整相对路径列表（确认无保护输入才填 []），outputs 是完整非空谓词列表。模板逐项选取字段；既有变更所需的可选修订字段按下文实际审核后添加到 arguments。既有绑定重新提交仍需五字段。`canContinue: false` 适用于等待必要用户观察、决定、授权或外部条件；未完成项目或 mode=active 不足以支持 true。false 不表示完成、取消或用户 pause，也不阻止后续用户输入。[续轮语义 100–105](../runtime/native-state-mcp.cjs#L100)。
+`reviewedContract` 必须含已审查的全部五字段：inputs 是完整相对路径列表（确认无保护输入才填 []），outputs 是完整非空谓词列表。模板逐项选取字段；既有变更所需的可选修订字段按下文实际审核后添加到 arguments。既有绑定重新提交仍需五字段。`canContinue: false` 适用于等待必要用户观察、决定、授权或外部条件；未完成项目或 mode=active 不足以支持 true。false 不表示完成、取消或用户 pause，也不阻止后续用户输入。[可行性记录语义](../runtime/native-state-mcp.cjs#L100)。
 
 保存合同的 `checkpoint.inputs` 含 `{path, observed}` 指纹对象；重绑参数 `inputs` 则只接受相对路径字符串。核对保护和变更处置后取各项 path，不直接把保存的对象列表作为参数，也不省略已有保护。首次绑定的 snapshot 可为 mode=unbound、revision=0、checkpoint=null；仍须有真实输入及可用恢复标志，再提交完整的新合同。
 
