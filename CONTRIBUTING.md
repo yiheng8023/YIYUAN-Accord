@@ -92,6 +92,12 @@ compare unchanged requirements separately from later authorized decisions.
 Exercise pending and final selection, dependency changes and criterion changes.
 Passing simulated observers remains unit evidence, not actual admission.
 
+Declared executable fixture fingerprints must match their committed source bytes,
+including nested worker bindings. Rebind affected current declarations after a
+source change, preserve the original snapshots and failures, and rerun the
+pre-dispatch identity guard. The current fixture-fingerprint regression covers
+every declared execution reference; static conformance still does not prove execution.
+
 CLI reports use UTF-8 on standard output, including redirected output. Decode
 captured report bytes as UTF-8; callers need not change their system locale.
 For ad hoc Python JSON reads, use `-X utf8` or an explicit UTF-8 stdout encoding;

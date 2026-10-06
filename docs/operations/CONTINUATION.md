@@ -22,6 +22,10 @@
 
 本轮CI纠偏：21c0f774 / CI37500553594最终失败，9个产品矩阵项失败、2个原生回归项成功。Ubuntu3.12完整官方日志与本机复现定位四个测试仍依赖旧pending或整个历史scope不可变的假设；保原日志与失败，不改准入器、原N身份/限额/判定或质量底线。四测试改为显式未定反例及当前final正向、按实际依赖失效和对未变历史条件的精确比较；六项定向检查135.513秒全部通过。选定桌面/手机行的说明同步为Chat本版deferred/能力未知，未改选择集合或判据。通用测试维护规则进入CONTRIBUTING，不重复塞进已有核验Skill。本次未启模型/SDK、安装或Trust；源码包b076及现装123保持，完整F/A仍未通过。证据：accord-ci-entry-selection-correction-20261007-01，修正提交的CI仅材料性终态回核。
 
+当前18e96754 / CI37510656606已按精确head核11/11成功，原21失败保持。下一必要机制验证已有专用sdk-lifecycle-case的Windows base工作流，包含两case前绑、实际身份重核、限额、原始回执和退出；不新增runner/默认服务或重做旧模型业务。当前POSIX默认CI还启hot-reload，不能代入两Windows/base声明。执行前对账找到两声明的runner指纹仍为fe8，当前提交源码为06d5；原前态和未派发事实保在accord-current-windows-lifecycle-20261007-01。已仅修当前两case指纹，新增遍历全部已声明执行引用的回归，原runner/预算/质量/判据不动；未实际执行或准入前不宣称通过。
+
+原生前绑源审查在accord-native-case-binding-20261007-01/review.md：现caller-owned observer允许不带execution block的普通native case，无需强造SDK。该准备本身未前绑，不追认准入；新可用来源是本次宿主session/turn记录实际Sol/medium、0.160.1、on-request/danger-full-access/default，并关联Root及唯一子任务，不能用requested参数代证所有actor/入口。普通维护一致性候选尚未找到未完成缺陷，当前不为标签重做已审文案。Source角色已completed，写集仅私有review.md；原Root主模型/用户配置、source25/packageb076/現装123不变。
+
 ## 目标与权限
 
 - Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 负责整合；3.3 必要功能、质量、完整验收及精确候选均满足后，按既有条件授权发布 3.3.0。当前没有发布资格。发布后的传播、部署和治理不计进度。

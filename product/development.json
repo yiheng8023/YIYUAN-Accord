@@ -1239,6 +1239,14 @@
   },
   "developmentObservations": [
     {
+      "id": "current-sdk-execution-fixture-source-rebinding-20261007",
+      "source": "18e96754/CI37510656606 completed success11/11. Source-only preflight of the existing sdk-lifecycle-case Windows base route rejected both declared execution fingerprints: fe8c76f2 versus committed runner06d5e472. No workflow or native process was dispatched at the mismatch.",
+      "effect": "Update only the two current SDK lifecycle/scoped-exposure caseSha256 values to the actual committed runner. Their WindowsJob/base limits, original fixtures, effects, independent observation and all scope/quality conditions remain. Existing Windows workflow already binds both cases before execution; default POSIX hot-reload CI is a different condition, not their passing evidence.",
+      "validation": "New fixture-fingerprint regression failed for exactly both stale SDK declarations, then passed after rebinding; it traverses all current execution references and compares actual Git bytes. No new case, runtime, module, service, dependency, installation or trust state was added.",
+      "limits": "Prepared source identity is not observed mechanism or formal admission. Preserve old declaration snapshots and failed/preflight records; no old model-business instance or consumed grant is replayed. Any new Windows run belongs to its fresh immutable candidate and retains the existing finite limits.",
+      "evidence": "Private accord-current-windows-lifecycle-20261007-01/ORIGINAL-BINDING-MISMATCH.json and fingerprint-red.log/fingerprint-green.log. Native planning source review in accord-native-case-binding-20261007-01/review.md confirms callable observer, optional execution helper and unresolved actual-effect prerequisites."
+    },
+    {
       "id": "final-selection-test-assumptions-correction-20261007",
       "source": "CI37500553594 at21c0f774: nine product-suite jobs failed, two native jobs succeeded. Complete official Ubuntu3.12 log identifies four stale test assumptions; local four-test reproduction failed51.010seconds before correction.",
       "effect": "Negative selection fixtures explicitly bind non-final state. Dependency and navigation tests include newly eligible final-entry cases rather than permanently excluding parent scopes. Historical-disposition checks retain exact failed identity, source bytes, original limits, unchanged scopes and acceptance floors while allowing only the later user-authorized entry-selection fields. Selected desktop/mobile explanatory basis now says deferred/unknown for the non-selected Chat mode.",
@@ -6512,7 +6520,7 @@
               ],
               "runner": "scripts/observe_codex_lifecycle.py",
               "caseFile": "scripts/observe_codex_lifecycle.py",
-              "caseSha256": "fe8c76f27f77c2ae0266d1a9622c54073a4bf333749b45a73c8687eb2fae9f8d"
+              "caseSha256": "06d5e472ed87e4448d604c0da7fd30e75daf0d183cdf029fa9e6f088f608a6e9"
             }
           },
           "id": "v33-codex-sdk-lifecycle-01",
@@ -6635,7 +6643,7 @@
               ],
               "runner": "scripts/observe_codex_lifecycle.py",
               "caseFile": "scripts/observe_codex_lifecycle.py",
-              "caseSha256": "fe8c76f27f77c2ae0266d1a9622c54073a4bf333749b45a73c8687eb2fae9f8d"
+              "caseSha256": "06d5e472ed87e4448d604c0da7fd30e75daf0d183cdf029fa9e6f088f608a6e9"
             }
           },
           "id": "v33-codex-sdk-scoped-exposure-01",

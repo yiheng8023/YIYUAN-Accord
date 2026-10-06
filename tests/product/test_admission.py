@@ -1355,6 +1355,28 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report['caseBindingGaps']['v33-system-integration']['function']['caseIds'], [])
         self.assertEqual(report['caseBindingGaps']['v33-dynamic-model-routing']['function']['caseIds'], [])
 
+    def test_declared_current_execution_fixtures_match_committed_sources(self):
+        checked = set()
+        for case in self.contract['acceptance']['admission']['cases']:
+            pending = [case['conditions'].get('execution')]
+            while pending:
+                value = pending.pop()
+                if isinstance(value, list):
+                    pending.extend(value)
+                    continue
+                if not isinstance(value, dict):
+                    continue
+                pending.extend(item for item in value.values() if isinstance(item, (dict, list)))
+                if not {'runner', 'caseFile', 'caseSha256'} <= set(value):
+                    continue
+                with self.subTest(case=case['id'], fixture=value['caseFile']):
+                    self.assertIn(value['caseFile'], case['oracleFiles'])
+                    raw = subprocess.check_output(
+                        ['git', '-C', str(self.root), 'show', 'HEAD:' + value['caseFile']], timeout=30)
+                    self.assertEqual(value['caseSha256'], hashlib.sha256(raw).hexdigest())
+                checked.add(case['id'])
+        self.assertTrue({'v33-codex-sdk-lifecycle-01', 'v33-codex-sdk-scoped-exposure-01'} <= checked)
+
     def test_ended_release_case_preserves_failure_identity_and_continuity_floor(self):
         from yiyuan_accord.admission import _definition
         record = next(row for row in self.contract['developmentObservations']
