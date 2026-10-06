@@ -1,6 +1,6 @@
 # MCP 任务状态调用指南
 
-适用对象：维护者、原生 MCP 接入者及消费此指南的 Agent。依据源码 `315e2476e4818545d0dbb6a2c241be72b01ceae4`。
+适用对象：维护者、原生 MCP 接入者及消费此指南的 Agent。原调用模板依据源码 `315e2476e4818545d0dbb6a2c241be72b01ceae4`；输入隔离补充依据 `73120669` 与2026-10-06原生回执对账。
 
 ## 调用前：取得可用的最新观察
 
@@ -9,6 +9,14 @@
 `cwd` 是调用者选择的绝对工作区；inputs 路径与每个 outputs.path 均相对该工作区。管理共同必填字段是 cwd、action、epoch、expectedRevision。当前 root/session/turn 身份由原生调用元数据提供；调用者 arguments 不填 session_id、threadId、nativeTurnId 或伪造 metadata。后代共享 session 的身份差异会被拒绝。[参数与身份 guard 309–376](../runtime/native-state-mcp.cjs#L309)、[相对路径 1269](../runtime/task-checkpoint.cjs#L1269)。
 
 若细节标为 `omitted-bounded-result`，先读 `checkpointSource.path` 的完整字节，对实际解析的同一份字节计算 SHA-256 并比对 checkpointSource.sha256，取得完整合同。保存文件只有基线/谓词；当前业务文件观察需另行检查。依赖动作前再次 inspect 并核对当前输入、epoch、revision、digest、pause 与恢复标志；变化或未知仍未决，不能把省略字段当空值。[超长返回 246–267](../runtime/native-state-mcp.cjs#L246)、[架构 110–117](architecture.md#L110)。
+
+## 输入隔离不等于本轮正文缺失
+
+`needsNativeReplay=true` 表示助手的输入基准尚不能用于绑定或续轮，不单独证明本轮正文漏收。先区分 `inputReceipt.present`、`failureWatermarkScopes` 和 `inputSource`，再将捕获文本与实际当前任务的原生输入、身份及轮次核对。完整捕获可以与 `quarantined-native-input` 同时存在；这既不是恢复成功，也不是输入必然缺失。
+
+未能确定会话归属的工作区故障标记会影响同工作区尚未确认该标记的会话。旧标记只含 generation 时，文件时间不能补出原事件、原会话或丢失内容。不得因新会话、标记较旧或当前正文完整便删除共享标记、设置自动过期或宣称旧责任已恢复。
+
+实际需要恢复本任务时，使用既有最新 recovery epoch 与宿主保留的真实当前输入，按该会话进行核对和恢复；不能从哈希重构输入，也不能借此解除其他会话的隔离或暂停。不要为改判已结束案例而事后重放。只停止依赖该未恢复输入基准的动作；助手恢复状态、独立来源证明的当前任务事实和其他已授权职责分别记账，不把局部隔离误报为全宿主故障或完成。
 
 ## bind：每次完整绑定当前合同
 

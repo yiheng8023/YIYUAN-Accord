@@ -6,7 +6,7 @@
 
 真实受控能力丢失组合已跑通：源成功保存检查点后，其任务写工具 lease 实际撤销；源收到无写入的拒绝后自行提出接管，Root核定，目标读原任务/检查点及受托明确选择的原版Implement，接收后才取得recorder唯一写者并完成三产物。三轮实际均为Sol/medium；19项模型测试和独立18合法/34拒绝均通过，源订阅释放、恢复原件保留，原生与QA Job均0，558.624秒内完成。它提供受控条件下自主判断到实用续作的正向证据，不是所有自主择时或完整A05通过。
 
-下一核本次实录暴露的workspace级input-loss/quarantine是否把旧来源故障传播到全新任务：先核必要来源和作用域，区分现装与候选，不清旧标记或重放输入求绿。现新任务通过完整调用者输入/当前原生流独立绑定，未声称修复该未知；保留已完成接管及W02事实，不重跑本例。正式case映射与尚缺失败退路随实际结论对齐。
+输入隔离诊断已闭：C02三份捕获文本逐字匹配原生派发；同一旧workspace标记使其保持quarantine，现装/候选对应逻辑及隔离fixture行为一致。不是本轮漏收，也没有证明可删除共享标记；旧标记原事件/会话未知。既有token-bound恢复可只确认本会话，保其他暂停和标记，本轮仅在临时fixture验证，未改实际状态。下一回到已证接管的正式case/条件映射，区分可复用证据和确缺失败退路，不重跑实例或无价值盘点。
 每段工作以可核结果或具体反例收束。必要的机制验证和受控决策试验本身可以服务发布验收，不需要捏造另一项业务为调用工具找理由；如用合成数据或人为控制条件，事前标明，结论限于该条件。模型自主判断不能由固定响应、明确要求迁移或回执格式替代。
 
 ## 目标与权限
@@ -35,7 +35,7 @@
 |---|---|---|
 | W01/W03/W04 | 普通委托、来源保护及局部纠偏已有各自有限结果。 | 在新输入、失败与更正后继续推进并修复受影响旧产物和判断；外部救场不追认自主成功，重大未知责任保持。 |
 | W02 能力协调 | 备件任务有无Skill cue的自主选择/采用；真实Root代选、worker首个业务写前读取Implement、TDD和四实物及独立后置QA提供有限正向功能事实。本次另在真实目标同连接核enabled/规范来源，目标在业务写前读取Implement并按范围采用，完成同episode交付。native activation与这些事实分别记账。 | 当前政策/有效委托、停用或排除、同名/同义的语义判断、目标控制、变化后纠偏与完整组合；复用已证正向，不重跑业务求形式标签。 |
-| W05 连续性 | 真实受控任务工具失效后源自主proposal、语义继承、单写者首续作、同episode独立QA及源订阅释放已有正向实例。 | 更广择时/变化和适用失败恢复、workspace输入隔离未知仍待核；catalog声明及正式case映射尚缺 `recovery-and-rollback` / `capability-loss`，本观察不自动晋准入。健康任务不强制交接，不重跑已闭实例。 |
+| W05 连续性 | 真实受控任务工具失效后源自主proposal、语义继承、单写者首续作、同episode独立QA及源订阅释放已有正向实例。 | 更广择时/变化和适用失败恢复仍待核；workspace隔离已定位为旧未归属标记的保守行为，原责任未知保留；catalog声明及正式case映射尚缺 `recovery-and-rollback` / `capability-loss`，本观察不自动晋准入。健康任务不强制交接，不重跑已闭实例。 |
 | W06/W07 | 部分环境/资源变化、后置核验和所属进程退出已有有限事实。 | 有实际变化的环境/资源组合及真实恢复、成品与退出。局部Job0不覆盖整个宿主。 |
 | W08 与发布 | 全部必要范围已定义；分散结果和局部准入保持。 | 同episode的必要职责/八质量轴/四场景及独立净影响；职责由足够宿主能力承担或适当不介入也可成立，不能为覆盖而强行调用所有机制。须有具体oracle，不以空旗标放行。 |
 
@@ -47,6 +47,7 @@
 
 只有处理对应结果、恢复或比较时才读取下列原件；它们不是下一轮命令。私有目录均在 `C:\Users\15521\.codex\backups\`。
 
+- 输入隔离对账：`accord-input-isolation-diagnosis-20261006-01/FACTS.json`（SHA `b0a196c2651e12eef1906412de5a0a64106f39ee42ca72e63f5adf6a9646b70e`）；三当前文本完整，原marker/两receipt字节未动，原归属未知，停止同标记调查。
 - 本次受控组合：`accord-controlled-capability-loss-20261006-02/ROOT-RESULT.json`及原生stream、Root各门、工具写记录和独立QA；`accord-controlled-capability-loss-20261006-01/ROOT-RESULT.json`保首turn前失败。01仅因额外`includeTurns`要求失配，02复用最小元数据与真实stream，未伪造完整历史；已闭不重跑。
 - 当前源码与SDK：`accord-stop-progress-repro-20261006-01`；`accord-autonomous-trigger-source-20261006-01`（诊断已闭）；`accord-autonomous-live-20261006-01/ROOT-RESULT.json`（实际运行已闭）。
 - W02与UTF8：`accord-w02-spares-workbook-20261004-01`、`accord-w02-exam-schedule-20261005-01`、`accord-w02-w08-prospective-20261005-01/NATIVE-ACTUAL-RESULT.json`及其`post-delivery-qa-preparation/ROOT-POST-DELIVERY-RESULT.json`。UTF8原S980/1200未启动QA失败与后来软件QA通过分别保留，不能追认原episode。
