@@ -1238,16 +1238,17 @@
   },
   "developmentObservations": [
     {
-      "id": "native-release-successor-fixture-preparation-20261006",
+      "id": "native-release-successor-fixture-actual-20261006",
       "observedAt": "2026-10-06",
-      "scope": "opt-in-native-protocol-fixture-source-and-pure-tests-only",
-      "sourceBase": "5a2c9b0c18725573cbfafd239291c4df9964d524",
-      "finding": "Existing two test files now prepare real normal unsubscribe acknowledgement loss at the original consumer, original controller/native/OS-resource closure, then a distinct read-only native controller finalizing the same recorder without replay. The independent inspector links raw requests/ACKs/terminals/history, versions, durable recorder, preserved originals and owned-resource exit.",
-      "checks": "91 pure tests pass, including41 new synthetic oracle/callback regressions;19 private Node driver boundary tests and independent source review. No actual CLI/AppServer/SDK/model run of this scenario.",
-      "corrections": "Independent review found and Root fixed the required sourceContext callback and provider request envelope mismatch before actual execution. Both paths have persistent pure regressions.",
-      "execution": "Explicit release-recovery scenario only;240-second shared work deadline plus30-second final close allowance, source phase at most90 seconds,4 fixed localhost replies and0 real-model calls. Fresh task-owned home/workspace/state/temp, scoped disabled plugins/hooks/apps/web, inherited credentials removed; prior resources must be proved closed before successor launch. Actual version, isolation and execution remain to be checked.",
-      "claimLimit": "Prepared mechanism scenario, not observed native recovery, semantic/model autonomy, effective-user-environment coverage or complete F05/A05/A08. Existing failure/case/authority and package identities unchanged; no new default CI scenario.",
-      "privateEvidence": "accord-native-release-fixture-20261006-01: review.md, driver, oracle-tests, tests.log, READY.md and FREEZE.json"
+      "scope": "controlled-native-normal-release-consumer-ACK-loss-and-successor-finalization",
+      "subjectRevision": "2ae5d76499557bd92ece7971a257ee081c503f84",
+      "host": "Windows, Codex CLI0.160.1, Node24.21.0; isolated task-owned home/state with fixed localhost responses",
+      "finding": "One actual run passed: native unsubscribe accord-owned:13 returned unsubscribed before the original SDK consumer received NATIVE_EFFECT_UNKNOWN. Original owner31692/native57096 exited naturally with streams closed and Job active0. Successor owner31836/native61232 started16.582ms after original closure, used only initialize/initialized plus two thread/read calls, and finalized the same durable recorder from revision18 to19 with prior-controller-closed and receiptDigest null. Original failure, intent and release observation remain; no unsubscribe replay or settle.",
+      "protection": "Both controller Jobs and direct native children exited normally. Four fixed localhost replies,zero real-model calls;11 executed source snapshots/binaries,shared configuration and keep.txt matched. Native home/session evidence retained,owned home/state/temp actually absent. Root raw/SQLite readback and independent source-evidence review corroborate the limited result.",
+      "privateEvidence": "accord-native-release-fixture-20261006-01/actual-01 plus ROOT-RAW-RECHECK.json, ACTUAL-INDEPENDENT-REVIEW.md and ACTUAL-RESULT.json; original FREEZE/READY/DISPATCH retained",
+      "claimLimit": "Consumer acknowledgement-loss protocol mechanism under a controlled fixed-response fixture only. Not network/power failure, autonomous timing/semantic takeover, ordinary installed-plugin operation, business outcome or complete F05/A05/A08. Original N failure and old case/grants remain unchanged; no installation,trust,user configuration or default CI scenario change.",
+      "evidenceSha256": "ef3f6e98533624bd9edd6f6b386333cbce105795ca388f9d648061e2bbd9e642",
+      "postRunCorrection": "Independent review found a nonblocking evidenceRef label: resources.json path used the source-result hash. Raw/prior/resources/SQLite independently verified the actual effects. A later repository-only correction now names source-result.json consistently; one RED regression failed before correction and42 synthetic oracle tests passed after. Original133 actual artifacts, original source snapshot and N failure unchanged; no native rerun or new outcome inference."
     },
     {
       "id": "native-release-recovery-coverage-mapping",

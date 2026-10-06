@@ -2598,3 +2598,14 @@ Root独立source oracle先复现三项缺绑定拒绝缺失、pending case/scope
 独审发现必发sourceContext回调漏接、provider日志实际{ordinal,request}结构失配，已定点修正并纳入纯回归。原50项加新41项共91项测试通过（30.918秒）；私有driver另19项纯边界通过。核验器读取原始请求/ACK/终态、版本/provider/输入/权限、同账本CAS、保全home/session及实际目录退出；合成数据只测试核验器，不冒原生证据。当前未启动新CLI/AppServer/SDK/model，默认CI未加场景。
 
 新执行预算独立绑定240秒工作、30秒收尾、源阶段至多90秒和4固定回复，未扩大或重跑原N/C02。原N失败、后置修正候选、原件/权限与全部F/A保持。f958及5a2的CI均已精确head成功。代码/测试总3258887字节，3340000上限余81113不够原5%所需167000；新3440000余181113，对所需172000充分。只调源码容量，无新文件/服务/运行时/指令/活动case或准入。准备、审查及下一具体路线保在accord-native-release-fixture-20261006-01。
+
+
+## 2026-10-06 正常释放 ACK-loss 的真实跨控制者恢复
+
+已有项目机制验证权限下，在新actual-01只执行一次2ae5d764的显式release-recovery，使用原已安装CLI0.160.1/Node24.21.0及隔离home/state，4本地固定回复、零真实模型。raw请求accord-owned:13的unsubscribe先返回unsubscribed，原SDK消费者才被注入NATIVE_EFFECT_UNKNOWN；此为消费回调丢失，不冒网络断线或崩溃。
+
+source owner31692/native57096自然exit0、streams closed、Job0；source阶段1.023秒结束，16.582毫秒后successor owner31836/native61232启动。后者仅initialize/initialized、source read及target includeTurns read，无start/resume/再次unsubscribe；同SQLite原记录18→19、prior-controller-closed/receiptDigest=null，原failure/attempt/intent/observation保留、settled0。successor0.442秒自然退出及Job0。上述是两阶段历时，不冒整个Root审查耗时；整次命令5.274秒含即时来源复核。
+
+Root独立raw/SQLite对账及独立审查核实真实原件。11执行源及两二进制、共享配置、keep字节保持；4provider响应/2session与完整home保全，任务home/state/temp确已清理，workspace/记录保留。原件在accord-native-release-fixture-20261006-01/actual-01与同目录上层ACTUAL-RESULT/ROOT-RAW-RECHECK/ACTUAL-INDEPENDENT-REVIEW。新机制已闭，不重跑旧N/C02或此实例；固定回复不证明模型自主择时/语义/实用交付或完整F/A，原失败与所有旧限制不改。
+
+独审另发现subscriptionRelease.evidenceRef的路径标资源回执、后缀却为结果文件SHA。Root未依此字符串证明资源退出，原native/OS回执已独立闭链，因此窄机制结果有效并带该记录缺陷。后置源码仅将引用路径纠正为真正被hash的source-result.json，新增回归原RED失败、修后42项纯测试7.266秒通过。原133文件/hash/mtime保持，不改旧账本标注、不重跑实际例。ACTUAL-RESULT SHA `ef3f6e98533624bd9edd6f6b386333cbce105795ca388f9d648061e2bbd9e642`分别记录原运行与后置修正。

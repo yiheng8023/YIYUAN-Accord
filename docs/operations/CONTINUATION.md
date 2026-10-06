@@ -12,7 +12,9 @@ F05/A05映射与历史来源核对已闭；一次原生完整历史读取已成�
 
 后置源码修正保在新的`post-failure-fix`：Root计划数字构造/校验、覆盖Root回调等待的绝对turn watchdog与真实终态取消、fault=null时保留原操作错误，Root复核及Node10/Python6纯测试过；旧executor/config/grant/run及失败不变。
 
-现有原生证据对应已闭：f958 CI两平台CLI0.156.0原件均证实首次续作turn/start效果已发生、adapter回调丢回执、同一控制者核历史并正常unsubscribe/finalize；11份executed source与当前一致。正常release未知及新controller分支目前只有stub；C02的真实自主提议和R的0.160.1历史读取不能拼成一次恢复。既有fixed-response原生框架现已接入显式`release-recovery`场景：保留真实unsubscribe ACK、只向原消费者丢回执，核原Node/native及OS资源退出后，另一个owned只读连接读取原线程并同recorder finalize，不重发效果。源码与独立原件核验器已齐，91项纯测试及独审通过；这条新场景尚未真实执行，默认CI没有增项。模型/语义及完整F05/A05/A08仍分别保原要求。新执行路线在`accord-native-release-fixture-20261006-01/READY.md`：240秒共享工作及30秒收尾、源阶段至多90秒、4个本地固定回复、零真实模型调用；具体来源/版本、隔离和对应权限复核后方可运行。不重跑N/C02或旧marker调查。
+现有原生证据对应及窄机制执行已闭：本次在精确2ae5d764源码、Windows CLI0.160.1上执行一次`release-recovery`成功。真实unsubscribe返回unsubscribed后只向原消费者丢回执，保留NATIVE_EFFECT_UNKNOWN；原Node31692/native57096自然退出、Job0，16.582毫秒后新Node31836/native61232启动，只initialize/initialized及两次thread/read，原账本18→19完成prior-controller-closed收尾，保原failure且不重发unsubscribe、不settle。4个localhost固定回复、零真实模型调用；11源/二进制、共享配置、keep原件未变，两个控制阶段及版本读取均退出，native证据保全、临时home/state/temp已清。
+
+Root独立raw/SQLite复核与独立审查通过。这补足“正常release消费回执丢失→原控制者真实退出→新只读控制者同账本finalize”的机制事实；原C02自主提议/语义/实用续作按本来条件复用，原N失败保留，不能拼成新的业务episode或全F05/A05/A08通过。独审另发现非阻断的evidenceRef路径与哈希对象标注失配；已在后续源码修正并补RED→42纯测试通过，133原件未改、不重跑实际实例。该窄机制不再重复准备或运行。下一核剩余正式连续性条件与已结束N实例的当前登记是否一致，复用已证事实，只处理真正未闭条件。
 每段工作以可核结果或具体反例收束。必要的机制验证和受控决策试验本身可以服务发布验收，不需要捏造另一项业务为调用工具找理由；如用合成数据或人为控制条件，事前标明，结论限于该条件。模型自主判断不能由固定响应、明确要求迁移或回执格式替代。
 
 独审已在执行前修正sourceContext回调遗漏和provider日志envelope读取失配，并补永久纯回归。f958/CI37419577754与5a2/CI37421079468均已按精确head核completed/success。源码容量按实测3258887字节调至3440000，保原5%余量；不加文件、服务、分发内容或验收通过。
@@ -43,7 +45,7 @@ F05/A05映射与历史来源核对已闭；一次原生完整历史读取已成�
 |---|---|---|
 | W01/W03/W04 | 普通委托、来源保护及局部纠偏已有各自有限结果。 | 在新输入、失败与更正后继续推进并修复受影响旧产物和判断；外部救场不追认自主成功，重大未知责任保持。 |
 | W02 能力协调 | 备件任务有无Skill cue的自主选择/采用；真实Root代选、worker首个业务写前读取Implement、TDD和四实物及独立后置QA提供有限正向功能事实。本次另在真实目标同连接核enabled/规范来源，目标在业务写前读取Implement并按范围采用，完成同episode交付。native activation与这些事实分别记账。 | 当前政策/有效委托、停用或排除、同名/同义的语义判断、目标控制、变化后纠偏与完整组合；复用已证正向，不重跑业务求形式标签。 |
-| W05 连续性 | 真实受控任务工具失效后源自主proposal、语义继承、单写者首续作、同episode独立QA及源订阅释放已有正向实例。 | 更广择时/变化和适用失败恢复仍待核；旧workspace责任未知保留。新ACK-loss case补齐此前缺失的恢复/能力丢失声明维度，尚无本案行为或准入证据，旧catalog与C02保持。健康任务不强制交接。 |
+| W05 连续性 | 真实受控任务工具失效后源自主proposal、语义继承、单写者首续作、同episode独立QA及源订阅释放已有正向实例。 | 更广择时/变化和适用失败恢复仍待核；旧workspace责任未知保留。原N实例执行失败保留；独立fixed-response原生场景已证明正常释放缺ACK后的跨控制者收尾，但不替代模型行为、业务episode或正式完整准入，旧catalog与C02保持。健康任务不强制交接。 |
 | W06/W07 | 部分环境/资源变化、后置核验和所属进程退出已有有限事实。 | 有实际变化的环境/资源组合及真实恢复、成品与退出。局部Job0不覆盖整个宿主。 |
 | W08 与发布 | 全部必要范围已定义；分散结果和局部准入保持。 | 同episode的必要职责/八质量轴/四场景及独立净影响；职责由足够宿主能力承担或适当不介入也可成立，不能为覆盖而强行调用所有机制。须有具体oracle，不以空旗标放行。 |
 
@@ -55,6 +57,7 @@ F05/A05映射与历史来源核对已闭；一次原生完整历史读取已成�
 
 只有处理对应结果、恢复或比较时才读取下列原件；它们不是下一轮命令。私有目录均在 `C:\Users\15521\.codex\backups\`。
 
+- 新控制者原生恢复：`accord-native-release-fixture-20261006-01/actual-01`、`ROOT-RAW-RECHECK.json`、`ACTUAL-INDEPENDENT-REVIEW.md`及`ACTUAL-RESULT.json`（SHA `ef3f6e98533624bd9edd6f6b386333cbce105795ca388f9d648061e2bbd9e642`）。源码2ae5d764，真实source `01a10ff9-ec88-7932-bfbd-151567b0648f`、target `01a10ff9-ed54-7c21-91bc-e1b3cbd0086e`；只证明透明fixed-response故障机制，不重跑。
 - 原生已执行历史：`accord-sdk-history-readonly-20261006-01/FACTS.json`（SHA `980614c12059dab9869a1f64c98c86352a2aefab164ddb9b5a1ff08f58f6e063`）及原始帧/Job回执；真实方法仅initialize/initialized/thread-read，无新任务/模型/恢复。原C01失败保留，同二进制但不同线程/阶段及中间配置，不单归因轮数。额外空text_elements按现有语义核对，观察器修正不重跑。
 - 新恢复工作负载：`accord-release-ack-recovery-20261006-01/ACTUAL-RESULT.json`（SHA `5337ee533d1bb9e9547a8a3fe9ad8e2b60d15c725f62cbaefac841dd057a833b`）与原`run`保存本次失败。实际config `3366ab83`、grant `1f29f8d8`已消费。仅inventory 434字节（SHA `b8b0674ec8da78938f2bad867915085eeaeb6bc6a67bab650709acc5bc962ee1`）已核，note缺失；原source仅一turn，累计total1317337/uncached75467/output4110，不是Root总成本或占用。`post-failure-fix/REVIEW.md`及纯测试是后置候选修正，未用于重跑或追认通过。
 - 原生恢复覆盖：`accord-native-recovery-coverage-20261006-01/MAPPING.json`（SHA `8b5eb7e474d9d447e1cd6455ab65c2f4f0a3dbccd840dc29d194dcb5bef97298`）、`MAPPING.md`、`RAW-RECHECK.json`和3份原始CI artifact ZIP。两finalization原始请求/响应/终态/历史与记录匹配，POSIX仅证所属进程组absent；没有执行下载内容或读取旧native-home数据库。

@@ -1156,7 +1156,7 @@ def _release_recovery_verdict(stage, facts, plan, prior, keep_unchanged):
                  'receiptVerified', 'reconciliationAuthorized', 'releaseAuthorized', 'priorAttemptQuiesced',
                  'priorControllerClosed', 'priorControllerQuiesced', 'sourceConnectionReleased', 'subscriptionReleaseVerified'):
         value[name] = ok
-    value['subscriptionReleaseEvidenceRef'] = ('retained/release-source-resources.json:'+prior['sourceHash']) if ok else None
+    value['subscriptionReleaseEvidenceRef'] = ('retained/release-source-result.json:'+prior['sourceHash']) if ok else None
     return value
 
 
@@ -1761,6 +1761,19 @@ class SyntheticReleaseRecoveryOracleTests(unittest.TestCase):
             with self.subTest(args=args), self.assertRaises(ValueError):
                 invoke({'kind':'sourceContext','args':args})
         self.assertEqual(len(saved), 2)
+
+    def test_release_evidence_reference_identifies_its_hashed_file(self):
+        import ast
+        tree = ast.parse(Path(__file__).read_text(encoding='utf-8'))
+        function = next(n for n in tree.body if isinstance(n, ast.FunctionDef)
+                        and n.name == '_release_recovery_verdict')
+        assignment = next(n for n in function.body if isinstance(n, ast.Assign)
+                          and isinstance(n.targets[0], ast.Subscript))
+        prior = self.read('retained/release-successor-config.json')['prior']
+        namespace = {'prior': prior, 'ok': True, 'value': {}}
+        exec(compile(ast.Module(body=[assignment], type_ignores=[]), '<actual-reference>', 'exec'), namespace)
+        path, digest = namespace['value']['subscriptionReleaseEvidenceRef'].rsplit(':', 1)
+        self.assertEqual(self.digest(path), digest)
 
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='SYNTHETIC-release-oracle-')
