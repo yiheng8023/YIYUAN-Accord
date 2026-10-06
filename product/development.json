@@ -1238,6 +1238,17 @@
   },
   "developmentObservations": [
     {
+      "id": "controlled-native-dossier-capability-change-20261006",
+      "scope": "two-stage-current-source-dossier-native-functional-observation-not-full-admission",
+      "source": "ffb15daa; before inputs/oracle/900-second window recorded before native dispatch; real current candidate and CI snapshots, controlled maintainer interaction.",
+      "observed": "Same native writer actual Sol/medium completed59.019s and71.906s business turns. First draft waited for the next request; current-source CI then changed to11/11 success. Root task-only read-sharing lock independently rejected write; writer raw custom_tool_call_output shows the real sharing violation. Writer retained old draft and original error, selected allowed final.md, and delivered correct machine status/meaning with ready_to_publish=false. Source inputs and draft hashes/mtime preserved; independent semantic review passed.",
+      "poststate": "Owned lock invocation closed naturally exit0 before expiry, PID absent. Writer/reviewer completed; provider-managed retained state is not global-host0. No source transfer, new install/trust/configuration or publication observed.",
+      "rootFailure": "Final source-record reconciliation took1214.638s and missed the original900s work window. Root first recognized only function_call_output, then expected plaintext user messages; current source uses custom_tool_call_output and encrypted agent_message. Preserve missing exact recipient plaintext and the late closeout; no decrypt, invented receipt, old-budget extension or episode replay.",
+      "limits": "Useful actual change/alternative/recovery/qualification facts only. No whole W02/W05/W08/F-A or ordinary autonomous timing/takeover pass. No actual Skill read/activation observed, no fixed tiers or optimality/net-value claim. Source representation and necessary evidence must be checked within the bound span; do not misclassify unobservable fields as missing actions or require business replay for an observer defect.",
+      "privateEvidence": "accord-native-admission-dossier-20261006-01/OUTCOME.json; SHA9adc99d5cd1b1b667a2d63754c3914d3f8bb792cac78e504bcbe8f6de78d42f6",
+      "hostedChecks": "CI37471945089/fdfa98a6 and CI37477748093/ffb15daa completed11/11 success; neither establishes whole functional acceptance."
+    },
+    {
       "id": "current-release-copy-correction-20261006",
       "scope": "ordinary-native-source-correction-of-still-current-release-materials",
       "source": "fdfa98a6 plus current PLAN/CONTINUATION and exact123921 local adoption; six source files and six oracle conditions frozen before edits.",
