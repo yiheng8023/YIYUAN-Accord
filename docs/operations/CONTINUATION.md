@@ -6,7 +6,7 @@
 
 真实受控能力丢失组合已跑通：源成功保存检查点后，其任务写工具 lease 实际撤销；源收到无写入的拒绝后自行提出接管，Root核定，目标读原任务/检查点及受托明确选择的原版Implement，接收后才取得recorder唯一写者并完成三产物。三轮实际均为Sol/medium；19项模型测试和独立18合法/34拒绝均通过，源订阅释放、恢复原件保留，原生与QA Job均0，558.624秒内完成。它提供受控条件下自主判断到实用续作的正向证据，不是所有自主择时或完整A05通过。
 
-F05/A05映射和历史来源核对已闭。官方App read_thread可读C02目标的两轮completed及完整输入，均逐字匹配前绑；当前notLoaded、无下一页。它与独立App Server响应/控制权限分开，不能伪装成thread/read回执或据此恢复已闭case。下一先核现有原生路径在已执行轮次后是否可读完整历史，避免提前增加接口；如确有缺口，再比较怎样用已证的官方观察保留exact轮次/输入、完整性与当前控制核验。不得把首turn前失败推为全部历史不可用，也不盲去includeTurns求绿。
+F05/A05映射与历史来源核对已闭。一次独立CLI0.160.1原生thread/read(includeTurns=true)已读到C02目标的两轮completed、精确输入和ephemeral=false；1.344秒正常退出/Job0、22源未变。现有原生路线可复用，无需新增history provider或去掉必要历史核验。下一回到真实在途/缺ACK窗口的存活恢复者链路，先前瞻绑定新必要case/原生窗口/独立oracle和权限，保原C02不重跑；只缺读取形式不再成为准备分支。
 每段工作以可核结果或具体反例收束。必要的机制验证和受控决策试验本身可以服务发布验收，不需要捏造另一项业务为调用工具找理由；如用合成数据或人为控制条件，事前标明，结论限于该条件。模型自主判断不能由固定响应、明确要求迁移或回执格式替代。
 
 ## 目标与权限
@@ -47,6 +47,7 @@ F05/A05映射和历史来源核对已闭。官方App read_thread可读C02目标�
 
 只有处理对应结果、恢复或比较时才读取下列原件；它们不是下一轮命令。私有目录均在 `C:\Users\15521\.codex\backups\`。
 
+- 原生已执行历史：`accord-sdk-history-readonly-20261006-01/FACTS.json`（SHA `980614c12059dab9869a1f64c98c86352a2aefab164ddb9b5a1ff08f58f6e063`）及原始帧/Job回执；真实方法仅initialize/initialized/thread-read，无新任务/模型/恢复。原C01失败保留，同二进制但不同线程/阶段及中间配置，不单归因轮数。额外空text_elements按现有语义核对，观察器修正不重跑。
 - 已执行历史只读来源：`accord-native-history-readonly-20261006-01/FACTS.json`（SHA `fce520537121096d41cfd418bedc35896d635f3aef3ee610473d1803477db16a`）及两份原始官方read_thread结果；02:39:33 UTC读回两轮输入与前绑一致，未续跑。此观察不含SDK连接/写者/权限/ephemeral，当前SDK恢复接线仍未证。
 - F05条件映射：`accord-f05-evidence-mapping-20261006-01/MAPPING.json`（SHA `1ad98ceb94c09b0af9bd1cb1b54162c7c7dd2056d1a74901f43978f470644286`）及`MAPPING.md`；明确可复用正向、不可顶替catalog和实际恢复缺口。`USAGE.json`从旧实录每线程取最后累计一次：total1109225、cached937856、uncached165381、output5988；不是占用、价款或净收益。
 - 输入隔离对账：`accord-input-isolation-diagnosis-20261006-01/FACTS.json`（SHA `b0a196c2651e12eef1906412de5a0a64106f39ee42ca72e63f5adf6a9646b70e`）；三当前文本完整，原marker/两receipt字节未动，原归属未知，停止同标记调查。
