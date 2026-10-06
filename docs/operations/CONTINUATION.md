@@ -10,7 +10,9 @@ F05/A05映射与历史来源核对已闭；一次原生完整历史读取已成�
 
 本次正式case `v33-source-release-ack-recovery-01`已执行一次并失败，不能重跑：源真实写出inventory、任务工具lease失效后再次自主提议交接，但Root把源进程收尾990秒误填为SDK计划恢复截止，超过源run的960秒上限，被现有正确守卫拒绝。未创建目标、未转移writer、未请求unsubscribe，故实际ACK-loss/finalize窗口未观察到。原件87源及四输入未变，原Node exit1/native自然exit0/Job0，412.687秒退出；源turn被中断，349.949秒超过声明300秒，不能称限时验收通过。
 
-后置源码修正保在新的`post-failure-fix`：Root计划数字构造/校验、覆盖Root回调等待的绝对turn watchdog与真实终态取消、fault=null时保留原操作错误，Root复核及Node10/Python6纯测试过；旧executor/config/grant/run及失败不变。下一先复用已有真实原生/CI故障覆盖，核该缺ACK窗口还缺什么必要实证及最小路线，避免为已有模型自主提议再重复业务或强制迁移；未来具体执行须新前绑和实际权限，原case仍失败。旧workspace标记只记录本轮干扰，不再泛查其未知归属。
+后置源码修正保在新的`post-failure-fix`：Root计划数字构造/校验、覆盖Root回调等待的绝对turn watchdog与真实终态取消、fault=null时保留原操作错误，Root复核及Node10/Python6纯测试过；旧executor/config/grant/run及失败不变。
+
+现有原生证据对应已闭：f958 CI两平台CLI0.156.0原件均证实首次续作turn/start效果已发生、adapter回调丢回执、同一控制者核历史并正常unsubscribe/finalize；11份executed source与当前一致。正常release未知及新controller分支目前只有stub；C02的真实自主提议和R的0.160.1历史读取不能拼成一次恢复。下一沿既有fixed-response原生框架，只准备补“真实源释放ACK丢失→原控制者退出→新只读控制者同recorder finalize”的窄机制场景，无需再启动模型业务证明这个协议条件。模型/语义及完整F05/A05/A08仍分别保原要求。具体版本、隔离、权限和前绑充分前不执行；不重跑N/C02或旧marker调查。
 每段工作以可核结果或具体反例收束。必要的机制验证和受控决策试验本身可以服务发布验收，不需要捏造另一项业务为调用工具找理由；如用合成数据或人为控制条件，事前标明，结论限于该条件。模型自主判断不能由固定响应、明确要求迁移或回执格式替代。
 
 ## 目标与权限
@@ -53,6 +55,7 @@ F05/A05映射与历史来源核对已闭；一次原生完整历史读取已成�
 
 - 原生已执行历史：`accord-sdk-history-readonly-20261006-01/FACTS.json`（SHA `980614c12059dab9869a1f64c98c86352a2aefab164ddb9b5a1ff08f58f6e063`）及原始帧/Job回执；真实方法仅initialize/initialized/thread-read，无新任务/模型/恢复。原C01失败保留，同二进制但不同线程/阶段及中间配置，不单归因轮数。额外空text_elements按现有语义核对，观察器修正不重跑。
 - 新恢复工作负载：`accord-release-ack-recovery-20261006-01/ACTUAL-RESULT.json`（SHA `5337ee533d1bb9e9547a8a3fe9ad8e2b60d15c725f62cbaefac841dd057a833b`）与原`run`保存本次失败。实际config `3366ab83`、grant `1f29f8d8`已消费。仅inventory 434字节（SHA `b8b0674ec8da78938f2bad867915085eeaeb6bc6a67bab650709acc5bc962ee1`）已核，note缺失；原source仅一turn，累计total1317337/uncached75467/output4110，不是Root总成本或占用。`post-failure-fix/REVIEW.md`及纯测试是后置候选修正，未用于重跑或追认通过。
+- 原生恢复覆盖：`accord-native-recovery-coverage-20261006-01/MAPPING.json`（SHA `8b5eb7e474d9d447e1cd6455ab65c2f4f0a3dbccd840dc29d194dcb5bef97298`）、`MAPPING.md`、`RAW-RECHECK.json`和3份原始CI artifact ZIP。两finalization原始请求/响应/终态/历史与记录匹配，POSIX仅证所属进程组absent；没有执行下载内容或读取旧native-home数据库。
 - 已执行历史只读来源：`accord-native-history-readonly-20261006-01/FACTS.json`（SHA `fce520537121096d41cfd418bedc35896d635f3aef3ee610473d1803477db16a`）及两份原始官方read_thread结果；02:39:33 UTC读回两轮输入与前绑一致，未续跑。此观察不含SDK连接/写者/权限/ephemeral，当前SDK恢复接线仍未证。
 - F05条件映射：`accord-f05-evidence-mapping-20261006-01/MAPPING.json`（SHA `1ad98ceb94c09b0af9bd1cb1b54162c7c7dd2056d1a74901f43978f470644286`）及`MAPPING.md`；明确可复用正向、不可顶替catalog和实际恢复缺口。`USAGE.json`从旧实录每线程取最后累计一次：total1109225、cached937856、uncached165381、output5988；不是占用、价款或净收益。
 - 输入隔离对账：`accord-input-isolation-diagnosis-20261006-01/FACTS.json`（SHA `b0a196c2651e12eef1906412de5a0a64106f39ee42ca72e63f5adf6a9646b70e`）；三当前文本完整，原marker/两receipt字节未动，原归属未知，停止同标记调查。
