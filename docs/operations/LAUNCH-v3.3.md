@@ -9,6 +9,8 @@
 | 字段 | 英文稿 | 中文含义 |
 |---|---|---|
 | 产品名 | YIYUAN Accord | 项目统一名称 |
+| Declaration | Empower every dream. | 宣言：助力每一个梦想。 |
+| Mission | Support reliable long-term human–AI collaboration | 为人与AI的长期协作提供协调与可靠性支持 |
 | Tagline | Keep human-AI work aligned from intent to delivery | 让人与AI的协作从意图到交付保持一致 |
 | Description | An open-source collaboration reliability system for AI agents. Designed to preserve goals, handle changes, coordinate capabilities, and verify delivery throughout ongoing work. | 面向AI Agent的开源协作可靠性系统，旨在持续工作中承接目标、处理变化、协调能力并核验交付。 |
 
@@ -24,11 +26,11 @@
 
 ## 首次使用者说明与发布字段草案
 
-以下中英介绍、结构字段和检查清单面向非技术首次使用者。它们已经过开发期核对与修订，仍须在发布前按精确版本和实际验收结果更新；不构成支持、效果、安装或发布承诺。 素材绑定01397fbe的2026-09-24快照；其中开发构建号仅标识该快照，不能用作当前源包或安装身份。
+以下中英介绍、结构字段和检查清单面向非技术首次使用者。当前稿依据共识计划及`20261006123921`开发候选修订，仍须在发布前按精确版本和实际验收结果更新；不构成普遍支持、效果或发布承诺。此前01397fbe的2026-09-24稿保留在Git历史，其旧开发构建号不作为当前包身份。
 
 ## YIYUAN Accord 3.3：让 Agent 协调协作（草案）
 
-> **草案，非正式发行说明。** 3.3仍在开发，尚未完成验收或发布；目前没有可供常规安装的已接受3.3发行版。素材快照中的 Codex 开发包标识为 `3.3.0-dev.1+codex.20260924001947`，不代表正式发行版本。
+> **草案，非正式发行说明。** 3.3仍在开发，尚未完成验收或发布；目前没有可供常规安装的已接受3.3发行版。当前 Codex 开发包标识为 `3.3.0-dev.1+codex.20261006123921`，不代表正式发行版本。一份本机原线程已核采用，不能推广为所有用户或入口均已验收。
 
 ### 你可以怎样开始
 
@@ -38,11 +40,13 @@
 
 Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和还缺什么条件，在获准范围内选择、组合宿主已有能力与 Accord 组件，随着情况变化调整做法，并检查实际结果。若条件不足或影响先前判断，Agent 应说明、修正受影响的工作，并保留尚未完成的事项以便继续。用户不必预先掌握工具协调、配置或任务交接。
 
-3.3当前范围为已选本地OpenAI执行路线，包括CLI、桌面和IDE；开发包为Codex适配。各入口支持仍须实际验收，Linux/macOS CLI和通用连续性保留；其它执行位置没有当前适配承诺。普通Chat仅辅助，Claude不在3.3分发范围，供应商中立定位保持。
+3.3当前范围为已选本地OpenAI执行路线，包括CLI、桌面和IDE；开发包为Codex适配。各入口支持仍须实际验收，Linux/macOS CLI和通用连续性保留；其它执行位置没有当前适配承诺。普通Chat按任务需求判断：研究或内容可以构成完整结果，当前独立用途仍待实测。Claude不在3.3分发范围，供应商中立定位保持。
+
+普通对话沿用宿主常规流程，Accord不会为达成闭环而自动追加对话回合；结束本轮时仍须保留未完事项。任务恢复与按需交接保留。需要长程持续执行时，由用户明确选择宿主的目标模式等控制。
 
 ### 哪些决定仍由你掌握
 
-你明确选择的模型、推理强度和使用限制应持续生效，适用的现有配置应保持稳定。Agent 可在已有授权和宿主支持范围内调度子任务，但这不自动授权更改主模型。对于既有授权未涵盖的变更，包括改变你固定的选择或跨越服务商、账户、数据访问、重大费用边界，Agent 应先说明影响并取得必要决定；已有明确授权无需重复确认。
+你明确选择的模型、推理强度和使用限制应持续生效，适用的现有配置应保持稳定。子任务的模型与推理强度应按实际需要及当前宿主支持选择，不固定档位数量，也不要求与主模型相同；保留足够的当前配置同样合理。这不自动授权更改主模型。对于既有授权未涵盖的变更，包括改变你固定的选择或跨越服务商、账户、数据访问、重大费用边界，Agent 应先说明影响并取得必要决定；已有明确授权无需重复确认。
 
 你决定要达成什么、是否改变方向，以及是否授权会产生实质影响的操作。Agent 应在授权范围内行动；需要你的判断、授权或本人操作时，应把具体事项交还给你。Agent 负责核验交付并纠正已发现的问题；你可以审阅和纠正结果，决定是否接受，而不必替 Agent 承担每一步检查。能力协调不会绕过宿主权限，也不意味着每一步都自动完成；自动交接仍在开发中。
 
@@ -54,7 +58,7 @@ Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和
 
 ## YIYUAN Accord 3.3: letting an Agent coordinate the work (draft)
 
-> **Draft, not an official release note.** Version 3.3 is in development and has not completed acceptance or publication. There is currently no accepted 3.3 release for normal installation. The Codex development package in the source snapshot is identified as `3.3.0-dev.1+codex.20260924001947`; this is not an official release version.
+> **Draft, not an official release note.** Version 3.3 is in development and has not completed acceptance or publication. There is currently no accepted 3.3 release for normal installation. The current Codex development package is `3.3.0-dev.1+codex.20261006123921`; this is not an official release version. Local adoption has been checked in one original task; this does not establish acceptance for every user or entry.
 
 ### How to get started
 
@@ -64,11 +68,13 @@ You do not need to learn plugins, commands, or model settings first. Tell the Ag
 
 Accord is designed to have the Agent start by understanding the goal, assess feasibility and missing conditions, choose and combine host capabilities and Accord components within its authorization, adapt as circumstances change, and check the actual result. If conditions are missing or earlier judgments are affected, the Agent should explain and correct the affected work, while preserving unfinished items for continuation. Users need not first learn tool coordination, configuration, or task handoff.
 
-Version 3.3 covers selected local OpenAI execution paths, including CLI, desktop and IDE; the development package is the Codex adaptation. Each entry still needs actual acceptance. Linux/macOS CLI and shared continuity remain; other execution locations have no current adaptation commitment. Ordinary Chat is auxiliary, and Claude is outside 3.3 distribution. Vendor independence is unchanged.
+Version 3.3 covers selected local OpenAI execution paths, including CLI, desktop and IDE; the development package is the Codex adaptation. Each entry still needs actual acceptance. Linux/macOS CLI and shared continuity remain; other execution locations have no current adaptation commitment. Ordinary Chat is evaluated against task needs: research or content can be a complete result, while independent use remains unverified. Claude is outside 3.3 distribution. Vendor independence is unchanged.
+
+Ordinary conversations follow the host's normal flow. Accord does not add turns to force completion; unfinished duties remain when a turn ends. Task recovery and appropriate handoff are preserved. Long-running controls such as the host's Goal mode remain the user's explicit choice.
 
 ### Decisions that remain yours
 
-Your explicit choices of model and reasoning effort, and your usage restrictions, remain in force; an adequate configuration should stay stable. The Agent may delegate subtasks within existing authority and host support; that does not itself authorize changing the main model. If a change is not already covered by your authorization, the Agent should explain its impact and obtain the necessary decision before acting. This includes changing a pinned choice or crossing boundaries involving providers, accounts, data access or significant cost. Existing explicit authorization does not require repeated confirmation.
+Your explicit choices of model and reasoning effort, and your usage restrictions, remain in force; an adequate configuration should stay stable. Subtask models and efforts should fit actual needs and current host support, with no fixed tier count or requirement to match the main model. Keeping an adequate existing choice is also valid. This does not itself authorize changing the main model. If a change is not already covered by your authorization, the Agent should explain its impact and obtain the necessary decision before acting. This includes changing a pinned choice or crossing boundaries involving providers, accounts, data access or significant cost. Existing explicit authorization does not require repeated confirmation.
 
 You decide what outcome you want, whether to change direction, and whether to authorize actions with material consequences. The Agent should act within its authorization and bring specific decisions, permissions, or actions back to you when needed. The Agent is responsible for checking its deliverables and correcting identified problems. You can review and challenge the result and decide whether to accept it, without taking over every verification step. Coordinating capabilities does not bypass host permissions or mean every step happens automatically; automatic handoff remains in development.
 
@@ -85,20 +91,24 @@ Version 3.3 remains in development and has not completed acceptance or publicati
   "audience": "People encountering YIYUAN Accord for the first time, including readers without a technical background.",
   "stage": "Draft only; 3.3 is in development and has not completed acceptance or publication. There is no accepted 3.3 release for normal installation.",
   "productName": "YIYUAN Accord",
+  "declaration": "Empower every dream.",
+  "mission": "Support reliable long-term human–AI collaboration.",
   "version": {
     "release": "3.3 (development; not an accepted release)",
-    "note": "Package identity from source snapshot 01397fbe; not a current installation or official release identity.",
-    "developmentPackageSnapshot": "3.3.0-dev.1+codex.20260924001947"
+    "note": "Current development candidate from 416160e1; adoption checked in one local original task, not universal acceptance or an official release identity.",
+    "developmentPackageSnapshot": "3.3.0-dev.1+codex.20261006123921"
   },
   "scope": {
     "purpose": "Designed to help an Agent understand a goal, assess feasibility and missing conditions, coordinate available host capabilities and Accord components within authorization, adapt to changes, check results, correct affected work, and preserve unfinished items.",
     "howToStart": "State the desired outcome in everyday language; optionally add background, constraints, priorities, and how to check the result. No technical setup knowledge is assumed in this introductory explanation.",
+    "normalInteraction": "Preserve task duties, recovery and appropriate handoff without automatically adding conversation turns. Host long-running controls remain the user's explicit choice.",
+    "subtaskAllocation": "Select models and efforts against actual task needs and current host support; no fixed tier count or requirement to inherit. Keeping an adequate current choice is valid. Preserve user-pinned main-model choices and authority boundaries; optimality remains unverified.",
     "userDecisions": "The user retains decisions about the desired outcome, changes of direction, authorizations with material consequences, and acceptance. Explicit choices of model and reasoning effort, and usage restrictions, remain in force; keep an adequate configuration stable. Subtask delegation does not itself authorize changing the main model. A change not already covered by existing authorization, including changing a pinned choice or crossing provider, account, data access or significant cost boundaries, requires explaining its impact and obtaining the necessary user decision. Existing explicit authorization does not require repeated confirmation. The Agent owns verification and correction; users may inspect and challenge outputs without taking over each verification step.",
     "focus": "OpenAI execution environments with practical delivery value and a feasible way to fulfill necessary collaboration duties; the current development package provides the Codex adaptation.",
     "limits": [
       "These are design aims, not accepted results across all entry points.",
-      "Suitability depends on the specific host and actual acceptance; web or cloud location, plugin installation, or Hook support alone does not establish it.",
-      "Ordinary Chat is not a default standalone deliverable.",
+      "Suitability depends on the specific host and actual acceptance; plugin visibility or Hook support alone does not establish it.",
+      "Ordinary Chat is assessed by required capabilities and results; research or content may form a complete outcome, while independent use remains unverified.",
       "Claude is outside the 3.3 distribution scope.",
       "Agent actions remain within authorization and host permissions; automatic handoff remains in development."
     ]

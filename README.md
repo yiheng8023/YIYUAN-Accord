@@ -32,7 +32,7 @@ The project is open source and not driven by profit. It aims for industrial and 
 >
 > The [3.3 consensus node and plan](docs/operations/PLAN-v3.3.md) is the current entry for design, the system diagram, historical disposition, outstanding work and completion criteria. [v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1) remains a historical release baseline; its exact tag defines its scope and evidence, not 3.3 support.
 
-Accord preserves task responsibility, recovery and handoff within the normal host interaction. Development-only Stop auto-continuation is excluded from the3.3 candidate; it does not add conversation turns.
+Accord preserves task responsibility, recovery and handoff within the normal host interaction. Development-only Stop auto-continuation is excluded from the 3.3 candidate; it does not add conversation turns. Long-running controls such as the host's Goal mode remain the user's explicit choice.
 
 ## What problem it addresses
 
