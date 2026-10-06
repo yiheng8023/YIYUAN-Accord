@@ -6,7 +6,9 @@
 
 真实受控能力丢失组合已跑通：源成功保存检查点后，其任务写工具 lease 实际撤销；源收到无写入的拒绝后自行提出接管，Root核定，目标读原任务/检查点及受托明确选择的原版Implement，接收后才取得recorder唯一写者并完成三产物。三轮实际均为Sol/medium；19项模型测试和独立18合法/34拒绝均通过，源订阅释放、恢复原件保留，原生与QA Job均0，558.624秒内完成。它提供受控条件下自主判断到实用续作的正向证据，不是所有自主择时或完整A05通过。
 
-F05/A05映射与历史来源核对已闭。一次独立CLI0.160.1原生thread/read(includeTurns=true)已读到C02目标的两轮completed、精确输入和ephemeral=false；1.344秒正常退出/Job0、22源未变。现有原生路线可复用，无需新增history provider或去掉必要历史核验。下一回到真实在途/缺ACK窗口的存活恢复者链路，先前瞻绑定新必要case/原生窗口/独立oracle和权限，保原C02不重跑；只缺读取形式不再成为准备分支。
+F05/A05映射与历史来源核对已闭；一次原生完整历史读取已成功并正常退出。新[释放回执丢失工作负载](../../product/cases/release-ack-recovery-v3.3.json)已固定合成输入、两产物、独立oracle、演员、实际ACK过滤窗口和统一期限。源任务写能力在首次保存后真实失效，由模型自行判断；仅在真实正常释放ACK到达原始wire后丢弃该帧，原SDK失败原样保留。存活Root须核原owner/native/Job退出，再以新只读连接和原recorder完成既有finalize，不重发unsubscribe。业务结果和恢复机制分别验，未观察到迁移/ACK不强制制造成功。
+
+当前只有源准备，尚未运行新业务或登记活动case。下一直接把既有owner/Job与已审过滤器接成一个最小执行包：两文件写工具、原始wire完整落盘、恢复verifier及同一时钟的顺序收尾；完整静态和独审后将精确execution登记并提交，再按真实权限派发。缺少这些接口时保未就绪，不写假hash或旧grant。当前12活动case和F/A均未晋升；不再查已闭历史接口、旧marker或重跑C02。
 每段工作以可核结果或具体反例收束。必要的机制验证和受控决策试验本身可以服务发布验收，不需要捏造另一项业务为调用工具找理由；如用合成数据或人为控制条件，事前标明，结论限于该条件。模型自主判断不能由固定响应、明确要求迁移或回执格式替代。
 
 ## 目标与权限
@@ -48,6 +50,7 @@ F05/A05映射与历史来源核对已闭。一次独立CLI0.160.1原生thread/re
 只有处理对应结果、恢复或比较时才读取下列原件；它们不是下一轮命令。私有目录均在 `C:\Users\15521\.codex\backups\`。
 
 - 原生已执行历史：`accord-sdk-history-readonly-20261006-01/FACTS.json`（SHA `980614c12059dab9869a1f64c98c86352a2aefab164ddb9b5a1ff08f58f6e063`）及原始帧/Job回执；真实方法仅initialize/initialized/thread-read，无新任务/模型/恢复。原C01失败保留，同二进制但不同线程/阶段及中间配置，不单归因轮数。额外空text_elements按现有语义核对，观察器修正不重跑。
+- 新恢复工作负载：`accord-release-ack-recovery-20261006-01/binding-manifest.json`、`candidate-case.json`与`owner/release-ack-recovery-plan.md`。四输入、请求、oracle和纯过滤源已固定；私有case仅为前瞻草案，缺实际执行接线，不是授权或原生恢复通过。
 - 已执行历史只读来源：`accord-native-history-readonly-20261006-01/FACTS.json`（SHA `fce520537121096d41cfd418bedc35896d635f3aef3ee610473d1803477db16a`）及两份原始官方read_thread结果；02:39:33 UTC读回两轮输入与前绑一致，未续跑。此观察不含SDK连接/写者/权限/ephemeral，当前SDK恢复接线仍未证。
 - F05条件映射：`accord-f05-evidence-mapping-20261006-01/MAPPING.json`（SHA `1ad98ceb94c09b0af9bd1cb1b54162c7c7dd2056d1a74901f43978f470644286`）及`MAPPING.md`；明确可复用正向、不可顶替catalog和实际恢复缺口。`USAGE.json`从旧实录每线程取最后累计一次：total1109225、cached937856、uncached165381、output5988；不是占用、价款或净收益。
 - 输入隔离对账：`accord-input-isolation-diagnosis-20261006-01/FACTS.json`（SHA `b0a196c2651e12eef1906412de5a0a64106f39ee42ca72e63f5adf6a9646b70e`）；三当前文本完整，原marker/两receipt字节未动，原归属未知，停止同标记调查。
