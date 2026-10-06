@@ -2589,3 +2589,12 @@ Root独立source oracle先复现三项缺绑定拒绝缺失、pending case/scope
 最终纠正只给具完整新绑定的当前integration案例扩展来源摘要，当前选择校验仍先拒缺字段；历史未含这些字段的定义保持原算法与摘要。仅reuse深拷贝排序两种已验证引用集合，原stored definition和业务有序数组不改。作者两项RED分别为一处历史error和两处reuse失败，修后五项定向通过。Root最终独立副本完整CurrentDevelopmentEvidenceTests 52项通过，538.827秒；独立source复审无新阻断，开发/产品/Codex三静态有效，原12活动和3结束definition保持。
 
 实测两文件净增7805字节，总3142774。旧3300000上限余157226，不足原5%所需的165000余量；本阶段3310000上限余167226，对所需165500仍充分。只调源码容量与说明，184文件、36000主指令、5%底线、17scope/12活动case/13未验职责、全F/A和旧执行窗口保持。机器其它字段深等，候选包d2ce、现装24fa、Meta原文5118、作者源/策略及用户主模型保持；不把pure/source通过晋为实际Skill采用、完整功能或发布资格。
+
+
+## 2026-10-06 正常释放回执丢失与新控制者的原生场景准备
+
+复用既有carrier_handoff两测试文件、fixed localhost provider及OS资源控制，新增显式release-recovery；源实际unsubscribe回执须先保留，向原消费者抛未知效果，再核其Node/native及Job或进程组关闭。新的独立连接只initialize/initialized和两次thread/read，使用原recorder及真实原历史finalize，不重发unsubscribe、不settle。无真实模型判断或业务。
+
+独审发现必发sourceContext回调漏接、provider日志实际{ordinal,request}结构失配，已定点修正并纳入纯回归。原50项加新41项共91项测试通过（30.918秒）；私有driver另19项纯边界通过。核验器读取原始请求/ACK/终态、版本/provider/输入/权限、同账本CAS、保全home/session及实际目录退出；合成数据只测试核验器，不冒原生证据。当前未启动新CLI/AppServer/SDK/model，默认CI未加场景。
+
+新执行预算独立绑定240秒工作、30秒收尾、源阶段至多90秒和4固定回复，未扩大或重跑原N/C02。原N失败、后置修正候选、原件/权限与全部F/A保持。f958及5a2的CI均已精确head成功。代码/测试总3258887字节，3340000上限余81113不够原5%所需167000；新3440000余181113，对所需172000充分。只调源码容量，无新文件/服务/运行时/指令/活动case或准入。准备、审查及下一具体路线保在accord-native-release-fixture-20261006-01。

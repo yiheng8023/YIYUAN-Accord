@@ -19,6 +19,30 @@ async function runOwnedConnection(config) {
   // The test owns and launches the process. The shipped connection only receives
   // its streams; Python provides the existing fixture/recorder/verifier, not RPC.
   const fs = require('node:fs');
+  const releaseRecoveryMode=config.mode==='native-release-recovery';
+  const releaseCase=releaseRecoveryMode||config.releaseAckLoss===true;
+  const startedAt=performance.now();
+  if(releaseCase){
+    if(!Number.isSafeInteger(config.remainingMs)||config.remainingMs<=0||config.remainingMs>2147483647)
+      throw Error('Python remaining total budget is required');
+    if(config.websocketEndpoint||config.recoverReceipt||config.finalizeReceipt)
+      throw Error('release fixture requires its own stdio case, without legacy recovery');
+  }
+  const prior=releaseRecoveryMode?clone(config.prior):null;
+  const priorLoss=prior?.sourceDone?.releaseLoss;
+  if(releaseRecoveryMode && (!priorLoss?.fault||!priorLoss.record||!priorLoss.plan||
+      !prior.resourceReceipt||typeof prior.sourceRoot!=='string'||!prior.sourceRoot||
+      typeof prior.sourceHash!=='string'||!prior.sourceHash||
+      config.binding?.connectionId===priorLoss.record.state?.connection?.connectionId||
+      JSON.stringify(config.argv)!==JSON.stringify(prior.sourceDone.nativeArgv)))
+    throw Error('exact source loss, distinct connection, source references and outer receipt required');
+  const ownedPlan=releaseRecoveryMode?priorLoss.plan:config.plan;
+  if(config.releaseAckLoss){
+    const totalDeadline=Date.now()+config.remainingMs;
+    if(!Number.isSafeInteger(ownedPlan?.deadlineMs)||!Number.isSafeInteger(ownedPlan?.recoveryDeadlineMs)||
+        ownedPlan.deadlineMs>totalDeadline||ownedPlan.recoveryDeadlineMs>totalDeadline)
+      throw Error('source plan deadlines must fit the Python remaining total budget');
+  }
   const {spawn} = require('node:child_process');
   const {Writable} = require('node:stream');
   const {createOwnedAppServerConnection,createOwnedAppServerWebSocketConnection,CONTEXT_OBSERVATION_TOOL} = require('../../runtime/codex-connection.cjs');
@@ -35,7 +59,9 @@ async function runOwnedConnection(config) {
   };
   let result=null,error=null,context=null,exitCode=null,closeState=null,recorderCloseError=null;
   let lastRpcRequest=null,fault=null,recovery=null,reconciliation=null,finalization=null,durableRecorder=null,plan=null;
-  const deadline=performance.now()+45000;
+  let releaseLoss=null,releaseRecovery=null,sourceSnapshot=null,transportCloseError=null;
+  let nativeStreamsClosed=null,nativeCloseCode=null;
+  const deadline=releaseCase?startedAt+config.remainingMs:performance.now()+45000;
   const contextReplies=[];
   const captureMessage=event=>capture(Buffer.from(String(event.data)+'\n','utf8'));
   try {
@@ -54,29 +80,72 @@ async function runOwnedConnection(config) {
       socket.send=data=>{fs.writeSync(requests,String(data).trimEnd()+'\n');return send(data)};
       connection=createOwnedAppServerWebSocketConnection({socket,...config.binding});
     }else{
-      native=spawn(config.argv[0],config.argv.slice(1),{cwd:config.plan.target.cwd,
+      native=spawn(config.argv[0],config.argv.slice(1),{cwd:ownedPlan.target.cwd,
         stdio:['pipe','pipe',stderr],windowsHide:true});
       native.stdout.on('data',capture);
       const outgoing=new Writable({write(chunk,encoding,done){
         fs.writeSync(requests,chunk);
-        if(config.recoverReceipt){const frame=JSON.parse(chunk.toString('utf8'));if(frame.method && Object.hasOwn(frame,'id'))lastRpcRequest=frame;}
+        if(config.recoverReceipt||releaseCase){const frame=JSON.parse(chunk.toString('utf8'));if(frame.method && Object.hasOwn(frame,'id'))lastRpcRequest=frame;}
         native.stdin.write(chunk,encoding,done);
       }});
       connection=createOwnedAppServerConnection({stdin:outgoing,stdout:native.stdout,...config.binding});
-      ended=new Promise((resolve,reject)=>{native.once('exit',code=>{exitCode=code;resolve(code)});native.once('error',reject)});
+      ended=new Promise((resolve,reject)=>{
+        native.once('exit',code=>{exitCode=code;if(!releaseCase)resolve(code)});
+        if(releaseCase){
+          nativeStreamsClosed=false;
+          native.once('close',code=>{nativeStreamsClosed=true;nativeCloseCode=code;resolve(code)});
+        }
+        native.once('error',reject);
+      });
     }
     const t=connection.transport;
     await t.request('initialize',{clientInfo:{name:'accord_connection_fixture',version:'1'},
       capabilities:{experimentalApi:true}},deadline);
     await t.notify('initialized',{},deadline);
+    if(releaseRecoveryMode){
+      plan=clone(ownedPlan);
+      const {openCarrierRecorder}=require('../../runtime/carrier-recorder.cjs');
+      durableRecorder=openCarrierRecorder({path:config.recorderPath,create:false,busyTimeoutMs:Math.min(5000,config.remainingMs)});
+      const basis=durableRecorder.read(plan.transferId,plan.scopeRef);
+      sourceSnapshot={record:clone(basis),scope:clone(durableRecorder.readScope(plan.scopeRef))};
+      releaseRecovery={prior,sourceSnapshot,finalSnapshot:null,sourceRead:null,targetRead:null,finalized:null};
+      const {isDeepStrictEqual}=require('node:util');
+      if(!isDeepStrictEqual(basis,priorLoss.record)||!isDeepStrictEqual(basis.state.plan,plan))
+        throw Error('durable source snapshot differs from prior done');
+      const remaining=Math.floor(deadline-performance.now());
+      if(remaining<=0)throw Error('native release recovery deadline expired');
+      const recoveryTransport={...t,async request(method,params,limit){
+        const source=params?.threadId===basis.state.source?.threadId;
+        const target=params?.threadId===basis.state.target?.threadId;
+        if(method!=='thread/read'||(!source&&!target))
+          throw Error('release successor only permits source/target thread/read');
+        const value=await t.request(method,params,limit);
+        if(value?.thread?.ephemeral!==false)throw Error('release recovery requires observed persistent threads');
+        releaseRecovery[source?'sourceRead':'targetRead']=clone(value);
+        return value;
+      }};
+      releaseRecovery.finalized=await finalizeReconciledHandoff({transferId:plan.transferId,
+        scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+        deadlineMs:Date.now()+remaining,expectedRevision:basis.revision,expectedLease:basis.lease,
+        receiptDigest:null,releaseKind:'prior-controller-closed'},
+        {transport:recoveryTransport,recorder:durableRecorder,
+          verify:(stage,facts,limit)=>remote('verify',[stage,facts,
+            Math.max(0,limit-performance.now()),prior])});
+      releaseRecovery.finalSnapshot={record:clone(durableRecorder.read(plan.transferId,plan.scopeRef)),
+        scope:clone(durableRecorder.readScope(plan.scopeRef))};
+      result=releaseRecovery.finalized;
+    }else{
     const source=await t.request('thread/start',{model:'fixture-no-model',modelProvider:'accord_fixture',
       cwd:config.plan.target.cwd,sandbox:'read-only',approvalPolicy:'never',
+      ...(config.releaseAckLoss?{ephemeral:false}:{}),
       dynamicTools:[HANDOFF_PROPOSAL_TOOL,...(config.contextRead?[CONTEXT_OBSERVATION_TOOL]:[])]},deadline);
+    if(config.releaseAckLoss&&source.thread?.ephemeral!==false)
+      throw Error('release source requires observed ephemeral:false');
     const turn=await t.request('turn/start',{threadId:source.thread.id,
       input:[{type:'text',text:'Submit one handoff proposal for the bound fixed task, then finish without other actions.'}]},deadline);
     plan={...config.plan,source:{threadId:source.thread.id,turnId:turn.turn.id}};
     await remote('sourceReady',[source,turn]);
-    if(config.finalizeReceipt){
+    if(config.finalizeReceipt||config.releaseAckLoss){
       const {openCarrierRecorder}=require('../../runtime/carrier-recorder.cjs');
       durableRecorder=openCarrierRecorder({path:config.recorderPath,create:true,busyTimeoutMs:5000});
       const bound=durableRecorder.bindScope(plan.scopeRef,source.thread.id);
@@ -98,7 +167,21 @@ async function runOwnedConnection(config) {
     const channel=connection.proposalChannel(proposal,async()=>({scopeRef:plan.scopeRef,
       authorityRef:plan.authorityRef,stateRef:plan.stateRef,writerThreadId:source.thread.id}));
     let targetTurns=0;
-    const transport=config.recoverReceipt?{...t,async request(method,params,limit){
+    const transport=config.releaseAckLoss?{...t,async request(method,params,limit){
+      const value=await t.request(method,params,Math.min(limit,deadline));
+      if((method==='thread/start'||method==='thread/read')&&value?.thread?.ephemeral!==false)
+        throw Error('release source/target requires observed persistent threads');
+      if(method==='thread/unsubscribe'&&params?.threadId===source.thread.id&&value?.status==='unsubscribed'){
+        if(fault)throw Error('release acknowledgement loss already injected');
+        if(lastRpcRequest?.method!==method||JSON.stringify(lastRpcRequest.params)!==JSON.stringify(params))
+          throw Error('release fault request binding differs');
+        const requestRef={...config.binding,requestId:lastRpcRequest.id,method};
+        fault={request:clone(lastRpcRequest),response:clone(value),requestRef};
+        const lost=Error('controlled normal release acknowledgement loss');
+        lost.rpcRequest=Object.freeze(requestRef);throw lost;
+      }
+      return value;
+    },waitTerminal:(threadId,turnId,limit)=>t.waitTerminal(threadId,turnId,Math.min(limit,deadline))}:config.recoverReceipt?{...t,async request(method,params,limit){
       const value=await t.request(method,params,limit);
       if(method==='turn/start' && ++targetTurns===2){
         if(lastRpcRequest?.method!==method || JSON.stringify(lastRpcRequest.params)!==JSON.stringify(params))throw Error('fault request binding differs');
@@ -116,8 +199,17 @@ async function runOwnedConnection(config) {
     result=await runHandoffProposal(plan,{transport,
       recorder:handoffRecorder,
       verify:(stage,facts,limit)=>remote('verify',[stage,facts,Math.max(0,limit-performance.now())])},proposal,channel);
+    }
   } catch (e) {
     error={name:e.name,message:e.message,code:e.code,state:e.state,details:e.details};
+    if(config.releaseAckLoss&&fault){
+      releaseLoss={fault:clone(fault),record:clone(durableRecorder.read(plan.transferId,plan.scopeRef)),plan:clone(plan)};
+      sourceSnapshot={record:releaseLoss.record,scope:clone(durableRecorder.readScope(plan.scopeRef))};
+    }
+    if(releaseRecoveryMode&&durableRecorder&&plan&&releaseRecovery){
+      releaseRecovery.finalSnapshot={record:clone(durableRecorder.read(plan.transferId,plan.scopeRef)),
+        scope:clone(durableRecorder.readScope(plan.scopeRef))};
+    }
     if(config.recoverReceipt && fault){
       try{
         const t=connection.transport,threadId=fault.request.params.threadId,turnId=fault.response.turn.id;
@@ -155,6 +247,11 @@ async function runOwnedConnection(config) {
     }
   } finally {
     closeState=connection?.close();
+    if(config.releaseAckLoss&&durableRecorder&&plan&&!sourceSnapshot){
+      try{sourceSnapshot={record:clone(durableRecorder.read(plan.transferId,plan.scopeRef)),
+        scope:clone(durableRecorder.readScope(plan.scopeRef))};}
+      catch(e){sourceSnapshot={error:{name:e.name,message:e.message,code:e.code}};}
+    }
     try{durableRecorder?.close();}catch(e){recorderCloseError={name:e.name,message:e.message};}
     let timer;
     try {
@@ -165,10 +262,16 @@ async function runOwnedConnection(config) {
           socket.close(1000);
         }else ended=Promise.resolve();
       }else native?.stdin.end();
-      if(ended)await Promise.race([ended,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('owned transport exit timed out')),10000)})]);
+      if(ended)await Promise.race([ended,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('owned transport exit timed out')),
+        releaseCase?Math.max(0,Math.min(10000,Math.floor(deadline-performance.now()))):10000)})]);
+    } catch(e){
+      if(!releaseCase)throw e;
+      transportCloseError={name:e.name,message:e.message};
     } finally {clearTimeout(timer);native?.stdout.off('data',capture);fs.closeSync(stderr);fs.closeSync(stdout);fs.closeSync(requests);}
   }
   process.stdout.write(JSON.stringify({kind:'done',result,error,recovery,reconciliation,finalization,context,contextReplies,exitCode,socketCloseCode,recorderCloseError,
+    ...(releaseCase?{plan,releaseLoss,releaseRecovery,sourceSnapshot,nativeArgv:config.argv,transportCloseError,
+      nativePid:native?.pid??null,nativeStreamsClosed,nativeCloseCode}:{}),
     transportKind:socket?'websocket':'stdio',closeState,rawBytes})+'\n');
   rl.close();process.stdin.destroy();
 }
@@ -762,7 +865,7 @@ async function run(config) {
 }
 rl.on('line', line => {
   const value = JSON.parse(line);
-  if (!started) {started = true; (value.mode==='native-connection'?runOwnedConnection(value):
+  if (!started) {started = true; (['native-connection','native-release-recovery'].includes(value.mode)?runOwnedConnection(value):
     value.mode==='finalize-sqlite'?runFinalizationSqlite(value):run(value)).catch(e => {process.stderr.write(String(e.stack)); process.exitCode=1; rl.close(); process.stdin.destroy();}); return;}
   const waiting = pending.get(value.id);
   if (!waiting) throw new Error('unmatched host reply');

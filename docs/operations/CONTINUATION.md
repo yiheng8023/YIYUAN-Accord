@@ -12,8 +12,10 @@ F05/A05映射与历史来源核对已闭；一次原生完整历史读取已成�
 
 后置源码修正保在新的`post-failure-fix`：Root计划数字构造/校验、覆盖Root回调等待的绝对turn watchdog与真实终态取消、fault=null时保留原操作错误，Root复核及Node10/Python6纯测试过；旧executor/config/grant/run及失败不变。
 
-现有原生证据对应已闭：f958 CI两平台CLI0.156.0原件均证实首次续作turn/start效果已发生、adapter回调丢回执、同一控制者核历史并正常unsubscribe/finalize；11份executed source与当前一致。正常release未知及新controller分支目前只有stub；C02的真实自主提议和R的0.160.1历史读取不能拼成一次恢复。下一沿既有fixed-response原生框架，只准备补“真实源释放ACK丢失→原控制者退出→新只读控制者同recorder finalize”的窄机制场景，无需再启动模型业务证明这个协议条件。模型/语义及完整F05/A05/A08仍分别保原要求。具体版本、隔离、权限和前绑充分前不执行；不重跑N/C02或旧marker调查。
+现有原生证据对应已闭：f958 CI两平台CLI0.156.0原件均证实首次续作turn/start效果已发生、adapter回调丢回执、同一控制者核历史并正常unsubscribe/finalize；11份executed source与当前一致。正常release未知及新controller分支目前只有stub；C02的真实自主提议和R的0.160.1历史读取不能拼成一次恢复。既有fixed-response原生框架现已接入显式`release-recovery`场景：保留真实unsubscribe ACK、只向原消费者丢回执，核原Node/native及OS资源退出后，另一个owned只读连接读取原线程并同recorder finalize，不重发效果。源码与独立原件核验器已齐，91项纯测试及独审通过；这条新场景尚未真实执行，默认CI没有增项。模型/语义及完整F05/A05/A08仍分别保原要求。新执行路线在`accord-native-release-fixture-20261006-01/READY.md`：240秒共享工作及30秒收尾、源阶段至多90秒、4个本地固定回复、零真实模型调用；具体来源/版本、隔离和对应权限复核后方可运行。不重跑N/C02或旧marker调查。
 每段工作以可核结果或具体反例收束。必要的机制验证和受控决策试验本身可以服务发布验收，不需要捏造另一项业务为调用工具找理由；如用合成数据或人为控制条件，事前标明，结论限于该条件。模型自主判断不能由固定响应、明确要求迁移或回执格式替代。
+
+独审已在执行前修正sourceContext回调遗漏和provider日志envelope读取失配，并补永久纯回归。f958/CI37419577754与5a2/CI37421079468均已按精确head核completed/success。源码容量按实测3258887字节调至3440000，保原5%余量；不加文件、服务、分发内容或验收通过。
 
 ## 目标与权限
 
