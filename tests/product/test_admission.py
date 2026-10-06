@@ -1158,18 +1158,18 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def test_current_case_can_be_admitted_without_closing_missing_requirements(self):
         report = self.assess(observer=self.observer)
         self.assertEqual(report["errors"], [])
-        selection_dependent_scopes = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
-                                      "v33-admitted-entry-lifecycle", "v33-codex-entry-coverage"}
-        self.assertEqual(report["acceptedCases"], sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]
-                                                          if case["scope"] not in selection_dependent_scopes))
+        self.assertEqual(report["acceptedCases"], sorted(
+            case["id"] for case in self.contract["acceptance"]["admission"]["cases"]))
         self.assertEqual(report["entrySelection"], {
-            "final": False,
+            "final": True,
             "selected": ["chatgpt-desktop", "chatgpt-mobile", "cx-cli", "cx-desktop", "cx-sdk", "cx-vscode"],
             "selectedModes": {"chatgpt-desktop": ["remote", "work-local"],
                               "chatgpt-mobile": ["remote"], "chatgpt-web": []},
-            "pendingModes": {"chatgpt-desktop": ["chat"], "chatgpt-mobile": ["chat"],
-                             "chatgpt-web": ["chat"]}})
+            "pendingModes": {"chatgpt-desktop": [], "chatgpt-mobile": [],
+                             "chatgpt-web": []}})
         applicability = report["openCoverage"]["v33-openai-entry-applicability"]
+        self.assertEqual(applicability["claims"]["function"],
+                         {"duties": [], "qualityAxes": [], "scenarios": []})
         self.assertEqual(applicability["entry"], "cx-desktop")
         self.assertEqual(set(applicability["subjectEntries"]), {
             row["id"] for row in self.contract["capabilityMap"]["entrySurfaces"]["rows"]
@@ -1179,7 +1179,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
         # The consumed recovery case is historical. Even a synthetic observer
         # accepting every active case cannot fill its now-unbound dimensions.
-        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, set())
+        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]},
+                         {"A01", "A03"})
         self.assertEqual(report["acceptanceRequirements"]["A05"]["missingScopes"],
                          {"function": ["v33-autonomous-continuity"]})
         self.assertEqual(report["openCoverage"]["v33-autonomous-continuity"]["claims"]["function"],
@@ -1195,11 +1196,11 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report["openCoverage"]["v33-codex-cli-ordinary-delivery"]
                          ["claims"]["function"]["scenarios"], [])
         self.assertNotIn("v33-openai-entry-applicability", report["unboundCoverage"]["function"])
-        self.assertIn("v33-openai-entry-applicability",
-                      report["acceptanceRequirements"]["A02"]["missingScopes"]["function"])
+        self.assertEqual(report["acceptanceRequirements"]["A02"]["missingScopes"]["function"],
+                         ["v33-dynamic-model-routing"])
         self.assertNotIn("claude-code", report["productCoverage"])
-        self.assertEqual(report["progress"]["coverageVerified"], 6)
-        self.assertEqual(report["progress"]["requirementsComplete"], 0)
+        self.assertEqual(report["progress"]["coverageVerified"], 10)
+        self.assertEqual(report["progress"]["requirementsComplete"], 2)
         # Ended resource/adaptation instances are historical; SDK sub-scopes
         # cannot discharge either their missing cases or lifecycle parents.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
@@ -1520,6 +1521,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 if row.get("scope", row.get("id")) not in parent_ids:
                     continue
                 row["conditions"]["selectionFinal"] = selection_final
+                # Construct the unresolved row explicitly; the current baseline is final.
+                row["conditions"]["entryDispositions"]["cx-jetbrains"]["status"] = "pending"
                 if clear_pending:
                     for disposition in row["conditions"]["entryDispositions"].values():
                         if disposition["status"] == "pending":
@@ -1601,10 +1604,14 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 continue
             row["conditions"]["selectionFinal"] = True
             for key, disposition in row["conditions"]["entryDispositions"].items():
-                if disposition["status"] == "pending" and key != "chatgpt-web":
+                if key == "chatgpt-web":
+                    disposition["status"] = "pending"
+                elif disposition["status"] == "pending":
                     disposition["status"] = "deferred"
                 for mode, value in disposition.get("modes", {}).items():
-                    if value["status"] == "pending" and mode != "chat":
+                    if mode == "chat":
+                        value["status"] = "pending"
+                    elif value["status"] == "pending":
                         value["status"] = "deferred"
         with self.history():
             self.commit(contract)
@@ -1860,6 +1867,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
 
     def test_host_lifecycle_cannot_close_while_entry_selection_is_pending(self):
         contract = self.lifecycle_binding_contract()
+        policy = contract['acceptance']['admission']
+        for row in [*policy['scopes'], *policy['cases']]:
+            if 'entryDispositions' in row['conditions']:
+                row['conditions']['entryDispositions']['cx-jetbrains']['status'] = 'pending'
         with self.history():
             self.commit(contract)
             report = self.assess(contract, self.observer)

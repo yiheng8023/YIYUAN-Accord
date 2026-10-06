@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-10-07 · N33-20260909 / r37。这里只维护当前责任和下一依赖。[计划](PLAN-v3.3.md#当前推进顺序)拥有共识与工序，[基线](BASELINE-v3.3.md)与[验收](ACCEPTANCE-v3.3.md)展开结果和判据，[机器投影](../../product/development.json)供校验。实时 Git、原生输入和实际资源优先于保存的观察。
+更新：2026-10-07 · N33-20260909 / r38。这里只维护当前责任和下一依赖。[计划](PLAN-v3.3.md#当前推进顺序)拥有共识与工序，[基线](BASELINE-v3.3.md)与[验收](ACCEPTANCE-v3.3.md)展开结果和判据，[机器投影](../../product/development.json)供校验。实时 Git、原生输入和实际资源优先于保存的观察。
 
 ## 当前动作
 
@@ -14,7 +14,11 @@
 
 新受控原生组合已执行完，不重跑：`accord-native-admission-dossier-20261006-01/OUTCOME.json`，SHA `9adc99d5cd1b1b667a2d63754c3914d3f8bb792cac78e504bcbe8f6de78d42f6`。当前候选真实证据的两阶段草案/更新，由同一Sol/medium写者实际完成59.019秒及71.906秒；一阶段准确等待，二阶段遭任务私有草案共享锁的真实写入拒绝，保原错误/旧稿并在授权范围交付final.md及机器清单。原件hash/mtime、确切head CI归属、false发布就绪与限制均获Root/独立语义核对；所属锁正常exit0、PID已消失。Root最后记录耗时1214.638秒超原900窗口，保该协调失败，不作完整限时验收通过。原因是Root观察器先漏当前custom_tool_call_output、再错要明文user记录；实际委派为encrypted agent_message，不能解密/捏造接收原文，已有派发与原生动作只支持有限事实。无Skill实际读取/激活或交接观察，不晋全W02/W05/W08或F/A，也不拼接C02。后续先复用这些已证功能，按当前支持的源表示核必要证据与收口时限，不再泛查本例消息/旧入口或制造等价补跑。
 
-能力策略与入口路线已交叉源审查：现有启停、Root受托显式代选和目标控制条款保持；coordinate-capabilities补一段来源身份、同名/同义、冲突与去冗余，区分默认匹配偏好、作者调用禁止和用户排除，同Hook事件不等组件/效果。六反例独审通过，25-member新源码候选20261006155722 / SHA8b784f73ca64c87e86b99cccd2ef8778c68fd0789f045ba6edc3cd460ae90c7e尚未本机采用；现装123921、元指导5118及运行时/Hook未改。R3现源码已允许deferred，final集合无需消除所有候选unknown；维持六selected执行/控制入口及现选模式、把三个Chat独立模式/网页和两内置IDE本版延期的具体范围问题已呈用户，未答前不改pending或final标志。该选择门不替代六入口的真实职责验收，不产生采购要求；已有主线及本次源补正继续在原授权内。资料：accord-r2-policy-parallel-20261006-01、accord-r3-entry-parallel-20261006-01。
+能力策略与入口路线已交叉源审查：988b4c61已补来源身份、同名/同义、冲突与去冗余，区分默认匹配偏好、作者调用禁止和用户排除，同Hook事件不等组件/效果；六反例独审通过。既有启停、Root受托显式代选和目标控制条款保持，R3源码允许本版deferred且能力仍unknown。用户随后确认六条执行/控制入口及现选模式为最终范围，其余本版延期；该选择不替代六入口的真实职责验收，也不产生采购要求。资料：accord-r2-policy-parallel-20261006-01、accord-r3-entry-parallel-20261006-01。
+
+2026-10-07最终范围已由用户同意，三父scope/case同步final/deferred，不再请示；原职责/质量/情境/选定subjects/modes保持。插件总使用许可与有效组件/信任/加载分开；子代理可选、用户控制，Ultra允许主动委派不等越过禁用。当前源162254/25成员/SHAb07687f944939bc683981f41ac5e9d6d31b9e0cb308a0a125dd4ef7a77407e5e未采用，现装123保持。公开可搜索目标保持，官方目录路线与本机MCP差距已核；当前不提交、部署或改变账号。资料见research/reviews/2026-10-07-public-plugin-directory-route.md。
+
+公共目录最新取舍：本地/Git市场优先，是否投放公共目录仍待后续商议，研究材料保留但没有发布后固定提交承诺。按发现价值与兼容/数据权限/用户安装及维护成本评价；不为上架强迁在线MCP或新建Sites服务。六路由最终范围的已批准决定不受影响，完整F/A仍保持，主线回到实际必要验收。
 
 ## 目标与权限
 
@@ -28,7 +32,7 @@
 
 | 对象 | 当前可用结论及限制 |
 |---|---|
-| 源候选与现装 | 新源码候选 `20261006155722` /25成员/SHA `8b784f73ca64c87e86b99cccd2ef8778c68fd0789f045ba6edc3cd460ae90c7e`尚未采用。现装 `20261006123921`来自416160e1，SHA941bc89e…，原线程采用已核；旧包与恢复材料保持，不以源码补正推定加载。 |
+| 源候选与现装 | 当前源码候选 `20261006162254` /25成员/SHA `b07687f944939bc683981f41ac5e9d6d31b9e0cb308a0a125dd4ef7a77407e5e`尚未采用。现装 `20261006123921`来自416160e1，SHA941bc89e…，原线程采用已核；旧包与恢复材料保持，不以源码补正推定加载。 |
 | Stop 产品范围 | 自动续轮及其预算已从产品与现装撤回，当前相关待办退休；旧防重复修正和15af预算只保历史。旧callback只防误识别，未完责任/恢复/交接保持。 |
 | 本机09 | 正确安装后态已核；执行器失败、信任形成未知和旧恢复原件保持。该段已闭，不能为求绿重装、授信或复活已退休缓存。 |
 | 宿主与模型 | 本轮桌面 metadata：Sol / 0.160.0 / default；独立 CLI 安装器使用0.160.1精确二进制。主线程 effort/Fast 未独立核定。源任务与审查已有 Sol/medium、Sol/high、Luna/high、Astra/medium/high 等逐轮观察，不代表最优分配或固定模型梯子；本轮未改模型/模式。 |
@@ -48,7 +52,7 @@
 
 现为17必要scope、12活动case、13未验职责；六范围尚无活动case：dynamic-model-routing、environment-adaptation、resource-pressure-and-exit、system-integration、codex-lifecycle、system-impact-assessment。连续性另缺recovery-and-rollback/capability-loss的当前声明绑定，故声明缺口涉及七范围；移除失败实例不把这些职责变成通过。新case的前瞻登记不增加实际通过；数量是当前映射，不是完成率或永恒上限。
 
-适用性为9行、6selected/3pending；网页聚合、桌面/手机/网页三个Chat模式及两内置IDE的必要判断保持。以具体任务职责与实际证据选择，不能仅由界面名、没有本地设备或选择器可见作支持/排除结论。`selectionFinal`、`functionalCompletion`、`candidateEligible` 仍为false，完整F/A及质量底线未改。
+适用性为9行、6selected/3deferred，现选模式最终确定；网页聚合、桌面/手机/网页三个Chat模式及两内置IDE的必要判断保持。以具体任务职责与实际证据选择，不能仅由界面名、没有本地设备或选择器可见作支持/排除结论。`selectionFinal`已true，`functionalCompletion`、`candidateEligible`仍false，完整F/A及质量底线未改。
 
 ## 证据入口与禁止重放
 

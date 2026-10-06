@@ -26,11 +26,11 @@
 
 ## 首次使用者说明与发布字段草案
 
-以下中英介绍、结构字段和检查清单面向非技术首次使用者。当前稿依据共识计划及`20261006155722`源码候选修订，仍须在发布前按精确版本和实际验收结果更新；不构成普遍支持、效果或发布承诺。此前01397fbe的2026-09-24稿保留在Git历史，其旧开发构建号不作为当前包身份。
+以下中英介绍、结构字段和检查清单面向非技术首次使用者。当前稿依据共识计划及`20261006162254`源码候选修订，仍须在发布前按精确版本和实际验收结果更新；不构成普遍支持、效果或发布承诺。此前01397fbe的2026-09-24稿保留在Git历史，其旧开发构建号不作为当前包身份。
 
 ## YIYUAN Accord 3.3：让 Agent 协调协作（草案）
 
-> **草案，非正式发行说明。** 3.3仍在开发，尚未完成验收或发布；目前没有可供常规安装的已接受3.3发行版。当前 Codex 源码候选为 `3.3.0-dev.1+codex.20261006155722`，尚未实装。现装`20261006123921`仅在一份本机原线程核过采用，不能推广为新候选或所有入口均已验收。
+> **草案，非正式发行说明。** 3.3仍在开发，尚未完成验收或发布；目前没有可供常规安装的已接受3.3发行版。当前 Codex 源码候选为 `3.3.0-dev.1+codex.20261006162254`，尚未实装。现装`20261006123921`仅在一份本机原线程核过采用，不能推广为新候选或所有入口均已验收。
 
 ### 你可以怎样开始
 
@@ -58,7 +58,7 @@ Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和
 
 ## YIYUAN Accord 3.3: letting an Agent coordinate the work (draft)
 
-> **Draft, not an official release note.** Version 3.3 is in development and has not completed acceptance or publication. There is currently no accepted 3.3 release for normal installation. The current Codex source candidate is `3.3.0-dev.1+codex.20261006155722` and has not been locally adopted. The installed `20261006123921` was checked in one original local task; that does not establish adoption of the new candidate or acceptance across all entries.
+> **Draft, not an official release note.** Version 3.3 is in development and has not completed acceptance or publication. There is currently no accepted 3.3 release for normal installation. The current Codex source candidate is `3.3.0-dev.1+codex.20261006162254` and has not been locally adopted. The installed `20261006123921` was checked in one original local task; that does not establish adoption of the new candidate or acceptance across all entries.
 
 ### How to get started
 
@@ -96,7 +96,7 @@ Version 3.3 remains in development and has not completed acceptance or publicati
   "version": {
     "release": "3.3 (development; not an accepted release)",
     "note": "Current source policy candidate not locally adopted. Installed20261006123921 from416160e1 was checked in one original local task; not universal acceptance or an official release identity.",
-    "developmentPackageSnapshot": "3.3.0-dev.1+codex.20261006155722"
+    "developmentPackageSnapshot": "3.3.0-dev.1+codex.20261006162254"
   },
   "scope": {
     "purpose": "Designed to help an Agent understand a goal, assess feasibility and missing conditions, coordinate available host capabilities and Accord components within authorization, adapt to changes, check results, correct affected work, and preserve unfinished items.",

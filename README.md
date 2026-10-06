@@ -22,6 +22,19 @@ deliver it with task coordination without editing your AGENTS.md. Installation
 and actual loading still need verification; this does not override host priority
 or establish coverage of every host, execution mode or subagent path.
 
+**Plugin participation requires** the target host entry to permit plugin use,
+Accord to be installed and enabled in that scope, and the used Hooks/MCP to meet
+required trust/permissions and actually load. In the ChatGPT desktop app, the
+General setting that allows installed plugins is one global use gate; installation
+alone is insufficient. Users control it. An inactive plugin cannot enable itself.
+
+Subagents are optional capabilities, not an Accord prerequisite. Check current
+user choices and effective availability/permissions; use an adequate single-agent
+route when delegation is disabled, retaining any necessary independent-review gap.
+Ultra permits proactive delegation in supported host modes, but that does not
+replace enablement and authority checks. Defaults vary by entry/version. See the
+[official subagent guidance](https://learn.chatgpt.com/docs/agent-configuration/subagents).
+
 See the [project glossary](GLOSSARY.md) for terms concerning objectives, authority, responsibility and evidence.
 
 YIYUAN Accord is designed to support reliable long-term human–AI collaboration. Its goal is for the Agent to clarify a user's requirements, assess feasibility, establish necessary conditions, and own authorized execution, correction, recovery and result verification. Users should not need to learn tool coordination, configuration, model routing or task handoff first; experienced users retain control over their own actions and changes of direction.

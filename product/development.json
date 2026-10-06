@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261006155722",
+    "version": "3.3.0-dev.1+codex.20261006162254",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261006155722",
-        "packageSha256": "8b784f73ca64c87e86b99cccd2ef8778c68fd0789f045ba6edc3cd460ae90c7e",
+        "packageVersion": "3.3.0-dev.1+codex.20261006162254",
+        "packageSha256": "b07687f944939bc683981f41ac5e9d6d31b9e0cb308a0a125dd4ef7a77407e5e",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -183,6 +183,7 @@
       "product/development.json",
       "product/program.json",
       "product/reshaping-guidance.json",
+    "research/reviews/2026-10-07-public-plugin-directory-route.md",
       "research/PROTOTYPE-dynamic-relation-graph.html",
       "runtime/accord-hook.cjs",
       "runtime/codex-context.cjs",
@@ -253,9 +254,9 @@
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 3470000,
-      "maxTrackedFiles": 185,
+      "maxTrackedFiles": 186,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current phase allocation: 3470000 code/test bytes, 185 tracked files and 36000 primary-instruction bytes. Historical allocation: the 2026-10-05 prospective system-integration admission binding repair adds 7805 bytes in the existing admission module and existing product tests. The measured total is 3142774 bytes: the prior 3300000 ceiling leaves 157226 bytes, below its unchanged 165000 five-percent reserve. The phase-local 3310000 ceiling leaves 167226 bytes versus 165500 required. No tracked file, runtime service, dependency, primary instruction or active case is added. All quality floors, 17 scopes, 12 case definitions, F/A gates, old execution limits and failure verdicts remain unchanged. This is source capacity allocation, not functional acceptance. Historical allocations below retain their original dates. The 2026-10-02 reviewed normal-release recovery and exact-request/completed-basis regression paths measure 3067438 product/test bytes. The former 3200000 ceiling leaves 132562 bytes, below the unchanged five-percent reserve of 160000. The new ceiling leaves 182562 bytes versus a required 162500. Changes stay in the existing handoff runtime and distributed mirror, existing tests and interface reference; no service, runtime module, dependency or tracked file is added. This is a phase-local capacity allocation for a confirmed recovery defect, not a behavioral or execution-limit change. F/A conditions, quality floors, scope and scenario coverage, case deadlines, token caps, resource-release requirements and evidence rules remain unchanged. Earlier allocations and rationale remain in Git, including 2b6b4037685a96da9b5e984716962dc6f6e0f3d1:product/development.json. Historical failed cases keep their original conditions and verdicts. Prospective skill-glossary data-only fixture allocation adds one tracked file (178 to 179); the 3250000 byte budget, 36000 instruction budget and existing five-percent reserve floor remain unchanged. The real pre-release concept-relations fixture adds one further data file (179 to 180); it preserves the same byte/instruction budgets and quality reserve, with no runtime or service added. Root ordinary repository development adds the single source-aligned project glossary (180 to 181); it is not a replay, substitute output or passing result of the ended SDK case, and changes no functional/acceptance definition. Preparation, binding and case count do not establish functional completion. The single demand-bound MCP client guide adds one tracked reference file (181 to 182), linked only for integration/parameter/error branches. Runtime, services, dependencies, primary instructions, quality floors and behavioral acceptance are unchanged; isolated request-template checks are not native adoption or F/A admission. The prospective guide-consumption fixture adds one necessary data file (182 to 183). No runtime/service/primary instruction or test module is added, and byte budgets, five-percent reserve, 17 scope definitions and full F/A floors remain unchanged. Its static preparation is not admission or completion. The user-authorized 3.3 original meta-guidance adds one canonical reference(183 to 184), exact 4444 CRLF bytes, counted in primary exposure. Existing entry/child-only Hook bridge and guardrails are reused; no service, runtime module or third-party dependency. Original authority/quality/reserve/17scope/F-A and failed-case limits remain. The initial measured meta-inclusion tree is 3091939 product/test bytes:3250000 leaves158061, below the unchanged162500 five-percent reserve. A3300000 ceiling leaves208061 versus165000 required. This phase-local allocation covers the user-approved exact foundation, existing loading/state-isolation checks and tests, not a new service or relaxed functional/execution/quality condition. The observed tool/file truncation correction adds397 bytes to the existing continuity Skill (7994 to8391). The source-phase per-Skill cap increases8000 to9000,leaving609 bytes above this necessary body; no new Skill/runtime/service/file or relaxed outcome is added. Total source and primary-instruction ceilings,the five-percent reserve floor and all F/A/oldcase limits remain unchanged. The 2026-10-06 shared declaration diagnostic and regression checks measure3163819 product/test bytes. The3320000 phase limit leaves156181 bytes, below the unchanged166000 five-percent reserve. The3340000 limit leaves176181 against167000 required; no tracked file, runtime service, dependency or primary instruction is added. This restores source/test capacity only; all acceptance definitions, original failures and execution limits remain unchanged. The confirmed Stop retry defect adds only internal observation keying and finite JSON validation to the existing helper, plus end-to-end regressions. This source phase allocates3320000 instead of3310000 bytes to retain the unchanged five-percent reserve; file/instruction floors and all functional duties, old failures and execution limits remain. No new runtime module or service. The prospective source-release ACK-loss recovery workload adds one data-only case file (184 to185). It initially remained outside active cases while the executable was incomplete. After minimal wiring and independent source review, the new thirteenth case is prospectively declared with exact bootstrap identities; this does not provide actual recovery or admission evidence. No runtime module, service, dependency, primary instruction or new test module is added; byte/instruction limits, reserve floor, current scopes/cases and all acceptance conditions remain unchanged. The 2026-10-06 opt-in normal-release ACK-loss/new-controller fixture and independent raw-evidence regressions measure3258887 code/test bytes in two existing test files. The3340000 ceiling leaves81113 below its unchanged167000 reserve. A3440000 source-phase ceiling leaves181113 against172000 required. No product runtime, service, dependency, tracked file, primary instruction, active case or default native CI scenario is added. Fixed-response protocol preparation is not observed native recovery, model autonomy or F/A admission; original N failure and all case execution limits remain unchanged. The20261006 ordinary Stop budget adds78 core lines,175 complete checkpoint tests including9 budget regressions and finite-span guidance in existing files. Measured code/test bytes3283511 leave156489 under3440000, below172000 required. Source capacity3470000 leaves186489 against173500 unchanged five-percent reserve. No tracked file/service/dependency is added;175 tests and policy bounds do not constitute installed behavior or release acceptance."
+      "rationale": "Current phase allocation: 3470000 code/test bytes, 186 tracked files and 36000 primary-instruction bytes. The user-requested 2026-10-07 public-directory route review adds one source-linked research document (185 to186); it is an optional distribution decision aid, not a new runtime, service, dependency, active case, permission or release requirement. All byte/instruction budgets, reserve and F/A quality floors remain unchanged. Historical allocation: the 2026-10-05 prospective system-integration admission binding repair adds 7805 bytes in the existing admission module and existing product tests. The measured total is 3142774 bytes: the prior 3300000 ceiling leaves 157226 bytes, below its unchanged 165000 five-percent reserve. The phase-local 3310000 ceiling leaves 167226 bytes versus 165500 required. No tracked file, runtime service, dependency, primary instruction or active case is added. All quality floors, 17 scopes, 12 case definitions, F/A gates, old execution limits and failure verdicts remain unchanged. This is source capacity allocation, not functional acceptance. Historical allocations below retain their original dates. The 2026-10-02 reviewed normal-release recovery and exact-request/completed-basis regression paths measure 3067438 product/test bytes. The former 3200000 ceiling leaves 132562 bytes, below the unchanged five-percent reserve of 160000. The new ceiling leaves 182562 bytes versus a required 162500. Changes stay in the existing handoff runtime and distributed mirror, existing tests and interface reference; no service, runtime module, dependency or tracked file is added. This is a phase-local capacity allocation for a confirmed recovery defect, not a behavioral or execution-limit change. F/A conditions, quality floors, scope and scenario coverage, case deadlines, token caps, resource-release requirements and evidence rules remain unchanged. Earlier allocations and rationale remain in Git, including 2b6b4037685a96da9b5e984716962dc6f6e0f3d1:product/development.json. Historical failed cases keep their original conditions and verdicts. Prospective skill-glossary data-only fixture allocation adds one tracked file (178 to 179); the 3250000 byte budget, 36000 instruction budget and existing five-percent reserve floor remain unchanged. The real pre-release concept-relations fixture adds one further data file (179 to 180); it preserves the same byte/instruction budgets and quality reserve, with no runtime or service added. Root ordinary repository development adds the single source-aligned project glossary (180 to 181); it is not a replay, substitute output or passing result of the ended SDK case, and changes no functional/acceptance definition. Preparation, binding and case count do not establish functional completion. The single demand-bound MCP client guide adds one tracked reference file (181 to 182), linked only for integration/parameter/error branches. Runtime, services, dependencies, primary instructions, quality floors and behavioral acceptance are unchanged; isolated request-template checks are not native adoption or F/A admission. The prospective guide-consumption fixture adds one necessary data file (182 to 183). No runtime/service/primary instruction or test module is added, and byte budgets, five-percent reserve, 17 scope definitions and full F/A floors remain unchanged. Its static preparation is not admission or completion. The user-authorized 3.3 original meta-guidance adds one canonical reference(183 to 184), exact 4444 CRLF bytes, counted in primary exposure. Existing entry/child-only Hook bridge and guardrails are reused; no service, runtime module or third-party dependency. Original authority/quality/reserve/17scope/F-A and failed-case limits remain. The initial measured meta-inclusion tree is 3091939 product/test bytes:3250000 leaves158061, below the unchanged162500 five-percent reserve. A3300000 ceiling leaves208061 versus165000 required. This phase-local allocation covers the user-approved exact foundation, existing loading/state-isolation checks and tests, not a new service or relaxed functional/execution/quality condition. The observed tool/file truncation correction adds397 bytes to the existing continuity Skill (7994 to8391). The source-phase per-Skill cap increases8000 to9000,leaving609 bytes above this necessary body; no new Skill/runtime/service/file or relaxed outcome is added. Total source and primary-instruction ceilings,the five-percent reserve floor and all F/A/oldcase limits remain unchanged. The 2026-10-06 shared declaration diagnostic and regression checks measure3163819 product/test bytes. The3320000 phase limit leaves156181 bytes, below the unchanged166000 five-percent reserve. The3340000 limit leaves176181 against167000 required; no tracked file, runtime service, dependency or primary instruction is added. This restores source/test capacity only; all acceptance definitions, original failures and execution limits remain unchanged. The confirmed Stop retry defect adds only internal observation keying and finite JSON validation to the existing helper, plus end-to-end regressions. This source phase allocates3320000 instead of3310000 bytes to retain the unchanged five-percent reserve; file/instruction floors and all functional duties, old failures and execution limits remain. No new runtime module or service. The prospective source-release ACK-loss recovery workload adds one data-only case file (184 to185). It initially remained outside active cases while the executable was incomplete. After minimal wiring and independent source review, the new thirteenth case is prospectively declared with exact bootstrap identities; this does not provide actual recovery or admission evidence. No runtime module, service, dependency, primary instruction or new test module is added; byte/instruction limits, reserve floor, current scopes/cases and all acceptance conditions remain unchanged. The 2026-10-06 opt-in normal-release ACK-loss/new-controller fixture and independent raw-evidence regressions measure3258887 code/test bytes in two existing test files. The3340000 ceiling leaves81113 below its unchanged167000 reserve. A3440000 source-phase ceiling leaves181113 against172000 required. No product runtime, service, dependency, tracked file, primary instruction, active case or default native CI scenario is added. Fixed-response protocol preparation is not observed native recovery, model autonomy or F/A admission; original N failure and all case execution limits remain unchanged. The20261006 ordinary Stop budget adds78 core lines,175 complete checkpoint tests including9 budget regressions and finite-span guidance in existing files. Measured code/test bytes3283511 leave156489 under3440000, below172000 required. Source capacity3470000 leaves186489 against173500 unchanged five-percent reserve. No tracked file/service/dependency is added;175 tests and policy bounds do not constitute installed behavior or release acceptance."
     }
   },
   "source": {
@@ -1237,6 +1238,14 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "plugin-use-subagent-option-and-final-entry-selection-20261007",
+      "source": "Latest user plugin-toggle screenshot, optional/user-controlled delegation requirement and explicit agreement to six-route/current-mode3.3 support selection; fetched official Subagents/config/plugin guidance.",
+      "effect": "Clarify global plugin-use permission versus scoped install/enable/trust/loading. Delegation is optional, user-controlled; adequate single-agent fallback or an explicit assurance gap. Ultra proactive delegation is a host behavior, not authority to bypass disabled choices. All three current parent scopes/cases now selectionFinal=true, formerly pending candidates/modes deferred with capability unknown; selected subjects/modes and necessary scope/duty/quality/scenario requirements retained.",
+      "limits": "Final selection and documentation are not actual-entry acceptance, source adoption or a whole F/A pass. No user setting, third-party source, install/trust or model/mode mutation.",
+      "publicDistribution": "Local Git-market visibility is not universal-directory publication. Public search supported after developer identity/package checks/review/publication. Local/Git-market distribution is the priority. Retain public-directory research as optional; decide after3.3 acceptance/release by discovery value, compatibility, user burden and total authority/data/maintenance cost. No fixed submission commitment and external review timing is not a release prerequisite. Current local stdio state/identity cannot be assumed to survive remote HTTP hosting. Sites MCP is a supported hosted/private-plugin candidate, not an adopted service, public listing or local-state replacement.",
+      "evidence": "research/reviews/2026-10-07-public-plugin-directory-route.md; private accord-plugin-subagent-gates-20261007-01/FACTS.json and accord-entry-selection-final-20261007-01/DECISION.json"
+    },
     {
       "id": "capability-identity-and-semantic-arbitration-20261007",
       "scope": "minimum-existing-specialist-guidance-correction-not-functional-acceptance",
@@ -5210,7 +5219,7 @@
   "acceptance": {
     "admission": {
       "schema": "yiyuan-accord-evidence-admission/v5",
-      "rule": "Current v3.3 cases use the existing immutable-source observe/recheck and independent-review mechanism. All A01-A08 requirements remain explicit, with absent scope definitions and absent evidence reported separately. Retained v3.2.1 policy and observations remain at previousDevelopmentSnapshot and are not current cases. A partial case cannot establish whole-system completion. Required delivery host codex identifies the current distribution family, not a commitment to every interface. v33-openai-entry-applicability must bind candidate dispositions, their evidence and the selected delivery set, including actual mode, executor, authority and state boundaries. Unknown is not inapplicable. v33-admitted-entry-delivery and v33-admitted-entry-lifecycle must cover that same selected set; CLI/App Server child cases cannot stand in for the parent coverage. Ordinary Chat has no default standalone delivery obligation. Shared implementations can be reused, but relevant differences need evidence. Hook absence requires analysis of native, Agent, MCP or other duty-equivalent alternatives, not automatic exclusion. The decision must preserve necessary reliability, recovery and lifecycle duties and record justified deferrals. The three entry ranges now bind subject entries and per-entry predicates. Selection remains provisional and pending, so definitions grant no acceptance; no functional requirement, failure or unknown becomes a pass. Claude is excluded from the current distribution and acceptance scope; retained historical observations are not current support. No incremental-value claim is made; complete independent impact assessment is required. No publication authority is created. Explicit App Server lifecycle and scoped-exposure child scopes refine already required responsibilities. Parent host/environment scopes stay open; no App Server result substitutes for CLI/Desktop/ChatGPT or for autonomous behavior. Counts change because scope decomposition is now explicit, not because new product duties were added. Execution evidence binds the actual case, scope, conditions, quality criteria, package and executed oracle sources. Planning prose, progress descriptions and non-executed tests are reviewed against the current candidate without automatically requiring new host execution. A substantive requirement or oracle change must revise its affected binding and invalidate dependent evidence; original observation digests remain immutable. One prospectively bound episode may support several applicable cases through independently assessed records, not through duplicate execution or automatic copying of expected facts.",
+      "rule": "Current v3.3 cases use the existing immutable-source observe/recheck and independent-review mechanism. All A01-A08 requirements remain explicit, with absent scope definitions and absent evidence reported separately. Retained v3.2.1 policy and observations remain at previousDevelopmentSnapshot and are not current cases. A partial case cannot establish whole-system completion. Required delivery host codex identifies the current distribution family, not a commitment to every interface. v33-openai-entry-applicability must bind candidate dispositions, their evidence and the selected delivery set, including actual mode, executor, authority and state boundaries. Unknown is not inapplicable. v33-admitted-entry-delivery and v33-admitted-entry-lifecycle must cover that same selected set; CLI/App Server child cases cannot stand in for the parent coverage. Ordinary Chat has no default standalone delivery obligation. Shared implementations can be reused, but relevant differences need evidence. Hook absence requires analysis of native, Agent, MCP or other duty-equivalent alternatives, not automatic exclusion. The decision must preserve necessary reliability, recovery and lifecycle duties and record justified deferrals. The three entry ranges now bind subject entries and per-entry predicates. Current six-route/mode selection is final; deferred capability remains unknown and definitions grant no acceptance; no functional requirement, failure or unknown becomes a pass. Claude is excluded from the current distribution and acceptance scope; retained historical observations are not current support. No incremental-value claim is made; complete independent impact assessment is required. No publication authority is created. Explicit App Server lifecycle and scoped-exposure child scopes refine already required responsibilities. Parent host/environment scopes stay open; no App Server result substitutes for CLI/Desktop/ChatGPT or for autonomous behavior. Counts change because scope decomposition is now explicit, not because new product duties were added. Execution evidence binds the actual case, scope, conditions, quality criteria, package and executed oracle sources. Planning prose, progress descriptions and non-executed tests are reviewed against the current candidate without automatically requiring new host execution. A substantive requirement or oracle change must revise its affected binding and invalidate dependent evidence; original observation digests remain immutable. One prospectively bound episode may support several applicable cases through independently assessed records, not through duplicate execution or automatic copying of expected facts.",
       "reviewPolicy": {
         "requiredAxes": [
           "product",
@@ -5628,15 +5637,15 @@
           ],
           "conditions": {
             "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
-            "selectionFinal": false,
+            "selectionFinal": true,
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
                 "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -5653,8 +5662,8 @@
                 "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5663,12 +5672,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   }
                 }
               },
@@ -5681,8 +5690,8 @@
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-jetbrains": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：已有AGENTS.md/Skill/MCP组件通道和按项目跨IDE会话的聊天/Agent历史；未知是同一控制者的输入/身份/工作区绑定、压缩或重开后的指导与状态恢复、在途效果和退出承担者，不能把历史保存当作已完成这些职责。AI Assistant聊天规则不替代Codex指导。外部Codex接IDE MCP保持独立组合路线，不代验内置，也不因未安装排除。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -5693,8 +5702,8 @@
                 "basis": "继续纳入开发，历史普通任务的有限入口参与保留原版本身份。当前官方Plugins页不支持IDE插件；本机扩展普通客户端未见全局禁用不等于后端加载成立。需按实际后端、组件/Hook/MCP及支持路径补证，不以CLI或插件界面等效代验。"
               },
               "cx-xcode": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               }
             },
             "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
@@ -5742,15 +5751,15 @@
           ],
           "conditions": {
             "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
-            "selectionFinal": false,
+            "selectionFinal": true,
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
                 "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -5767,8 +5776,8 @@
                 "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5777,12 +5786,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   }
                 }
               },
@@ -5795,8 +5804,8 @@
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-jetbrains": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：已有AGENTS.md/Skill/MCP组件通道和按项目跨IDE会话的聊天/Agent历史；未知是同一控制者的输入/身份/工作区绑定、压缩或重开后的指导与状态恢复、在途效果和退出承担者，不能把历史保存当作已完成这些职责。AI Assistant聊天规则不替代Codex指导。外部Codex接IDE MCP保持独立组合路线，不代验内置，也不因未安装排除。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -5807,8 +5816,8 @@
                 "basis": "继续纳入开发，历史普通任务的有限入口参与保留原版本身份。当前官方Plugins页不支持IDE插件；本机扩展普通客户端未见全局禁用不等于后端加载成立。需按实际后端、组件/Hook/MCP及支持路径补证，不以CLI或插件界面等效代验。"
               },
               "cx-xcode": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               }
             },
             "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
@@ -5855,15 +5864,15 @@
           ],
           "conditions": {
             "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
-            "selectionFinal": false,
+            "selectionFinal": true,
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
                 "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -5880,8 +5889,8 @@
                 "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "remote": {
                     "status": "selected",
@@ -5890,12 +5899,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   }
                 }
               },
@@ -5908,8 +5917,8 @@
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-jetbrains": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：已有AGENTS.md/Skill/MCP组件通道和按项目跨IDE会话的聊天/Agent历史；未知是同一控制者的输入/身份/工作区绑定、压缩或重开后的指导与状态恢复、在途效果和退出承担者，不能把历史保存当作已完成这些职责。AI Assistant聊天规则不替代Codex指导。外部Codex接IDE MCP保持独立组合路线，不代验内置，也不因未安装排除。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -5920,8 +5929,8 @@
                 "basis": "继续纳入开发，历史普通任务的有限入口参与保留原版本身份。当前官方Plugins页不支持IDE插件；本机扩展普通客户端未见全局禁用不等于后端加载成立。需按实际后端、组件/Hook/MCP及支持路径补证，不以CLI或插件界面等效代验。"
               },
               "cx-xcode": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               }
             },
             "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
@@ -6934,15 +6943,15 @@
           ],
           "conditions": {
             "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
-            "selectionFinal": false,
+            "selectionFinal": true,
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
                 "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -6959,8 +6968,8 @@
                 "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "remote": {
                     "status": "selected",
@@ -6969,12 +6978,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   }
                 }
               },
@@ -6987,8 +6996,8 @@
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-jetbrains": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：已有AGENTS.md/Skill/MCP组件通道和按项目跨IDE会话的聊天/Agent历史；未知是同一控制者的输入/身份/工作区绑定、压缩或重开后的指导与状态恢复、在途效果和退出承担者，不能把历史保存当作已完成这些职责。AI Assistant聊天规则不替代Codex指导。外部Codex接IDE MCP保持独立组合路线，不代验内置，也不因未安装排除。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -6999,8 +7008,8 @@
                 "basis": "继续纳入开发，历史普通任务的有限入口参与保留原版本身份。当前官方Plugins页不支持IDE插件；本机扩展普通客户端未见全局禁用不等于后端加载成立。需按实际后端、组件/Hook/MCP及支持路径补证，不以CLI或插件界面等效代验。"
               },
               "cx-xcode": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               }
             },
             "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
@@ -7163,15 +7172,15 @@
           ],
           "conditions": {
             "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
-            "selectionFinal": false,
+            "selectionFinal": true,
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
                 "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -7188,8 +7197,8 @@
                 "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "remote": {
                     "status": "selected",
@@ -7198,12 +7207,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   }
                 }
               },
@@ -7216,8 +7225,8 @@
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-jetbrains": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：已有AGENTS.md/Skill/MCP组件通道和按项目跨IDE会话的聊天/Agent历史；未知是同一控制者的输入/身份/工作区绑定、压缩或重开后的指导与状态恢复、在途效果和退出承担者，不能把历史保存当作已完成这些职责。AI Assistant聊天规则不替代Codex指导。外部Codex接IDE MCP保持独立组合路线，不代验内置，也不因未安装排除。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -7228,8 +7237,8 @@
                 "basis": "继续纳入开发，历史普通任务的有限入口参与保留原版本身份。当前官方Plugins页不支持IDE插件；本机扩展普通客户端未见全局禁用不等于后端加载成立。需按实际后端、组件/Hook/MCP及支持路径补证，不以CLI或插件界面等效代验。"
               },
               "cx-xcode": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               }
             },
             "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
@@ -7365,15 +7374,15 @@
           ],
           "conditions": {
             "observerCarrierRole": "Codex Desktop coordinates the bounded source/evidence review. The entry field identifies this carrier only, not actual loading or execution of any subject entry.",
-            "selectionFinal": false,
+            "selectionFinal": true,
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
                 "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "work-local": {
                     "status": "selected",
@@ -7390,8 +7399,8 @@
                 "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   },
                   "remote": {
                     "status": "selected",
@@ -7400,12 +7409,12 @@
                 }
               },
               "chatgpt-web": {
-                "status": "pending",
-                "basis": "按任务相对适用性保留待判：研究/内容可有独立结果，不因网页或Chat名称一律排除；当前账号、Accord加载/实际作用、必要信息与工具权限、结果与恢复责任未验。外部effects需求不能由仅能对话的能力代替。",
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。",
                 "modes": {
                   "chat": {
-                    "status": "pending",
-                    "basis": "按绑定任务待判：研究、分析、论证或内容成果可以形成独立需求/来源/交付核验/反馈修正闭环；外部操作及长程任务另核必要执行、权限、状态、接续与退路。可选Skill不证明实际采用，不宣称完整支持；仅承担辅助时明确获准组合及责任。"
+                    "status": "deferred",
+                    "basis": "2026-10-07用户确认本版不承诺该独立Chat模式，能力仍未知；按需求可再评价，非永久排除。"
                   }
                 }
               },
@@ -7418,8 +7427,8 @@
                 "basis": "纳入开发：用户实际主入口及同源后端已核对；加载、交互、权限与退出差异须分别取证。"
               },
               "cx-jetbrains": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：已有AGENTS.md/Skill/MCP组件通道和按项目跨IDE会话的聊天/Agent历史；未知是同一控制者的输入/身份/工作区绑定、压缩或重开后的指导与状态恢复、在途效果和退出承担者，不能把历史保存当作已完成这些职责。AI Assistant聊天规则不替代Codex指导。外部Codex接IDE MCP保持独立组合路线，不代验内置，也不因未安装排除。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               },
               "cx-sdk": {
                 "status": "selected",
@@ -7430,8 +7439,8 @@
                 "basis": "继续纳入开发，历史普通任务的有限入口参与保留原版本身份。当前官方Plugins页不支持IDE插件；本机扩展普通客户端未见全局禁用不等于后端加载成立。需按实际后端、组件/Hook/MCP及支持路径补证，不以CLI或插件界面等效代验。"
               },
               "cx-xcode": {
-                "status": "pending",
-                "basis": "待判（IDE内置）：专用配置与组件导入、用户可见转录、同线程跟进、Stop及Git文件Restore已有官方依据；未知是同一控制者输入/身份绑定、压缩/重连后恢复与在途效果、退出承担者。停止响应或恢复文件不证明资源静止、外部效果撤销或交权。外部Codex接mcpbridge保持独立组合路线，不代验内置或借macOS CI通过。"
+                "status": "deferred",
+                "basis": "2026-10-07用户确认本版延期，能力仍未知；未判不适用或失败。原候选依据保前态/Git，发布后再议。"
               }
             },
             "sourceBasis": "当前r37以任务所需能力/结果/必要控制评入口；六已选本地执行或控制路线保持。Chat研究/内容等可条件独立闭环，但当前为待验候选；modeCatalog不变，不从Skill可选、Hook存在或不存在推全支持/不适用。共有核心和已选Work不证明Chat采用；历史契约按原身份保留，不承诺已取消执行位置。",
@@ -8332,7 +8341,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r37",
+    "revision": "r38",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

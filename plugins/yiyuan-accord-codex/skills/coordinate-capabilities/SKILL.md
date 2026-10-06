@@ -62,6 +62,10 @@ retain the last safe state. Calibrate from observed errors and total task cost.
 Reuse adequate current reasoning and checks; this needs no extra model call,
 fixed provider sequence or separate decision service.
 
+Delegate only with effective availability and user permission. Defaults never
+override a disabled choice; use an adequate single-agent route while preserving
+any necessary independent-review gap and the user's restriction.
+
 For a material verification gap that benefits from an independent perspective,
 delegate a bounded review to a native subagent when host rules permit and useful
 non-overlapping work can continue locally. Bind the goal, source/artifact snapshot,

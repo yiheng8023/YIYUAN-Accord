@@ -10,6 +10,14 @@ already available, first read the [brief entry](../deliver-demand-driven-outcome
 Read other specialist Skills only for a concrete dependency; invoking this
 Skill grants no new work or permission.
 
+For plugin-based participation, first check that the host permits plugin use in
+the target entry/account and that the plugin is enabled in its effective scope.
+A global plugin-use switch, per-plugin enablement, required trust/connections and
+actual loading are separate conditions. Preserve disabled choices; establish only
+authorized missing conditions. If the plugin is blocked before its entry loads,
+use the user's host controls or another permitted recovery actor rather than
+claiming that the inactive plugin can enable itself.
+
 Before installing, query supported native inventory for the candidate's canonical
 identity and source, applicable version/build, execution location and installation
 scope. Confirm availability in the actual task. Reuse a compatible healthy
