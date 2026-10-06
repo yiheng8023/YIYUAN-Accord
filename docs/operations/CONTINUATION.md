@@ -24,7 +24,9 @@
 
 当前18e96754 / CI37510656606已按精确head核11/11成功，原21失败保持。下一必要机制验证已有专用sdk-lifecycle-case的Windows base工作流，包含两case前绑、实际身份重核、限额、原始回执和退出；不新增runner/默认服务或重做旧模型业务。当前POSIX默认CI还启hot-reload，不能代入两Windows/base声明。执行前对账找到两声明的runner指纹仍为fe8，当前提交源码为06d5；原前态和未派发事实保在accord-current-windows-lifecycle-20261007-01。已仅修当前两case指纹，新增遍历全部已声明执行引用的回归，原runner/预算/质量/判据不动；未实际执行或准入前不宣称通过。
 
-原生前绑源审查在accord-native-case-binding-20261007-01/review.md：现caller-owned observer允许不带execution block的普通native case，无需强造SDK。该准备本身未前绑，不追认准入；新可用来源是本次宿主session/turn记录实际Sol/medium、0.160.1、on-request/danger-full-access/default，并关联Root及唯一子任务，不能用requested参数代证所有actor/入口。普通维护一致性候选尚未找到未完成缺陷，当前不为标签重做已审文案。Source角色已completed，写集仅私有review.md；原Root主模型/用户配置、source25/packageb076/現装123不变。
+原生前绑源审查在accord-native-case-binding-20261007-01/review.md：现caller-owned observer允许不带execution block的普通native case，无需强造SDK。该准备本身未前绑，不追认准入；新可用来源是本次宿主session/turn记录实际Sol/medium、0.160.1、on-request/danger-full-access/default，并关联Root及唯一子任务，不能用requested参数代证所有actor/入口。普通维护一致性候选尚未找到未完成缺陷，当前不为标签重做已审文案。Source角色已completed，写集仅私有review.md；原Root主模型/用户配置、source25/packageb076/现装123不变。
+
+Windows本次实际执行已闭：a5ac5631 / sdk-lifecycle-case37519941776成功，artifact11439291330原ZIP SHAe9fa15f6126741ad96f71b0e40a8236b80c61ad096e359f223a9b9027fc1c4d2。动作前两case绑定、base/WindowsJob、25-member完整包b076、4执行源与提交一致；原件检查pass且各记录Job自然exit0/余进程0。两独立审查确认有限状态/版本/退出链，但共享设置保护被AGENTS.md哈希代替、宽限期前后采样不足、helper后代未在Job证明中，故完整案例准入保持held，不判泄漏、不追认F/A或真实模型自主性。下一只补必要观察来源/收尾覆盖，保原600/60/15限和本次原件；不为求绿重跑旧模型业务。DISPOSITION SHA607bc70b2a19f413ee9be4e6413689f496184bf4c8bd9fbb0d619f12bacb628e，资料在accord-current-windows-lifecycle-20261007-01。源码/现装、用户模型/模式及第三方保持。
 
 ## 目标与权限
 

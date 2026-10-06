@@ -1239,6 +1239,15 @@
   },
   "developmentObservations": [
     {
+      "id": "current-prebound-windows-sdk-mechanism-observation-20261007",
+      "source": "Fresh a5ac5631 sdk-lifecycle-case37519941776 Windows base run succeeded; artifact11439291330, ZIP SHAe9fa15f6126741ad96f71b0e40a8236b80c61ad096e359f223a9b9027fc1c4d2. Both existing declarations were bound before execution; complete25-member packageb076 and four source hashes match the immutable candidate.",
+      "observed": "Base WindowsJob conditions and recorded inspection pass; version/state/paused recovery chain has raw support. Seven native and six command Job records retain unforced successful exits and zero members within their assigned scopes; fixture actual modelCalls0. This is a controlled maintainer mechanism episode.",
+      "independentReview": "Separate product/specification and implementation/standards source reviews support bounded mechanisms but hold full admission. Shared settings/selections is aliased to AGENTS.md preservation, before/after-grace sampling is incomplete, and helper descendants are outside recorded Job coverage. Retain these gaps and distinguish them from proven leaks or model failures.",
+      "next": "Repair only source-backed settings and relevant cleanup observation gaps within existing runner/reader seams, with meaningful pure regressions. Keep the original run,600/60/15 limits, failed/preflight snapshots and all parent F/A floors; no same-instance replay or self-written true qualification.",
+      "limits": "Workflow success and limited raw validation do not establish whole cases, real user-host adoption, autonomous model behavior, fullW05/W08/F-A or publication. No local install/Trust, user setting/model/mode or third-party source changed; active declarations and necessary scope counts remain.",
+      "evidence": "Private accord-current-windows-lifecycle-20261007-01 WINDOWS-RAW.zip, admission bindings, WINDOWS-ROOT-RECHECK.json, spec-review.json, impl-review.json and DISPOSITION.json SHA607bc70b2a19f413ee9be4e6413689f496184bf4c8bd9fbb0d619f12bacb628e. Root primary runtime metadata now reports0.160.1; native planning reviewer actual Sol/medium is separately source-observed and is not this business episode."
+    },
+    {
       "id": "current-sdk-execution-fixture-source-rebinding-20261007",
       "source": "18e96754/CI37510656606 completed success11/11. Source-only preflight of the existing sdk-lifecycle-case Windows base route rejected both declared execution fingerprints: fe8c76f2 versus committed runner06d5e472. No workflow or native process was dispatched at the mismatch.",
       "effect": "Update only the two current SDK lifecycle/scoped-exposure caseSha256 values to the actual committed runner. Their WindowsJob/base limits, original fixtures, effects, independent observation and all scope/quality conditions remain. Existing Windows workflow already binds both cases before execution; default POSIX hot-reload CI is a different condition, not their passing evidence.",
