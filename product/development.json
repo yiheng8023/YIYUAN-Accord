@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261006123921",
+    "version": "3.3.0-dev.1+codex.20261006155722",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261006123921",
-        "packageSha256": "941bc89eb1fe711dea4150507974cef654fde68454fe32ee80896b22a6966c33",
+        "packageVersion": "3.3.0-dev.1+codex.20261006155722",
+        "packageSha256": "8b784f73ca64c87e86b99cccd2ef8778c68fd0789f045ba6edc3cd460ae90c7e",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -1237,6 +1237,16 @@
     ]
   },
   "developmentObservations": [
+    {
+      "id": "capability-identity-and-semantic-arbitration-20261007",
+      "scope": "minimum-existing-specialist-guidance-correction-not-functional-acceptance",
+      "source": "Parallel read-only R2/R3 source review at c2fccda9; current author/host matching semantics and existing identity/guardrail/evidence seams.",
+      "effect": "Clarify source/scope identity beyond display labels, same-name/different-effect and different-name/overlap decisions, duty reuse and independent safeguard retention, actual invocation prohibition versus default matching preference, host/user conflict arbitration and Hook event versus component identity. No new router/service or fixed component count.",
+      "verification": "Independent static semantic review passed six branch counterexamples. Source candidate20261006155722 has25 members and exact package identity; original meta-guidance, runtime/Hook bytes and third-party sources unchanged. Current local installed123921 remains separate; new candidate adoption not claimed.",
+      "entryDecision": "Current admission already supports deferred while retaining unknown capability; final selected delivery set need not mean complete knowledge of every candidate. Concrete six-selected/current-mode plus pending candidates/Chat-mode deferral question presented to user. No response inferred and no pending/final disposition changed.",
+      "limits": "No all Skill invocation/activation, policy change behavior, full R2/R3/F-A or release verdict. Source-defined human-only invocation cannot be treated as a default implicit matching preference; actual relevant source semantics still require evidence.",
+      "privateEvidence": "accord-r2-policy-parallel-20261006-01/review.md and PACKAGE.json; accord-r3-entry-parallel-20261006-01 source review"
+    },
     {
       "id": "controlled-native-dossier-capability-change-20261006",
       "scope": "two-stage-current-source-dossier-native-functional-observation-not-full-admission",

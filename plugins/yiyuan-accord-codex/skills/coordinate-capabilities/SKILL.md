@@ -33,6 +33,18 @@ delegation needs no repeated per-use approval. Read or wrap content only through
 an authorized route, preserving policy and management ownership. Check whether the
 Skill's workflow fits the task and verify its effects; selection is not delivery.
 
+Bind a selected capability to its current managed source and applicable scope,
+not its display name alone. Compare responsibilities and effects: identical
+names may denote different behavior, while different names may overlap. Reuse
+sufficient compatible guidance and assign missing or complementary work,
+preserving source policies, ownership and necessary independent safeguards.
+Keep a default matching preference distinct from a source-defined invocation
+prohibition or user exclusion; delegation cannot bypass the latter restrictions.
+Resolve conflicts by host priority and the user's bound choices before dependent
+action. A shared Hook event name identifies a lifecycle point, not its component
+or behavior. Retain unresolved meaning, policy or target control; hold only the
+dependent route while suitable authorized work continues.
+
 Compare maintained external options for a
 material gap, uncertainty, domain shift or plausible net benefit, even if native
 can finish. Check actual capability, evidence, fit, upkeep, licensing, authority,
