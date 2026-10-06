@@ -1067,14 +1067,17 @@ class DeclarationCaseBindingTests(unittest.TestCase):
             "coverageTotal", "coverageDefined", "coverageUnbound", "coverageWithoutCases",
             "coverageWithCaseBindingGaps", "casesDefined")}, {
                 "coverageTotal": 17, "coverageDefined": 17, "coverageUnbound": 0,
-                "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 6, "casesDefined": 13})
+                "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 7, "casesDefined": 12})
         gaps = summary["caseBindingGaps"]
         self.assertEqual({scope_id for scope_id, claims in gaps.items()
                           if any(not gap["caseIds"] for gap in claims.values())}, {
             "v33-dynamic-model-routing", "v33-system-integration", "v33-codex-lifecycle",
             "v33-system-impact-assessment", "v33-resource-pressure-and-exit", "v33-environment-adaptation"})
-        # Prospective recovery declaration fills the dimensions, not evidence.
-        self.assertNotIn("v33-autonomous-continuity", gaps)
+        # The ended one-use recovery instance is history, not a future PASS obligation.
+        continuity = gaps["v33-autonomous-continuity"]["function"]
+        self.assertEqual(continuity["caseIds"], ["v33-continuity-catalog-01"])
+        self.assertEqual(continuity["missingDimensions"]["duties"], ["recovery-and-rollback"])
+        self.assertEqual(continuity["missingDimensions"]["scenarios"], ["capability-loss"])
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(report["currentHostBehavior"], "unverified")

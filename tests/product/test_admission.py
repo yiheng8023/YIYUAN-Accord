@@ -1216,11 +1216,11 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 17, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 0, "coverageDefinedButUnverified": 17,
-            "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 6,
+            "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 7,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
         self.assertEqual(set(report['caseBindingGaps']),
-                         {'v33-dynamic-model-routing',
+                         {'v33-dynamic-model-routing', 'v33-autonomous-continuity',
                           'v33-system-integration',
                           'v33-codex-lifecycle', 'v33-system-impact-assessment',
                           'v33-resource-pressure-and-exit', 'v33-environment-adaptation'})
@@ -1238,6 +1238,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     self.assertTrue({'mid-task-user-steering', 'capability-loss'}
                                     <= set(gap['missingDimensions']['scenarios']))
                     self.assertTrue(gap['jointCaseMissing'])
+                elif scope_id == 'v33-autonomous-continuity':
+                    self.assertEqual(gap['caseIds'], ['v33-continuity-catalog-01'])
+                    self.assertEqual(gap['missingDimensions']['duties'], ['recovery-and-rollback'])
+                    self.assertEqual(gap['missingDimensions']['scenarios'], ['capability-loss'])
                 else:
                     self.assertEqual(gap['caseIds'], [])
                 self.assertTrue(gap['missingDimensions']['duties'])
@@ -1345,6 +1349,43 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report['caseBindingGaps']['v33-system-integration']['function']['caseIds'], [])
         self.assertEqual(report['caseBindingGaps']['v33-dynamic-model-routing']['function']['caseIds'], [])
 
+    def test_ended_release_case_preserves_failure_identity_and_continuity_floor(self):
+        from yiyuan_accord.admission import _definition
+        record = next(row for row in self.contract['developmentObservations']
+                      if row['id'] == 'ended-release-ack-case-disposition-20261006')
+        declaration = record['declarations'][0]
+        historical = json.loads(subprocess.check_output([
+            'git', '-C', str(self.root), 'show', declaration['declarationSnapshot']], timeout=30))
+        policy = self.contract['acceptance']['admission']
+        old = next(row for row in historical['acceptance']['admission']['cases']
+                   if row['id'] == declaration['caseId'])
+        self.assertNotIn(old['id'], {row['id'] for row in policy['cases']})
+        self.assertEqual(record['executionVerdict'], 'failed')
+        self.assertEqual(record['outcome'], 'not-admitted')
+        self.assertTrue(record['originalAuthority']['consumed'])
+        self.assertFalse(record['originalAuthority']['replayAllowed'])
+        self.assertEqual(declaration['attempts'], 1)
+        self.assertEqual(declaration['caseObjectSha256'], hashlib.sha256(json.dumps(
+            old, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest())
+        self.assertEqual(declaration['definitionSha256'], _definition(historical, old))
+        for key, value in declaration['limits'].items():
+            self.assertEqual(value, old['conditions']['execution'][key])
+        original_file = subprocess.check_output(['git', '-C', str(self.root), 'show',
+            declaration['declarationSnapshot'].split(':')[0] + ':' + declaration['caseFile']], timeout=30)
+        self.assertEqual((self.root / declaration['caseFile']).read_bytes(), original_file)
+        self.assertEqual(hashlib.sha256(original_file).hexdigest(), declaration['caseFileSha256'])
+        for key in ('scopes', 'requiredCoverage', 'acceptanceRequirements'):
+            self.assertEqual(policy[key], historical['acceptance']['admission'][key])
+        report = self.assess()
+        self.assertEqual(report['acceptedCases'], [])
+        self.assertFalse(report['functionalCompletion'])
+        self.assertFalse(report['candidateEligible'])
+        gap = report['caseBindingGaps']['v33-autonomous-continuity']['function']
+        self.assertEqual(gap['missingDimensions']['duties'], ['recovery-and-rollback'])
+        self.assertEqual(gap['missingDimensions']['scenarios'], ['capability-loss'])
+        self.assertFalse(report['acceptanceRequirements']['A05']['complete'])
+        self.assertIn('A05', report['acceptanceRequirements']['A08']['blockedBy'])
+
     def test_partial_allocation_case_keeps_uncovered_duties_and_scenarios_open(self):
         contract = copy.deepcopy(self.contract)
         policy = contract['acceptance']['admission']
@@ -1364,7 +1405,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertIn('capability-loss', gap['missingDimensions']['scenarios'])
         self.assertIn('default-host-without-extra-extensions', gap['missingDimensions']['scenarios'])
         self.assertEqual(report['progress']['coverageWithoutCases'], 5)
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 6)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 7)
         self.assertEqual(report['acceptedCases'], [])
         self.assertFalse(report['functionalCompletion'])
 
@@ -1372,10 +1413,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         report = self.assess(self.without_correction_and_user_environment_cases())
         self.assertEqual(report['errors'], [])
         self.assertEqual(report['progress']['coverageWithoutCases'], 7)
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 8)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 9)
         gaps = report['caseBindingGaps']
         self.assertEqual(set(gaps), {'v33-systemic-correction', 'v33-codex-cli-ordinary-delivery',
-                                    'v33-dynamic-model-routing',
+                                    'v33-dynamic-model-routing', 'v33-autonomous-continuity',
                                     'v33-system-integration',
                                     'v33-codex-lifecycle', 'v33-system-impact-assessment',
                                     'v33-resource-pressure-and-exit', 'v33-environment-adaptation'})

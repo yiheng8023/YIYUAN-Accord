@@ -6,15 +6,15 @@
 
 真实受控能力丢失组合已跑通：源成功保存检查点后，其任务写工具 lease 实际撤销；源收到无写入的拒绝后自行提出接管，Root核定，目标读原任务/检查点及受托明确选择的原版Implement，接收后才取得recorder唯一写者并完成三产物。三轮实际均为Sol/medium；19项模型测试和独立18合法/34拒绝均通过，源订阅释放、恢复原件保留，原生与QA Job均0，558.624秒内完成。它提供受控条件下自主判断到实用续作的正向证据，不是所有自主择时或完整A05通过。
 
-F05/A05映射与历史来源核对已闭；一次原生完整历史读取已成功并正常退出。新[释放回执丢失工作负载](../../product/cases/release-ack-recovery-v3.3.json)已固定合成输入、两产物、独立oracle、演员、实际ACK过滤窗口和统一期限。源任务写能力在首次保存后真实失效，由模型自行判断；仅在真实正常释放ACK到达原始wire后丢弃该帧，原SDK失败原样保留。存活Root须核原owner/native/Job退出，再以新只读连接和原recorder完成既有finalize，不重发unsubscribe。业务结果和恢复机制分别验，未观察到迁移/ACK不强制制造成功。
+F05/A05映射与历史来源核对已闭；原生完整历史读取及下述跨控制者恢复机制已有独立原件，可按其精确条件复用。已结束的N实例现转为历史失败，不再作为当前必须成功且又禁止重跑的实例；不以新机制成功追认旧业务。
 
-本次正式case `v33-source-release-ack-recovery-01`已执行一次并失败，不能重跑：源真实写出inventory、任务工具lease失效后再次自主提议交接，但Root把源进程收尾990秒误填为SDK计划恢复截止，超过源run的960秒上限，被现有正确守卫拒绝。未创建目标、未转移writer、未请求unsubscribe，故实际ACK-loss/finalize窗口未观察到。原件87源及四输入未变，原Node exit1/native自然exit0/Job0，412.687秒退出；源turn被中断，349.949秒超过声明300秒，不能称限时验收通过。
+原正式case `v33-source-release-ack-recovery-01`已执行一次并失败，不能重跑：源真实写出inventory、任务工具lease失效后再次自主提议交接，但Root把源进程收尾990秒误填为SDK计划恢复截止，超过源run的960秒上限，被现有正确守卫拒绝。未创建目标、未转移writer、未请求unsubscribe，故实际ACK-loss/finalize窗口未观察到。原件87源及四输入未变，原Node exit1/native自然exit0/Job0，412.687秒退出；源turn被中断，349.949秒超过声明300秒，不能称限时验收通过。
 
 后置源码修正保在新的`post-failure-fix`：Root计划数字构造/校验、覆盖Root回调等待的绝对turn watchdog与真实终态取消、fault=null时保留原操作错误，Root复核及Node10/Python6纯测试过；旧executor/config/grant/run及失败不变。
 
 现有原生证据对应及窄机制执行已闭：本次在精确2ae5d764源码、Windows CLI0.160.1上执行一次`release-recovery`成功。真实unsubscribe返回unsubscribed后只向原消费者丢回执，保留NATIVE_EFFECT_UNKNOWN；原Node31692/native57096自然退出、Job0，16.582毫秒后新Node31836/native61232启动，只initialize/initialized及两次thread/read，原账本18→19完成prior-controller-closed收尾，保原failure且不重发unsubscribe、不settle。4个localhost固定回复、零真实模型调用；11源/二进制、共享配置、keep原件未变，两个控制阶段及版本读取均退出，native证据保全、临时home/state/temp已清。
 
-Root独立raw/SQLite复核与独立审查通过。这补足“正常release消费回执丢失→原控制者真实退出→新只读控制者同账本finalize”的机制事实；原C02自主提议/语义/实用续作按本来条件复用，原N失败保留，不能拼成新的业务episode或全F05/A05/A08通过。独审另发现非阻断的evidenceRef路径与哈希对象标注失配；已在后续源码修正并补RED→42纯测试通过，133原件未改、不重跑实际实例。该窄机制不再重复准备或运行。下一核剩余正式连续性条件与已结束N实例的当前登记是否一致，复用已证事实，只处理真正未闭条件。
+Root独立raw/SQLite复核与独立审查通过。这补足“正常release消费回执丢失→原控制者真实退出→新只读控制者同账本finalize”的机制事实；原C02自主提议/语义/实用续作按本来条件复用，原N失败保留，不能拼成新的业务episode或全F05/A05/A08通过。独审另发现非阻断的evidenceRef路径与哈希对象标注失配；已在后续源码修正并补RED→42纯测试通过，133原件未改、不重跑实际实例。该窄机制不再重复准备或运行。当前登记已纠偏：N从活动必过集合移到带79d原定义及失败身份的历史处置。下一只补真正未闭的普通择时/变化、继承修复及适用入口/组合条件，复用已有控制恢复；不为新增case名称重跑业务或制造空替代。
 每段工作以可核结果或具体反例收束。必要的机制验证和受控决策试验本身可以服务发布验收，不需要捏造另一项业务为调用工具找理由；如用合成数据或人为控制条件，事前标明，结论限于该条件。模型自主判断不能由固定响应、明确要求迁移或回执格式替代。
 
 独审已在执行前修正sourceContext回调遗漏和provider日志envelope读取失配，并补永久纯回归。f958/CI37419577754与5a2/CI37421079468均已按精确head核completed/success。源码容量按实测3258887字节调至3440000，保原5%余量；不加文件、服务、分发内容或验收通过。
@@ -49,7 +49,7 @@ Root独立raw/SQLite复核与独立审查通过。这补足“正常release消�
 | W06/W07 | 部分环境/资源变化、后置核验和所属进程退出已有有限事实。 | 有实际变化的环境/资源组合及真实恢复、成品与退出。局部Job0不覆盖整个宿主。 |
 | W08 与发布 | 全部必要范围已定义；分散结果和局部准入保持。 | 同episode的必要职责/八质量轴/四场景及独立净影响；职责由足够宿主能力承担或适当不介入也可成立，不能为覆盖而强行调用所有机制。须有具体oracle，不以空旗标放行。 |
 
-现为17必要scope、13活动case、13未验职责；六范围尚无活动case：dynamic-model-routing、environment-adaptation、resource-pressure-and-exit、system-integration、codex-lifecycle、system-impact-assessment。新case的前瞻登记不增加实际通过；数量是当前映射，不是完成率或永恒上限。
+现为17必要scope、12活动case、13未验职责；六范围尚无活动case：dynamic-model-routing、environment-adaptation、resource-pressure-and-exit、system-integration、codex-lifecycle、system-impact-assessment。连续性另缺recovery-and-rollback/capability-loss的当前声明绑定，故声明缺口涉及七范围；移除失败实例不把这些职责变成通过。新case的前瞻登记不增加实际通过；数量是当前映射，不是完成率或永恒上限。
 
 适用性为9行、6selected/3pending；网页聚合、桌面/手机/网页三个Chat模式及两内置IDE的必要判断保持。以具体任务职责与实际证据选择，不能仅由界面名、没有本地设备或选择器可见作支持/排除结论。`selectionFinal`、`functionalCompletion`、`candidateEligible` 仍为false，完整F/A及质量底线未改。
 
@@ -57,6 +57,7 @@ Root独立raw/SQLite复核与独立审查通过。这补足“正常release消�
 
 只有处理对应结果、恢复或比较时才读取下列原件；它们不是下一轮命令。私有目录均在 `C:\Users\15521\.codex\backups\`。
 
+- N结束实例处置：`accord-f05-closeout-disposition-20261006-01/DISPOSITION.json`、`REMAINING.json`及保全before、独立审查；原case对象SHA `5d63a3b1935424db544d26e1b381f559dea6819e7b0d4849a3eb631283bb5456`、definition SHA `280de8cd72ca1e9d859496fcda3d20faac9bd759472853320085fae7fb25ca3c`可从79d重算，fixture/失败/旧许可不变，其余12case定义保持。
 - 新控制者原生恢复：`accord-native-release-fixture-20261006-01/actual-01`、`ROOT-RAW-RECHECK.json`、`ACTUAL-INDEPENDENT-REVIEW.md`及`ACTUAL-RESULT.json`（SHA `ef3f6e98533624bd9edd6f6b386333cbce105795ca388f9d648061e2bbd9e642`）。源码2ae5d764，真实source `01a10ff9-ec88-7932-bfbd-151567b0648f`、target `01a10ff9-ed54-7c21-91bc-e1b3cbd0086e`；只证明透明fixed-response故障机制，不重跑。
 - 原生已执行历史：`accord-sdk-history-readonly-20261006-01/FACTS.json`（SHA `980614c12059dab9869a1f64c98c86352a2aefab164ddb9b5a1ff08f58f6e063`）及原始帧/Job回执；真实方法仅initialize/initialized/thread-read，无新任务/模型/恢复。原C01失败保留，同二进制但不同线程/阶段及中间配置，不单归因轮数。额外空text_elements按现有语义核对，观察器修正不重跑。
 - 新恢复工作负载：`accord-release-ack-recovery-20261006-01/ACTUAL-RESULT.json`（SHA `5337ee533d1bb9e9547a8a3fe9ad8e2b60d15c725f62cbaefac841dd057a833b`）与原`run`保存本次失败。实际config `3366ab83`、grant `1f29f8d8`已消费。仅inventory 434字节（SHA `b8b0674ec8da78938f2bad867915085eeaeb6bc6a67bab650709acc5bc962ee1`）已核，note缺失；原source仅一turn，累计total1317337/uncached75467/output4110，不是Root总成本或占用。`post-failure-fix/REVIEW.md`及纯测试是后置候选修正，未用于重跑或追认通过。

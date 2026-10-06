@@ -2609,3 +2609,12 @@ source owner31692/native57096自然exit0、streams closed、Job0；source阶段1
 Root独立raw/SQLite对账及独立审查核实真实原件。11执行源及两二进制、共享配置、keep字节保持；4provider响应/2session与完整home保全，任务home/state/temp确已清理，workspace/记录保留。原件在accord-native-release-fixture-20261006-01/actual-01与同目录上层ACTUAL-RESULT/ROOT-RAW-RECHECK/ACTUAL-INDEPENDENT-REVIEW。新机制已闭，不重跑旧N/C02或此实例；固定回复不证明模型自主择时/语义/实用交付或完整F/A，原失败与所有旧限制不改。
 
 独审另发现subscriptionRelease.evidenceRef的路径标资源回执、后缀却为结果文件SHA。Root未依此字符串证明资源退出，原native/OS回执已独立闭链，因此窄机制结果有效并带该记录缺陷。后置源码仅将引用路径纠正为真正被hash的source-result.json，新增回归原RED失败、修后42项纯测试7.266秒通过。原133文件/hash/mtime保持，不改旧账本标注、不重跑实际例。ACTUAL-RESULT SHA `ef3f6e98533624bd9edd6f6b386333cbce105795ca388f9d648061e2bbd9e642`分别记录原运行与后置修正。
+
+
+## 2026-10-06 结束的N实例退出当前必过集合
+
+直接复核原ACTUAL-RESULT：一次许可已消费、failed、replayAllowed=false；79d原case与本次处置前对象/definition相同，fixture原字节保持。admission仍要求全部活动案例准入，所以把N继续列为当前必过形成无法合法满足的实例义务。沿已有结束实例处置只移除此对象，保79d原声明、caseObject/definition/file三摘要、原失败/300/960/1200/1230限和旧授权。未复跑N/C02/新fixture，未启CLI/SDK/model或修改准入算法。
+
+17scope、13职责、F/A与全部质量/情境底线保留；其余12case对象及定义摘要不变。活动13→12，六无case范围保持，continuity暴露recovery-and-rollback/capability-loss声明缺口，声明缺口范围6→7。C02和2ae的已有正向事实分别保全，不顶替N或拼接成完整验收；当前functionalCompletion/candidateEligible仍false。新增历史身份/底线回归，既有诊断计数按真实集合更新，首轮一处旧6项计数断言失败保留。
+
+最终12项针对性测试7.003秒通过，三静态valid/errors[]及独立审查通过；首轮旧计数失败日志保持。DISPOSITION SHA `b1be88fdd4dad89c5e8f084aaa818dba2e3917fbdd2d343bf4bfdf6c0a6ee234`，REMAINING SHA `14017fcc01db47019399b319096ec4b7dfbc5a4ac9af4dc6c4759c0cbb65e0cc`逐项区分可复用事实、真实剩余职责与纯声明缺口。源码/业务机制未变，没有增加新实例或批准任何执行。
