@@ -1380,8 +1380,22 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             declaration['declarationSnapshot'].split(':')[0] + ':' + declaration['caseFile']], timeout=30)
         self.assertEqual((self.root / declaration['caseFile']).read_bytes(), original_file)
         self.assertEqual(hashlib.sha256(original_file).hexdigest(), declaration['caseFileSha256'])
-        for key in ('scopes', 'requiredCoverage', 'acceptanceRequirements'):
+        for key in ('requiredCoverage', 'acceptanceRequirements'):
             self.assertEqual(policy[key], historical['acceptance']['admission'][key])
+        prior_scopes = {row['id']: row for row in historical['acceptance']['admission']['scopes']}
+        self.assertEqual({row['id'] for row in policy['scopes']}, set(prior_scopes))
+        entry_scopes = {'v33-openai-entry-applicability', 'v33-admitted-entry-delivery',
+                        'v33-admitted-entry-lifecycle'}
+        for scope in policy['scopes']:
+            prior = prior_scopes[scope['id']]
+            if scope['id'] not in entry_scopes:
+                self.assertEqual(scope, prior)
+                continue
+            # Later user selection may change; the original failure and every floor remain.
+            current = copy.deepcopy(scope)
+            for key in ('selectionFinal', 'entryDispositions'):
+                current['conditions'][key] = copy.deepcopy(prior['conditions'][key])
+            self.assertEqual(current, prior)
         report = self.assess()
         self.assertEqual(report['acceptedCases'], [])
         self.assertFalse(report['functionalCompletion'])
@@ -1704,6 +1718,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def test_entry_coverage_waits_for_selection_and_binds_its_source(self):
         from yiyuan_accord.admission import _definition
         contract = self.entry_coverage_contract()
+        for row in [*contract['acceptance']['admission']['scopes'],
+                    *contract['acceptance']['admission']['cases']]:
+            if 'entryDispositions' in row['conditions']:
+                row['conditions']['selectionFinal'] = False
         case = next(row for row in contract["acceptance"]["admission"]["cases"]
                     if row["scope"] == "v33-codex-entry-coverage")
         before = _definition(contract, case)
@@ -2240,10 +2258,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 result = self.observer(request)
                 if request["phase"] == "observe": result["records"] = retained
                 return result
-            parents = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
-                       "v33-admitted-entry-lifecycle", "v33-codex-entry-coverage"}
             expected = sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]
-                              if locator not in case["oracleFiles"] and case["scope"] not in parents)
+                              if locator not in case["oracleFiles"])
             self.assertEqual(self.assess(observer=replay)["acceptedCases"], expected)
 
     def test_navigation_updates_preserve_evidence_but_changed_case_criteria_do_not(self):
@@ -2253,10 +2269,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             result = self.observer(request)
             if request["phase"] == "observe": retained = copy.deepcopy(result["records"])
             return result
-        parents = {"v33-openai-entry-applicability", "v33-admitted-entry-delivery",
-                   "v33-admitted-entry-lifecycle", "v33-codex-entry-coverage"}
-        expected = sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"]
-                          if case["scope"] not in parents)
+        expected = sorted(case["id"] for case in self.contract["acceptance"]["admission"]["cases"])
         self.assertEqual(self.assess(observer=capture)["acceptedCases"], expected)
         def replay(request):
             result = self.observer(request)  # Reviews still bind the current candidate.

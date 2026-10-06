@@ -1239,6 +1239,14 @@
   },
   "developmentObservations": [
     {
+      "id": "final-selection-test-assumptions-correction-20261007",
+      "source": "CI37500553594 at21c0f774: nine product-suite jobs failed, two native jobs succeeded. Complete official Ubuntu3.12 log identifies four stale test assumptions; local four-test reproduction failed51.010seconds before correction.",
+      "effect": "Negative selection fixtures explicitly bind non-final state. Dependency and navigation tests include newly eligible final-entry cases rather than permanently excluding parent scopes. Historical-disposition checks retain exact failed identity, source bytes, original limits, unchanged scopes and acceptance floors while allowing only the later user-authorized entry-selection fields. Selected desktop/mobile explanatory basis now says deferred/unknown for the non-selected Chat mode.",
+      "validation": "Six targeted current-admission tests passed135.513seconds. CONTRIBUTING records explicit test-state setup and historical/current separation; existing verify-and-close guidance already covers the general correction duty, so no redundant product rule is added.",
+      "limits": "Mock observers and these local tests are not actual acceptance. No admission runtime, active-case set, F/A conditions, quality allocation, package bytes, installed state, model/mode, author policy, SDK business, install or trust effect changed. Preserve the original21CI failure and six-case selection tests as distinct records.",
+      "evidence": "Private accord-ci-entry-selection-correction-20261007-01 official-job-ubuntu312.log, red-four-tests.log and green-six-tests.log; source test changes and CONTRIBUTING. Subsequent CI must match its own exact commit."
+    },
+    {
       "id": "plugin-use-subagent-option-and-final-entry-selection-20261007",
       "source": "Latest user plugin-toggle screenshot, optional/user-controlled delegation requirement and explicit agreement to six-route/current-mode3.3 support selection; fetched official Subagents/config/plugin guidance.",
       "effect": "Clarify global plugin-use permission versus scoped install/enable/trust/loading. Delegation is optional, user-controlled; adequate single-agent fallback or an explicit assurance gap. Ultra proactive delegation is a host behavior, not authority to bypass disabled choices. All three current parent scopes/cases now selectionFinal=true, formerly pending candidates/modes deferred with capability unknown; selected subjects/modes and necessary scope/duty/quality/scenario requirements retained.",
@@ -5641,7 +5649,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途本版deferred且能力未知，不借已选Work证明。",
                 "modes": {
                   "chat": {
                     "status": "deferred",
@@ -5659,7 +5667,7 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途本版deferred且能力未知，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
                     "status": "deferred",
@@ -5755,7 +5763,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途本版deferred且能力未知，不借已选Work证明。",
                 "modes": {
                   "chat": {
                     "status": "deferred",
@@ -5773,7 +5781,7 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途本版deferred且能力未知，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
                     "status": "deferred",
@@ -5868,7 +5876,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途本版deferred且能力未知，不借已选Work证明。",
                 "modes": {
                   "chat": {
                     "status": "deferred",
@@ -5886,7 +5894,7 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途本版deferred且能力未知，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
                     "status": "deferred",
@@ -6947,7 +6955,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途本版deferred且能力未知，不借已选Work证明。",
                 "modes": {
                   "chat": {
                     "status": "deferred",
@@ -6965,7 +6973,7 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途本版deferred且能力未知，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
                     "status": "deferred",
@@ -7176,7 +7184,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途本版deferred且能力未知，不借已选Work证明。",
                 "modes": {
                   "chat": {
                     "status": "deferred",
@@ -7194,7 +7202,7 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途本版deferred且能力未知，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
                     "status": "deferred",
@@ -7378,7 +7386,7 @@
             "entryDispositions": {
               "chatgpt-desktop": {
                 "status": "selected",
-                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途另为pending，不借已选Work证明。",
+                "basis": "已选开发仍仅local-only Work和Remote复用获准本地主机；真实包/配置/交互权限、交付、恢复和退出差异保持待验，原Work查询cwd错位结果保留。普通Chat研究/内容等task-bound独立用途本版deferred且能力未知，不借已选Work证明。",
                 "modes": {
                   "chat": {
                     "status": "deferred",
@@ -7396,7 +7404,7 @@
               },
               "chatgpt-mobile": {
                 "status": "selected",
-                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途pending，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
+                "basis": "已选开发仍仅Remote控制获准Codex Desktop本地任务；执行/状态/插件/权限由连接主机承担，当前配对与行为未验。普通Chat研究/内容等task-bound用途本版deferred且能力未知，不能由无手机本地执行器推出不能研究交付；不新增取消的执行位置。",
                 "modes": {
                   "chat": {
                     "status": "deferred",

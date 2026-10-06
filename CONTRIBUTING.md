@@ -85,6 +85,13 @@ case. Use these computed facts before semantic review. Invalid current sources
 return `null`; legacy reports keep their prior shape. This diagnostic reads no
 execution evidence and grants no functional completion or release eligibility.
 
+Give each test the selection, enablement and permission state its scenario needs.
+Negative fixtures must set that state explicitly rather than inherit a mutable
+project decision. Keep historical identity and limits bound to their exact source;
+compare unchanged requirements separately from later authorized decisions.
+Exercise pending and final selection, dependency changes and criterion changes.
+Passing simulated observers remains unit evidence, not actual admission.
+
 CLI reports use UTF-8 on standard output, including redirected output. Decode
 captured report bytes as UTF-8; callers need not change their system locale.
 For ad hoc Python JSON reads, use `-X utf8` or an explicit UTF-8 stdout encoding;
