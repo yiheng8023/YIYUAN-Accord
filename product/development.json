@@ -1241,9 +1241,10 @@
       "id": "development-only-stop-product-withdrawal-20261006",
       "source": "Latest user clarified temporary development requirement; closed-loop delivery does not require added user turns.",
       "effect": "Remove product Stop registration/dispatch and its budget/env/parser chain; compatibility canContinue is only a recorded feasibility judgment. Preserve input/state/CAS/pause/recovery/completion safeguards and native handoff.",
-      "verification": "Checkpoint167, MCP45, entry104 local tests pass; global consumers/delivery checks and new package adoption remain in progress. Legacy state-only callback and direct inspection/retire regressions preserve safety after dispatch withdrawal.",
+      "verification": "Checkpoint167, MCP45, entry104 and development100 local tests pass; 25-member package and original-thread Hook/MCP adoption verified at416160e1. Five official installer invocations exited naturally with owned Job0. Legacy state-only callback and direct inspection/retire regressions preserve safety after dispatch withdrawal. CI37467089089 native jobs passed but nine matrix jobs failed two stale admission-test expectations after the historical recovery case retired; the assertion correction retains actual A05 gaps and requires its own hosted result.",
       "claimLimit": "Not a reduction of F01-F08/A01-A08 responsibility or replay of prior cases. Previous budget and failed installers remain historical, not current launchers.",
-      "privateEvidence": "accord-remove-product-continuation-20261006-01"
+      "privateEvidence": "accord-remove-product-continuation-20261006-01/adoption/ADOPTION.json; SHA532fa9197e3e160daf209f1d4bf7dd0e03a8d9c4160f74498d754b017e654bf7",
+      "currentDisposition": "Implemented and locally adopted. All current Stop feature, budget and adjustment work retired; only historical evidence and non-operative old-callback input recognition retained. R1 closed in this narrow meaning; R2-R4 and full acceptance remain open."
     },
     {
       "id": "bounded-stop-runtime-20261006",
@@ -1254,7 +1255,7 @@
         "maxElapsedMs": 1800000
       },
       "behavior": "Actual user input freezes budget in the existing receipt; callback identity survives rebind/resume and late callbacks cannot renew a newer input. Metadata changes, compaction and replay do not extend it. Invalid/legacy/backward-clock state preserves unfinished work without automatic continuation.",
-      "verification": "175 complete TaskCheckpointTests and9 budget tests pass; independent review passes. Root HELP integration targeted4 tests passed. Actual installed adoption remains pending.",
+      "verification": "175 complete TaskCheckpointTests and9 budget tests passed for the historical candidate; independent review and Root HELP integration targeted4 tests passed. This candidate was not adopted and is now retired; it has no pending installation or budget-validation work.",
       "claimLimit": "Limits new Accord Stop continuation requests only, not running model/tool cancellation or other host schedulers. No Goal activation, new service or third-party change.",
       "privateEvidence": "accord-stop-budget-implementation-20261006-01/REVIEW.md",
       "disposition": "User clarified automatic Stop continuation was a temporary development request, not Accord product scope. Keep15af implementation/results as history; exclude it and its budgets from the active distribution."

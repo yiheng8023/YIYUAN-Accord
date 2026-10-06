@@ -1177,9 +1177,14 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
-        # This synthetic observer supports every expected fact, including the
-        # new recovery case. It is not evidence that the real case has run.
-        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {"A05"})
+        # The consumed recovery case is historical. Even a synthetic observer
+        # accepting every active case cannot fill its now-unbound dimensions.
+        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, set())
+        self.assertEqual(report["acceptanceRequirements"]["A05"]["missingScopes"],
+                         {"function": ["v33-autonomous-continuity"]})
+        self.assertEqual(report["openCoverage"]["v33-autonomous-continuity"]["claims"]["function"],
+                         {"duties": ["recovery-and-rollback"], "qualityAxes": [],
+                          "scenarios": ["capability-loss"]})
         # Historical executions do not supply replacement correction or
         # installed-environment evidence, even when a component worked.
         self.assertNotIn("v33-systemic-correction-02", report["acceptedCases"])
@@ -1193,8 +1198,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertIn("v33-openai-entry-applicability",
                       report["acceptanceRequirements"]["A02"]["missingScopes"]["function"])
         self.assertNotIn("claude-code", report["productCoverage"])
-        self.assertEqual(report["progress"]["coverageVerified"], 7)
-        self.assertEqual(report["progress"]["requirementsComplete"], 1)
+        self.assertEqual(report["progress"]["coverageVerified"], 6)
+        self.assertEqual(report["progress"]["requirementsComplete"], 0)
         # Ended resource/adaptation instances are historical; SDK sub-scopes
         # cannot discharge either their missing cases or lifecycle parents.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
@@ -1436,7 +1441,12 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         report = self.assess(contract)
         self.assertEqual(report['errors'], [])
         self.assertNotIn('v33-codex-cli-ordinary-delivery', report['caseBindingGaps'])
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 7)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 8)
+        continuity = report['caseBindingGaps']['v33-autonomous-continuity']['function']
+        self.assertEqual(continuity['caseIds'], ['v33-continuity-catalog-01'])
+        self.assertEqual(continuity['missingDimensions'],
+                         {'duties': ['recovery-and-rollback'], 'qualityAxes': [],
+                          'scenarios': ['capability-loss']})
         for scope in ('v33-resource-pressure-and-exit', 'v33-environment-adaptation'):
             self.assertEqual(report['caseBindingGaps'][scope]['function']['caseIds'], [])
         self.assertEqual(report['progress']['coverageVerified'], 0)
