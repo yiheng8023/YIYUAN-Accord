@@ -545,6 +545,17 @@ a nested proposal while a transfer is in progress is refused without queuing.
 This is a same-controller path, not automatic cold recovery or arbitrary thread
 adoption. Project/sidebar association alone establishes none of these bindings.
 
+The source session's run deadline also bounds the handoff plan's recovery
+deadline: `plan.deadlineMs <= plan.recoveryDeadlineMs <= run.deadlineMs`.
+An owner's later process-close allowance or a separate post-release recovery
+window cannot be inserted as that plan deadline. Construct and validate these
+numbers before dispatching the reviewed plan. If an owner declares an additional
+per-turn limit, SDK wait timeouts alone are insufficient: Root and tool callback
+waits must also be bounded, while an observed native terminal cancels that turn's
+watchdog. Retain the original operation failure separately from controller or
+shutdown errors. An absent fault-injection event means the selected window was
+not observed; it is not a recovery failure or permission to retry.
+
 For a new controller, `restoreCodexSourceSession` handles a completed,
 settled target, or an acknowledged ordinary source with reconciled prior effects.
 The source route supplies its retained thread/connection identity and current
