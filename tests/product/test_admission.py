@@ -1177,7 +1177,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
-        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, set())
+        # This synthetic observer supports every expected fact, including the
+        # new recovery case. It is not evidence that the real case has run.
+        self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]}, {"A05"})
         # Historical executions do not supply replacement correction or
         # installed-environment evidence, even when a component worked.
         self.assertNotIn("v33-systemic-correction-02", report["acceptedCases"])
@@ -1191,8 +1193,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertIn("v33-openai-entry-applicability",
                       report["acceptanceRequirements"]["A02"]["missingScopes"]["function"])
         self.assertNotIn("claude-code", report["productCoverage"])
-        self.assertEqual(report["progress"]["coverageVerified"], 6)
-        self.assertEqual(report["progress"]["requirementsComplete"], 0)
+        self.assertEqual(report["progress"]["coverageVerified"], 7)
+        self.assertEqual(report["progress"]["requirementsComplete"], 1)
         # Ended resource/adaptation instances are historical; SDK sub-scopes
         # cannot discharge either their missing cases or lifecycle parents.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
@@ -1214,21 +1216,17 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 17, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 0, "coverageDefinedButUnverified": 17,
-            "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 7,
+            "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 6,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
         self.assertEqual(set(report['caseBindingGaps']),
-                         {'v33-dynamic-model-routing', 'v33-autonomous-continuity',
+                         {'v33-dynamic-model-routing',
                           'v33-system-integration',
                           'v33-codex-lifecycle', 'v33-system-impact-assessment',
                           'v33-resource-pressure-and-exit', 'v33-environment-adaptation'})
         for scope_id, claims in report['caseBindingGaps'].items():
             for gap in claims.values():
-                if scope_id == 'v33-autonomous-continuity':
-                    self.assertEqual(gap['caseIds'], ['v33-continuity-catalog-01'])
-                    self.assertEqual(gap['missingDimensions']['duties'], ['recovery-and-rollback'])
-                    self.assertEqual(gap['missingDimensions']['scenarios'], ['capability-loss'])
-                elif scope_id == 'v33-dynamic-model-routing':
+                if scope_id == 'v33-dynamic-model-routing':
                     self.assertEqual(gap['caseIds'], [])
                     self.assertIn('environment-and-self-exposure', gap['missingDimensions']['duties'])
                     self.assertTrue({'default-host-without-extra-extensions', 'capability-loss'}
@@ -1366,7 +1364,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertIn('capability-loss', gap['missingDimensions']['scenarios'])
         self.assertIn('default-host-without-extra-extensions', gap['missingDimensions']['scenarios'])
         self.assertEqual(report['progress']['coverageWithoutCases'], 5)
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 7)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 6)
         self.assertEqual(report['acceptedCases'], [])
         self.assertFalse(report['functionalCompletion'])
 
@@ -1374,10 +1372,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         report = self.assess(self.without_correction_and_user_environment_cases())
         self.assertEqual(report['errors'], [])
         self.assertEqual(report['progress']['coverageWithoutCases'], 7)
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 9)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 8)
         gaps = report['caseBindingGaps']
         self.assertEqual(set(gaps), {'v33-systemic-correction', 'v33-codex-cli-ordinary-delivery',
-                                    'v33-dynamic-model-routing', 'v33-autonomous-continuity',
+                                    'v33-dynamic-model-routing',
                                     'v33-system-integration',
                                     'v33-codex-lifecycle', 'v33-system-impact-assessment',
                                     'v33-resource-pressure-and-exit', 'v33-environment-adaptation'})
@@ -1397,7 +1395,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         report = self.assess(contract)
         self.assertEqual(report['errors'], [])
         self.assertNotIn('v33-codex-cli-ordinary-delivery', report['caseBindingGaps'])
-        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 8)
+        self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 7)
         for scope in ('v33-resource-pressure-and-exit', 'v33-environment-adaptation'):
             self.assertEqual(report['caseBindingGaps'][scope]['function']['caseIds'], [])
         self.assertEqual(report['progress']['coverageVerified'], 0)
