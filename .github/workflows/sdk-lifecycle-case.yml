@@ -146,6 +146,7 @@ jobs:
             ${{ env.ACCORD_CASE_ROOT }}/episode/inspection.stderr.txt
             ${{ env.ACCORD_CASE_ROOT }}/episode/native
             ${{ env.ACCORD_CASE_ROOT }}/episode/commands
+            ${{ env.ACCORD_CASE_ROOT }}/episode/helpers
             ${{ env.ACCORD_CASE_ROOT }}/episode/retained
             ${{ env.ACCORD_CASE_ROOT }}/episode/source-package
             ${{ env.ACCORD_CASE_ROOT }}/episode/standalone-skills

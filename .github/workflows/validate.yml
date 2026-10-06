@@ -151,6 +151,7 @@ jobs:
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/inspection.stderr.txt
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/native
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/commands
+            ${{ env.ACCORD_NATIVE_ROOT }}/episode/helpers
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/retained
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/source-package
             ${{ env.ACCORD_NATIVE_ROOT }}/episode/hot-reload-package
@@ -449,6 +450,7 @@ jobs:
           path: |
             ${{ env.ACCORD_NATIVE_ROOT }}/host-upgrade/*.json
             ${{ env.ACCORD_NATIVE_ROOT }}/host-upgrade/commands
+            ${{ env.ACCORD_NATIVE_ROOT }}/host-upgrade/helpers
             ${{ env.ACCORD_NATIVE_ROOT }}/host-upgrade/native
             ${{ env.ACCORD_NATIVE_ROOT }}/host-upgrade/retained
             ${{ env.ACCORD_NATIVE_ROOT }}/host-upgrade/source-package
