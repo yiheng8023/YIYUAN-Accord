@@ -35,7 +35,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.codex_rpc import BoundedRpc
-from scripts.inspect_native_resources import native_processes_released, read_native_resource_records
+from scripts.inspect_native_resources import _valid_after, native_processes_released, read_native_resource_records
 from scripts.observe_codex_entry import PosixProcessGroup, WindowsJob, digest, read_regular, save
 
 
@@ -47,6 +47,9 @@ RESOURCE_LABELS = (
 )
 COMMAND_LABELS = ("marketplace-add", "package-add", "invalid-candidate", "healthy-retry",
                   "package-remove", "package-list-after-remove")
+SETTINGS_STAGES = ("after-package-add", *RESOURCE_LABELS[:-1], "after-healthy-retry")
+HELPER_OPS = ("status", "status", "status", "retire", "status", "bind", "pause",
+              "status", "status", "status", "status", "status")
 HOT_CASE = "loaded-accord-paused-thread-upgrade-rollback/v1"
 HOT_BUILD = "codex.hot-reload-observation"
 HOT_COMMAND_LABELS = (*COMMAND_LABELS, "hot-reload-upgrade", "hot-reload-rollback")
@@ -122,10 +125,66 @@ def _record_released(record, manifest):
             and native_processes_released(record.get("after"), controller))
 
 
+def _begin_release(job, graceful_deadline, recovery_deadline):
+    return {"before": {"at": time.monotonic(), "sample": job.sample()},
+            "gracefulDeadline": graceful_deadline, "recoveryDeadline": recovery_deadline}
+
+
+def _complete_release(record, release, after_grace, after):
+    record["releaseObservation"] = {**release, "afterGrace": after_grace,
+                                    "after": {"at": time.monotonic(), "sample": after}}
+    return record
+
+
+def _observed_release(record, manifest):
+    if not _record_released(record, manifest):
+        return False
+    observation = record.get("releaseObservation", {})
+    try:
+        before, grace, after = (observation[key] for key in ("before", "afterGrace", "after"))
+        times = [before["at"], grace["at"], after["at"],
+                 observation["gracefulDeadline"], observation["recoveryDeadline"]]
+        if any(type(value) not in (int, float) or not math.isfinite(value) for value in times):
+            return False
+        controller = manifest.get("resourceController", "windows-job-object")
+        # A graceful phase can finish early after observed release. Its deadline
+        # is fixed before shutdown; forced recovery never renews that allowance.
+        return (times[0] <= times[1] <= times[2] <= times[4]
+                and times[0] <= times[3] <= times[4]
+                and times[4] - times[0] <= manifest["limits"]["recoverySeconds"] + 0.01
+                and (record["forced"] or times[1] <= times[3])
+                and after["sample"] == record["after"]
+                and all(_valid_after(value["sample"], controller)
+                        for value in (before, grace, after))
+                and (record["forced"] or native_processes_released(grace["sample"], controller)))
+    except (KeyError, TypeError):
+        return False
+
+
 def _invoked_processes_released(evidence, manifest):
     # Never remove the owned workspace/home beneath a still alive or unknown
     # invocation. Missing receipts do not establish release.
-    for area, filename in (("native", "resources.json"), ("commands", "record.json")):
+    receipt = Path(evidence) / "retained/helper.jsonl"
+    if receipt.exists():
+        try:
+            rows = [json.loads(line) for line in read_regular(receipt).decode("utf-8").splitlines() if line]
+            labels = [row["invocation"] for row in rows if row.get("phase") == "request"]
+            if (not labels or len(labels) != len(set(labels))
+                    or {path.name for path in (Path(evidence) / "helpers").iterdir()} != set(labels)
+                    or len(rows) != 2 * len(labels)
+                    or any(rows[index * 2].get("phase") != "request"
+                           or rows[index * 2 + 1].get("phase") != "response"
+                           or rows[index * 2 + 1].get("invocation") != label
+                           for index, label in enumerate(labels))):
+                return False
+        except (OSError, ValueError, TypeError, KeyError, UnicodeError):
+            return False
+    for area, filename in (("native", "resources.json"), ("commands", "record.json"),
+                           ("helpers", "resources.json")):
+        if not (Path(evidence) / area).exists():
+            if area == "helpers" and (Path(evidence) / "retained/helper.jsonl").exists():
+                return False
+            continue
         for directory in (Path(evidence) / area).iterdir():
             if directory.is_dir():
                 try:
@@ -134,6 +193,62 @@ def _invoked_processes_released(evidence, manifest):
                         return False
                 except (OSError, ValueError, TypeError):
                     return False
+    return True
+
+
+def _settings_paths(manifest):
+    return {"home-config": str(Path(manifest["ownedRoots"]["home"]) / "config.toml"),
+            "workspace-config": str(Path(manifest["ownedRoots"]["workspace"]) / ".codex/config.toml")}
+
+
+def _settings_snapshot(manifest, stage):
+    if stage not in SETTINGS_STAGES:
+        raise ValueError("unbound settings observation stage")
+    files = {}
+    for key, value in _settings_paths(manifest).items():
+        path = Path(value)
+        if path.resolve() != path or path.is_symlink():
+            raise ValueError("redirected settings source")
+        if not path.exists():
+            files[key] = {"path": value, "present": False}
+        else:
+            raw = read_regular(path, 1024 * 1024)
+            files[key] = {"path": value, "present": True, "bytesHex": raw.hex(),
+                          "sha256": hashlib.sha256(raw).hexdigest()}
+    snapshot = {"stage": stage, "files": files,
+                "standaloneHashes": _tree_hashes(manifest["standaloneSkill"]["root"])}
+    root = Path(manifest["evidence"]) / "retained/settings"
+    root.mkdir(exist_ok=True)
+    save(root / (stage + ".json"), snapshot)
+    return snapshot
+
+
+def _settings_preserved(manifest):
+    binding = manifest.get("settingsProtection")
+    if binding != {"paths": _settings_paths(manifest), "stages": list(SETTINGS_STAGES)}:
+        return False
+    baseline = None
+    for stage in SETTINGS_STAGES:
+        snapshot = json.loads(read_regular(Path(manifest["evidence"]) / "retained/settings" / (stage + ".json"), 5 * 1024 * 1024))
+        if (snapshot.get("stage") != stage or set(snapshot.get("files", {})) != set(binding["paths"])
+                or snapshot.get("standaloneHashes") != manifest["standaloneSkill"]["hashes"]):
+            return False
+        files = snapshot["files"]
+        for key, source in files.items():
+            if source.get("path") != binding["paths"][key] or type(source.get("present")) is not bool:
+                return False
+            if source["present"]:
+                if set(source) != {"path", "present", "bytesHex", "sha256"}:
+                    return False
+                raw = bytes.fromhex(source["bytesHex"])
+                if len(raw) > 1024 * 1024 or hashlib.sha256(raw).hexdigest() != source["sha256"]:
+                    return False
+            elif set(source) != {"path", "present"}:
+                return False
+        if baseline is None:
+            baseline = files
+        elif files != baseline:
+            return False
     return True
 
 
@@ -671,7 +786,7 @@ def prepare(args):
     replacement_binding = None
     if replacement is not None:
         evidence.mkdir()
-        for name in (*OWNED_ROOTS, "native", "commands", "retained"):
+        for name in (*OWNED_ROOTS, "native", "commands", "helpers", "retained"):
             (evidence / name).mkdir()
         probe_manifest = {
             "evidence": str(evidence), "node": str(node), "resourceController": controller,
@@ -723,7 +838,7 @@ def prepare(args):
     variant = _hot_variant(package) if getattr(args, "hot_reload", False) else None
     if not evidence.exists():
         evidence.mkdir()
-        for name in (*OWNED_ROOTS, "native", "commands", "retained"):
+        for name in (*OWNED_ROOTS, "native", "commands", "helpers", "retained"):
             (evidence / name).mkdir()
     snapshot = evidence / "source-package"
     shutil.copytree(package, snapshot)
@@ -789,6 +904,8 @@ def prepare(args):
         manifest.update(case=REPLACEMENT_CASE, hostReplacement=replacement_binding)
         manifest["claimLimit"] += "; host replacement applies only after observed source-process release in this paused thread; no automatic upgrade, GUI adoption or arbitrary state migration claim"
         _version_probe_records(manifest, replacement_binding)
+    manifest["settingsProtection"] = {"paths": _settings_paths(manifest), "stages": list(SETTINGS_STAGES)}
+    manifest["helperOperations"] = [*HELPER_OPS, *(["status"] * 4 if hot else [])]
     save(evidence / "manifest.json", manifest)
     return {"prepared": True, "modelCalls": 0, "evidence": str(evidence)}
 
@@ -809,6 +926,8 @@ def _load(evidence):
             or tuple(manifest.get("nativeCommandLabels", ())) != (HOT_COMMAND_LABELS if hot else COMMAND_LABELS)
             or set(manifest.get("ownedRoots", {})) != set(OWNED_ROOTS)
             or set(manifest.get("initialRootHashes", {})) != set(OWNED_ROOTS)
+            or manifest.get("settingsProtection") != {"paths": _settings_paths(manifest), "stages": list(SETTINGS_STAGES)}
+            or manifest.get("helperOperations") != [*HELPER_OPS, *(["status"] * 4 if hot else [])]
             or set(manifest.get("binaryHashes", {})) != {"codex", "node", "python"}
             or not isinstance(manifest.get("protectedFiles"), dict) or not manifest["protectedFiles"]
             or set(manifest.get("limits", {})) != {"workSeconds", "requestSeconds", "recoverySeconds",
@@ -877,7 +996,7 @@ def _validate_prebound(manifest):
 def _wait_job(job, deadline, *, exact_deadline=False):
     sample = job.sample()
     while not _released(sample) and time.monotonic() < deadline:
-        time.sleep(min(0.05, max(0, deadline - time.monotonic())) if exact_deadline else 0.05)
+        time.sleep(min(0.05, max(0, deadline - time.monotonic())))
         sample = job.sample()
     return sample
 
@@ -909,6 +1028,7 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
     if close_deadline is not None and time.monotonic() >= work_deadline:
         raise TimeoutError("owner work deadline exhausted before native resource creation")
     job, process, forced, failure, recovery_deadline = _new_controller(), None, False, None, None
+    release, after_grace = None, None
     try:
         with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
             if close_deadline is not None and time.monotonic() >= work_deadline:
@@ -943,16 +1063,19 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
                 forced, failure = True, ("owner-close-deadline" if close_deadline is not None and query_deadline == owner_graceful_deadline else "work-deadline")
                 job.terminate()
         recovery_deadline = close_deadline if close_deadline is not None else time.monotonic() + manifest["limits"]["recoverySeconds"]
+        graceful_deadline = owner_graceful_deadline if close_deadline is not None else recovery_deadline - manifest["limits"]["recoverySeconds"] / 2
+        release = _begin_release(job, graceful_deadline, recovery_deadline)
         if process is not None and process.poll() is None:
             process.wait(timeout=max(0 if close_deadline is not None else 0.001, recovery_deadline - time.monotonic()))
-        graceful_deadline = owner_graceful_deadline if close_deadline is not None else recovery_deadline - manifest["limits"]["recoverySeconds"] / 2
         after = _wait_job(job, recovery_deadline if forced else graceful_deadline, exact_deadline=close_deadline is not None)
+        after_grace = {"at": time.monotonic(), "sample": after}
         if not _released(after):
             forced = True
             job.terminate()
             after = _wait_job(job, recovery_deadline, exact_deadline=close_deadline is not None)
         record = {"arguments": arguments, **launch_fields,
                   **_resource_record(manifest, process, forced, after, failure)}
+        _complete_release(record, release, after_grace, after)
         save(root / "record.json", record)
         if not _record_released(record, manifest):
             raise RuntimeError("native command process release unobserved within recovery deadline")
@@ -973,8 +1096,11 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
             except subprocess.TimeoutExpired:
                 pass
         after = _wait_job(job, recovery_deadline, exact_deadline=close_deadline is not None)
-        save(root / "record.json", {"arguments": arguments, **launch_fields,
-            **_resource_record(manifest, process, forced, after, failure or "native-command")})
+        record = {"arguments": arguments, **launch_fields,
+                  **_resource_record(manifest, process, forced, after, failure or "native-command")}
+        if release is not None:
+            _complete_release(record, release, after_grace or {"at": time.monotonic(), "sample": after}, after)
+        save(root / "record.json", record)
         raise
     finally:
         job.close()
@@ -1196,12 +1322,19 @@ class _App:
             self.job.terminate()
 
         try:
-            self.process.stdin.close()
             recovery_deadline = time.monotonic() + manifest["limits"]["recoverySeconds"]
             # EOF is the normal stdio shutdown signal. Leave part of the same
             # deadline for forced termination, exit-status collection and readers.
             # An owned listener has no EOF exit contract: its caller requests stop.
             graceful_deadline = recovery_deadline - manifest["limits"]["recoverySeconds"] / 2
+            try:
+                release = _begin_release(self.job, graceful_deadline, recovery_deadline)
+            except Exception as error:
+                release = {"before": {"at": time.monotonic(), "sample": {
+                    "controller": manifest.get("resourceController", "windows-job-object"),
+                    "observationError": {"type": type(error).__name__, "message": str(error)[:1024]}}},
+                    "gracefulDeadline": graceful_deadline, "recoveryDeadline": recovery_deadline}
+            self.process.stdin.close()
             if stop_owned and self.process.poll() is None:
                 force_owned("owned-listener-stop")
             try:
@@ -1216,11 +1349,13 @@ class _App:
             # The root can exit before its group. Its unforced group wait must
             # share the graceful deadline, reserving recovery after termination.
             after = _wait_job(self.job, recovery_deadline if forced else graceful_deadline)
+            after_grace = {"at": time.monotonic(), "sample": after}
             if not _released(after):
                 force_owned("job-not-empty", after)
                 after = _wait_job(self.job, recovery_deadline)
             self.reader.join(timeout=max(0, recovery_deadline - time.monotonic()))
             record = _resource_record(manifest, self.process, forced, after)
+            _complete_release(record, release, after_grace, after)
             record["readerStopped"] = not self.reader.is_alive()
             if force_observations:
                 record["forceObservations"] = force_observations
@@ -1233,6 +1368,8 @@ class _App:
             self._close_record = record
             if not _record_released(record, manifest):
                 raise RuntimeError("native app process release unobserved within recovery deadline")
+            if manifest.get("settingsProtection") is not None and self.root.name in SETTINGS_STAGES:
+                _settings_snapshot(manifest, self.root.name)
             return record
         finally:
             self._closed = True
@@ -1259,31 +1396,168 @@ def _argv(manifest, fixture, extra=(), codex_role="source"):
 def _helper(manifest, installed, env, work_deadline, thread, op, **fields):
     request = {"op": op, "session_id": thread, "cwd": manifest["ownedRoots"]["workspace"], **fields}
     receipt = Path(manifest["evidence"]) / "retained/helper.jsonl"
+    helper_root = Path(manifest["evidence"]) / "helpers"
+    helper_root.mkdir(exist_ok=True)
+    invocation = f"{len(list(helper_root.iterdir())) + 1:06d}"
+    root = helper_root / invocation
+    root.mkdir()
+    arguments = [manifest["node"], str(installed / "runtime/task-checkpoint.cjs")]
+    stdin_path, stdout_path, stderr_path = root / "stdin.json", root / "stdout.json", root / "stderr.txt"
+    stdin_path.write_bytes(json.dumps(request).encode())
     with receipt.open("a", encoding="utf-8") as stream:
-        stream.write(json.dumps({"phase": "request", "request": request}, ensure_ascii=False) + "\n")
+        stream.write(json.dumps({"phase": "request", "invocation": invocation, "request": request}, ensure_ascii=False) + "\n")
+    job, process, forced, failure, original_error = _new_controller(), None, False, None, None
+    terminal = {"phase": "response", "invocation": invocation, "op": op}
+    script_hash, attached = None, False
+    recovery_deadline, release, after_grace = None, None, None
     try:
-        process = subprocess.run([manifest["node"], str(installed / "runtime/task-checkpoint.cjs")],
-            input=json.dumps(request).encode(), capture_output=True,
-            timeout=min(manifest["limits"]["requestSeconds"], _remaining(work_deadline)),
-            env=env, cwd=manifest["ownedRoots"]["workspace"])
-    except subprocess.TimeoutExpired as error:
+        query_deadline = min(work_deadline, time.monotonic() + manifest["limits"]["requestSeconds"])
+        _remaining(query_deadline)
+        script_hash = digest(arguments[1])
+        if (script_hash != manifest["packageHashes"]["runtime/task-checkpoint.cjs"]
+                or digest(manifest["node"]) != manifest["binaryHashes"]["node"]):
+            raise ValueError("checkpoint helper executable bytes differ")
+        with stdin_path.open("rb") as stdin, stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
+            process = subprocess.Popen(arguments, stdin=stdin, stdout=stdout, stderr=stderr,
+                env=env, cwd=manifest["ownedRoots"]["workspace"], **_spawn_options())
+            job.attach_and_resume(process)
+            attached = True
+            while process.poll() is None:
+                if stdout_path.stat().st_size + stderr_path.stat().st_size > 4 * 1024 * 1024:
+                    raise ValueError("checkpoint helper output limit")
+                if time.monotonic() >= query_deadline:
+                    terminal["timeout"] = True
+                    raise TimeoutError("checkpoint helper request deadline")
+                time.sleep(min(0.01, max(0, query_deadline - time.monotonic())))
+    except BaseException as error:
+        original_error, failure = error, type(error).__name__ + ": " + str(error)[:1024]
+    finally:
+        # Operation failure and release evidence are independent. A failed
+        # helper can be reclaimed only after its whole owned controller releases.
+        recovery_deadline = time.monotonic() + manifest["limits"]["recoverySeconds"]
+        graceful_deadline = recovery_deadline - manifest["limits"]["recoverySeconds"] / 2
+        def diagnose(error):
+            terminal.setdefault("releaseError", type(error).__name__ + ": " + str(error)[:1024])
+
+        def wait_owned(deadline):
+            try:
+                return _wait_job(job, deadline)
+            except Exception as error:
+                diagnose(error)
+                return {"controller": manifest["resourceController"], "observationError": type(error).__name__}
+
+        try:
+            try:
+                release = _begin_release(job, graceful_deadline, recovery_deadline)
+            except Exception as error:
+                diagnose(error)
+                release = {"before": {"at": time.monotonic(), "sample": {
+                    "controller": manifest["resourceController"], "observationError": type(error).__name__}},
+                    "gracefulDeadline": graceful_deadline, "recoveryDeadline": recovery_deadline}
+            if process is not None and process.poll() is None:
+                forced = True
+                try:
+                    job.terminate()
+                except Exception as error:
+                    diagnose(error)
+                try:
+                    if process.poll() is None:
+                        process.kill()
+                except Exception as error:
+                    diagnose(error)
+                try:
+                    process.wait(timeout=max(0, recovery_deadline - time.monotonic()))
+                except Exception as error:
+                    diagnose(error)
+            after = wait_owned(recovery_deadline if forced else graceful_deadline)
+            after_grace = {"at": time.monotonic(), "sample": after}
+            if not _released(after):
+                forced = True
+                try:
+                    job.terminate()
+                except Exception as error:
+                    diagnose(error)
+                after = wait_owned(recovery_deadline)
+            record = _resource_record(manifest, process, forced, after, failure)
+            record.update(invocation=invocation, request=request, arguments=arguments,
+                          rootPid=getattr(process, "pid", None), scriptSha256=script_hash,
+                          nodeSha256=manifest["binaryHashes"]["node"], controllerAttached=attached)
+            _complete_release(record, release, after_grace, after)
+            save(root / "resources.json", record)
+            terminal.update(exitCode=record["exitCode"], failure=failure)
+            for key, path in (("stdout", stdout_path), ("stderr", stderr_path)):
+                terminal[key] = read_regular(path, 4 * 1024 * 1024).decode("utf-8", "replace") if path.exists() else ""
+            try:
+                terminal["result"] = json.loads(terminal["stdout"])
+            except (ValueError, UnicodeError):
+                terminal["parseError"] = True
+            if not _record_released(record, manifest):
+                terminal.setdefault("releaseError", "helper controller release unobserved")
+        except BaseException as release_error:
+            terminal["releaseError"] = type(release_error).__name__ + ": " + str(release_error)[:1024]
+            if original_error is None:
+                original_error = release_error
+        finally:
+            # Preserve operation diagnostics even when release sampling fails.
+            terminal.setdefault("exitCode", getattr(process, "returncode", None))
+            terminal.setdefault("failure", failure)
+            for key, path in (("stdout", stdout_path), ("stderr", stderr_path)):
+                if key not in terminal:
+                    try:
+                        terminal[key] = read_regular(path, 4 * 1024 * 1024).decode("utf-8", "replace") if path.exists() else ""
+                    except (OSError, ValueError) as capture_error:
+                        terminal[key + "Error"] = type(capture_error).__name__
+            try:
+                job.close()
+            except BaseException as close_error:
+                terminal["closeError"] = type(close_error).__name__ + ": " + str(close_error)[:1024]
+                if original_error is None:
+                    original_error = close_error
         with receipt.open("a", encoding="utf-8") as stream:
-            stream.write(json.dumps({"phase": "response", "op": op, "timeout": True,
-                "stdout": (error.stdout or b"").decode("utf-8", "replace"),
-                "stderr": (error.stderr or b"").decode("utf-8", "replace")}, ensure_ascii=False) + "\n")
-        raise
-    terminal = {"phase": "response", "op": op, "exitCode": process.returncode,
-                "stdout": process.stdout.decode("utf-8", "replace"),
-                "stderr": process.stderr.decode("utf-8", "replace")}
-    try:
-        terminal["result"] = json.loads(process.stdout)
-    except (ValueError, UnicodeError):
-        terminal["parseError"] = True
-    with receipt.open("a", encoding="utf-8") as stream:
-        stream.write(json.dumps(terminal, ensure_ascii=False) + "\n")
-    if process.returncode or terminal.get("parseError"):
+            stream.write(json.dumps(terminal, ensure_ascii=False) + "\n")
+    if original_error is not None:
+        raise original_error
+    if terminal.get("exitCode") != 0 or terminal.get("parseError") or terminal.get("releaseError"):
         raise RuntimeError("checkpoint helper failed; inspect retained/helper.jsonl")
     return terminal["result"]
+
+
+def _helper_resources(manifest, rows):
+    operations = manifest.get("helperOperations", [])
+    labels = [f"{index + 1:06d}" for index in range(len(operations))]
+    root = _ordinary_dir(Path(manifest["evidence"]) / "helpers")
+    if (not operations or len(rows) != len(operations) * 2
+            or any(not isinstance(row, dict) for row in rows)
+            or {path.name for path in root.iterdir()} != set(labels)):
+        raise ValueError("helper invocation set differs from prepared operations")
+    records = read_native_resource_records(root, labels)
+    for index, (label, operation) in enumerate(zip(labels, operations)):
+        request, response, record = rows[index * 2], rows[index * 2 + 1], records[label]
+        raw_request = json.loads(read_regular(root / label / "stdin.json"))
+        if not isinstance(raw_request, dict):
+            raise ValueError("helper request is not an object")
+        stdout = read_regular(root / label / "stdout.json", 4 * 1024 * 1024).decode("utf-8", "replace")
+        stderr = read_regular(root / label / "stderr.txt", 4 * 1024 * 1024).decode("utf-8", "replace")
+        arguments = record.get("arguments", [])
+        if (request.get("phase") != "request" or response.get("phase") != "response"
+                or any(value.get("invocation") != label for value in (request, response, record))
+                or raw_request != request.get("request") or raw_request != record.get("request")
+                or raw_request.get("op") != operation or response.get("op") != operation
+                or raw_request.get("cwd") != manifest["ownedRoots"]["workspace"]
+                or response.get("exitCode") != record["exitCode"] or record["exitCode"] != 0
+                or record.get("failure") is not None or response.get("releaseError") or response.get("timeout")
+                or response.get("stdout") != stdout or response.get("stderr") != stderr
+                or response.get("result") != json.loads(stdout)
+                or type(record.get("rootPid")) is not int or record["rootPid"] <= 0
+                or record.get("controllerAttached") is not True
+                or record.get("scriptSha256") != manifest["packageHashes"]["runtime/task-checkpoint.cjs"]
+                or record.get("nodeSha256") != manifest["binaryHashes"]["node"]
+                or len(arguments) != 2 or arguments[0] != manifest["node"]
+                or not Path(arguments[1]).is_relative_to(Path(manifest["ownedRoots"]["home"]))
+                or Path(arguments[1]).name != "task-checkpoint.cjs"
+                or not _observed_release(record, manifest)):
+            raise ValueError("helper request, executable or release evidence differs")
+    return records
 
 
 def _start_turn(app, ephemeral, prompt):
@@ -1473,6 +1747,7 @@ def run(args):
             raise RuntimeError("installed package differs")
         result["installedPathReturned"] = str(installed)
         result["installedPackageHashes"] = _tree_hashes(installed)
+        _settings_snapshot(manifest, "after-package-add")
         fixture = _Fixture(manifest)
         codex_role = "source"
         base = _argv(manifest, fixture, codex_role=codex_role)
@@ -1639,12 +1914,16 @@ def run(args):
         app = _App(manifest, "restored-exposure", current_base, env, work_deadline,
                    codex_role=codex_role); apps.append(app); app.initialize()
         app.rpc("skills/extraRoots/set", {"extraRoots": [manifest["standaloneSkill"]["root"]]})
-        restored = [s for s in _skill_rows(app.rpc("skills/list", {
-            "cwds": [manifest["ownedRoots"]["workspace"]], "forceReload": True}))
+        restored_catalog = app.rpc("skills/list", {
+            "cwds": [manifest["ownedRoots"]["workspace"]], "forceReload": True})
+        save(evidence / "retained/skills-restored.json", restored_catalog)
+        restored = [s for s in _skill_rows(restored_catalog)
             if Path(s["path"]).resolve() == Path(standalone_path)]
         result["originalExposureRestored"] = len(restored) == 1 and restored[0].get("enabled") is True
         app.rpc("skills/extraRoots/set", {"extraRoots": []})
-        cleared = _skill_rows(app.rpc("skills/list", {"cwds": [manifest["ownedRoots"]["workspace"]], "forceReload": True}))
+        cleared_catalog = app.rpc("skills/list", {"cwds": [manifest["ownedRoots"]["workspace"]], "forceReload": True})
+        save(evidence / "retained/skills-cleared.json", cleared_catalog)
+        cleared = _skill_rows(cleared_catalog)
         result["standaloneExposureCleared"] = not any(Path(s["path"]).resolve() == Path(standalone_path) for s in cleared)
         result["standaloneSkillBytesUnchanged"] = _tree_hashes(manifest["standaloneSkill"]["root"]) == standalone_before
         app.close(manifest); apps.remove(app)
@@ -1667,6 +1946,7 @@ def run(args):
         healthy, _ = _run_cli(manifest, "healthy-retry", ["plugin", "add", manifest["pluginId"], "--json"],
                               env, work_deadline, codex_role=codex_role)
         result["healthyRetryExact"] = healthy["exitCode"] == 0 and _tree_hashes(installed) == installed_before
+        _settings_snapshot(manifest, "after-healthy-retry")
         result["failureStage"] = "package-remove"
         removed, _ = _run_cli(manifest, "package-remove", ["plugin", "remove", manifest["pluginId"], "--json"],
                               env, work_deadline, codex_role=codex_role)
@@ -1759,7 +2039,13 @@ def run(args):
             protected_after[path] = observed
         result["protectedFileHashesAfter"] = protected_after
         result["protectedSharedFilesUnchanged"] = protected_after == manifest["protectedFiles"]
-        result["sharedSettingsAndSelectionsPreserved"] = result["protectedSharedFilesUnchanged"]
+        try:
+            result["sharedSettingsAndSelectionsPreserved"] = (
+                result["protectedSharedFilesUnchanged"] and _settings_preserved(manifest))
+        except (OSError, ValueError, TypeError, KeyError):
+            result["sharedSettingsAndSelectionsPreserved"] = False
+        if result["sharedSettingsAndSelectionsPreserved"] is not True:
+            result.setdefault("cleanupErrors", []).append("settings/selection source observations missing or changed")
         if (result.get("failure") is None
                 and (not all(result["ownedRootsAbsent"].values()) or result.get("cleanupErrors")
                      or not result["protectedSharedFilesUnchanged"])):
@@ -1870,7 +2156,7 @@ def inspect(evidence):
     replacement_probe_records = {}
     try:
         records = read_native_resource_records(root / "native", manifest["nativeResourceLabels"])
-        resources_ok = all(record["exitCode"] == 0 and _record_released(record, manifest)
+        resources_ok = all(record["exitCode"] == 0 and _observed_release(record, manifest)
                            for record in records.values())
     except (OSError, ValueError, json.JSONDecodeError):
         records, resources_ok = {}, False
@@ -1888,7 +2174,7 @@ def inspect(evidence):
         if (any(command_records[label].get("exitCode") != 0 for label in manifest["nativeCommandLabels"] if label != "invalid-candidate")
                 or command_records["invalid-candidate"].get("exitCode") in (None, 0)):
             raise ValueError("command terminal differs")
-        if any(not _record_released(record, manifest) for record in command_records.values()):
+        if any(not _observed_release(record, manifest) for record in command_records.values()):
             raise ValueError("command process release unobserved or controller differs")
         if any(record.get("arguments", [])[:2] != ["-c", 'cli_auth_credentials_store="file"']
                for record in command_records.values()):
@@ -1927,6 +2213,12 @@ def inspect(evidence):
                 or _contains_path(provider_rows, manifest["standaloneSkill"]["path"])
                 or any(controls[0]["name"].casefold() in text.casefold() for text in _strings(provider_rows))):
             raise ValueError("standalone control remains in provider input")
+        restored = [skill for skill in _skill_rows(json.loads(read_regular(root / "retained/skills-restored.json")))
+                    if skill.get("path") == manifest["standaloneSkill"]["path"]]
+        cleared = _skill_rows(json.loads(read_regular(root / "retained/skills-cleared.json")))
+        if (len(restored) != 1 or restored[0].get("enabled") is not True
+                or any(skill.get("path") == manifest["standaloneSkill"]["path"] for skill in cleared)):
+            raise ValueError("original standalone selection was not restored and cleared")
         provider_responses = [json.loads(read_regular(root / "retained" / f"provider-response-{ordinal}.json"))
                               for ordinal in range(1, manifest["limits"]["providerRequests"] + 1)]
         if any(not _provider_response_matches(row, ordinal)
@@ -1936,6 +2228,9 @@ def inspect(evidence):
         if (not helper_rows or not any(row.get("phase") == "request" for row in helper_rows)
                 or not any(row.get("phase") == "response" for row in helper_rows)):
             raise ValueError("helper receipts absent")
+        helper_records = _helper_resources(manifest, helper_rows)
+        if not _settings_preserved(manifest):
+            raise ValueError("shared settings or standalone selection sources changed or absent")
         paused_thread = json.loads(read_regular(root / "retained/paused-thread.json"))["threadId"]
         critical_requests = [row["request"] for row in helper_rows if row.get("phase") == "request"
                              and row.get("request", {}).get("op") in {"bind", "pause"}]

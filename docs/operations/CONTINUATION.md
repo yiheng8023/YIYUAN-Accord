@@ -28,6 +28,8 @@
 
 Windows本次实际执行已闭：a5ac5631 / sdk-lifecycle-case37519941776成功，artifact11439291330原ZIP SHAe9fa15f6126741ad96f71b0e40a8236b80c61ad096e359f223a9b9027fc1c4d2。动作前两case绑定、base/WindowsJob、25-member完整包b076、4执行源与提交一致；原件检查pass且各记录Job自然exit0/余进程0。两独立审查确认有限状态/版本/退出链，但共享设置保护被AGENTS.md哈希代替、宽限期前后采样不足、helper后代未在Job证明中，故完整案例准入保持held，不判泄漏、不追认F/A或真实模型自主性。下一只补必要观察来源/收尾覆盖，保原600/60/15限和本次原件；不为求绿重跑旧模型业务。DISPOSITION SHA607bc70b2a19f413ee9be4e6413689f496184bf4c8bd9fbb0d619f12bacb628e，资料在accord-current-windows-lifecycle-20261007-01。源码/现装、用户模型/模式及第三方保持。
 
+2026-10-07已实现上述采集纠偏：同安装期间按明确路径保留home/workspace配置字节或缺席原件，包含中间退出；保留原生standalone恢复/清除目录；退出记录增加固定宽限期的前后样本；helper改用现有Job/进程组，保请求配对、PID、执行字节和退出，缺失/未知不得清根或准入。独审及模块回归发现并修正绑定与采样同时失败可能留下子进程、初始采样失败阻挡原有回收两处窗口；原错误和未知仍保留。两个当前runner指纹随真实源更新，判据/包/预算不变。源码验证与新的精确机制观察分开，旧a5结果不填补、不追认；资料在accord-lifecycle-collector-correction-20261007-01。
+
 ## 目标与权限
 
 - Root 在原检出 `C:\Projects\YIYUAN-Accord` 的 main 负责整合；3.3 必要功能、质量、完整验收及精确候选均满足后，按既有条件授权发布 3.3.0。当前没有发布资格。发布后的传播、部署和治理不计进度。

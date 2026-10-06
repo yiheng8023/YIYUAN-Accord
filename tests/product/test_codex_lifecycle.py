@@ -117,6 +117,13 @@ class ControlledOwnerCloseDeadlineTests(unittest.TestCase):
         self.assertGreaterEqual(result['clock'], 583)
         self.assertLess(result['clock'], 584)
         self.assertTrue(result['closed'])
+        observation = result['record']['releaseObservation']
+        self.assertIn(observation['before']['sample']['activeProcesses'], (0, 1))
+        self.assertEqual(observation['afterGrace']['sample']['activeProcesses'], 0)
+        self.assertEqual(observation['after']['sample'], result['record']['after'])
+        self.assertLessEqual(observation['before']['at'], observation['afterGrace']['at'])
+        self.assertLessEqual(observation['afterGrace']['at'], observation['after']['at'])
+        self.assertLessEqual(observation['after']['at'], observation['recoveryDeadline'])
 
     def test_force_at_595_preserves_time_to_observe_release(self):
         result = self.run_owner(natural_exit=None, force_release_delay=3)
@@ -436,7 +443,213 @@ class CodexLifecycleTests(unittest.TestCase):
         if controller == "posix-session-process-group":
             after = {"controller": controller, "activeProcesses": None, "processGroupId": 123,
                      "rootPid": 123, "processGroupState": "absent", "rootExitCode": exit_code}
-        return {"controller": controller, "exitCode": exit_code, "forced": False, "after": after}
+        return {"controller": controller, "exitCode": exit_code, "forced": False, "after": after,
+                "releaseObservation": {"before": {"at": 1, "sample": after},
+                    "afterGrace": {"at": 2, "sample": after}, "after": {"at": 2, "sample": after},
+                    "gracefulDeadline": 3, "recoveryDeadline": 4}}
+
+    def settings_receipts(self, manifest):
+        (Path(manifest['evidence']) / 'retained/settings').mkdir(exist_ok=True)
+        for stage in lifecycle.SETTINGS_STAGES:
+            lifecycle._settings_snapshot(manifest, stage)
+
+    def helper_receipts(self, manifest, installed, thread):
+        rows = []
+        for ordinal, op in enumerate(manifest['helperOperations'], 1):
+            invocation = f'{ordinal:06d}'
+            root = Path(manifest['evidence']) / 'helpers' / invocation
+            root.mkdir()
+            request = {'op': op, 'session_id': thread, 'cwd': manifest['ownedRoots']['workspace']}
+            lifecycle.save(root / 'stdin.json', request)
+            (root / 'stdout.json').write_text('{}')
+            (root / 'stderr.txt').write_text('')
+            lifecycle.save(root / 'resources.json', {**self.resource_record(manifest),
+                'invocation': invocation, 'request': request, 'rootPid': ordinal,
+                'scriptSha256': manifest['packageHashes']['runtime/task-checkpoint.cjs'],
+                'nodeSha256': manifest['binaryHashes']['node'],
+                'controllerAttached': True,
+                'arguments': [manifest['node'], str(Path(installed) / 'runtime/task-checkpoint.cjs')]})
+            rows.extend([{'phase': 'request', 'invocation': invocation, 'request': request},
+                {'phase': 'response', 'invocation': invocation, 'op': op,
+                 'exitCode': 0, 'stdout': '{}', 'stderr': '', 'result': {}}])
+        (Path(manifest['evidence']) / 'retained/helper.jsonl').write_text(
+            '\n'.join(json.dumps(row) for row in rows) + '\n')
+        return rows
+
+    def test_helper_inspection_requires_paired_invocations_and_original_request_exit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, manifest = self.fixture(Path(tmp).resolve())
+            installed = Path(manifest['ownedRoots']['home']) / 'plugins/cache/fixture'
+            rows = self.helper_receipts(manifest, installed, 'paused-thread')
+            self.assertEqual(len(lifecycle._helper_resources(manifest, rows)), len(manifest['helperOperations']))
+            for invalid in ('missing-response', 'invocation', 'request', 'exit'):
+                with self.subTest(invalid=invalid):
+                    changed = json.loads(json.dumps(rows))
+                    if invalid == 'missing-response': changed.pop()
+                    elif invalid == 'invocation': changed[1]['invocation'] = '000002'
+                    elif invalid == 'request': changed[0]['request']['session_id'] = 'other-thread'
+                    else: changed[1]['exitCode'] = 7
+                    with self.assertRaises(ValueError):
+                        lifecycle._helper_resources(manifest, changed)
+            for invalid in (None, [], 1):
+                with self.subTest(raw_request=invalid):
+                    lifecycle.save(Path(manifest['evidence']) / 'helpers/000001/stdin.json', invalid)
+                    with self.assertRaises(ValueError):
+                        lifecycle._helper_resources(manifest, rows)
+
+    def test_helper_nonzero_and_timeout_preserve_raw_exit_and_job_receipts(self):
+        for mode in ('nonzero', 'timeout', 'attach-and-sample-failure'):
+            timeout = mode == 'timeout'
+            attachment_failure = mode == 'attach-and-sample-failure'
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as tmp:
+                _, manifest = self.fixture(Path(tmp).resolve())
+                manifest['limits']['requestSeconds'] = 1
+                clock = [1.0]
+                class Process:
+                    pid = 123
+                    returncode = None if timeout or attachment_failure else 7
+                    def poll(self): return self.returncode
+                    def kill(self): self.returncode = 124
+                    def wait(self, timeout=None): return self.returncode
+                process = Process()
+                after = self.resource_record(manifest, 124 if timeout else 7)['after']
+                class Job:
+                    attached = False
+                    closed = False
+                    def attach_and_resume(self, child):
+                        if attachment_failure: raise RuntimeError('original attachment failure')
+                        self.attached = child is process
+                    def sample(self):
+                        if attachment_failure: raise RuntimeError('independent sampling failure')
+                        return after
+                    def terminate(self): process.kill()
+                    def close(self): self.closed = True
+                job = Job()
+                def popen(arguments, **kwargs):
+                    kwargs['stdout'].write(b'{"retained":"raw"}')
+                    kwargs['stderr'].write(b'original helper diagnostic')
+                    return process
+                def sleep(seconds): clock[0] += seconds
+                installed = Path(manifest['ownedRoots']['home']) / 'plugins/cache/fixture'
+                (installed / 'runtime').mkdir(parents=True)
+                (installed / 'runtime/task-checkpoint.cjs').write_bytes(
+                    (Path(manifest['package']) / 'runtime/task-checkpoint.cjs').read_bytes())
+                with patch.object(lifecycle.time, 'monotonic', side_effect=lambda: clock[0]), \
+                        patch.object(lifecycle.time, 'sleep', side_effect=sleep), \
+                        patch.object(lifecycle, '_new_controller', return_value=job), \
+                        patch.object(lifecycle, '_spawn_options', return_value={}), \
+                        patch.object(lifecycle.subprocess, 'Popen', side_effect=popen), \
+                        patch.object(lifecycle.subprocess, 'run') as uncontained, \
+                        self.assertRaises(TimeoutError if timeout else RuntimeError):
+                    lifecycle._helper(manifest, installed, {}, 20, 'paused-thread', 'status')
+                uncontained.assert_not_called()
+                self.assertEqual(job.attached, not attachment_failure)
+                self.assertTrue(job.closed)
+                evidence = Path(manifest['evidence'])
+                record = json.loads((evidence / 'helpers/000001/resources.json').read_text())
+                rows = [json.loads(line) for line in (evidence / 'retained/helper.jsonl').read_text().splitlines()]
+                self.assertEqual(record['exitCode'], 124 if timeout or attachment_failure else 7)
+                self.assertEqual(rows[0]['invocation'], rows[1]['invocation'])
+                self.assertEqual(rows[1]['exitCode'], record['exitCode'])
+                self.assertEqual(rows[1]['stdout'], '{"retained":"raw"}')
+                self.assertEqual(rows[1]['stderr'], 'original helper diagnostic')
+                self.assertEqual(rows[1].get('timeout', False), timeout)
+                self.assertEqual(lifecycle._invoked_processes_released(evidence, manifest), not attachment_failure)
+                if attachment_failure:
+                    self.assertIn('original attachment failure', rows[1]['failure'])
+                    self.assertIn('sampling failure', rows[1]['releaseError'])
+                    self.assertFalse(record['controllerAttached'])
+                self.assertTrue(all(Path(path).exists() for path in manifest['ownedRoots'].values()))
+
+    def test_settings_snapshots_bind_bytes_absence_and_reject_changed_source(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, manifest = self.fixture(Path(tmp).resolve())
+            paths = lifecycle._settings_paths(manifest)
+            config = Path(paths['home-config'])
+            config.write_bytes(b'[features]\r\nhooks = true\r\n')
+            self.settings_receipts(manifest)
+            self.assertTrue(lifecycle._settings_preserved(manifest))
+            baseline = json.loads((Path(manifest['evidence']) / 'retained/settings/after-package-add.json').read_text())
+            self.assertEqual(baseline['files']['home-config']['bytesHex'], config.read_bytes().hex())
+            self.assertEqual(baseline['files']['workspace-config'],
+                             {'path': paths['workspace-config'], 'present': False})
+            config.write_bytes(b'[features]\r\nhooks = false\r\n')
+            lifecycle._settings_snapshot(manifest, 'restored-exposure')
+            self.assertFalse(lifecycle._settings_preserved(manifest))
+            config.unlink()
+            lifecycle._settings_snapshot(manifest, 'restored-exposure')
+            self.assertFalse(lifecycle._settings_preserved(manifest))
+
+    def test_settings_inspection_rejects_missing_forged_or_redirected_receipts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, manifest = self.fixture(Path(tmp).resolve())
+            Path(lifecycle._settings_paths(manifest)['home-config']).write_bytes(b'original = true\n')
+            self.settings_receipts(manifest)
+            target = Path(manifest['evidence']) / 'retained/settings/discovery.json'
+            original = target.read_bytes()
+            target.unlink()
+            with self.assertRaises(OSError):
+                lifecycle._settings_preserved(manifest)
+            for field, value in (('bytesHex', b'forged = true\n'.hex()),
+                                 ('path', str(Path(tmp) / 'other-config.toml'))):
+                with self.subTest(field=field):
+                    altered = json.loads(original)
+                    altered['files']['home-config'][field] = value
+                    lifecycle.save(target, altered)
+                    self.assertFalse(lifecycle._settings_preserved(manifest))
+            target.write_bytes(original)
+            standalone = Path(manifest['standaloneSkill']['path'])
+            standalone.write_bytes(standalone.read_bytes() + b'changed\n')
+            lifecycle._settings_snapshot(manifest, 'restored-exposure')
+            self.assertFalse(lifecycle._settings_preserved(manifest))
+
+    def test_release_observation_rejects_missing_late_unordered_and_mismatched_samples(self):
+        manifest = {'resourceController': 'windows-job-object', 'limits': {'recoverySeconds': 10}}
+        class Job:
+            def sample(self): return {'controller': 'windows-job-object', 'activeProcesses': 1}
+        with patch.object(lifecycle.time, 'monotonic', side_effect=[1, 3]):
+            release = lifecycle._begin_release(Job(), 5, 10)
+            after = {'controller': 'windows-job-object', 'activeProcesses': 0}
+            record = lifecycle._complete_release(
+                {'controller': 'windows-job-object', 'exitCode': 0, 'forced': False, 'after': after},
+                release, {'at': 2, 'sample': after}, after)
+        self.assertTrue(lifecycle._observed_release(record, manifest))
+        for invalid in ('missing', 'late', 'unordered', 'mismatched', 'wrong-controller'):
+            with self.subTest(invalid=invalid):
+                changed = json.loads(json.dumps(record))
+                observation = changed['releaseObservation']
+                if invalid == 'missing': del observation['before']
+                elif invalid == 'late': observation['after']['at'] = 11
+                elif invalid == 'unordered': observation['afterGrace']['at'] = 0
+                elif invalid == 'mismatched': observation['after']['sample']['activeProcesses'] = 1
+                else: observation['before']['sample']['controller'] = 'different-controller'
+                self.assertTrue(lifecycle._record_released(changed, manifest))
+                self.assertFalse(lifecycle._observed_release(changed, manifest))
+
+    def test_unknown_live_or_missing_helper_release_retains_owned_roots(self):
+        for state in ('unknown', 'live', 'missing'):
+            with self.subTest(state=state), tempfile.TemporaryDirectory() as tmp:
+                args, manifest = self.fixture(Path(tmp).resolve())
+                evidence = Path(args.evidence)
+                helper = evidence / 'helpers/000001'
+                helper.mkdir(parents=True)
+                (evidence / 'retained/helper.jsonl').write_text(
+                    json.dumps({'phase': 'request', 'invocation': '000001', 'request': {'op': 'status'}}) + '\n')
+                record = self.resource_record(manifest)
+                if state == 'unknown': record['exitCode'] = None
+                elif state == 'live':
+                    record['after'] = {'controller': manifest['resourceController'], 'activeProcesses': 1,
+                        'processGroupState': 'present', 'rootExitCode': 0}
+                if state != 'missing': lifecycle.save(helper / 'resources.json', record)
+                with patch.object(lifecycle, '_run_cli', side_effect=RuntimeError('bounded mock failure')), \
+                        patch.object(lifecycle.subprocess, 'Popen') as native, \
+                        patch.object(lifecycle, '_remove_owned_tree') as remove:
+                    result = lifecycle.run(args)
+                native.assert_not_called()
+                remove.assert_not_called()
+                self.assertFalse(result['invokedProcessesReleasedWithinControllerScope'])
+                self.assertEqual(result['ownedRootsAbsent'], {name: False for name in lifecycle.OWNED_ROOTS})
+                self.assertTrue(helper.exists())
 
     def fake_version_probe(self, path, manifest, role, _env, versions):
         version = versions[role]
@@ -1189,7 +1402,7 @@ class CodexLifecycleTests(unittest.TestCase):
                     terminated = False
                     def sample(self):
                         self.samples += 1
-                        if 'before' in failures and self.samples == 1:
+                        if 'before' in failures and not self.terminated:
                             raise OSError('fixture diagnostic unavailable')
                         return {'activeProcesses': 0 if self.terminated else 1}
                     def terminate(self):
@@ -1297,6 +1510,7 @@ class CodexLifecycleTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             args, manifest = self.fixture(Path(tmp).resolve())
             evidence = Path(args.evidence)
+            self.settings_receipts(manifest)
             for name in lifecycle.OWNED_ROOTS:
                 path = Path(manifest["ownedRoots"][name])
                 if path.exists():
@@ -1328,6 +1542,8 @@ class CodexLifecycleTests(unittest.TestCase):
                 {"name": "exposure-control", "path": manifest["standaloneSkill"]["path"], "enabled": True},
                 *[{"name": Path(path).parent.name, "path": path, "enabled": True} for path in package_skill_paths]]}]}
             lifecycle.save(evidence / "retained/skills-before.json", skill_catalog)
+            lifecycle.save(evidence / "retained/skills-restored.json", skill_catalog)
+            lifecycle.save(evidence / "retained/skills-cleared.json", {"data": [{"skills": []}]})
             with (evidence / "retained/provider-requests.jsonl").open("w", encoding="utf-8") as stream:
                 for ordinal in range(1, 5):
                     stream.write(json.dumps({"ordinal": ordinal, "request": {"id": ordinal}}) + "\n")
@@ -1335,10 +1551,7 @@ class CodexLifecycleTests(unittest.TestCase):
                         "ordinal": ordinal, "transportStatus": "completed",
                         "response": {"id": f"resp_fixture_{ordinal}", "status": "completed",
                         "output": [{"id": f"msg_fixture_{ordinal}"}]}})
-            (evidence / "retained/helper.jsonl").write_text(
-                json.dumps({"phase": "request", "request": {"op": "bind", "session_id": paused_thread}}) + "\n"
-                + json.dumps({"phase": "request", "request": {"op": "pause", "session_id": paused_thread}}) + "\n"
-                + json.dumps({"phase": "response", "op": "status", "result": {}}) + "\n", encoding="utf-8")
+            self.helper_receipts(manifest, installed, paused_thread)
             lifecycle.save(evidence / "retained/paused-thread.json", {"threadId": paused_thread})
             source_hash = manifest["initialRootHashes"]["workspace"]["source.json"]
             checkpoint = {"epoch": "bound", "result": "Deliver pending.json only after an explicit later decision",

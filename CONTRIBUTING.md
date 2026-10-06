@@ -191,6 +191,11 @@ without dispatching another native task. Preserve failed attempts separately.
 The fixed local response tests lifecycle mechanisms, not model judgment or
 ordinary-user delivery. Raw requests, native responses, state, package bytes and
 all seven process records remain inputs to independent review and admission.
+Configuration preservation requires retained configuration sources, including
+intermediate exposure changes; protected-file hashes alone cannot establish it.
+All checkpoint helpers share owned process containment and release checks.
+Retain graceful-phase samples and auxiliary sampling errors independently so
+failed diagnostics cannot prevent cleanup or replace the original failure.
 
 Bind the code that actually executes, observes and recovers a maintainer case,
 including dynamic imports, inherited controller methods and late cleanup code.
