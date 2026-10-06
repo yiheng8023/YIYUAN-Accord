@@ -1046,6 +1046,177 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertTrue(any("historical object unavailable" in error for error in result["errors"]))
 
 
+class DeclarationCaseBindingTests(unittest.TestCase):
+    """Static declaration diagnostics; no Agent, observer or evidence execution."""
+
+    def setUp(self):
+        self.contract = json.loads((ROOT / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
+
+    def test_current_static_cli_exposes_gaps_without_promoting_qualification(self):
+        from yiyuan_accord import __main__ as cli
+        with patch.object(sys, "argv", ["yiyuan_accord", "verify-development", "--root", str(ROOT), "--json"]), \
+                patch.object(cli, "_emit") as emit:
+            self.assertEqual(cli.main(), 0)
+        report, as_json = emit.call_args.args
+        self.assertTrue(as_json)
+        self.assertTrue(report["valid"], report["errors"])
+        summary = report["declarationSummary"]
+        self.assertEqual(summary["scope"], "current-v3.3-case-binding-declarations-only")
+        self.assertIn("No evidence observed", summary["claimLimit"])
+        self.assertEqual({key: summary[key] for key in (
+            "coverageTotal", "coverageDefined", "coverageUnbound", "coverageWithoutCases",
+            "coverageWithCaseBindingGaps", "casesDefined")}, {
+                "coverageTotal": 17, "coverageDefined": 17, "coverageUnbound": 0,
+                "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 7, "casesDefined": 12})
+        gaps = summary["caseBindingGaps"]
+        self.assertEqual({scope_id for scope_id, claims in gaps.items()
+                          if any(not gap["caseIds"] for gap in claims.values())}, {
+            "v33-dynamic-model-routing", "v33-system-integration", "v33-codex-lifecycle",
+            "v33-system-impact-assessment", "v33-resource-pressure-and-exit", "v33-environment-adaptation"})
+        continuity = gaps["v33-autonomous-continuity"]["function"]
+        self.assertEqual(continuity["caseIds"], ["v33-continuity-catalog-01"])
+        self.assertEqual(continuity["missingDimensions"]["duties"], ["recovery-and-rollback"])
+        self.assertEqual(continuity["missingDimensions"]["scenarios"], ["capability-loss"])
+        self.assertFalse(report["functionalCompletion"])
+        self.assertFalse(report["candidateEligible"])
+        self.assertEqual(report["currentHostBehavior"], "unverified")
+        self.assertEqual(report["incrementalValue"], "unverified")
+
+    def test_summary_matches_admission_and_never_observes_or_mutates(self):
+        from yiyuan_accord import admission
+        before = copy.deepcopy(self.contract)
+        with patch.object(admission, "_git", side_effect=AssertionError("unexpected Git observation")), \
+                patch.object(admission, "evidence_subject", side_effect=AssertionError("unexpected subject lookup")), \
+                patch.object(admission.subprocess, "run", side_effect=AssertionError("unexpected external program")):
+            summary = admission.declaration_case_binding_summary(self.contract)
+            report = admission.assess_development_evidence(ROOT, self.contract, None)
+        self.assertEqual(self.contract, before)
+        self.assertEqual(summary["caseBindingGaps"], report["caseBindingGaps"])
+        for key in ("coverageTotal", "coverageDefined", "coverageUnbound", "coverageWithoutCases",
+                    "coverageWithCaseBindingGaps", "casesDefined"):
+            self.assertEqual(summary[key], report["progress"][key], key)
+        self.assertEqual(report["acceptedCases"], [])
+        self.assertFalse(report["functionalCompletion"])
+        self.assertFalse(report["candidateEligible"])
+
+    def test_aggregate_case_dimensions_do_not_replace_one_complete_episode(self):
+        from yiyuan_accord.admission import declaration_case_binding_summary, assess_development_evidence
+        contract = copy.deepcopy(self.contract)
+        policy = contract["acceptance"]["admission"]
+        scope = next(row for row in policy["scopes"] if row["id"] == "v33-system-integration")
+        first = copy.deepcopy(policy["cases"][0])
+        first.pop("packageFiles", None)
+        first.update({field: copy.deepcopy(scope[field]) for field in (
+            "host", "entry", "duties", "qualityAxes", "scenarios", "claims", "conditions")})
+        first.update(id="split-integration-first", scope=scope["id"])
+        selected = next(row for row in policy["cases"] if row["scope"] == "v33-codex-entry-coverage")
+        for key in ("subjectEntries", "selectedModes"):
+            first["conditions"][key] = copy.deepcopy(selected["conditions"][key])
+        second = copy.deepcopy(first)
+        second["id"] = "split-integration-rest"
+        first["duties"], second["duties"] = first["duties"][:1], second["duties"][1:]
+        policy["cases"].extend([first, second])
+        summary = declaration_case_binding_summary(contract)
+        self.assertIsNotNone(summary)
+        gap = summary["caseBindingGaps"][scope["id"]]["function"]
+        self.assertEqual(gap["caseIds"], [first["id"], second["id"]])
+        self.assertFalse(any(gap["missingDimensions"].values()))
+        self.assertTrue(gap["jointCaseMissing"])
+        report = assess_development_evidence(ROOT, contract, None)
+        self.assertEqual(report["caseBindingGaps"], summary["caseBindingGaps"])
+        self.assertFalse(report["functionalCompletion"])
+        self.assertFalse(report["candidateEligible"])
+        # A complete declaration removes only this planning gap; it admits no evidence.
+        first["duties"] = copy.deepcopy(scope["duties"])
+        summary = declaration_case_binding_summary(contract)
+        self.assertNotIn(scope["id"], summary["caseBindingGaps"])
+        report = assess_development_evidence(ROOT, contract, None)
+        self.assertEqual(report["acceptedCases"], [])
+        self.assertFalse(report["functionalCompletion"])
+        self.assertFalse(report["candidateEligible"])
+
+    def test_malformed_admission_summary_is_unavailable_not_empty_gaps(self):
+        from yiyuan_accord.admission import declaration_case_binding_summary
+        variants = [None, [], {}, {"schema": self.contract["schema"], "acceptance": None}]
+        for field, value in (("cases", None), ("cases", [None]), ("scopes", None),
+                             ("requiredCoverage", {}), ("acceptanceRequirements", [])):
+            changed = copy.deepcopy(self.contract)
+            changed["acceptance"]["admission"][field] = value
+            variants.append(changed)
+        unknown_scope = copy.deepcopy(self.contract)
+        unknown_scope["acceptance"]["admission"]["cases"][0]["scope"] = "missing-scope"
+        variants.append(unknown_scope)
+        for index, contract in enumerate(variants):
+            with self.subTest(index=index):
+                self.assertIsNone(declaration_case_binding_summary(contract))
+
+    def test_invalid_source_cli_preserves_unknown_summary_and_false_qualification(self):
+        from yiyuan_accord import development
+        original_read = development._bounded_regular_bytes
+        missing_cases = copy.deepcopy(self.contract)
+        missing_cases["acceptance"]["admission"].pop("cases")
+        invalid_ceiling = copy.deepcopy(self.contract)
+        invalid_ceiling["claimCeiling"]["functionalCompletion"] = True
+        malformed_acceptance = copy.deepcopy(self.contract)
+        malformed_acceptance["acceptance"] = None
+        malformed_cases = copy.deepcopy(self.contract)
+        malformed_cases["acceptance"]["admission"]["cases"] = [None]
+        for data in (b"{invalid-json", *[json.dumps(contract).encode() for contract in (
+                missing_cases, invalid_ceiling, malformed_acceptance, malformed_cases)]):
+            def changed(path, *args, **kwargs):
+                if Path(path) == ROOT / DEVELOPMENT_FILE:
+                    return data, None
+                return original_read(path, *args, **kwargs)
+            with self.subTest(data=data[:30]), \
+                    patch.object(development, "_bounded_regular_bytes", side_effect=changed), \
+                    patch.object(development, "declaration_case_binding_summary", side_effect=AssertionError("invalid source summarized")):
+                report = verify_development(ROOT)
+            self.assertFalse(report["valid"])
+            self.assertIsNone(report.get("declarationSummary"))
+            self.assertFalse(report["functionalCompletion"])
+            self.assertFalse(report["candidateEligible"])
+
+    def test_legacy_admission_and_static_report_do_not_gain_current_summary(self):
+        from yiyuan_accord import admission, development
+        legacy = historical_development()
+        legacy_v3 = copy.deepcopy(legacy)
+        policy = legacy_v3["acceptance"]["admission"]
+        policy["schema"] = admission.SCHEMA
+        policy["requiredCoverage"]["incremental-value"] = policy["requiredCoverage"].pop("impact-assessment")
+        for row in [*policy["scopes"], *policy["cases"]]:
+            row["claims"] = ["incremental-value" if claim == "impact-assessment" else claim for claim in row["claims"]]
+        for contract in (legacy, legacy_v3):
+            with self.subTest(schema=contract["acceptance"]["admission"]["schema"]):
+                self.assertEqual(admission.admission_contract_errors(contract), [])
+                self.assertIsNone(admission.declaration_case_binding_summary(contract))
+                report = admission.assess_development_evidence(ROOT, contract, None)
+                self.assertNotIn("caseBindingGaps", report)
+                self.assertNotIn("progress", report)
+                self.assertFalse(report["functionalCompletion"])
+                self.assertFalse(report["candidateEligible"])
+        original_read = development._bounded_regular_bytes
+        def changed(path, *args, **kwargs):
+            if Path(path) == ROOT / DEVELOPMENT_FILE:
+                return json.dumps(legacy).encode(), None
+            return original_read(path, *args, **kwargs)
+        with patch.object(development, "_bounded_regular_bytes", side_effect=changed):
+            report = verify_development(ROOT)
+        self.assertNotIn("declarationSummary", report)
+
+    def test_historical_top_schema_keeps_existing_current_policy_report(self):
+        from yiyuan_accord import admission
+        historical_top = copy.deepcopy(self.contract)
+        historical_top["schema"] = "yiyuan-accord-development/v4"
+        with patch.object(admission, "_git", side_effect=AssertionError("unexpected Git observation")), \
+                patch.object(admission.subprocess, "run", side_effect=AssertionError("unexpected external program")):
+            current = admission.assess_development_evidence(ROOT, self.contract, None)
+            actual = admission.assess_development_evidence(ROOT, historical_top, None)
+        self.assertEqual(actual, {**current, "scope": "caller-observed-development-candidate"})
+        self.assertEqual(actual["errors"], [])
+        self.assertFalse(actual["candidateEligible"])
+        self.assertIsNone(admission.declaration_case_binding_summary(historical_top))
+
+
 class DevelopmentDeliveryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

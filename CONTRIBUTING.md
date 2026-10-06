@@ -78,6 +78,13 @@ python -B -m yiyuan_accord host-check --adapter codex --root . --json
 python -B -X utf8 -m unittest discover -s tests/product -v
 ~~~
 
+For a valid current contract, `verify-development` also emits
+`declarationSummary`: the admission verifier's existing case-binding gaps,
+including missing duties, quality axes, scenarios and a missing complete joined
+case. Use these computed facts before semantic review. Invalid current sources
+return `null`; legacy reports keep their prior shape. This diagnostic reads no
+execution evidence and grants no functional completion or release eligibility.
+
 CLI reports use UTF-8 on standard output, including redirected output. Decode
 captured report bytes as UTF-8; callers need not change their system locale.
 For ad hoc Python JSON reads, use `-X utf8` or an explicit UTF-8 stdout encoding;

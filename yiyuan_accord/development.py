@@ -13,7 +13,7 @@ import subprocess
 from urllib.parse import urlsplit
 
 from .identity import _bounded_git_bytes, _bounded_regular_bytes, _strict_json_object
-from .admission import CURRENT_SCHEMA, admission_contract_errors
+from .admission import CURRENT_SCHEMA, admission_contract_errors, declaration_case_binding_summary
 
 
 DEVELOPMENT_FILE = "product/development.json"
@@ -726,6 +726,8 @@ def _inspect_development(root):
         "releaseIntent": (contract["claimCeiling"]["releaseIntent"] if not errors else None),
         "errors": errors,
     }
+    if contract.get("schema") == V5_SCHEMA:
+        report["declarationSummary"] = (declaration_case_binding_summary(contract) if not errors else None)
     return report, contract
 
 
