@@ -1239,6 +1239,16 @@
   },
   "developmentObservations": [
     {
+      "id": "isolated-auth-persistence-read-reconciliation-20261008",
+      "observedAt": "2026-10-08",
+      "scope": "New limited post-episode independent readonly observation of the already authorized retained authentication profile.",
+      "observed": "A new CLI0.161.0 process requested only initialize/config-read/account-read with refreshTokenfalse. Direct native account projection shows chatgpt; actual configuration file store/pluginsfalse/remote-pluginfalse/appsfalse. Natural exit0 and owned Windows Job activeProcesses0,2.530s elapsed,30 protected source/old-evidence hashes unchanged.",
+      "authority": "Current user continued the specifically remaining readonly verification. No new login/account connection, expired grant/clock reuse, thread/turn, model business, installation or Hook trust operation.",
+      "consequence": "Independent fresh-process authentication persistence is observed for this retained profile. This completes the missing authentication prerequisite fact; original390s episode remains incomplete and unchanged, with later evidence kept at its actual scope and time.",
+      "evidence": "accord-auth-persistence-read-20261008-01/ROOT-VERIFICATION.json and original native frames/receipts/resource record.",
+      "boundary": "Plugin installation, trusted participation, Skill body use, ordinary outcomes, cross-entry/whole-host acceptance and release remain unverified. All acceptance/case definitions and original failures retained."
+    },
+    {
       "id": "isolated-native-auth-owner-result-20261008",
       "observedAt": "2026-10-08",
       "scope": "Actual authorized login owner only; original complete authentication prerequisite did not finish within its bound window.",

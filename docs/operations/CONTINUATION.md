@@ -4,7 +4,9 @@
 
 ## 当前动作
 
-中断/模型切换后的原生检查点绑定两次返回native-call-turn-conflict，revision仍371；未绕过协议写状态。当前实际后态以本节、私有ACTUAL-RESULT和原生owner回执恢复。旧检查点中的“待开始登录”已过期，不能据此重发；下一原生输入更新后再同步未完责任。
+2026-10-08 独立只读认证对账已完成：用户继续后，在新任务路径用CLI0.161.0及同一已获许可保留的profile，仅initialize/config-read/account-read(refreshToken=false)。新进程直接原生投影显示chatgpt账户仍存在，file认证存储、plugins/remote-plugin/apps关闭；2.530秒正常退出，所属Windows Job进程0，30份源/旧回执未变。没有新登录、thread/turn、模型、安装或授信。这是原实例结束后的新有限只读观察，原390秒未完结论及原grant/clock保持；认证持久性前提现已有独立实证，下一才是对应权限内的插件实装/正文参与/普通结果。资料accord-auth-persistence-read-20261008-01/ROOT-VERIFICATION.json；此事实不晋全生命周期/F-A或发布资格。
+
+中断/模型切换后的原生检查点绑定曾两次返回native-call-turn-conflict，原拒绝保留；本轮用户继续刷新原生输入后已通过正常bind恢复（revision372），未绕过协议写状态。旧“待开始登录”内容已过期，当前实际后态按本节、私有ACTUAL-RESULT及独立读回恢复，不能据旧状态重发登录。
 
 2026-10-08 一次隔离认证检查已有实际结果：用户确认后，官方CLI0.161.0完成本次匹配loginId的登录，原生账户读取从null变为chatgpt；最后一次owner请求在227.593秒，处于240秒工作窗内。Owner和所属Windows Job正常退出，进程数0，登录链接暂态文件已删除，25份冻结源未变。Root处理浏览器显示与结束回执发生延误，独立reader启动前被READBACK_RESERVE_EXHAUSTED拦住；没有readback启动标记或账户请求。本次整体未在原390秒范围内完成，不扩原窗、不改守卫求通过。用户不需要重新登录；认证资料按许可留在隔离profile，新的独立进程持久性仍未核验。原grant/clock/回执及失败保留，实际结果在accord-isolated-auth-ready-20261007-01/actual/ACTUAL-RESULT.json，SHA21d2e2c119178cd9bf61679f05e8cef7245ce8f0b0e19989b5965821963c877d。下一只需对保留profile作必要独立只读对账，不重发OAuth；插件采用/业务/F-A及发布未闭。
 
