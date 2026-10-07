@@ -1239,6 +1239,17 @@
   },
   "developmentObservations": [
     {
+      "id": "isolated-candidate-install-and-entry-partial-20261008",
+      "observedAt": "2026-10-08",
+      "scope": "Actual authorized isolated native installation and later remaining-only process trust/empty-thread observations; original failed episodes separate.",
+      "observed": "02 official marketplace/add and plugin/add succeeded; installed25members/hash match,5Skills/6Hook native discovery. Actual taggedsha256 Hash was falsely rejected by the private checker. Native exit0/owner1/unforced/WindowsJob0,14.390s; no trust/thread/model effect in02.03 reused that installation without CLI mutation; direct native config confirms only primary SessionStart and SessionEnd trusted, other4disabled, oneephemeral Sol-medium/readOnly/networkfalse/never thread,0turns.",
+      "failure": "03 observed no hook/completed/context before90s work deadline. The work gate also blocked finally unsubscribe; request not sent/ACK unproved. NativeEOF exit0/owner1/unforced/Job0 within92.547s, under110s close limit. Missing context does not prove absent Hook execution or a defective guidance body; triggering/participation remains unverified. Original01 wrapper and nullable-summary failures,02/03 outcomes and clocks preserved, not retried or retro-passed.",
+      "authority": "Direct current user authorized one isolated install and two process-local Hook trust plus oneephemeral entry,0model. Independent rechecks confirmed before-native corrections did not spend installation, and03 only completed unperformed trust/thread effects using existing valid installation. No copied old grant, main-user configuration/model/mode/global trust mutation, new login/Cloud or publication.",
+      "protection": "Current64sources/credential/main-user and project protection bytes unchanged. OS-owned closure directly observed; no unsubscribe ACK invented. Post-failure private derived release gate retains source/identity/authority/input boundaries and original close deadline;2pure controls pass, no actual execution or old ACK completion.",
+      "evidence": "accord-isolated-install-20261008-02/actual/POSTSTATE-FACTS.json;accord-isolated-entry-20261008-03/SLICE-RESULT.md,actual/POSTSTATE-FACTS.json and original raw/config/process/Job receipts. Independent actual fact review agrees. Exactbd55 CI37677631295 completed11/11success.",
+      "boundary": "Actual partial install/trust facts do not complete either failedepisode, prove model/body adoption, ordinary delivery, selected-entry completeness, all F/A, value or release. Reuse cached valid state; next observe participation with a necessary ordinary result rather than replaying empty-thread waits. All acceptance/case definitions and original failures remain."
+    },
+    {
       "id": "isolated-native-install-preparation-20261008",
       "observedAt": "2026-10-08",
       "scope": "Task-owned candidate installation/native entry preparation; default not-granted and not dispatched.",

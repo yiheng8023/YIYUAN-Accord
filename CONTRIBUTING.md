@@ -102,6 +102,15 @@ verification; they do not prove a defect in the business output. An explicit
 rejection exit code and an exception are different valid observations when the
 bound contract permits both.
 
+Include the actual launcher boundary in those controls: required parent
+directories, Windows text encoding, nullable failure receipts and owned-process
+closure. Preserve native field representations, including tagged hashes, instead
+of guessing their shape from synthetic examples. Creating a thread, discovering
+a component and observing its execution are separate effects; do not wait for
+an execution receipt without establishing its trigger. Keep business deadlines
+separate from the bounded release of already-owned resources, preserving source,
+identity, authority and input checks.
+
 Read contracted JSON artifacts using their declared encoding and preserve raw
 console bytes separately. Do not infer redirected PowerShell encoding from the
 parent console or turn a console decoding error into a business failure. Bind
