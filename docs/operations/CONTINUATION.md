@@ -4,6 +4,10 @@
 
 ## 当前动作
 
+中断/模型切换后的原生检查点绑定两次返回native-call-turn-conflict，revision仍371；未绕过协议写状态。当前实际后态以本节、私有ACTUAL-RESULT和原生owner回执恢复。旧检查点中的“待开始登录”已过期，不能据此重发；下一原生输入更新后再同步未完责任。
+
+2026-10-08 一次隔离认证检查已有实际结果：用户确认后，官方CLI0.161.0完成本次匹配loginId的登录，原生账户读取从null变为chatgpt；最后一次owner请求在227.593秒，处于240秒工作窗内。Owner和所属Windows Job正常退出，进程数0，登录链接暂态文件已删除，25份冻结源未变。Root处理浏览器显示与结束回执发生延误，独立reader启动前被READBACK_RESERVE_EXHAUSTED拦住；没有readback启动标记或账户请求。本次整体未在原390秒范围内完成，不扩原窗、不改守卫求通过。用户不需要重新登录；认证资料按许可留在隔离profile，新的独立进程持久性仍未核验。原grant/clock/回执及失败保留，实际结果在accord-isolated-auth-ready-20261007-01/actual/ACTUAL-RESULT.json，SHA21d2e2c119178cd9bf61679f05e8cef7245ce8f0b0e19989b5965821963c877d。下一只需对保留profile作必要独立只读对账，不重发OAuth；插件采用/业务/F-A及发布未闭。
+
 2026-10-08 9398 /CI37630863569已按精确head核success。最小配置认证前提包已完成且默认未授权：只一次官方managed-browser登录owner与一次新account/read-only核持久状态，0业务模型/插件安装/Hook授信；账户资料仅留任务配置，URI只作暂态交互，保留证据无身份/token。20纯控制及独审完成：无授权/过期不创建进程、同loginId通知关联含早于应答的通知、各阶段工作截止、墙钟回拨、强制结束后URL暂态清理、Root终判写后超限保held。独审发现的readback15秒未接/残留URL/20秒采样误差/终判写后状态均已修，原失败保留，不以纯控制冒实际认证。Source与Node共用Windows系统tick尺度，SDK资源控制器仍按单调绝对截止；期限login240/work300/close330/Root390，不续窗或重发OAuth。Root已呈成熟范围的新账户连接权限，待用户决定及本人官方登录；非用户暂停，整体3.3仍未闭。资料accord-isolated-auth-ready-20261007-01/READY.md与plan.ready.json SHA5fa300384e014f9be7a4c998afb20f8732de557817fe7663cb0c62494b232689。
 
 准备期间仅证本机全局CLI实际从0.160.1换为0.161.0，变更者/原因未知，原线程MCP报告仍0.160.1，不混同两者或推断主模型/模式。旧生成声明/冻结拒绝保原，当前0.161.0二进制生成声明0.919秒、实际version及两生成所属进程均自然exit0/Job0；version纯文本被旧JSON读者误读后只复用原stdout/退出回执，未重跑。执行源25项已冻结，包/Runtime/Skill/原Meta5118/17scope/13case/F-A/预算不改；此包不执行安装或新信任，也不把认证成功当正文采用、普通交付或发布资格。实际派发前核新source/输入/暂停/对应权限，未知即持有。

@@ -1239,6 +1239,17 @@
   },
   "developmentObservations": [
     {
+      "id": "isolated-native-auth-owner-result-20261008",
+      "observedAt": "2026-10-08",
+      "scope": "Actual authorized login owner only; original complete authentication prerequisite did not finish within its bound window.",
+      "observed": "CLI0.161.0 emitted a successful completion matching this loginId and native account/read changed from null to chatgpt. Last owner request227.593s within240s; native/controller natural exit0, Windows Job activeProcesses0, transient login URL removed, all25 frozen sources unchanged.",
+      "failure": "Root delayed browser presentation and consumption of the completed owner receipt. Independent readback was rejected by READBACK_RESERVE_EXHAUSTED before a stage marker or process existed. The original390s episode is not complete; no deadline/guard rewritten and no OAuth replay. This does not attribute authentication failure to the user.",
+      "retention": "Authorized isolated profile retained. Original grant, absolute clock, owner results and raw non-sensitive projections preserved. No credential contents read/copied, no model business/plugin installation/Hook trust dispatched.",
+      "next": "Only necessary independent read-only reconciliation of the retained profile remains; no new login needed. Later observations retain their actual timing and do not retroactively pass this original episode.",
+      "evidence": "accord-isolated-auth-ready-20261007-01/actual/ACTUAL-RESULT.json SHA21d2e2c119178cd9bf61679f05e8cef7245ce8f0b0e19989b5965821963c877d",
+      "boundary": "Authentication is observed only in the owner. Fresh-process persistence, plugin/body adoption, ordinary outcome, full F-A and release remain unverified; all acceptance definitions and existing failures retained."
+    },
+    {
       "id": "isolated-native-auth-prerequisite-ready-20261008",
       "observedAt": "2026-10-08",
       "scope": "One task-owned native authentication prerequisite candidate; default not-granted, not dispatched. No model business, plugin installation, Hook trust, ordinary delivery or adoption acceptance.",
