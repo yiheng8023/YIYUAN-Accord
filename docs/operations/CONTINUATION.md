@@ -38,6 +38,8 @@ Windows本次实际执行已闭：a5ac5631 / sdk-lifecycle-case37519941776成功
 
 ## 目标与权限
 
+0607778f / CI37578886188最终失败，9个产品job在6项声明预检失败，两个native生命周期job成功。完整官方日志和本机三项RED明确：新真实allocation case使无案例范围6→5，但旧测试仍隐式假定allocation为空。测试现按源声明核当前数量，并显式构造无分配/部分分配负基线；历史SDK检查不再假定其它scope永远为空。原失败保全，验收器/运行时/包/原case判据不改；资料accord-r39-ci-correction-20261007-01。 三项本机RED后，七定向检查21.518秒通过，完整CurrentDevelopmentEvidenceTests54项784.907秒通过，development/product静态valid；有限native case已在同一不可变原件上正式准入，P2依旧披露。
+
 下一普通原生工序已在效果前绑定：v33-native-exact-ci-decision-01，交付任务私有精确提交CI判定工具；真实输入冻结、26项独立正反oracle、同actor两业务阶段及900/1200秒绝对窗口。后续输入改待判提交并撤回联网/新增委派，只核真实许可变化与本地复用，不冒硬disable、制造交接或借旧绿灯。当前13活动声明是按实际新增结果分配，登记不等于执行/准入；17父范围及原全部F/A不变。包/现装不改，普通原生实施在既有项目授权内；启动先核实际配置/身份，业务写仅三个私有输出。
 
 该实例已执行并在997.436秒内收口：实际actor三个Sol/medium/default轮次（bootstrap+两业务阶段）；维护工具/decision/report交付，目标297的passed随新输入和政策撤回正确改为目标f4的unknown，旧绿不借用，工具c3bf字节复用。26项Root独立oracle两阶段均通过，输入/共享文件哈希不变，13工具调用都有终态；Source业务约404秒结束，Root未修业务。两独审支持有界功能与纠偏，但启动时曾列出禁止访问的Root evidence目录元数据，未见内容读取；保P2偏差，不冒零访问/完整合规。后续仅核同一冻结原件与原标准，0607778f上正式observe/recheck接受该有限case，caseRejections/errors空；ADMISSION SHA4910c59a70870130ef3694128d6c80390dc466f3e5ff60927f1d626dc50e87c4。原P2记录不变、非事后授权；原case没有零目录访问声明，有限资格不扩大为全读取/全政策合规。完整W02/W05/W08及F/A保持、不重跑业务。资料accord-exact-ci-checker-20261007-01，工具在outputs/checker.py、当前结果在outputs/decision.json/report.md；下一不再补同类CI样本：动态能力父范围实际仍缺research-learning-and-reuse、recovery-and-lifecycle、capability-loss及default-host-without-extra-extensions，选择确有价值的相应结果，并保整体组合与净影响责任。

@@ -1239,6 +1239,14 @@
   },
   "developmentObservations": [
     {
+      "id": "current-allocation-diagnostic-fixture-correction-20261007",
+      "source": "r39 CI37578886188 failed nine product jobs at the six-test declaration-gap precheck; both native lifecycle jobs succeeded. Complete official Ubuntu3.12 log and local three-test red reproduction retained.",
+      "cause": "A new prospectively bound real allocation case reduced unplanned scopes from6 to5. Three tests still assumed a no-case allocation baseline; an additional full-suite history check also incorrectly expected that scope to remain empty.",
+      "change": "Actual-declaration counts and current allocation gaps are checked against their source sets. Unplanned/partial negatives explicitly remove current allocations in their synthetic fixture before adding the one intended case; historical failure identities and scope floors remain checked independently.",
+      "limits": "Test and current progress-record correction only. No admission/runtime/Skill/package/criteria changes, actual business replay, private output repair or promotion to functional completion. Original failed CI and red tests remain.",
+      "verification": "Three focused tests reproduced red; seven relevant tests passed in21.518 seconds and the complete54-test CurrentDevelopmentEvidenceTests class passed in784.907 seconds. Development/product checks valid. Original CI/reproduction logs preserved; new immutable push receives hosted validation."
+    },
+    {
       "id": "native-exact-ci-decision-observation-20261007",
       "source": "Prospectively bound f4a4c378 v33-native-exact-ci-decision-01; one native Desktop actor with three actual Sol/medium/default contexts: startup identity verification, two business stages. No CLI/AppServer model business, forced transfer or Goal mode.",
       "outcome": "Delivered task-private offline checker c3bf4fb64b29ba62b713a8748104eba252f85b6fa615898c41ac3f680f9ec166. Old297 exact-head CI passed; actual prebound target/policy update to f4 withdrew networking/new delegation, reused the unchanged executable and corrected current decision/report to unknown instead of borrowing either old green. Both Root26-case positive/negative checks passed; Root did not repair business files.",

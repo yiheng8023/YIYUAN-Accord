@@ -1212,6 +1212,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
 
     def test_current_declaration_without_observer_reports_actual_missing_coverage(self):
         report = self.assess()
+        policy = self.contract['acceptance']['admission']
+        scopes_with_cases = {case['scope'] for case in policy['cases']}
+        scopes_without_cases = {scope['id'] for scope in policy['scopes']} - scopes_with_cases
         self.assertEqual(report["errors"], [])
         self.assertEqual(report["acceptedCases"], [])
         self.assertFalse(report["candidateEligible"])
@@ -1222,7 +1225,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 17, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 0, "coverageDefinedButUnverified": 17,
-            "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 7,
+            "coverageWithoutCases": len(scopes_without_cases), "coverageWithCaseBindingGaps": 7,
             "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
         })
         self.assertEqual(set(report['caseBindingGaps']),
@@ -1233,8 +1236,13 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         for scope_id, claims in report['caseBindingGaps'].items():
             for gap in claims.values():
                 if scope_id == 'v33-dynamic-model-routing':
-                    self.assertEqual(gap['caseIds'], [])
-                    self.assertIn('environment-and-self-exposure', gap['missingDimensions']['duties'])
+                    allocated = [case for case in policy['cases'] if case['scope'] == scope_id]
+                    scope = next(row for row in policy['scopes'] if row['id'] == scope_id)
+                    self.assertEqual(set(gap['caseIds']), {case['id'] for case in allocated})
+                    for dimension in ('duties', 'qualityAxes', 'scenarios'):
+                        declared = set().union(*(set(case[dimension]) for case in allocated))
+                        self.assertEqual(set(gap['missingDimensions'][dimension]),
+                                         set(scope[dimension]) - declared)
                     self.assertTrue({'default-host-without-extra-extensions', 'capability-loss'}
                                     <= set(gap['missingDimensions']['scenarios']))
                 elif scope_id == 'v33-system-integration':
@@ -1353,7 +1361,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report['candidateEligible'])
         self.assertIn('v33-system-integration', report['acceptanceRequirements']['A08']['missingScopes']['function'])
         self.assertEqual(report['caseBindingGaps']['v33-system-integration']['function']['caseIds'], [])
-        self.assertEqual(report['caseBindingGaps']['v33-dynamic-model-routing']['function']['caseIds'], [])
+        allocation = [case for case in policy['cases'] if case['scope'] == 'v33-dynamic-model-routing']
+        self.assertEqual(set(report['caseBindingGaps']['v33-dynamic-model-routing']['function']['caseIds']),
+                         {case['id'] for case in allocation})
 
     def test_declared_current_execution_fixtures_match_committed_sources(self):
         checked = set()
@@ -1433,6 +1443,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         policy = contract['acceptance']['admission']
         scope = next(row for row in policy['scopes'] if row['id'] == 'v33-dynamic-model-routing')
         case = copy.deepcopy(policy['cases'][0])
+        # Test an explicit unallocated baseline, independent of current real
+        # episodes. Adding another case must not silently widen this fixture.
+        policy['cases'] = [row for row in policy['cases'] if row['scope'] != scope['id']]
         case.pop('packageFiles', None)
         case.update(id='partial-allocation-fixture', scope=scope['id'], host=scope['host'], entry=scope['entry'],
                     claims=['function'], conditions=copy.deepcopy(scope['conditions']),
@@ -1452,7 +1465,11 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report['functionalCompletion'])
 
     def test_diagnostic_retains_unplanned_scope_and_scenario_gaps(self):
-        report = self.assess(self.without_correction_and_user_environment_cases())
+        contract = self.without_correction_and_user_environment_cases()
+        # This negative explicitly asks for an unplanned allocation scope.
+        contract['acceptance']['admission']['cases'] = [case for case in
+            contract['acceptance']['admission']['cases'] if case['scope'] != 'v33-dynamic-model-routing']
+        report = self.assess(contract)
         self.assertEqual(report['errors'], [])
         self.assertEqual(report['progress']['coverageWithoutCases'], 7)
         self.assertEqual(report['progress']['coverageWithCaseBindingGaps'], 9)

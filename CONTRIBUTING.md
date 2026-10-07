@@ -91,6 +91,9 @@ project decision. Keep historical identity and limits bound to their exact sourc
 compare unchanged requirements separately from later authorized decisions.
 Exercise pending and final selection, dependency changes and criterion changes.
 Passing simulated observers remains unit evidence, not actual admission.
+Coverage-count checks derive their baseline from the bound source declarations.
+Tests for an unplanned or partially allocated scope must explicitly construct
+that baseline; a later real case must not silently change their scenario.
 
 Declared executable fixture fingerprints must match their committed source bytes,
 including nested worker bindings. Rebind affected current declarations after a
