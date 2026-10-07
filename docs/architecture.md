@@ -28,9 +28,14 @@ test proves that the premise or composition is sufficient.
 
 Version 3.3 internalizes applicable question decomposition, typed results,
 uncertainty handling and feedback designs through host models, supported tools
-and necessary Accord components. Dedicated third-party decision-model provider
-integrations are deferred for evaluation in later versions; no additional user model deployment,
-training program or hosted model service is introduced. This boundary preserves
+and necessary Accord components. Decision implementations are optional capabilities evaluated by the concrete
+problem, actual host availability, authority and whole-task benefit; no fixed
+provider integration is scheduled. Deterministic checks can use code or native
+facts; sufficient host models can supply semantic judgment. A platform API such
+as OpenAI Decisions is not proof that Desktop/CLI/IDE exposes or uses it.
+Developer experiments do not become default user calls, accounts or keys. No
+additional user model deployment, training program or hosted decision service is
+introduced. This boundary preserves
 ordinary ecosystem reuse and does not prescribe a fixed model sequence or claim
 superiority over specialized models.
 
