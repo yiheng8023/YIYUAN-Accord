@@ -4,6 +4,8 @@
 
 ## 当前动作
 
+2026-10-07诊断新episode已结束、不得重跑：源Sol/medium/default/0.160.1在原600秒内交付三个私有实物，源自产25包/Node24.21.0 pass、host/overall unknown，输入hash/mtime不变。Root首QA读取器把PowerShell console原字节当UTF8失败；后置读取实际JSON并复用首探针，但协调收口超过原900秒，原案FAIL/not-admitted，不追认或扩限。独验复制包报告Get-FileHash不可达，源自产报告pass，现仅证观察环境差异；collision明确exit3且未改manifest，Root要求caught exception的oracle误判。其余包负例被缺失cmdlet部分遮蔽，不当有效区分。10探针及encoding-control均自然exit0/Job0，原脚本/结果/说明、保护源与失败全保留。此结束单次实例从活动必过集合转历史，17scope/全部F-A及其它13case定义不变；不是清空未验职责。ec8 CI37605131761只在identity门失败：活跃case中一个oracle辅助文件名触发旧module token；原ec8定义/hash/日志保精确Git及私有原件，退休结束实例不改身份扫描或旧判据。资料accord-prerequisite-diagnostic-20261007-01/ACTUAL-RESULT.json SHA9f1d3e8767e082fb9a3497d61cfdc8eb297fa6c2ec9035f94e23350723b7170f。下一先纯源核Root验收器的编码/环境/退出语义与绝对时钟，不重跑该业务/旧SDK，不把源实物冒整案通过。
+
 2026-10-07 ee32 /CI37596336633已按精确head核成功，原c5/50b/246e失败保持。下一新普通交付已效果前登记为v33-windows-prerequisite-diagnostic-01：任务私有PowerShell首次安装前提诊断脚本、实际JSON结果和退路说明；源包25/b076及输入/软件合同/独立九类oracle冻结，source Sol/medium≤600秒、episode≤900秒，RootQA180秒及有限用量。只用既有原生工位，富环境披露，不冒只Accord/默认用户起点；实际Node不可达为诊断子进程PATH中的依赖条件，不冒模型工具撤销、自主迁移或全capability-loss。14个活动声明只反映新增真实交付准备，不等执行/准入。派发先核真实actor/config和精确前绑；业务仅写三个私有产物，原件/共享设置/作者内容保持，0安装/启停/Trust/联网，Root不修业务。最小profile安装/认证/信任仍为另一个未获本方案许可的边界，不让它阻止现有权限内的有用交付。资料accord-prerequisite-diagnostic-20261007-01。
 
 2026-10-07最小曝光路径已取得实际元数据：两个新的独立私有进程仅initialize/initialized/config-read/skills-list/hooks-list，无线程/模型、登录、安装或信任请求。首次仅隔离HOME并禁插件/MCP/apps，仍发现38个enabled用户Skills，是有效反例；第二次按同一原生canonical路径作进程内精确禁用，实际38→0，5个宿主system Skills保留，插件/MCP/Hook空，控制来自sessionFlags且user/system配置层空。CLI0.160.1实际握手、raw、配置/路径/启停与独审相符；两次1.258/1.255秒自然exit0，所属Job0，14/55保护源未变，无auth文件。65+65运行文件逐字保到retained-runtime后，仅各四个任务私有运行根删除，所有原件/反例保留。此只证明这两个进程的曝光控制，不证明卸载、无物理安装、无网络、Accord已加载、Skill采用或普通最小环境业务验收；不登记空case。资料：accord-minimal-profile-read-20261007-01及accord-minimal-profile-controlled-20261007-01。下一可复用已证配置控制，必要Accord采用/实际用户成果仍须完整前绑及对应真实权限。
@@ -82,7 +84,7 @@ Windows本次实际执行已闭：a5ac5631 / sdk-lifecycle-case37519941776成功
 | W06/W07 | 部分环境/资源变化、后置核验和所属进程退出已有有限事实。 | 有实际变化的环境/资源组合及真实恢复、成品与退出。局部Job0不覆盖整个宿主。 |
 | W08 与发布 | 全部必要范围已定义；分散结果和局部准入保持。 | 同episode的必要职责/八质量轴/四场景及独立净影响；职责由足够宿主能力承担或适当不介入也可成立，不能为覆盖而强行调用所有机制。须有具体oracle，不以空旗标放行。 |
 
-现为17必要scope、14活动case、13未验职责；五范围尚无活动case：environment-adaptation、resource-pressure-and-exit、system-integration、codex-lifecycle、system-impact-assessment。动态能力仍缺research-learning-and-reuse、recovery-and-lifecycle及default-host-without-extra-extensions的完整声明，诊断依赖缺失新case仅为前绑，实际capability-loss范围仍不得据此闭合；连续性另缺recovery-and-rollback/capability-loss，故声明缺口仍涉及七范围。三个有限案例准入不把这些父职责变成通过；新case前瞻登记也不增加实际通过。数量是当前映射，不是完成率或永恒上限。
+现为17必要scope、13活动case、13未验职责；五范围尚无活动case：environment-adaptation、resource-pressure-and-exit、system-integration、codex-lifecycle、system-impact-assessment。动态能力仍缺research-learning-and-reuse、recovery-and-lifecycle及capability-loss/default-host-without-extra-extensions的完整绑定；诊断一次失败转历史，有限源结果保留且不代这些父条件。连续性另缺recovery-and-rollback/capability-loss，声明缺口仍涉及七范围。三个有限案例准入不把这些父职责变成通过；新case前瞻登记也不增加实际通过。数量是当前映射，不是完成率或永恒上限。
 
 适用性为9行、6selected/3deferred，现选模式最终确定；网页聚合、桌面/手机/网页三个Chat模式及两内置IDE的必要判断保持。以具体任务职责与实际证据选择，不能仅由界面名、没有本地设备或选择器可见作支持/排除结论。`selectionFinal`已true，`functionalCompletion`、`candidateEligible`仍false，完整F/A及质量底线未改。
 
