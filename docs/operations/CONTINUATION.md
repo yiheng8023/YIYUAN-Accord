@@ -4,6 +4,10 @@
 
 ## 当前动作
 
+2026-10-07 f271 /CI37609975390已按精确head核success。Root验收端纠偏在新私有路径完成：按合同读取UTF8/BOM产物，console原字节独立保留；分别识别显式exit拒绝与exception；效果前、QA预留、保护复核后和最终落盘前后检查同一绝对截止时间，过期启动已在目录/进程创建前拒绝。两个独立合成PS控制核中文产物/hash及exit3拒绝均成功；观察文件在1.470秒落盘，所属Job0，原九份源/证据hash与mtime不变。两子进程只改继承PSModulePath仍Get-FileHash不可达，不能归因为该变量；任务进程显式加载已有Windows Utility模块后命令及已知fixture hash恢复。新封装先核测量环境，缺条件为验收受阻，不判业务缺陷。
+
+独立复审发现原件保护复核后的终判时限缺口，已补写前/写后检查，新增纯测试核跨期拒绝；9项纯测试0.014秒通过，未重跑两项合成或原业务。三项静态检查valid/errors[]，13项case定义及复用定义、其余机器合同不变。最初维修准备480秒工作跨度自身超期，原clock/拒绝保留；后续明示20秒工作/25秒终判的合成窗口不追认原限时通过。规范经验进入CONTRIBUTING，未新增产品运行时/服务/常驻规则，无安装或全局修改；原900秒case仍失败，完整业务/最小环境/F-A未闭。资料accord-qa-controller-correction-20261007-01。下一取当前尚缺的实际发布验收工作，复用已核Root观察器；不复跑原诊断、旧SDK或为格式重复样本。
+
 2026-10-07诊断新episode已结束、不得重跑：源Sol/medium/default/0.160.1在原600秒内交付三个私有实物，源自产25包/Node24.21.0 pass、host/overall unknown，输入hash/mtime不变。Root首QA读取器把PowerShell console原字节当UTF8失败；后置读取实际JSON并复用首探针，但协调收口超过原900秒，原案FAIL/not-admitted，不追认或扩限。独验复制包报告Get-FileHash不可达，源自产报告pass，现仅证观察环境差异；collision明确exit3且未改manifest，Root要求caught exception的oracle误判。其余包负例被缺失cmdlet部分遮蔽，不当有效区分。10探针及encoding-control均自然exit0/Job0，原脚本/结果/说明、保护源与失败全保留。此结束单次实例从活动必过集合转历史，17scope/全部F-A及其它13case定义不变；不是清空未验职责。ec8 CI37605131761只在identity门失败：活跃case中一个oracle辅助文件名触发旧module token；原ec8定义/hash/日志保精确Git及私有原件，退休结束实例不改身份扫描或旧判据。资料accord-prerequisite-diagnostic-20261007-01/ACTUAL-RESULT.json SHA9f1d3e8767e082fb9a3497d61cfdc8eb297fa6c2ec9035f94e23350723b7170f。下一先纯源核Root验收器的编码/环境/退出语义与绝对时钟，不重跑该业务/旧SDK，不把源实物冒整案通过。
 
 2026-10-07 ee32 /CI37596336633已按精确head核成功，原c5/50b/246e失败保持。下一新普通交付已效果前登记为v33-windows-prerequisite-diagnostic-01：任务私有PowerShell首次安装前提诊断脚本、实际JSON结果和退路说明；源包25/b076及输入/软件合同/独立九类oracle冻结，source Sol/medium≤600秒、episode≤900秒，RootQA180秒及有限用量。只用既有原生工位，富环境披露，不冒只Accord/默认用户起点；实际Node不可达为诊断子进程PATH中的依赖条件，不冒模型工具撤销、自主迁移或全capability-loss。14个活动声明只反映新增真实交付准备，不等执行/准入。派发先核真实actor/config和精确前绑；业务仅写三个私有产物，原件/共享设置/作者内容保持，0安装/启停/Trust/联网，Root不修业务。最小profile安装/认证/信任仍为另一个未获本方案许可的边界，不让它阻止现有权限内的有用交付。资料accord-prerequisite-diagnostic-20261007-01。

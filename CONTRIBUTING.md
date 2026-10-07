@@ -95,6 +95,20 @@ Coverage-count checks derive their baseline from the bound source declarations.
 Tests for an unplanned or partially allocated scope must explicitly construct
 that baseline; a later real case must not silently change their scenario.
 
+Qualify an evaluator in its actual child environment with small synthetic
+controls before starting the business episode. Check its required commands,
+output encoding and rejection semantics. Missing observer capabilities hold
+verification; they do not prove a defect in the business output. An explicit
+rejection exit code and an exception are different valid observations when the
+bound contract permits both.
+
+Read contracted JSON artifacts using their declared encoding and preserve raw
+console bytes separately. Do not infer redirected PowerShell encoding from the
+parent console or turn a console decoding error into a business failure. Bind
+one absolute episode clock with QA and recovery reserves before effects; check
+it before directory/process creation and before the final verdict. Recovery
+must not reset that clock or replay an ambiguous/completed operation for a pass.
+
 Declared executable fixture fingerprints must match their committed source bytes,
 including nested worker bindings. Rebind affected current declarations after a
 source change, preserve the original snapshots and failures, and rerun the

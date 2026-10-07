@@ -1239,6 +1239,16 @@
   },
   "developmentObservations": [
     {
+      "id": "root-oracle-controller-correction-20261007",
+      "observedAt": "2026-10-07",
+      "scope": "Root-only evaluator primitives and synthetic command controls; original diagnostic source/case/window not replayed or repaired.",
+      "observed": "Two same-controller metadata processes retained unavailable Get-FileHash even when inherited PSModulePath alone was removed. Do not attribute to that variable. Explicit loading of the existing Windows Utility module in a task process restored the command and exact independent fixture SHA.",
+      "correction": "Contracted UTF8/BOM JSON artifacts are authoritative and raw console is preserved without guessed decoding; explicit nonzero rejection exit or exception are independently classified with input preservation. Observer dependency gaps hold verification, not business failure. Absolute QA/recovery clock guards precede all effects and final verdict; expiration is not renewed automatically.",
+      "checks": "Nine pure tests0.014s pass, including expiration after protection checks and during final persistence. Independent review found the missing post-protection final check; source corrected without rerunning the actual controls. Actual expired start refused before runtime directory/process creation. Two separate synthetic controls in an explicit20s work/25s final window verified Unicode artifact/hash and explicitexit3 rejection, natural exit/Job0; observation persistence at1.470s, all nine original protected inputs unchanged. Three static checks valid/errors[], all13 exact/reuse case definitions and the remaining contract unchanged. No original business or model dispatch.",
+      "boundary": "The initial Root-only preparation480s work span itself expired and is retained; the new synthetic qualification window does not retrospectively satisfy it or the original900s case. No no-network/all-host/default-user/function/release claim. Original diagnosis FAIL/not-admitted/replayAllowedfalse and17 scope/13 current-case/F-A floors remain.",
+      "delivery": "Private qa_controller.py/qa-wrapper.ps1/dry_run.py and pure tests; practical evaluator qualification/deadline/encoding rules added to CONTRIBUTING. No source Skill/runtime/plugin/installation/trust/service change."
+    },
+    {
       "id": "ended-prerequisite-diagnostic-disposition-20261007",
       "observedAt": "2026-10-07",
       "scope": "This once-only native private diagnostic episode ended, not full function/entry/default-environment acceptance.",
