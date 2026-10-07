@@ -1239,6 +1239,17 @@
   },
   "developmentObservations": [
     {
+      "id": "isolated-native-auth-prerequisite-ready-20261008",
+      "observedAt": "2026-10-08",
+      "scope": "One task-owned native authentication prerequisite candidate; default not-granted, not dispatched. No model business, plugin installation, Hook trust, ordinary delivery or adoption acceptance.",
+      "source": "Actual CLI changed from0.160.1 to0.161.0 during preparation; owner/cause unknown, original-thread MCP still reports0.160.1. Old compiled declarations and denied freeze retained. New exact binary generates the needed0.161.0 declarations0.919s; actual version stdout and both generated-command records natural exit0/Job0. Version-text JSON consumer error retained; original completed command read, no replay.",
+      "candidate": "Root-owned READY.md/plan.ready.json in accord-isolated-auth-ready-20261007-01, SHA5fa300384e014f9be7a4c998afb20f8732de557817fe7663cb0c62494b232689;25 executable/declaration/binary sources frozen. Official CLI owns browser OAuth in a fresh profile, followed by a new refreshTokenfalse account reader and attributable exit. No old credentials/token/grant copied.",
+      "controls": "Twenty pure controls and independent source review completed. Found and corrected phase deadline/drain separation, forced-exit transient URL retention, nonshared close/work sampling and Root late-verdict state. Shared Windows tick deadlines, nonrenewing outer monotonic control, matching completion including early notification, default denial, no unsupported RPC, privacy and actual final-time checks. Pure controls are not native authentication evidence.",
+      "authority": "Mature bounded account-connection permission presented to the user; not inferred from this proposal. Human completes the official login. login240s/work300s/close330s/Root390s, one owner/one readback, partial or failed owner effects only reconciled, original failure retained; no automatic OAuth retry.",
+      "boundary": "Authentication, persistence, actual network/account/OS outcomes remain unknown until authorized execution. No shared configuration/main-model/third-party or product package/runtime/Skill change;17scope/13case/full F-A and quality/execution limits remain. Authentication is a prerequisite, not ordinary-user/full-host/release acceptance.",
+      "sourceRefs": ["https://learn.chatgpt.com/docs/app-server", "https://raw.githubusercontent.com/nodejs/node/v24.21.0/deps/uv/src/win/util.c", "https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-gettickcount64"]
+    },
+    {
       "id": "minimal-adoption-observer-trust-boundary-20261007",
       "observedAt": "2026-10-07",
       "scope": "Source preparation for a real task-owned minimal-profile adoption route; actual installation/authentication/model business not dispatched.",
