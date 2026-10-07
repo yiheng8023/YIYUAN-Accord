@@ -1239,6 +1239,16 @@
   },
   "developmentObservations": [
     {
+      "id": "isolated-native-install-preparation-20261008",
+      "observedAt": "2026-10-08",
+      "scope": "Task-owned candidate installation/native entry preparation; default not-granted and not dispatched.",
+      "observed": "Twenty-five copied package files match the current candidate source individually. The private market identity is accord-isolated-validation, using the already authenticated isolated profile. Current Desktop call metadata reports0.162.0-alpha.2; the separately frozen CLI is0.161.0. Exact b1437bcd CI37667770562 completed with11/11success.",
+      "route": "Official current inventory before one isolated marketplace registration/install; all six actual Hook declarations reconciled; only primary SessionStart and SessionEnd session trust; one ephemeral native entry with no turn/start. Full raw configuration, Hook context, cache bytes and attributable exits have distinct verification duties, with one shared90/110/150second budget.",
+      "authority": "Current source preparation and review only. The new isolated installation and necessary Hook trust require corresponding mature explicit permission. No old authentication grant/clock copied, no new login or model business.",
+      "evidence": "accord-isolated-install-20261008-01/PACKAGE-FROZEN.json,READY.md,REVIEW.json and plan.readySHA0628745cd47e25006a11ba55bf3ac54be2208670c05777dde5acd9a86953d813/62sources. Twenty pure controls and three static checks pass; independent source/delta review passes after exact Hook Node resolution, receipt projection and UTF8 corrections. Actual installation and native context remain unobserved.",
+      "boundary": "Native installation/loading is not model adoption, ordinary delivery, selected-entry completeness, all F/A, incremental value or release. Main-user package/configuration/model, third-party sources and all retained definitions/failures remain."
+    },
+    {
       "id": "isolated-auth-persistence-read-reconciliation-20261008",
       "observedAt": "2026-10-08",
       "scope": "New limited post-episode independent readonly observation of the already authorized retained authentication profile.",

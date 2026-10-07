@@ -4,6 +4,8 @@
 
 ## 当前动作
 
+2026-10-08 下一隔离安装段准备及独审已闭：已从当前候选逐项复制核对25文件，私有市场使用accord-isolated-validation，仅复用已认证profile。默认未授权的执行包先核实际空插件清单，再官方登记/安装，核六条声明、实际配置及两条必要进程内信任，只创建一次无模型轮次的原生入口，直接保全完整Hook正文和所属退出。共享90/110/150秒时钟；20项纯检查、三静态及独审PASS，修正缺失字段/null跨语言差异、Hook裸node解析和Windows UTF8读取，原准备缺口保留。plan.ready SHA0628745cd47e25006a11ba55bf3ac54be2208670c05777dde5acd9a86953d813/62源，资料accord-isolated-install-20261008-01/READY.md与REVIEW.json。当前桌面调用元数据已为0.162.0-alpha.2；执行CLI仍为独立核过的0.161.0，不混淆版本与证据。b1437bcd / CI37667770562已按精确head核11/11成功。尚未实装、授信、创建新线程或执行模型；主用户当前包/模型/设置及全部F/A保持。等待本次新安装和两信任范围权限，普通业务采用仍是下一未完责任，不能以原生注入代证。
+
 2026-10-08 独立只读认证对账已完成：用户继续后，在新任务路径用CLI0.161.0及同一已获许可保留的profile，仅initialize/config-read/account-read(refreshToken=false)。新进程直接原生投影显示chatgpt账户仍存在，file认证存储、plugins/remote-plugin/apps关闭；2.530秒正常退出，所属Windows Job进程0，30份源/旧回执未变。没有新登录、thread/turn、模型、安装或授信。这是原实例结束后的新有限只读观察，原390秒未完结论及原grant/clock保持；认证持久性前提现已有独立实证，下一才是对应权限内的插件实装/正文参与/普通结果。资料accord-auth-persistence-read-20261008-01/ROOT-VERIFICATION.json；此事实不晋全生命周期/F-A或发布资格。
 
 中断/模型切换后的原生检查点绑定曾两次返回native-call-turn-conflict，原拒绝保留；本轮用户继续刷新原生输入后已通过正常bind恢复（revision372），未绕过协议写状态。旧“待开始登录”内容已过期，当前实际后态按本节、私有ACTUAL-RESULT及独立读回恢复，不能据旧状态重发登录。
