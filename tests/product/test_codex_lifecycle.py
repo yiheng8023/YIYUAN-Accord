@@ -1645,6 +1645,79 @@ class CodexLifecycleTests(unittest.TestCase):
                 lifecycle.main()
             self.assertEqual(stopped.exception.code, 1)
 
+    def trust_boundary_run(self, changed=None):
+        """Exercise the producer's discovery-to-trust boundary without processes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            args, manifest = self.fixture(Path(tmp).resolve(), hooks=json.dumps({
+                "hooks": {"SessionStart": [{"hooks": [{"type": "command",
+                    "command": "node ${PLUGIN_ROOT}/runtime/task-checkpoint.cjs"}]}]}}))
+            installed = Path(manifest["ownedRoots"]["home"]) / "plugins/cache/fixture"
+            key = manifest["pluginId"] + ":session_start:fixture"
+            hook = {"key": key, "currentHash": "fixture-current-hash", "enabled": True,
+                    "sourcePath": str(installed / "hooks/hooks.json"), "trustStatus": "untrusted"}
+            package_path = str(installed / "skills/demo/SKILL.md")
+            standalone_path = manifest["standaloneSkill"]["path"]
+
+            class App:
+                def __init__(self, _manifest, label, *_args, **_kwargs): self.label = label
+                def initialize(self): pass
+                def close(self, _manifest): return {}
+                def rpc(self, method, _params):
+                    if method == "hooks/list":
+                        row = hook if self.label == "discovery" else {
+                            **hook, "trustStatus": "trusted", **(changed or {})}
+                        return {"data": [{"hooks": [row]}]}
+                    if method == "skills/list": return {"data": [{"skills": [
+                        {"path": package_path, "enabled": True},
+                        {"path": standalone_path, "enabled": self.label == "discovery",
+                         "pluginId": None}]}]}
+                    return {}
+
+            fixture = type("Fixture", (), {"auth_seen": False,
+                "thread": type("Thread", (), {"is_alive": lambda _self: False})(),
+                "close": lambda _self: None})()
+            def command(_manifest, label, *_args, **_kwargs):
+                if label == "package-add":
+                    lifecycle.shutil.copytree(manifest["package"], installed)
+                    return {"exitCode": 0}, {"installedPath": str(installed)}
+                return {"exitCode": 0}, {}
+            with patch.object(lifecycle, "_run_cli", side_effect=command), \
+                    patch.object(lifecycle, "_Fixture", return_value=fixture), \
+                    patch.object(lifecycle, "_App", App), \
+                    patch.object(lifecycle, "_argv", return_value=[]), \
+                    patch.object(lifecycle, "_invoked_processes_released", return_value=True), \
+                    patch.object(lifecycle, "_start_turn",
+                        side_effect=RuntimeError("after-trust-control")) as model_action:
+                result = lifecycle.run(args)
+            return result, model_action.call_count
+
+    def test_failed_trust_check_does_not_report_trusted_package(self):
+        result, calls = self.trust_boundary_run({"trustStatus": "untrusted"})
+        self.assertEqual(result["failureReason"], "hook trust mismatch")
+        self.assertIs(result["exactPackageLoadedAndTrusted"], False)
+        self.assertEqual(calls, 0)
+
+    def test_changed_hook_hash_after_discovery_stops_before_model(self):
+        result, calls = self.trust_boundary_run({"currentHash": "another-trusted-definition"})
+        self.assertEqual(result["failureReason"], "hook definition changed after discovery")
+        self.assertIs(result["exactPackageLoadedAndTrusted"], False)
+        self.assertEqual(calls, 0)
+
+    def test_changed_hook_enablement_or_identity_stops_before_model(self):
+        for changed in ({"enabled": False}, {"key": "other-component:same-event"}):
+            with self.subTest(changed=changed):
+                result, calls = self.trust_boundary_run(changed)
+                self.assertEqual(result["failureReason"], "hook state mismatch")
+                self.assertIs(result["exactPackageLoadedAndTrusted"], False)
+                self.assertEqual(calls, 0)
+
+    def test_matching_trust_is_recorded_but_not_full_episode_success(self):
+        result, calls = self.trust_boundary_run()
+        self.assertEqual(result["failureReason"], "after-trust-control")
+        self.assertEqual(result["failure"], "RuntimeError")
+        self.assertIs(result["exactPackageLoadedAndTrusted"], True)
+        self.assertEqual(calls, 1)
+
 
 # This real-process case is applicable only to POSIX; no skip or empty Windows
 # pass stands in for its syscalls. All shared lifecycle tests remain registered.

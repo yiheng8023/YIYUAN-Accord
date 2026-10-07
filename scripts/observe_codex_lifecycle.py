@@ -1723,6 +1723,7 @@ def run(args):
     env = _owned_environment(manifest)
     work_deadline = time.monotonic() + manifest["limits"]["workSeconds"]
     result = {"failure": None, "failureStage": None, "modelCalls": 0, "claimLimit": manifest["claimLimit"],
+              "exactPackageLoadedAndTrusted": False,
               "resourceController": manifest.get("resourceController", "windows-job-object"),
               "resourceEvidenceScope": _resource_scope(manifest.get("resourceController", "windows-job-object"))}
     if replacement is not None:
@@ -1771,7 +1772,6 @@ def run(args):
             raise RuntimeError("installed hooks or complete Skill inventory absent")
         result["loadedObject"] = {"installedPath": str(installed), "hookSourcePaths": hook_sources,
                                   "skillPaths": [skill["path"] for skill in package_skills]}
-        result["exactPackageLoadedAndTrusted"] = True
         trust = {hook["key"]: {"enabled": True, "trusted_hash": hook["currentHash"]} for hook in owned}
         standalone_path = manifest["standaloneSkill"]["path"]
         controls = [skill for skill in _skill_rows(skills) if Path(skill["path"]).resolve() == Path(standalone_path)]
@@ -1796,6 +1796,9 @@ def run(args):
                 raise RuntimeError("hook state mismatch")
             if any(h.get("trustStatus") != "trusted" for h in checked if h.get("enabled")):
                 raise RuntimeError("hook trust mismatch")
+            if any(h.get("currentHash") != states[h["key"]]["trusted_hash"]
+                   for h in checked if h.get("enabled")):
+                raise RuntimeError("hook definition changed after discovery")
             visible = _skill_rows(app.rpc("skills/list", {"cwds": [manifest["ownedRoots"]["workspace"]], "forceReload": True}))
             selected = [s for s in visible if Path(s["path"]).resolve() == Path(standalone_path)]
             if len(selected) != 1 or selected[0].get("enabled"):
@@ -1811,6 +1814,8 @@ def run(args):
                     raise RuntimeError("SessionEnd hook identity ambiguous")
                 states[matches[0]]["enabled"] = False
             app = launch(label, states)
+            if enabled:
+                result["exactPackageLoadedAndTrusted"] = True
             thread, turn = _start_turn(app, True, "只确认收到，不操作任何文件。")
             if app.wait_turn(thread, turn) != "completed":
                 raise RuntimeError("fixed turn did not complete")
