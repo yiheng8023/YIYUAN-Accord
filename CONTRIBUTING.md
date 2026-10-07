@@ -254,6 +254,9 @@ capture format. Distinguish an expected flag from a measurement produced by an
 executed, source-bound observer. Disclose derived measurements and their limits;
 an additional snapshot or observer is a recommendation unless a concrete gap or
 binding criterion makes it necessary. Do not add a mandatory gate by preference.
+When reviewer material is excluded from an actor, keep startup inventory inside
+the permitted roots. Directory metadata is access too; disclose it separately
+from content reads and verify access claims against actual tool calls.
 
 For serialized App Server observers, [BoundedRpc](scripts/codex_rpc.py) separates
 the work deadline from a fixed recovery window. Bind work, per-request and recovery
