@@ -1239,6 +1239,18 @@
   },
   "developmentObservations": [
     {
+      "id": "session-start-trigger-and-current-continuation-correction-20261008",
+      "observedAt": "2026-10-08",
+      "scope": "Version-bound official source reconciliation and useful current-state maintenance with ordinary authorized read-only native review; no new AppServer/model trial, installation or Hook trust effect.",
+      "source": "Official rust-v0.161.0 resolves to979011409de0a60b52f179721948e65531d26144. Retained source Git blobSHA and SHA256 checked: session/session.rs1940-1968 queues startup source; session/turn.rs322 invokes pending start hooks in run_turn; hook_runtime.rs128-181 binds the actual turn ID,820-934 records context and emits eligible synchronous nonbuiltin notifications.",
+      "consequence": "03 issued thread/start but no turn/start and additionally filtered for turnIdnull. Its expectation could not establish startup context on that source path; waiting longer or recreating empty threads cannot supply the missing trigger. This corrects the evaluator premise rather than proving defective Accord body or retro-passing03. A future check binds the actual first turn, complete text and native source, with all preceding conditions still required.",
+      "componentComparison": "Main-user123921 and candidate162254 accord-hook/task-checkpoint/main coordination body/original meta bytes match. Capability coordination and lifecycle Skill bytes differ. Same-component source comparison does not prove whole-candidate adoption, changed Skill use or equivalence of expanded installation paths.",
+      "currentStateCorrection": "CONTINUATION.md replaces obsolete login/install/host/CI next actions with current facts, authoritative permissions, seven declared binding gaps and evidence navigation. Original40742byte page retained at7258af8a and private continuation-before.md. Source-labelled observations, failed episodes, limits and all remaining duties remain.",
+      "checks": "Independent fixed-source review agrees;5pure prospective context checks include the retained old predicate rejecting a valid turn-shaped fixture, reject empty thread/null or wrong turn/source/status/text and accept only the bound source-shaped context. These are synthetic checks, not native execution evidence. Latest7258 CI37684599294 completed11/11success.",
+      "evidence": "docs/operations/PROCEDURE-v3.3.md#2026-10-08-sessionstart-source-correction and private accord-sessionstart-trigger-20261008-01/sources.json,original source files,continuation-before.md,development-check.json and pure predicate checks.",
+      "boundary": "No original grant/clock/case replay or declaration/acceptance downgrade. Installation/trust/body use/ordinary outcome/F-A/value/release remain separate; next real participation must accompany a necessary authorized ordinary result."
+    },
+    {
       "id": "isolated-candidate-install-and-entry-partial-20261008",
       "observedAt": "2026-10-08",
       "scope": "Actual authorized isolated native installation and later remaining-only process trust/empty-thread observations; original failed episodes separate.",

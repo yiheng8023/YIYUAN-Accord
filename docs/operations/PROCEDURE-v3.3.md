@@ -2618,3 +2618,34 @@ Root独立raw/SQLite对账及独立审查核实真实原件。11执行源及两�
 17scope、13职责、F/A与全部质量/情境底线保留；其余12case对象及定义摘要不变。活动13→12，六无case范围保持，continuity暴露recovery-and-rollback/capability-loss声明缺口，声明缺口范围6→7。C02和2ae的已有正向事实分别保全，不顶替N或拼接成完整验收；当前functionalCompletion/candidateEligible仍false。新增历史身份/底线回归，既有诊断计数按真实集合更新，首轮一处旧6项计数断言失败保留。
 
 最终12项针对性测试7.003秒通过，三静态valid/errors[]及独立审查通过；首轮旧计数失败日志保持。DISPOSITION SHA `b1be88fdd4dad89c5e8f084aaa818dba2e3917fbdd2d343bf4bfdf6c0a6ee234`，REMAINING SHA `14017fcc01db47019399b319096ec4b7dfbc5a4ac9af4dc6c4759c0cbb65e0cc`逐项区分可复用事实、真实剩余职责与纯声明缺口。源码/业务机制未变，没有增加新实例或批准任何执行。
+
+
+## 2026-10-08 SessionStart source correction
+
+结论：先前零轮次探针的预期不成立。官方 `rust-v0.161.0` 源码在创建会话时排队启动事件，在实际轮次进入相应阶段后执行 Hook；该启动路径关联实际 turn ID。因此，仅发出 `thread/start` 并等待 `turnId=null` 的完整正文不能承担这项核验。
+
+### 固定来源与调用链
+
+官方标签解析为提交 `979011409de0a60b52f179721948e65531d26144`。保留文件按 Git blob SHA 和本地 SHA256 双重核对；本机原生初始化记录报告 `0.161.0`。这是版本对应的源码解释，与本次原始请求相互对照，不把当前网站文档或其它版本的行为直接移植过来。
+
+1. [会话创建，session.rs:1940](https://github.com/openai/codex/blob/979011409de0a60b52f179721948e65531d26144/codex-rs/core/src/session/session.rs#L1940)：按初始历史选定 startup/resume/fork/clear，并在1968行排队。这里没有执行启动 Hook。
+2. [实际轮次，turn.rs:322](https://github.com/openai/codex/blob/979011409de0a60b52f179721948e65531d26144/codex-rs/core/src/session/turn.rs#L322)：`run_turn` 在前序上下文、Skill/插件准备成立后调用待运行的启动 Hook。开启轮次是这条路径的必要条件，不保证前序条件或 Hook 一定成功。
+3. [启动执行，hook_runtime.rs:128](https://github.com/openai/codex/blob/979011409de0a60b52f179721948e65531d26144/codex-rs/core/src/hook_runtime.rs#L128)：取出排队来源，构造请求，并在170行以实际 `turn_context.sub_id` 调用启动 Hook。普通主线程与所述子代理路径分别选择 SessionStart/SubagentStart。
+4. [通知与正文，hook_runtime.rs:820](https://github.com/openai/codex/blob/979011409de0a60b52f179721948e65531d26144/codex-rs/core/src/hook_runtime.rs#L820)：执行前后产生对应事件，返回的非空additional contexts进入对话记录；875行限制通知为非 builtin、同步 Hook，891行启动事件明确带关联 turn ID。接口字段允许 null，不代表当前启动执行路径返回 null。
+
+### 与原实例对照
+
+`accord-isolated-entry-20261008-03` 原请求只有 initialize、config/read、hooks/list、skills/list、account/read、thread/start；没有 turn/start。其调用者还将正文事件限定为 `turnId === null`。这两个条件解释了原等待方案为什么不能证明正文参与；不能再以延长等待或重复创建空线程解决。
+
+保留03原90秒工作限、92.547秒退出、0模型轮次、未观测正文、unsubscribe请求及ACK未证、native自然退出0/owner退出1/未强杀/所属Job0。原02有效安装、两段失败、各自授权与时钟不改；不追认原实例通过。
+
+新纯证据谓词要求真实 thread/turn/source/full-text 对应，拒绝没有轮次、空线程通知、null或其它轮次、错误来源/失败状态/截断正文。五项纯检查通过，包含原谓词拒绝合法轮次形状的对照；仅证明谓词边界，没有启动原生宿主或模型，也没有补造回执。
+
+### 当前路线取舍
+
+- 后续需要观测启动正文时，应连接一项实际必要的普通任务，绑定其真实首轮与通知。不得为观察 Hook 制造无用业务，也不得越过用户当前模型、数据、信任或费用边界。
+- 安装、目录发现、信任、运行、正文进入上下文、实际采用和交付分别核实。前序实证可按未变来源复用，不把所有证据重新跑一遍。
+- 当前主用户安装版与候选的 `accord-hook.cjs`、`task-checkpoint.cjs`、主协调正文及元指导原件逐字相同；能力协调和生命周期 Skill 有变化。此比较支持不因本次探针错误改写相同入口代码，不能代替整个候选、变化 Skill 或其它入口的采用证据；展开的引用路径也仍属于各自安装。
+- 当前接续页混有已经完成的登录/安装下一步，以及过期宿主和CI值，应替换为当前事实与未完责任。完整旧页保留在Git `7258af8a`及私有原件，不让历史步骤继续指挥当前执行。
+
+本次源核对与独立审查均不改变17范围、13活动案例、完整F/A、发布授权条件或任何原失败。资料位于私有 `accord-sessionstart-trigger-20261008-01`：`sources.json`、官方源文件、`continuation-before.md`、`development-check.json`及纯谓词检查。

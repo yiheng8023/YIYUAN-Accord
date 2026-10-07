@@ -111,6 +111,13 @@ an execution receipt without establishing its trigger. Keep business deadlines
 separate from the bounded release of already-owned resources, preserving source,
 identity, authority and input checks.
 
+For Codex0.161 startup context, session creation queues the start source;
+the normal turn path runs the pending Hook and associates its actual turn ID.
+A thread-only probe or null-turn-only filter cannot qualify that path. Bind the
+native first turn when a useful authorized task needs the observation; do not add
+an otherwise unnecessary model task just to exercise a Hook. See the fixed-source
+[trigger review](docs/operations/PROCEDURE-v3.3.md#2026-10-08-sessionstart-source-correction).
+
 Read contracted JSON artifacts using their declared encoding and preserve raw
 console bytes separately. Do not infer redirected PowerShell encoding from the
 parent console or turn a console decoding error into a business failure. Bind
