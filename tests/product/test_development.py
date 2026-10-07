@@ -1069,16 +1069,23 @@ class DeclarationCaseBindingTests(unittest.TestCase):
         summary = report["declarationSummary"]
         self.assertEqual(summary["scope"], "current-v3.3-case-binding-declarations-only")
         self.assertIn("No evidence observed", summary["claimLimit"])
+        # This CLI runs against the live declaration, not a frozen twelve-case
+        # fixture. New legitimate cases must change its counts and gap rows.
+        policy = self.contract["acceptance"]["admission"]
+        required = {(scope_id, claim) for claim, ids in policy["requiredCoverage"].items()
+                    for scope_id in ids}
+        declared = {(scope["id"], claim) for scope in policy["scopes"] for claim in scope["claims"]}
+        bound = {(case["scope"], claim) for case in policy["cases"] for claim in case["claims"]}
+        without_cases = {scope_id for scope_id, claim in required - bound}
         self.assertEqual({key: summary[key] for key in (
-            "coverageTotal", "coverageDefined", "coverageUnbound", "coverageWithoutCases",
-            "coverageWithCaseBindingGaps", "casesDefined")}, {
-                "coverageTotal": 17, "coverageDefined": 17, "coverageUnbound": 0,
-                "coverageWithoutCases": 6, "coverageWithCaseBindingGaps": 7, "casesDefined": 12})
+            "coverageTotal", "coverageDefined", "coverageUnbound", "coverageWithoutCases", "casesDefined")}, {
+                "coverageTotal": len(required), "coverageDefined": len(required & declared),
+                "coverageUnbound": len(required - declared), "coverageWithoutCases": len(without_cases),
+                "casesDefined": len(policy["cases"])})
         gaps = summary["caseBindingGaps"]
+        self.assertGreater(summary["coverageWithCaseBindingGaps"], 0)
         self.assertEqual({scope_id for scope_id, claims in gaps.items()
-                          if any(not gap["caseIds"] for gap in claims.values())}, {
-            "v33-dynamic-model-routing", "v33-system-integration", "v33-codex-lifecycle",
-            "v33-system-impact-assessment", "v33-resource-pressure-and-exit", "v33-environment-adaptation"})
+                          if any(not gap["caseIds"] for gap in claims.values())}, without_cases)
         # The ended one-use recovery instance is history, not a future PASS obligation.
         continuity = gaps["v33-autonomous-continuity"]["function"]
         self.assertEqual(continuity["caseIds"], ["v33-continuity-catalog-01"])

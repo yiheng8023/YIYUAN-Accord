@@ -1239,6 +1239,17 @@
   },
   "developmentObservations": [
     {
+      "id": "current-cli-declaration-preflight-correction-20261007",
+      "observedAt": "2026-10-07",
+      "scope": "Only the live current-declaration CLI regression and existing CI early checks; no new case or behavior claim.",
+      "source": "50b/CI37581888107 completed failure in nine product jobs; Ubuntu3.12 job112663212063 full official raw log SHA009c92c5c21f7fdf17c44eb70094fb031dfc1ed4f891fc31372fb7e3a14abf69 and Windows3.14 job112663212036 agree on one test. Two native jobs succeeded; admission preflight succeeded.",
+      "observation": "DeclarationCaseBindingTests outside the prior six-test admission preflight retained12 cases/6 empty scopes and empty allocation after the prospectively registered native case made13/5. Local original test reproduced RED in0.850s.",
+      "correction": "The live CLI test binds counts and empty-scope rows to independently enumerated source declarations, preserving no-observer qualification limits and historical/explicit synthetic counterexamples. Add this existing CLI test to the early CI step, instead of discovering its stale fixture only after the full suite.",
+      "checks": "All seven CLI declaration tests pass in4.895s; targeted existing admission and workflow/source checks retained separately. The independent read-only audit found no additional source-registration count omissions; numeric synthetic and historical tests remain.",
+      "preserved": "Runtime/source25/packageb076/installed123921,17 parent scopes/13 active cases and definition/reuse digests, original failures and consumed authority, F/A and completion/eligibility remain unchanged. CI results stay bound to their immutable heads; no canceled run or business replay.",
+      "qualification": "Necessary test/feedback-loop correction, not environment/resource behavior acceptance or release readiness. 246e CI was still in_progress when read; a new corrected commit requires its own hosted result."
+    },
+    {
       "id": "resource-environment-method-binding-correction-20261007",
       "observedAt": "2026-10-07",
       "scope": "Only the two currently unallocated resource/environment parent scopes and their declaration matching; no new active case or behavior admission.",

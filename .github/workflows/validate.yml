@@ -62,6 +62,7 @@ jobs:
       - name: Check declared case gaps before the full suite
         run: >-
           python -B -m unittest -v
+          tests.product.test_development.DeclarationCaseBindingTests.test_current_static_cli_exposes_gaps_without_promoting_qualification
           tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_current_declaration_without_observer_reports_actual_missing_coverage
           tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_partial_allocation_case_keeps_uncovered_duties_and_scenarios_open
           tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_diagnostic_retains_unplanned_scope_and_scenario_gaps
