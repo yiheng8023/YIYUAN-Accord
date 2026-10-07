@@ -63,6 +63,9 @@ jobs:
         run: >-
           python -B -m unittest -v
           tests.product.test_development.DeclarationCaseBindingTests.test_current_static_cli_exposes_gaps_without_promoting_qualification
+          tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_ended_resource_cases_keep_their_exact_history_and_scope_floors
+          tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_ended_fixed_sdk_cases_preserve_original_definitions_and_scope_floors
+          tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_ended_release_case_preserves_failure_identity_and_continuity_floor
           tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_current_declaration_without_observer_reports_actual_missing_coverage
           tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_partial_allocation_case_keeps_uncovered_duties_and_scenarios_open
           tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_diagnostic_retains_unplanned_scope_and_scenario_gaps

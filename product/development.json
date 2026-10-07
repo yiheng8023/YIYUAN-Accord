@@ -1239,6 +1239,25 @@
   },
   "developmentObservations": [
     {
+      "id": "isolated-metadata-skill-control-20261007",
+      "observedAt": "2026-10-07",
+      "scope": "Two prospectively bound metadata-only native processes; no business/model, auth login, plugin install/trust, source patch or shared config change. No active case or functional admission.",
+      "source": "Current CLI0.160.1 exact binary9e7c59c0 and Nodeba4e6d11; first raw SHAa5d3124d95396a8dc58def93e15bc18aa8ea5b92bc597f3ddc3c867dd4e8ac39; controlled raw SHA1f44f6a9683b2de0c694761b1b8b3da1783129d3b15c33a4d0ade70e31776edd. Private binding/read/raw/config/OS records and independent native review retained.",
+      "counterexample": "Private CODEX_HOME/USERPROFILE/HOME/XDG roots with plugins/remote_plugin/apps disabled still exposed38 enabled user Skills. Environment variables and empty plugin/MCP/Hook lists alone do not establish minimal capability exposure.",
+      "control": "A separate task-owned profile bound38 exact canonical SKILL.md selectors from original native metadata, enabled=false through supported process config. Actual config/sessionFlags plus skills/list show same38 all disabled and five system Skills enabled; user/system config layers empty; plugins/MCP/hooks empty. No author Skill or global setting was altered.",
+      "preservation": "First14 and second55 protected inputs unchanged; both native and outer-owned Windows Jobs naturally closed with0 active processes,1.258/1.255s. No auth files. Before runtime cleanup,65 files per profile retained byte-for-byte; removed only four exact owned runtime roots per profile. Raw/original counterexample, bindings and source code retained.",
+      "qualification": "Effective process exposure control only. Disabled is not uninstalled; no clean-machine, no-network, active/adopted Accord, implicit Skill use, ordinary default-host outcome, model autonomy, F/A or release verdict. Need actual useful result and candidate/control/permission binding before next new business. Do not re-run these ended metadata reads."
+    },
+    {
+      "id": "ended-ack-test-live-scope-compatibility-correction-20261007",
+      "observedAt": "2026-10-07",
+      "scope": "Existing historical failure compatibility test and CI preflight only.",
+      "source": "c5/CI37588925119 failed nine product jobs at the same test_ended_release_case_preserves_failure_identity_and_continuity_floor; two native jobs succeeded. Full Ubuntu3.12 job112685485924 raw log SHA1c6a5d41ad13eb113616f7975a93e8d1c33d478767a42694778b8c11fc175fc1 and local2.823s RED retained.",
+      "correction": "Keep exact retired ACK case object/definition/file hashes, original failed verdict/one attempt/consumed authority/replay denial and current continuity/quality floors. Do not force every other live parent implementation and later user-selected subjects to equal the old snapshot. Add existing ended resource/SDK/ACK checks to the CI early step.",
+      "checks": "Three direct historical preservation regressions passed3.358s. Full current-source preflight and static/invariance results bound separately before commit; no result promotion or original-business replay.",
+      "preserved": "All17 scopes/13 active case definitions and criteria, package/source25/b076/installed123921, native outcomes, original failures/permissions and F/A remain unchanged. This corrects a test-only overconstraint, not a functional or hosted verdict."
+    },
+    {
       "id": "current-cli-declaration-preflight-correction-20261007",
       "observedAt": "2026-10-07",
       "scope": "Only the live current-declaration CLI regression and existing CI early checks; no new case or behavior claim.",

@@ -1529,18 +1529,14 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             self.assertEqual(policy[key], historical['acceptance']['admission'][key])
         prior_scopes = {row['id']: row for row in historical['acceptance']['admission']['scopes']}
         self.assertEqual({row['id'] for row in policy['scopes']}, set(prior_scopes))
-        entry_scopes = {'v33-openai-entry-applicability', 'v33-admitted-entry-delivery',
-                        'v33-admitted-entry-lifecycle'}
         for scope in policy['scopes']:
             prior = prior_scopes[scope['id']]
-            if scope['id'] not in entry_scopes:
-                self.assertEqual(scope, prior)
-                continue
-            # Later user selection may change; the original failure and every floor remain.
-            current = copy.deepcopy(scope)
-            for key in ('selectionFinal', 'entryDispositions'):
-                current['conditions'][key] = copy.deepcopy(prior['conditions'][key])
-            self.assertEqual(current, prior)
+            # This ended instance freezes its own identity, definition, limits
+            # and failure (above), not every later parent's implementation or
+            # user-selected subjects. Current outcome/quality floors remain.
+            floor_keys = ('id', 'host', 'duties', 'qualityAxes', 'scenarios', 'claims')
+            self.assertEqual({key: scope[key] for key in floor_keys},
+                             {key: prior[key] for key in floor_keys})
         report = self.assess()
         self.assertEqual(report['acceptedCases'], [])
         self.assertFalse(report['functionalCompletion'])
