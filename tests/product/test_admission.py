@@ -1243,8 +1243,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                         declared = set().union(*(set(case[dimension]) for case in allocated))
                         self.assertEqual(set(gap['missingDimensions'][dimension]),
                                          set(scope[dimension]) - declared)
-                    self.assertTrue({'default-host-without-extra-extensions', 'capability-loss'}
-                                    <= set(gap['missingDimensions']['scenarios']))
+                    # The source-derived missing set above remains the oracle.
+                    # A newly declared dependency-loss sample must not freeze
+                    # this live view at the earlier scenario allocation.
                 elif scope_id == 'v33-system-integration':
                     self.assertEqual(gap['caseIds'], [])
                     self.assertIn('recovery-and-rollback', gap['missingDimensions']['duties'])
