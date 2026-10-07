@@ -4,6 +4,8 @@
 
 ## 当前动作
 
+2026-10-07 R2/R3源纠偏：两个无活动case的资源/环境父范围已分离旧SDK/Windows方法与功能判据，主体/配置/真实变化来源仍须效果前绑定。准入器显式maximum限额允许更严格完整整数预算，原600+20、45+10及Token上界和全部职责/质量/权限不变；其它条件、旧实例及失败仍精确保留。此为必要源码修正，包含原生独立源审查，无新行为案例、SDK/安装/信任或验收通过。当前50b CI独立运行，不阻安全源码工作；验收/发布仍须精确修正提交的托管结果。
+
 2026-10-07 r39判断能力取舍已获用户同意：通用判断/选择/反馈/纠偏保留，确定规则用代码/原生事实，语义工作复用足够的现有模型；Jev、Decisions等只按实际可达、授权和收益评估，不默认外挂专用模型或新账户/key/服务/调用，不排定固定接入。平台API公测不证明本机宿主已采用；开发侧试用不转用户默认成本。源码/安装/主模型/原试验和全部验收不变，本次无API、模型、安装或信任动作。PLAN/基线/验收/架构/中英README及机器投影按同一决定对齐，SDK与普通native原件保持原条件。
 
 用户已明确：Stop自动接续是过去临时开发需求，不是Accord产品需求，也不是闭环必然条件。当前撤回产品Stop注册、自动dispatch及后来增加的预算/env链路；任务输入/状态、CAS、暂停、未知及完成保护和按需自动交接保留。canContinue兼容为判断记录，不能驱动执行或新回合；历史callback仅为兼容识别，不签发新callback。全局同步涵盖运行时/镜像/adapter/入口验证/MCP/Skills/架构/验收/计划及机器投影。
@@ -72,7 +74,7 @@ Windows本次实际执行已闭：a5ac5631 / sdk-lifecycle-case37519941776成功
 | W06/W07 | 部分环境/资源变化、后置核验和所属进程退出已有有限事实。 | 有实际变化的环境/资源组合及真实恢复、成品与退出。局部Job0不覆盖整个宿主。 |
 | W08 与发布 | 全部必要范围已定义；分散结果和局部准入保持。 | 同episode的必要职责/八质量轴/四场景及独立净影响；职责由足够宿主能力承担或适当不介入也可成立，不能为覆盖而强行调用所有机制。须有具体oracle，不以空旗标放行。 |
 
-现为17必要scope、12活动case、13未验职责；六范围尚无活动case：dynamic-model-routing、environment-adaptation、resource-pressure-and-exit、system-integration、codex-lifecycle、system-impact-assessment。连续性另缺recovery-and-rollback/capability-loss的当前声明绑定，故声明缺口涉及七范围；移除失败实例不把这些职责变成通过。新case的前瞻登记不增加实际通过；数量是当前映射，不是完成率或永恒上限。
+现为17必要scope、13活动case、13未验职责；五范围尚无活动case：environment-adaptation、resource-pressure-and-exit、system-integration、codex-lifecycle、system-impact-assessment。动态能力另缺research-learning-and-reuse、recovery-and-lifecycle及capability-loss/default-host-without-extra-extensions的完整绑定；连续性另缺recovery-and-rollback/capability-loss，故声明缺口仍涉及七范围。三个有限案例准入不把这些父职责变成通过；新case前瞻登记也不增加实际通过。数量是当前映射，不是完成率或永恒上限。
 
 适用性为9行、6selected/3deferred，现选模式最终确定；网页聚合、桌面/手机/网页三个Chat模式及两内置IDE的必要判断保持。以具体任务职责与实际证据选择，不能仅由界面名、没有本地设备或选择器可见作支持/排除结论。`selectionFinal`已true，`functionalCompletion`、`candidateEligible`仍false，完整F/A及质量底线未改。
 

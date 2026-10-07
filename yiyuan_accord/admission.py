@@ -87,6 +87,23 @@ def _text(value):
     return isinstance(value, str) and 0 < len(value.strip()) <= 4096
 
 
+def _within_limit_ceiling(actual, maximum):
+    if isinstance(maximum, dict):
+        return (bool(maximum) and isinstance(actual, dict) and actual.keys() == maximum.keys()
+                and all(_within_limit_ceiling(actual[key], value) for key, value in maximum.items()))
+    return type(actual) is int and type(maximum) is int and 0 < actual <= maximum
+
+
+def _conditions_match(actual, required):
+    # Only an explicit typed ceiling permits smaller budgets. Other conditions,
+    # including legacy limits, still bind exactly; observed receipts bind the
+    # actual case budget, not this parent ceiling.
+    return all(key in actual and (
+        _within_limit_ceiling(actual[key], value)
+        if key == 'limits' and required.get('limitSemantics') == 'maximum'
+        else _json(actual[key]) == _json(value)) for key, value in required.items())
+
+
 def _refs(value, known):
     return (isinstance(value, list) and all(isinstance(v, str) for v in value)
             and len(value) == len(set(value)) and set(value) <= known)
@@ -350,6 +367,11 @@ def admission_contract_errors(contract):
                     or not isinstance(scope.get("conditions"), dict) or not scope["conditions"]
                     or any(v is None for v in scope["conditions"].values())):
                 return ["evidence scope must bind its entry, relevant environment axes and required coverage"]
+            conditions = scope['conditions']
+            if ('limitSemantics' in conditions and (
+                    conditions['limitSemantics'] != 'maximum' or 'limits' not in conditions
+                    or not _within_limit_ceiling(conditions['limits'], conditions['limits']))):
+                return ["scope limit ceiling must declare maximum positive integer budgets"]
             scopes[scope["id"]] = scope
         if current and any(scope["host"] not in policy["requiredHosts"] for scope in scopes.values()):
             return ["current scopes cannot silently activate a deferred delivery host"]
@@ -391,8 +413,7 @@ def admission_contract_errors(contract):
                     or current and parent in _ENTRY_PARENT_SCOPES
                     and case["subjectEntries"] != scope["subjectEntries"]
                     or any(not set(case[k]) <= set(scope[k]) for k in sets)
-                    or any(k not in case["conditions"] or _json(case["conditions"][k]) != _json(v)
-                           for k, v in scope["conditions"].items())):
+                    or not _conditions_match(case["conditions"], scope["conditions"])):
                 return ["evidence case differs from its declared claim scope"]
             if "packageFiles" in case:
                 _sparse_package_files(contract, case)

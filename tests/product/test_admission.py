@@ -1299,8 +1299,15 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 self.assertEqual(digest, declaration['caseObjectSha256'])
                 scope = next(r for r in policy['scopes'] if r['id'] == old['scope'])
                 prior = next(r for r in historical['acceptance']['admission']['scopes'] if r['id'] == old['scope'])
-                self.assertEqual({k:v for k,v in scope.items() if k != 'conditions'},
-                                 {k:v for k,v in prior.items() if k != 'conditions'})
+                # Preserve outcome floors and exact historical definitions,
+                # not the old sample's SDK/Windows implementation choices.
+                floor_keys = ('id', 'host', 'duties', 'qualityAxes', 'scenarios', 'claims')
+                self.assertEqual({k:scope[k] for k in floor_keys},
+                                 {k:prior[k] for k in floor_keys})
+                self.assertEqual(scope['entry'], 'cx-desktop')
+                self.assertEqual(scope['conditions']['limitSemantics'], 'maximum')
+                self.assertEqual(scope['conditions']['collaborationMode'], 'default')
+                self.assertIs(scope['conditions']['goalModeActive'], False)
                 self.assertEqual(scope['conditions']['limits'], {
                     'wholeWorkSeconds': 600, 'recoverySeconds': 20,
                     'workerInvocationSeconds': 45, 'workerRecoverySeconds': 10,
@@ -1325,6 +1332,112 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report['functionalCompletion'])
         case['conditions']['limits']['wholeWorkSeconds'] += 1
         self.assertTrue(admission_contract_errors(contract))
+
+    def bounded_resource_declaration(self, scope_id='v33-environment-adaptation'):
+        contract = copy.deepcopy(self.contract)
+        policy = contract['acceptance']['admission']
+        scope = next(row for row in policy['scopes'] if row['id'] == scope_id)
+        # A typed ceiling is a prospective policy fixture, never host evidence.
+        scope['conditions']['limitSemantics'] = 'maximum'
+        case = {key: copy.deepcopy(scope[key]) for key in
+                ('host', 'entry', 'duties', 'qualityAxes', 'scenarios', 'claims', 'conditions')}
+        case.update(id='bounded-resource-policy-fixture', scope=scope_id,
+                    oracle='Synthetic declaration; no execution or acceptance.',
+                    oracleFiles=['docs/operations/ACCEPTANCE-v3.3.md', 'docs/operations/PLAN-v3.3.md'],
+                    maxAgeSeconds=3600, expected=copy.deepcopy(policy['cases'][0]['expected']))
+        policy['cases'].append(case)
+        return contract, scope, case
+
+    def test_explicit_resource_ceilings_accept_stricter_prospective_budgets(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        for scope_id in ('v33-resource-pressure-and-exit', 'v33-environment-adaptation'):
+            contract, scope, case = self.bounded_resource_declaration(scope_id)
+            case['conditions']['limits'] = {
+                'wholeWorkSeconds': 240, 'recoverySeconds': 10,
+                'workerInvocationSeconds': 30, 'workerRecoverySeconds': 5,
+                'usageCaps': {'totalTokens': 1000000, 'uncachedInputTokens': 100000, 'outputTokens': 8000}}
+            with self.subTest(scope=scope_id):
+                self.assertEqual(admission_contract_errors(contract), [])
+                self.assertEqual(scope['conditions']['limits']['wholeWorkSeconds'], 600)
+
+    def test_resource_ceilings_reject_overflow_missing_unknown_and_noninteger_limits(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        alterations = (
+            lambda limits: limits.update(wholeWorkSeconds=601),
+            lambda limits: limits['usageCaps'].update(outputTokens=14001),
+            lambda limits: limits.pop('recoverySeconds'),
+            lambda limits: limits.update(unknownBudget=1),
+            lambda limits: limits['usageCaps'].pop('uncachedInputTokens'),
+            *(lambda limits, value=value: limits.update(wholeWorkSeconds=value)
+              for value in (0, -1, True, '240', 240.0, None)),
+        )
+        for index, alter in enumerate(alterations):
+            contract, _, case = self.bounded_resource_declaration()
+            alter(case['conditions']['limits'])
+            with self.subTest(alteration=index):
+                self.assertTrue(admission_contract_errors(contract))
+
+    def test_limit_ceiling_does_not_relax_other_conditions_or_legacy_exact_binding(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        contract, scope, case = self.bounded_resource_declaration()
+        case['conditions']['collaborationMode'] = 'plan'
+        self.assertTrue(admission_contract_errors(contract))
+        contract, scope, case = self.bounded_resource_declaration()
+        scope['conditions'].pop('limitSemantics')
+        case['conditions'].pop('limitSemantics')
+        case['conditions']['limits']['wholeWorkSeconds'] = 240
+        self.assertTrue(admission_contract_errors(contract))
+
+    def test_invalid_limit_policy_cannot_silently_fall_back_to_exact_binding(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        for invalid in ('minimum', 'unknown', True):
+            contract, scope, case = self.bounded_resource_declaration()
+            scope['conditions']['limitSemantics'] = case['conditions']['limitSemantics'] = invalid
+            with self.subTest(policy=invalid):
+                self.assertTrue(admission_contract_errors(contract))
+        contract, scope, case = self.bounded_resource_declaration()
+        scope['conditions']['limits'] = case['conditions']['limits'] = {}
+        self.assertTrue(admission_contract_errors(contract))
+
+    def test_resource_subject_method_is_bound_per_case_without_relabelling_observer(self):
+        from yiyuan_accord.admission import admission_contract_errors
+        contract, scope, case = self.bounded_resource_declaration()
+        self.assertEqual(scope['entry'], 'cx-desktop')
+        self.assertFalse({'entryProtocol', 'operatingSystem', 'windowsSandbox'} & scope['conditions'].keys())
+        case['conditions'].update(subjectEntry='cx-cli', operatingSystem='Linux',
+                                  entryProtocol='ordinary-native', permissionPolicy='read-only')
+        self.assertEqual(admission_contract_errors(contract), [])
+        case['conditions']['businessNetwork'] = True
+        self.assertTrue(admission_contract_errors(contract))
+        case['conditions']['businessNetwork'] = False
+        case['entry'] = 'cx-sdk'
+        self.assertTrue(admission_contract_errors(contract))
+
+    def test_resource_observation_must_match_case_budget_not_just_parent_ceiling(self):
+        contract, _, case = self.bounded_resource_declaration()
+        case['conditions']['limits']['wholeWorkSeconds'] = 240
+        for changed_phase in ('observe', 'recheck'):
+            def observer(request):
+                response = self.observer(request)
+                if request['phase'] == changed_phase:
+                    if changed_phase == 'observe':
+                        conditions = next(row['conditions'] for row in response['records']
+                                          if row['case'] == case['id'])
+                    else:
+                        conditions = response['conditions'][case['id']]
+                    # Still within the parent 600 ceiling, but not the actual
+                    # prospectively bound 240-second case. Never borrow it.
+                    conditions['limits']['wholeWorkSeconds'] = 241
+                return response
+            with self.subTest(phase=changed_phase):
+                with self.history():
+                    # The observer must see a committed synthetic subject;
+                    # otherwise declaration drift stops it before this gate.
+                    self.commit(contract)
+                    report = self.assess(contract, observer)
+                    self.assertNotIn(case['id'], report['acceptedCases'])
+                    self.assertTrue(report['caseRejections'][case['id']])
+                    self.assertFalse(report['candidateEligible'])
 
     def test_ended_fixed_sdk_cases_preserve_original_definitions_and_scope_floors(self):
         from yiyuan_accord.admission import _definition

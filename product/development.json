@@ -1239,6 +1239,17 @@
   },
   "developmentObservations": [
     {
+      "id": "resource-environment-method-binding-correction-20261007",
+      "observedAt": "2026-10-07",
+      "scope": "Only the two currently unallocated resource/environment parent scopes and their declaration matching; no new active case or behavior admission.",
+      "source": "Exact baseline50b281cd3913a0933e62805f991683cc1a0413dc and protected seven-file before snapshot; necessary R2/R3 source correction under existing repository authority.",
+      "observation": "The existing smaller-budget contradiction was reproduced against maximum wording. New typed-policy fixtures also demonstrate the missing policy/empty-limit validation before this implementation. The parent also retained SDK/Windows/CLI-version methods although the current outcome contract permits suitable supported routes.",
+      "correction": "Explicit limitSemantics maximum validates complete same-shaped positive-integer bounds. Smaller prospective limits are allowed; overflow, missing or extra fields, invalid types/policy and all other condition drift are rejected. Observed/rechecked records must still match the exact case budget. Separate desktop observer from actual subject host/runtime/entry/OS/permissions and source-bound change; CLI only where applicable.",
+      "preserved": "All original numeric ceilings, two parent duty/quality/scenario/claim floors, remaining15 scopes, 13 active case objects and definition/reuse digests, old ended instances/failures/authority, source25/packageb076, installed123921 and full F/A remain unchanged.",
+      "review": "A bounded independent native source review found one leftover mandatory CLI-version phrase; Root corrected it to actual host/runtime version with CLI where applicable. Pure checks and source observations are recorded in accord-resource-scope-correction-20261007-01; no replay or new behavioral execution.",
+      "qualification": "Source correction only. Both scopes still have no activity-bound case; default environment, genuine adaptation/resources, full integration/net impact and selected-entry adoption remain to be demonstrated. No release eligibility or global capability verdict."
+    },
+    {
       "id": "current-allocation-diagnostic-fixture-correction-20261007",
       "source": "r39 CI37578886188 failed nine product jobs at the six-test declaration-gap precheck; both native lifecycle jobs succeeded. Complete official Ubuntu3.12 log and local three-test red reproduction retained.",
       "cause": "A new prospectively bound real allocation case reduced unplanned scopes from6 to5. Three tests still assumed a no-case allocation baseline; an additional full-suite history check also incorrectly expected that scope to remain empty.",
@@ -5991,7 +6002,7 @@
         },
         {
           "host": "codex",
-          "entry": "cx-sdk",
+          "entry": "cx-desktop",
           "qualityAxes": [
             "compliance-and-safety",
             "functional-coverage",
@@ -6011,19 +6022,17 @@
             "function"
           ],
           "conditions": {
-            "entryProtocol": "app-server",
-            "operatingSystem": "Windows",
-            "ephemeral": false,
-            "permissionPolicy": "workspace-write/never; business network disabled",
-            "windowsSandbox": "elevated",
-            "userConfig": "Existing effective user configuration and already trusted installed plugin; before/after hashes and exact owned-workspace registration recovery retained privately. No source Hook injection or tool-preapproval bypass.",
+            "observerCarrierRole": "Codex Desktop coordinates source and independent evidence review. This entry identifies the observer, not adoption or execution by a subject entry; each actual actor and subject path needs its own prebound evidence.",
+            "subjectBinding": "Before effects, bind the actual supported host, selected subject entry/mode, protocol or native path, operating system, model/effort, permission and sandbox controls, exact candidate/package and effective configuration. SDK, Windows Job and thread/goal/get are supported methods, not whole-function prerequisites or proof of another entry.",
+            "businessNetwork": false,
+            "userConfig": "Preserve the effective user environment, already authorized components, current goals, pauses, unfinished responsibilities and usable recovery sources. Retain relevant before/after configuration bytes or absence, inputs and sources; no source Hook injection, tool-preapproval bypass, shared reset or silent restoration of user settings.",
             "package": "Exact current Git package and native installed bytes bound before this new episode; prior episodes retain their original conditions.",
             "collaborationMode": "default",
             "goalModeActive": false,
-            "modeEvidence": "Native thread/goal/get before and after plus full intervening events and actual turn configuration; unavailable remains unknown, never enable a mode to inspect it.",
-            "executionBinding": "Before dispatch, bind the actual supported CLI version, task-appropriate worker model/effort, immutable candidate/package, actual host/entry, protected inputs, writer ownership, observer and recovery actor. This scope is not an executable case or permission.",
+            "modeEvidence": "Bind supported native mode/Goal observations before and after, intervening events and actual actor configuration; SDK thread/goal/get is one sufficient method, not a required query for every route. Unavailable controls remain unknown; never enable a mode to inspect it.",
+            "executionBinding": "Before dispatch, bind the actual supported host/runtime version (CLI version where applicable), task-appropriate worker model/effort, immutable candidate/package, actual subject host/entry and observer, protected inputs, writer ownership and recovery actor. This scope is not an executable case or permission.",
             "ordinaryUse": "Each new case binds a necessary ordinary local task and its exact input/turn count. Do not prescribe Accord internals or obtain a pass through evaluator rescue, rewriting protected tools, or replaying the ended batch.",
-            "resourceTransition": "Prospectively bind a real owned-worker capacity change, applicable OS observations, reusable partial results and sufficient execution choices. Preserve native-sufficient counterexamples; do not manufacture an allocation failure. Actual limits and natural/forced exit must be reported truthfully.",
+            "resourceTransition": "Prospectively bind a real attributable resource/capacity transition, its supported OS/host observations, sufficient execution choices, preserved partial work and independent complete result and resource post-state. Do not manufacture allocation failure or force a change when the original route remains sufficient. Actual limits and natural/forced exit must be reported truthfully.",
             "nativeBootstrapEffects": "Any new workspace trust registration needs its own bounded authority, original-state backup and exact recovery; consumed old permission grants no new write. Preserve existing user settings and components.",
             "limits": {
               "wholeWorkSeconds": 600,
@@ -6036,6 +6045,7 @@
                 "outputTokens": 14000
               }
             },
+            "limitSemantics": "maximum",
             "limitRule": "A new case must bind finite work, worker, recovery and native cumulative usage limits no greater than these retained ceilings. Bind applicable output/event limits and stop/recovery conditions before observing results. Stop on unknown effects or exhausted limits without automatic rerun; no increase, rescue input or same-instance retry is authorized here."
           },
           "duties": [
@@ -6045,11 +6055,11 @@
             "verification-and-value"
           ],
           "id": "v33-resource-pressure-and-exit",
-          "rule": "Complete necessary local work through a real owned-worker capacity transition with preserved partial results, adequate concurrency and verified process/resource exit. This bounded case does not establish all-machine/GPU/VRAM or every entry coverage."
+          "rule": "Complete necessary local work through a real attributable resource/capacity transition with preserved partial results, adequate execution choices and verified resource exit. Methods and operating systems are bound per case; no bounded result establishes all-machine/GPU/VRAM or every-entry coverage."
         },
         {
           "host": "codex",
-          "entry": "cx-sdk",
+          "entry": "cx-desktop",
           "qualityAxes": [
             "compliance-and-safety",
             "functional-coverage",
@@ -6069,19 +6079,17 @@
             "function"
           ],
           "conditions": {
-            "entryProtocol": "app-server",
-            "operatingSystem": "Windows",
-            "ephemeral": false,
-            "permissionPolicy": "workspace-write/never; business network disabled",
-            "windowsSandbox": "elevated",
-            "userConfig": "Existing effective user configuration and already trusted installed plugin; before/after hashes and exact owned-workspace registration recovery retained privately. No source Hook injection or tool-preapproval bypass.",
+            "observerCarrierRole": "Codex Desktop coordinates source and independent evidence review. This entry identifies the observer, not adoption or execution by a subject entry; each actual actor and subject path needs its own prebound evidence.",
+            "subjectBinding": "Before effects, bind the actual supported host, selected subject entry/mode, protocol or native path, operating system, model/effort, permission and sandbox controls, exact candidate/package and effective configuration. SDK, Windows Job and thread/goal/get are supported methods, not whole-function prerequisites or proof of another entry.",
+            "businessNetwork": false,
+            "userConfig": "Preserve the effective user environment, already authorized components, current goals, pauses, unfinished responsibilities and usable recovery sources. Retain relevant before/after configuration bytes or absence, inputs and sources; no source Hook injection, tool-preapproval bypass, shared reset or silent restoration of user settings.",
             "package": "Exact current Git package and native installed bytes bound before this new episode; prior episodes retain their original conditions.",
             "collaborationMode": "default",
             "goalModeActive": false,
-            "modeEvidence": "Native thread/goal/get before and after plus full intervening events and actual turn configuration; unavailable remains unknown, never enable a mode to inspect it.",
-            "executionBinding": "Before dispatch, bind the actual supported CLI version, task-appropriate worker model/effort, immutable candidate/package, actual host/entry, protected inputs, writer ownership, observer and recovery actor. This scope is not an executable case or permission.",
+            "modeEvidence": "Bind supported native mode/Goal observations before and after, intervening events and actual actor configuration; SDK thread/goal/get is one sufficient method, not a required query for every route. Unavailable controls remain unknown; never enable a mode to inspect it.",
+            "executionBinding": "Before dispatch, bind the actual supported host/runtime version (CLI version where applicable), task-appropriate worker model/effort, immutable candidate/package, actual subject host/entry and observer, protected inputs, writer ownership and recovery actor. This scope is not an executable case or permission.",
             "ordinaryUse": "Each new case binds a necessary ordinary local task and its exact input/turn count. Do not prescribe Accord internals or obtain a pass through evaluator rescue, rewriting protected tools, or replaying the ended batch.",
-            "resourceTransition": "Prospectively bind a real owned-worker capacity change, applicable OS observations, reusable partial results and sufficient execution choices. Preserve native-sufficient counterexamples; do not manufacture an allocation failure. Actual limits and natural/forced exit must be reported truthfully.",
+            "resourceTransition": "In one ordinary task, prospectively bind a real effective execution-environment change and its supported source observations, needed adaptation or sufficient unchanged route, preserved partial work, independent complete result and attributable resource post-state. A resource claim also binds real capacity/limit measurements; a policy notification is not an OS failure. No manufactured failure or evaluator rescue.",
             "nativeBootstrapEffects": "Any new workspace trust registration needs its own bounded authority, original-state backup and exact recovery; consumed old permission grants no new write. Preserve existing user settings and components.",
             "limits": {
               "wholeWorkSeconds": 600,
@@ -6094,6 +6102,7 @@
                 "outputTokens": 14000
               }
             },
+            "limitSemantics": "maximum",
             "limitRule": "A new case must bind finite work, worker, recovery and native cumulative usage limits no greater than these retained ceilings. Bind applicable output/event limits and stop/recovery conditions before observing results. Stop on unknown effects or exhausted limits without automatic rerun; no increase, rescue input or same-instance retry is authorized here."
           },
           "duties": [
@@ -6103,7 +6112,7 @@
             "verification-and-value"
           ],
           "id": "v33-environment-adaptation",
-          "rule": "In the same ordinary task, reconcile changed execution capacity through an existing interface, continue within current authority, and preserve unrelated user environment and truthful delivery. Other component, trust and entry differences retain their separate required coverage."
+          "rule": "In the same ordinary task, reconcile changed effective execution conditions through a supported authorized path, continue or correctly retain the sufficient route, and preserve unrelated user state, truthful delivery and resource post-state. Other component, trust and entry differences retain their separate required coverage."
         },
         {
           "host": "codex",
