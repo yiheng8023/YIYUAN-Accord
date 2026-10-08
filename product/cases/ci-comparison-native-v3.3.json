@@ -1,0 +1,47 @@
+{
+  "schema": "yiyuan-accord-ci-comparison-native-case/v1",
+  "purpose": "Compare the newly completed c22 CI matrix with the independently verified35b timing baseline; deliver a reusable current index and comparison, not a replay of old business.",
+  "prompt": "请在 C:\\Users\\15521\\.codex\\backups\\accord-ci-comparison-20261009-01\\workspace 用已有批处理入口完成新CI日志索引，并与baseline里的旧索引比较，交付README约定的test-index.jsonl、comparison.json和简短中文result.md。重点说明各矩阵的实际耗时变化、值得继续核查的测试间隔变化和结论限制，以及实际遇到或未解决的问题。保护原始材料和工具，保留cache、run-records；只在此目录写业务文件，主仓仅供读取，不联网、不安装、不改共享设置或工具，不启用Plan/Goal。按当前实际情况选择足够的并发，300秒内完成这次工作；不需要制造失败或迁移，未知效果先保留并如实说明。",
+  "workspace": "C:\\Users\\15521\\.codex\\backups\\accord-ci-comparison-20261009-01\\workspace",
+  "currentRun": 37821558646,
+  "baselineRun": 37728674381,
+  "actor": {
+    "route": "existing native collaboration.spawn_agent",
+    "history": "none",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "observer": "Desktop Root; independent comparison oracle and result reviewer",
+    "identity": "Host-returned fresh allocation ID and actual native context/Goal/tool/result records; requested fields alone are not observed configuration."
+  },
+  "sources": {
+    "C:\\Users\\15521\\.codex\\backups\\accord-ci-comparison-20261009-01\\workspace\\README.md": "ce423f6a969d7e5deb5dc6375de73af335c8907bbdade95f9e52919d0241174d",
+    "C:\\Users\\15521\\.codex\\backups\\accord-ci-comparison-20261009-01\\workspace\\batch_tool.py": "772aaa8439e8ed0ba033d3e7de6cb2c41a4212c2ac143912f9d0fe5f34a26c1b",
+    "C:\\Users\\15521\\.codex\\backups\\accord-ci-comparison-20261009-01\\workspace\\ci_log_worker.py": "ce192e0cb819c9074b94a42d0d75def8168bec0d4b91978c5c891c04baa9e7a2",
+    "C:\\Users\\15521\\.codex\\backups\\accord-ci-comparison-20261009-01\\workspace\\inputs\\manifest.json": "def10bf6767fabb64f78134e34f9d9b637c8570564d0e96162a855845762821c",
+    "C:\\Users\\15521\\.codex\\backups\\accord-ci-comparison-20261009-01\\workspace\\baseline\\manifest.json": "1adf4e9da5d8bb8526743e2e9048ca796e6225f202f7be10971a949042fb4bdb",
+    "C:\\Users\\15521\\.codex\\backups\\accord-ci-comparison-20261009-01\\workspace\\baseline\\test-index.jsonl": "e788e98ebc088d67746868da2bf14b68c8b2ee7399e8831f75291f255f45d830",
+    "C:\\Users\\15521\\.codex\\backups\\accord-ci-comparison-20261009-01\\oracle\\comparison_oracle.py": "ccbc95f5f8c967f3f0296006de0bf1345d98f6cf94a39d2ca691092bc3ce7c0b",
+    "C:\\Users\\15521\\.codex\\backups\\accord-ci-comparison-20261009-01\\oracle\\test_comparison_oracle.py": "0c06c52cf0efde9fa2bbf60d8ef9dfdcf0281a8176de1a6eea9a3d56e6b62d5c"
+  },
+  "limits": {
+    "wholeWorkSeconds": 600,
+    "workerWorkSeconds": 300,
+    "recoverySeconds": 20,
+    "workerInvocationSeconds": 45,
+    "workerRecoverySeconds": 10,
+    "usageCaps": {
+      "totalTokens": 2500000,
+      "uncachedInputTokens": 200000,
+      "outputTokens": 14000
+    }
+  },
+  "controls": "One fresh native worker, one ordinary input, no new trust/install/config/account/Cloud/Goal/mode changes. Preserve existing host permissions; business writer only private workspace, main repository task-read-only. Root alone writes repo. Observe both sides of actual160MiB→96MiB Job/CPU10% transition and complete owned exits; enough unchanged concurrency is allowed.",
+  "outputs": [
+    "test-index.jsonl",
+    "comparison.json",
+    "result.md"
+  ],
+  "oracle": "Independent original-line reconstruction for current index; frozen validated baseline; exact per-matrix/test-id joins, step durations, deltas and top5 ordering. Review all prose against raw tool calls, native mode/usage, partial preservation and OS records. Source-timing intervals are not pure test CPU time or causal performance benefit.",
+  "stop": "Root stops this owned worker at its work bound, reconciles any pending owned processes and retains unknowns. No rescues/replays/old grants; total600 includes post-result QA, finishing after that cannot count as a deadline pass.",
+  "boundary": "A native result does not retrospectively admit SDK01/02 or establish all-entry coverage/system net impact. No equivalent new Windows sandbox attempt."
+}
