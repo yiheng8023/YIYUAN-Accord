@@ -1276,6 +1276,10 @@ class ProductControlTests(unittest.TestCase):
                      'exact package lifecycle GT-20 subject is invalid')
 
     def test_provisional_gt20_21_mutations_fail_after_repository_rehash(self):
+        # Reuse only immutable Git reads; unittest releases this method's scope.
+        token = product_control._SNAPSHOT_READ_CACHE.set(product_control._SnapshotBlobCache())
+        self.addCleanup(product_control._SNAPSHOT_READ_CACHE.reset, token)
+
         def entry(source, task_id):
             return _find(source['provisionalContract']['records'],
                          'taskId', task_id)

@@ -1240,6 +1240,18 @@
   },
   "developmentObservations": [
     {
+      "id": "bounded-test-cost-and-plan-correction-20261008",
+      "observedAt": "2026-10-08",
+      "scope": "Development throughput correction following user-requested faster progress with optional parallel work; not new product functionality or acceptance.",
+      "source": "Official35bCI37728674381 jobs/logs: visible job envelope2647seconds; longest macOS3.10 job2642seconds with2585seconds in the full suite. Raw timing remains subject to IO,setup,teardown,buffering and runner-load limits.",
+      "change": "One retained multi-mutation test now creates the existing bounded immutable snapshot cache in standard unittest setup and registers ContextVar reset through addCleanup. No decorators or execution-marker exceptions. The original validation body and all mutations/assertions remain; active worktree data and verdicts are not cached. No package/runtime/workflow/matrix/budget change.",
+      "measurement": "Original method and prototype each execute21 complete validations and pass. Git subprocess counts6742 to2163, a67.92percent reduction, with identical original method-body SHA3d81a4547664b836a9b6bcedb868243992b447782dfb420de95e683f87f2184a. Recorded times615.648 and265.391seconds partly overlap, so no causal wall-clock or hosted speedup claim. Final standard-unittest form passes the complete method in254.982seconds and verifies cache release toNone.",
+      "counterevidence": "A second whole-method cache candidate failed its original predecessor/lineage assertions and was withdrawn. No bound or assertion was relaxed. Existing method-executability validation rejected a decorator form, so final code uses ordinary setup/cleanup without changing that validator. Six related cache/current-read/boundary checks passed, including three scope tests repeated independently; three static checks pass.",
+      "planAlignment": "Mark the already completed normal-release ACK preparation as historical, remove cancelled Cloud continuation from current procedures, and align ordinaryChat/webChat with r38 release deferral. Preserve17scopes,13cases,7declared gaps, six selected entry routes, allF-A and original failures.",
+      "evidence": "accord-ci-timing-20261008-01/jobs.json,logs.zip,timing-report.md,timing.json,before-profile.json,candidate-profile.json,assertion-body-check.json,final-assertion-body-check.json,RESULT.md; independent final source review.",
+      "limit": "Only one test method adopts the cache scope. This reduces measured Git work in that method, not product resource cost, model autonomy, all-CI latency or any functional qualification. Await the final commit hosted result."
+    },
+    {
       "id": "main-user-candidate-adoption-20261008",
       "observedAt": "2026-10-08",
       "scope": "User-authorized one-shot update from123921 to114112 at fixed35b63b75, followed by read-only checks in the reopened original desktop task.",
