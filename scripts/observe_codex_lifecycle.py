@@ -349,7 +349,9 @@ def _latest_input_context(request):
         if isinstance(item, dict) and item.get("role") == "developer":
             for content in item.get("content", []):
                 if isinstance(content, dict) and isinstance(content.get("text"), str):
-                    if "Accord task entry:" in content["text"] and "Native input receipt: session=" in content["text"]:
+                    text = content["text"]
+                    if (any(marker in text for marker in ("Accord task entry:", "Accord input/state notice."))
+                            and "Native input receipt: session=" in text):
                         contexts.append(content["text"])
     return contexts[-1] if contexts else ""
 

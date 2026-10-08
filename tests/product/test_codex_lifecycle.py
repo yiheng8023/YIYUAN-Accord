@@ -1092,12 +1092,35 @@ class CodexLifecycleTests(unittest.TestCase):
 
     def test_current_input_context_uses_last_developer_receipt_not_historical_path(self):
         first = "Accord task entry: Native input receipt: session=task; epoch=old. use node /old/runtime/task-checkpoint.cjs"
-        last = "Accord task entry: Native input receipt: session=task; epoch=new. use node /new/runtime/task-checkpoint.cjs"
+        last = "Accord input/state notice. Native input receipt: session=task; epoch=new. use node /new/runtime/task-checkpoint.cjs"
         request = {"input": [{"role": "developer", "content": [{"text": first}]},
             {"role": "user", "content": [{"text": first}]},
-            {"role": "developer", "content": [{"text": last}]}]}
+            {"role": "developer", "content": [{"text": last}]},
+            {"role": "tool", "content": [{"text": first}]},
+            {"role": "developer", "content": [{"text": "Unrelated Native input receipt: session=other"}]},
+            {"role": "developer", "content": [{"text": "Accord input/state notice. Missing receipt."}]}]}
         self.assertEqual(lifecycle._latest_input_context(request), last)
         self.assertFalse(lifecycle._contains_path(lifecycle._latest_input_context(request), "/old/runtime/task-checkpoint.cjs"))
+        self.assertEqual(lifecycle._latest_input_context({"input": request["input"][:1]}), first)
+        self.assertEqual(lifecycle._latest_input_context({"input": request["input"][3:]}), "")
+
+    def test_current_input_selector_consumes_the_shipped_hook_output(self):
+        node = lifecycle.shutil.which("node")
+        self.assertIsNotNone(node)
+        helper = lifecycle.ROOT / "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs"
+        with tempfile.TemporaryDirectory(prefix="accord-input-contract-") as tmp:
+            root = Path(tmp).resolve()
+            event = {"hook_event_name": "UserPromptSubmit", "session_id": "lifecycle-contract",
+                     "cwd": str(root), "prompt": "Inspect this receipt only."}
+            result = lifecycle.subprocess.run([node, str(helper), "--hook", "UserPromptSubmit"],
+                input=json.dumps(event), capture_output=True, text=True, encoding="utf-8", timeout=10,
+                env={**os.environ, "YIYUAN_ACCORD_TASK_STATE_DIR": str(root / "state")})
+            self.assertEqual(result.returncode, 0, result.stderr)
+            notice = json.loads(result.stdout)["hookSpecificOutput"]["additionalContext"]
+            self.assertIn("Native input receipt: session=lifecycle-contract; epoch=", notice)
+            request = {"input": [{"role": "developer", "content": [{"text": notice}]}]}
+            self.assertEqual(lifecycle._latest_input_context(request), notice)
+            self.assertTrue(lifecycle._contains_path(notice, helper))
 
     def test_hot_reload_inspection_recomputes_packages_turns_trust_and_native_receipts(self):
         import shutil
@@ -1174,7 +1197,7 @@ class CodexLifecycleTests(unittest.TestCase):
                 native.extend([{"id": request_id, "result": {"turn": {"id": turn}}},
                     {"method": "turn/completed", "params": {"threadId": thread, "turn": {"id": turn, "status": "completed"}}},
                     {"id": hook_id, "result": hooks(path)}])
-                context = f'Accord task entry: Native input receipt: session={thread}; epoch={epoch}. use node "{Path(path) / "runtime/task-checkpoint.cjs"}" --help'
+                context = f'Accord input/state notice. Native input receipt: session={thread}; epoch={epoch}. use node "{Path(path) / "runtime/task-checkpoint.cjs"}" --help'
                 provider_rows[index + 4]["request"] = {"input": [{"role": "developer", "content": [{"text": context}]}]}
                 current_prior, previous_after = after, retained / "after-turn-state"
             request_rows.append({"method": "thread/unsubscribe", "params": {"threadId": thread}})

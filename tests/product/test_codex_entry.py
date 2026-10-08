@@ -1869,6 +1869,26 @@ class EntryTests(unittest.TestCase):
             return entry.native_entry_observation('\n'.join(json.dumps(x) for x in rows),
                 thread_id=thread, turn_id=selected_turn, workspace=workspace, guide=guide)
         self.assertTrue(check([*start, core, action])['valid'])
+        full, notice = (json.loads(json.dumps(core)) for _ in range(2))
+        full['payload']['content'][0]['text'] = guide
+        notice['payload']['content'][0]['text'] = 'Accord input/state notice. Native input receipt: session=thread; epoch=one.'
+        for pair in ([full, notice], [notice, full]):
+            self.assertTrue(check([*start, *pair, action])['valid'])
+        for rows in ([full], [notice], [full, action, notice], [notice, action, full]):
+            self.assertFalse(check([*start, *rows, action])['valid'])
+        for original, other in ((full, notice), (notice, full)):
+            for mutation in ('assistant', 'stale', 'untrusted', 'truncated'):
+                altered = json.loads(json.dumps(original))
+                payload = altered['payload']
+                if mutation == 'assistant':
+                    payload['role'] = 'assistant'
+                elif mutation == 'stale':
+                    payload['internal_chat_message_metadata_passthrough']['turn_id'] = 'earlier-turn'
+                elif mutation == 'untrusted':
+                    payload.pop('internal_chat_message_metadata_passthrough')
+                else:
+                    payload['content'][0]['text'] = payload['content'][0]['text'][:25]
+                self.assertFalse(check([*start, altered, other, action])['valid'], mutation)
         self.assertFalse(check([*start, action])['valid'])
         self.assertFalse(check([*start, action, core])['valid'])
         self.assertFalse(check([*start, core, action], 'another-turn')['valid'])

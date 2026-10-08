@@ -1240,6 +1240,18 @@
   },
   "developmentObservations": [
     {
+      "id": "input-notice-lifecycle-consumer-correction-20261008",
+      "observedAt": "2026-10-08",
+      "scope": "Repair the lifecycle observer after CI37724704741 at4a464748 failed on Ubuntu and macOS; no product-package or local installation change.",
+      "source": "Retained Ubuntu artifact11527347486 and macOS11527551170, result.json, provider-requests.jsonl and native/raw state records in accord-input-notice-ci-20261008-01.",
+      "cause": "The input notice producer changed, but the lifecycle consumer still required the old Accord task entry prefix. Both native fifth provider requests contain the new notice, correct native receipt and hot-package helper path; the old selector returns empty. The hot-reload guard correctly rejects that missing observation.",
+      "correction": "Recognize both known full-entry and bounded-state prefixes while retaining developer-role and native-receipt requirements and selecting the last qualifying context. Existing exact installed-path, session, epoch, turn, paused-checkpoint and trust checks remain. A regression now feeds the actual shipped Node Hook output to this consumer, avoiding stale handcrafted producer and consumer fixtures.",
+      "relatedConsumer": "Review also found native_entry_observation still required full guidance and the input receipt in one developer message. It now observes both independently within the same bound native session/turn and before model activity, retaining developer role and Hook provenance. Notice-only, missing/stale/late/truncated/echoed content remains rejected; old combined guidance remains supported. This was a source/test counterexample, not a newly executed persistent host failure.",
+      "checks": "The original CI bytes reproduce the selector failure. Two lifecycle regressions and the split-message entry gate fail before their fixes and pass after them;51 lifecycle tests,104 entry tests and three static checks pass. Both retained real requests select their actual latest native receipt after correction. Independent review confirms unchanged identity/provenance/activity boundaries. This narrow re-read does not complete the aborted episodes.",
+      "binding": "The two current lifecycle/scoped-exposure declarations bind the corrected observer SHAfc1d1e2718cbf4181e7d1f66f02c0f8b87243c66a440a7f23bcb83ae63387161 prospectively. Original frozen runs and earlier admission remain at their exact sources; they do not automatically validate this changed observer.",
+      "boundary": "Original CI failures remain failures. Both runs report incomplete settings/selection observations after early termination, though scoped process release and owned-root removal were recorded; no overall success is inferred. Candidate114112/packagee4c0 unchanged, main-user123921 and isolated162254 unchanged,0local model/native reruns. FullF-A and release gates remain."
+    },
+    {
       "id": "input-guidance-responsibility-split-20261008",
       "observedAt": "2026-10-08",
       "scope": "Source correction for duplicate full guidance observed in retained native CI; no installation, trust, native host or model trial.",
@@ -6861,7 +6873,7 @@
               ],
               "runner": "scripts/observe_codex_lifecycle.py",
               "caseFile": "scripts/observe_codex_lifecycle.py",
-              "caseSha256": "f7092102eee2149311c207fcd5ed29c5623a26200e953583bcfb7c80049d3e89"
+              "caseSha256": "fc1d1e2718cbf4181e7d1f66f02c0f8b87243c66a440a7f23bcb83ae63387161"
             }
           },
           "id": "v33-codex-sdk-lifecycle-01",
@@ -6984,7 +6996,7 @@
               ],
               "runner": "scripts/observe_codex_lifecycle.py",
               "caseFile": "scripts/observe_codex_lifecycle.py",
-              "caseSha256": "f7092102eee2149311c207fcd5ed29c5623a26200e953583bcfb7c80049d3e89"
+              "caseSha256": "fc1d1e2718cbf4181e7d1f66f02c0f8b87243c66a440a7f23bcb83ae63387161"
             }
           },
           "id": "v33-codex-sdk-scoped-exposure-01",

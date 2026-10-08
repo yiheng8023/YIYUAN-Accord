@@ -1856,14 +1856,14 @@ def native_turn_context_observation(stream, *, thread_id, turn_id, workspace):
 
 
 def native_entry_observation(stream, *, thread_id, turn_id, workspace, guide):
-    """Require the current input Hook's full guide before model activity.
+    """Require full entry guidance and this input's receipt before model activity.
 
     Native role, hook provenance and turn identity prevent prior context or an
     assistant echo from being mistaken for this turn's upstream participation.
     This observes delivery, not semantic adoption or business completion.
     """
     result = {"valid": False, "decision": "not-observed", "threadId": thread_id,
-              "turnId": turn_id, "limit": "full native input guidance before model activity; not adoption or outcome acceptance"}
+              "turnId": turn_id, "limit": "full native guidance and current input receipt before model activity; not adoption or outcome acceptance"}
     try:
         rows = [json.loads(line) for line in stream.splitlines() if line.strip()]
         metadata = [row["payload"] for row in rows if row.get("type") == "session_meta"]
@@ -1876,6 +1876,7 @@ def native_entry_observation(stream, *, thread_id, turn_id, workspace, guide):
                   and row["payload"].get("turn_id") == turn_id]
         if len(starts) != 1:
             raise ValueError("native turn boundary unavailable")
+        guide_line = receipt_line = None
         for i in range(starts[0] + 1, len(rows)):
             row, payload = rows[i], rows[i].get("payload", {})
             if row.get("type") == "event_msg" and payload.get("type") == "task_started":
@@ -1889,10 +1890,15 @@ def native_entry_observation(stream, *, thread_id, turn_id, workspace, guide):
                     or "hooks.additional_context" not in origin.get("content_item_kinds", [])):
                 continue
             text = "".join(item.get("text", "") for item in payload.get("content", []) if isinstance(item, dict))
-            if text.startswith(guide) and f"Native input receipt: session={thread_id}; epoch=" in text:
-                result.update(valid=True, decision="observed", line=i + 1,
-                              guideSha256=hashlib.sha256(guide.encode("utf-8")).hexdigest())
-                break
+            if text.startswith(guide):
+                guide_line = i + 1
+            if ((text.startswith(guide) or text.startswith("Accord input/state notice."))
+                    and f"Native input receipt: session={thread_id}; epoch=" in text):
+                receipt_line = i + 1
+        if guide_line is not None and receipt_line is not None:
+            result.update(valid=True, decision="observed", line=max(guide_line, receipt_line),
+                          guideLine=guide_line, receiptLine=receipt_line,
+                          guideSha256=hashlib.sha256(guide.encode("utf-8")).hexdigest())
     except (ValueError, UnicodeError, TypeError, KeyError, AttributeError):
         result["decision"] = "unknown"
     return result
