@@ -4,7 +4,11 @@
 
 ## 当前动作
 
-已把已证修正接入[CI索引02新实例](../../product/cases/ci-timing-index-v3.3-02.json)：复用已有exact-trusted主仓作为HOST_CWD，业务WORK单独限定在新私有目录。主仓对worker任务权限只读，未声称OS只读；全部tracked原件、HEAD及Git后态另核。调用者不允许新信任或配置恢复写，bootstrap和关闭后配置必须不变。34项纯mock及独审通过，未变工具/oracle原37项检查可复用。新两case同episode前绑，按既有普通开发授权推进，不复制01授权或扩大600+20、45+10/Token限额。
+[CI索引02](../../product/cases/ci-timing-index-v3.3-02.json)已一次执行结束：真实0.161.0/Sol-medium/default、Goal前后null、完整入口及当前输入回执已核；约52.259秒、原生自然exit0/Job0，共享配置和主仓原件保持。但shell及备用Node通道在读业务材料前遭遇Windows sandbox setup错误，模型如实保未完成，未生成业务成果；不由原生completed状态晋通过。匹配日志定位到占用中node_repl.exe的ACL更新错误32，以及受保护PCManger授读失败。Root未杀其它会话进程、改ACL或重跑02。
+
+所需维护成果已由Root当前健康本地通道在独立`accord-ci-index-maintenance-20261009-01`完成：9日志/7814条索引，独立原文校验、原件/两首批cache保持均过，中文报告明确单独路线。维护监督器另暴露正常worker退出85后立即强制收尾尚存所属进程的问题；派生宽限修正已过7项纯测、未实跑，没有运行96MiB阶段。Root复用两份已核cache，顺序解析余7份交付，不将它追认SDK或资源/环境验收。独立oracle原“总结与step结束同秒”额外假设已在派生副本修为真实时间范围，7原测+2反例及全数据过；原工具、原oracle、原失败保留。数据/报告/自动校验约398秒，独立语义复审约649秒，整段未达原600秒计划，不声称时限通过。
+
+下一必要方向为收敛这些已知工具/宿主前提并利用健康原生能力推进其它实际职责；不再重复相同SDK实例。02两固定声明保d8988f98后移出活动必过集合，全部父范围/限额保持。Windows错误未解决前不关闭未知用户组件或修改安全配置。
 
 用户确认后，[CI时序索引一次实例](../../product/cases/ci-timing-index-v3.3.json)在模型输入前2.0528秒被Root调用者误拒：把请求中的cwd写根错误要求原样回显。固定0.161.0官方源码把cwd作为隐含写根、从返回的显式writableRoots去除；其余已核控制相符。未发turn/start、0业务输入，无cache或交付物；原配置字节/mtime未变，所属Job强制收尾exit124/active0、reader停止。原失败、授权、源码和回执保持，不追认成功或重跑。
 
@@ -56,14 +60,14 @@
 
 ## 剩余主线
 
-当前声明诊断为17范围、15活动case，5范围存在声明绑定缺口，其中3范围没有case。02两项只有前绑、尚未实际验收；01两声明仍保4fcd63fa历史。数字来自机器声明，不是完成率，也不是完整实际验收结果。
+当前声明诊断为17范围、13活动case，7范围存在声明绑定缺口，其中5范围没有case。01/02的已结束声明分别保在4fcd63fa/d8988f98历史，Root维护产物不代其通过。数字来自机器声明，不是完成率，也不是完整实际验收结果。
 
 | 仍缺范围 | 下一必要内容 |
 |---|---|
 | 能力协调 | research-learning-and-reuse、recovery-and-lifecycle、capability-loss及default-host-without-extra-extensions的充分绑定与实际结果；继续保持作者政策、用户禁用/排除、同名/同义仲裁与真实目标控制。 |
 | 连续性 | recovery-and-rollback及capability-loss正式绑定；普通择时、变化后继承/暂停/纠偏、适用失败恢复和必要原件/资源条件。旧workspace未知责任保持。健康任务不强制交接，不把分散实例拼成同episode。 |
-| environment-adaptation | 02已前绑；待实际条件变化、充分路线、原件/配置、结果与退出观察。01历史不代新结果。 |
-| resource-pressure-and-exit | 02已前绑；待实际所属Job变化、并发选择、部分结果保留与退出，外层Job0不代业务通过。 |
+| environment-adaptation | 02证实宿主故障后的如实保留及退出，未完成原成果；仍需充分变化适应结果。 |
+| resource-pressure-and-exit | 维护产物正确但原监督器强退、96MiB阶段未运行；仍缺完整实际条件变化/资源后态验收。 |
 | codex-lifecycle | 复用已证完整注入/传递机制，补真实模型采用、当前适用入口、变更/失败/恢复及有效用户环境的充分证据，尚无父case。不得由认证、安装或目录发现代证。 |
 | system-integration | 尚无必要职责共同成立的完整case；覆盖当前目标所需职责、八质量轴及适用场景。足够原生能力承担职责或合理不介入也可成立，不为覆盖强行调用所有机制。 |
 | system-impact-assessment | 尚无父case；需独立核结果、用户干预/纠偏/恢复负担和相关总成本/净影响。能力可见、安装和局部成功不等于价值。 |
