@@ -2711,3 +2711,13 @@ Root独立后读及另一原件审查确认：五个官方CLI0.161.0调用全部
 在私有`accord-resource-ci-index-20261008-01`从CI37728674381保全九份原日志与manifest，准备逐测试索引和中文报告的普通输入。工具、独立原文oracle和复用现有App Server/WindowsJob的caller分工实现；Root保持主仓唯一写者。独立复审和Root复核共70项纯合成/mock测试通过，没有先运行真实九份日志或生成cache/交付物。实际资源/环境、模型采用、报告语义、正式准入均未观察。
 
 已修正源审发现的时间精度、同目录并发竞争、完整sandbox期待和留证失败可能跳过资源关闭；分别有反例核验。private REVIEW.md保精确来源。新增一份数据定义、两项同episode的前瞻case，不增加产品runtime或安装文件；固定114112/e4c0包、0.161.0、Sol/medium/default及原600+20/45+10/Token上界。默认未授权执行包须在新增工作区信任权限、当前原件/配置/输入与干净提交绑定后才可运行。一次结束后据实际结论处理，不自动重跑；原C02/N/旧资源任务等失败、限额和权限保持。
+
+## 2026-10-09 CI索引bootstrap误拒及收口
+
+用户“确认”后按4fcd63fa精确包与当前输入生成本次授权，隔夜33来源、25包成员、原配置和工作区无变化；前一CI37754378598已success。一次执行仅发initialize/initialized/thread/start，2.0527974秒在完整sandbox比较失败，未发turn/start、未调用batch，0业务输入与0业务产物。actual模型/effort回读Sol/medium只属startup配置，不算模型行为或Goal观察。原Job强制exit124、activeProcesses0、readerStopped；原配置前/启动后/结束后字节与mtime完全相等，未观察到trusted登记或恢复写入。
+
+Root把请求配置错当成必须逐字段回显的响应，造成误拒。[固定0.161源码](https://github.com/openai/codex/blob/979011409de0a60b52f179721948e65531d26144/codex-rs/protocol/src/permissions.rs#L1841)的to_legacy_sandbox_policy将等于cwd的可写路径表示为workspace_root_writable，只把额外路径加入返回writable_roots；原生请求中的workspace与state两根因此合法返回仅state。实际cwd和其它控制均与固定期待相符。这是调用者的协议语义错误，不是用户授权不足或宿主漏设写权限。
+
+原caller/绑定/授权/失败不修改。私有sandbox-diagnosis保官方固定源、原始返回纯重放和仅拆分请求/响应期待的最小patch。4项纯回归含11拒绝变体核cwd、额外根、字段类型、网络和临时目录仍严格；请求权限、状态目录、时限和授权拒绝不变。独立复核根因与资源/配置后态一致，未新启CLI/AppServer/model。该修正尚未实际复跑或构成资源/环境通过。
+
+沿既有结束实例处置，将两条固定case保全4fcd63fa声明/对象摘要后移出活动必过集合；原数据定义留存，17父scope和全部F/A、原限额保持。保护既有失败并不要求永久重跑同一失败实例。需要的新结果仍未交付，原日志/工具可供新的前瞻绑定复用；不得复制本次grant或重新启动原marker。
