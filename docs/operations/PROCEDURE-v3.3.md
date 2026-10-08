@@ -2649,3 +2649,15 @@ Root独立raw/SQLite对账及独立审查核实真实原件。11执行源及两�
 - 当前接续页混有已经完成的登录/安装下一步，以及过期宿主和CI值，应替换为当前事实与未完责任。完整旧页保留在Git `7258af8a`及私有原件，不让历史步骤继续指挥当前执行。
 
 本次源核对与独立审查均不改变17范围、13活动案例、完整F/A、发布授权条件或任何原失败。资料位于私有 `accord-sessionstart-trigger-20261008-01`：`sources.json`、官方源文件、`continuation-before.md`、`development-check.json`及纯谓词检查。
+
+## 2026-10-08 Retained startup context delivery
+
+优先回读[精确0d8的既有CI](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/37704527081)，未重新运行模型或原生探针。Ubuntu artifact11519141575及macOS11519470257原ZIP各267成员，SHA分别为`0166d5ea2f17250b1d729b92f87fc0e46ce2ed27bd1d848170ab805e8632a303`、`36acd606a1569411beb391a18eec9c315760937e7efd07e0cd7dde6e8963834d`。
+
+两者25文件包原件、manifest、安装哈希及当前候选162254逐项匹配，四项声明执行源也与当前代码一致。按包内原件保Meta原换行、规范协调正文并展开实际POSIX路径后，完整预期文本与真实SessionStart completed/plugin/sync事件context逐字符相等；Ubuntu11100字节、macOS11106字节。首条固定provider请求的developer `input[2].content[0].text`再次逐字符一致，thread/turn metadata同源，原生turn/completed为completed。
+
+这补足了这两个精确运行中启动正文执行、完整注入及传递的原始证据，不依赖只读者自报旗标。实际CLI均0.154.0，provider为loopback固定响应，0真实模型调用；不能外推真实模型理解/采用、普通交付、Windows0.161/桌面/IDE/跨入口、净价值或完整F/A。对应原生进程exit0/forcedfalse/readerStopped，同进程组absent，仅支持该POSIX控制范围。
+
+同一首请求中，UserPromptSubmit的developer input[4]也含完整guidance。两个副本是实际上下文事实；是否可在保留恢复/输入职责下减少重复，以及实际token、费用或时延影响仍待核。未据该现象修改原文、Hook、用户设置或加入新模块。
+
+资料`accord-existing-hook-input-evidence-20261008-01`保原ZIP、索引、直接读者与FACTS/RESULT。独立审查直接重建文本并核原件，不执行下载代码或把FACTS当证明。初次读者误将`result.sourceHashAfter`工作负载source.json摘要当作执行源映射，已按真实字段语义修正，原ZIP和结果未改。原02/03实例及其失败、限制、授权保持，不拼接追认通过。

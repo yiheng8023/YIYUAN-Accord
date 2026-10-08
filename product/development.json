@@ -1239,6 +1239,17 @@
   },
   "developmentObservations": [
     {
+      "id": "retained-ci-startup-context-delivery-20261008",
+      "observedAt": "2026-10-08",
+      "scope": "Read-only reconciliation of existing exact0d8 CI37704527081 native lifecycle artifacts; no native/model/install/trust replay.",
+      "source": "Ubuntu artifact11519141575 ZIP SHA0166d5ea2f17250b1d729b92f87fc0e46ce2ed27bd1d848170ab805e8632a303;macOS11519470257 ZIP SHA36acd606a1569411beb391a18eec9c315760937e7efd07e0cd7dde6e8963834d. Each25source-package members/manifest/installed hashes/current candidate162254 match; four declared execution source hashes match current sources.",
+      "observed": "Actual0.154.0 sessionStart/plugin/sync/completed events carry complete entry text including immutable4444byte/78CRLF/Meta5118 and path-expanded coordination body. Ubuntu11100bytes/macOS11106bytes independently reconstructed from package originals equal native context and same-thread/turn first-provider developer input[2] character-for-character. Both turns completed; direct native process exit0/forcedfalse/readerStopped, samePOSIX group absent.",
+      "contextComposition": "The same first request input[4] is UserPromptSubmit context containing another full guidance copy. Actual duplication is observed; token price, latency and whether a narrower delivery preserves all duties remain unproved. Retain this under existing system-impact/resource responsibility, not a new mandatory module or automatic deletion rule.",
+      "verification": "Root direct byte/source/event/provider/identity checks and independent ZIP/original review agree. Reader initially confused result.sourceHashAfter workload source.json hash with executable source mapping; corrected to actual manifest.sourceHashes and preserved ZIP/results unchanged. Exact0d8 hosted result11/11success.",
+      "evidence": "accord-existing-hook-input-evidence-20261008-01/artifact-index.json,originalZIPs,FACTS.json,RESULT.md,read_existing.py; original native/end-enabled request/stdout/resources and retained/provider-requests.jsonl.",
+      "boundary": "Local fixed-response provider/0real-model calls. Complete native injection/transmission is a reusable qualified mechanism fact, not real-model understanding/use, ordinary outcome, Windows0.161/Desktop/IDE/cross-host or fullF-A/net-value/release proof. Original02/03 failures, criteria and budgets stay unchanged."
+    },
+    {
       "id": "session-start-trigger-and-current-continuation-correction-20261008",
       "observedAt": "2026-10-08",
       "scope": "Version-bound official source reconciliation and useful current-state maintenance with ordinary authorized read-only native review; no new AppServer/model trial, installation or Hook trust effect.",
