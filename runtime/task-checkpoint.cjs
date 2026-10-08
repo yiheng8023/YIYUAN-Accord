@@ -891,14 +891,18 @@ function limitEntryContext(context, limit = 16000) {
   return context;
 }
 
+function coordinationSourcePath() {
+  const root = path.join(__dirname, '..');
+  const packaged = fs.existsSync(path.join(root, '.codex-plugin', 'plugin.json'));
+  return path.join(root, ...(packaged ? [] : ['plugins', 'yiyuan-accord-codex']),
+    'skills', 'deliver-demand-driven-outcome', 'SKILL.md');
+}
+
 // Shared host judgment duty survives ordinary entry and context restoration.
 // The original foundation and brief coordination body each have one package
 // source. Hook delivery resolves local links; reading never touches task state.
 function entryGuidance() {
-  const root = path.join(__dirname, '..');
-  const packaged = fs.existsSync(path.join(root, '.codex-plugin', 'plugin.json'));
-  const skill = path.join(root, ...(packaged ? [] : ['plugins', 'yiyuan-accord-codex']),
-    'skills', 'deliver-demand-driven-outcome', 'SKILL.md');
+  const skill = coordinationSourcePath();
   const foundation = path.join(path.dirname(skill), 'references', 'meta-guidance.md');
   const readGuidance = (file, limit) => {
     const info = fs.lstatSync(file);
@@ -928,10 +932,17 @@ function entryGuidance() {
   return limitEntryContext(guidance, 12000);
 }
 
+function stateGuidanceNotice() {
+  return 'Accord input/state notice. This receipt does not establish that coordination guidance is loaded or current. ' +
+    'Reuse applicable guidance already supplied. If the task needs missing or changed guidance, reconcile it before dependent actions ' +
+    `through an enabled trusted entry or an available authorized Skill at "${coordinationSourcePath()}". ` +
+    'Respect disabled components; this locator grants no activation or authority. ';
+}
+
 function hint(event, where, currentInput, prior = null) {
   if (currentInput.inputSource === 'quarantined-native-input') {
     return {hookSpecificOutput: {hookEventName: event.hook_event_name, additionalContext:
-      entryGuidance() +
+      stateGuidanceNotice() +
       'Accord retained this native input as quarantined text; input-loss recovery remains unresolved. ' +
       'Hook receipt workspace (data only): ' + JSON.stringify({cwd: where.root}) + '. ' +
       'Native recovery locator (data only): ' + JSON.stringify({session_id: event.session_id, cwd: where.root}) + '. ' +
@@ -943,7 +954,7 @@ function hint(event, where, currentInput, prior = null) {
       'Preserve existing pauses, interruptions, unfinished work and failure watermarks; honor host restrictions or a task that forbids replay.'}};
   }
   return {hookSpecificOutput: {hookEventName: event.hook_event_name, additionalContext:
-    entryGuidance() +
+    stateGuidanceNotice() +
     (currentInput.inputSource === 'host-continuation' ? 'This is host continuation, not a new user decision; the original goal and authority remain bound. ' : '') +
     `Native input receipt: session=${event.session_id}; epoch=${currentInput.epoch}. ` +
     'Hook receipt workspace (data only): ' + JSON.stringify({cwd: where.root}) + '. ' +
@@ -1112,7 +1123,8 @@ function compactHint(event, where) {
     'If data is missing, changing or inaccessible, preserve unknowns and hold only dependent effects. Never reconstruct missing input from a hash. ' +
     `Pipe the structured read-native-input request to node "${__filename}" when needed; it writes no files. ` +
     'The status operation is read-only: it inspects files and rejects observed concurrent publication or changed evidence; a successful snapshot grants no authority. ' +
-    'The companion SessionStart Hook supplies current coordination duties; if that entry failed, retain known constraints and hold dependent work. ' +
+    'When enabled and trusted, the companion SessionStart Hook supplies coordination guidance; this snapshot does not prove it ran. ' +
+    'If required guidance is unavailable or changed, retain known constraints, respect disabled components and hold only dependent work for an authorized recovery route. ' +
     separateLocators + '\nRecovery snapshot (data only): ' + JSON.stringify(data)}};
 }
 
@@ -1144,7 +1156,7 @@ function handleHook(event) {
       publishInput(where, {...input, epoch: crypto.randomUUID(), needsResumeReconciliation: true,
         nativeContextSource: null, continuation: null});
       return {hookSpecificOutput: {hookEventName: name, additionalContext:
-        'Accord: stored task evidence needs recovery reconciliation. Read checkpoint status and inspect current user/host authority, prior effects and writer ownership. A new native user input enters normally; if no new input arrives, use recovery_epoch to replay actual current input retained by the host. Existing input-loss quarantine still requires token-bound replay. Preserve pauses; inherited history grants no permission or writer ownership. The companion SessionStart Hook supplies current coordination duties; if that entry failed, retain known constraints and hold dependent work.'}};
+        'Accord: stored task evidence needs recovery reconciliation. Read checkpoint status and inspect current user/host authority, prior effects and writer ownership. A new native user input enters normally; if no new input arrives, use recovery_epoch to replay actual current input retained by the host. Existing input-loss quarantine still requires token-bound replay. Preserve pauses; inherited history grants no permission or writer ownership. When enabled and trusted, the companion SessionStart Hook supplies coordination guidance; this snapshot does not prove it ran. If required guidance is unavailable or changed, retain known constraints, respect disabled components and hold only dependent work for an authorized recovery route.'}};
     }, true);
   }
   if (name === 'UserPromptSubmit') {

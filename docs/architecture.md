@@ -105,8 +105,12 @@ records this code observation and its limits; no deletion experiment was run.
 The current Codex package targets `3.3.0-dev.1`; versioning is not publication
 evidence. It exposes one brief coordinator and four independently discoverable specialist
 Skills for capabilities, continuity, verification and plugin lifecycle. Native
-SessionStart and UserPromptSubmit read the same brief Skill body and resolve its
-package-local pointers; selection of a Skill is not the delivery mechanism.
+SessionStart and SubagentStart supply the original meta-guidance and the same
+brief Skill body with package-local pointers. UserPromptSubmit captures input
+and provides a bounded state reconciliation notice, without repeating that body
+or depending on its readability. The notice reuses applicable guidance and
+identifies an authorized recovery path for missing or changed guidance before
+dependent actions; it respects disabled components and does not prove adoption.
 SessionStart supplies the coordination body separately from the companion
 checkpoint Hook's recovery evidence, preserving its bounded snapshot budget.
 Startup guidance reads the packaged brief, with no task-state access. A missing

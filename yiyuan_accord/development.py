@@ -78,7 +78,7 @@ def _strings(value, *, empty=False):
             and len(value) == len(set(value)))
 
 
-def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False, meta_guidance=False):
+def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False, meta_guidance=False, input_state_notice=False):
     """Describe this development package, not a mandatory product mechanism."""
     contract = {
         "schema": 2, "productId": "yiyuan-accord", "packageId": package_id,
@@ -188,6 +188,13 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "SessionStart/startup and clear inject shared core guidance and same-package detail paths "
                 "without reading or writing task-state storage; no receipt, restored state or new authority. "
                 "Node and current Hook trust remain prerequisites."
+            )
+        if input_state_notice:
+            contract["ordinaryInputParticipation"]["effect"] = "capture-input-and-inject-bounded-state-reconciliation-notice"
+            contract["ordinaryInputParticipation"]["limits"] = (
+                "receipt-is-not-guidance-adoption; full-guidance-owned-by-enabled-trusted-SessionStart-and-SubagentStart; "
+                "reuse-applicable-guidance-or-recover-missing-changed-guidance-through-authorized-available-entry; "
+                "respect-disabled-components; preserve-input-pause-quarantine-and-unfinished-work"
             )
         if meta_guidance:
             contract["ordinaryInputParticipation"]["metaGuidance"] = {

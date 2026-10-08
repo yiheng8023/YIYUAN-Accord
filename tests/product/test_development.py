@@ -154,6 +154,18 @@ class SkillReferencePackageTests(unittest.TestCase):
         self.assertIn("enabled-currently-trusted-startup-hook", current["ordinaryPrerequisites"])
         self.assertEqual(previous["optionalTaskCheckpoint"], current["optionalTaskCheckpoint"])
 
+    def test_input_notice_variant_preserves_historical_guidance_and_state_contract(self):
+        from yiyuan_accord.development import V5_SCHEMA, delivery_adapter_contract
+        options = dict(development_schema=V5_SCHEMA, startup_entry=True, meta_guidance=True)
+        previous = delivery_adapter_contract("codex", "yiyuan-accord-codex", **options)
+        current = delivery_adapter_contract("codex", "yiyuan-accord-codex", input_state_notice=True, **options)
+        old_input, new_input = (item["ordinaryInputParticipation"] for item in (previous, current))
+        self.assertEqual(old_input["effect"], "inject-necessary-task-duties-without-skill-selection-prerequisite")
+        self.assertEqual(new_input["effect"], "capture-input-and-inject-bounded-state-reconciliation-notice")
+        self.assertEqual(old_input["metaGuidance"], new_input["metaGuidance"])
+        self.assertEqual(previous["optionalTaskCheckpoint"], current["optionalTaskCheckpoint"])
+        self.assertEqual(old_input["existingCheckpoint"], new_input["existingCheckpoint"])
+
 
 class ClaudeUpdateInspectionTests(unittest.TestCase):
     def run_fixture(self, **conditions):
@@ -1278,6 +1290,17 @@ class DevelopmentDeliveryTests(unittest.TestCase):
                 hooks["hooks"]["SessionStart"][0]["matcher"] = matcher
                 with self.changed(locator, json.dumps(hooks).encode()):
                     self.assertTrue(any("activation mechanism contract" in error
+                                        for error in self.report()["errors"]))
+
+    def test_input_notice_requires_declared_full_guidance_entry(self):
+        for change, expected in (({"inputStateNotice": "true"}, "must be boolean"),
+                                 ({"startupEntry": False}, "requires the declared full guidance entry"),
+                                 ({"metaGuidance": False}, "requires the declared full guidance entry")):
+            with self.subTest(change=change):
+                definition = copy.deepcopy(self.contract)
+                definition["delivery"]["hostProjections"][0].update(change)
+                with self.changed(DEVELOPMENT_FILE, json.dumps(definition).encode()):
+                    self.assertTrue(any("input state notice" in error and expected in error
                                         for error in self.report()["errors"]))
 
     def test_current_context_reentry_requires_the_compact_matcher(self):

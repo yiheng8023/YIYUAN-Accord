@@ -807,6 +807,15 @@ def validate_host_projection(
             errors.append(f"{prefix} meta guidance declaration must be boolean")
         if projection["metaGuidance"] and not (expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("metaGuidance")):
             errors.append(f"{prefix} meta guidance is outside the declared adapter")
+    if "inputStateNotice" in projection:
+        expected_shape |= {"inputStateNotice"}
+        if type(projection["inputStateNotice"]) is not bool:
+            errors.append(f"{prefix} input state notice declaration must be boolean")
+        if projection["inputStateNotice"] and not (
+                projection.get("startupEntry") is True and projection.get("metaGuidance") is True
+                and expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("effect")
+                == "capture-input-and-inject-bounded-state-reconciliation-notice"):
+            errors.append(f"{prefix} input state notice requires the declared full guidance entry")
     if adapter_id not in ("codex", "claude-code") or not _exact(projection, expected_shape):
         errors.append(f"{prefix} program projection shape is invalid")
     manifest_locator, marketplace_locator = projection.get("manifest"), projection.get("marketplace")

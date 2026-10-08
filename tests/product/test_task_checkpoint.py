@@ -605,6 +605,72 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
         foundation.unlink()
         self.assertNotEqual(read().returncode, 0)
 
+    def test_prompt_notice_preserves_receipts_without_repeating_entry_guidance(self):
+        original = (RUNTIME.parents[1] / 'plugins/yiyuan-accord-codex/skills/'
+                    'deliver-demand-driven-outcome/references/meta-guidance.md').read_bytes().decode('utf-8')
+        startup = subprocess.run([self.node, str(RUNTIME.with_name('accord-hook.cjs'))],
+            input=json.dumps({'hook_event_name': 'SessionStart', 'source': 'startup'}),
+            text=True, encoding='utf-8', capture_output=True, env=self.environment,
+            cwd=self.work, timeout=10)
+        self.assertEqual(startup.returncode, 0, startup.stderr)
+        entry = json.loads(startup.stdout)['hookSpecificOutput']['additionalContext']
+        self.assertEqual(entry.count(original), 1)
+        for text in ('First actual request.', 'A changed request with current guidance.'):
+            notice = self.event('UserPromptSubmit', prompt=text)['hookSpecificOutput']['additionalContext']
+            self.assertEqual(notice.count(original), 0, 'state capture must not repeat the foundation')
+            self.assertNotIn('# Coordinate the current task', notice)
+            self.assertIn('does not establish', notice)
+            self.assertIn('disabled', notice)
+            self.assertIn('missing or changed', notice)
+            self.assertIn('Native input receipt:', notice)
+            self.assertIn('deliver-demand-driven-outcome', notice)
+            self.assertEqual(self.invoke({'op': 'read-native-input'})['entries'][-1]['text'], text)
+
+    def test_missing_or_invalid_guidance_does_not_corrupt_input_capture(self):
+        package = self.root / 'independent-input-package'
+        shutil.copytree(RUNTIME.parents[1] / 'plugins/yiyuan-accord-codex', package)
+        foundation = package / 'skills/deliver-demand-driven-outcome/references/meta-guidance.md'
+        module = package / 'runtime/task-checkpoint.cjs'
+        for missing in (False, True):
+            if missing:
+                foundation.unlink()
+            else:
+                foundation.write_bytes(b'invalid foundation')
+            result = subprocess.run([self.node, str(module), '--hook', 'UserPromptSubmit'],
+                input=json.dumps({'hook_event_name': 'UserPromptSubmit', 'session_id': 'test-session',
+                    'cwd': str(self.work), 'prompt': 'Preserve this actual input.'}),
+                text=True, encoding='utf-8', capture_output=True, env=self.environment,
+                cwd=self.work, timeout=10)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn('does not establish', json.loads(result.stdout)['hookSpecificOutput']['additionalContext'])
+            observed = self.status()
+            self.assertFalse(observed['needsNativeReplay'])
+            self.assertEqual(self.invoke({'op': 'read-native-input'})['entries'][-1]['text'], 'Preserve this actual input.')
+            entry = subprocess.run([self.node, str(package / 'runtime/accord-hook.cjs')],
+                input=json.dumps({'hook_event_name': 'SessionStart', 'source': 'startup'}),
+                text=True, encoding='utf-8', capture_output=True, env=self.environment,
+                cwd=self.work, timeout=10)
+            self.assertNotEqual(entry.returncode, 0)
+
+    def test_brief_quarantine_notice_preserves_pause_and_replay_requirements(self):
+        self.bind(unresolved=['Owned work remains.'])
+        self.pause('Keep the user pause.')
+        state_file = next(self.state.glob('*.state.json'))
+        checkpoint = state_file.read_bytes()
+        workspace_key = str(self.work).lower() if os.name == 'nt' else str(self.work)
+        marker = self.state / (hashlib.sha256(workspace_key.encode()).hexdigest() + '.workspace-input-failure.json')
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'prior-loss'}), encoding='utf-8')
+        notice = self.event('UserPromptSubmit', prompt='Inspect only; do not resume.')['hookSpecificOutput']['additionalContext']
+        self.assertNotIn('# Idea-Driven AI Collaboration', notice)
+        self.assertNotIn('# Coordinate the current task', notice)
+        self.assertIn('does not establish', notice)
+        self.assertIn('recovery token', notice)
+        self.assertIn('Preserve existing pauses', notice)
+        self.assertEqual(state_file.read_bytes(), checkpoint)
+        observed = self.status()
+        self.assertEqual(observed['mode'], 'paused')
+        self.assertTrue(observed['needsNativeReplay'])
+
     def test_subagent_start_guidance_is_complete_and_never_changes_root_state(self):
         self.bind(unresolved=['Root remains unfinished.'])
         self.pause('Root is paused.')
@@ -1352,9 +1418,13 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.assertEqual(self.compact_snapshot()['checkpoint']['value']['unresolved'], [gap])
         self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
         self.event('SessionStart', source='resume')
-        contexts.append(self.event('UserPromptSubmit',
+        notice = self.event('UserPromptSubmit',
             prompt='Apply the revised acceptance baseline to the existing release and its consumers.'
-            )['hookSpecificOutput']['additionalContext'])
+            )['hookSpecificOutput']['additionalContext']
+        self.assertIn('Reuse applicable guidance already supplied', notice)
+        self.assertIn('missing or changed guidance', notice)
+        self.assertIn('existing unfinished checkpoint remains', notice)
+        self.assertNotIn('Before any change, assess its effect on the whole goal', notice)
         for context in contexts:
             self.assertIn('Before any change, assess its effect on the whole goal', context)
             self.assertIn('current validity of historical conclusions', context)
