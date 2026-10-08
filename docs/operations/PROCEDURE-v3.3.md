@@ -2735,3 +2735,15 @@ Root随后在独立`accord-ci-index-maintenance-20261009-01`通过当前健康�
 独立oracle从原日志另行重建全部行，数据、原件及首批cache保持均通过。原oracle把总结时间错误等同step完成秒，在Ubuntu3.12的31.997附近总结/32秒step结束处误拒；派生修正只核原step时间范围、秒精度和不早于末条测试回执，原7项及2项边界反例通过，原实现保留。独立复核与报告明确上述方法改变、原失败、未验资源后态和时间含义；该维护结果不追认SDK、两阶段资源或产品净收益。
 
 02两条已结束固定声明保全d8988f98精确定义/对象摘要后移出活动必过集合；17父scope及F/A、其它case和全部限额保持。下一工作复用这些具体故障/纠偏结果，不再堆等价试验，也不把已验证机制传递当完整业务验收。
+
+## 2026-10-09 原生CI比较的实际结果与前绑缺口
+
+07ea93fb前绑fresh原生协作任务，以新c22/CI37821558646九日志对照已验35b索引，实际child01a11ceb-4da9-7632-9abc-c9d2f87d25d6、turn01a11ceb-4f65-7d43-acd9-ba4faed261d8在165993ms完成三产物。父SubAgentActivity给出真实allocation ID，原生记录直接核0.162.0-alpha.2、Sol/medium/default及既有on-request/danger-full-access；没有改宿主权限。两次get_goal原始工具回执均null。累计token762514，uncached80559、output6243，限内；它们不是当前上下文占用或金额。worker自行选择并读取Accord核验Skill，随后完成实际数据/资源/原件检查，不等全Skill或typed激活覆盖。
+
+两个真实worker Job分别160/96MiB、CPU1000/10000，两路并发，直接worker85/0，forcedfalse、failure空、activeProcesses0、锁释放。约0.544/1.072秒，峰值21102592/24547328字节。第一次宿主命令exit1与工具正常继续码85不同，Agent据原回执继续而未重放首批。第一stage cacheAfter、第二stage cacheBefore与实际两文件SHA/mtime一致；完整16业务原件、189tracked源、共享配置保持。正常退出宽限修正在这个新任务得到真实观察，原监督器强退失败不追认。
+
+Root独立oracle和额外复审确认新旧各7814条、九矩阵集合一致。八矩阵步骤减少18～372秒，Windows/Python3.10增加420秒；九矩阵最大间隔减少均为repository rehash方法（46.455109～268.420586秒）。这些是日志/步骤观察差异，不是同环境因果或产品净收益。报告方法名前多余反斜杠仅格式问题，原业务报告保持；无数据/语义偷换。
+
+本次完整准入仍持有：freeze只有repoTracked，没有完整native已装缓存字节before来源。后读25成员仍为e4c0不补造前态；已证结果/配置/资源与该缺口分开。Root机械后验598.932秒只记其检查终点，之后新增复审不算原600秒内，不能把它代作所有条件和最终裁定均及时完成。原两声明、数据定义和限额保07ea93fb历史后退出活动集合，17父scope和其它13case不变，禁止重做该已完成比较求绿。
+
+私有`accord-ci-comparison-20261009-01`保原始日志、三产物、freeze/start/FACTS、native-worker-history、OBSERVER-REVIEW及ASSESSMENT。future-only preflight-v2/freeze-next在准备入口实际读取并核完整安装包，缺失或晚于派发的快照拒绝；两项纯边界检查过，原freeze不改。实际native身份应从父事件的allocation映射直接取，随后读精确child记录，避免广泛UI/文件时间过滤调查和耗尽QA余量。

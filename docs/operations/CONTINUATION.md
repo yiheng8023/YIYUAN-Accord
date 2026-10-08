@@ -4,7 +4,9 @@
 
 ## 当前动作
 
-最新c22d0351/CI37821558646已success。下一必要成果已选择为[原生新CI比较](../../product/cases/ci-comparison-native-v3.3.json)：冻结该新矩阵九日志，与已验35b基准比较。使用健康原生fresh worker Sol/medium和已证监督器宽限候选，业务300秒、总600秒含独立QA；不新增SDK/CLI/Trust/配置写，也不重跑旧日志业务。两项原生case仅前绑，实际入口/模式/资源/结果仍须原件验证。
+[原生新CI比较](../../product/cases/ci-comparison-native-v3.3.json)已真实完成：fresh原生worker约166秒交付新7814条索引、九矩阵比较和报告，独立原文/计算/语义核验通过。原生日志确认0.162.0-alpha.2、Sol/medium/default、Goal前后null、累计usage在限内；自主选读核验Skill并用于结果检查。两路并发在实际160→96MiB、CPU10%条件下均自然结束，所属Job0，首批cache、16业务原件、189主仓tracked文件和配置保持。八矩阵步骤减少18～372秒，Windows/Python3.10增加420秒，不据此宣称因果提速或净收益。
+
+正式准入仍未成立：本次冻结漏了派发前完整已装缓存字节来源，主仓package源码/实际Hook正文不能代替；后读25成员e4c0不能补造before。机械后验在598.932秒落盘只证明其检查终点，不等完整接纳裁定在600秒内完成。原两固定声明精确保07ea93fb后移出活动必过集合，不重跑已完成比较。future-only preflight-v2/freeze-next已把实际已装字节读取接入准备入口，缺失/晚于派发拒绝，两边界测试过。下次直接使用已证SubAgentActivity→真实child ID→原生记录路线，避免再次泛查UI/线程列表消耗QA余量。
 
 [CI索引02](../../product/cases/ci-timing-index-v3.3-02.json)已一次执行结束：真实0.161.0/Sol-medium/default、Goal前后null、完整入口及当前输入回执已核；约52.259秒、原生自然exit0/Job0，共享配置和主仓原件保持。但shell及备用Node通道在读业务材料前遭遇Windows sandbox setup错误，模型如实保未完成，未生成业务成果；不由原生completed状态晋通过。匹配日志定位到占用中node_repl.exe的ACL更新错误32，以及受保护PCManger授读失败。Root未杀其它会话进程、改ACL或重跑02。
 
@@ -62,14 +64,14 @@
 
 ## 剩余主线
 
-当前声明诊断为17范围、15活动case，5范围存在声明绑定缺口，其中3范围没有case。新原生CI比较两项只有前绑；01/02历史和Root维护边界不变。数字来自机器声明，不是完成率，也不是完整实际验收结果。
+当前声明诊断为17范围、13活动case，7范围存在声明绑定缺口，其中5范围没有case。已完成原生比较保留真实结果与资源贡献，但前绑缺口不转成正式通过；01/02历史不变。数字来自机器声明，不是完成率，也不是完整实际验收结果。
 
 | 仍缺范围 | 下一必要内容 |
 |---|---|
 | 能力协调 | research-learning-and-reuse、recovery-and-lifecycle、capability-loss及default-host-without-extra-extensions的充分绑定与实际结果；继续保持作者政策、用户禁用/排除、同名/同义仲裁与真实目标控制。 |
 | 连续性 | recovery-and-rollback及capability-loss正式绑定；普通择时、变化后继承/暂停/纠偏、适用失败恢复和必要原件/资源条件。旧workspace未知责任保持。健康任务不强制交接，不把分散实例拼成同episode。 |
-| environment-adaptation | 02证实宿主故障后的如实保留及退出，未完成原成果；仍需充分变化适应结果。 |
-| resource-pressure-and-exit | 维护产物正确但原监督器强退、96MiB阶段未运行；仍缺完整实际条件变化/资源后态验收。 |
+| environment-adaptation | 新原生比较已证实际条件变化下的充分路线、完整结果和退出；正式条件仍缺本次已装字节before，不追认。 |
+| resource-pressure-and-exit | 新原生比较已实测160/96MiB两阶段自然退出及partial保留；原监督器强退原件保持，正式条件缺口另列。 |
 | codex-lifecycle | 复用已证完整注入/传递机制，补真实模型采用、当前适用入口、变更/失败/恢复及有效用户环境的充分证据，尚无父case。不得由认证、安装或目录发现代证。 |
 | system-integration | 尚无必要职责共同成立的完整case；覆盖当前目标所需职责、八质量轴及适用场景。足够原生能力承担职责或合理不介入也可成立，不为覆盖强行调用所有机制。 |
 | system-impact-assessment | 尚无父case；需独立核结果、用户干预/纠偏/恢复负担和相关总成本/净影响。能力可见、安装和局部成功不等于价值。 |
