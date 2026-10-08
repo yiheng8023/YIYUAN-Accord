@@ -1240,6 +1240,17 @@
   },
   "developmentObservations": [
     {
+      "id": "main-user-candidate-adoption-20261008",
+      "observedAt": "2026-10-08",
+      "scope": "User-authorized one-shot update from123921 to114112 at fixed35b63b75, followed by read-only checks in the reopened original desktop task.",
+      "installation": "Five official CLI0.161.0 commands completed in24.179seconds with exit0,forcedfalse,failure=null and zero remaining owned Windows Job processes. Current25cache members match the reviewed source package e4c0ce9df44857dc5cc665f292342cd631fc87a08b93d9af70e4267d3de1b435. Original recovery copies and frozen sources remain unchanged.",
+      "configuration": "All11 recorded configuration stages match the exact marketplace transition. Existing Hook trust, enabled settings, models and third-party choices were preserved. Current configuration after client restart differs only in the known session pipe field, checked separately. No daemon stop, model business or repeated installation.",
+      "entry": "The original task received native SessionStart/resume guidance and the new bounded input/state notice from114112. Current MCP read returned the actual parent thread/current turn, fresh native input receipt and preserved checkpoint revision390 with13 unresolved conditions; no input-loss or resume-reconciliation flag. The two changed specialist Skill bodies were read from the current installed paths.",
+      "limits": "Installation does not reconcile a new input or itself authorize continuation. The read initially had currentInputReconciled=false and canContinue=false, retained until Root reconciles the actual user message and remaining task. A newly created Node process has relative native-state-mcp.cjs arguments; cwd and exact response-to-PID/module-root binding were not independently exposed. Only this original task entry transmission and current MCP read are confirmed, not all component branches, other entries, model compliance, global idle, net benefit or fullF-A.",
+      "verification": "Root direct read-back and independent source/resource/configuration review agree. Original execution/result unverified entry fields remain immutable; separate post-update evidence records subsequent observations. The single installation grant is consumed. Fixed35bCI37728674381 passed11/11; subsequent record-only5aCI37733785518 also succeeded.",
+      "evidence": "accord-local-adoption-20261008-01/executor actual command/config/auth/attempt/resource records and post-update/INSTALLATION-FACTS.json,MCP-READ.json,MCP-PROCESS.json,ADOPTION-RESULT.md."
+    },
+    {
       "id": "input-notice-lifecycle-consumer-correction-20261008",
       "observedAt": "2026-10-08",
       "scope": "Repair the lifecycle observer after CI37724704741 at4a464748 failed on Ubuntu and macOS; no product-package or local installation change.",

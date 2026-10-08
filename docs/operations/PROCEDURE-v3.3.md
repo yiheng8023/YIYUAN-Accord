@@ -2683,3 +2683,13 @@ Root独立raw/SQLite对账及独立审查核实真实原件。11执行源及两�
 独立复审再发现persistent入口仍要求全文和receipt同处一条developer消息。新分工不保证同条，因此改为在同一已绑定session/turn、模型活动前分别观察两者，保原Hook来源和角色要求，输出各自行号。旧合并形状仍支持；两种分离顺序、缺失一侧、晚到及双方各自的过期/复述/无Hook来源/截断反例先红后绿。此为源码/测试反例修正，没有新跑persistent宿主或模型，也不以notice代替全文。
 
 当前两项lifecycle/scoped-exposure声明前瞻绑定修正观察器，原正式准入及失败保持精确原源，不继承为本次通过。原CI提前退出后缺完整settings/selection观察；虽记录所属进程退出和所属目录回收，整案仍失败，不追认成功。插件25成员/版本114112/包e4c0、元指导、主用户123921与隔离162254安装均未改；没有借此次CI修复运行旧私有实例、安装或授信。独立复审确认上述来源、身份和活动屏障未降低；修正提交的托管结果须另核。
+
+## 2026-10-08 Main-user candidate adoption
+
+修正提交35b63b75 / CI37728674381实际11/11成功，记录提交5a08dc19 / CI37733785518亦success，原4a失败不追认。用户随后明确允许已准备并独审的本机123921到114112更新；新许可绑定45e139计划，未复制旧grant。用户关闭客户端后从外部终端执行，安装源固定35b，后续记录提交不改变这个目标。
+
+Root独立后读及另一原件审查确认：五个官方CLI0.161.0调用全部exit0、forced=false、failure=null、所属Windows Job剩余0，attempt到末步结束24.179秒；25成员缓存与冻结新包相同，包SHA为e4c0ce9df44857dc5cc665f292342cd631fc87a08b93d9af70e4267d3de1b435。旧包、原配置和所有冻结恢复原件保持。11份配置阶段按old×4/removed×2/new×5匹配预期，安装期间只有Accord市场ref变化；重开当前配置只另有已知会话pipe变化。没有新增Hook信任、组件启停、主模型/模式、第三方或既有daemon停止。
+
+原线程重开后实际收到114112的SessionStart/resume指导及新的简短input/state notice；当前MCP只读响应返回同一原线程、当前turn、新epoch及原checkpoint rev390/13项未完责任，未见input-loss或resume待恢复标记。安装不会自动把currentInputReconciled/canContinue改为真，Root仍需基于实际新输入和既有目标对账。当前变更的两项专用Skill正文亦已从新安装路径读取。
+
+相关Node进程在客户端重开后新建，但参数为相对runtime路径，OS接口未独立暴露cwd，MCP响应也无PID，不能由并行观察补造精确进程根绑定。这里只确认本原线程新Hook参与和当前MCP读取正常，不外推全部组件分支、其它入口、模型遵循、净收益或完整3.3验收。原execution/result中的freshHookInput/freshMcpAdoption未验值保留；后续观察另记`accord-local-adoption-20261008-01/post-update/ADOPTION-RESULT.md`及原件。本次单次许可已消费，不重复安装，隔离162254未改，主线剩余验收继续保留。

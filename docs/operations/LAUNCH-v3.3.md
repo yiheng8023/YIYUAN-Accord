@@ -30,7 +30,7 @@
 
 ## YIYUAN Accord 3.3：让 Agent 协调协作（草案）
 
-> **草案，非正式发行说明。** 3.3仍在开发，尚未完成验收或发布；目前没有可供常规安装的已接受3.3发行版。当前 Codex 源码候选为 `3.3.0-dev.1+codex.20261008114112`，尚未在主用户环境采用。现装`20261006123921`仅在一份本机原线程核过采用，不能推广为新候选或所有入口均已验收。
+> **草案，非正式发行说明。** 3.3仍在开发，尚未完成验收或发布；目前没有可供常规安装的已接受3.3发行版。当前 Codex 源码候选和主用户安装为 `3.3.0-dev.1+codex.20261008114112`。已在一份本机原线程核到新版Hook参与和当前MCP状态读取；不能推广为所有组件分支、入口或完整功能均已验收。
 
 ### 你可以怎样开始
 
@@ -58,7 +58,7 @@ Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和
 
 ## YIYUAN Accord 3.3: letting an Agent coordinate the work (draft)
 
-> **Draft, not an official release note.** Version 3.3 is in development and has not completed acceptance or publication. There is currently no accepted 3.3 release for normal installation. The current Codex source candidate is `3.3.0-dev.1+codex.20261008114112` and has not been adopted in the main user environment. The installed `20261006123921` was checked in one original local task; that does not establish adoption of the new candidate or acceptance across all entries.
+> **Draft, not an official release note.** Version 3.3 is in development and has not completed acceptance or publication. There is currently no accepted 3.3 release for normal installation. The current Codex source candidate and main user installation are `3.3.0-dev.1+codex.20261008114112`. The new Hook participation and current MCP state read were observed in one original local task; this does not establish acceptance of every component branch, entry or complete functionality.
 
 ### How to get started
 
@@ -95,7 +95,7 @@ Version 3.3 remains in development and has not completed acceptance or publicati
   "mission": "Support reliable long-term human–AI collaboration.",
   "version": {
     "release": "3.3 (development; not an accepted release)",
-    "note": "Current source policy candidate not locally adopted. Installed20261006123921 from416160e1 was checked in one original local task; not universal acceptance or an official release identity.",
+    "note": "Installed20261008114112 from35b63b75. New Hook participation and current MCP state read observed in one original local task; not universal acceptance or an official release identity.",
     "developmentPackageSnapshot": "3.3.0-dev.1+codex.20261008114112"
   },
   "scope": {
