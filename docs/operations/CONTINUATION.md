@@ -4,6 +4,8 @@
 
 ## 当前动作
 
+已把已证修正接入[CI索引02新实例](../../product/cases/ci-timing-index-v3.3-02.json)：复用已有exact-trusted主仓作为HOST_CWD，业务WORK单独限定在新私有目录。主仓对worker任务权限只读，未声称OS只读；全部tracked原件、HEAD及Git后态另核。调用者不允许新信任或配置恢复写，bootstrap和关闭后配置必须不变。34项纯mock及独审通过，未变工具/oracle原37项检查可复用。新两case同episode前绑，按既有普通开发授权推进，不复制01授权或扩大600+20、45+10/Token限额。
+
 用户确认后，[CI时序索引一次实例](../../product/cases/ci-timing-index-v3.3.json)在模型输入前2.0528秒被Root调用者误拒：把请求中的cwd写根错误要求原样回显。固定0.161.0官方源码把cwd作为隐含写根、从返回的显式writableRoots去除；其余已核控制相符。未发turn/start、0业务输入，无cache或交付物；原配置字节/mtime未变，所属Job强制收尾exit124/active0、reader停止。原失败、授权、源码和回执保持，不追认成功或重跑。
 
 最小纯修正只区分请求与原生返回的期待，仍精确核cwd、唯一额外写根、字段/类型、网络和临时目录；原请求权限不变。原始返回重放、4项回归/11拒绝变体及独立复核通过，尚未在新实例执行。原两次声明共属一个已结束实例，已按既有历史处置保全4fcd63fa精确定义后移出当前必过集合，父职责/限额不变。私有`accord-resource-ci-index-20261008-01/sandbox-diagnosis`保FACTS、固定官方源、patch、测试和REVIEW。下一次必要执行应先采用这份已证修正并重新前绑实际路线，复用未开展业务的原日志/工具，不重开安装、泛查入口或延长旧窗口。
@@ -54,14 +56,14 @@
 
 ## 剩余主线
 
-当前声明诊断为17范围、13活动case，7范围存在声明绑定缺口，其中5范围没有case。已结束的CI索引bootstrap两声明保在4fcd63fa历史，不能成为永久必过实例或凭纯修正关闭实际缺口。数字来自机器声明，不是完成率，也不是完整实际验收结果。
+当前声明诊断为17范围、15活动case，5范围存在声明绑定缺口，其中3范围没有case。02两项只有前绑、尚未实际验收；01两声明仍保4fcd63fa历史。数字来自机器声明，不是完成率，也不是完整实际验收结果。
 
 | 仍缺范围 | 下一必要内容 |
 |---|---|
 | 能力协调 | research-learning-and-reuse、recovery-and-lifecycle、capability-loss及default-host-without-extra-extensions的充分绑定与实际结果；继续保持作者政策、用户禁用/排除、同名/同义仲裁与真实目标控制。 |
 | 连续性 | recovery-and-rollback及capability-loss正式绑定；普通择时、变化后继承/暂停/纠偏、适用失败恢复和必要原件/资源条件。旧workspace未知责任保持。健康任务不强制交接，不把分散实例拼成同episode。 |
-| environment-adaptation | 原CI索引bootstrap已结束未执行业务；仍待新前绑任务的实际条件变化、充分路线、原件/配置、结果与退出观察。 |
-| resource-pressure-and-exit | 仍待实际所属Job变化、并发选择、部分结果保留与退出；本次外层Job0不证明资源压力任务通过或整个宿主无残留。 |
+| environment-adaptation | 02已前绑；待实际条件变化、充分路线、原件/配置、结果与退出观察。01历史不代新结果。 |
+| resource-pressure-and-exit | 02已前绑；待实际所属Job变化、并发选择、部分结果保留与退出，外层Job0不代业务通过。 |
 | codex-lifecycle | 复用已证完整注入/传递机制，补真实模型采用、当前适用入口、变更/失败/恢复及有效用户环境的充分证据，尚无父case。不得由认证、安装或目录发现代证。 |
 | system-integration | 尚无必要职责共同成立的完整case；覆盖当前目标所需职责、八质量轴及适用场景。足够原生能力承担职责或合理不介入也可成立，不为覆盖强行调用所有机制。 |
 | system-impact-assessment | 尚无父case；需独立核结果、用户干预/纠偏/恢复负担和相关总成本/净影响。能力可见、安装和局部成功不等于价值。 |
