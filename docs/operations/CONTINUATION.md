@@ -89,8 +89,13 @@ CONFIRMATION-RECEIPT.json。用户已实际运行；preflight仅被Auto/LocalSys
 CodexSandboxService.OpenAI.Codex（PID31664）阻止，未有attempt/execution，旧包exact、新包未生，
 许可未消费。该服务不随客户端关闭必然退出，不能盲等或重复执行。SCM登记与磁盘签名已核，
 实际image的LIMITED_INFORMATION读取返回WinError5；不按名字/登记路径直接豁免或停服务。
-已准备并静态复审固定6a4a2847只读查询，只收SCM/PID/实际image/创建时间及文件hash，
-尚未执行，新的管理员只读权限待决定；原安装授权继续有效，安装/真实setup未完成。
+用户已允许并完成单次管理员只读查询，固定6a4a2847退出0、句柄闭合，实际服务image/
+创建时间与SCM一致；该权限已消费，不重复提权。普通权限另核Legacy owner为当前用户、
+主home非desktop创建、cache路径不覆盖安装/恢复；已按必要源区分provisioning读者与
+卸载清理写者。实例资格化派生executor-service-qualified02，binding4c7d6026，30项检查
+及独立复审通过，登记原未消费安装确认。逐阶段核实例/登记/签名/所有权，损坏记录、
+进程缺失/复用和其他消费者仍拒绝。仅关闭客户端/IDE/CLI后运行该新目录launch.cmd，
+不停止沙箱服务、不运行旧失败目录。原5步/151947/配置保护保持，安装/真实setup未完成。
 
 ## 剩余主线与下一依赖
 
