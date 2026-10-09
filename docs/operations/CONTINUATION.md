@@ -57,7 +57,7 @@
 | CLI / Desktop / SDK | 复用普通交付和机制事实，补当前候选适用性及未闭行为，不能互相代验。 |
 | VS Code | 新线程已证完整指导、输入捕获与一次MCP读取；完整新输入仍受旧无归属workspace水印隔离。已结束probe与旧v2禁止replay，不再重跑或调查已证连接；必要后续任务按其原生输入/历史/权限走既有按会话恢复。 |
 | Work Local | 在必要实际交付中按Hook实际cwd联读状态。旧projectless查询误用Root cwd，不归因用户或判整个宿主故障。 |
-| Desktop/手机Remote | 2026-10-09用户已回复并截图确认：Android手机的Remote入口在Codex内，页面显示带绿色指示的主机和YIYUAN-Accord项目；不再等待入口信息。仍需同一任务的实际输入/审批、暂停/撤权、断连后效果及结果权限证据，列表可见不代这些行为。手机复用本地主机，不部署插件；无需因菜单改名重新配对或启用。 |
+| Desktop/手机Remote | 2026-10-09用户Android截图确认入口在Codex内；随后“从手机继续。”经原生回执落在原Root线程，当前epoch/turn一致、无replay，实际命令仍在原本机仓库执行。手机来源由用户说明，原生元数据无设备类型字段。入口发现和此次输入/本地执行已证；手机端结果显示、审批、暂停/撤权、断连后态仍未验。手机复用主机，不部署插件，不重新配对或启用。 |
 
 ## 权限与保留的未知
 
@@ -89,6 +89,8 @@ C:\Users\15521\.codex\backups\，仅按当前依赖读取：
   隔离02/03、认证原件和限制按前页导航读取，不复跑。
 - IDE：accord-ide-live-20261009-01/FACTS.json；否决基线方案：
   accord-input-baseline-20261009-01/DIAGNOSIS.md。
+- 手机Remote：accord-mobile-remote-20261009-01/OBSERVATION.json及原生inspect、
+  read-task-input和本机命令原始回执；只支持此次原线程输入与本地执行观察。
 - 子范围准入：accord-sdk-admission-20261007-01/ADMISSION.json、
   accord-exact-ci-checker-20261007-01；C02、N/ACK、UTF8等按前页导航读取。
 - 本次接续重整：accord-continuation-reconcile-20261009-01/checkpoint-before.json、
