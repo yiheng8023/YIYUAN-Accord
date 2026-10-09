@@ -178,7 +178,7 @@ VS Code兼容编辑器优先作为同一扩展适配族，Xcode、JetBrains等�
 
 [JetBrains当前官方说明](https://www.jetbrains.com/help/ai-assistant/codex-agent.html)明确支持Skill、AGENTS.md和经设置传入的MCP，以及自己的权限/模式与上下文显示；这提供了复用或组合的候选路线，尚未证明Accord Hook参与。OpenAI的[IDE说明](https://learn.chatgpt.com/docs/codex/ide)区分VS Code兼容扩展与JetBrains/Xcode自有集成，不能跨集成直接借用证据。此前通用插件页与本机VS Code有限参与观察的分歧保留为历史记录；当前按2026-09-28补核分别处理官方支持边界、历史参与和实际加载未知；按实际构建和功能区分处理，不回退为统一排除。上述来源复核不是完整支持声明或新增安装授权。
 
-2026-09-15的外部触发及内置IDE候选来源保留于bca52cdb历史计划，不构成当前任务。移动Remote的已选路线仍复用连接主机的任务、文件、插件与权限；本轮官方回读见下文，实际配对及远端输入/审批/断连差异仍待验，不能宣称手机本地执行或加载。
+2026-09-15的外部触发及内置IDE候选来源保留于bca52cdb历史计划，不构成当前任务。移动Remote的已选路线仍复用连接主机的任务、文件、插件与权限；本轮官方回读及用户界面观察见下文，同一任务的远端输入/审批/断连差异仍待验，不能宣称手机本地执行或加载。
 
 验收沿用A01–A08：A02核当前范围处置、已选入口及依据，A01/A03/A06核实际交付和生命周期，A08核完整组合与净影响。适用性覆盖当前9个OpenAI盘点行（6selected、3deferred：两内置IDE及网页Chat）；后两父范围仍对应同一六个已选集合。三混合入口以当前modeCatalog完整声明，各独立Chatmode均deferred；selectionFinal=true、17范围和全部质量底线保持，必要case按实际缺口补绑定。载体entry与被验subjectEntries不得混同，开发选择不计行为通过。
 
@@ -195,6 +195,8 @@ VS Code兼容编辑器优先作为同一扩展适配族，Xcode、JetBrains等�
 以下是历史组件复用分析，不是本版内置IDE待办；它不新增IDE控制器、身份合成或Hook转换层。内置入口缺失的职责可由充分原生机制承担，但须有明确对应；外部组合不绕过内置的不确定性，也不要求先完成整项验收才能开发。IDE MCP的启动cwd与业务项目分别绑定；启用或自动配置会启动服务、改变连接或客户端设置，需具体授权和恢复责任，不能用当前来源审查代替。项目工具暴露和执行确认保留用户选择；停止客户端或回滚文件不自动撤销IDE内已发生的全部效果。当时只沿官方契约和既有资料核对，没有要求用户采购或为取证安装；是否重新选择这些内置入口另议。该段保留2026-09-27工程路线核对的历史观察，当时为4selected/7pending；当前集合以r38最终决定及r39保持的9行（6selected/3deferred）、已选模式与selectionFinal=true为准，不能沿用旧分母。父范围和必要质量仍分别验收。
 
 2026-10-09只读回核官方现页：[Plugins](https://learn.chatgpt.com/docs/plugins)仍明确IDE扩展不支持插件；[Remote connections](https://learn.chatgpt.com/docs/remote-connections)说明复用连接主机的项目、状态、权限和插件，实际配对/可用性仍需核；[插件打包](https://developers.openai.com/plugins/build/plugins)仍支持现有`.codex-plugin/plugin.json`兼容格式。因此当前没有强制迁移manifest格式的任务，VS Code也不能借桌面插件可用性直接过关。本轮未操作IDE/手机、启用连接或调整安装；六条选择和行为unknown保持。
+
+同日后续用户已补充Android手机截图并确认Remote位于Codex内：页面显示带绿色指示的已列出主机及YIYUAN-Accord项目。入口发现已闭，不再记录为等待用户答复或入口消失。官方现页也说明从Codex进入连接电脑、旧界面可能仍称Remote；其改名说明明确举iOS，本机Android位置以用户截图为据。`remote`仍表示已选的本地主机控制路线，不锁定菜单名称，不因界面改名修改机器模式ID或扩大范围。主机/项目列表可见不等于同一任务的输入、审批、暂停/撤权、断连后态和结果回传已验；后续在必要实际交付中补证，不为菜单核对重新配对、启用连接或创建Cloud环境。
 
 ## 跨项目与执行位置的连续性
 
