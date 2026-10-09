@@ -2821,3 +2821,19 @@ Root评估了一个候选：在SessionStart startup、没有本会话input/state
 新增test_delayed_startup_cannot_acknowledge_unidentified_input_loss用真实helper CLI的无效JSON触发工作区水印（隔离临时目录内），随后真实entry handler处理startup，再送“Continue; the earlier request still applies.”。结果保持quarantine、禁止bind、全文保全，另一暂停任务及共享水印字节不变。连同原新会话逐token恢复/旧任务仍暂停、暂停中断保留及捕获时水印变化4项回归全部通过，5.281秒。这里的CLI是本地Node测试脚本，不是Codex CLI/AppServer或模型实例；不复跑真实IDE probe。
 
 当前较小路线仍是既有按会话核对后的token-bound replay；它不清其它会话或共享水印，也不证明未捕获历史已恢复。既有原生读取权限不是本次已结束只读probe的状态修改许可，旧v2禁止replay保持。该局部调查已闭，不继续叠加初始化机制或为形式标签重做业务。原水印因何产生仍unknown，不由此源码反例归因；其它主线可独立推进。源与候选否决理由保私有accord-input-baseline-20261009-01。
+
+## 2026-10-09 监督器宽限的真实OS观察与外层纠偏
+
+d13c08bd的CI37902406821已11/11成功。下一选择既有维护监督器772aaa候选的真实收尾缺口，未解析旧九日志或重跑旧业务。Root在新accord-job-grace-native-20261009-01冻结候选、worker库、真实WindowsJob源码、Python、共享配置及执行器；业务manifest/reusable/phase明确为合成桩，Popen、挂入/恢复、OS内存/CPU限制、采样、时钟、terminate/close真实。测试本身不包含模型/Codex CLI/SDK/AppServer，也未修改共享安装、配置或旧任务。
+
+执行前独审发现两项观察器问题并纠正：query-fault会绕过原processExitCode赋值，故必须保null，仅用按实际Popen.pid关联的独立句柄核85；Job关闭后须对原handle作GetHandleInformation并取得ERROR_INVALID_HANDLE，不能以自写closed标志代证。原件和过程不是self flags的旁证，实际句柄用IsProcessInJob绑定所属Job并保持至退出核验。
+
+一次执行取得自然、到期、显式查询故障三项机制事实：分别2.331/10.997/0.997秒；自然85且无terminate、Job0；到期仅一次terminate/tool124/Job0；query-fault保持processExitCode=null、tool75、unknown、postState=null，独立句柄退出不能回填这些原字段。三个内层Job各实际4进程，附加PID用途未留证，不能猜测归因。原PLAN把2进程/场景写在limits里，因此完整条件不符；测试内oracle pass不构成整案通过。
+
+外层driver虽exit0，原launcher却再次在直接进程完成后立即终止仍存在的所属尾进程，forced=true。14.796秒完成收尾，实际外层Job0/总计14进程、Job handle失效；保护源SHA/mtime不变。原整轮not-admitted，原PLAN/代码/回执不改。原层级中的局部成功没有掩盖Root外层缺陷和进程限额错误。
+
+新correction/settle.py仅补外层正常driver0且无失败时共享既有deadline的宽限，错误/超时保持强退、查询错误抛给外层finally关闭；调用点patch另存、不应用原执行器。5项纯回归覆盖原片段立即强退、正常宽限、截止不续期、异常driver和未知查询。首版测试把强退后一次采样的最终clock误当terminate时刻而失败，保before-assertion后改为记录实际terminate时刻，5项通过；不是改原执行结论。
+
+随后只对这个外层修正作新独立OS专项回归，未重演内层三个场景。前绑45秒工作/10秒收尾、160MiB及8活跃OS进程上限，先用Job API设置并回读，再运行两个直接业务角色。实际总4进程、2.300秒、无forced/error、尾进程正常完成、Job0、Job句柄失效及保护源保持。它验证新外层路径，不能追认原2进程限制或整轮通过，也不代业务、模型自主性、资源变化组合或净收益。
+
+必要通用经验进入CONTRIBUTING：监督器责任覆盖每一自有层级，角色数不等于OS后代数，必要限额须实际设置/回读，句柄关闭不能自报。这是维护者执行改进，没有新增产品服务、默认限额或宿主操作。正式17scope/13case及F-A未晋；未来必要组合可复用已证的有限收尾路径，原失败留作反证。

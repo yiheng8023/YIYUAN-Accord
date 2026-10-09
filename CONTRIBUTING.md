@@ -111,6 +111,14 @@ an execution receipt without establishing its trigger. Keep business deadlines
 separate from the bounded release of already-owned resources, preserving source,
 identity, authority and input checks.
 
+Apply owned-resource closure to every supervisor layer, including the outer
+launcher. A successful direct child can leave owned helpers briefly alive;
+use the existing bounded recovery allowance before calling normal cleanup a
+forced failure. Query failures remain unknown. Distinguish business roles and
+direct launches from actual OS descendants: bind and enforce a real process
+limit when required, query its setting and observe the whole owned group. A
+call returning from close is not proof that the underlying handle closed.
+
 For Codex0.161 startup context, session creation queues the start source;
 the normal turn path runs the pending Hook and associates its actual turn ID.
 A thread-only probe or null-turn-only filter cannot qualify that path. Bind the
