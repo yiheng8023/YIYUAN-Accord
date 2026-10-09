@@ -2787,3 +2787,13 @@ Root原工具撤回实际exit23；worker未强行执行/修复，独立PowerShel
 具体漂移包括：entrySurfaces.rule及网页environment、桌面/手机execution，三个入口父scope与三个case的sourceBasis仍自称r37待判；PLAN两处工作线、入口小节和路线表仍写七pending/三pending/selectionFinal=false；BASELINE及ACCEPTANCE也保过期Chat待判。独立只读复核支持限定对齐；旧记录归bca52cdb原文，当前不再推动这些延期任务。源码核验确认applicability覆盖全部模式，而delivery/lifecycle只取selected；boundedModeVerified没有独立赋予延期模式的行为通过语义，故只补说明、不删除/降低expected或改准入器。
 
 官方现页于本轮实际打开核对，来源见PLAN本轮段落；仅更新决策说明，非全量宿主盘点、账户认证、配对、加载或实际交付。没有新模型业务、宿主实例、组件配置或安装效果。
+
+## 2026-10-09 Windows source-pump测试期限敏感性
+
+最新a356/CI37887791818为10成功/1失败，失败仅Windows/Python3.10的source-pump queued用例：收到一次释放回执后最终记录提交unknown。原用例本地0.813秒过；仅延迟最后持久化4300ms即复现同code/stage/终态/单次释放签名。功能夹具不应把磁盘速度当协议断言，现统一20秒source run并由同deadline预留8/6秒给plan/recovery，外层30秒（双交接50秒）；显式4秒短期限反例仍正确失败且不重放，原adoption10ms及普通3秒守卫保持。69项本地会话/连接与独立复审通过；产品运行字节、25成员包、真实案例限额及CI job timeout未变。原CI未保底层持久化耗时，因此只确认并修期限敏感性，不声称已证明平台故障或托管重验通过。
+
+回归首先在未修夹具上一正例失败/一短期限预期拒绝，再修改夹具预算后两者及原source-pump场景通过。延期只注入任务自有SQLite记录器，未启动CLI/AppServer/model或修改产品运行时。原失败日志与复现保私有目录，debug输出只存在诊断脚本，不进入仓库。托管结果仍等新精确提交，未重跑旧CI求绿。
+
+并行IDE只读来源：当前扩展26.1002.51308，普通本地spawn/initialize及通用mcp-request转发存在；辅助R2请求才关闭hooks/plugins，不能归为普通全局禁用。默认后端可被用户cliExecutable或WSL设置覆盖，两个限定文件未见覆盖；当前profile/remote合并值未验证。进程快照没有Code.exe或扩展bin actor，Desktop/daemon PID不能代IDE。实际启动/版本、当前会话和Hook/MCP状态仍unknown。已请求用户方便时打开项目Codex面板，不发送新任务或重放旧v2；没有启动客户端、写配置或操作旧隔离状态。
+
+本地复核覆盖现有Python3.14.7/Node24.21.0的69项36.245秒，以及既有Python3.10.20/同Node的69项37.217秒，均通过；未安装或更新解释器。失败CI使用Python3.10.11，仍等新精确提交的托管结果，不将本机3.10补验追认旧CI通过。

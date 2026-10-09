@@ -5637,6 +5637,20 @@
       "evidence": "accord-consumer-impact-20261009-01 packet/freeze/start/identity/stage1-original/stage2-start/stage2-observed/native/ASSESSMENT. Original oracle FAIL; diagnostic equivalence PASS; separate root-corrected-delivery/correction.json binds corrected artifacts and independently recomputed tree digests.",
       "correction": "Root-corrected report removes the invented archive prerequisite and normalizes only equivalent path prefixes. Architecture now documents the existing tree-digest definition; no binding criterion, old source, original verdict, user configuration or package changed.",
       "currentEffect": "Only the ended fixed instance leaves active cases. All17 scopes and previous13 case definitions/conditions remain;7 declaration gaps and5 no-case parents remain. Limited positive observations are reusable without whole-scope qualification."
+    },
+    {
+      "id": "source-pump-ci-deadline-sensitivity-20261009",
+      "observedAt": "2026-10-09",
+      "scope": "pure-protocol-fixture-deadline-sensitivity-not-product-budget-change",
+      "failedRevision": "a3569a0d9bb95432c501490a8db1b499890107a8",
+      "ciRun": 37887791818,
+      "failedJob": 113681578007,
+      "failure": "Windows/Python3.10 source-pump queued test failed at release with RECORDER_COMMIT_UNKNOWN after one unsubscribe acknowledgement and completed target; other10 jobs passed. Original hosted failure remains. Raw log lacks the underlying persistence timing/cause, so infrastructure latency is not independently proved.",
+      "reproduction": "Original test passed locally in0.813s; delaying only source-subscription-released compareAndSet4300ms reproduced the exact outer code/stage/target-terminal/one-unsubscribe signature. New regression pair first produced one failure and one expected rejection.",
+      "correction": "Only the functional Node/SQLite test fixture changes: handoff source run20s, default plan run-8s/recovery run-6s, outer30s or50s for two-transfer chain. Explicit short-plan4s/4.5s remains a regression and still locks with no unsubscribe replay. Adoption10ms and ordinary3s branches retain their controls. Production runtime, shipped25-member package, actual-case limits and CI job timeouts unchanged.",
+      "validation": "3 targeted methods pass9.868s;69 session/connection methods pass on local Python3.14.7(36.245s) and installed Python3.10.20(37.217s), both Node24.21.0. Independent8 relevant methods pass, including slow positive/expired negative, adoption deadline, chain and ordinary modes. Not hosted Windows3.10.11 success.",
+      "evidence": "accord-ci-a356-20261009-01/job.log SHA fed2389936d625d186922832b1da7c1e10adc33e30a325996a4c0aa0aacfbd9b, reproduction and current regression source. Earlier gh --log-failed capture was incomplete; full job endpoint supplies the actual failure.",
+      "claimLimit": "Confirmed and corrected fixture deadline sensitivity. Original CI low-level cause remains bounded; await fresh exact-commit CI, no repeat of old business/model cases."
     }
   ],
   "environmentControl": {

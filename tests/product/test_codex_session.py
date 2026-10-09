@@ -19,6 +19,8 @@ const {openCarrierRecorder} = require(process.argv[2]);
 const {createCodexSourceSession,CodexSourceSessionError} = require(process.argv[3]);
 const mode = process.argv[4], databasePath = process.argv[5];
 const slowRecordMs = Number(process.argv[6] || 0);
+const slowReleaseMs = Number(process.argv[7] || 0);
+const handoffWorkMs = Number(process.argv[8] || 0);
 const adoptionPrecondition = ['adopt-old-lease', 'adopt-stale-ref',
   'adopt-busy', 'adopt-missing-tools'].includes(mode);
 const output = new PassThrough(), sent = [], starts = [], serverResponses = [];
@@ -215,6 +217,8 @@ const storedRecorder = openCarrierRecorder({path:databasePath, create:true});
 const recorder = {...storedRecorder, compareAndSet(...args) {
   if (slowRecordMs && args[2].phase === 'writer-transferred')
     Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, slowRecordMs);
+  if (slowReleaseMs && args[2].phase === 'source-subscription-released')
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, slowReleaseMs);
   return storedRecorder.compareAndSet(...args);
 }};
 let scopeReads = 0, recordReads = 0, settleCalls = 0;
@@ -285,10 +289,11 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
       target:{cwd:'C:/fixture', model:`target-model-${ordinal}`, effort:'target-effort'},
       handoffText:'Retain the fixed authorized task and protected inputs.',
       continuation:{input:'Perform the next bounded step.', sandboxPolicy:{type:'readOnly'}},
-      // These modes test adoption guards after successful real SQLite work,
-      // not disk speed. Reserve recovery and outer-run time from one deadline.
-      deadlineMs:adoptionPrecondition ? context.deadlineMs-8000 : now+4000,
-      recoveryDeadlineMs:adoptionPrecondition ? context.deadlineMs-6000 : now+4500};
+      // Protocol/ownership fixtures are not disk-speed benchmarks. Derive the
+      // ordinary plan from its run window, reserving recovery and caller time.
+      // Deadline regressions opt into a deliberately smaller plan explicitly.
+      deadlineMs:handoffWorkMs ? now+handoffWorkMs : context.deadlineMs-8000,
+      recoveryDeadlineMs:handoffWorkMs ? now+handoffWorkMs+500 : context.deadlineMs-6000};
   },
   verify(stage, facts) {
     verifyCalls.push(stage);
@@ -347,15 +352,14 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
           deadlineMs:Date.now()+3000});
       } catch (error) { result.error = {code:error.code, phase:error.phase, state:error.state}; }
     } else if (mode === 'adopt-chain') {
-      result.first = await session.run({input:'one source turn', deadlineMs:Date.now()+6000});
+      result.first = await session.run({input:'one source turn', deadlineMs:Date.now()+20000});
       result.adopted = await session.adoptTarget({deadlineMs:Date.now()+3000});
       result.secondTransfer = await session.run({input:'second source carrier',
-        deadlineMs:Date.now()+6000});
+        deadlineMs:Date.now()+20000});
       try { await session.run({input:'must wait for second adoption', deadlineMs:Date.now()+1000}); }
       catch (error) { result.second = error.code; }
     } else if (mode.startsWith('adopt-')) {
-      result.first = await session.run({input:'one source turn',
-        deadlineMs:Date.now()+(adoptionPrecondition ? 20000 : 6000)});
+      result.first = await session.run({input:'one source turn', deadlineMs:Date.now()+20000});
       adoptionStarted = true;
       const adoptionDeadline = mode === 'adopt-deadline-before-settle' ? 10 :
         adoptionPrecondition ? 8000 : 3000;
@@ -373,7 +377,7 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
     } else {
       try { result.first = await session.run({input:'one source turn',
         turn:{effort:'turn-owner-effort', sandboxPolicy:{type:'workspaceWrite'}},
-        deadlineMs:Date.now()+6000}); }
+        deadlineMs:Date.now()+20000}); }
       catch (error) { result.error = {code:error.code, phase:error.phase,
         state:error.state, rpcRequest:error.rpcRequest, nativeRequest:error.nativeRequest}; }
       try { await session.run({input:'must not replay', deadlineMs:Date.now()+1000}); }
@@ -530,17 +534,17 @@ const restoreArgs=(basis)=>({...sourceMode?{source:{threadId:mode==='wrong-id'?'
 
 
 class CodexSourceSessionTests(unittest.TestCase):
-    def run_case(self, mode, *, slow_record_ms=0):
+    def run_case(self, mode, *, slow_record_ms=0, slow_release_ms=0,
+                 handoff_work_ms=0):
         with tempfile.TemporaryDirectory() as temp:
             database = Path(temp) / "carrier.sqlite"
             command = [shutil.which("node"), "-e", NODE_SCENARIO,
                        str(ROOT / "runtime" / "codex-connection.cjs"),
                        str(ROOT / "runtime" / "carrier-recorder.cjs"),
-                       str(MODULE), mode, str(database), str(slow_record_ms)]
+                       str(MODULE), mode, str(database), str(slow_record_ms),
+                       str(slow_release_ms), str(handoff_work_ms)]
             completed = subprocess.run(command, capture_output=True, text=True,
-                                       encoding="utf-8", timeout=30 if mode in {
-                                           "adopt-old-lease", "adopt-stale-ref", "adopt-busy",
-                                           "adopt-missing-tools"} else 15)
+                                       encoding="utf-8", timeout=50 if mode == "adopt-chain" else 30)
             self.assertEqual(completed.returncode, 0, completed.stderr)
             return json.loads(completed.stdout)
 
@@ -623,6 +627,29 @@ class CodexSourceSessionTests(unittest.TestCase):
                 self.assertLess(reply_index, starts[1])
                 self.assertEqual(result['second'], 'SOURCE_TRANSFERRED')
                 self.assertNotIn(106, replies)
+
+    def test_queued_source_pump_allows_slow_durable_release_within_run_budget(self):
+        result = self.run_case('handoff-source-queued', slow_release_ms=4300)
+        self.assertNotIn('error', result.keys())
+        self.assertEqual(result['first']['status'], 'transferred')
+        replies = [frame['id'] for frame in result['serverResponses']]
+        self.assertEqual(replies.count(105), 1)
+        methods = [frame['method'] for frame in result['sent'] if 'method' in frame]
+        self.assertEqual(methods.count('thread/start'), 2)
+        self.assertEqual(methods.count('thread/unsubscribe'), 1)
+        self.assertEqual(result['second'], 'SOURCE_TRANSFERRED')
+
+    def test_explicit_release_deadline_still_locks_without_replaying_unsubscribe(self):
+        result = self.run_case('handoff-source-queued', slow_release_ms=4300,
+                               handoff_work_ms=4000)
+        self.assertEqual(result['error']['code'], 'SERVER_REQUEST_FAILED')
+        cause = result['error']['state']['failure']['cause']
+        self.assertEqual(cause['code'], 'RECORDER_COMMIT_UNKNOWN')
+        self.assertEqual(cause['stage'], 'release')
+        self.assertTrue(cause['state']['targetTurnTerminal'])
+        self.assertEqual(sum(frame.get('method') == 'thread/unsubscribe'
+                             for frame in result['sent']), 1)
+        self.assertEqual(result['second'], 'SESSION_FAILED')
 
     def test_source_pump_failure_retains_exact_request_without_target_or_replay(self):
         for mode, pending in (('handoff-source-send-loss', 102), ('handoff-source-owner-failure', 105)):
