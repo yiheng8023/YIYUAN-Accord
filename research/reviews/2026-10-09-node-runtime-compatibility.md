@@ -61,6 +61,23 @@ IMMEDIATE 在 BEGIN 时争取写事务；WAL 下 EXCLUSIVE 与 IMMEDIATE 等价�
 
 Root 17 项回归原件：[RUNTIME-CHECK.json](C:/Users/15521/.codex/backups/accord-node-runtime-compatibility-20261009-01/RUNTIME-CHECK.json)、[stderr.txt](C:/Users/15521/.codex/backups/accord-node-runtime-compatibility-20261009-01/stderr.txt)、[sources-before.json](C:/Users/15521/.codex/backups/accord-node-runtime-compatibility-20261009-01/sources-before.json)。本研究已只读核对结果 JSON 的版本、Node SHA-256、测试选择、exitCode、保护集合计数和 changed，以及 stderr 尾部 17 项／OK，并抽读保护输入索引；没有重新执行该测试或独立重算 29 项哈希。Node SHA-256 为 `3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237`。Root 应保留这些原件并在当前验收记录绑定本地有限证据；本报告不把记录核对称为独立运行复现。
 
+## 宿主与依赖的联合兼容
+
+2026-10-09按用户补充，在`a8dea65478123ee8ddc9d705b545609af29befcc`基础上核对这一层：前文只回答包内API和有限Node测试，不能单独形成宿主支持结论。应绑定**实际入口及后端版本、所用接口、实际运行时路径/版本、OS/架构、权限和包身份**；宿主应用、扩展和实际后端不能只记一个产品名。
+
+| 运行关系 | 应检查的兼容条件 |
+| --- | --- |
+| 扩展与宿主共用解释器 | 同时满足宿主声明的运行时范围与扩展实际API要求；运行时由宿主控制时，不擅自替换宿主内部组件 |
+| Accord当前Hook/状态MCP独立进程 | 宿主支持相应事件/stdio与消息协议，允许启动命令，并传入可用路径、环境和权限；再核该进程的Node是否满足本包要求。无需让它与宿主内部Node版本号相同 |
+| 调用方程序及SDK | 使用哪个SDK就核哪个包的版本要求和后端绑定；Accord当前自有CJS调用适配器没有导入`@openai/codex-sdk`，不能把二者的要求混为一项 |
+| 手机等远端控制入口 | Node及本地工具条件属于实际执行主机；控制端另核输入、审批和结果等差异，不要求手机安装同一运行时 |
+
+[官方插件文档](https://developers.openai.com/plugins/build/plugins)要求Hook脚本位于实际执行环境且按当前定义获信任；[Hooks文档](https://learn.chatgpt.com/docs/hooks)描述命令处理器与宿主事件/输入输出约定。这些是宿主连接条件，不能由本地Node单测替代。具体入口的支持声明与实际观察仍按当前项目适用性记录处理，不从通用文档跨入口外推。
+
+一个具体的分层反例：本机`@openai/codex` **0.162.0** 的`package.json`声明`engines.node >=16`，`bin/codex.js`选择平台可执行文件并用`spawn`启动它；这是本次只读核定的npm启动器要求，不是Accord所有组件的Node下界。[官方Codex TypeScript SDK文档](https://learn.chatgpt.com/docs/codex-sdk)另声明Node18+，也不等于Accord可选SQLite路径只需Node18。本机启动器的原始字段与文件hash保存在私有`accord-node-runtime-compatibility-20261009-01/HOST-LAYERS.json`；不将本机样本宣称为所有宿主的统一约束。
+
+因此，Node24仍是当前受测推荐，须与所选宿主的实际条件一起成立；没有宿主统一Node范围的来源时，不猜范围，也不将“未公布”视为不兼容。升级宿主、后端、运行时或包后，只重核受影响的接口和行为，不要求穷举所有版本组合。这是既有环境验收的分层对应，不新增宿主、依赖安装或版本矩阵任务。
+
 ## 官方维护状态与待验
 
 截至 2026-10-09，官方发布页列 24 与 22 为 LTS、26 为 Current，20 及更早相关主线 EOL；[官方发布表](https://nodejs.org/en/about/previous-releases) 与 [官方 schedule.json](https://raw.githubusercontent.com/nodejs/Release/main/schedule.json) 给出：24 尚在 Active LTS，2026-10-20 进入 Maintenance、2028-04-30 结束；22 在 Maintenance，2027-04-30 结束；26 计划 2026-10-28 才进入 LTS。故维护选择支持优先 24，但上游支持状态不强制 Accord 同时承诺 22／26。
