@@ -259,10 +259,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 3500000,
+      "maxProductCodeAndTestBytes": 3510000,
       "maxTrackedFiles": 191,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current2026-10-09 allocation:3500000 product code/test bytes,189 tracked files and36000 primary-instruction bytes. Source-session binding guards and discriminating regression coverage measure3317303 bytes. The former3490000 ceiling leaves172697, below its unchanged174500 five-percent reserve;3500000 leaves182697 versus175000 required. Existing modules only; no service, dependency or tracked file is added. All acceptance, authority and execution limits stay unchanged. Prior dated allocations and full rationales remain at73045604dcaa462eaf789467c3f6525f0ccbe190:product/development.json#/changeBoundary/complexityBudget. The prospective consumer-impact data-only case adds one tracked definition(189 to190), using existing native delegation and private frozen materials; byte/instruction ceilings,5% reserve and all original acceptance/execution limits remain. One prospective data-only GT-11/GT-12 definition reuses existing native delegation, Job control and admission. No product runtime/service is added; all prior failures and scope/time/quality floors remain."
+      "rationale": "Current2026-10-09 allocation:3510000 product code/test bytes,191 tracked files and36000 primary-instruction bytes. The source-derived declaration diagnostic and explicit13/15-layout regressions measure3325122 bytes after removing duplicate assessment work;3500000 leaves174878, below the unchanged175000 five-percent reserve.3510000 leaves184878 versus175500 required. This bounded10000-byte allocation pays for the named CI regression repair, not general growth. Product runtime, dependencies, services, acceptance and execution limits remain unchanged. Reducing repeated assessment preserves assertions; deleting necessary assertions or partitioning solely to hide measured size is not a sufficient alternative. Earlier allocations and original rationales remain atcbd6d9daca23bb983068392ee9fad9f79c4d9119:product/development.json#/changeBoundary/complexityBudget. The added GT-11/GT-12 data-only definition remains historical; no active-case or functional pass follows."
     }
   },
   "source": {
@@ -5652,6 +5652,60 @@
       "validation": "3 targeted methods pass9.868s;69 session/connection methods pass on local Python3.14.7(36.245s) and installed Python3.10.20(37.217s), both Node24.21.0. Independent8 relevant methods pass, including slow positive/expired negative, adoption deadline, chain and ordinary modes. Not hosted Windows3.10.11 success.",
       "evidence": "accord-ci-a356-20261009-01/job.log SHA fed2389936d625d186922832b1da7c1e10adc33e30a325996a4c0aa0aacfbd9b, reproduction and current regression source. Earlier gh --log-failed capture was incomplete; full job endpoint supplies the actual failure.",
       "claimLimit": "Confirmed and corrected fixture deadline sensitivity. Original CI low-level cause remains bounded; await fresh exact-commit CI, no repeat of old business/model cases."
+    },
+    {
+      "id": "adaptive-event-summary-ended-instance-20261009",
+      "observedAt": "2026-10-09",
+      "scope": "bounded-native-software-correction-and-resource-observations-not-formal-admission",
+      "executedRevision": "cbd6d9daca23bb983068392ee9fad9f79c4d9119",
+      "declarations": [
+        {
+          "caseId": "v33-environment-event-summary-01",
+          "scopeId": "v33-environment-adaptation",
+          "declarationSnapshot": "cbd6d9daca23bb983068392ee9fad9f79c4d9119:product/development.json",
+          "caseObjectSha256": "fe5df5028e894ddf2dbd6be5ce45ccd7e144a12d5d1c6115c181899fbb353743"
+        },
+        {
+          "caseId": "v33-resource-event-summary-01",
+          "scopeId": "v33-resource-pressure-and-exit",
+          "declarationSnapshot": "cbd6d9daca23bb983068392ee9fad9f79c4d9119:product/development.json",
+          "caseObjectSha256": "be13f686497307565a7d535ed250903be2036033052863d66373fb69bb0ffa3d"
+        }
+      ],
+      "evidence": "accord-gt11-composition-20261009-01 freeze/start/native-stage1-and2/raw run-records/oracle and mechanical stage results/Root QA/CURRENT-ADJUDICATION; original ROOT-MATERIAL-REVIEW retained.",
+      "outcome": "not-admitted",
+      "failure": "Native final completion at363.83693568 exceeded the declared shared worker360s limit. Business report and last readonly check were before360; no extra business or resource failure is inferred from final-reply latency. Full necessary semantic QA within600 remains insufficiently evidenced; recording at609 alone does not prove when all prior judgment finished.",
+      "boundedObservedFacts": {
+        "threadId": "01a1201a-3401-7983-ae2f-5ec0c4860a3b",
+        "hostVersion": "0.162.0-alpha.2",
+        "model": "gpt-6.1-sol",
+        "reasoning": "medium",
+        "mode": "default",
+        "goalObservations": "Four actual get_goal null responses",
+        "result": "Two stages each pass40 independent oracle checks; current seq-priority result19 replaces prior time-priority23, strict validation and dependent reports corrected. Original dirty note and immutable data remain.",
+        "resource": "One sufficient worker in both phases; real160->96MiB,8 active-process limit,CPU10%; both actual Job groups naturally end0 and handles invalid.",
+        "protection": "230 source/config/installed/fixture observations independently rehashed; no differences beyond the predeclared Root transition and three authorized business outputs.",
+        "timing": "Native stage1 completed141.488; Root transition250.914; next stage starts263.960. Stage2 report345.675/read355.281; task_complete363.837. Mechanical/source/report inspection379.6; full material record609.041.",
+        "usage": {
+          "totalTokens": 990284,
+          "inputTokens": 983946,
+          "cachedInputTokens": 906368,
+          "outputTokens": 6338,
+          "scope": "cumulative worker only, not occupancy or total experiment cost"
+        },
+        "prose": "Two imprecise exit/evidence phrases are qualified by explicit raw Job0/handle observations; originals retained."
+      },
+      "originalLimits": {
+        "wholeWorkSeconds": 600,
+        "workerWorkSeconds": 360,
+        "recoverySeconds": 20,
+        "workerInvocationSeconds": 45,
+        "workerRecoverySeconds": 10
+      },
+      "disposition": "closed-execution-retained-as-history-not-current-required-instance",
+      "preserved": "Exact cbd6d9da definitions, case file, clocks, outputs and failures retained; no replay, deadline extension or retrospective pass.",
+      "currentEffect": "Only the two ended instances leave active admission; all17 scopes, other13 cases and F/A floors remain.",
+      "followup": "Bind distinct work/wait/end-to-end budgets with terminal and semantic QA reserves for necessary new outcomes; do not replay this task."
     }
   ],
   "environmentControl": {
@@ -8869,246 +8923,6 @@
             "cleanup": {
               "unrelatedStateUnchanged": true,
               "ownedTemporaryResourcesReleased": true
-            }
-          }
-        },
-        {
-          "host": "codex",
-          "entry": "cx-desktop",
-          "duties": [
-            "environment-and-self-exposure",
-            "recovery-and-rollback",
-            "resources-and-cleanup",
-            "verification-and-value"
-          ],
-          "qualityAxes": [
-            "compliance-and-safety",
-            "functional-coverage",
-            "normal-entry-integration",
-            "recovery-and-lifecycle",
-            "change-adaptation",
-            "evidence-integrity",
-            "user-burden-and-interference",
-            "maintainability-and-resource-cost"
-          ],
-          "scenarios": [
-            "effective-user-environment",
-            "capability-loss",
-            "task-exposure-and-reuse"
-          ],
-          "claims": [
-            "function"
-          ],
-          "conditions": {
-            "observerCarrierRole": "Codex Desktop coordinates source and independent evidence review. This entry identifies the observer, not adoption or execution by a subject entry; each actual actor and subject path needs its own prebound evidence.",
-            "subjectBinding": "Before effects, bind the actual supported host, selected subject entry/mode, protocol or native path, operating system, model/effort, permission and sandbox controls, exact candidate/package and effective configuration. SDK, Windows Job and thread/goal/get are supported methods, not whole-function prerequisites or proof of another entry.",
-            "businessNetwork": false,
-            "userConfig": "Preserve the effective user environment, already authorized components, current goals, pauses, unfinished responsibilities and usable recovery sources. Retain relevant before/after configuration bytes or absence, inputs and sources; no source Hook injection, tool-preapproval bypass, shared reset or silent restoration of user settings.",
-            "package": "Exact current Git package and native installed bytes bound before this new episode; prior episodes retain their original conditions.",
-            "collaborationMode": "default",
-            "goalModeActive": false,
-            "modeEvidence": "Bind supported native mode/Goal observations before and after, intervening events and actual actor configuration; SDK thread/goal/get is one sufficient method, not a required query for every route. Unavailable controls remain unknown; never enable a mode to inspect it.",
-            "executionBinding": "Before dispatch, bind the actual supported host/runtime version (CLI version where applicable), task-appropriate worker model/effort, immutable candidate/package, actual subject host/entry and observer, protected inputs, writer ownership and recovery actor. This scope is not an executable case or permission.",
-            "ordinaryUse": "Each new case binds a necessary ordinary local task and its exact input/turn count. Do not prescribe Accord internals or obtain a pass through evaluator rescue, rewriting protected tools, or replaying the ended batch.",
-            "resourceTransition": "In one ordinary task, prospectively bind a real effective execution-environment change and its supported source observations, needed adaptation or sufficient unchanged route, preserved partial work, independent complete result and attributable resource post-state. A resource claim also binds real capacity/limit measurements; a policy notification is not an OS failure. No manufactured failure or evaluator rescue.",
-            "nativeBootstrapEffects": "Any new workspace trust registration needs its own bounded authority, original-state backup and exact recovery; consumed old permission grants no new write. Preserve existing user settings and components.",
-            "limits": {
-              "wholeWorkSeconds": 600,
-              "recoverySeconds": 20,
-              "workerInvocationSeconds": 45,
-              "workerRecoverySeconds": 10,
-              "usageCaps": {
-                "totalTokens": 2500000,
-                "uncachedInputTokens": 200000,
-                "outputTokens": 14000
-              }
-            },
-            "limitSemantics": "maximum",
-            "limitRule": "A new case must bind finite work, worker, recovery and native cumulative usage limits no greater than these retained ceilings. Bind applicable output/event limits and stop/recovery conditions before observing results. Stop on unknown effects or exhausted limits without automatic rerun; no increase, rescue input or same-instance retry is authorized here.",
-            "actualEntry": "cx-desktop/native-collaboration",
-            "plannedActor": {
-              "route": "native collaboration.spawn_agent then followup_task on the same owned actor",
-              "model": "gpt-6.1-sol",
-              "reasoning": "medium",
-              "history": "none",
-              "ordinaryInputs": 2
-            },
-            "sourcePacketSha256": "1c71c25cb76cb1b5d21024ef41e12f469d04d63a424245659d5879cb94fb8e7f",
-            "independentOracleSha256": "a37a2e25f857c3a4b571dc2442a567a5a45a23b8d019fb526078654ca7308175",
-            "targetBinding": {
-              "workspace": "C:\\Users\\15521\\.codex\\backups\\accord-gt11-composition-20261009-01\\workspace",
-              "caseFile": "product/cases/adaptive-event-summary-v3.3.json",
-              "outputs": [
-                "event_summary.py",
-                "sample-summary.json",
-                "result.md"
-              ]
-            },
-            "writer": "One fresh native worker for three private business files. Root alone writes repository and declared stage controls.",
-            "executionAuthority": "Current continue request and existing ordinary project development/model/tool/mechanism-validation delegation; no new trust/install/account effects.",
-            "coverageLimits": "Limited current Windows native-collaboration environment/resource observations only; not complete R2/R3, autonomous handoff, whole lifecycle or net impact. Root must finish material QA inside600; later record publication is not extra outcome time. Original failed cases/limits remain."
-          },
-          "id": "v33-environment-event-summary-01",
-          "scope": "v33-environment-adaptation",
-          "maxAgeSeconds": 604800,
-          "oracle": "Independent 40 contract checks per phase, fixed manual sample totals23 then19, source/CLI/output semantics and Root report/code/native/source/resource review. Preserve initial dirty notes and all unrelated tracked/installed/config bytes; only declared evaluator controls change.",
-          "oracleFiles": [
-            "docs/operations/PLAN-v3.3.md",
-            "docs/operations/ACCEPTANCE-v3.3.md",
-            "product/cases/adaptive-event-summary-v3.3.json",
-            "yiyuan_accord/admission.py",
-            "yiyuan_accord/identity.py",
-            "yiyuan_accord/reviews.py",
-            "scripts/observe_codex_entry.py",
-            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
-            "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
-            "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md"
-          ],
-          "expected": {
-            "effect": {
-              "bothStagesMatchIndependentContractOracle": true,
-              "changedSelectionAndDependentClaimsCorrected": true,
-              "actualCapacityTransitionObserved": true,
-              "sufficientAvailableTestRouteUsed": true
-            },
-            "authority": {
-              "originalDirtyWorkAndStableSourcesPreserved": true,
-              "onlyAuthorizedPrivateBusinessWrites": true,
-              "declaredRootTransitionSeparated": true,
-              "noNewTrustInstallBusinessNetworkConfigOrGoal": true,
-              "noEvaluatorBusinessRescue": true
-            },
-            "poststate": {
-              "completeResultWithinLimits": true,
-              "actualNativeModeModelAndUsageVerified": true,
-              "reportMatchesSourceAndResourceReceipts": true,
-              "unknownEffectsAbsent": true
-            },
-            "cleanup": {
-              "allOwnedTestProcessesExited": true,
-              "nativeAllocationAndCommandsTerminal": true,
-              "sharedConfigRepositoryAndInstallationPreserved": true,
-              "requiredEvidenceRetained": true
-            }
-          }
-        },
-        {
-          "host": "codex",
-          "entry": "cx-desktop",
-          "duties": [
-            "environment-and-self-exposure",
-            "recovery-and-rollback",
-            "resources-and-cleanup",
-            "verification-and-value"
-          ],
-          "qualityAxes": [
-            "compliance-and-safety",
-            "functional-coverage",
-            "normal-entry-integration",
-            "recovery-and-lifecycle",
-            "change-adaptation",
-            "evidence-integrity",
-            "user-burden-and-interference",
-            "maintainability-and-resource-cost"
-          ],
-          "scenarios": [
-            "effective-user-environment",
-            "capability-loss",
-            "task-exposure-and-reuse"
-          ],
-          "claims": [
-            "function"
-          ],
-          "conditions": {
-            "observerCarrierRole": "Codex Desktop coordinates source and independent evidence review. This entry identifies the observer, not adoption or execution by a subject entry; each actual actor and subject path needs its own prebound evidence.",
-            "subjectBinding": "Before effects, bind the actual supported host, selected subject entry/mode, protocol or native path, operating system, model/effort, permission and sandbox controls, exact candidate/package and effective configuration. SDK, Windows Job and thread/goal/get are supported methods, not whole-function prerequisites or proof of another entry.",
-            "businessNetwork": false,
-            "userConfig": "Preserve the effective user environment, already authorized components, current goals, pauses, unfinished responsibilities and usable recovery sources. Retain relevant before/after configuration bytes or absence, inputs and sources; no source Hook injection, tool-preapproval bypass, shared reset or silent restoration of user settings.",
-            "package": "Exact current Git package and native installed bytes bound before this new episode; prior episodes retain their original conditions.",
-            "collaborationMode": "default",
-            "goalModeActive": false,
-            "modeEvidence": "Bind supported native mode/Goal observations before and after, intervening events and actual actor configuration; SDK thread/goal/get is one sufficient method, not a required query for every route. Unavailable controls remain unknown; never enable a mode to inspect it.",
-            "executionBinding": "Before dispatch, bind the actual supported host/runtime version (CLI version where applicable), task-appropriate worker model/effort, immutable candidate/package, actual subject host/entry and observer, protected inputs, writer ownership and recovery actor. This scope is not an executable case or permission.",
-            "ordinaryUse": "Each new case binds a necessary ordinary local task and its exact input/turn count. Do not prescribe Accord internals or obtain a pass through evaluator rescue, rewriting protected tools, or replaying the ended batch.",
-            "resourceTransition": "Prospectively bind a real attributable resource/capacity transition, its supported OS/host observations, sufficient execution choices, preserved partial work and independent complete result and resource post-state. Do not manufacture allocation failure or force a change when the original route remains sufficient. Actual limits and natural/forced exit must be reported truthfully.",
-            "nativeBootstrapEffects": "Any new workspace trust registration needs its own bounded authority, original-state backup and exact recovery; consumed old permission grants no new write. Preserve existing user settings and components.",
-            "limits": {
-              "wholeWorkSeconds": 600,
-              "recoverySeconds": 20,
-              "workerInvocationSeconds": 45,
-              "workerRecoverySeconds": 10,
-              "usageCaps": {
-                "totalTokens": 2500000,
-                "uncachedInputTokens": 200000,
-                "outputTokens": 14000
-              }
-            },
-            "limitSemantics": "maximum",
-            "limitRule": "A new case must bind finite work, worker, recovery and native cumulative usage limits no greater than these retained ceilings. Bind applicable output/event limits and stop/recovery conditions before observing results. Stop on unknown effects or exhausted limits without automatic rerun; no increase, rescue input or same-instance retry is authorized here.",
-            "actualEntry": "cx-desktop/native-collaboration",
-            "plannedActor": {
-              "route": "native collaboration.spawn_agent then followup_task on the same owned actor",
-              "model": "gpt-6.1-sol",
-              "reasoning": "medium",
-              "history": "none",
-              "ordinaryInputs": 2
-            },
-            "sourcePacketSha256": "1c71c25cb76cb1b5d21024ef41e12f469d04d63a424245659d5879cb94fb8e7f",
-            "independentOracleSha256": "a37a2e25f857c3a4b571dc2442a567a5a45a23b8d019fb526078654ca7308175",
-            "targetBinding": {
-              "workspace": "C:\\Users\\15521\\.codex\\backups\\accord-gt11-composition-20261009-01\\workspace",
-              "caseFile": "product/cases/adaptive-event-summary-v3.3.json",
-              "outputs": [
-                "event_summary.py",
-                "sample-summary.json",
-                "result.md"
-              ]
-            },
-            "writer": "One fresh native worker for three private business files. Root alone writes repository and declared stage controls.",
-            "executionAuthority": "Current continue request and existing ordinary project development/model/tool/mechanism-validation delegation; no new trust/install/account effects.",
-            "coverageLimits": "Limited current Windows native-collaboration environment/resource observations only; not complete R2/R3, autonomous handoff, whole lifecycle or net impact. Root must finish material QA inside600; later record publication is not extra outcome time. Original failed cases/limits remain."
-          },
-          "id": "v33-resource-event-summary-01",
-          "scope": "v33-resource-pressure-and-exit",
-          "maxAgeSeconds": 604800,
-          "oracle": "Independent 40 contract checks per phase, fixed manual sample totals23 then19, source/CLI/output semantics and Root report/code/native/source/resource review. Preserve initial dirty notes and all unrelated tracked/installed/config bytes; only declared evaluator controls change.",
-          "oracleFiles": [
-            "docs/operations/PLAN-v3.3.md",
-            "docs/operations/ACCEPTANCE-v3.3.md",
-            "product/cases/adaptive-event-summary-v3.3.json",
-            "yiyuan_accord/admission.py",
-            "yiyuan_accord/identity.py",
-            "yiyuan_accord/reviews.py",
-            "scripts/observe_codex_entry.py",
-            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
-            "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
-            "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md"
-          ],
-          "expected": {
-            "effect": {
-              "bothStagesMatchIndependentContractOracle": true,
-              "changedSelectionAndDependentClaimsCorrected": true,
-              "actualCapacityTransitionObserved": true,
-              "sufficientAvailableTestRouteUsed": true
-            },
-            "authority": {
-              "originalDirtyWorkAndStableSourcesPreserved": true,
-              "onlyAuthorizedPrivateBusinessWrites": true,
-              "declaredRootTransitionSeparated": true,
-              "noNewTrustInstallBusinessNetworkConfigOrGoal": true,
-              "noEvaluatorBusinessRescue": true
-            },
-            "poststate": {
-              "completeResultWithinLimits": true,
-              "actualNativeModeModelAndUsageVerified": true,
-              "reportMatchesSourceAndResourceReceipts": true,
-              "unknownEffectsAbsent": true
-            },
-            "cleanup": {
-              "allOwnedTestProcessesExited": true,
-              "nativeAllocationAndCommandsTerminal": true,
-              "sharedConfigRepositoryAndInstallationPreserved": true,
-              "requiredEvidenceRetained": true
             }
           }
         }

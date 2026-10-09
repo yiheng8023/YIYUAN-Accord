@@ -1156,10 +1156,16 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         return observer
 
     def test_current_case_can_be_admitted_without_closing_missing_requirements(self):
-        report = self.assess(observer=self.observer)
+        # This counterexample deliberately has no resource/environment cases;
+        # future declarations must not change what its observer can discharge.
+        contract = self.without_resource_and_environment_cases()
+        with self.history():
+            if contract != self.contract:
+                self.commit(contract)
+            report = self.assess(contract, self.observer)
         self.assertEqual(report["errors"], [])
         self.assertEqual(report["acceptedCases"], sorted(
-            case["id"] for case in self.contract["acceptance"]["admission"]["cases"]))
+            case["id"] for case in contract["acceptance"]["admission"]["cases"]))
         self.assertEqual(report["entrySelection"], {
             "final": True,
             "selected": ["chatgpt-desktop", "chatgpt-mobile", "cx-cli", "cx-desktop", "cx-sdk", "cx-vscode"],
@@ -1201,8 +1207,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertNotIn("claude-code", report["productCoverage"])
         self.assertEqual(report["progress"]["coverageVerified"], 10)
         self.assertEqual(report["progress"]["requirementsComplete"], 2)
-        # Ended resource/adaptation instances are historical; SDK sub-scopes
-        # cannot discharge either their missing cases or lifecycle parents.
+        # The explicit absent resource/adaptation cases and lifecycle parents
+        # cannot be discharged by SDK sub-scopes.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
         self.assertIn("v33-codex-lifecycle", missing["package-lifecycle"])
         self.assertIn("v33-environment-adaptation", missing["function"])
@@ -1210,13 +1216,42 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
 
         self.assertNotIn("v33-codex-sdk-scoped-exposure", missing["function"])
 
+    def source_case_binding_gaps(self, contract):
+        """Independent declaration oracle; never read verifier output as truth."""
+        policy = contract['acceptance']['admission']
+        dimensions = ('duties', 'qualityAxes', 'scenarios')
+        joint_scopes = next(row for row in policy['acceptanceRequirements'] if row['id'] == 'A08')
+        joint_scopes = joint_scopes['requiredCoverage']['function']
+        gaps, without_cases = {}, 0
+        for scope in policy['scopes']:
+            for claim in scope['claims']:
+                if scope['id'] not in policy['requiredCoverage'].get(claim, []):
+                    continue
+                allocated = [case for case in policy['cases']
+                             if case['scope'] == scope['id'] and claim in case['claims']]
+                missing = {field: sorted(value for value in scope[field]
+                                        if all(value not in case[field] for case in allocated))
+                           for field in dimensions}
+                joint_missing = claim == 'function' and scope['id'] in joint_scopes and not any(
+                    all(value in case[field] for field in dimensions for value in scope[field])
+                    for case in allocated)
+                without_cases += not allocated
+                if not allocated or any(missing.values()) or joint_missing:
+                    gaps.setdefault(scope['id'], {})[claim] = {
+                        'caseIds': sorted(case['id'] for case in allocated),
+                        'missingDimensions': missing, 'jointCaseMissing': joint_missing}
+        return gaps, without_cases
+
     def test_current_declaration_without_observer_reports_actual_missing_coverage(self):
-        report = self.assess()
-        policy = self.contract['acceptance']['admission']
-        scopes_with_cases = {case['scope'] for case in policy['cases']}
-        scopes_without_cases = {scope['id'] for scope in policy['scopes']} - scopes_with_cases
+        self.assert_current_declaration_reports_missing_coverage(self.contract)
+
+    def assert_current_declaration_reports_missing_coverage(self, contract):
+        report = self.assess(contract)
+        policy = contract['acceptance']['admission']
+        expected_gaps, without_cases = self.source_case_binding_gaps(contract)
         self.assertEqual(report["errors"], [])
         self.assertEqual(report["acceptedCases"], [])
+        self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertIn("v33-codex-cli-ordinary-delivery", report["acceptanceRequirements"]["A03"]["missingScopes"]["function"])
         self.assertEqual(report["progress"], {
@@ -1225,42 +1260,24 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             "coverageTotal": 17, "coverageDefined": 17, "coverageVerified": 0,
             "coverageScorePercent": 0.0,
             "coverageUnbound": 0, "coverageDefinedButUnverified": 17,
-            "coverageWithoutCases": len(scopes_without_cases), "coverageWithCaseBindingGaps": 7,
-            "casesDefined": len(self.contract["acceptance"]["admission"]["cases"]), "casesAccepted": 0,
+            "coverageWithoutCases": without_cases,
+            "coverageWithCaseBindingGaps": sum(len(claims) for claims in expected_gaps.values()),
+            "casesDefined": len(policy["cases"]), "casesAccepted": 0,
         })
-        self.assertEqual(set(report['caseBindingGaps']),
-                         {'v33-dynamic-model-routing', 'v33-autonomous-continuity',
-                          'v33-system-integration',
-                          'v33-codex-lifecycle', 'v33-system-impact-assessment',
-                          'v33-resource-pressure-and-exit', 'v33-environment-adaptation'})
-        for scope_id, claims in report['caseBindingGaps'].items():
-            for gap in claims.values():
-                if scope_id == 'v33-dynamic-model-routing':
-                    allocated = [case for case in policy['cases'] if case['scope'] == scope_id]
-                    scope = next(row for row in policy['scopes'] if row['id'] == scope_id)
-                    self.assertEqual(set(gap['caseIds']), {case['id'] for case in allocated})
-                    for dimension in ('duties', 'qualityAxes', 'scenarios'):
-                        declared = set().union(*(set(case[dimension]) for case in allocated))
-                        self.assertEqual(set(gap['missingDimensions'][dimension]),
-                                         set(scope[dimension]) - declared)
-                    # The source-derived missing set above remains the oracle.
-                    # A newly declared dependency-loss sample must not freeze
-                    # this live view at the earlier scenario allocation.
-                elif scope_id == 'v33-system-integration':
-                    self.assertEqual(gap['caseIds'], [])
-                    self.assertIn('recovery-and-rollback', gap['missingDimensions']['duties'])
-                    self.assertIn('context-and-task-continuity', gap['missingDimensions']['duties'])
-                    self.assertTrue({'mid-task-user-steering', 'capability-loss'}
-                                    <= set(gap['missingDimensions']['scenarios']))
-                    self.assertTrue(gap['jointCaseMissing'])
-                elif scope_id == 'v33-autonomous-continuity':
-                    self.assertEqual(gap['caseIds'], ['v33-continuity-catalog-01'])
-                    self.assertEqual(gap['missingDimensions']['duties'], ['recovery-and-rollback'])
-                    self.assertEqual(gap['missingDimensions']['scenarios'], ['capability-loss'])
-                else:
-                    self.assertEqual(gap['caseIds'], [])
-                self.assertTrue(gap['missingDimensions']['duties'])
-        self.assertTrue(report['caseBindingGaps']['v33-system-integration']['function']['jointCaseMissing'])
+        # Compare every scope/claim, case ID, dimension and joint obligation,
+        # including newly allocated scopes, against the source declarations.
+        self.assertEqual(report['caseBindingGaps'], expected_gaps)
+        integration = report['caseBindingGaps']['v33-system-integration']['function']
+        self.assertEqual(integration['caseIds'], [])
+        self.assertTrue({'recovery-and-rollback', 'context-and-task-continuity'}
+                        <= set(integration['missingDimensions']['duties']))
+        self.assertTrue({'mid-task-user-steering', 'capability-loss'}
+                        <= set(integration['missingDimensions']['scenarios']))
+        self.assertTrue(integration['jointCaseMissing'])
+        continuity = report['caseBindingGaps']['v33-autonomous-continuity']['function']
+        self.assertEqual(continuity['caseIds'], ['v33-continuity-catalog-01'])
+        self.assertEqual(continuity['missingDimensions']['duties'], ['recovery-and-rollback'])
+        self.assertEqual(continuity['missingDimensions']['scenarios'], ['capability-loss'])
         self.assertEqual(report['acceptanceRequirements']['A08']['blockedBy'],
                          ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07'])
         self.assertIn('v33-codex-lifecycle',
@@ -1271,9 +1288,52 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                       report['acceptanceRequirements']['A05']['missingScopes']['function'])
         self.assertIn('v33-dynamic-model-routing',
                       report['acceptanceRequirements']['A02']['missingScopes']['function'])
+        return report
+
+    def test_resource_and_environment_declarations_do_not_promote_evidence(self):
+        baseline = copy.deepcopy(self.contract)
+        policy = baseline['acceptance']['admission']
+        scope_ids = {'v33-resource-pressure-and-exit', 'v33-environment-adaptation'}
+        policy['cases'] = [case for case in policy['cases'] if case['scope'] not in scope_ids]
+        expanded = copy.deepcopy(baseline)
+        expanded_policy = expanded['acceptance']['admission']
+        # Exercise both declaration layouts without executing the real cases
+        # or supplying an observer. These clones cover declarations only.
+        for scope in policy['scopes']:
+            if scope['id'] not in scope_ids:
+                continue
+            case = copy.deepcopy(policy['cases'][0])
+            case.pop('packageFiles', None)
+            case.update({key: copy.deepcopy(scope[key]) for key in
+                         ('host', 'entry', 'duties', 'qualityAxes', 'scenarios', 'claims', 'conditions')})
+            case.update(id='fixture-declaration-' + scope['id'], scope=scope['id'])
+            expanded_policy['cases'].append(case)
+        reports = []
+        for contract in (baseline, expanded):
+            with self.subTest(cases=len(contract['acceptance']['admission']['cases'])):
+                for key in ('scopes', 'requiredCoverage', 'acceptanceRequirements'):
+                    self.assertEqual(contract['acceptance']['admission'][key],
+                                     self.contract['acceptance']['admission'][key])
+                # Reuse the full comparison, including all zero-evidence and
+                # false-qualification assertions, without reassessing twice.
+                reports.append(self.assert_current_declaration_reports_missing_coverage(contract))
+        before, after = reports
+        self.assertTrue(scope_ids <= set(before['caseBindingGaps']))
+        self.assertFalse(scope_ids & set(after['caseBindingGaps']))
+        for metric in ('coverageWithoutCases', 'coverageWithCaseBindingGaps'):
+            self.assertEqual(after['progress'][metric], before['progress'][metric] - 2)
+        self.assertEqual(after['progress']['casesDefined'], before['progress']['casesDefined'] + 2)
+
+    def without_resource_and_environment_cases(self):
+        """An explicit no-case counterexample, with all scope floors intact."""
+        contract = copy.deepcopy(self.contract)
+        policy = contract['acceptance']['admission']
+        policy['cases'] = [case for case in policy['cases'] if case['scope'] not in
+                           {'v33-resource-pressure-and-exit', 'v33-environment-adaptation'}]
+        return contract
 
     def without_correction_and_user_environment_cases(self):
-        contract = copy.deepcopy(self.contract)
+        contract = self.without_resource_and_environment_cases()
         policy = contract['acceptance']['admission']
         policy['cases'] = [c for c in policy['cases'] if c['scope'] != 'v33-systemic-correction'
                            and not (c['scope'] == 'v33-codex-cli-ordinary-delivery'
@@ -1549,7 +1609,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertIn('A05', report['acceptanceRequirements']['A08']['blockedBy'])
 
     def test_partial_allocation_case_keeps_uncovered_duties_and_scenarios_open(self):
-        contract = copy.deepcopy(self.contract)
+        contract = self.without_resource_and_environment_cases()
         policy = contract['acceptance']['admission']
         scope = next(row for row in policy['scopes'] if row['id'] == 'v33-dynamic-model-routing')
         case = copy.deepcopy(policy['cases'][0])

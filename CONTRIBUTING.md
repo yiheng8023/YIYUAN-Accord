@@ -151,6 +151,11 @@ that its strings survived the transport.
 Distinguish a planning estimate from a user-bound execution limit or an immutable
 test window. Include setup, model work, review and recovery in the relevant total;
 model reminders and occasional clock reads are not automatic deadline enforcement.
+Before dispatch, distinguish active worker time, waiting between stages and the
+end-to-end wall clock. Reserve the bound native terminal response and material
+semantic review, not only file writes. Once a transition's prerequisites are
+verified, perform it promptly instead of consuming the worker's shared allowance
+with repeated explanation or bookkeeping. Do not change those meanings afterward.
 Use supported action-boundary guards when a hard limit matters. A missed test
 window stays missed. Reconcile whether verified partial results and remaining
 outcome work are still authorized before recovery; completing that work cannot
