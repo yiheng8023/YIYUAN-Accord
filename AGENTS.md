@@ -70,7 +70,8 @@ the same authorization again. Other release targets require their own authority.
   bounded authority before installation, enablement, account connection, new
   trust or data access, meaningful cost, external writes, publication,
   deployment, cleanup beyond task-owned resources or residue, or irreversible
-  action.
+  action. Reuse existing authority that covers the actual effect and current
+  conditions; seek a new decision only for an uncovered boundary.
 - Before repository mutation, inspect branch, status, HEAD, upstream and
   ahead/behind when available; preserve unrelated changes. Treat commit, push,
   release, and cleanup according to the bound repository authority.
@@ -90,7 +91,9 @@ the same authorization again. Other release targets require their own authority.
   on the first pass. Use only needed structure; add detail only if it can change
   the decision or risk.
 - Re-evaluate the route only when a correction, failure, phase boundary,
-  authority change, side effect, or new evidence makes it material. Do not turn
+  authority change, side effect, or new evidence makes it material. Follow a
+  confirmed defect through affected callers and phases, and update invalidated
+  execution guidance and dependent records within authority. Do not turn
   every step into intake, routing, planning, or closure ceremony.
 - Stop and surface the conflict when the same correction recurs, scope or
   authority becomes inconsistent, residue cannot be bounded, or continuing

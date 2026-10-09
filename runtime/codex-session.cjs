@@ -370,12 +370,23 @@ function createSession(options, restoreMode = false) {
     return value;
   }
 
+  async function receiveBoundActivity(threadId, turnId, deadline) {
+    ensureBindings();
+    const activity = await Reflect.apply(bound.receive, undefined,
+      [threadId, turnId, deadline, {includeUnscoped: ownUnscopedRequests}]);
+    // All phases consume requests from the same borrowed reader. Preserve the
+    // actual request before checking changes during receive, not its parent
+    // handoff proposal or a later request that has not been processed.
+    if (activity?.type === 'request' && plainObject(activity.request)) {
+      state = {...state, pendingRequest: immutable(activity.request)};
+    }
+    ensureBindings();
+    return activity;
+  }
+
   async function pumpHandoffTerminal(threadId, turnId, deadline, phase = 'handoff-target') {
     for (;;) {
-      ensureBindings();
-      const activity = await Reflect.apply(bound.receive, undefined,
-        [threadId, turnId, deadline, {includeUnscoped: ownUnscopedRequests}]);
-      ensureBindings();
+      const activity = await receiveBoundActivity(threadId, turnId, deadline);
       if (activity?.type === 'terminal') return immutable(activity.terminal);
       if (activity?.type !== 'request' || !plainObject(activity.request)) {
         throw new Error('connection returned invalid handoff activity');
@@ -400,6 +411,7 @@ function createSession(options, restoreMode = false) {
           [nativeRequest, ownerContext], deadline, 'ownerRequest'));
         await Reflect.apply(bound.respond, undefined, [nativeRequest, body, deadline]);
       }
+      ensureBindings();
       state = {...state, pendingRequest: null};
     }
   }
@@ -536,15 +548,7 @@ function createSession(options, restoreMode = false) {
       for (;;) {
         let activity;
         try {
-          ensureBindings();
-          activity = await Reflect.apply(bound.receive, undefined,
-            [sourceThreadId, turnId, budget.monotonicDeadline, {includeUnscoped: ownUnscopedRequests}]);
-          // Receiving a request consumes it from the borrowed connection. Keep
-          // it for reconciliation even if the owner changed during that await.
-          if (activity?.type === 'request' && plainObject(activity.request)) {
-            state = {...state, pendingRequest: immutable(activity.request)};
-          }
-          ensureBindings();
+          activity = await receiveBoundActivity(sourceThreadId, turnId, budget.monotonicDeadline);
         } catch (error) {
           return lockFailure('TURN_ACTIVITY_FAILED', 'source turn activity became unavailable', error,
             {phase: 'turn-activity-unknown', nativeRequest: state.pendingRequest || undefined});
@@ -670,6 +674,7 @@ function createSession(options, restoreMode = false) {
             [nativeRequest, ownerContext], budget.monotonicDeadline, 'ownerRequest'));
           await Reflect.apply(bound.respond, undefined,
             [nativeRequest, body, budget.monotonicDeadline]);
+          ensureBindings();
           state = {...state, phase: 'turn-running', pendingRequest: null};
         } catch (error) {
           if (lockedFailures.has(error)) throw error;

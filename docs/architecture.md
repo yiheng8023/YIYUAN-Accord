@@ -544,9 +544,10 @@ The owner supplies current authority, the handoff plan, independent effect
 verification and decisions for other server requests. A single activity wait
 handles either a request or the matching terminal event; it leaves no losing
 waiter that could consume a later request. Unscoped requests require explicit
-ownership. Ordinary activity reception checks the borrowed connection binding
-before and after waiting. A consumed request is retained before the post-receive
-check; a context reply also rechecks binding before clearing that request. Changed
+ownership. Ordinary turns and handoff source/target activity share one receiver
+that checks the borrowed connection binding before and after waiting. A consumed
+request is retained before the post-receive check; context and owner replies also
+recheck binding before clearing that request. Changed
 bindings lock the session, preserving the request without replay, including when
 one reply was already sent. These guards do not revoke an already delivered reply
 or prove that a frozen native connection can change identity.

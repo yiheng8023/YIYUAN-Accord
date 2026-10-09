@@ -69,7 +69,7 @@ function handle(frame) {
       if (mode === 'handoff-source-queued') return;
       if (mode.startsWith('handoff-source-')) serverRequest(106, 'approval/request', {
         threadId:'unrelated-source', turnId:'other-turn', reason:'not-owned'});
-      if (mode === 'handoff-source-context') return serverRequest(105, 'item/tool/call', {
+      if (mode === 'handoff-source-context' || mode.startsWith('binding-handoff-source-')) return serverRequest(105, 'item/tool/call', {
         threadId:'source-1', turnId:'source-turn-1', callId:'late-context',
         tool:'accord_inspect_context', namespace:null, arguments:{maxAgeMs:30000}});
       if (['handoff-source-owner', 'handoff-source-owner-failure'].includes(mode)) return serverRequest(105, 'approval/request', {
@@ -148,7 +148,7 @@ function handle(frame) {
           serverRequest(300, 'item/tool/call', {threadId:frame.params.threadId, turnId:id,
             callId:'second-handoff-call', tool:'accord_request_handoff', namespace:null,
             arguments:{reason:'Continue to the next fresh carrier.'}});
-        } else if (mode === 'adopt-chain' && targetTurn === 1) {
+        } else if ((mode === 'adopt-chain' || mode.startsWith('binding-handoff-target-')) && targetTurn === 1) {
           serverRequest(200, 'item/tool/call', {threadId:frame.params.threadId, turnId:id,
             callId:'target-context-call', tool:'accord_inspect_context', namespace:null,
             arguments:{maxAgeMs:30000}});
@@ -190,11 +190,24 @@ if (mode.startsWith('binding-')) {
       if (mode === 'binding-receive-version') connection.transport.hostVersion = 'replacement';
       if (mode === 'binding-receive-callback') connection.replyContext = async () => {};
     }
+    if (activity.type === 'request' &&
+        (mode === 'binding-handoff-source-receive' && activity.request.id === 105 ||
+         mode === 'binding-handoff-target-receive' && activity.request.id === 200))
+      connection.transport.connectionId = 'replacement';
     return activity;
   };
   connection.replyContext = async (...args) => {
     const reply = await nativeConnection.replyContext(...args);
-    if (mode === 'binding-reply-id') connection.transport.connectionId = 'replacement';
+    if (mode === 'binding-reply-id' ||
+        mode === 'binding-handoff-source-reply' && args[0].id === 105 ||
+        mode === 'binding-handoff-target-reply' && args[0].id === 200)
+      connection.transport.connectionId = 'replacement';
+    return reply;
+  };
+  connection.respondRequest = async (...args) => {
+    const reply = await nativeConnection.respondRequest(...args);
+    if (mode === 'binding-owner-reply' && args[0].id === 101)
+      connection.transport.connectionId = 'replacement';
     return reply;
   };
 }
@@ -716,6 +729,31 @@ class CodexSourceSessionTests(unittest.TestCase):
         self.assertEqual(result["ownerCalls"], 0)
         self.assertEqual(result["planCalls"], 0)
         self.assertEqual(result["second"], "SESSION_FAILED")
+        self.assertEqual(len(result["starts"]), 1)
+
+    def test_handoff_binding_changes_retain_the_actual_source_or_target_request(self):
+        for side, request_id, starts in (("source", 105, 1), ("target", 200, 2)):
+            for point, replies in (("receive", 0), ("reply", 1)):
+                with self.subTest(side=side, point=point):
+                    result = self.run_case(f"binding-handoff-{side}-{point}")
+                    self.assertEqual(result["error"]["nativeRequest"]["id"], request_id)
+                    self.assertEqual(result["snapshot"]["pendingRequest"]["id"], request_id)
+                    self.assertEqual(result["snapshot"]["status"], "failed")
+                    self.assertEqual(result["second"], "SESSION_FAILED")
+                    self.assertEqual(len(result["starts"]), starts)
+                    self.assertEqual(len([r for r in result["serverResponses"]
+                                          if r["id"] == request_id]), replies)
+                    self.assertFalse(any(r["id"] == 201 for r in result["serverResponses"]))
+                    self.assertFalse(any(r.get("method") == "thread/unsubscribe"
+                                         for r in result["sent"]))
+
+    def test_binding_change_after_owner_reply_preserves_that_request_once(self):
+        result = self.run_case("binding-owner-reply")
+        self.assertEqual(result["error"]["nativeRequest"]["id"], 101)
+        self.assertEqual(result["snapshot"]["pendingRequest"]["id"], 101)
+        self.assertEqual([r["id"] for r in result["serverResponses"]], [100, 101])
+        self.assertEqual(result["second"], "SESSION_FAILED")
+        self.assertEqual(result["planCalls"], 0)
         self.assertEqual(len(result["starts"]), 1)
 
     def test_source_start_ack_loss_is_not_retried_and_locks_the_session(self):
