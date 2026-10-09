@@ -220,6 +220,47 @@ class TaskCheckpointTests(unittest.TestCase):
         self.assertEqual(self.status()['epoch'], current['epoch'])
         self.assertEqual(self.event('Stop'), {})
 
+    def test_delayed_startup_cannot_acknowledge_unidentified_input_loss(self):
+        # Native run_turn error paths can submit/record input before consuming
+        # pending SessionStart(startup). No local receipt is not zero history.
+        self.bind()
+        self.pause('Another task is still paused.')
+        old_files = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        lost = subprocess.run([self.node, str(RUNTIME), '--hook', 'UserPromptSubmit'],
+            input='{', text=True, encoding='utf-8', capture_output=True,
+            env=self.environment, cwd=self.work, timeout=10)
+        self.assertNotEqual(lost.returncode, 0)
+        self.assertIn('invalid-json-input', lost.stderr)
+        marker = next(self.state.glob('*.workspace-input-failure.json'))
+        marker_bytes = marker.read_bytes()
+        old_status = self.status()
+        self.assertTrue(old_status['needsNativeReplay'])
+        target = 'pending-startup-task'
+        startup = subprocess.run([self.node, str(RUNTIME.with_name('accord-hook.cjs'))],
+            input=json.dumps({'hook_event_name': 'SessionStart', 'source': 'startup',
+                              'session_id': target, 'cwd': str(self.work),
+                              'model': 'test-model', 'turn_id': 'later-turn'}),
+            text=True, encoding='utf-8', capture_output=True,
+            env=self.environment, cwd=self.work, timeout=10)
+        self.assertEqual(startup.returncode, 0, startup.stderr)
+        self.assertIn('Accord task entry:', json.loads(startup.stdout)['hookSpecificOutput']['additionalContext'])
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()},
+                         {**old_files, marker.name: marker_bytes})
+        prompt = 'Continue; the earlier request still applies.'
+        self.invoke({'hook_event_name': 'UserPromptSubmit', 'session_id': target,
+                     'turn_id': 'later-turn', 'prompt': prompt}, hook=True)
+        current = self.invoke({'op': 'status', 'session_id': target})
+        self.assertTrue(current['needsNativeReplay'])
+        self.assertEqual(current['inputSource'], 'quarantined-native-input')
+        self.assertEqual(current['mode'], 'unbound')
+        page = self.invoke({'op': 'read-native-input', 'session_id': target})
+        self.assertEqual([entry['text'] for entry in page['entries']], [prompt])
+        self.assertIn('native-replay', self.invoke({'op': 'bind', 'session_id': target,
+            'epoch': current['epoch'], 'expectedRevision': 0}, success=False))
+        self.assertEqual(marker.read_bytes(), marker_bytes)
+        self.assertEqual({name: (self.state/name).read_bytes() for name in old_files}, old_files)
+        self.assertEqual(self.status(), old_status)
+
     def test_failure_during_quarantined_capture_obsoletes_the_capture_epoch(self):
         receipt = next(self.state.glob('*.input.json'))
         marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))

@@ -288,6 +288,14 @@ a stored input receipt file. A missing file with a failure watermark is labelled
 acknowledged markers remain listed. These fields do not establish which input
 failed, when it failed, native message delivery or permission to replay. Existing
 replay, pause and input-reconciliation requirements continue to govern state changes.
+An empty local receipt set and a native SessionStart(startup) are not sufficient
+evidence of no earlier input: the retained rust-v0.161.0 startup error paths can
+run UserPromptSubmit before the pending startup Hook. An unidentified transport
+failure there leaves only a workspace watermark. Automatically accepting that
+watermark at the later startup could hide this same task's missing input. Recovery
+therefore keeps the existing task-scoped reconciliation and current-token path;
+startup guidance alone does not establish a clean input baseline. This source
+counterexample does not attribute the local historical watermark to that failure.
 Resume reconciliation and input publication retain their existing write locks
 and lifecycle semantics.
 Failure watermarks remain until their owning

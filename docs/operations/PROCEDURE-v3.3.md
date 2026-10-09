@@ -2811,3 +2811,13 @@ Root原工具撤回实际exit23；worker未强行执行/修复，独立PowerShel
 原生记录、输入、标记、两侧helper和对应测试保于私有accord-ide-live-20261009-01，FACTS列原路径/摘要/mtime并确认采集前后未变。当前探针明确禁止replay/状态写入，因此本轮止于诊断与记录；旧v2未动，共享标记未删，未绑定新检查点。下一必要评估是区分新任务初始化与旧责任恢复的充分来源及作用域，不复查已证IDE连接、不重跑探针或把文本保全当自动恢复授权。其它主线保持，17scope/13case/F-A未晋。
 
 同时纠正两项当前指引遗漏：CONT剩余表仍把已经补核的安装before写成缺口，现指回真正未证的600秒完整QA时点；机器cycle.scopeRule仍称Chat pending，现对齐r38/r39已定deferred。只改当前说明，不改范围集合、判据、案例或原失败。
+
+## 2026-10-09 延后startup反例与隔离路线取舍
+
+Root评估了一个候选：在SessionStart startup、没有本会话input/state/sessionfailure时记下旧workspace generation，首个完整输入若generation未变则正常接受。隔离纯探针首先证明现实现不会这样接受；其失败只证明候选期望不同，不能当作产品缺陷已证。独立源审查随后推翻了候选前提，故未改运行时或添加起始基线文件。
+
+既有固定官方rust-v0.161.0 / 979011409de0a60b52f179721948e65531d26144的session/session.rs1940–1950把InitialHistory::New映射Startup，但session/turn.rs241–249及268–277的前序错误可以先run_hooks_and_record_inputs后return；正常run_pending_session_start_hooks在322。UserPromptSubmit传输失败时，当前helper仅能发布匿名workspace水印。下一轮startup仍可见无本会话回执/检查点/失败文件，不能据此认为之前没有输入。保存的Hook调用代码也未证明历史在外部读取前完整刷盘，因此不再以扫描transcript补一个未经证明的“无历史”豁免。
+
+新增test_delayed_startup_cannot_acknowledge_unidentified_input_loss用真实helper CLI的无效JSON触发工作区水印（隔离临时目录内），随后真实entry handler处理startup，再送“Continue; the earlier request still applies.”。结果保持quarantine、禁止bind、全文保全，另一暂停任务及共享水印字节不变。连同原新会话逐token恢复/旧任务仍暂停、暂停中断保留及捕获时水印变化4项回归全部通过，5.281秒。这里的CLI是本地Node测试脚本，不是Codex CLI/AppServer或模型实例；不复跑真实IDE probe。
+
+当前较小路线仍是既有按会话核对后的token-bound replay；它不清其它会话或共享水印，也不证明未捕获历史已恢复。既有原生读取权限不是本次已结束只读probe的状态修改许可，旧v2禁止replay保持。该局部调查已闭，不继续叠加初始化机制或为形式标签重做业务。原水印因何产生仍unknown，不由此源码反例归因；其它主线可独立推进。源与候选否决理由保私有accord-input-baseline-20261009-01。
