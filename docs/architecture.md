@@ -690,6 +690,16 @@ unchanged predecessor, declared package identity, namespace/legal carriage,
 hint transport, complexity and bounded changed paths. Their PASS does not
 establish functionality, value or candidate eligibility.
 
+The current package `packageSha256` is a tree digest, not an archive digest.
+For each exact distributed member in sorted repository-relative path order,
+hash its bytes, then feed the UTF-8 path (including the plugin directory), a
+NUL separator and that binary SHA-256 digest into the outer SHA-256. A directory
+copy with the complete names and bytes is sufficient to reproduce it. When
+sharing identity facts, retain the digest definition and path namespace; an
+unknown definition does not establish a need for a ZIP or another new artifact.
+Source locators with different prefixes require explicit object equivalence,
+not a silent format assumption or a retroactively changed observation.
+
 The development source's `acceptance.admission` binds required coverage, defined
 scopes and cases with a risk-bound independent review policy. Each claimed host
 requires function, package lifecycle and impact assessment. Incremental benefit is a
