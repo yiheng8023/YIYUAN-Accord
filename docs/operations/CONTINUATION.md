@@ -77,12 +77,15 @@ CLI0.162.0一次新隔离安装核到setup元数据，25缓存成员逐字节对
 2026-10-10为让主宿主读取setup声明，已准备一次114112→151947的官方更新，
 固定已通过11/11 CI的1f80fe60/25成员050e45a6。只有manifest/adapter/lifecycle Skill/
 SDK driver四文件不同，Hook声明和普通MCP/state保持，不新增信任或运行时。
-新执行包accord-setup-adoption-20261010-01默认未授权，binding9877ed76；
-Root22离线检查通过，独立复审20项运行+2项静态，有条件通过。已补实有旁车漏检、
-首次效果前旧缓存必须完整及preflight拒绝留证说明；125份旧原件保持。
-客户端/IDE/CLI关闭后才由外部终端执行，任何Codex旁车或未知消费者拒绝，不停后台。
-当前无attempt/execution，主配置与安装未变。等待本次明确安装决定，不复制旧grant。
-详见私有UPDATE-READY.md、REVIEW.md和READY-RECEIPT.json；这不是setup已执行。
+用户2026-10-10已确认本次更新。原binding9877ed76因npm CLI已变0.162.1及9处当前
+宿主工具/notify配置变化，被即时检查拒绝，未派发。原件保持；派生executor-reconciled01
+复用本机已有同字节0.162.0/dce CLI，并完整保留当前配置为前态，不回退新宿主/CLI。
+三个执行代码文件不变，新binding471945e5；Root22检查通过，独立20运行及范围复审
+有条件通过。已按本轮真实确认登记authorized=true，未消费且无attempt/execution。
+客户端/IDE/CLI关闭后从外部终端执行；任何Codex旁车或未知消费者拒绝，不停后台。
+只用executor-reconciled01/launch.cmd，不运行原包。原范围及全部即时门不放宽；
+详见CONFIRMED-EXECUTION.md、RECONCILIATION.json、RECONCILED-REVIEW.md和
+CONFIRMATION-RECEIPT.json。等待用户关闭客户端并执行，安装/真实setup尚未验。
 
 ## 剩余主线与下一依赖
 
