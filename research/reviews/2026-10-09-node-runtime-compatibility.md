@@ -151,3 +151,17 @@ Root先以CLI0.162读取四个未安装本地marketplace变体（原版/有效se
 后一次binding继承的businessForbidden列表误留plugin/install，和明确的一次隔离安装authority/请求链不一致。原binding与实际安装回执保留，另记RECONCILIATION；这是前绑文本纠偏，不能称该次没有安装。后续派发核对声明与真实方法相符，不重跑本次。原件位于私有backups下accord-onboarding-preview-20261009-01和accord-onboarding-installed-preview-20261009-01。
 
 下一有效缺口是实际健康宿主能进入setup并完成必要运行时与Hook/MCP连接，不是再读取同一metadata。当前裸node启动方式未改变；仅放入私有二进制不能证明宿主会采用。完整零准备体验、更新回退和用户负担仍待实证。本次不增加scope/case，不改变全部F/A或旧失败，产品功能/候选状态仍false。
+
+## 宿主引导连接与进程级复用（2026-10-10）
+
+修复提交1f80fe60的CI37955873604已11/11成功，结束上一轮夹具故障核验。当前25成员151947/050e候选未变；本节不新增产品代码、运行时、服务或用户安装。
+
+[官方setup文档](https://developers.openai.com/plugins/build/plugins#add-an-onboarding-skill)明确由安装后的setup动作调用包内Skill，支持新对话及安装所在对话。本机26.1002.7124资源中的plugin-installation-content实际先核pluginOnboarding能力和目标，再用plugin/read及强制刷新Skill清单找到启用的精确Skill；start实现构造普通插件mention与skill输入。它不是专用安装服务，也不自动取得安装权限。该源码核对不证明本账户功能开关、setup点击或模型轮次已运行。
+
+当前原生load_workspace_dependencies只读接口已返回bundled26.1007.11041及Node实际路径，运行值24.19.0；可作为本地执行者的一条已观察来源，不硬编码该缓存路径为跨升级契约。配置中的workspace_dependencies可受管理策略控制，其他入口或被关闭时不能假定存在。接口实现返回现有安装信息，不等于自动将路径加入所有Hook/MCP环境。当前源码仍以裸node启动，两者须分别核验。
+
+Root用一个受控Windows进程核连接：原PATH仅System32，cmd调用node确实失败；仅为该进程加入原生接口所给Node目录，where解析到唯一预期二进制。随后原候选MCP以裸node实际启动，initialize及tools/list返回候选151947和3个现有状态工具，未调用任何状态读写工具。所属Job自然退出且activeProcesses=0；用户config与包原件哈希保持，空自有home已移除、任务state未创建。它证明该局部进程的连接方法，不能代宿主全局环境修改、真实setup模型对话、Hook信任/加载或完整首次安装体验。
+
+原第一次探针把缺命令exitCode写死9009，实际cmd返回1，故在MCP启动前失败；其原日志/脚本和失败保留。明确实际无效果、资源已退出后，只修观察器为缺PATH解析且命令非零的语义判据，在新目录执行连接，未改变产品判据或追认原尝试。私有原件accord-setup-host-route-20261010-01包含host-source-spans、FACTS、PROBE-FAILURE和runtime-binding-02中的原始协议/结果/来源绑定。
+
+后续优先组合已证的普通Skill引导路径与现有执行者的局部环境设置。对本地CLI/SDK等由获准执行者创建的进程，可前瞻绑定运行时及其作用域；当前常驻桌面、IDE或已有MCP不能假定继承后来某个终端的PATH。先核所属宿主支持的刷新/启动控制，缺失则保具体边界。宿主提供运行时时优先复用；确实缺失才准备必要安装方案。下一步应验证真正的setup调用与采用，不再重复本节元数据/源码/握手检查，也不为此新建通用安装器或更改用户全局PATH。

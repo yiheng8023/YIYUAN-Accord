@@ -5781,6 +5781,19 @@
       "verification": "New fixture/source-preservation regression failed before the fix. All117tests across test_codex_entry and test_codex_session_native then passed in34.862s, including the original fast-gate cases, restored setup/unknown-extension refusal, source integrity, source-drift and resource cleanup checks. No new real model or native-host business instance.",
       "limits": "Current package151947/050e remains unchanged, as do main-user installation, all17scopes/13cases/F-A and prior failures. A local suite pass does not establish corrected hosted CI or actual setup invocation. Earlier implementation omitted this fixture caller; future setup/projection changes include the affected native fixture suite.",
       "evidence": "Private accord-onboarding-ci-fix-20261009-01/windows-job.log,regression-red.log,affected-tests.log. The9matrix failures on source4e6 are retained while its remaining native job runs; do not relabel a rerun as its original result."
+    },
+    {
+      "id": "setup-host-route-and-runtime-binding-20261010",
+      "observedAt": "2026-10-10",
+      "scope": "current-host-source-and-local-process-mechanism-not-setup-acceptance",
+      "sourceRevision": "1f80fe608278a1f30f293831b865ffde56ef96d1",
+      "hostedCheck": "CI37955873604 success11/11; preceding4e6 matrix failures retained.",
+      "hostSource": "Installed desktop26.1002.7124 plugin onboarding checks feature/target and enabled Skill discovery, then uses ordinary mention+skill input. Source inspection does not establish current account gate or actual setup invocation. Native workspace dependency reader returns an existing host-owned Node24.19 path, not automatic Hook/MCP environment binding.",
+      "localObservation": "Windows child PATH initially onlySystem32 cannot execute node. Adding only the supplied existing runtime directory to that process PATH resolves exactly one expected Node; unchanged candidate151947 MCP initializes and lists3tools. No tools/call, state writes, model, CLI/AppServer, installation or trust. Natural owning Job0, protected package/config hashes unchanged, empty owned home removed. The first observer child omitted -B and created4known script import caches; static verification caught them. Epoch/source/Job-attributed cleanup removed only those caches; original failure and cleanup receipt retained, final static verify valid/errors[]. Future observer derivatives pass -B to child Python.",
+      "correction": "Initial observer incorrectly required missing-command exit9009; actual exit1 caused failure before MCP launch. Original script/log/failed attempt retained and known effects reconciled, then new bounded derivative uses missing PATH resolution and nonzero command as semantic oracle. Do not relabel original attempt as passed.",
+      "limits": "This establishes a process-scoped connection, not the desktop/IDE already-running environment, native Hook loading, setup model flow, clean-machine completeness or full F/A.25package members and5Skills unchanged; no new runtime or installer shipped. Re-query supported locators after relevant changes; do not hardcode private cache paths or enable disabled host facilities.",
+      "next": "Combine the existing ordinary Skill setup route with authorized target-executor environment control and actual adoption. Reuse this source/handshake evidence; do not repeat probes or build a universal installer. Missing runtime installation/Trust/main-user change still needs matching concrete authority.",
+      "evidence": "research/reviews/2026-10-09-node-runtime-compatibility.md and private accord-setup-host-route-20261010-01 host-source-spans,FACTS,PROBE-FAILURE,runtime-binding-02 raw and Job observations."
     }
   ],
   "environmentControl": {

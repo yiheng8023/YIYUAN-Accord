@@ -7,13 +7,13 @@
 
 ## 当前起点
 
-- 最新已核提交 **a8dea654，CI37939373923成功**；此前3c219b2c/#833及794abbf1/#832也已成功。
+- 最新已核提交 **1f80fe60，CI37955873604（11/11）成功**；此前a8dea654、#832/#833均已成功。
   a3/cbd原9个快速门失败、2个native lifecycle成功保留；已修合法新增声明
   引起的旧计数假设。13/15布局回归仍保持无观察时0accepted、功能/候选false。
 - 4e6a95dd/CI37954912346的9个常规矩阵在native夹具前置检查失败；
   新onboarding声明被仅Hook夹具错误携带，严格投影拒绝。已只修派生夹具，
   保源包及严格拒绝；新增反例先失败后通过，两个受影响模块117项通过。
-  托管修复结果另核，当前151947/050e包与主用户安装均未变。
+  1f80托管修复现已11/11成功，当前151947/050e包与主用户安装均未变。
 - 主仓保持原检出main。当前17范围、13活动case、7处声明覆盖缺口、5个无case
   父范围；数字不是完成率。functionalCompletion/candidateEligible均false。
 - 源码候选20261009151947，25成员，包SHA
@@ -65,7 +65,12 @@ CLI0.162.0一次新隔离安装核到setup元数据，25缓存成员逐字节对
 安装前绑文字误留禁止install，实际安装在当前批准范围，原件与纠偏分别保留；
 后续派发先核允许/拒绝方法声明与实际效果一致。原生exit0/Job0，
 67+93运行文件逐一留证后移除两组各4个自有运行目录。
-下一必要工作是实际setup进入及运行时/Hook/MCP连接，不重做这两次元数据读取。
+2026-10-10核本机原生setup实现：按开启政策/目标和启用Skill走普通mention+skill对话；
+当前workspace-dependencies接口可返回宿主已有Node24.19路径。一次局部Windows进程
+在缺node后仅调整自身PATH，实际MCP握手/3工具发现成功，自然Job0，源和用户配置不变。
+原探针固定9009期待错误、实际exit1，失败与新目录的修正连接分开保留。
+该结果不代真实setup对话、Hook加载或常驻宿主环境采用。下一步组合实际引导与采用，
+不再重复已证元数据/源码/局部握手，不把所有依赖打包或修改全局PATH。
 
 ## 剩余主线与下一依赖
 
@@ -136,3 +141,6 @@ C:\Users\15521\.codex\backups\，仅按当前依赖读取：
 
 - 本次CI纠偏：accord-onboarding-ci-fix-20261009-01/windows-job.log、
   regression-red.log、affected-tests.log；只处理仅Hook夹具派生遗漏，不重跑原安装。
+
+- 宿主setup连接：accord-setup-host-route-20261010-01/host-source-spans.json、FACTS.json、
+  PROBE-FAILURE.json及runtime-binding-02原始协议/来源绑定/Job结果；只证局部进程连接。
