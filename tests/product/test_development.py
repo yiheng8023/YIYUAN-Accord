@@ -167,6 +167,67 @@ class SkillReferencePackageTests(unittest.TestCase):
         self.assertEqual(old_input["existingCheckpoint"], new_input["existingCheckpoint"])
 
 
+class NativeOnboardingContractTests(unittest.TestCase):
+    SKILL = "./skills/manage-plugin-lifecycle/SKILL.md"
+
+    def setUp(self):
+        definition = json.loads((ROOT / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
+        self.projection = definition["delivery"]["hostProjections"][0]
+        self.manifest = json.loads((ROOT / self.projection["manifest"]).read_text(encoding="utf-8"))
+        self.identity = json.loads((ROOT / "product/constitution.json").read_text(
+            encoding="utf-8"))["identity"]
+
+    def errors(self, manifest, **options):
+        from yiyuan_accord.guardrails import manifest_shape_errors
+        return manifest_shape_errors("codex", manifest, self.identity, "yiyuan-accord",
+            self.projection["interfaceDefaultPrompt"], unified_name=True, **options)
+
+    def test_onboarding_is_explicit_and_preserves_the_previous_adapter_contract(self):
+        from yiyuan_accord.development import V5_SCHEMA, delivery_adapter_contract
+        options = dict(development_schema=V5_SCHEMA, startup_entry=True, meta_guidance=True,
+                       input_state_notice=True)
+        previous = delivery_adapter_contract("codex", "yiyuan-accord-codex", **options)
+        disabled = delivery_adapter_contract("codex", "yiyuan-accord-codex",
+                                            native_onboarding=False, **options)
+        current = delivery_adapter_contract("codex", "yiyuan-accord-codex",
+                                           native_onboarding=True, **options)
+        self.assertEqual(disabled, previous)
+        self.assertNotIn("nativeOnboarding", previous)
+        self.assertEqual(current["nativeOnboarding"]["skill"], self.SKILL)
+        self.assertEqual({key: value for key, value in current.items()
+                          if key != "nativeOnboarding"}, previous)
+        self.assertEqual(current["behaviorEvidenceState"], "unverified")
+
+    def test_legacy_and_onboarding_manifest_shapes_are_separate(self):
+        legacy = copy.deepcopy(self.manifest)
+        legacy.pop("extensions", None)
+        before = copy.deepcopy(legacy)
+        self.assertEqual(self.errors(legacy), [])
+        self.assertEqual(legacy, before)
+        current = {**legacy, "extensions": {"com.openai": {"onboardingSkill": self.SKILL}}}
+        self.assertEqual(self.errors(current, onboarding_skill=self.SKILL), [])
+        self.assertTrue(self.errors(current))
+        self.assertTrue(self.errors(legacy, onboarding_skill=self.SKILL))
+        self.assertEqual(current["interface"], legacy["interface"])
+
+    def test_onboarding_extension_rejects_unknown_fields_and_unbound_targets(self):
+        legacy = copy.deepcopy(self.manifest)
+        legacy.pop("extensions", None)
+        invalid = [
+            None, {}, {"com.openai": {}},
+            {"com.openai": {"onboardingSkill": self.SKILL}, "other.vendor": {}},
+            {"com.openai": {"onboardingSkill": self.SKILL, "extra": True}},
+        ]
+        invalid += [{"com.openai": {"onboardingSkill": target}} for target in (
+            None, "", "./skills/unknown/SKILL.md", "./../outside/SKILL.md",
+            "/skills/manage-plugin-lifecycle/SKILL.md", "./skills/manage-plugin-lifecycle/../SKILL.md",
+        )]
+        for extension in invalid:
+            with self.subTest(extension=extension):
+                self.assertTrue(self.errors({**legacy, "extensions": extension},
+                                            onboarding_skill=self.SKILL))
+
+
 class ClaudeUpdateInspectionTests(unittest.TestCase):
     def run_fixture(self, **conditions):
         expected_validations = conditions.pop("expectedValidations", 1)
@@ -1280,6 +1341,72 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         self.assertFalse(report["valid"])
         self.assertTrue(any("caller-selected observer" in error for error in report["errors"]))
         self.assertFalse(report["repositoryCandidateReady"])
+
+    def test_current_onboarding_reuses_a_declared_skill_without_promoting_acceptance(self):
+        projection = self.contract["delivery"]["hostProjections"][0]
+        manifest = json.loads((self.root / projection["manifest"]).read_text(encoding="utf-8"))
+        adapter = json.loads((self.root / projection["contract"]).read_text(encoding="utf-8"))
+        target = manifest["extensions"]["com.openai"]["onboardingSkill"]
+        self.assertIs(projection["nativeOnboarding"], True)
+        self.assertEqual(target, NativeOnboardingContractTests.SKILL)
+        self.assertEqual(adapter["nativeOnboarding"]["skill"], target)
+        locator = (Path(projection["manifest"]).parent.parent / target[2:]).as_posix()
+        self.assertIn(locator, projection["supportingSkills"])
+        self.assertTrue((self.root / locator).is_file())
+        report = self.report()
+        self.assertTrue(report["valid"], report["errors"])
+        self.assertFalse(report["functionalCompletion"])
+        self.assertFalse(report["repositoryCandidateReady"])
+        self.assertEqual(report["hostChecks"]["codex"]["behaviorEvidenceState"], "unverified")
+
+    def test_onboarding_declaration_and_contract_must_agree_without_promotion(self):
+        for value in (None, "true", 1, False):
+            declaration = copy.deepcopy(self.contract)
+            projection = declaration["delivery"]["hostProjections"][0]
+            if value is None:
+                projection.pop("nativeOnboarding")
+            else:
+                projection["nativeOnboarding"] = value
+            with self.subTest(value=value), self.changed(
+                    DEVELOPMENT_FILE, json.dumps(declaration).encode()):
+                report = self.report()
+                self.assertFalse(report["valid"])
+                expected = ("native onboarding declaration must be boolean"
+                            if type(value) is not bool and value is not None
+                            else "contract does not match declared authority")
+                self.assertTrue(any(expected in error for error in report["errors"]),
+                                report["errors"])
+                self.assertFalse(report["functionalCompletion"])
+                self.assertFalse(report["repositoryCandidateReady"])
+        locator = self.contract["delivery"]["hostProjections"][0]["contract"]
+        adapter = json.loads((self.root / locator).read_text(encoding="utf-8"))
+        adapter.pop("nativeOnboarding")
+        with self.changed(locator, json.dumps(adapter).encode()):
+            report = self.report()
+        self.assertFalse(report["valid"])
+        self.assertTrue(any("contract does not match" in error for error in report["errors"]))
+        self.assertFalse(report["functionalCompletion"])
+        self.assertFalse(report["repositoryCandidateReady"])
+
+    def test_onboarding_target_requires_declared_and_present_package_membership(self):
+        declaration = copy.deepcopy(self.contract)
+        projection = declaration["delivery"]["hostProjections"][0]
+        locator = (Path(projection["manifest"]).parent.parent /
+                   NativeOnboardingContractTests.SKILL[2:]).as_posix()
+        projection["supportingSkills"].remove(locator)
+        with self.changed(DEVELOPMENT_FILE, json.dumps(declaration).encode()):
+            undeclared = self.report()
+        with self.changed(locator, None):
+            missing = self.report()
+        self.assertIn("adapter codex onboarding Skill is not a declared package member",
+                      undeclared["errors"])
+        self.assertIn(f"adapter codex package declared file is unsafe: {locator}",
+                      missing["errors"])
+        for report in (undeclared, missing):
+            self.assertFalse(report["valid"])
+            self.assertFalse(report["hostChecks"]["codex"]["staticReady"])
+            self.assertFalse(report["functionalCompletion"])
+            self.assertFalse(report["repositoryCandidateReady"])
 
     def test_current_startup_guidance_requires_exact_fork_matcher(self):
         locator = "plugins/yiyuan-accord-codex/hooks/hooks.json"

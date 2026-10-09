@@ -78,7 +78,7 @@ def _strings(value, *, empty=False):
             and len(value) == len(set(value)))
 
 
-def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False, meta_guidance=False, input_state_notice=False):
+def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False, meta_guidance=False, input_state_notice=False, native_onboarding=False):
     """Describe this development package, not a mandatory product mechanism."""
     contract = {
         "schema": 2, "productId": "yiyuan-accord", "packageId": package_id,
@@ -206,6 +206,15 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "additionalContextLimit": 4000,
                 "limits": "host-priority-and-user-authority-preserved; enabled-trusted-host-support-required; injection-is-not-behavior-or-all-surface-coverage",
             }
+    if adapter_id == "codex" and native_onboarding:
+        contract["nativeOnboarding"] = {
+            "manifestField": "extensions.com.openai.onboardingSkill",
+            "skill": "./skills/manage-plugin-lifecycle/SKILL.md",
+            "executor": "healthy-host-agent-with-authorized-native-tools",
+            "runtimeDependency": "text-guidance-readable-without-Accord-Node-or-MCP",
+            "effect": "inspect-prerequisites-and-prepare-authorized-setup-through-supported-host-controls",
+            "limits": "host-setup-support-and-enabled-skill-required; declaration-is-not-invocation-or-installation; no-self-enablement-auto-trust-or-bundled-runtime",
+        }
     if adapter_id == "claude-code":
         contract["optionalToolBatchFeedback"] = {
             "entry": "runtime/accord-hook.cjs", "nativeEvent": "PostToolBatch",

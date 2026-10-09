@@ -6695,7 +6695,8 @@ def _verify_development_product(root, evidence=None, review_bundle=None):
                     carrier_session=projection.get("carrierSession") is True,
                     native_state_mcp=projection.get("nativeStateMcp") is True,
                     meta_guidance=projection.get("metaGuidance") is True,
-                    input_state_notice=projection.get("inputStateNotice") is True),
+                    input_state_notice=projection.get("inputStateNotice") is True,
+                    native_onboarding=projection.get("nativeOnboarding") is True),
                 unified_name=contract.get("schema") == "yiyuan-accord-development/v5",
                 retained_checkpoint_revision=(contract["previousDevelopmentSnapshot"].split(":", 1)[0]
                     if contract.get("schema") == "yiyuan-accord-development/v5"

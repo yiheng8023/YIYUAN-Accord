@@ -1,6 +1,6 @@
 ---
 name: manage-plugin-lifecycle
-description: Install, update, reload, roll back or remove plugins and reconcile host upgrades within existing authority. Verify actual adoption, pending-task compatibility and recovery, preserving unrelated settings and user components.
+description: Set up, install, update, reload, roll back or remove plugins and reconcile host upgrades within existing authority. Verify prerequisites, actual adoption and recovery, preserving unrelated settings and user components.
 ---
 
 # Manage plugin lifecycle
@@ -9,6 +9,32 @@ Use the current goal and authority. If Accord's coordination duties are not
 already available, first read the [brief entry](../deliver-demand-driven-outcome/SKILL.md).
 Read other specialist Skills only for a concrete dependency; invoking this
 Skill grants no new work or permission.
+
+## First setup and missing prerequisites
+
+When the host invokes this Skill for Accord setup, use its healthy native tools
+even if Accord's Node commands or state MCP are unavailable. This text does not
+require them to run. Preserve the requested installation scope and existing work;
+use host state where sufficient, not a broken Accord tool as a setup prerequisite.
+
+Check the actual host entry/backend, execution environment, package source and
+available runtime. Prefer supported, stable host resources or a compatible existing
+runtime. If a prerequisite is missing, prepare the smallest authorized remedy;
+do not ask a novice to choose Node versions or repair PATH. Use only verified
+sources and supported installation controls. Reuse authority covering the actual
+preparation and request only an uncovered change. Merely exposing setup metadata
+does not authorize installation, enablement or trust.
+
+Keep runtime preparation out of ordinary Hook execution. Do not by default replace
+the host's runtime, change global PATH or bundle every external tool.
+Separate required runtime components from optional capabilities discovered for
+a particular task. A private runtime needs clear ownership, update and recovery
+conditions; do not assume an installer or a stable host-runtime path exists.
+
+Finish setup only after the selected entry actually loads the intended package,
+required guidance and tools, and passes its needed checks. Report a specific
+unmet condition when that cannot be verified; metadata or a successful download
+alone is not readiness. Continue lifecycle checks below as applicable.
 
 For plugin-based participation, first check that the host permits plugin use in
 the target entry/account and that the plugin is enabled in its effective scope.

@@ -302,10 +302,17 @@ def codex_metadata_errors(path, skill_name):
 
 def manifest_shape_errors(
     adapter_id, manifest, identity, product_id, declared_prompt, *, unified_name=False,
+    onboarding_skill=None,
 ):
     errors = []
     prefix = f"adapter {adapter_id}"
     expected_fields = MANIFEST_FIELDS.get(adapter_id, set())
+    if adapter_id == "codex" and onboarding_skill is not None:
+        expected_fields = expected_fields | {"extensions"}
+        if (onboarding_skill != "./skills/manage-plugin-lifecycle/SKILL.md"
+                or manifest.get("extensions") != {
+                    "com.openai": {"onboardingSkill": onboarding_skill}}):
+            errors.append(f"{prefix} onboarding Skill declaration is invalid")
     if not _exact(manifest, expected_fields):
         errors.append(f"{prefix} manifest has unsupported fields or omissions")
     if any(not _nonempty_string(manifest.get(field)) for field in (
@@ -816,6 +823,15 @@ def validate_host_projection(
                 and expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("effect")
                 == "capture-input-and-inject-bounded-state-reconciliation-notice"):
             errors.append(f"{prefix} input state notice requires the declared full guidance entry")
+    if "nativeOnboarding" in projection:
+        expected_shape |= {"nativeOnboarding"}
+        if type(projection["nativeOnboarding"]) is not bool:
+            errors.append(f"{prefix} native onboarding declaration must be boolean")
+        if adapter_id != "codex" or (projection["nativeOnboarding"] is True) != bool(
+                expected_contract and expected_contract.get("nativeOnboarding")):
+            errors.append(f"{prefix} native onboarding is outside the declared adapter")
+    elif expected_contract and expected_contract.get("nativeOnboarding"):
+        errors.append(f"{prefix} native onboarding declaration is missing")
     if adapter_id not in ("codex", "claude-code") or not _exact(projection, expected_shape):
         errors.append(f"{prefix} program projection shape is invalid")
     manifest_locator, marketplace_locator = projection.get("manifest"), projection.get("marketplace")
@@ -874,8 +890,17 @@ def validate_host_projection(
         if manifest.get(field) != expected:
             errors.append(f"{prefix} manifest {field} does not match declared identity")
     errors.extend(manifest_shape_errors(
-        adapter_id, manifest, identity, product_id, projection.get("interfaceDefaultPrompt"), unified_name=unified_name
+        adapter_id, manifest, identity, product_id, projection.get("interfaceDefaultPrompt"),
+        unified_name=unified_name,
+        onboarding_skill=(expected_contract or {}).get("nativeOnboarding", {}).get("skill"),
     ))
+    if expected_contract and expected_contract.get("nativeOnboarding"):
+        target = expected_contract["nativeOnboarding"].get("skill")
+        if isinstance(target, str) and isinstance(manifest_locator, str):
+            package_root = Path(manifest_locator).parent.parent
+            locator = (package_root / target.removeprefix("./")).as_posix()
+            if locator not in (supporting if isinstance(supporting, list) else []):
+                errors.append(f"{prefix} onboarding Skill is not a declared package member")
     asset_locators = []
     if adapter_id == "codex" and isinstance(manifest_locator, str):
         interface = manifest.get("interface") if isinstance(manifest, dict) else None

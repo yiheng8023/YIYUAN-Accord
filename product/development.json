@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261009113418",
+    "version": "3.3.0-dev.1+codex.20261009151947",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261009113418",
-        "packageSha256": "71aea2fe68fa34e903991e3015f7fc94ac4e0d9662dcad42d5b4c1affe8044bc",
+        "packageVersion": "3.3.0-dev.1+codex.20261009151947",
+        "packageSha256": "050e45a6ed66e6e52780092a4e7d8abfe7ebdd136518538d7e7dd0faa17afd3f",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -128,7 +128,8 @@
         "requiredSkillMarkers": [],
         "forbiddenPaths": [],
         "metaGuidance": true,
-        "inputStateNotice": true
+        "inputStateNotice": true,
+        "nativeOnboarding": true
       }
     ]
   },
@@ -260,10 +261,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 3510000,
+      "maxProductCodeAndTestBytes": 3520000,
       "maxTrackedFiles": 192,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current2026-10-09 allocation:3510000 product code/test bytes,192 tracked files and36000 primary-instruction bytes. The source-derived declaration diagnostic and explicit13/15-layout regressions measure3325122 bytes after removing duplicate assessment work;3500000 leaves174878, below the unchanged175000 five-percent reserve.3510000 leaves184878 versus175500 required. This bounded10000-byte allocation pays for the named CI regression repair, not general growth. Product runtime, dependencies, services, acceptance and execution limits remain unchanged. Reducing repeated assessment preserves assertions; deleting necessary assertions or partitioning solely to hide measured size is not a sufficient alternative. Earlier allocations and original rationales remain atcbd6d9daca23bb983068392ee9fad9f79c4d9119:product/development.json#/changeBoundary/complexityBudget. The added GT-11/GT-12 data-only definition remains historical; no active-case or functional pass follows. The additional single tracked file is research/reviews/2026-10-09-node-runtime-compatibility.md: the source-backed API/version assessment used by both installation overviews and the launch plan. Keeping the detailed version evidence in one linked report avoids duplicating it in both READMEs or enlarging the always-loaded kernel. The observed192-versus191 file-budget failure is preserved by this rationale; allocation grows by exactly one named documentation file. Code/test byte and primary-instruction budgets, original tests,17scopes/13cases, all F/A criteria and runtime package remain unchanged. The prior191-file allocation remains at7dd1b6b097ee746a6273ded69eb73ec778230d26:product/development.json#/changeBoundary/complexityBudget."
+      "rationale": "Current2026-10-09 allocation:3520000 product code/test bytes,192 tracked files and36000 primary-instruction bytes. The named native onboarding variant, package-member checks and six positive/negative regression methods measure3336702 code/test bytes;3510000 leaves173298, below the unchanged175500 five-percent reserve.After adding exact rejection assertions, the final measurement is3337327;3520000 leaves182673 versus176000 required. The original3336702 measurement and failed3510000 reserve check remain above. This bounded10000-byte allocation covers setup metadata and its verification, not third-party payloads, a new runtime, service or arbitrary growth. Package member count stays25 and Skill count stays5. Execution limits, all17scopes/13cases and F/A are unchanged. Earlier3510000-byte allocation and original rationales remain atce270113282bbc913f6caec6079dce1d7bf90f96:product/development.json#/changeBoundary/complexityBudget. The192-file allocation still covers the one linked runtime research report; primary guidance budget remains36000."
     }
   },
   "source": {
@@ -5756,6 +5757,19 @@
       "controls": "Only the assigned research report was written by the background actor; Root owns other repository edits. No runtime installation, account change, trust change, new SDK/CLI model process or user configuration change. Tests selected the existing bundled Node only in the test subprocess environment.",
       "limits": "This uses the existing customized native route, not the isolated metadata-only profile from current-minimal-profile-metadata-20261009. No default-host/model-adoption equivalence, new accepted case, full-runtime suite, net-benefit, F/A or release claim. Keep all17scopes and13cases unchanged.",
       "next": "Reuse this completed runtime assessment and tests. Do not install older Node versions or repeat the research just to fill a matrix. Necessary future ordinary delivery still needs actual package/actor/authority/result/exit conditions; minimum-environment behavior remains distinct. Host-version supplement at a8dea654: combine actual entry/backend, Hook/MCP interfaces, runtime path/version, OS/architecture, authority and package identity. Shared interpreters satisfy both requirements; independent Hook/MCP processes need not match a host-internal Node version. Local @openai/codex0.162 npm launcher engines>=16 and official TypeScript SDK Node18+ concern different components and do not define Accord compatibility. Sources and hashes retained in HOST-LAYERS.json. No new cross-product test matrix, supported entry or package change."
+    },
+    {
+      "id": "native-onboarding-metadata-20261009",
+      "observedAt": "2026-10-09",
+      "scope": "candidate-setup-declaration-and-one-task-owned-installation-not-setup-invocation",
+      "candidate": "3.3.0-dev.1+codex.20261009151947",
+      "packageSha256": "050e45a6ed66e6e52780092a4e7d8abfe7ebdd136518538d7e7dd0faa17afd3f",
+      "decision": "User approved lightweight setup: reuse reliable available resources; prepare missing prerequisites within corresponding authority. Do not bundle all third-party tools/dependencies. Existing lifecycle Skill is the onboarding entry; keep5Skills/25members, no new runtime/service.",
+      "observation": "CLI0.162.0 task-owned local plugin/install once resolved installed/enabled onboardingSkill metadata. All25cached members equal the candidate. Uninstalled four variants all returned null, not a test of installed disabled/missing-target behavior. AppServer PATH had System32 only; absolute observer Node remained an external measurement dependency.",
+      "controls": "Zero model turns, no Hook trust/authentication or main-user installation/config change. Native exit0 and owning Job0 for both readers. All7/6raw responses match structured receipts; raw contains a remoteControl notification despite unpopulated events arrays. Retained67/93runtime files before removing each four owned runtime roots.",
+      "correction": "Installed-probe binding inherited plugin/install in businessForbidden despite explicit current installation authority and request implementation. Preserve original and document inconsistency in RECONCILIATION; reconcile selected method declarations before future dispatch, do not relabel this install-free or rerun.",
+      "limits": "Setup path resolves against marketplace source, not an observed model invocation from cache. Actual setup invocation, runtime preparation/host binding, clean-machine experience and lifecycle acceptance remain unverified. Main-user package114112 unchanged. No promotion of17scopes/13cases/F-A or prior failures.",
+      "next": "Verify only the remaining actual setup/runtime connection when sufficiently bound. Do not repeat these metadata probes or add a universal installer, service, offline/SEA obligation. See runtime assessment and private accord-onboarding-preview-20261009-01 / accord-onboarding-installed-preview-20261009-01 raw,FACTS,RETENTION,CLEANUP,RECONCILIATION."
     }
   ],
   "environmentControl": {

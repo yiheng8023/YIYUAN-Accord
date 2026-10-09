@@ -117,5 +117,13 @@
       "additionalContextLimit": 4000,
       "limits": "host-priority-and-user-authority-preserved; enabled-trusted-host-support-required; injection-is-not-behavior-or-all-surface-coverage"
     }
+  },
+  "nativeOnboarding": {
+    "manifestField": "extensions.com.openai.onboardingSkill",
+    "skill": "./skills/manage-plugin-lifecycle/SKILL.md",
+    "executor": "healthy-host-agent-with-authorized-native-tools",
+    "runtimeDependency": "text-guidance-readable-without-Accord-Node-or-MCP",
+    "effect": "inspect-prerequisites-and-prepare-authorized-setup-through-supported-host-controls",
+    "limits": "host-setup-support-and-enabled-skill-required; declaration-is-not-invocation-or-installation; no-self-enablement-auto-trust-or-bundled-runtime"
   }
 }

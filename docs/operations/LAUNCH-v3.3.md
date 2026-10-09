@@ -26,11 +26,11 @@
 
 ## 首次使用者说明与发布字段草案
 
-以下中英介绍、结构字段和检查清单面向非技术首次使用者。当前稿依据共识计划及`20261009113418`源码候选修订，仍须在发布前按精确版本和实际验收结果更新；不构成普遍支持、效果或发布承诺。此前01397fbe的2026-09-24稿保留在Git历史，其旧开发构建号不作为当前包身份。
+以下中英介绍、结构字段和检查清单面向非技术首次使用者。当前稿依据共识计划及`20261009151947`源码候选修订，仍须在发布前按精确版本和实际验收结果更新；不构成普遍支持、效果或发布承诺。此前01397fbe的2026-09-24稿保留在Git历史，其旧开发构建号不作为当前包身份。
 
 ## YIYUAN Accord 3.3：让 Agent 协调协作（草案）
 
-> **草案，非正式发行说明。** 3.3仍在开发，尚未完成验收或发布；目前没有可供常规安装的已接受3.3发行版。当前 Codex 源码候选为 `3.3.0-dev.1+codex.20261009113418`；主用户安装仍为 `3.3.0-dev.1+codex.20261008114112`。已在一份本机原线程核到新版Hook参与和当前MCP状态读取；不能推广为所有组件分支、入口或完整功能均已验收。
+> **草案，非正式发行说明。** 3.3仍在开发，尚未完成验收或发布；目前没有可供常规安装的已接受3.3发行版。当前 Codex 源码候选为 `3.3.0-dev.1+codex.20261009151947`；主用户安装仍为 `3.3.0-dev.1+codex.20261008114112`。已在一份本机原线程核到新版Hook参与和当前MCP状态读取；不能推广为所有组件分支、入口或完整功能均已验收。
 
 ### 你可以怎样开始
 
@@ -58,7 +58,7 @@ Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和
 
 ## YIYUAN Accord 3.3: letting an Agent coordinate the work (draft)
 
-> **Draft, not an official release note.** Version 3.3 is in development and has not completed acceptance or publication. There is currently no accepted 3.3 release for normal installation. The current Codex source candidate is `3.3.0-dev.1+codex.20261009113418`; the main user installation remains `3.3.0-dev.1+codex.20261008114112`. The new Hook participation and current MCP state read were observed in one original local task; this does not establish acceptance of every component branch, entry or complete functionality.
+> **Draft, not an official release note.** Version 3.3 is in development and has not completed acceptance or publication. There is currently no accepted 3.3 release for normal installation. The current Codex source candidate is `3.3.0-dev.1+codex.20261009151947`; the main user installation remains `3.3.0-dev.1+codex.20261008114112`. The new Hook participation and current MCP state read were observed in one original local task; this does not establish acceptance of every component branch, entry or complete functionality.
 
 ### How to get started
 
@@ -96,7 +96,7 @@ Version 3.3 remains in development and has not completed acceptance or publicati
   "version": {
     "release": "3.3 (development; not an accepted release)",
     "note": "Installed20261008114112 from35b63b75. New Hook participation and current MCP state read observed in one original local task; not universal acceptance or an official release identity.",
-    "developmentPackageSnapshot": "3.3.0-dev.1+codex.20261009113418"
+    "developmentPackageSnapshot": "3.3.0-dev.1+codex.20261009151947"
   },
   "scope": {
     "purpose": "Designed to help an Agent understand a goal, assess feasibility and missing conditions, coordinate available host capabilities and Accord components within authorization, adapt to changes, check results, correct affected work, and preserve unfinished items.",
@@ -145,6 +145,7 @@ These items remain open. Version 3.3 is in development, acceptance and publicati
 - [ ] 将依赖版本与实际入口/后端、接口、OS/架构和权限共同核验；分开宿主内部运行时、npm启动器/SDK及独立Hook/MCP进程，不因版本数字相同或单项最低要求就宣布组合兼容。 / Verify dependencies with the actual entry/backend, interfaces, OS/architecture and permissions. Distinguish the host's internal runtime, npm launcher/SDK and independent Hook/MCP processes; matching version numbers or one component's minimum requirement do not establish compatibility.
 - 当前包的具体前提已在两语README说明：实际宿主启动环境可发现并执行兼容的 `node`；CI的Node 24覆盖不定义最低版本。普通入口不要求Python、第三方npm或额外第三方Skill/MCP；可选SDK记录器的内建SQLite要求另列。发布前仍须核实际入口，不以静态 `host-check` 或测试用绝对Node路径代验。 / Both READMEs now describe the current prerequisite: the actual host launch environment must find and execute compatible `node`. Node 24 CI coverage does not define a minimum version. The ordinary entry needs no Python, third-party npm packages or additional third-party Skills/MCP servers; the optional SDK recorder's built-in SQLite requirement is separate. Actual entry verification remains open; static `host-check` or a test's absolute Node path does not replace it.
 - [运行时评估](../../research/reviews/2026-10-09-node-runtime-compatibility.md)已用于上述说明：当前受测推荐为Node24维护线，已有24.19.0/24.21.0有限回归；其它主版本、最早兼容补丁和完整宿主采用仍未验，不硬编码“16.9起支持”或“22.5有SQLite即足够”。 / The [runtime assessment](../../research/reviews/2026-10-09-node-runtime-compatibility.md) informs this guidance: maintained Node24 is the current tested recommendation, with bounded24.19.0/24.21.0 checks; other major versions, the earliest compatible patch and complete host adoption remain unverified. API introduction dates do not establish package support.
+- [ ] 核实际setup调用和缺运行时准备：现有生命周期Skill已声明为官方引导入口，CLI0.162一次隔离安装只证元数据解析；25成员/5Skills，不默认携带第三方工具/运行时。 / Verify actual setup invocation and missing-runtime preparation: the existing lifecycle Skill is declared as the native onboarding entry; one isolated CLI0.162 installation establishes metadata resolution only. Keep25members/5Skills without bundling external tools or runtimes by default.
 - [ ] 保留“无需额外部署专用决策模型”与“宿主条件和费用仍适用”的区别；无比较证据时不承诺省时、省钱或更可靠。 / Distinguish no additional dedicated decision-model deployment from the host's continuing requirements and fees; make no unproven time, cost or reliability claims.
 - [ ] 发布前核对已有适用授权及其条件，只发布获准的精确候选，并核对公开结果；资料不足不等于授权必然不存在，也不自动要求重复授权。 / Before publication, check applicable existing authorization and its conditions, publish only the authorized exact candidate and verify the public result; missing supplied evidence does not itself establish absence of authority or require renewed authorization.
 

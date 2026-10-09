@@ -7,17 +7,18 @@
 
 ## 当前起点
 
-- 最新已核提交 **3c219b2c，CI#833（37931902956）成功**；此前794abbf1/#832也已成功。
+- 最新已核提交 **a8dea654，CI37939373923成功**；此前3c219b2c/#833及794abbf1/#832也已成功。
   a3/cbd原9个快速门失败、2个native lifecycle成功保留；已修合法新增声明
   引起的旧计数假设。13/15布局回归仍保持无观察时0accepted、功能/候选false。
 - 主仓保持原检出main。当前17范围、13活动case、7处声明覆盖缺口、5个无case
   父范围；数字不是完成率。functionalCompletion/candidateEligible均false。
-- 源码候选20261009113418，25成员，包SHA
-  71aea2fe68fa34e903991e3015f7fc94ac4e0d9662dcad42d5b4c1affe8044bc；
+- 源码候选20261009151947，25成员，包SHA
+  050e45a6ed66e6e52780092a4e7d8abfe7ebdd136518538d7e7dd0faa17afd3f；
   主用户现装20261008114112，25成员，包SHA
   e4c0ce9df44857dc5cc665f292342cd631fc87a08b93d9af70e4267d3de1b435。
-  入口/state/Skills相同，manifest及SDK session driver不同；普通原生源码工作
-  不代验SDK差异，不因此立即重装。隔离profile仍162254。
+  入口/state及其它Skills相同；manifest、adapter、生命周期Skill及SDK session driver不同。
+  新setup只在一次任务自有隔离安装核元数据，不代主用户更新或实际setup调用。
+  旧认证隔离profile仍162254；新验证缓存已保全后随自有临时配置清理。
 - Root最新原生观察：gpt-6-astra / 0.162.0-alpha.2 / default，effort/Fast未独立核定。
   外部CLI现为0.162.0（dce685d5），不再是旧冻结0.160.1/0.161.0；旧执行包不能按路径名直接重用。
   实际修复worker为Sol/medium，审查按需指定Sol/high；子代理按任务及实际支持选择，
@@ -46,6 +47,21 @@
 旧原生CI比较的安装before证据已裁定充分，剩余是原600秒完整QA时点未全证；
 不要再把before写成缺口。CLI0.161 SDK的Windows sandbox ACL/占用错误原件保留，
 未杀未知进程、改ACL或重跑；健康原生协作路径可独立使用。
+
+## 本轮最小安装引导
+
+用户已同意轻量路线：不默认打包全部第三方工具/依赖，优先复用可靠资源；
+缺失时按具体权限准备必要条件。官方onboardingSkill复用现有生命周期Skill，
+包保持25成员/5Skills。声明、合同与成员关系的正反回归通过，历史合同形状保持。
+CLI0.162.0一次新隔离安装核到setup元数据，25缓存成员逐字节对应候选。
+被测宿主PATH无Node，但外部观察器有Node，无实际setup模型轮次；
+未给Hook信任或改主用户配置，不能据此宣布首次安装闭环。
+
+未安装四变体均返回null，不能冒充安装后禁用/缺目标的负向实证。
+安装前绑文字误留禁止install，实际安装在当前批准范围，原件与纠偏分别保留；
+后续派发先核允许/拒绝方法声明与实际效果一致。原生exit0/Job0，
+67+93运行文件逐一留证后移除两组各4个自有运行目录。
+下一必要工作是实际setup进入及运行时/Hook/MCP连接，不重做这两次元数据读取。
 
 ## 剩余主线与下一依赖
 
@@ -109,3 +125,7 @@ C:\Users\15521\.codex\backups\，仅按当前依赖读取：
 - 本次接续重整：accord-continuation-reconcile-20261009-01/checkpoint-before.json、
   continuation-before.md、before.json。仅精简当前视图，不删除原定义、失败、
   权限、未知或未完责任。
+
+- 最小setup：accord-onboarding-preview-20261009-01及
+  accord-onboarding-installed-preview-20261009-01；binding、原始native流、FACTS、
+  RETENTION/CLEANUP和retained-runtime保实际来源，后者RECONCILIATION保观察边界及绑定文字错误。

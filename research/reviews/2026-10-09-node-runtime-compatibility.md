@@ -139,3 +139,15 @@ Root采纳范围（2026-10-09）：安装说明采用Node24维护版本作为当
 5. 若选择SEA，再核内嵌原文与模块路径、安全边界、OS签名及Node安全补丁重建成本；若宿主升级改变runtime连接，则正式托管优先路线被反驳，转向经过验证的隔离路线。
 
 建议3.3先解决已声明入口上的实际首次安装闭环，优先验证原生setup与薄安装准备；不先承诺全平台通用安装器、离线包或SEA。验证结果决定所需最小形态，这些备选不会自动扩大当前发布范围。
+
+## 后续采用与有限验证（2026-10-09）
+
+用户同意上述轻量路线，并明确不默认携带全部第三方工具或依赖。前文“候选、未采用/未执行”保留提出时状态；本节记录后续的有限采用，不能倒写为前文测试已通过。源码候选151947以官方`extensions.com.openai.onboardingSkill`复用现有生命周期Skill，加入前置检查、可靠runtime复用、最小授权准备和真实采用核验；仍25成员/5Skills，不新增运行时或服务。维护方承担版本兼容、来源、升级/恢复责任；用户保留必要决定，具体依赖按任务发现。离线包/SEA未选为本版默认方案。
+
+Root先以CLI0.162读取四个未安装本地marketplace变体（原版/有效setup/禁用目标/缺失目标），均返回onboardingSkill=null。该共同未安装条件不足以证明安装后的禁用和缺目标行为。随后按用户同意的最小验证，在全新任务自有profile仅一次安装151947：原生plugin/read由installed=false/null变为installed=true/enabled=true和正确setup Skill；25个缓存成员逐字节匹配源候选050e45a6。返回的Skill路径是marketplace来源，不是已观察的缓存内模型调用。
+
+被测App Server的PATH仅System32；runner在启动前拒绝发现node，现有Job helper直接转交env，App Server继承它。观察器本身通过绝对路径运行Node，因此这不等于无Node干净机器验收。两次均0模型、未授Hook信任、原生exit0/Job0，分别7/6个raw响应与结构回执一致；原流还有remoteControl通知，不能以未采集的events空数组推断无通知。67/93运行文件留存后，各4个自有运行目录已清理；主用户安装与配置未改。
+
+后一次binding继承的businessForbidden列表误留plugin/install，和明确的一次隔离安装authority/请求链不一致。原binding与实际安装回执保留，另记RECONCILIATION；这是前绑文本纠偏，不能称该次没有安装。后续派发核对声明与真实方法相符，不重跑本次。原件位于私有backups下accord-onboarding-preview-20261009-01和accord-onboarding-installed-preview-20261009-01。
+
+下一有效缺口是实际健康宿主能进入setup并完成必要运行时与Hook/MCP连接，不是再读取同一metadata。当前裸node启动方式未改变；仅放入私有二进制不能证明宿主会采用。完整零准备体验、更新回退和用户负担仍待实证。本次不增加scope/case，不改变全部F/A或旧失败，产品功能/候选状态仍false。
