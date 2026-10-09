@@ -7,7 +7,7 @@
 
 ## 当前起点
 
-- 最新已核提交 **794abbf1，CI#832（37930409219）成功**；3c219b2c/#833仍在运行。
+- 最新已核提交 **3c219b2c，CI#833（37931902956）成功**；此前794abbf1/#832也已成功。
   a3/cbd原9个快速门失败、2个native lifecycle成功保留；已修合法新增声明
   引起的旧计数假设。13/15布局回归仍保持无观察时0accepted、功能/候选false。
 - 主仓保持原检出main。当前17范围、13活动case、7处声明覆盖缺口、5个无case
@@ -37,6 +37,7 @@
 | 主用户114112已采用，两个SDK机制子范围曾正式observe/recheck；Linux/macOS原生Hook正文传递有固定源/原ZIP | 安装固定35b，不随源码提交漂移；机制、固定回复与真实模型采用分别计证。隔离02/03与原grant不复跑，完整生命周期/入口仍未闭。 |
 | 默认运行前提已按真实源码写入双语README；可选SQLite缺模块/缺接口时，插件entryGuidance仍可读，源/分发recorder拒绝create/open且私有目录字节不变；记录器11项回归通过 | 此为依赖边界的纯本地回归，不是完整Hook/MCP、最低Node版本、无额外扩展宿主或R2行为通过。普通入口的实际Node启动与有效扩展暴露仍须按下一真实环境核定。 |
 | CLI0.162.0零模型独立进程：38个共享Skill按精确路径在进程配置中禁用，5个系统Skill启用，发现无错误；55保护源保持，原生exit0/Job0，65文件留证后清理4个自有运行目录 | 复用已证0.160.1控制方式，但分别保原件；不再调查能否按进程控制。无Accord启用/加载或模型交付；MCP/plugin只核配置为空，未查实际连接/安装列表。不是物理卸载或完整默认环境通过。 |
+| Node兼容性评估已交付并用于双语安装说明；已有bundled24.19.0的17项有限回归通过、29保护文件保持，结合24.21.0与CI24推荐维护中的Node24 | API年代不代最低兼容版本；非完整包/宿主或全部24.x验收。此为原生背景研究与Root测试，未将它混称为隔离默认环境模型交付，不补事后case。 |
 
 旧原生CI比较的安装before证据已裁定充分，剩余是原600秒完整QA时点未全证；
 不要再把before写成缺口。CLI0.161 SDK的Windows sandbox ACL/占用错误原件保留，
@@ -97,6 +98,8 @@ C:\Users\15521\.codex\backups\，仅按当前依赖读取：
 - 当前CLI有效发现：accord-minimal-profile-current-20261009-01/FACTS.json、
   run/native-stdout.raw、RESULT/RETENTION/CLEANUP及保留运行副本。events空数组未采集通知，
   原始流另含remoteControl disabled通知，以raw为准。
+- Node兼容性：[维护评估](../../research/reviews/2026-10-09-node-runtime-compatibility.md)及
+  accord-node-runtime-compatibility-20261009-01/RUNTIME-CHECK.json、stderr.txt、sources-before.json。
 - 子范围准入：accord-sdk-admission-20261007-01/ADMISSION.json、
   accord-exact-ci-checker-20261007-01；C02、N/ACK、UTF8等按前页导航读取。
 - 本次接续重整：accord-continuation-reconcile-20261009-01/checkpoint-before.json、
