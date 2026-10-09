@@ -72,6 +72,18 @@ CLI0.162.0一次新隔离安装核到setup元数据，25缓存成员逐字节对
 该结果不代真实setup对话、Hook加载或常驻宿主环境采用。下一步组合实际引导与采用，
 不再重复已证元数据/源码/局部握手，不把所有依赖打包或修改全局PATH。
 
+## 已准备的下一次采用
+
+2026-10-10为让主宿主读取setup声明，已准备一次114112→151947的官方更新，
+固定已通过11/11 CI的1f80fe60/25成员050e45a6。只有manifest/adapter/lifecycle Skill/
+SDK driver四文件不同，Hook声明和普通MCP/state保持，不新增信任或运行时。
+新执行包accord-setup-adoption-20261010-01默认未授权，binding9877ed76；
+Root22离线检查通过，独立复审20项运行+2项静态，有条件通过。已补实有旁车漏检、
+首次效果前旧缓存必须完整及preflight拒绝留证说明；125份旧原件保持。
+客户端/IDE/CLI关闭后才由外部终端执行，任何Codex旁车或未知消费者拒绝，不停后台。
+当前无attempt/execution，主配置与安装未变。等待本次明确安装决定，不复制旧grant。
+详见私有UPDATE-READY.md、REVIEW.md和READY-RECEIPT.json；这不是setup已执行。
+
 ## 剩余主线与下一依赖
 
 | 工作 | 仍缺内容与下一动作边界 |
