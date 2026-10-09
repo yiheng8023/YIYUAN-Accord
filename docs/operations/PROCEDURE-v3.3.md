@@ -2797,3 +2797,17 @@ Root原工具撤回实际exit23；worker未强行执行/修复，独立PowerShel
 并行IDE只读来源：当前扩展26.1002.51308，普通本地spawn/initialize及通用mcp-request转发存在；辅助R2请求才关闭hooks/plugins，不能归为普通全局禁用。默认后端可被用户cliExecutable或WSL设置覆盖，两个限定文件未见覆盖；当前profile/remote合并值未验证。进程快照没有Code.exe或扩展bin actor，Desktop/daemon PID不能代IDE。实际启动/版本、当前会话和Hook/MCP状态仍unknown。已请求用户方便时打开项目Codex面板，不发送新任务或重放旧v2；没有启动客户端、写配置或操作旧隔离状态。
 
 本地复核覆盖现有Python3.14.7/Node24.21.0的69项36.245秒，以及既有Python3.10.20/同Node的69项37.217秒，均通过；未安装或更新解释器。失败CI使用Python3.10.11，仍等新精确提交的托管结果，不将本机3.10补验追认旧CI通过。
+
+## 2026-10-09 新IDE只读回执与共享水印后果
+
+新精确提交111b7030的CI37893087158已11/11成功；前a356原失败不追认。随后用户打开VS Code并在新空白对话发送限定只读指令，未使用旧v2。实际扩展26.1007.21434、后端0.162.0-alpha.17.2；OS父进程和扩展日志对应实际启动，未由Desktop进程推断IDE。既有二进制只做--version读取，Root没有新开CLI/AppServer任务或更改配置/信任。
+
+原生01a11f93-17c9-7053-b175-b2d2f828bed3记录source=vscode、originator=codex_vscode，实际turn为01a11f93-2051-74a0-a274-1549649a907e，Sol/medium/on-request。完整入口指导和简短input notice分别在JSONL第9/15行、早于首工具第18行；Meta原文5118完整存在。第25行一次真实accord-state.inspect_task_state成功，includeContext=false，request metadata与回执thread/turn/epoch相符。两次exec分别仅发现工具和执行该读取，无状态写入/replay；原生task_started至task_complete为23.151秒，截图“17秒”是另一UI口径。该有限原生观察不替代官方支持承诺、全部配置或完整IDE验收。
+
+新指令全文、回执与原生user正文SHA一致，inputReceipt.present=true、revision=0、unbound、checkpoint=null；但inputSource=quarantined-native-input、needsNativeReplay=true。原件含完整nativeContextSource locator；工具报告nativeContextSourceAvailable=false是隔离门的有效可用性判断，不是locator丢失。cwd标为caller-selected，不能冒充宿主路径认证。
+
+本次隔离直接关联工作区42eee88a旧generation。原workspace-input-failure文件只有schema/generation两字段，mtime为2026-09-12 08:25:40Z，归属/原因未知。当前源码与现装114112的task-checkpoint.cjs逐字相同：readInput把没有本任务回执但存在共享失败水印视为待恢复，UserPromptSubmit保全新输入并维持隔离。现有新会话隔离测试明确保护该行为；这揭示旧无归属标记对新任务的持续影响，不能因机制按设计执行而宣称交互负担合理，也不能凭文件年龄/新thread ID自动消除未知责任。
+
+原生记录、输入、标记、两侧helper和对应测试保于私有accord-ide-live-20261009-01，FACTS列原路径/摘要/mtime并确认采集前后未变。当前探针明确禁止replay/状态写入，因此本轮止于诊断与记录；旧v2未动，共享标记未删，未绑定新检查点。下一必要评估是区分新任务初始化与旧责任恢复的充分来源及作用域，不复查已证IDE连接、不重跑探针或把文本保全当自动恢复授权。其它主线保持，17scope/13case/F-A未晋。
+
+同时纠正两项当前指引遗漏：CONT剩余表仍把已经补核的安装before写成缺口，现指回真正未证的600秒完整QA时点；机器cycle.scopeRule仍称Chat pending，现对齐r38/r39已定deferred。只改当前说明，不改范围集合、判据、案例或原失败。

@@ -4,11 +4,13 @@
 
 ## 当前动作
 
-2026-10-09 CI纠偏：最新a356/CI37887791818为10成功/1失败，失败仅Windows/Python3.10的source-pump queued用例：收到一次释放回执后最终记录提交unknown。原用例本地0.813秒过；仅延迟最后持久化4300ms即复现同code/stage/终态/单次释放签名。功能夹具不应把磁盘速度当协议断言，现统一20秒source run并由同deadline预留8/6秒给plan/recovery，外层30秒（双交接50秒）；显式4秒短期限反例仍正确失败且不重放，原adoption10ms及普通3秒守卫保持。69项本地会话/连接与独立复审通过；产品运行字节、25成员包、真实案例限额及CI job timeout未变。原CI未保底层持久化耗时，因此只确认并修期限敏感性，不声称已证明平台故障或托管重验通过。
+2026-10-09真实IDE回读：用户在新空白对话完成一次限定只读核验。实际扩展26.1007.21434的后端为0.162.0-alpha.17.2；原生记录确认vscode来源、Sol/medium、完整入口指导和输入notice在首工具前到达，一次accord-state.inspect_task_state成功并与实际thread/turn/输入epoch对应。新指令全文及SHA已保全，但回执为quarantined-native-input、needsNativeReplay=true、unbound；原因是继承工作区旧失败水印。该标记只有schema/generation，mtime为9月12日，原归属/原因未知，不能据日期判安全可删。现装与候选状态helper字节相同，已有测试明确要求此隔离行为；只证明当前机制后果，不据此自动放宽恢复条件。原对话23.151秒终态，无状态写入或replay；旧v2和共享标记未动。私有accord-ide-live-20261009-01保原生记录/回执/标记和FACTS。IDE组件连接已有实证，完整恢复及交付仍未验；当前只读探针已结束，不要求用户重复发送。
+
+2026-10-09 CI纠偏已获新托管结果：111b7030 / CI37893087158全部11项成功；a356 / CI37887791818原10成功/1失败保留。原失败仅Windows/Python3.10的source-pump queued用例：收到一次释放回执后最终记录提交unknown。原用例本地0.813秒过；仅延迟最后持久化4300ms即复现同code/stage/终态/单次释放签名。功能夹具不应把磁盘速度当协议断言，现统一20秒source run并由同deadline预留8/6秒给plan/recovery，外层30秒（双交接50秒）；显式4秒短期限反例仍正确失败且不重放，原adoption10ms及普通3秒守卫保持。69项本地会话/连接与独立复审通过；产品运行字节、25成员包、真实案例限额及CI job timeout未变。原CI未保底层持久化耗时，因此只确认并修期限敏感性，不声称已证明平台故障。
 
 2026-10-09入口范围对齐：基线、计划、验收说明和机器说明中残留r37/pending/未定稿已纠正为r38最终选择、r39保持的6selected/3deferred及selectionFinal=true，独立Chat模式均deferred。原日期观察/未知/失败保原；并未完成入口行为验收。当前官方仍不支持IDE插件，Remote复用主机需实际配对/权限，现有manifest仍兼容；不新增格式迁移、Cloud、延期IDE/Chat任务。所有expected字段、9行/modeCatalog/已选集合和17scope/F-A未改，仅澄清延期模式适用性检查不冒运行通过。
 
-R3下一依赖按实际入口差异处理：CLI/Desktop/SDK复用已有子范围证据并核候选变化；VS Code先确认受支持组件连接及输入/恢复路径；Work Local补实际cwd下正确状态联读；Remote补已配对主机上的输入/审批、暂停/撤权及断连后态。共同后端事实可复用，各自UI/权限差异不能省略；没有当前源码/账户/设备依据时保具体unknown，不对已延期入口重复准备。
+R3下一依赖按实际入口差异处理：CLI/Desktop/SDK复用已有子范围证据并核候选变化；VS Code复用本次真实组件/输入捕获与状态读取，下一只处理旧水印对新任务的隔离作用域及必要恢复条件，不再盘点已证连接或重跑探针；Work Local补实际cwd下正确状态联读；Remote补已配对主机上的输入/审批、暂停/撤权及断连后态。当前IDE指令禁止replay/状态写入，源码诊断可继续，不能代旧未知责任消失。共同后端事实可复用，各自UI/权限差异不能省略；没有当前源码/账户/设备依据时保具体unknown，不对已延期入口重复准备。
 
 本次[调用者影响核对](../../product/cases/consumer-impact-v3.3.json)两阶段实际完成（145.077/98.048秒），同一Sol/medium/default任务在私有工具撤回后用只读替代，纳入新增合成调用者并撤回安装建议。原件/配置/190tracked保持、命令与轮次结束已核。原worker把未给定摘要算法错误推成必须提供归档，整案not-admitted；Root另交校正报告并独立复算两侧树摘要，不能追认worker原通过。原checker与helper路径前缀口径不一致，原FAIL保留，派生检查只证定位等价。原case精确定义保6fd67b63和摘要后转历史，不重跑；17scope/13活动case、7声明缺口/5无case保持，数字不是完成率。
 
@@ -55,7 +57,7 @@ R3下一依赖按实际入口差异处理：CLI/Desktop/SDK复用已有子范围
 | 宿主与模型 | 最新原线程MCP：Astra / `0.162.0-alpha.2` / default；主模型由用户切换，effort/Fast未独立核定。隔离原实例使用CLI `0.161.0`，临时线程配置Sol/medium但0模型轮次；配置不等于模型已执行。子代理按任务选择，用户启停/选择始终保留，不设固定模型或档位梯子。 |
 | 元指导与代码 | 原文4444个CRLF字节，SHA `511861ec00a15e051c97221d9d62e9586856a5d659724eff2d2953f002f457bc`。入口Hook、主协调正文与原文未改；现装状态helper已作输入提示分工修正，变化的能力协调/生命周期Skill正文已从当前安装路径读取。可见与读取不证明其所有业务分支已验。 |
 | Stop与长程 | 自动续轮、Stop注册及其预算已退休；旧callback仅防误识别。未完责任、恢复和交接保持；普通继续不启Plan/Goal，长程控制只按用户明确选择。 |
-| CI | 精确35b63b75 / CI37728674381已11/11成功；记录提交5a08dc19 / CI37733785518亦success。4a464748 / CI37724704741原9成功/2失败仍保原结果，不追认。实际安装固定35b源码，不随后续记录提交漂移。有效在途CI不因普通聊天或低价值推送取消，不重复轮询已闭矩阵。 |
+| CI | 最新运行候选111b7030 / CI37893087158已11/11成功；前a356 / CI37887791818原10成功/1失败保留。实际安装仍固定35b源码及其已过CI，不随后续记录提交漂移。有效在途CI不因普通聊天或低价值推送取消，不重复轮询已闭矩阵。 |
 
 - Root负责main整合，保留唯一活动分支及无关改动。必要实现、修复、检查、commit/push和既有订阅下的普通原生委派已授权，不因换任务名或旧实例许可消费就重复请示同一实际范围。
 - 安装/新信任、账户或数据接入、重要费用、超范围共享/外部写入、用户线程归档仍保对应明确权限。不得恢复过期窗口、复制旧grant或以新判据追认失败；完整方案完成后才处理真正的新边界。
@@ -82,7 +84,7 @@ R3下一依赖按实际入口差异处理：CLI/Desktop/SDK复用已有子范围
 |---|---|
 | 能力协调 | research-learning-and-reuse、recovery-and-lifecycle、capability-loss及default-host-without-extra-extensions的充分绑定与实际结果；继续保持作者政策、用户禁用/排除、同名/同义仲裁与真实目标控制。 |
 | 连续性 | recovery-and-rollback及capability-loss正式绑定；普通择时、变化后继承/暂停/纠偏、适用失败恢复和必要原件/资源条件。旧workspace未知责任保持。健康任务不强制交接，不把分散实例拼成同episode。 |
-| environment-adaptation | 新原生比较已证实际条件变化下的充分路线、完整结果和退出；正式条件仍缺本次已装字节before，不追认。 |
+| environment-adaptation | 新原生比较已证实际条件变化下的充分路线、完整结果和退出；已装字节before已由既有充分前态证据补核，剩余是原600秒内完整语义/原生事实QA时点未充分证明，不追认。 |
 | resource-pressure-and-exit | 新原生比较已实测160/96MiB两阶段自然退出及partial保留；原监督器强退原件保持，正式条件缺口另列。 |
 | codex-lifecycle | 复用已证完整注入/传递机制，补真实模型采用、当前适用入口、变更/失败/恢复及有效用户环境的充分证据，尚无父case。不得由认证、安装或目录发现代证。 |
 | system-integration | 尚无必要职责共同成立的完整case；覆盖当前目标所需职责、八质量轴及适用场景。足够原生能力承担职责或合理不介入也可成立，不为覆盖强行调用所有机制。 |
@@ -103,5 +105,6 @@ W01/W03/W04的变化处理与历史受影响成果纠偏、W06/W07的环境资�
 - ACK恢复与N处置：`accord-native-release-fixture-20261006-01/ACTUAL-RESULT.json`、`accord-native-recovery-coverage-20261006-01`；N原失败在`accord-release-ack-recovery-20261006-01/ACTUAL-RESULT.json`，退休登记在`accord-f05-closeout-disposition-20261006-01`。fixed-response与模型事实分开，原定义/失败/限制不改。
 - 备件/排考/UTF8、catalog/retro/词表/concept/stateclient、资源/环境及旧SDK实例均按原件保留；已闭业务不重播，旧240/600/20等窗口不扩。更新09已核后态，04/05强制退出和旧恢复记录保留，闪窗按用户决定搁置，不复活退休缓存。
 - IDE v2 `01a0e4dd-45c9-7a82-97f3-2d7bc0e9ae1a`输入缺失与禁止replay保持；Work projectless与Root cwd不混绑。GLM/Gemini工作树已可恢复归档、main唯一，用户会话保留，旧空目录占用不强杀。
+- 新IDE只读核验：`accord-ide-live-20261009-01/FACTS.json`及所列原生记录、输入、共享标记副本。与旧v2是不同线程，原指令完整仍被旧工作区水印隔离；不是输入缺失的复现，也不是恢复通过。保原探针禁止replay，未改变共享状态。
 
 更早历史见[87c13c8c快照](https://github.com/yiheng8023/YIYUAN-Accord/blob/87c13c8c7571dfb48c3897b5be631075c5719ce9/docs/operations/CONTINUATION.md)、[试验记录](PROCEDURE-v3.3.md)和私有`accord-release-gate-correction-20261006-01`原件。精简当前页不删除或改变历史身份、失败、授权、未完责任。
