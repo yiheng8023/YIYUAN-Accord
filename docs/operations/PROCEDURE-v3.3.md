@@ -2779,3 +2779,11 @@ canonical和Codex分发副本同步；新候选20261009104813、25成员、包SH
 Root原工具撤回实际exit23；worker未强行执行/修复，独立PowerShell核两侧25成员。两个调用者身份和条件分类正确，新输入没有使其误称全部绑定检查都是新增；安装建议按原第二输入置not-requested。实际Goal未查询，不推断全部UI。完整业务/根源/配置保持由独立读取核对；无新增CLI/AppServer、安装、Trust、共享设置或部署。
 
 两次原checker拒完整仓库前缀，helper/manifest却使用该前缀；这是材料口径冲突，不是漏报不同文件。诊断派生接受两种精确且无重复定位，原checker不改。另一项独立质量错误是把未知摘要定义收窄为归档前提：此处packageSha256实际是排序路径+NUL+成员摘要的树摘要，目录足以复算。Root另保原输出并校正交付，实际e4c0/71ae均吻合；未额外派发模型纠错、未追认整案通过。架构说明补现行算法，临时案例要求不进入AGENTS或常驻运行规则。原声明与case文件保全，结束实例转历史，其余13case/17scope/全部F-A不变。
+
+## 2026-10-09 已定入口范围与当前执行说明对齐
+
+2026-10-09入口范围对齐：基线、计划、验收说明和机器说明中残留r37/pending/未定稿已纠正为r38最终选择、r39保持的6selected/3deferred及selectionFinal=true，独立Chat模式均deferred。原日期观察/未知/失败保原；并未完成入口行为验收。当前官方仍不支持IDE插件，Remote复用主机需实际配对/权限，现有manifest仍兼容；不新增格式迁移、Cloud、延期IDE/Chat任务。所有expected字段、9行/modeCatalog/已选集合和17scope/F-A未改，仅澄清延期模式适用性检查不冒运行通过。
+
+具体漂移包括：entrySurfaces.rule及网页environment、桌面/手机execution，三个入口父scope与三个case的sourceBasis仍自称r37待判；PLAN两处工作线、入口小节和路线表仍写七pending/三pending/selectionFinal=false；BASELINE及ACCEPTANCE也保过期Chat待判。独立只读复核支持限定对齐；旧记录归bca52cdb原文，当前不再推动这些延期任务。源码核验确认applicability覆盖全部模式，而delivery/lifecycle只取selected；boundedModeVerified没有独立赋予延期模式的行为通过语义，故只补说明、不删除/降低expected或改准入器。
+
+官方现页于本轮实际打开核对，来源见PLAN本轮段落；仅更新决策说明，非全量宿主盘点、账户认证、配对、加载或实际交付。没有新模型业务、宿主实例、组件配置或安装效果。

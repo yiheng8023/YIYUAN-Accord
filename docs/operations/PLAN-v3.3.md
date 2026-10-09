@@ -18,7 +18,7 @@
 
 2026-10-07 r38用户确认本版最终六条执行/控制路径及现选模式；三个普通Chat独立模式、网页聚合与JetBrains/Xcode内置集成本版延期，能力仍未知、非永久排除。三父scope/case共同selectionFinal=true；原17范围/全部F-A/质量/selected subjects/modes责任保持，最终集合不等实际验收。原候选依据保前态/Git，改变条件按当前源重核、不追认旧案。插件参与须入口使用许可、有效启用及必要信任/权限/加载；子代理可选且用户掌控，关闭时足够单代理或保真实核验缺口。公共目录按官方路线准备，Git市场可见不等上架，上架不代入口适配。
 
-2026-10-04 r37纠偏：入口适用性以用户具体任务、可用能力、结果及必要控制为准。研究/论证/内容报告本身可为完整成果，闭环不以电脑effects或另建庞大Agent框架为前提；执行、长程状态、权限、恢复等在任务需要时仍须充分承担。3.3的OpenAI限制是供应商范围，不是其所有入口都支持的声明。现六已选执行/控制入口不变；三Chat mode及web聚合改为task-bound pending候选，9行为6selected/3pending、selectionFinal=false。此为当前未运行定义前瞻处置，旧auxiliary/inapplicable决定、case身份/失败保在Git；未因截图给准入、未复跑业务、未恢复取消的执行位置或新增scope/case。
+2026-10-04 r37纠偏（历史，当前范围已由r38取代）：入口适用性以用户具体任务、可用能力、结果及必要控制为准。研究/论证/内容报告本身可为完整成果，闭环不以电脑effects或另建庞大Agent框架为前提；执行、长程状态、权限、恢复等在任务需要时仍须充分承担。3.3的OpenAI限制是供应商范围，不是其所有入口都支持的声明。现六已选执行/控制入口不变；三Chat mode及web聚合改为task-bound pending候选，9行为6selected/3pending、selectionFinal=false。此为当时未运行定义的前瞻处置，旧auxiliary/inapplicable决定、case身份/失败保在Git；未因截图给准入、未复跑业务、未恢复取消的执行位置或新增scope/case。
 
 2026-10-05必要源接入：补此前无case的宿主能力覆盖正式定义，复用现有准入模块核其选定subject/mode与效果矩阵，缺行、误配或削弱必要谓词拒绝；入口选择未定时，该范围不能被外部自报完成解锁。定义指纹包含适用性来源，来源变化后重绑。当前scope仍17，case由14到15是一个必要声明绑定，不是行为通过；旧14case及已运行条件/失败保持。不新增观察器、服务或业务试验，普通足够工作由Root直接实现，必要源复核使用原生协作。
 
@@ -68,20 +68,16 @@
 
 2026-09-28随后集中补齐其余四项机器范围：入口能力覆盖、系统组合、整体生命周期、净影响评估。必要范围仍为原17项，现均已有定义；原12case保持，六项无case/无证据继续显式阻塞。前者分别承担功能表面与必要使用、同episode全链及纠偏、采用/变化/失败恢复/退出、独立结果与总成本判断，不互相代验，也不取代三个入口父范围或已限定的SDK子范围。此后定义缺口已闭合，执行重点转向具体案例前绑、真实行为和整体验收；不把17/17定义写成功能完成率。
 
-入口处置按下列三条工作线聚合，沿现有entrySurfaces及三个父scope记录，不新增入口名册或按界面数量复制试验：
+入口处置按当前r38最终选择、r39保持的范围分成两条工作线；既有entrySurfaces与三个父scope继续承担登记，不新增名册或按界面数复制试验：
 
-| 工作线 | 已有组成与具体待补条件 | 后续验收边界 |
+| 工作线 | 本版范围与待补条件 | 验收边界 |
 |---|---|---|
-| 本地或远程主机执行 | CLI/Desktop/VS Code/SDK复用共同机制；JetBrains/Xcode各自映射入口指导或充分原生替代、暂停/未知效果、状态恢复和退出承担者。已有IDE集成资料是候选路线，缺设备不是排除理由 | 共同代码不代验集成、权限和实际加载差异；这些条件有充分路线即可决定开发，不要求先拿到整项PASS |
-| 交互、控制与触发 | 普通Chat按研究/内容等task-bound用途待判；已选local-only Work和Remote继续核主机、输入、权限及结果 | 仅补当前已选路径的真实边界差异 |
+| 执行入口 | CLI/Desktop/VS Code/SDK四行，复用共同机制，补实际采用、输入/权限、恢复和退出差异 | 共同代码不代验各入口；VS Code仍需建立受支持的组件/后端连接，不能照搬桌面插件支持结论 |
+| 交互与控制 | 桌面仅local-only Work与Remote，手机仅Remote，复用获准本地主机 | 绑定同一任务、账户/配对、输入/审批、暂停/撤权、断连后效果及结果权限；手机不成为插件执行主机 |
 
-本轮实际重读的官方来源：[IDE入口](https://learn.chatgpt.com/docs/codex/ide)区分独立IDE集成；[Work执行边界](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-overview)区分本地与托管执行；[Remote连接](https://learn.chatgpt.com/docs/remote-connections)说明连接主机的复用关系。以上三条工作线是据此及既有项目事实作出的工程分工，不是官方给出的Accord支持结论。七个pending的依据已细化为具体条件，selected集合和selectionFinal=false保持；没有据缺少实际验收自动排除或晋升入口。条件充分的普通开发继续前瞻绑定一个连贯工作段，按实际职责组合补相关定义和案例；不等待所有入口调查结束，也不制造交接压力来填A05。
+当前9行是6selected/3deferred；各独立Chat模式均deferred，selectionFinal=true，没有待用户再次裁定的pending。延期保留能力unknown和未来再议，不构成本版交付/生命周期任务。选择已定与实际验收未完分开，不能用scope选择或静态代码宣布支持。
 
-2026-09-27模式判断：Remote复用已纳入开发的Codex Desktop本地项目任务，作为该限定子模式的开发方案；不新增手机执行器。[官方Remote说明](https://learn.chatgpt.com/docs/remote-connections)提供输入/审批、主机资源与同一对话跨设备访问的可行路径，接续职责继续由执行主机承担。此为据来源作出的工程选择，实际账户/配对、有效主机/包、暂停或撤权、断连后的任务与效果对账、结果权限及退出责任仍须核验；不可达不等于执行已停止，更不授权重新派发。原生跨主机搬运会迁移原chat与Git状态，不能替代fresh低继承接续，也不提供当前chat自迁移或云端搬运。本次未启用连接或执行迁移。
-
-2026-09-27当时普通Chat辅助处置的记录保留，当前适用性以本页r37任务相对判断为准；[Work本地安全边界](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-local-security)和[Work执行位置](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-overview)分别约束本地及托管模式，不能由Remote选择推出Work云适用。故mobile整体仍pending，三个父scope及三个case同步限定basis，父范围4个入口selected/7个pending和selectionFinal=false不变，不增加父级subjectEntries或验收通过。
-
-[Slack入口说明](https://learn.chatgpt.com/docs/third-party/slack)还给出具体目标绑定风险：环境有歧义时的最近环境回退、首映射仓库默认分支及设置相关的结果回复。实际采用须核用户意图对应的环境/仓库/ref与回传范围，链接或自动选择不替代这些检查；其它前端的权限与续接语义分别核对。cx-integrations继续依赖托管执行者判断，不为本次来源审查新增连接、外部消息或模型场景。
+2026-09-27至10-04的4/7、6/3 pending数量、当时Remote/Work工程选择及后来取消路线的来源段落保留在[bca52cdb原计划](https://github.com/yiheng8023/YIYUAN-Accord/blob/bca52cdb92c3eb51e061f9ab7fa3d8eca5b22589/docs/operations/PLAN-v3.3.md)，只作历史。当前继续沿已选路线推进；不可达不等于执行停止，不能据此重新派发，也不能让延期项目继续占用关键路径。
 
 2026-09-27更新/恢复说明交付已完成：[两轮工作段](../../product/cases/upgrade-guidance-v3.3.json)在用户批准后执行一次，三份成品按后来Stop反馈同步纠偏。既有准入器接受v33-codex-cli-update-guidance-01与v33-systemic-correction-03；详见[实际记录](PROCEDURE-v3.3.md#更新说明交付与反馈纠偏的实际准入2026-09-27)。独立备份与后置Hook路径的区别、安全更新时机和执行者责任已提炼到两语README；这是Root随后整合，模型原件保持。旧systemic scope的已结束实例条件仍留在7ae3bac5历史身份，新实例保持自己的候选与有效用户环境条件，不归因于Accord单独收益。该段及所属资源责任已闭合；后续沿上述工作线推进未定义范围、实际入口与自主连续性的必要工作，不重复这两轮或制造交接压力。后续用户截图已显示自然Stop完成，原单次失败的具体原因仍未知；完整验收与发布资格仍未成立。
 
@@ -90,9 +86,9 @@
 同日真实Work本地核验已完成：原生历史确认入口指导、UserPromptSubmit和一次状态MCP调用，thread/session/turn相符；实际cwd的输入回执与本轮epoch/turn一致。Root准备的提示词固定了项目目录，而用户新建的是projectless对话，因此原查询针对另一session+cwd键返回missing回执。保留原报告与事后对账的分别来源；这是诊断提示词的路径问题，不归责用户，也不改写为正确cwd的MCP联读成功。下一步将状态读取绑定实际Hook所在cwd，业务文件目录另列，在真正需要的普通Work交付中核验采用、续作和退出；不为覆盖原结果重跑诊断。MCP缺元数据/根身份冲突时的守卫，以及上下文读取对Hook转录和CODEX_HOME/sessions的限制保持。原查询不构成状态处理缺陷；后续只补足可发现性：输入回执提示给出JSON编码的实际绑定cwd，状态工具说明指向该定位并明确checkpoint文件也以此为基准，不自动改域或新增独立业务目录参数。
 
 
-2026-09-29模式处置对齐：此前两条已定开发路线现在进入三个父scope/case的正式限定集合：`chatgpt-desktop`选择Work Local及限定Remote，`chatgpt-mobile`仅选Remote控制已选本地主机任务。原四个Codex入口保持，共六个ID具有已选开发路线、五个聚合行待判。这是开发责任对齐，不是新增两个完整支持入口，也不增加功能完成率。
+2026-09-29模式处置对齐（历史数量，非当前范围）：此前两条已定开发路线现在进入三个父scope/case的正式限定集合：`chatgpt-desktop`选择Work Local及限定Remote，`chatgpt-mobile`仅选Remote控制已选本地主机任务。原四个Codex入口保持，共六个ID具有已选开发路线、五个聚合行待判。这是开发责任对齐，不是新增两个完整支持入口，也不增加功能完成率。
 
-混合入口只声明本版实际范围：桌面Chat/Work Local/Remote、手机Chat/Remote、网页Chat；完整模式由机器投影modeCatalog给出。普通Chat研究/内容等任务用途pending，不能凭界面名排除独立结果或凭选择器晋全支持；已选Work Local/Remote逐主机和交互边界验收，共有核心不代验Chat采用。校验器不得强迫已取消路线继续留在清单，也不得省略当前声明模式或削弱其判据。
+混合入口只声明本版实际范围：桌面Chat/Work Local/Remote、手机Chat/Remote、网页Chat；完整模式由机器投影modeCatalog给出。普通Chat独立用途已按r38本版deferred、能力unknown；不能凭界面名判永久不适用或凭选择器晋全支持；已选Work Local/Remote逐主机和交互边界验收，共有核心不代验Chat采用。校验器不得强迫已取消路线继续留在清单，也不得省略当前声明模式或削弱其判据。
 
 现有准入器核入口及当前modeCatalog全部模式：三个父范围共享完整处置，交付/生命周期只覆盖已选模式且保留全部职责。宿主能力覆盖case另引用同一已选集合与模式，不要求把它加入三父范围的共同声明组。任一仍在范围内的入口/模式pending或selectionFinal=false均阻止这些完整范围准入。当前17必要范围和A01–A08质量底线保持，实时case定义见机器投影；历史无模式的全待判声明仅可读取，不能用于完成当前准入。声明结构、范围来源和真实效果分别复核，案例数量不作为功能完成率。
 
@@ -100,13 +96,13 @@
 Work Local只指协调与工具执行均由已选本地主机承担；Remote复用对应主机。实际主机或入口变化时重新核对采用、状态、权限与退出，历史和模式不自动转移，不在当前对话中热切执行者。
 
 
-2026-10-03按官方现页与用户截图复核：新设置页的“创建环境”入口及当时空列表只支持该视图观察，不能追认环境创建、发布或Accord加载。现有安装/启动/仓库Skills通道可用于按需准备，保存配置、发布准备快照及新任务采用分别验证。当前Hook等限制按日期、实际模式/策略及证据记录，不能冻结为永久排除；也没有官方承诺某日开放Accord Hook。相关官方条款、原生能力契约或已获准实例的实际回执变化时，先重核必要差异，再做有权限的最小业务、输入/恢复与退出验证；不定时重跑旧失败或自动消费旧授权。预备可复用核心、受支持加载桥接和验收边界，能降低后续适配成本，不能提前算支持或必然完成。
+2026-10-03当时的新环境界面与准备观察已结束；其原条件和结果保留在上述bca52cdb历史计划及接续证据中。该执行位置后来已由用户取消，不再保留当前准备、适配或等待开放的工序；未来是否重选另议。
 
 2026-10-03元指导版本决定已明确：原文默认纳入3.3，由单一包内reference承载、现有入口加载及桥接具体任务职责；不是新增独立指导服务。保持原文字节、用户文件管理权与宿主优先级，去重不能删除实际保护。工序沿F01/F02/F04/F05/F06/F08及相应既有A项：先源/包/读取失败与子代理状态隔离，再核启用信任后的启动、普通输入、压缩恢复/重连及实际子代理全文可用，最后核结果、干扰、停用和退出。4000的正数每handler载荷门只是当前配置，不作无截断或全宿主保证；新安装/Hook信任及Cloud仍各自需对应权限，未消费旧单次许可，不改17scope或降低F/A。
 
 [项目说明](https://learn.chatgpt.com/docs/projects)还明确ChatGPT项目指令适用于项目内聊天，但这是项目作用域的指导通道，不等于已安装Accord的入口、全部非项目聊天或可靠的状态/效果恢复。不能借此要求用户重写AGENTS.md，或用静态指令替代应由宿主承担的确定性保护。实际账号的入口、权限和协调器采用条件分别核实；当前只读界面观察不能扩大为全账号不可用，也不授权创建/发布环境或修改项目指令。
 
-IDE资料的未知也应收准：[JetBrains历史](https://www.jetbrains.com/help/ai-assistant/chat-mode.html#chat-history)按项目跨IDE会话保存，[Xcode会话](https://developer.apple.com/documentation/xcode/writing-code-with-intelligence-in-xcode)提供用户可见转录、同线程跟进、Stop和基于Git的文件Restore。它们不是“没有历史或回退”；待核的是同一控制者的输入/身份/工作区绑定、压缩或重连后的指导与状态恢复、暂停时在途操作及退出承担者。UI停止响应或恢复文件不证明进程静止、外部效果撤销或交权完成。内置集成继续pending，外部Codex接IDE工具的既有组合路线保持。停止重复同类使用说明和旧诊断；只有版本化实现/协议、原生回执或可用的新入口能改变这些判断时，才推进依赖的实例核验。其余普通交付与组合验收按原工序继续，17项职责和A01–A08不变。
+历史IDE来源澄清保留在bca52cdb原计划：当时的会话/恢复资料不支持“没有历史或回退”的笼统结论，也不能证明完整状态继承与效果撤销。当前两项内置IDE均按r38本版deferred、能力unknown，没有本版核验待办；未来是否重选另议。外部执行者按真实任务需要使用IDE工具，不等于适配内置Agent。
 
 2026-09-30按用户关于DevDay变化的提醒核对[十项官方来源](../../research/reviews/2026-09-30-devday-accord-impact.md)。Dots的notes、暂停/唤醒及委派、MCP Events的异步订阅、Plugin Extensions的交互通道和Agents API的托管状态提供新的原生比较路线；它们的账号条件、不同停止语义、漏失/重复事件、云协调Hook限制及实际效果仍分别验证。先比较能否承担既有职责，不因新品可见新增入口ID、常驻服务、订阅、付费套餐或默认长程Goal，也不以新闻代验当前SDK/CLI链。CLI0.159的opt-in输入交错和启动变化按真实版本/开关核受影响部分，不强制全量重验或自动变更用户模型。当前Root本机新包已实际采用；目录自然退出失败和重启闪窗分别保留，完整验收、范围和发布条件不变。
 
@@ -147,7 +143,7 @@ Accord 面向人与 AI 的长期协作，属于更广泛的人机协作愿景。
 
 **3.3 只交付 OpenAI 范围的适配：ChatGPT 与 Codex 的适用入口分别验收；Claude 不纳入 3.3 分发、安装入口或功能声明。2026-09-28较早取消Claude后续适配，现按最新决定仅重新列为3.4可能候选，并加入Pi、DeepSeek Harness、Z.ai ZCode，随后补充Google Antigravity；其它后续计划保持。** 产品名称统一为 YIYUAN Accord；阶段性实现不改变通用设计和供应商独立。历史包与证据留在原版本，不能因更改版本号而成为 3.3 功能。当前源码中保留的历史验证代码、记录和来源引用只服务追溯，不构成当前支持承诺。
 
-AI协作入口承担所绑定任务的交付责任。入口先按任务必要能力、结果及控制经过下述适用性判断，再确定范围与承诺；普通Chat的研究/论证/内容等独立用途为pending候选，不由界面名决定只有辅助。未上架不能推断不能调用，品牌相同不能推断能力相同。3.3 不自动缩成 CLI，也不承诺所有尚未验证的 OpenAI 入口都可用。
+AI协作入口承担所绑定任务的交付责任。入口先按任务必要能力、结果及控制经过下述适用性判断，再确定范围与承诺；普通Chat的研究/论证/内容等独立用途按r38本版deferred、能力unknown，不由界面名判定永久只有辅助。未上架不能推断不能调用，品牌相同不能推断能力相同。3.3 不自动缩成 CLI，也不承诺所有尚未验证的 OpenAI 入口都可用。
 
 ## 入口适用性与版本承诺
 
@@ -166,7 +162,7 @@ VS Code兼容编辑器优先作为同一扩展适配族，Xcode、JetBrains等�
 
 2026-09-11用户确认：适配由真实交付价值与必要职责的全链路可行性决定，不以界面数量、产品名称或当前组件支持情况代替判断。先根据可行性和预期净价值确定开发范围，再通过真实执行确定支持声明；不要求先完成验收才能开始实现。网页、桌面、移动是交互位置，本地或云端是执行位置，均不能单独证明或否定Agent能力。模式、实际执行者、权限、数据与状态边界必须分开识别。
 
-按现有入口盘点逐项给出纳入开发、辅助用途、待判、后置或不适用的处置、依据及未完依赖，不另建一套登记系统。判断包括真实用途与用户收益、可用或能合理建立的执行条件、完整必要职责及失败恢复的可行路线、用户负担与全生命周期成本。普通Chat仅有对话或插件选择时，不承诺独立全链路适配；若承担有价值的需求承接或向实际执行者转交，评价该组合的连续性与结果，不能把转交说成Chat自行完成。未知保持待判；无法操作当前界面或暂缺账户不证明产品不适用。可补足的条件由Agent在已有授权内主动建立，真实新增权限、数据或费用仍按边界处置；后置及排除保留理由和原始缺口，不改写历史失败。
+按现有入口盘点逐项给出纳入开发、辅助用途、待判、后置或不适用的处置、依据及未完依赖，不另建一套登记系统。判断包括真实用途与用户收益、可用或能合理建立的执行条件、完整必要职责及失败恢复的可行路线、用户负担与全生命周期成本。普通Chat仅有对话或插件选择时，不承诺独立全链路适配；若承担有价值的需求承接或向实际执行者转交，评价该组合的连续性与结果，不能把转交说成Chat自行完成。未决的实际能力保持unknown；r38已决定本版延期的入口不再列作待判。无法操作当前界面或暂缺账户不证明产品永久不适用。可补足的条件由Agent在已有授权内主动建立，真实新增权限、数据或费用仍按边界处置；后置及排除保留理由和原始缺口，不改写历史失败。
 
 用户9月15日强调没有本地Mac不妨碍macOS/Xcode适配。继续利用官方配置/协议、跨平台实现、现有macOS CI及适合的远程资源完成可执行工作；只有确需具体宿主交互的未知才保留相应验证边界，不据此搁置整体适配或要求用户购买设备。macOS上的CLI机制与Xcode内集成分别归因，平台CI成功不冒充后者，缺少后者证据也不抹去前者的进展。
 
@@ -174,27 +170,29 @@ VS Code兼容编辑器优先作为同一扩展适配族，Xcode、JetBrains等�
 
 全链路指目标与授权、执行与纠偏、连续性与恢复、结果核验与交付、资源及未完责任均由可靠的承担者按需接通。Hook、Skill、MCP、原生状态/调度、Agent判断或其它合理组合都是手段。缺少Hook只限制依赖它的当前路线；应先映射缺失职责并比较替代方式，不能直接排除整个入口。替代方案须达到实际承诺所需的可靠性，并验证适时参与、行动反馈、恢复和收尾；需要确定性执行的保护不能仅靠提示出现来证明，也不预先把所有职责规定为拦截。共有执行基础优先复用，按实际差异补接与验收，不为多个界面重复建设适配器。
 
-当前Codex CLI、Desktop、VS Code及已绑定App Server职责继续；local-only Work和Remote限于已选本地主机路径。已选入口的完整功能、可编辑/可使用设置、交互、权限、普通交付、连续性、恢复与退出仍需验收；JetBrains/Xcode内置集成的必要差异继续收敛，普通Chat按任务用途待判，不能以无电脑effects否定研究/内容成果的闭环。
+当前Codex CLI、Desktop、VS Code及已绑定App Server职责继续；local-only Work和Remote限于已选本地主机路径。已选入口的完整功能、可编辑/可使用设置、交互、权限、普通交付、连续性、恢复与退出仍需验收；JetBrains/Xcode内置集成及普通Chat独立用途已按r38本版延期，不再作为当前工序，不能以无电脑effects否定研究/内容成果的闭环。
 
 
 
 [JetBrains当前官方说明](https://www.jetbrains.com/help/ai-assistant/codex-agent.html)明确支持Skill、AGENTS.md和经设置传入的MCP，以及自己的权限/模式与上下文显示；这提供了复用或组合的候选路线，尚未证明Accord Hook参与。OpenAI的[IDE说明](https://learn.chatgpt.com/docs/codex/ide)区分VS Code兼容扩展与JetBrains/Xcode自有集成，不能跨集成直接借用证据。此前通用插件页与本机VS Code有限参与观察的分歧保留为历史记录；当前按2026-09-28补核分别处理官方支持边界、历史参与和实际加载未知；按实际构建和功能区分处理，不回退为统一排除。上述来源复核不是完整支持声明或新增安装授权。
 
-9月15日补核三项具体路线，继续沿现有职责判断，不另造执行器：[Apple文档](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/)明确Xcode专用Codex配置根、命令/工具权限与Skill/MCP/插件组件导入；可比较复用现有包，Hook和恢复仍待核。[移动Remote](https://learn.chatgpt.com/docs/remote-connections)使用连接桌面主机的任务、文件、插件与权限，应复用主机执行链并验证远端输入/审批/断线重连，不能把移动端一律当普通Chat，也不宣称手机本地执行。[Slack](https://learn.chatgpt.com/docs/third-party/slack)和[Linear](https://learn.chatgpt.com/docs/third-party/linear)触发Codex云任务，可共用云执行基础，分别补来源、选仓、续接及回传权限差异；这不代验GitHub/GitLab。本轮仅查官方来源，未安装、连接、配对或发送消息；这些可行组件尚不证明整条Accord职责路线完成，原待判状态不冒充最终支持。
+2026-09-15的外部触发及内置IDE候选来源保留于bca52cdb历史计划，不构成当前任务。移动Remote的已选路线仍复用连接主机的任务、文件、插件与权限；本轮官方回读见下文，实际配对及远端输入/审批/断连差异仍待验，不能宣称手机本地执行或加载。
 
-验收沿用A01–A08：A02核当前范围处置、已选入口及依据，A01/A03/A06核实际交付和生命周期，A08核完整组合与净影响。适用性覆盖当前9个OpenAI盘点行（6selected、3pending：两内置IDE及网页Chat）；后两父范围仍对应同一六个已选集合。三混合入口以当前modeCatalog完整声明，各Chatmode按任务用途pending；selectionFinal=false、17范围和全部质量底线保持，必要case按实际缺口补绑定。载体entry与被验subjectEntries不得混同，开发选择不计行为通过。
+验收沿用A01–A08：A02核当前范围处置、已选入口及依据，A01/A03/A06核实际交付和生命周期，A08核完整组合与净影响。适用性覆盖当前9个OpenAI盘点行（6selected、3deferred：两内置IDE及网页Chat）；后两父范围仍对应同一六个已选集合。三混合入口以当前modeCatalog完整声明，各独立Chatmode均deferred；selectionFinal=true、17范围和全部质量底线保持，必要case按实际缺口补绑定。载体entry与被验subjectEntries不得混同，开发选择不计行为通过。
 
-2026-09-27将IDE内置Agent与外部执行者调用IDE工具分开判断，避免把组件发现当整包接通：
+2026-09-27曾将IDE内置Agent与外部执行者调用IDE工具分开判断；以下保留复用分析，当前处置已按r38更新，不能把组件发现当整包接通：
 
 2026-09-28补核VS Code：现行[官方插件说明](https://learn.chatgpt.com/docs/plugins)明确IDE扩展不属于插件受支持入口；历史发布说明和两次原生参与观察保留各自日期/版本，不能覆盖当前支持边界。本机26.917.62051扩展的普通app-server启动、initialize及请求转发未见全局plugins/hooks关闭，查到的关闭项只用于临时标题/描述生成；这仍不证明后端加载。附带0.155.0-alpha.16.3也不能代替实际后端身份，因为扩展允许CLI路径覆盖和WSL执行。cx-vscode继续作为开发目标，入口、Hook/MCP和安装路径须按实际构建补证，不按CLI插件等效宣称支持；限定只读核对的指定v2随后已由原生记录确认：27100450入口在首个工具前注入，一次状态MCP调用身份匹配；输入回执仍缺失并处于恢复隔离，未检验自主恢复或完整接入。没有因此启用、安装或调整用户配置，详情见接续。
 
 | 路线 | 复用与职责 | 当前决定及最小未完条件 |
 |---|---|---|
-| JetBrains内置Codex | [Skill导入](https://www.jetbrains.com/help/ai-assistant/agent-skills.html)和[Agents的MCP传入](https://www.jetbrains.com/help/ai-assistant/codex-agent.html)提供组件通道；[聊天Project rules](https://www.jetbrains.com/help/ai-assistant/configure-agent-behavior.html)不替代所选Codex的指导 | 保持待判。需要实际控制者的入口/新输入、原生身份与状态/恢复对应；不要求用户改AGENTS.md，不以导入技能推定Hook已部署 |
-| Xcode内置Codex | [专用配置与组件导入](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/)作用于Xcode启动的Agent | 保持待判。需具体构建的入口/事件、MCP身份、转录及恢复契约；配置根不证明这些条件，不能借用普通CLI或macOS CI |
-| 外部Codex使用IDE工具 | [JetBrains IDE MCP](https://www.jetbrains.com/help/idea/mcp-server.html)与[Apple mcpbridge](https://developer.apple.com/documentation/xcode/giving-external-agents-access-to-xcode/)均提供官方连接路线 | 确定复用已有Codex执行链的组合开发路线：Accord与任务接续留在外部执行者，IDE提供获准项目工具。实际连接、目标、效果和退出仍待验证，不改变两项内置入口的pending状态 |
+| JetBrains内置Codex | [Skill导入](https://www.jetbrains.com/help/ai-assistant/agent-skills.html)和[Agents的MCP传入](https://www.jetbrains.com/help/ai-assistant/codex-agent.html)提供组件通道；[聊天Project rules](https://www.jetbrains.com/help/ai-assistant/configure-agent-behavior.html)不替代所选Codex的指导 | 本版deferred、能力unknown，无当前适配/验收待办；若未来重新选择，仍需入口/输入、身份与恢复对应，不以导入技能推定Hook已部署 |
+| Xcode内置Codex | [专用配置与组件导入](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/)作用于Xcode启动的Agent | 本版deferred、能力unknown；未来若重新选择再核构建/事件、MCP身份与恢复，不借CLI或macOS CI冒入口采用 |
+| 外部Codex使用IDE工具 | [JetBrains IDE MCP](https://www.jetbrains.com/help/idea/mcp-server.html)与[Apple mcpbridge](https://developer.apple.com/documentation/xcode/giving-external-agents-access-to-xcode/)均提供官方连接路线 | 保留按真实任务需要复用的组合可能；不产生本版内置入口适配任务。若确需IDE工具，另核连接、目标、效果和退出，不能替代两内置入口的deferred处置 |
 
-这项选择不新增IDE控制器、身份合成或Hook转换层。内置入口缺失的职责可由充分原生机制承担，但须有明确对应；外部组合不绕过内置的不确定性，也不要求先完成整项验收才能开发。IDE MCP的启动cwd与业务项目分别绑定；启用或自动配置会启动服务、改变连接或客户端设置，需具体授权和恢复责任，不能用当前来源审查代替。项目工具暴露和执行确认保留用户选择；停止客户端或回滚文件不自动撤销IDE内已发生的全部效果。用户没有Mac/JetBrains仍沿官方契约和可靠既有证据推进，不要求采购或为取证安装。该段保留2026-09-27工程路线核对的历史观察，当时为4selected/7pending；当前集合以r37的9行（6selected/3pending）及modeCatalog处置为准，不能沿用旧分母。父范围和必要质量仍分别验收。
+以下是历史组件复用分析，不是本版内置IDE待办；它不新增IDE控制器、身份合成或Hook转换层。内置入口缺失的职责可由充分原生机制承担，但须有明确对应；外部组合不绕过内置的不确定性，也不要求先完成整项验收才能开发。IDE MCP的启动cwd与业务项目分别绑定；启用或自动配置会启动服务、改变连接或客户端设置，需具体授权和恢复责任，不能用当前来源审查代替。项目工具暴露和执行确认保留用户选择；停止客户端或回滚文件不自动撤销IDE内已发生的全部效果。当时只沿官方契约和既有资料核对，没有要求用户采购或为取证安装；是否重新选择这些内置入口另议。该段保留2026-09-27工程路线核对的历史观察，当时为4selected/7pending；当前集合以r38最终决定及r39保持的9行（6selected/3deferred）、已选模式与selectionFinal=true为准，不能沿用旧分母。父范围和必要质量仍分别验收。
+
+2026-10-09只读回核官方现页：[Plugins](https://learn.chatgpt.com/docs/plugins)仍明确IDE扩展不支持插件；[Remote connections](https://learn.chatgpt.com/docs/remote-connections)说明复用连接主机的项目、状态、权限和插件，实际配对/可用性仍需核；[插件打包](https://developers.openai.com/plugins/build/plugins)仍支持现有`.codex-plugin/plugin.json`兼容格式。因此当前没有强制迁移manifest格式的任务，VS Code也不能借桌面插件可用性直接过关。本轮未操作IDE/手机、启用连接或调整安装；六条选择和行为unknown保持。
 
 ## 跨项目与执行位置的连续性
 
@@ -636,7 +634,7 @@ Laya参考固定[42626c3](https://github.com/NandhaKishorM/laya/tree/42626c34875
 | 状态查询与故障诊断 | 15cfe704中的status取得写锁，损坏JSON的报错缺少来源；当前切片复用recoveryBasis补无写入诊断，在输出检查后复读来源，拒绝已观测竞争及无效检查结构。保留原始字节、暂停与未完责任，不自动修复或解锁。实际故障恢复仍须有执行者和有效依据，不能通过将损坏状态当作不存在来恢复工作。 |
 | 输入恢复与锁归属 | 128 KiB传输和8 MiB留存是不同边界，需核对超长输入实际恢复；workspace失效标记按session恢复确认，不能一删了之。PID存活不是充分身份，也不能反推死锁；保留现有串行恢复保护，不采用固定TTL强行解锁。只对尚未被源码或现有案例回答的缺口做必要实验。 |
 | 一致性、时效与历史复用 | 包内checkpoint与规范源字节已有guardrails检查，保留该机制；原子写已有独占临时文件、fsync及rename。独立复核时效与不可变事实复用应分开分析，但当前86400秒规则不因报告建议而取消，相关规则变化先核对用途和受影响判据。 |
-| 入口与收官 | 17项必要范围、未绑定案例和待判入口仍是未完工作，不能为通过而批量deferred。真实界面、原生协议加固定响应及模型行为证据分别使用；编译器超时不能成为删除全部历史测试的依据。源码开放、fork存在、摘要、哈希、静态调用形状或组件连接齐全均不能单独证明真实全链效果、交接、发布或供应链等级。 |
+| 入口与收官 | 17项必要范围、未绑定案例和已选入口的未验行为仍是未完工作；r38已明确延期的入口不再作为待判任务，不能为通过而擅自缩减仍已选范围。真实界面、原生协议加固定响应及模型行为证据分别使用；编译器超时不能成为删除全部历史测试的依据。源码开放、fork存在、摘要、哈希、静态调用形状或组件连接齐全均不能单独证明真实全链效果、交接、发布或供应链等级。 |
 
 [TypeSafe的设计](https://docs.typesafe.ai/concepts/how-to-build-with-system-one)可借鉴为“窄问题语义判断、结构化结果、代码或宿主组合与反馈”；其实现与应用方法按问题拆分、结果契约、组合位置、反馈和失败退路分别研究，适用部分内化为供应商中立的判断或连接，不照搬产品形态。判断与权限、持久状态、真实效果核验分开；可通过现有宿主、工具、成熟开源实现或可选服务落地，不预设供应商、必需引擎或固定provider顺序，也不新增模型训练要求。Jev在前期曾作为能力建议、意图变化识别或证据分流候选；按r29，其本版作用收敛为研究参考，不安排产品接入，也不承担唯一上游、授权闸门、交接放行或独立验收者。[官方模型边界](https://docs.typesafe.ai/models)及[已知弱点](https://docs.typesafe.ai/model-jaggedness/jev-1.13)要求另验中文、否定、不可信输入及组合一致性；类型正确、高置信或社媒口碑不证明语义正确或净收益。
 
