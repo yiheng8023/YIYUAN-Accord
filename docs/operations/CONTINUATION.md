@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-10-09 · N33-20260909 / r39。本页只承载下一步需要的事实与未完责任。
+更新：2026-10-10 · N33-20260909 / r39。本页只承载下一步需要的事实与未完责任。
 [计划](PLAN-v3.3.md)拥有共识与工序，[基线](BASELINE-v3.3.md)和
 [验收](ACCEPTANCE-v3.3.md)保留全部 F01–F08/A01–A08；
 [机器投影](../../product/development.json)不替代用户决策。
@@ -23,8 +23,9 @@
   入口/state及其它Skills相同；manifest、adapter、生命周期Skill及SDK session driver不同。
   新setup只在一次任务自有隔离安装核元数据，不代主用户更新或实际setup调用。
   旧认证隔离profile仍162254；新验证缓存已保全后随自有临时配置清理。
-- Root最新原生观察：gpt-6-astra / 0.162.0-alpha.2 / default，effort/Fast未独立核定。
-  外部CLI现为0.162.0（dce685d5），不再是旧冻结0.160.1/0.161.0；旧执行包不能按路径名直接重用。
+- Root最新原生观察：gpt-6.1-sol / 0.162.0-alpha.17.2 / default，effort/Fast未独立核定。
+  npm及常驻daemon为0.162.1（dd13bdb1）；本次安装仅复用已保全同字节
+  0.162.0（dce685d5）普通plugin命令，不降级或启动daemon。旧执行包不能按路径名直接重用。
   实际修复worker为Sol/medium，审查按需指定Sol/high；子代理按任务及实际支持选择，
   不锁定模型或推理档数，不替用户启用。主模型和模式由用户掌控。
 - Meta原文4444个CRLF字节、SHA
@@ -94,8 +95,27 @@ CodexSandboxService.OpenAI.Codex（PID31664）阻止，未有attempt/execution�
 主home非desktop创建、cache路径不覆盖安装/恢复；已按必要源区分provisioning读者与
 卸载清理写者。实例资格化派生executor-service-qualified02，binding4c7d6026，30项检查
 及独立复审通过，登记原未消费安装确认。逐阶段核实例/登记/签名/所有权，损坏记录、
-进程缺失/复用和其他消费者仍拒绝。仅关闭客户端/IDE/CLI后运行该新目录launch.cmd，
-不停止沙箱服务、不运行旧失败目录。原5步/151947/配置保护保持，安装/真实setup未完成。
+进程缺失/复用和其他消费者仍拒绝。用户已正确运行该02目录；真实preflight已保留
+沙箱服务，实际阻挡者仅两个0.162.1常驻进程：managed server20116及updater23784。
+两者不随窗口关闭必然退出，不能继续用关窗口或重试替代处理。没有attempt/execution/
+startup-config，旧包exact、新包未生；原安装许可仍未消费。
+
+同socket WinSock只读观察绑定实际server20116/出生134360534040224803/dd13映像和
+原PID登记，完整loaded列表为空，0.543秒退出、连接闭合、config/PID原字节不变；
+loaded-threads恢复候选文件不存在。此时点事实不代未来空闲或停后台权限。
+已在新executor-graceful03准备一次官方正常关闭两实例后接原更新：byte0原生生命周期
+锁、精确updater PID marker、自身HANDLE退出、managed socket精确PID/ACK与退出，
+再进原五步安装。90秒共享关闭时钟、连接/底层收发/控制帧/ACK/关闭同限；不强退、
+删恢复、启服务、重试或停止沙箱服务。有任务/恢复责任、其它消费者/子进程、身份/
+来源/配置变化或未知均拒绝。Python3.14可能把读取错误当路径不存在的守卫已仅在
+派生代码纠正；反向还原该严格缺失守卫后，安装AST与原02相等，原件不动。
+Root13新纯方法和31安装/服务检查通过，新未授启动在所有共享动作前拒绝。
+最终独立复审有条件通过；binding8c63fe84、plan d7f3dec8，stop授权仍默认false，
+原许可不覆盖后台停止，不派发。当前仅待这两个精确实例的新增正常关闭许可，
+不重复申请原安装确认；获准后仍须客户端关闭及所有即时门成立。
+最新具体源/观察/冻结与READY位于accord-setup-adoption-20261010-01/daemon-review及
+GRACEFUL-CLOSE-READY.md。旧执行目录全部仅作历史，不重跑；新实际范围成熟获准
+后才从外部执行唯一新launch。安装及真实setup仍未完成，R2/R3/R4和全部F/A保持。
 
 ## 剩余主线与下一依赖
 
