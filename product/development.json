@@ -5770,6 +5770,17 @@
       "correction": "Installed-probe binding inherited plugin/install in businessForbidden despite explicit current installation authority and request implementation. Preserve original and document inconsistency in RECONCILIATION; reconcile selected method declarations before future dispatch, do not relabel this install-free or rerun.",
       "limits": "Setup path resolves against marketplace source, not an observed model invocation from cache. Actual setup invocation, runtime preparation/host binding, clean-machine experience and lifecycle acceptance remain unverified. Main-user package114112 unchanged. No promotion of17scopes/13cases/F-A or prior failures.",
       "next": "Verify only the remaining actual setup/runtime connection when sufficiently bound. Do not repeat these metadata probes or add a universal installer, service, offline/SEA obligation. See runtime assessment and private accord-onboarding-preview-20261009-01 / accord-onboarding-installed-preview-20261009-01 raw,FACTS,RETENTION,CLEANUP,RECONCILIATION."
+    },
+    {
+      "id": "onboarding-hook-fixture-correction-20261009",
+      "observedAt": "2026-10-09",
+      "scope": "offline-test-fixture-repair-not-product-runtime-or-host-acceptance",
+      "sourceRevision": "4e6a95ddd5d7fbd93c79b6236a69e500037bf1ee",
+      "failure": "CI37954912346: all9standard matrix jobs failed at native fixture preparation, before the full suite. Local exact15-test fast gate reproduced3subtest errors: unsupported plugin manifest override or non-hook component in the multiline-prompt test. The Hook-only copy removed MCP but retained new onboarding metadata.",
+      "correction": "Only the test fixture removes the known onboardingSkill field from its copied manifest, pruning empty namespace containers. Source package bytes and strict production projection guard stay unchanged. Unknown extension fields remain for rejection; complete-plugin installed tests keep all components.",
+      "verification": "New fixture/source-preservation regression failed before the fix. All117tests across test_codex_entry and test_codex_session_native then passed in34.862s, including the original fast-gate cases, restored setup/unknown-extension refusal, source integrity, source-drift and resource cleanup checks. No new real model or native-host business instance.",
+      "limits": "Current package151947/050e remains unchanged, as do main-user installation, all17scopes/13cases/F-A and prior failures. A local suite pass does not establish corrected hosted CI or actual setup invocation. Earlier implementation omitted this fixture caller; future setup/projection changes include the affected native fixture suite.",
+      "evidence": "Private accord-onboarding-ci-fix-20261009-01/windows-job.log,regression-red.log,affected-tests.log. The9matrix failures on source4e6 are retained while its remaining native job runs; do not relabel a rerun as its original result."
     }
   ],
   "environmentControl": {

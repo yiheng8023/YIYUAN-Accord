@@ -10,6 +10,10 @@
 - 最新已核提交 **a8dea654，CI37939373923成功**；此前3c219b2c/#833及794abbf1/#832也已成功。
   a3/cbd原9个快速门失败、2个native lifecycle成功保留；已修合法新增声明
   引起的旧计数假设。13/15布局回归仍保持无观察时0accepted、功能/候选false。
+- 4e6a95dd/CI37954912346的9个常规矩阵在native夹具前置检查失败；
+  新onboarding声明被仅Hook夹具错误携带，严格投影拒绝。已只修派生夹具，
+  保源包及严格拒绝；新增反例先失败后通过，两个受影响模块117项通过。
+  托管修复结果另核，当前151947/050e包与主用户安装均未变。
 - 主仓保持原检出main。当前17范围、13活动case、7处声明覆盖缺口、5个无case
   父范围；数字不是完成率。functionalCompletion/candidateEligible均false。
 - 源码候选20261009151947，25成员，包SHA
@@ -129,3 +133,6 @@ C:\Users\15521\.codex\backups\，仅按当前依赖读取：
 - 最小setup：accord-onboarding-preview-20261009-01及
   accord-onboarding-installed-preview-20261009-01；binding、原始native流、FACTS、
   RETENTION/CLEANUP和retained-runtime保实际来源，后者RECONCILIATION保观察边界及绑定文字错误。
+
+- 本次CI纠偏：accord-onboarding-ci-fix-20261009-01/windows-job.log、
+  regression-red.log、affected-tests.log；只处理仅Hook夹具派生遗漏，不重跑原安装。

@@ -270,9 +270,20 @@ class EntryTests(unittest.TestCase):
 
     def copy_hook_only_fixture(self, package):
         # A source-Hook projection fixture is not the complete installed plugin.
-        # Keep native plugin loading (including MCP) in the installed-mode tests.
+        # MCP and onboarding require native plugin loading, not Hook overrides.
         shutil.copytree(SCRIPT.parents[1] / "plugins/yiyuan-accord-codex", package)
         (package / ".mcp.json").unlink()
+        metadata_path = package / ".codex-plugin/plugin.json"
+        metadata = json.loads(metadata_path.read_bytes())
+        extensions = metadata.get("extensions", {})
+        openai = extensions.get("com.openai", {})
+        openai.pop("onboardingSkill", None)
+        if not openai:
+            extensions.pop("com.openai", None)
+        if not extensions:
+            metadata.pop("extensions", None)
+        # Keep unknown fields so the strict projection still rejects them.
+        entry.save(metadata_path, metadata)
 
     def prepared_persistent(self, root, case_path=None, *, native_hooks=False, installed=False, admission_case=None,
                             composition=None):
@@ -1063,6 +1074,20 @@ class EntryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "non-hook component"):
             entry._native_hook_projection(source, shutil.which("node"))
 
+    def test_hook_fixture_keeps_setup_out_of_projection_and_source_intact(self):
+        source = SCRIPT.parents[1] / "plugins/yiyuan-accord-codex"
+        before = entry._package_hashes(source)
+        with tempfile.TemporaryDirectory() as tmp:
+            package = Path(tmp).resolve() / "package"
+            self.copy_hook_only_fixture(package)
+            metadata = json.loads((package / ".codex-plugin/plugin.json").read_bytes())
+            self.assertNotIn("extensions", metadata)
+            self.assertFalse((package / ".mcp.json").exists())
+            projection = entry._native_hook_projection(package, shutil.which("node"))
+            self.assertTrue(projection["sourceConfigurationOnly"])
+            self.assertFalse(projection["marketplaceInstalled"])
+        self.assertEqual(entry._package_hashes(source), before)
+
     def test_native_projection_preserves_extra_fields_and_rejects_unsupported_surfaces(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
@@ -1077,13 +1102,20 @@ class EntryTests(unittest.TestCase):
             if entry.tomllib:
                 self.assertEqual(entry.tomllib.loads(projected["configuration"])["hooks"], projected["hooks"])
             self.assertEqual(projected["hooks"]["SessionStart"][0]["customRegistration"], {"enabled": True, "labels": ["a", "b"]})
-            for change in ("manifest-override", "mcp", "prompt-handler", "shell-command", "null-field", "unknown-event"):
+            for change in ("manifest-override", "setup-extension", "unknown-extension", "mcp",
+                           "prompt-handler", "shell-command", "null-field", "unknown-event"):
                 metadata_path = package / ".codex-plugin/plugin.json"
                 original_metadata = metadata_path.read_bytes()
                 altered = json.loads(json.dumps(definition))
                 if change == "manifest-override":
                     metadata = json.loads(original_metadata)
                     metadata["hooks"] = "./other-hooks.json"
+                    entry.save(metadata_path, metadata)
+                elif change in ("setup-extension", "unknown-extension"):
+                    metadata = json.loads(original_metadata)
+                    metadata["extensions"] = ({"com.openai": {
+                        "onboardingSkill": "./skills/manage-plugin-lifecycle/SKILL.md"}}
+                        if change == "setup-extension" else {"unknown.vendor": {"enabled": True}})
                     entry.save(metadata_path, metadata)
                 elif change == "mcp":
                     (package / ".mcp.json").write_text("{}", encoding="utf-8")
