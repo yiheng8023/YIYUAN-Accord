@@ -85,7 +85,12 @@ SDK driver四文件不同，Hook声明和普通MCP/state保持，不新增信任
 客户端/IDE/CLI关闭后从外部终端执行；任何Codex旁车或未知消费者拒绝，不停后台。
 只用executor-reconciled01/launch.cmd，不运行原包。原范围及全部即时门不放宽；
 详见CONFIRMED-EXECUTION.md、RECONCILIATION.json、RECONCILED-REVIEW.md和
-CONFIRMATION-RECEIPT.json。等待用户关闭客户端并执行，安装/真实setup尚未验。
+CONFIRMATION-RECEIPT.json。用户已实际运行；preflight仅被Auto/LocalSystem沙箱服务
+CodexSandboxService.OpenAI.Codex（PID31664）阻止，未有attempt/execution，旧包exact、新包未生，
+许可未消费。该服务不随客户端关闭必然退出，不能盲等或重复执行。SCM登记与磁盘签名已核，
+实际image的LIMITED_INFORMATION读取返回WinError5；不按名字/登记路径直接豁免或停服务。
+已准备并静态复审固定6a4a2847只读查询，只收SCM/PID/实际image/创建时间及文件hash，
+尚未执行，新的管理员只读权限待决定；原安装授权继续有效，安装/真实setup未完成。
 
 ## 剩余主线与下一依赖
 
