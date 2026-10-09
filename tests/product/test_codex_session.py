@@ -174,8 +174,30 @@ const input = new Writable({write(chunk, encoding, done) {
   }
   done();
 }});
-const connection = createOwnedAppServerConnection({stdin:input, stdout:output,
+const nativeConnection = createOwnedAppServerConnection({stdin:input, stdout:output,
   connectionId:'fixture-connection', hostVersion:'fixture-host'});
+// Public source sessions also accept borrowed mutable connection adapters.
+// Keep the actual protocol reader; change only the borrower's binding while
+// an asynchronous receive or context reply is in progress.
+const connection = mode.startsWith('binding-') ? {
+  ...nativeConnection, transport:{...nativeConnection.transport},
+} : nativeConnection;
+if (mode.startsWith('binding-')) {
+  connection.receiveTurnActivity = async (...args) => {
+    const activity = await nativeConnection.receiveTurnActivity(...args);
+    if (activity.type === 'request' && activity.request.id === 100) {
+      if (mode === 'binding-receive-id') connection.transport.connectionId = 'replacement';
+      if (mode === 'binding-receive-version') connection.transport.hostVersion = 'replacement';
+      if (mode === 'binding-receive-callback') connection.replyContext = async () => {};
+    }
+    return activity;
+  };
+  connection.replyContext = async (...args) => {
+    const reply = await nativeConnection.replyContext(...args);
+    if (mode === 'binding-reply-id') connection.transport.connectionId = 'replacement';
+    return reply;
+  };
+}
 const storedRecorder = openCarrierRecorder({path:databasePath, create:true});
 const recorder = {...storedRecorder, compareAndSet(...args) {
   if (slowRecordMs && args[2].phase === 'writer-transferred')
@@ -668,6 +690,33 @@ class CodexSourceSessionTests(unittest.TestCase):
         self.assertEqual(result["ownerCalls"], 1)
         self.assertEqual(result["second"], "SESSION_FAILED")
         self.assertEqual(len([frame for frame in result["serverResponses"] if frame["id"] == 102]), 1)
+
+    def test_changed_borrowed_binding_rejects_received_context_without_reply(self):
+        for mode in ("binding-receive-id", "binding-receive-version",
+                     "binding-receive-callback"):
+            with self.subTest(mode=mode):
+                result = self.run_case(mode)
+                self.assertEqual(result["serverResponses"], [])
+                self.assertEqual(result["error"]["code"], "TURN_ACTIVITY_FAILED")
+                self.assertEqual(result["error"]["nativeRequest"]["id"], 100)
+                self.assertEqual(result["snapshot"]["pendingRequest"]["id"], 100)
+                self.assertEqual(result["snapshot"]["status"], "failed")
+                self.assertEqual(result["ownerCalls"], 0)
+                self.assertEqual(result["planCalls"], 0)
+                self.assertEqual(result["second"], "SESSION_FAILED")
+                self.assertEqual(len(result["starts"]), 1)
+
+    def test_binding_change_during_context_reply_retains_request_without_replay(self):
+        result = self.run_case("binding-reply-id")
+        self.assertEqual(result["error"]["nativeRequest"]["id"], 100)
+        self.assertEqual(result["error"]["code"], "SERVER_REQUEST_FAILED")
+        self.assertEqual(result["snapshot"]["pendingRequest"]["id"], 100)
+        self.assertEqual(result["snapshot"]["status"], "failed")
+        self.assertEqual([frame["id"] for frame in result["serverResponses"]], [100])
+        self.assertEqual(result["ownerCalls"], 0)
+        self.assertEqual(result["planCalls"], 0)
+        self.assertEqual(result["second"], "SESSION_FAILED")
+        self.assertEqual(len(result["starts"]), 1)
 
     def test_source_start_ack_loss_is_not_retried_and_locks_the_session(self):
         result = self.run_case("start-loss")

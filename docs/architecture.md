@@ -544,7 +544,13 @@ The owner supplies current authority, the handoff plan, independent effect
 verification and decisions for other server requests. A single activity wait
 handles either a request or the matching terminal event; it leaves no losing
 waiter that could consume a later request. Unscoped requests require explicit
-ownership. Failure retains the source/turn and RPC references for reconciliation
+ownership. Ordinary activity reception checks the borrowed connection binding
+before and after waiting. A consumed request is retained before the post-receive
+check; a context reply also rechecks binding before clearing that request. Changed
+bindings lock the session, preserving the request without replay, including when
+one reply was already sent. These guards do not revoke an already delivered reply
+or prove that a frozen native connection can change identity.
+Failure retains the source/turn and RPC references for reconciliation
 and cannot be retried through the failed session. A successful transfer stops
 writes to that source. The controller can explicitly adopt its own verified target
 after checking the final ledger, native idle/persistent state, current authority

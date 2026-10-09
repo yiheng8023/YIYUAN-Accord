@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261008114112",
+    "version": "3.3.0-dev.1+codex.20261009104813",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261008114112",
-        "packageSha256": "e4c0ce9df44857dc5cc665f292342cd631fc87a08b93d9af70e4267d3de1b435",
+        "packageVersion": "3.3.0-dev.1+codex.20261009104813",
+        "packageSha256": "5989b26284f69993d8ce7794e209b430045a8664b12790d880918c421f89700d",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -5548,6 +5548,22 @@
         "rule": "A new per-episode snapshot or specific field is not required when an already prospectively referenced source remains sufficient and applicable; no retrospective source selection or dependency narrowing.",
         "review": "accord-ci-comparison-20261009-01 BEFORE-EVIDENCE-REVIEW.md / ROOT-ADJUDICATION.md"
       }
+    },
+    {
+      "id": "source-session-borrowed-binding-guard-20261009",
+      "observedAt": "2026-10-09",
+      "scope": "ordinary-source-session-borrowed-connection-change-guard",
+      "sourceBase": "0e1802ef8c00116326577ebf13526d82159aee15",
+      "failure": "Ordinary receive omitted binding checks; a mutable borrowed adapter could change during receive/context reply, respond before failure and lose the consumed request. Frozen native connection identity mutation is not established.",
+      "correction": "Check binding before/after receive, retain the consumed request before checking, and check after context reply before clearing it. Lock failed sessions with exact pending request; preserve at most one delivered reply and reject run replay.",
+      "evidence": "Four counterexamples failed before the patch and pass after it;65 source-session/connection tests and independent fresh-transfer/continue-source controls pass. Pure local JSONL/SQLite, not actual host/model behavior.",
+      "candidate": {
+        "version": "3.3.0-dev.1+codex.20261009104813",
+        "members": 25,
+        "packageSha256": "5989b26284f69993d8ce7794e209b430045a8664b12790d880918c421f89700d"
+      },
+      "installed": "Main user remains20261008114112/e4c0; no install/trust/config change.",
+      "claimLimit": "Narrow deterministic guard correction only;17 scopes,13 cases and F/A/time conditions unchanged. No full continuity, resource or release qualification."
     }
   ],
   "environmentControl": {

@@ -2753,3 +2753,11 @@ Root独立oracle和额外复审确认新旧各7814条、九矩阵集合一致。
 上节及e2e44525关于“没有完整before来源”的判断已撤回，原判断作为历史保留。07ea冻结CONT第21/40行原已引用ADOPTION-RESULT→INSTALLATION-FACTS→实际安装器25成员逐项回读，早于本次19:09派发；同缓存根、配置、原生入口及较近SDK02字节/mtime观察支持适用。package-before条件充分，无须为了新快照格式重做。SDK02未被说成直接冻结来源，19:34 after-only不充before。独立BEFORE-EVIDENCE-REVIEW与Root来源核对支持该纠偏。
 
 整案仍not-admitted：worker166秒、Root约260秒原文oracle通过与报告读取、598.932秒源/配置/usage/资源检查均有原时点；完整语义对原生事实的核对现有明确证据在其后，未充分证明必要QA全部在原600秒内。保持未知，不把它说成确定worker超时，也不另加“额外复审/正式登记必须600秒内”的标准。原定义/失败/限额/原始记录不改，原两实例保持历史，不再次执行。当前计划、接续、验收解释和机器观察已同步，17scope/13case/7声明缺口及全部F/A不变。私有ROOT-ADJUDICATION.md为当前裁定，ASSESSMENT加更正并保原字节副本；现装25文件/Meta5118/用户设置未改。
+
+## 2026-10-09 普通源会话借用连接变化守卫
+
+本轮修复一个确定的连续性接口缺口：普通source run等待请求期间借用连接身份/版本/回调变化，原实现仍先回复context请求，随后才失败且丢失该pending请求。现接收前后核绑定，先保全已消费请求，再决定处理；回复后也核绑定再清请求。四个反例先失败后通过，会话/连接65项测试及独立正反复审通过。只证本地协议与SQLite组合，不外推原生冻结连接曾跨连接响应、模型自主性或完整F05/A05。
+
+实际反例使用既有真实JSONL connection/SQLite fixture外层可变借用包装：receive期间改变connectionId、hostVersion或replyContext引用时，修正前仍回复一次；replyContext期间改变连接时，修正前丢失原id100并在后续id101报错。现前三项零回复且锁定，第四项保留恰好一次回复及原请求，所有路径再次run均SESSION_FAILED、不调用owner/plan或再建source。正常冻结连接交接与continue-source正例保持。Root唯一改源码，子代理只读复现和独立复审；没有真实CLI/AppServer/model业务、安装、Trust或用户配置变化。
+
+canonical和Codex分发副本同步；新候选20261009104813、25成员、包SHA 5989b26284f69993d8ce7794e209b430045a8664b12790d880918c421f89700d。主用户安装仍114112/e4c0，未追认安装或全部功能完成。旧0e1802ef/CI37869819255已success；本候选按独立提交与托管检查核。所有17父scope、13case与原限额/F-A不改；本次补确定性异常守卫，不新增运行服务、控制平台或验收范围。

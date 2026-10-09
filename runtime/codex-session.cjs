@@ -536,11 +536,18 @@ function createSession(options, restoreMode = false) {
       for (;;) {
         let activity;
         try {
+          ensureBindings();
           activity = await Reflect.apply(bound.receive, undefined,
             [sourceThreadId, turnId, budget.monotonicDeadline, {includeUnscoped: ownUnscopedRequests}]);
+          // Receiving a request consumes it from the borrowed connection. Keep
+          // it for reconciliation even if the owner changed during that await.
+          if (activity?.type === 'request' && plainObject(activity.request)) {
+            state = {...state, pendingRequest: immutable(activity.request)};
+          }
+          ensureBindings();
         } catch (error) {
           return lockFailure('TURN_ACTIVITY_FAILED', 'source turn activity became unavailable', error,
-            {phase: 'turn-activity-unknown'});
+            {phase: 'turn-activity-unknown', nativeRequest: state.pendingRequest || undefined});
         }
         if (activity?.type === 'terminal') {
           const terminal = immutable(activity.terminal);
@@ -567,6 +574,7 @@ function createSession(options, restoreMode = false) {
               nativeRequest.params?.tool === CONTEXT_OBSERVATION_TOOL.name &&
               nativeRequest.params?.namespace == null) {
             await Reflect.apply(bound.replyContext, undefined, [nativeRequest, budget.monotonicDeadline]);
+            ensureBindings();
             state = {...state, phase: 'turn-running', pendingRequest: null};
             continue;
           }
