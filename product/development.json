@@ -5725,6 +5725,23 @@
       "correction": "Both READMEs and the launch checklist now name actual host-process Node discoverability and executability, preserve reuse/installation authority, separate ordinary and optional SDK prerequisites, and distinguish static or prepared-fixture checks from actual host entry.",
       "limits": "No minimum Node version, pristine-profile exposure, generic host PATH availability, model behavior or full default-host acceptance established. No installation, new runtime, config change, old-business rerun, new case or qualification promotion. Default-host means declared supported prerequisites without added third-party extensions, not zero prerequisites. New regression test_optional_sqlite_unavailable_keeps_entry_usable_and_files_unchanged injects missing-module/missing-export in isolated Node children: the distributed plugin entryGuidance loads without SQLite, canonical/distributed recorder create/open rejects with SQLITE_UNAVAILABLE, and Python independently verifies all private directory bytes. All11 recorder tests pass locally; this is not a full Hook/MCP or actual default-host behavior test.",
       "next": "For the next necessary ordinary delivery, establish actual effective extension exposure and native launch context, retain missing/unexecutable runtime or unreached Hook/MCP failures, and use existing supported resources within authority. Do not clear user configuration or repeat closed probes."
+    },
+    {
+      "id": "current-minimal-profile-metadata-20261009",
+      "observedAt": "2026-10-09",
+      "scope": "one-current-version-metadata-only-process-not-model-or-plugin-adoption",
+      "sourceRevision": "3c219b2cf90998aea45f869a2f908c1facf94557",
+      "binary": {
+        "version": "0.162.0",
+        "sha256": "dce685d569526ef4712fa82d20ff20e1309baad5fcd34215e1126698f611242f"
+      },
+      "basis": "Reuse retained isolated-metadata-skill-control-20261007 positive control; native binary changed from0.160.1/0.161.0 at the same path, so only current-version effective metadata was checked once. No old case, authentication, install, trust or model replay.",
+      "observed": "Raw initialize/config-read/skills-list/hooks-list responses match structured results.38 exact user Skill selectors disabled via sessionFlags,5 system Skills enabled,43 unique paths,Skill errors empty. User/system config layers empty; plugins/remote_plugin/apps false. Hooks/errors/warnings empty; MCP/plugin configuration empty.",
+      "rawSha256": "9521aae8926fcabbdccd0c50c08fc33809cb86194141e0199f19269b13a147db",
+      "preservation": "55 frozen source hashes unchanged; native exit0/closed/not-forced and owned Job active0 in1.256s.65 runtime files copied and independently rehashed before removing four exact task-owned roots. Raw/config/result/binding/runtime evidence retained in accord-minimal-profile-current-20261009-01.",
+      "review": "Independent native reviewer compared raw responses, effective selectors/layers and recorded process/Job closure; Root separately rehashed55 sources and65 retained files. Reviewer did not claim a second source-hash verification.",
+      "limits": "No plugin/list or mcpServerStatus/list: empty configuration is not an inspected installed/connected list. Raw remoteControl disabled notification is retained; reader events=[] was not populated. Disabled is not uninstalled. No authenticated task, actual Accord adoption, model behavior, pristine machine, default-host outcome or F/A promotion.",
+      "next": "Current process-level discovery control is established; do not rerun this reader. Next useful ordinary delivery must bind actual package/launch context/authority and verify adoption, behavior and exit. Existing isolated162254 package differs from current source in adapter/manifest/session/checkpoint; do not reuse old0.161 executable binding or one-shot grants."
     }
   ],
   "environmentControl": {
