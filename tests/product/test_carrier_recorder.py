@@ -173,6 +173,51 @@ class CarrierRecorderTests(unittest.TestCase):
             "create", path=str(self.db), scopeRef=scope, writerThreadId=writer,
         )
 
+    def test_optional_sqlite_unavailable_keeps_entry_usable_and_files_unchanged(self):
+        plugin_checkpoint = PLUGIN_RECORDER.with_name("task-checkpoint.cjs")
+        missing = self.root / "not-created.sqlite"
+        self.db.write_bytes(b"retained input, not a database")
+        before = {path.name: path.read_bytes() for path in self.root.iterdir()}
+        script = r"""
+const [recorderPath, checkpointPath, missingPath, retainedPath, mode] = process.argv.slice(1);
+const Module = require('node:module');
+const load = Module._load;
+let sqliteRequests = 0;
+Module._load = function (id, ...args) {
+  if (id === 'node:sqlite') {
+    sqliteRequests += 1;
+    if (mode === 'missing-export') return {};
+    throw Object.assign(new Error('fixture: SQLite unavailable'), {code: 'ERR_UNKNOWN_BUILTIN_MODULE'});
+  }
+  return load.call(this, id, ...args);
+};
+const {openCarrierRecorder} = require(recorderPath);
+const guidance = require(checkpointPath).entryGuidance();
+const entrySqliteRequests = sqliteRequests;
+const codes = [];
+for (const [path, create] of [[missingPath, true], [retainedPath, false]]) {
+  try { openCarrierRecorder({path, create}); codes.push('unexpected-success'); }
+  catch (error) { codes.push(error.code); }
+}
+process.stdout.write(JSON.stringify({guidancePresent: Boolean(guidance), entrySqliteRequests, codes}));
+"""
+        for module in (RECORDER, PLUGIN_RECORDER):
+            for mode in ("missing-module", "missing-export"):
+                with self.subTest(module=module, mode=mode):
+                    completed = subprocess.run(
+                        ["node", "-e", script, str(module), str(plugin_checkpoint),
+                         str(missing), str(self.db), mode],
+                        cwd=ROOT, text=True, capture_output=True, timeout=15,
+                    )
+                    self.assertEqual(completed.returncode, 0, completed.stderr)
+                    self.assertEqual(json.loads(completed.stdout), {
+                        "guidancePresent": True, "entrySqliteRequests": 0,
+                        "codes": ["SQLITE_UNAVAILABLE", "SQLITE_UNAVAILABLE"],
+                    })
+                    self.assertEqual(
+                        {path.name: path.read_bytes() for path in self.root.iterdir()}, before,
+                    )
+
     def test_two_processes_compete_for_one_scope(self):
         self.assertTrue(self.create()["created"])
         gate = self.root / "start.gate"

@@ -34,6 +34,7 @@
 | C02受控能力失效后的自主proposal、继承、一写者首续作、独立QA及源释放；另有fixed-response跨控制者ACK-loss恢复 | 不拼成同episode，不代普通自主择时或完整F05/A05；健康任务不强制交接。原N/C01/catalog失败保持。 |
 | 备件有限自主Skill选择、受托explicit-only代选、业务前正文采用；UTF8四实物及后置QA；CI判定工具两阶段结果 | 原时限失败与后置软件通过分开；不为native activation形式重做业务。已准入子范围按原身份复用，原P2目录metadata越界保持。 |
 | 主用户114112已采用，两个SDK机制子范围曾正式observe/recheck；Linux/macOS原生Hook正文传递有固定源/原ZIP | 安装固定35b，不随源码提交漂移；机制、固定回复与真实模型采用分别计证。隔离02/03与原grant不复跑，完整生命周期/入口仍未闭。 |
+| 默认运行前提已按真实源码写入双语README；可选SQLite缺模块/缺接口时，插件entryGuidance仍可读，源/分发recorder拒绝create/open且私有目录字节不变；记录器11项回归通过 | 此为依赖边界的纯本地回归，不是完整Hook/MCP、最低Node版本、无额外扩展宿主或R2行为通过。普通入口的实际Node启动与有效扩展暴露仍须按下一真实环境核定。 |
 
 旧原生CI比较的安装before证据已裁定充分，剩余是原600秒完整QA时点未全证；
 不要再把before写成缺口。CLI0.161 SDK的Windows sandbox ACL/占用错误原件保留，
@@ -43,7 +44,7 @@
 
 | 工作 | 仍缺内容与下一动作边界 |
 |---|---|
-| R2 能力协调 | research-learning-and-reuse、recovery-and-lifecycle、capability-loss及default-host-without-extra-extensions充分实际证据；保作者政策、用户禁用/排除、同名同义仲裁与真实目标控制，不重复盘点已知可见能力。 |
+| R2 能力协调 | research-learning-and-reuse、recovery-and-lifecycle、capability-loss及default-host-without-extra-extensions充分实际证据。默认环境先核真实宿主启动的node和有效扩展暴露；既有测试绝对Node/PATH、定制profile不能代此条件。两语README已补既有运行前提，未新增安装或行为通过；保作者政策、用户禁用/排除和实际目标控制，不再重复目录盘点。 |
 | R2 连续性 | recovery-and-rollback/capability-loss正式覆盖、普通择时、变化后继承/暂停/纠偏及必要异常恢复；不以Root指定转移、固定响应或分散案例替代完整自主性。 |
 | R3 环境、资源与系统组合 | environment-adaptation、resource-pressure-and-exit、system-integration三父范围仍缺当前充分case；完整任务须有必要职责、八质量轴和适用场景共同成立的证据。新执行前分清active worker/阶段等待/端到端时钟，留足终态与语义QA余量；及时执行已满足前提的转换，不再造同类业务凑case。 |
 | R3 生命周期与净影响 | codex-lifecycle、system-impact-assessment仍未闭；需当前采用/变化/失败恢复/退出及独立结果、总成本和用户负担判断。安装、目录、局部Job0或不声称正收益均不免除完整判定。 |
