@@ -5461,9 +5461,9 @@
           "caseObjectSha256": "db2bfd25576bd5513977d6caf6f00c29fd0c6fae33c96b4fc6447e7805980c20"
         }
       ],
-      "evidence": "accord-ci-comparison-20261009-01 freeze/start/FACTS/native-worker-history/workspace run-records and three outputs/OBSERVER-REVIEW/ASSESSMENT; installed-after-only is explicitly not before evidence",
+      "evidence": "accord-ci-comparison-20261009-01 freeze/start/FACTS/native-worker-history/workspace run-records and three outputs/OBSERVER-REVIEW/ASSESSMENT; installed-after-only is explicitly not before evidence; BEFORE-EVIDENCE-REVIEW and ROOT-ADJUDICATION correct the earlier before-source exclusion; original ASSESSMENT bytes retained",
       "outcome": "not-admitted",
-      "failure": "Prospective packet omitted a complete installed-cache byte snapshot. Repository tracked sources and actual native Hook/Skill reading do not independently satisfy that inherited before condition. Do not backdate the later25-member e4c0 read.",
+      "failure": "Complete required result QA within the original600s remains insufficiently evidenced, not a proven worker timeout. The earlier missing-installed-before reason is withdrawn: original frozen CONT already referenced a sufficient exact installation observation chain. No whole-case pass or replay follows.",
       "boundedObservedFacts": {
         "threadId": "01a11ceb-4da9-7632-9abc-c9d2f87d25d6",
         "turnId": "01a11ceb-4f65-7d43-acd9-ba4faed261d8",
@@ -5519,7 +5519,7 @@
         "result": "New and baseline indices each7814 rows across9 matrices; independent original-line/comparison oracle and semantic review passed. Eight step durations decreased18..372s; Windows/Python3.10 increased420s. No causal-performance or product net-benefit conclusion.",
         "guidanceUse": "Worker independently chose and read the available verify-and-close Skill before output verification, then acted on source/result/resource checks; not a claim of typed native activation or all third-party policy coverage.",
         "originals": "16 business originals,189 tracked repository sources, shared configuration and first-two cache bytes/mtime preserved; two worker Job exits natural with no remaining assigned process or lock.",
-        "timing": "Worker completed in166s; Root mechanical source/config/usage/resource check ended at598.932s. Later additional review is outside the600s window; that local timestamp does not establish complete all-condition admission within it."
+        "timing": "Worker165993ms; original-line/comparison oracle PASS and report read at19:13:17Z; native completed/idle at19:17:28Z; mechanical source/config/usage/resource checks598.932s at19:18:55Z. Complete prose/native-fact cross-check is evidenced later. Whole required QA within600 remains unproven. Later optional review/admission timing alone is not execution timeout."
       },
       "originalLimits": {
         "wholeWorkSeconds": 600,
@@ -5535,7 +5535,19 @@
       "disposition": "closed-execution-retained-as-history-not-current-required-instance",
       "preserved": "Both fixed definitions remain at07ea93fb with hashes and original case file; no rerun, changed old limits, installed-package update or retroactive pass.",
       "currentEffect": "Only these two completed fixed declarations leave active admission; all17 scopes and other13 cases and F/A floors remain. Actual data and resource facts remain reusable at their proved scope.",
-      "followup": "Future-only preflight-v2/freeze-next captures actual installed bytes inside preparation and rejects missing or late-before snapshots. Use the now-proven SubAgentActivity allocation ID to read the exact child native record promptly; avoid broad UI/thread inventories and reserve real QA margin. Next work must have a genuine new purpose, not replay this finished comparison."
+      "followup": "Before rejecting evidence, distinguish existence, prospective linkage and continued applicability. Future preflight-v2/freeze-next is one sufficient direct-capture method, not a universal new-field requirement. Use exact native allocation mapping and reserve actual required QA time. Do not replay this finished comparison or poll its closed CI.",
+      "priorAssessment": {
+        "revision": "e2e44525da7a2a804bb549f899d89146c4e320b1",
+        "failure": "Prospective packet omitted a complete installed-cache byte snapshot. Repository tracked sources and actual native Hook/Skill reading do not independently satisfy that inherited before condition. Do not backdate the later25-member e4c0 read.",
+        "status": "package-before-reason-corrected; original-assessment-retained"
+      },
+      "packageBeforeAdjudication": {
+        "status": "sufficient-under-original-condition",
+        "source": "07ea freeze.repoTracked CONT lines21/40 -> local-adoption post-update ADOPTION-RESULT / INSTALLATION-FACTS -> executor actual25-member readback; same114112/e4c0 identity, effective config and native entry",
+        "corroboration": "SDK02 earlier actual25-member SHA/bytes/mtime equals after-only; SDK02 is not a directly named frozen member source and after-only remains after.",
+        "rule": "A new per-episode snapshot or specific field is not required when an already prospectively referenced source remains sufficient and applicable; no retrospective source selection or dependency narrowing.",
+        "review": "accord-ci-comparison-20261009-01 BEFORE-EVIDENCE-REVIEW.md / ROOT-ADJUDICATION.md"
+      }
     }
   ],
   "environmentControl": {

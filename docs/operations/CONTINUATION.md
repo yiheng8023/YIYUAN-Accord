@@ -6,7 +6,7 @@
 
 [原生新CI比较](../../product/cases/ci-comparison-native-v3.3.json)已真实完成：fresh原生worker约166秒交付新7814条索引、九矩阵比较和报告，独立原文/计算/语义核验通过。原生日志确认0.162.0-alpha.2、Sol/medium/default、Goal前后null、累计usage在限内；自主选读核验Skill并用于结果检查。两路并发在实际160→96MiB、CPU10%条件下均自然结束，所属Job0，首批cache、16业务原件、189主仓tracked文件和配置保持。八矩阵步骤减少18～372秒，Windows/Python3.10增加420秒，不据此宣称因果提速或净收益。
 
-正式准入仍未成立：本次冻结漏了派发前完整已装缓存字节来源，主仓package源码/实际Hook正文不能代替；后读25成员e4c0不能补造before。机械后验在598.932秒落盘只证明其检查终点，不等完整接纳裁定在600秒内完成。原两固定声明精确保07ea93fb后移出活动必过集合，不重跑已完成比较。future-only preflight-v2/freeze-next已把实际已装字节读取接入准备入口，缺失/晚于派发拒绝，两边界测试过。下次直接使用已证SubAgentActivity→真实child ID→原生记录路线，避免再次泛查UI/线程列表消耗QA余量。
+本轮纠正前态判定：07ea冻结CONT已引用114112/e4c0安装报告及25成员实际回读链，同配置和真实原生入口支持其适用，package-before条件充分。没有每轮必须新建快照的标准；SDK02清单仅作既有补充，after-only不充before。整案仍未正式准入：原600秒含必要QA，约260秒的oracle通过/报告读取和598.932秒的机械后验，不充分证明全部语义与原生事实核对在窗口内完成，记未验证而非worker超时。后续额外复审或登记时间本身不构成超时。原两固定声明仍保07ea历史，不重跑已完成比较；future-only采集只是一种充分方法。详见私有ROOT-ADJUDICATION.md和本轮工序纠偏；e2e/CI37835688818已success。
 
 [CI索引02](../../product/cases/ci-timing-index-v3.3-02.json)已一次执行结束：真实0.161.0/Sol-medium/default、Goal前后null、完整入口及当前输入回执已核；约52.259秒、原生自然exit0/Job0，共享配置和主仓原件保持。但shell及备用Node通道在读业务材料前遭遇Windows sandbox setup错误，模型如实保未完成，未生成业务成果；不由原生completed状态晋通过。匹配日志定位到占用中node_repl.exe的ACL更新错误32，以及受保护PCManger授读失败。Root未杀其它会话进程、改ACL或重跑02。
 

@@ -2747,3 +2747,9 @@ Root独立oracle和额外复审确认新旧各7814条、九矩阵集合一致。
 本次完整准入仍持有：freeze只有repoTracked，没有完整native已装缓存字节before来源。后读25成员仍为e4c0不补造前态；已证结果/配置/资源与该缺口分开。Root机械后验598.932秒只记其检查终点，之后新增复审不算原600秒内，不能把它代作所有条件和最终裁定均及时完成。原两声明、数据定义和限额保07ea93fb历史后退出活动集合，17父scope和其它13case不变，禁止重做该已完成比较求绿。
 
 私有`accord-ci-comparison-20261009-01`保原始日志、三产物、freeze/start/FACTS、native-worker-history、OBSERVER-REVIEW及ASSESSMENT。future-only preflight-v2/freeze-next在准备入口实际读取并核完整安装包，缺失或晚于派发的快照拒绝；两项纯边界检查过，原freeze不改。实际native身份应从父事件的allocation映射直接取，随后读精确child记录，避免广泛UI/文件时间过滤调查和耗尽QA余量。
+
+## 2026-10-09 安装前态来源与时限解释纠偏
+
+上节及e2e44525关于“没有完整before来源”的判断已撤回，原判断作为历史保留。07ea冻结CONT第21/40行原已引用ADOPTION-RESULT→INSTALLATION-FACTS→实际安装器25成员逐项回读，早于本次19:09派发；同缓存根、配置、原生入口及较近SDK02字节/mtime观察支持适用。package-before条件充分，无须为了新快照格式重做。SDK02未被说成直接冻结来源，19:34 after-only不充before。独立BEFORE-EVIDENCE-REVIEW与Root来源核对支持该纠偏。
+
+整案仍not-admitted：worker166秒、Root约260秒原文oracle通过与报告读取、598.932秒源/配置/usage/资源检查均有原时点；完整语义对原生事实的核对现有明确证据在其后，未充分证明必要QA全部在原600秒内。保持未知，不把它说成确定worker超时，也不另加“额外复审/正式登记必须600秒内”的标准。原定义/失败/限额/原始记录不改，原两实例保持历史，不再次执行。当前计划、接续、验收解释和机器观察已同步，17scope/13case/7声明缺口及全部F/A不变。私有ROOT-ADJUDICATION.md为当前裁定，ASSESSMENT加更正并保原字节副本；现装25文件/Meta5118/用户设置未改。
