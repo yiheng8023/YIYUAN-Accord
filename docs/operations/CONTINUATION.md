@@ -43,7 +43,7 @@ accord-dev-delivery-20261010-01已交付当前221152私有检查ZIP、25成员�
 
 2026-10-11背景回核已读constitution、两语README及旧主线程23的交接/用户决策，明确产品目标是Agent完整有界自举与可靠协作、真实结果和较低用户负担。两语README顶部把已延期普通Chat独立用途写成待实测的漂移已修正，Work Local本地执行模式与Remote宿主控制通道分开，共有有效证据按需复用。Native Luna/medium请求完成私有proposal，Root提供的首份facts把Work Local误归control，第一稿原件及不批准原因保留；新增纠正输入后worker两语修正，Root独立语义核验并明确共有机制复用后整合，冻结输入SHA/mtime与config保持。Root QA448.755秒在原480秒窗内，最终收尾证明517.950秒，原完整窗仍未通过，不追认普通CLI、默认无额外扩展或完整F/A；仅计可用维护成品及限定Desktop协作观察。私有原件在accord-readme-scope-correction-20261011-01。
 
-现有CLI观察器保留用户配置/Hook信任，但实际固定workspace-write/never；用户真实profile为danger-full-access/on-request，不能称完全继承。上一只读隔离CLI的初始化失败保持该条件，未证明整体CLI不可用。当前针对实际差异补现有observer显式sandbox参数，旧默认、历史execution绑定、审批never及准入标准保持；新权限选择仍不授予Trust或业务范围，当前包21字节不变。
+现有CLI观察器保留用户配置/Hook信任，但实际固定workspace-write/never；用户真实profile为danger-full-access/on-request，不能称完全继承。上一只读隔离CLI的初始化失败保持该条件，未证明整体CLI不可用。现有observer已补显式sandbox-mode，非默认danger-full-access只用于installed-plugin/persistent路径；非法组合在路径/探针操作前拒绝，非默认值进manifest/execution前后绑定和initial/resume参数，漂移在本阶段业务Agent的Job/Popen前拒绝。现装inventory可能已运行，不称所有进程零副作用。旧默认、历史execution对象及审批never保持，新参数不授予Trust或业务范围，不宣称完整继承用户on-request策略或Windowsbackend实际参与。108入口回归及verify/verify-development/host-check通过，Astra独审无新增P1/P2；首源码检查因5%预留不足失败保原件，按现有可修订预算规则有据增加10000至3550000，5%/192文件/36000指导及17scope/F-A保持。observer摘要改变，旧执行证据只按其依赖复用；原生新模式行为、整体CLI采用/普通任务仍待前瞻绑定，当前包21字节不变。原件和初失败在accord-observer-permission-20261011-01。
 
 ## 剩余主线
 

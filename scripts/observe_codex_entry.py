@@ -1,7 +1,11 @@
 """Prepare/run a bounded Codex CLI observation or prepare an App Server case.
 
 No model is called by prepare or inspect. Run uses existing CODEX_HOME auth,
-explicit model/effort, workspace-write and reviewed task-local hooks. The default
+explicit model/effort, sandbox mode (workspace-write by default) and reviewed
+task-local hooks. Approval policy remains never; this is not complete inheritance
+of the caller permission profile. --sandbox-mode danger-full-access only represents
+an already-authorized installed-plugin persistent task; it grants no permissions.
+The default
 case is ephemeral; a persistent coordination case uses native exec/resume and the
 existing stage oracle. Neither establishes full plugin or resource acceptance.
 Optional --native-package-hooks projects every package Node hook registration
@@ -30,7 +34,8 @@ Inspect --retained reads persistent stage copies after workspace cleanup without
 calling a model or replaying the original checker. It verifies retained byte and
 record consistency, leaving original outcomes and semantic/admission verdicts intact.
 Windows Job Objects contain descendants before the suspended CLI starts executing.
-The caller must select an existing Windows sandbox backend explicitly; this runner
+The caller selects an existing Windows sandbox backend preference explicitly;
+danger-full-access does not establish that this backend participates. This runner
 does not initialize/install a sandbox or directly edit shared configuration.
 Native thread startup may persist workspace trust. The caller owns authorization
 and exact recovery of that registration; before/after observations do not undo it.
@@ -70,6 +75,7 @@ if os.name == "nt":
 
 EVENTS = ("UserPromptSubmit", "Stop", "SessionEnd", "Interrupt")
 HOOK_MODES = ("checkpoint-wrapper", "native-package-hooks", "installed-plugin")
+SANDBOX_MODES = ("workspace-write", "danger-full-access")
 PROMPT = "请使用这个目录提供的订单数据接口，整理已经备妥的订单，按原顺序生成 details.csv（id,units 两列）、summary.json（ready_ids 和 total_units 两项）以及简短的 report.md。不要把待处理订单算进去。保留原始材料和无关文件，检查实际交付文件后告诉我结果。本次只处理本地材料，不联网、不安装软件、不修改共享设置。"
 ORDERS = b"id,status,units\nA,ready,60\nB,ready,80\nC,pending,50\n"
 SOURCE = '''import json
@@ -230,6 +236,7 @@ def load_manifest(evidence, *, require_workspace=True):
         raise ValueError("manifest binding mismatch")
     protocol = manifest.get("entryProtocol", "exec")
     _hook_mode(manifest)
+    _sandbox_mode(manifest)
     if protocol not in ("exec", "exec-resume", "app-server"):
         raise ValueError("unsupported entry protocol")
     if (protocol == "exec-resume" and manifest.get("caseSchema", "yiyuan-accord-coordination-case/v1")
@@ -253,6 +260,18 @@ def _hook_mode(manifest):
         raise ValueError("unsupported hook mode")
     if mode in ("native-package-hooks", "installed-plugin") and manifest.get("entryProtocol") != "exec-resume":
         raise ValueError("native package hooks require persistent exec-resume")
+    return mode
+
+
+def _sandbox_mode(manifest):
+    # An explicit task control for already-authorized effects, never a permission
+    # grant or full caller-profile inheritance (approval_policy stays never).
+    mode = manifest.get("sandboxMode", "workspace-write")
+    if not isinstance(mode, str) or mode not in SANDBOX_MODES:
+        raise ValueError("unsupported sandbox mode")
+    if mode != "workspace-write" and (manifest.get("entryProtocol", "exec") != "exec-resume"
+                                       or _hook_mode(manifest) != "installed-plugin"):
+        raise ValueError("danger-full-access requires installed-plugin persistent exec-resume")
     return mode
 
 
@@ -463,6 +482,7 @@ def _verify_prepared_sources(manifest, *, inventory_label="run-preflight"):
 
 
 def _execution_settings(manifest):
+    sandbox_mode = _sandbox_mode(manifest)
     project = Path(__file__).resolve().parents[1]
     version = manifest["nativeVersion"]
     match = re.fullmatch(r"codex-cli ([0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?)", version)
@@ -475,6 +495,8 @@ def _execution_settings(manifest):
                      usageCaps=manifest["limits"]["usageCaps"], usageScope=manifest["limits"]["usageScope"],
                      runner=Path(manifest["runner"]).relative_to(project).as_posix(),
                      caseFile=Path(manifest["case"]).relative_to(project).as_posix())
+    if sandbox_mode != "workspace-write":
+        execution["sandboxMode"] = sandbox_mode
     return execution
 
 
@@ -553,6 +575,7 @@ def build_command(manifest, *, stage=0, thread_id=None):
     protocol = manifest.get("entryProtocol", "exec")
     if protocol not in ("exec", "exec-resume"):
         raise ValueError("CLI command cannot represent an App Server case")
+    sandbox_mode = _sandbox_mode(manifest)
     installed = _hook_mode(manifest) == "installed-plugin"
     hooks = None if installed else _hook_configuration(manifest)
     trust = [] if installed else ["--dangerously-bypass-hook-trust"]
@@ -564,7 +587,7 @@ def build_command(manifest, *, stage=0, thread_id=None):
         output = str(Path(manifest["evidence"]) / f"last-message-{stage + 1}.txt")
         config = ([] if installed else ["--enable", "hooks"]) + ["-m", manifest["model"],
                   "-c", "approval_policy=\"never\"",
-                  "-c", "sandbox_mode=\"workspace-write\"",
+                  "-c", "sandbox_mode=" + json.dumps(sandbox_mode),
                   "-c", "model_reasoning_effort=" + json.dumps(manifest["reasoning"]),
                   "-c", "windows.sandbox=" + json.dumps(manifest["windowsSandbox"])]
         if hooks is not None:
@@ -572,7 +595,7 @@ def build_command(manifest, *, stage=0, thread_id=None):
         if stage == 0:
             if thread_id is not None:
                 raise ValueError("initial persistent stage cannot resume a thread")
-            return [manifest["codex"], "exec", *isolation, "--skip-git-repo-check", "--sandbox", "workspace-write",
+            return [manifest["codex"], "exec", *isolation, "--skip-git-repo-check", "--sandbox", sandbox_mode,
                     "--json", "--color", "never", "--output-last-message", output,
                     *trust, "-C", manifest["workspace"],
                     "--add-dir", str(Path(manifest["evidence"]) / "state"), *config, "-"]
@@ -612,6 +635,12 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
     native_hooks = getattr(args, "native_package_hooks", False)
     installed_id = getattr(args, "installed_plugin", None)
     direct_hooks = native_hooks or installed_id is not None
+    protocol = "app-server" if app_server_case is not None else "exec-resume" if persistent_case is not None else "exec"
+    # Reject unsupported controls before paths, inventory, fixtures or resources.
+    sandbox_mode = _sandbox_mode({"sandboxMode": getattr(args, "sandbox_mode", "workspace-write"),
+                                 "entryProtocol": protocol,
+                                 "hookMode": "native-package-hooks" if native_hooks else
+                                             "installed-plugin" if installed_id is not None else "checkpoint-wrapper"})
     admission_case = getattr(args, "admission_case", None)
     if (admission_case is not None or composition is not None) and (persistent_case is None or not direct_hooks):
         raise ValueError("admission binding requires a persistent native Hook or installed-plugin case")
@@ -684,7 +713,6 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
     if os.name == "nt" and paths["codex"].suffix.lower() != ".exe":
         raise ValueError("bind the native codex.exe, not an npm shell wrapper")
     hashes = {k: digest(p, os_shell=k == "hookShell") for k, p in paths.items()}
-    protocol = "app-server" if app_server_case is not None else "exec-resume" if persistent_case is not None else "exec"
     help_protocol = "app-server" if protocol == "app-server" else "exec"
     help_run = subprocess.run([str(paths["codex"]), help_protocol, "--help"], capture_output=True, timeout=15)
     help_text = help_run.stdout.decode("utf-8", "replace")
@@ -719,6 +747,8 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
             "timeoutSeconds": args.timeout, "turnTimeoutSeconds": turn_timeout,
             "recoveryTimeoutSeconds": recovery_timeout, "caseSha256": hashlib.sha256(case_bytes).hexdigest(),
             "limits": {"usageCaps": usage_caps, "usageScope": case["limits"]["usageScope"]}}
+        if sandbox_mode != "workspace-write":
+            binding_manifest["sandboxMode"] = sandbox_mode
         if admission_case is not None:
             admission_binding = _admission_binding(binding_manifest, admission_case)
         if composition is not None:
@@ -767,6 +797,11 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
                 "docs": ["https://learn.chatgpt.com/docs/hooks", "https://learn.chatgpt.com/docs/config-file/config-reference",
                          "https://learn.chatgpt.com/docs/config-file/config-basic#windows-sandbox-mode"]}
     manifest["hookMode"] = "installed-plugin" if installed is not None else "native-package-hooks" if native_hooks else "checkpoint-wrapper"
+    if sandbox_mode != "workspace-write":
+        manifest["sandboxMode"] = sandbox_mode
+        manifest["sandboxSetup"] = ("windowsSandbox is a selected backend preference, not evidence of participation under danger-full-access; "
+                                    "no setup/install or direct shared config mutation by runner; approval_policy=never, not full caller profile inheritance; "
+                                    "native workspace trust requires caller-authorized recovery")
     if native_hooks:
         manifest["nativeHookProjection"] = projection
     if installed is not None:
@@ -2493,8 +2528,10 @@ def main():
     prep.add_argument("--installed-plugin", help="persistent CLI only: existing enabled name@marketplace; retain native discovery, user configuration and Hook trust")
     prep.add_argument("--turn-timeout", type=int, help="per-turn cap for a persistent case")
     prep.add_argument("--recovery-timeout", type=int, help="owned process recovery cap for a persistent case")
+    prep.add_argument("--sandbox-mode", choices=SANDBOX_MODES, default="workspace-write",
+                      help="already-authorized task control; danger-full-access only for installed-plugin persistent CLI; approval remains never, not full profile inheritance")
     prep.add_argument("--windows-sandbox", choices=("elevated", "unelevated"), required=True,
-                      help="existing native backend, independent of workspace-write policy; no setup is performed")
+                      help="existing native backend preference; danger-full-access does not establish backend participation; no setup is performed")
     for name in ("run", "inspect", "hook"):
         item = sub.add_parser(name)
         item.add_argument("--evidence", required=True)

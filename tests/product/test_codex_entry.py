@@ -508,6 +508,112 @@ class EntryTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "cannot use the checkpoint wrapper"):
                     entry.hook(argparse.Namespace(evidence=manifest["evidence"], event="Stop"))
 
+    def sandbox_manifest(self):
+        # Pure offline declaration: no native inventory, sandbox or fixture roots.
+        return {"entryProtocol": "exec-resume", "hookMode": "installed-plugin",
+                "codex": PYTHON, "package": str(SCRIPT.parents[1] / "plugins/yiyuan-accord-codex"),
+                "evidence": str(SCRIPT.parent / "offline-evidence"),
+                "workspace": str(SCRIPT.parent / "offline-work"), "prompts": ["initial", "resume"],
+                "model": "explicit-offline-model", "reasoning": "high", "windowsSandbox": "elevated",
+                "nativeVersion": "codex-cli 0.156.1", "runner": str(SCRIPT),
+                "case": str(SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"),
+                "caseSha256": "fixture", "timeoutSeconds": 600, "turnTimeoutSeconds": 180,
+                "recoveryTimeoutSeconds": 20, "limits": {"usageCaps": {"totalTokens": 1000},
+                                                        "usageScope": "native cumulative fixture"}}
+
+    def test_sandbox_mode_preserves_legacy_default_and_binds_initial_and_resume(self):
+        manifest = self.sandbox_manifest()
+        initial = entry.build_command(manifest)
+        expected = [PYTHON, "exec", "--skip-git-repo-check", "--sandbox", "workspace-write",
+                    "--json", "--color", "never", "--output-last-message",
+                    str(Path(manifest["evidence"]) / "last-message-1.txt"), "-C", manifest["workspace"],
+                    "--add-dir", str(Path(manifest["evidence"]) / "state"), "-m", manifest["model"],
+                    "-c", 'approval_policy="never"', "-c", 'sandbox_mode="workspace-write"',
+                    "-c", 'model_reasoning_effort="high"', "-c", 'windows.sandbox="elevated"', "-"]
+        self.assertEqual(initial, expected)
+        legacy_execution = entry._execution_settings(manifest)
+        self.assertEqual(set(legacy_execution), {
+            "host", "entry", "codexVersion", "entryProtocol", "hookMode", "model", "reasoning",
+            "windowsSandbox", "timeoutSeconds", "turnTimeoutSeconds", "recoveryTimeoutSeconds",
+            "caseSha256", "usageCaps", "usageScope", "runner", "caseFile"})
+        explicit_default = {**manifest, "sandboxMode": "workspace-write"}
+        for stage in (0, 1):
+            thread = "observed-thread" if stage else None
+            self.assertEqual(entry.build_command(manifest, stage=stage, thread_id=thread),
+                             entry.build_command(explicit_default, stage=stage, thread_id=thread))
+        self.assertEqual(entry._execution_settings(explicit_default), legacy_execution)
+        wider = {**manifest, "sandboxMode": "danger-full-access"}
+        for stage in (0, 1):
+            command = entry.build_command(wider, stage=stage, thread_id="observed-thread" if stage else None)
+            self.assertIn('sandbox_mode="danger-full-access"', command)
+            self.assertNotIn('sandbox_mode="workspace-write"', command)
+            self.assertIn('approval_policy="never"', command)
+            if not stage:
+                self.assertEqual(command[command.index("--sandbox") + 1], "danger-full-access")
+            else:
+                self.assertEqual(command[-2:], ["observed-thread", "-"])
+        self.assertEqual(entry._execution_settings(wider), {**legacy_execution, "sandboxMode": "danger-full-access"})
+
+    def test_sandbox_mode_rejects_invalid_or_inapplicable_controls_before_resources(self):
+        rejected = [("danger-full-access", "exec", "checkpoint-wrapper"),
+                    ("danger-full-access", "app-server", "checkpoint-wrapper"),
+                    ("danger-full-access", "exec-resume", "checkpoint-wrapper"),
+                    ("danger-full-access", "exec-resume", "native-package-hooks")]
+        rejected += [(mode, "exec-resume", "installed-plugin") for mode in ("read-only", "", None, [], True)]
+        for mode, protocol, hooks in rejected:
+            with self.subTest(mode=mode, protocol=protocol, hooks=hooks), \
+                    patch.object(entry, "ordinary_dir") as directory, \
+                    patch.object(entry, "WindowsJob") as job, \
+                    patch.object(entry.subprocess, "run") as probe, \
+                    patch.object(entry.subprocess, "Popen") as process:
+                args = argparse.Namespace(sandbox_mode=mode, native_package_hooks=hooks == "native-package-hooks",
+                                          installed_plugin="plugin@market" if hooks == "installed-plugin" else None)
+                with self.assertRaisesRegex(ValueError, "sandbox mode|requires installed-plugin"):
+                    entry.prepare(args, persistent_case=() if protocol == "exec-resume" else None,
+                                  app_server_case={} if protocol == "app-server" else None)
+                directory.assert_not_called()
+                job.assert_not_called()
+                probe.assert_not_called()
+                process.assert_not_called()
+                manifest = {**self.sandbox_manifest(), "sandboxMode": mode,
+                            "entryProtocol": protocol, "hookMode": hooks}
+                with self.assertRaises(ValueError):
+                    entry.build_command(manifest)
+                manifest.update(schema="accord-codex-entry/v1")
+                evidence = Path(manifest["evidence"])
+                with patch.object(entry, "ordinary_dir", return_value=evidence), \
+                        patch.object(entry, "read_regular", return_value=json.dumps(manifest).encode()):
+                    with self.assertRaises(ValueError):
+                        entry.load_manifest(evidence)
+
+    def test_sandbox_mode_drift_is_rejected_by_command_and_binding_before_stage_resources(self):
+        for guard in ("command", "binding"):
+            with self.subTest(guard=guard):
+                manifest = {**self.sandbox_manifest(), "sandboxMode": "danger-full-access",
+                            "sourceHashes": {}, "installedPlugin": {"pluginId": "plugin@market"},
+                            "entryGuide": "Accord task entry: fixture"}
+                manifest["entryGuideSha256"] = hashlib.sha256(manifest["entryGuide"].encode()).hexdigest()
+                manifest["initialCommand"] = entry.build_command(manifest)
+                manifest["stageCommandTemplates"] = [manifest["initialCommand"]]
+                manifest["promptSha256s"] = [hashlib.sha256(b"initial").hexdigest()]
+                if guard == "binding":
+                    manifest["admissionBinding"] = {"case": "formal-case", "execution": entry._execution_settings(manifest)}
+                manifest["sandboxMode"] = "workspace-write"
+                failure = []
+                with patch.object(entry, "_installed_plugin_binding", return_value=manifest["installedPlugin"]), \
+                        patch.object(entry, "_admission_binding", side_effect=lambda m, case: {
+                            "case": case, "execution": entry._execution_settings(m)}), \
+                        patch.object(entry, "read_regular", side_effect=[
+                            json.dumps({"stages": [{"prompt": "initial"}]}).encode(), b"initial"]), \
+                        patch.object(entry, "WindowsJob") as job, \
+                        patch.object(entry.subprocess, "Popen") as process:
+                    with self.assertRaisesRegex(ValueError, "prepared stage command|prepared admission binding"):
+                        entry._run_persistent_stage(manifest, 0, None, {}, time.monotonic() + 1,
+                                                    preflight_failure=failure)
+                    job.assert_not_called()
+                    process.assert_not_called()
+                self.assertEqual(failure, [True])
+
     def test_installed_binding_rejects_catalog_or_package_drift_without_model_dispatch(self):
         for mutation in ("disabled", "absent", "version", "source", "skill", "added-file", "home", "copy"):
             with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
