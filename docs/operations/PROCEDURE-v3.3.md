@@ -2893,3 +2893,9 @@ Root复核后去掉新回归中重复评估及已由完整比较覆盖的重复�
 本次未发现当前SDK格式guard或sandbox实现仍需立即修的确定缺陷。首次输入恢复请求有源交接禁止重放的具体依据；无文本的新回合有native `resume_interrupted_task`来源，不据缺userMessage臆测自动续轮。未找到Root开启Goal/Plan、归档聊天、重置主模型、直接修改共享ACL或强杀共享进程的执行证据。现装25成员及raw config摘要独立复核保持；六段私有workspace/temp及测试临时目录无新残留。SDK/controller/attempt/gate/原始结果与恢复资料仍需保留，未知ACL局部效应不以当前配置匹配消除。
 
 修正范围是源材料、执行工序、证据保证、活动记录与本任务残留；必要功能、权限及验收底线没有下降。完整3.3仍未验收/未发布。后续先核专用SDK资格路径和精确CI，再回到实际入口中的自主能力/连续性与组合成果；不重复结束的CLIguide、ZIP、README或手机操作求绿。
+
+## SDK SessionEnd 原件闭环修正（2026-10-11）
+
+沿既有`sdk-lifecycle-case.yml`运行Windows/base，a38cdc7b的38082396015成功，预绑两个SDK case；7原生进程、6命令和12 helper原件及资源后态留存。独审product/spec限定通过，implementation/standards发现P2：启用/禁用的状态前后映射未保存，inspect直接采信contrast布尔值。Root依原始状态转换判据暂缓正式准入；这不是已证SessionEnd运行失败。
+
+修复复用原观察器，保留两次对照的状态映射、线程、Hook状态和单调时钟，并从原生请求/回执、helper与资源记录复算。缺证、错线程/Hook/删除/时序均不能以成功标志替代。首补丁误读原生资源不存在的arguments字段，私有反例修正；第二版前置identity检查遮住5个原信任测试错误，Root恢复原阶段顺序。最终53项相关测试通过，真实Windows状态键金值调用生产计算路径。原失败、旧ZIP及评审保在accord-thread24-audit-20261011-01/session-end-fix，不填改旧原件。后续新候选需按原工作流重新前瞻绑定并核实际原件，不能把单元通过当原生正式准入。

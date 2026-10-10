@@ -1529,6 +1529,112 @@ class CodexLifecycleTests(unittest.TestCase):
             self.assertTrue(recorded["forced"])
             self.assertEqual(recorded["failure"], "job-attach")
 
+    def test_session_end_state_key_matches_retained_windows_artifact(self):
+        # Actual a38 SDK artifact helper/000006 and retained/unfinished-state filename.
+        manifest = {"ownedRoots": {"workspace": r"D:\a\_temp\accord-sdk-lifecycle-case\episode\workspace"},
+                    "resourceController": "windows-job-object"}
+        self.assertEqual(lifecycle._state_input_key(manifest, "01a1276c-acf1-7120-a7f0-5a64b4675fab"),
+                         "01e23adaa2d55b2e1a28fa7976bb860005c2a28b54cdabdb37a3fca05e8146d4.input.json")
+
+    def session_end_receipts(self, manifest):
+        root = Path(manifest["evidence"])
+        hook = {"key": manifest["pluginId"] + ":hooks/hooks.json:session_end:0:0",
+                "eventName": "sessionEnd", "currentHash": "sha256:" + "a" * 64}
+        lifecycle.save(root / "retained/hooks-before.json", {"data": [{"hooks": [hook]}]})
+        helper_rows = [json.loads(line) for line in (root / "retained/helper.jsonl").read_text().splitlines()]
+        for ordinal, (label, enabled) in enumerate((("end-enabled", True), ("end-disabled", False)), 1):
+            thread = label + "-thread"
+            states = {hook["key"]: {"enabled": enabled, "trusted_hash": hook["currentHash"]}}
+            requests = [{"id": 1, "method": "hooks/list"}, {"id": 2, "method": "thread/start"},
+                        {"id": 3, "method": "thread/unsubscribe", "params": {"threadId": thread}}]
+            native = [{"id": 1, "result": {"data": [{"hooks": [{**hook, "enabled": enabled, "trustStatus": "trusted"}]}]}},
+                      {"id": 2, "result": {"thread": {"id": thread}}}, {"id": 3, "result": {}}]
+            for name, rows in (("requests.jsonl", requests), ("stdout.jsonl", native)):
+                (root / "native" / label / name).write_text("\n".join(json.dumps(row) for row in rows))
+            record = json.loads((root / "native" / label / "resources.json").read_text())
+            self.assertNotIn("arguments", record)  # Actual _App resource receipts have no launch argv.
+            record["releaseObservation"]["before"]["at"] = 3
+            for phase in ("afterGrace", "after"):
+                record["releaseObservation"][phase]["at"] = 4
+            record["releaseObservation"].update(gracefulDeadline=5, recoveryDeadline=6)
+            lifecycle.save(root / "native" / label / "resources.json", record)
+            invocation = f"{ordinal:06d}"
+            request = {"op": "status", "session_id": thread, "cwd": manifest["ownedRoots"]["workspace"]}
+            status = {"mode": "unbound", "inputReceipt": {"present": True}}
+            lifecycle.save(root / "helpers" / invocation / "stdin.json", request)
+            lifecycle.save(root / "helpers" / invocation / "stdout.json", status)
+            helper_record = json.loads((root / "helpers" / invocation / "resources.json").read_text())
+            helper_record["request"] = request
+            lifecycle.save(root / "helpers" / invocation / "resources.json", helper_record)
+            helper_rows[(ordinal - 1) * 2]["request"] = request
+            helper_rows[(ordinal - 1) * 2 + 1].update(result=status,
+                stdout=(root / "helpers" / invocation / "stdout.json").read_bytes().decode())
+            cwd = manifest["ownedRoots"]["workspace"]
+            if manifest["resourceController"] == "windows-job-object": cwd = cwd.lower()
+            key = hashlib.sha256(json.dumps({"cwd": cwd, "session": thread}, ensure_ascii=False,
+                separators=(",", ":")).encode()).hexdigest() + ".input.json"
+            before = {key: "b" * 64}
+            lifecycle.save(root / "retained" / (label + ".json"), {"threadId": thread, "hookKey": hook["key"],
+                "states": states, "before": before, "after": {} if enabled else before,
+                "beforeAt": 2, "ackAt": 3, "afterAt": 5})
+        (root / "retained/helper.jsonl").write_text("\n".join(json.dumps(row) for row in helper_rows))
+
+    def test_session_end_rejects_foreign_subject_hook_phase_and_forged_contrast(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, manifest = self.fixture(Path(tmp).resolve())
+            root = Path(manifest["evidence"])
+            for label in ("end-enabled", "end-disabled"):
+                (root / "native" / label).mkdir()
+                lifecycle.save(root / "native" / label / "resources.json", self.resource_record(manifest))
+            self.helper_receipts(manifest, "unused", "paused-thread")
+            self.session_end_receipts(manifest)
+            def inspect():
+                records = {label: json.loads((root / "native" / label / "resources.json").read_text())
+                           for label in ("end-enabled", "end-disabled")}
+                rows = [json.loads(line) for line in (root / "retained/helper.jsonl").read_text().splitlines()]
+                lifecycle._inspect_session_end(manifest, records, rows)
+            inspect()
+            path = root / "retained/end-enabled.json"
+            original = json.loads(path.read_text())
+            disabled = json.loads((root / "retained/end-disabled.json").read_text())
+            for mode in ("no-deletion", "foreign-file", "wrong-thread", "wrong-hook", "untrusted", "early-after", "swapped", "nonfinite"):
+                with self.subTest(mode=mode):
+                    changed = json.loads(json.dumps(original))
+                    if mode == "no-deletion": changed["after"] = changed["before"]
+                    elif mode == "foreign-file": changed["before"] = {"foreign.input.json": "c" * 64}
+                    elif mode == "wrong-thread": changed["threadId"] = "foreign"
+                    elif mode == "wrong-hook": changed["hookKey"] = "other"
+                    elif mode == "untrusted": changed["states"][changed["hookKey"]]["trusted_hash"] = "other"
+                    elif mode == "early-after": changed["afterAt"] = 3
+                    elif mode == "nonfinite": changed["afterAt"] = float("nan")
+                    else: changed["before"] = disabled["before"]
+                    lifecycle.save(path, changed)
+                    with self.assertRaises((ValueError, KeyError)): inspect()
+            lifecycle.save(path, original)
+            native_path = root / "native/end-enabled/stdout.jsonl"
+            native_original = native_path.read_text()
+            native_rows = [json.loads(line) for line in native_original.splitlines()]
+            native_rows[0]["result"]["data"][0]["hooks"][0]["enabled"] = False
+            native_path.write_text("\n".join(json.dumps(row) for row in native_rows))
+            with self.assertRaises(ValueError): inspect()
+            native_path.write_text(native_original)
+            native_rows = [json.loads(line) for line in native_original.splitlines()]
+            native_rows[-1] = {"id": 3, "error": {"message": "unsubscribe failed"}}
+            native_path.write_text("\n".join(json.dumps(row) for row in native_rows))
+            with self.assertRaises(ValueError): inspect()
+            native_path.write_text(native_original)
+            rows_path = root / "retained/helper.jsonl"
+            rows_original = rows_path.read_text()
+            rows = [json.loads(line) for line in rows_original.splitlines()]
+            rows[6]["request"]["session_id"] = "end-enabled-thread"  # Completed retire precedes retained after; this is not a launch timestamp.
+            rows_path.write_text("\n".join(json.dumps(row) for row in rows))
+            with self.assertRaises(ValueError): inspect()
+            rows_path.write_text(rows_original)
+            path = root / "retained/end-disabled.json"
+            disabled["after"] = {}  # Later controller retire cannot become disabled SessionEnd evidence.
+            lifecycle.save(path, disabled)
+            with self.assertRaises(ValueError): inspect()
+
     def test_inspect_requires_exact_complete_resource_set_and_explicit_facts(self):
         with tempfile.TemporaryDirectory() as tmp:
             args, manifest = self.fixture(Path(tmp).resolve())
@@ -1618,6 +1724,8 @@ class CodexLifecycleTests(unittest.TestCase):
             lifecycle.save(evidence / "run-started.json", {"manifestSha256": lifecycle.digest(evidence / "manifest.json"),
                 "nativeResourceLabels": list(lifecycle.RESOURCE_LABELS),
                 "nativeCommandLabels": list(lifecycle.COMMAND_LABELS), "resourceController": manifest["resourceController"]})
+            self.assertEqual(lifecycle.inspect(evidence)["decision"], "fail")
+            self.session_end_receipts(manifest)
             self.assertEqual(lifecycle.inspect(evidence)["decision"], "pass")
             for invalid in ("missing", "disabled"):
                 changed_catalog = json.loads(json.dumps(skill_catalog))

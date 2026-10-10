@@ -261,10 +261,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 3550000,
+      "maxProductCodeAndTestBytes": 3560000,
       "maxTrackedFiles": 192,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current allocation: 3550000 product code/test bytes, 192 tracked files and 36000 primary-instruction bytes, with the existing five-percent code/test reserve. The explicit sandbox selector reuses the installed-plugin persistent observer and its binding, drift and owned-resource guards; 108 offline entry tests and one bounded native initial turn support their recorded claims. The prior 3540000 allowance left only169278 bytes after3370722 measured bytes, below its177000 reserve; a bounded10000-byte increase retained that floor without a new runtime component or weaker acceptance. Previous allocation: a191bc426380a6516dd2d4e40b77ece58930a442:product/development.json. The temporary193-file allowance for the prospectively committed CLI guide fixture has ended: the case failed business semantics and is closed, and retained-only inspection does not read the live fixture. Exact original bytes and definition remain at Git87f5f84f and the private evidence. Remove its duplicate active-tree file and restore192; no historical result is upgraded or necessary duty retired."
+      "rationale": "Current allocation: 3560000 product code/test bytes, 192 tracked files and 36000 primary-instruction bytes, with the existing five-percent code/test reserve. The SessionEnd observer retained only a derived contrast flag; it now retains before/after state hashes and correlates native thread/Hook/status/exit records on inspection. Measured3378680 bytes exceeded the prior3550000 allocation's reserved-use threshold3372500. A bounded10000-byte increase preserves the five-percent floor and existing meaningful regressions without another observer or runtime component. Prior allocation and all original dispositions remain at a38cdc7b7c60695558505e5c5b31322759aaef74:product/development.json; the ended CLI fixture remains removed and the192-file ceiling stays unchanged. Case standards, limits, scopes and historical non-admission are unchanged."
     }
   },
   "source": {
@@ -2676,7 +2676,7 @@
               ],
               "runner": "scripts/observe_codex_lifecycle.py",
               "caseFile": "scripts/observe_codex_lifecycle.py",
-              "caseSha256": "fc1d1e2718cbf4181e7d1f66f02c0f8b87243c66a440a7f23bcb83ae63387161"
+              "caseSha256": "52021dc04d39ca798d32b250bf62e64160402962c4874989e9c16056e8bb1b4b"
             }
           },
           "id": "v33-codex-sdk-lifecycle-01",
@@ -2799,7 +2799,7 @@
               ],
               "runner": "scripts/observe_codex_lifecycle.py",
               "caseFile": "scripts/observe_codex_lifecycle.py",
-              "caseSha256": "fc1d1e2718cbf4181e7d1f66f02c0f8b87243c66a440a7f23bcb83ae63387161"
+              "caseSha256": "52021dc04d39ca798d32b250bf62e64160402962c4874989e9c16056e8bb1b4b"
             }
           },
           "id": "v33-codex-sdk-scoped-exposure-01",

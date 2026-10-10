@@ -1810,10 +1810,6 @@ def run(args):
         for label, enabled in (("end-enabled", True), ("end-disabled", False)):
             states = json.loads(json.dumps(trust))
             if not enabled:
-                matches = [hook["key"] for hook in owned if str(hook.get("eventName", "")).lower() == "sessionend"
-                           or ":session_end:" in hook["key"]]
-                if len(matches) != 1:
-                    raise RuntimeError("SessionEnd hook identity ambiguous")
                 states[matches[0]]["enabled"] = False
             app = launch(label, states)
             if enabled:
@@ -1824,10 +1820,20 @@ def run(args):
             before = _helper(manifest, installed, env, work_deadline, thread, "status")
             if before.get("mode") != "unbound":
                 raise RuntimeError("unexpected checkpoint state")
+            if enabled:
+                matches = [hook["key"] for hook in owned if str(hook.get("eventName", "")).lower() == "sessionend"
+                           or ":session_end:" in hook["key"]]
+                if len(matches) != 1:
+                    raise RuntimeError("SessionEnd hook identity ambiguous")
             state_before = _tree_hashes(manifest["ownedRoots"]["state"])
+            before_at = time.monotonic()
             app.rpc("thread/unsubscribe", {"threadId": thread})
+            ack_at = time.monotonic()
             app.close(manifest); apps.remove(app)
             state_after = _tree_hashes(manifest["ownedRoots"]["state"]) if any(Path(manifest["ownedRoots"]["state"]).iterdir()) else {}
+            save(evidence / "retained" / (label + ".json"), {"threadId": thread,
+                "hookKey": matches[0], "states": states, "before": state_before, "after": state_after,
+                "beforeAt": before_at, "ackAt": ack_at, "afterAt": time.monotonic()})
             if bool(set(state_before) - set(state_after)) != enabled:
                 raise RuntimeError("SessionEnd contrast failed")
             if not enabled:
@@ -2063,6 +2069,86 @@ def run(args):
     return result
 
 
+def _state_input_key(manifest, thread):
+    # Bound task-checkpoint.cjs location(): sorted keys and Windows real cwd lowercased.
+    cwd = manifest["ownedRoots"]["workspace"]
+    if manifest.get("resourceController", "windows-job-object") == "windows-job-object":
+        cwd = cwd.lower()
+    return hashlib.sha256(json.dumps({"cwd": cwd, "session": thread}, ensure_ascii=False,
+                                    separators=(",", ":")).encode()).hexdigest() + ".input.json"
+
+
+def _inspect_session_end(manifest, records, helper_rows):
+    """Recompute the original deletion contrast, tied to each native subject."""
+    root, threads = Path(manifest["evidence"]), set()
+    owned = [h for h in _hook_rows(json.loads(read_regular(root / "retained/hooks-before.json")))
+             if h.get("key", "").startswith(manifest["pluginId"] + ":")]
+    keys = [h["key"] for h in owned if str(h.get("eventName", "")).lower() == "sessionend"
+            or ":session_end:" in h["key"]]
+    if len(keys) != 1:
+        raise ValueError("SessionEnd hook identity differs")
+    for label, enabled in (("end-enabled", True), ("end-disabled", False)):
+        observed = json.loads(read_regular(root / "retained" / (label + ".json")))
+        thread = observed["threadId"]
+        if not isinstance(thread, str) or not thread or thread in threads:
+            raise ValueError("SessionEnd thread identity differs")
+        threads.add(thread)
+        requests, native = [[json.loads(line) for line in read_regular(root / "native" / label / name)
+                            .decode("utf-8").splitlines() if line] for name in ("requests.jsonl", "stdout.jsonl")]
+        def reply(method):
+            rows = [r for r in requests if r.get("method") == method]
+            if len(rows) != 1:
+                raise ValueError("SessionEnd native request differs")
+            replies = [r for r in native if "id" in r and r["id"] == rows[0]["id"]]
+            if len(replies) != 1 or "result" not in replies[0] or "error" in replies[0]:
+                raise ValueError("SessionEnd native response differs")
+            return rows[0], replies[0]["result"]
+        start, started = reply("thread/start")
+        unsubscribe, _ = reply("thread/unsubscribe")
+        if (started["thread"]["id"] != thread or unsubscribe.get("params") != {"threadId": thread}
+                or requests[-1] != unsubscribe):
+            raise ValueError("SessionEnd native thread differs")
+        _, hooks = reply("hooks/list")
+        states = {h["key"]: {"enabled": True, "trusted_hash": h["currentHash"]} for h in owned}
+        states[keys[0]]["enabled"] = enabled
+        if observed["hookKey"] != keys[0] or observed["states"] != states:
+            raise ValueError("SessionEnd selected Hook differs")
+        checked = {h["key"]: h for h in _hook_rows(hooks)}
+        if {k for k, h in checked.items() if h.get("enabled")} != {k for k, v in states.items() if v["enabled"]}:
+            raise ValueError("SessionEnd enabled Hook set differs")
+        if any(k not in checked or checked[k].get("enabled") is not v["enabled"]
+               or checked[k].get("trustStatus") != "trusted"
+               or checked[k].get("currentHash") != v["trusted_hash"] for k, v in states.items()):
+            raise ValueError("SessionEnd native Hook state differs")
+        statuses = [r for r in helper_rows if r.get("phase") == "request"
+                    and r.get("request", {}).get("session_id") == thread]
+        if not statuses or statuses[0]["request"] != {"op": "status", "session_id": thread,
+                "cwd": manifest["ownedRoots"]["workspace"]}:
+            raise ValueError("SessionEnd helper subject differs")
+        if any(type(observed[k]) not in (int, float) or not math.isfinite(observed[k])
+               for k in ("beforeAt", "ackAt", "afterAt")):
+            raise ValueError("SessionEnd observation clock differs")
+        for row in statuses[1:]:
+            if row["request"].get("op") == "retire":
+                retire = json.loads(read_regular(root / "helpers" / row["invocation"] / "resources.json"))
+                if retire["releaseObservation"]["before"]["at"] < observed["afterAt"]:
+                    raise ValueError("SessionEnd observation includes controller retirement")
+        status = json.loads(read_regular(root / "helpers" / statuses[0]["invocation"] / "stdout.json"))
+        helper = json.loads(read_regular(root / "helpers" / statuses[0]["invocation"] / "resources.json"))
+        if (status.get("mode") != "unbound" or status.get("inputReceipt", {}).get("present") is not True
+                or not helper["releaseObservation"]["after"]["at"] <= observed["beforeAt"]
+                <= observed["ackAt"] <= records[label]["releaseObservation"]["before"]["at"]
+                or records[label]["releaseObservation"]["after"]["at"] > observed["afterAt"]):
+            raise ValueError("SessionEnd observation phase differs")
+        key = _state_input_key(manifest, thread)
+        before, after = observed["before"], observed["after"]
+        if (not isinstance(before, dict) or not isinstance(after, dict) or key not in before
+                or any(not isinstance(v, str) or not re.fullmatch("[0-9a-f]{64}", v)
+                       for v in (*before.values(), *after.values()))
+                or bool(set(before) - set(after)) != enabled or (key not in after) != enabled):
+            raise ValueError("SessionEnd raw deletion contrast differs")
+
+
 def _inspect_hot_reload(manifest, installed, thread, prior, provider_rows, requests, commands, resources):
     """Recompute optional-case predicates from CLI, native, package and receipt bytes."""
     root, hot = Path(manifest["evidence"]), _hot_binding(manifest)
@@ -2236,6 +2322,7 @@ def inspect(evidence):
                 or not any(row.get("phase") == "response" for row in helper_rows)):
             raise ValueError("helper receipts absent")
         helper_records = _helper_resources(manifest, helper_rows)
+        _inspect_session_end(manifest, records, helper_rows)
         if not _settings_preserved(manifest):
             raise ValueError("shared settings or standalone selection sources changed or absent")
         paused_thread = json.loads(read_regular(root / "retained/paused-thread.json"))["threadId"]
