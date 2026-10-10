@@ -9,7 +9,7 @@
 - 源码及本机现装221152，25成员/5Skills，规范包SHA2023f0d1ab5ba44e824e211c2cd3aaeda9913482d4dc75f7705f699cf9bbff1f。用户最新授权本地包按需更新，本轮先通过支持的CLI更新150947/cafa；因实际原生格式拒绝修正SDK入口后，再按各终态依次更新marketplace及plugin至221152，25份现装文件与源码逐一相同。配置原始字节仅该marketplace固定ref先1f80fe60→0538fe35、再→2b3852c4，其余模型/审批/第三方保持；旧包和配置恢复保在accord-native-consumer-20261010-01/lifecycle-recovery，后态见root-qa/sdk-format-update-after.json。新现装模块的三项固定本地响应入口核验通过，未重跑旧模型业务。中断后本Root可见Skill目录已指向221152，必要continuity/verify正文已读；这不代原Desktop Hook/MCP/GUI刷新或完整实际参与。原刷新跳过固定ref、来源冲突及过早依赖操作的旧包回执保留，不叫更新成功。Meta4444CRLF/511861ec保持。
 - r42当前17必要scope、6活动定义、11声明覆盖缺口、11无case范围；此为映射，不是完成率。functionalCompletion/candidateEligible=false，完整验收及发布未完成。
 - 当前根回执gpt-6.1-sol/0.162.0-alpha.17.2/default；effort/Fast未独立核定。子代理按任务与有效支持/权限选择，不锁模型或档数，不替用户开启。普通继续不启Plan/Goal，Stop和自动增加回合已退休。
-- 当前真实输入epoch85086f52、turn01a1263c与Root原生调用一致，present/reconciled为true，replay/resume均false；原中断写入的native-call-turn-conflict及rev7原件保留，以真实新输入原生调和至rev8/9，没有重放业务。此次compact入口已供应221152协调正文与回执定位；其它Hook场景、MCP worker及GUI采用未全证，不能把单次指导供应当全部组件刷新。旧失效水印归属仍未知。
+- 2026-10-10该轮恢复输入epoch85086f52、turn01a1263c曾与Root原生调用一致，present/reconciled为true，replay/resume均false；原中断写入的native-call-turn-conflict及rev7原件保留，以当时真实新输入原生调和至rev8/9，没有重放业务。最新输入与进度从原生状态读取，不沿用此历史epoch。此次compact入口已供应221152协调正文与回执定位；其它Hook场景、MCP worker及GUI采用未全证，不能把单次指导供应当全部组件刷新。旧失效水印归属仍未知。
 - 主线程24已在原main独立核源合同/当前原生输入/HEAD与包后接管，源恢复保留；本轮按需派发Sol/high实现、Astra/high独审，Luna/high只读核活动措辞。私有accord-native-consumer-20261010-01完成CLI0.162.1/Node24.21下150947/cafa SDK模块的两轮真实消费：25row精确delta与7面维护说明，Root逐行oracle后同idle/persistent源与同token续作，未transfer，unsubscribe/自然exit0/close/Job0及输入后态已核。guidance为显式采用、本进程限工具配置不改全局，不冒Root Desktop Hook/MCP/GUI刷新、普通自主择时/完整F-A或默认环境证明。原管道/过期限/gate换读问题、canonical/legacy混合原生拒绝、Root前启动/工序错误均保原失败和修正；live01不通过，修正live02有新前绑完整窗且证据在窗内，旧窗不延长。前段工具30项及独审成品可用，最终记录总窗晚57秒不追认；精确记录见该目录root-qa/RESULT.md和原accord-candidate-consumer-20261010-01。
 
 ## 本轮已完成的清理
@@ -40,6 +40,10 @@ Setup/零Node/一键/私有runtime不在发布关键路径；README说明普通�
 原141项回归发生在后补断言前，不能担保最终测试版本。精确2b3852c4/CI38058906743及cb8b91c5/CI38059519330均已failure：两native生命周期job通过、九matrix失败；原Linux py3.11 job114232951665为895项中一条错误断言。Root把“不得回复102”误加到结果未知的发送反例，实际发送尝试应保留。现已仅将该断言移至目标格式前置拒绝例，保既有未知效果与失败锁；两受影响方法通过，Astra/high独审无新增P1/P2，完整Windows本地896项/3160.905秒/exit0通过。修正提交3caa5c5a1924534f36ce330004c71fdc111f5f52的[CI38067581558](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/38067581558)现已11/11成功：九跨平台Python矩阵及两native生命周期job均通过。此为精确源码/软件证据，不代整体验收；包字节未变，不重装。原日志、错误及后续保证修正在accord-native-consumer-20261010-01/root-qa/sdk-format-test-assurance-correction.json分别保留。
 
 accord-dev-delivery-20261010-01已交付当前221152私有检查ZIP、25成员清单及双语检查/使用/恢复说明；归档、源码、现装一致，39项保护原件/输入的摘要、大小与mtime及用户配置回核通过，冻结租约已在最终核验后结束。该说明由Root补齐并由Sol/medium独审。普通CLI0.162.1/Sol/medium/read-only在业务读取前遇到setup refresh错误，模型草稿保未知；实际未缓存输入40495超过40000，完整QA首次晚于原1500秒窗口914.863秒，原预算和窗口均未通过，不计自主完成或正式准入。执行者自然exit0/Job0，句柄与Job已关闭；共享node_repl文件锁和PCManger读ACL更新失败仅为该宿主初始化观察，helper可能的部分ACL效果未知，没有手动修复或清理共享资源。ZIP仅供维护者检查，原生ZIP安装路线未验；Root辅助成品、原模型失败及所有限额分别保在RESULT.md/evidence/closeout.json，不延长原窗或降低600+20/worker45+10等现行准入上界。
+
+2026-10-11背景回核已读constitution、两语README及旧主线程23的交接/用户决策，明确产品目标是Agent完整有界自举与可靠协作、真实结果和较低用户负担。两语README顶部把已延期普通Chat独立用途写成待实测的漂移已修正，Work Local本地执行模式与Remote宿主控制通道分开，共有有效证据按需复用。Native Luna/medium请求完成私有proposal，Root提供的首份facts把Work Local误归control，第一稿原件及不批准原因保留；新增纠正输入后worker两语修正，Root独立语义核验并明确共有机制复用后整合，冻结输入SHA/mtime与config保持。Root QA448.755秒在原480秒窗内，最终收尾证明517.950秒，原完整窗仍未通过，不追认普通CLI、默认无额外扩展或完整F/A；仅计可用维护成品及限定Desktop协作观察。私有原件在accord-readme-scope-correction-20261011-01。
+
+现有CLI观察器保留用户配置/Hook信任，但实际固定workspace-write/never；用户真实profile为danger-full-access/on-request，不能称完全继承。上一只读隔离CLI的初始化失败保持该条件，未证明整体CLI不可用。当前针对实际差异补现有observer显式sandbox参数，旧默认、历史execution绑定、审批never及准入标准保持；新权限选择仍不授予Trust或业务范围，当前包21字节不变。
 
 ## 剩余主线
 
