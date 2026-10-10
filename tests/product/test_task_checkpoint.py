@@ -2056,6 +2056,53 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
                 self.assertEqual(answer["capacityFit"], fit)
                 self.assertFalse(answer["sourceReleaseAllowed"])
 
+    def test_native_remaining_does_not_silently_ignore_invalid_supplied_efficiency(self):
+        for ceiling, source in ((-1, "bound-range"), (0, "bound-range"),
+                                (1.5, "bound-range"), ("4500", "bound-range"), (4500, "")):
+            with self.subTest(ceiling=ceiling, source=source):
+                request = self.native_remaining_context_request(3200)
+                request["assessment"]["estimates"].update(
+                    efficiencyCeilingTokens=ceiling, efficiencySourceRef=source)
+                answer = self.invoke(request)
+                self.assertEqual(answer["decision"], "unknown")
+                self.assertEqual(answer["reasons"], ["efficiency-range-not-evidenced"])
+                self.assertFalse(answer["sourceReleaseAllowed"])
+
+    def test_native_remaining_respects_a_supplied_sourced_efficiency_range(self):
+        # Independent arithmetic: native3200 minus three100 reserves leaves2900;
+        # efficiency4500 minus context4000 and those reserves leaves200.
+        # Native capacity fits1000, but the supplied stricter range does not.
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        for work, ceiling, decision, available in (
+                (199, 4500, "continue-bounded", 200),
+                (200, 4500, "prepare-handoff", 200),
+                (1000, 4500, "prepare-handoff", 200),
+                (1000, 4300, "preserve-recovery", 0),
+                (1000, 12000, "continue-bounded", 2900)):
+            with self.subTest(work=work, ceiling=ceiling):
+                request = self.native_remaining_context_request(3200)
+                request["assessment"]["estimates"].update(
+                    contextUpperBoundTokens=4000, nextWorkTokens=work,
+                    handoffTokens=100, recoveryTokens=100, safetyMarginTokens=100,
+                    efficiencyCeilingTokens=ceiling, efficiencySourceRef="bound-range")
+                answer = self.invoke(request)
+                self.assertEqual(answer["decision"], decision)
+                self.assertEqual(answer["capacityFit"], "fits")
+                self.assertEqual(answer["remainingAfterReserves"], available)
+                self.assertFalse(answer["sourceReleaseAllowed"])
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
+
+    def test_supplied_efficiency_with_native_remaining_needs_its_own_sourced_basis(self):
+        for upper, decision in ((None, "unknown"), (3999, "reassess")):
+            with self.subTest(upper=upper):
+                request = self.native_remaining_context_request(3200)
+                request["assessment"]["estimates"].update(
+                    contextUpperBoundTokens=upper,
+                    efficiencyCeilingTokens=4500, efficiencySourceRef="bound-range")
+                answer = self.invoke(request)
+                self.assertEqual(answer["decision"], decision)
+                self.assertFalse(answer["sourceReleaseAllowed"])
+
     def test_native_remaining_is_tight_budget_not_full_window_and_stales_after_more_output(self):
         signals = self.signal_request()
         self.append_native_remaining(signals, 3200)

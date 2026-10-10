@@ -78,6 +78,11 @@ python -B -m yiyuan_accord host-check --adapter codex --root . --json
 python -B -X utf8 -m unittest discover -s tests/product -v
 ~~~
 
+Keep source and package identity stable while a dependent check reads them.
+Finish edits and candidate sealing first; parallel work must be independent of
+those inputs. If a change crosses a running check, retain that result and rerun
+the affected check against the fixed identity rather than changing its assertion.
+
 For a valid current contract, `verify-development` also emits
 `declarationSummary`: the admission verifier's existing case-binding gaps,
 including missing duties, quality axes, scenarios and a missing complete joined

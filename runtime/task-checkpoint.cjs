@@ -607,32 +607,44 @@ function assessContext(request, prior, input, now = Date.now(), transcriptObserv
   }
   const transferReserve = estimate.handoffTokens + estimate.recoveryTokens + estimate.safetyMarginTokens;
   if (!Number.isSafeInteger(transferReserve + estimate.nextWorkTokens)) return stop('unknown', 'forecast-overflow');
-  if (nativeRemaining != null) {
-    result.capacityFit = transferReserve + estimate.nextWorkTokens < nativeRemaining ? 'fits' : 'does-not-fit';
-    result.remainingAfterReserves = nativeRemaining - transferReserve;
-    if (result.remainingAfterReserves <= 0) return stop('preserve-recovery', 'transfer-reserve-already-at-risk');
-    if (estimate.nextWorkTokens >= result.remainingAfterReserves) {
-      return stop('prepare-handoff', 'next-span-would-consume-transfer-reserve');
-    }
-    return stop('continue-bounded', 'forecast-fits-native-remaining-budget-recheck-before-next-span');
-  }
-  if (!count(estimate.contextUpperBoundTokens)) {
-    return stop('unknown', 'sourced-context-upper-bound-required-without-native-remaining-budget');
-  }
-  const responseBasis = transcript ? transcript.lastResponseTokens : native.params.tokenUsage?.last?.totalTokens;
-  if (count(responseBasis) && estimate.contextUpperBoundTokens < responseBasis) {
-    return stop('reassess', 'context-forecast-below-observed-response-basis');
-  }
   const efficiency = estimate.efficiencyCeilingTokens;
   if (efficiency != null && (!count(efficiency) || efficiency === 0 || !text(estimate.efficiencySourceRef))) {
     return stop('unknown', 'efficiency-range-not-evidenced');
   }
-  const limit = efficiency == null ? window : Math.min(window, efficiency);
   result.efficiencyCeilingTokens = efficiency ?? null;
+  const responseBasis = transcript ? transcript.lastResponseTokens : native.params.tokenUsage?.last?.totalTokens;
+  // Only a supplied efficiency constraint needs its own context basis.
+  if (nativeRemaining == null || efficiency != null) {
+    if (!count(estimate.contextUpperBoundTokens)) {
+      return stop('unknown', nativeRemaining == null
+        ? 'sourced-context-upper-bound-required-without-native-remaining-budget'
+        : 'sourced-context-upper-bound-required-for-efficiency-range');
+    }
+    if (count(responseBasis) && estimate.contextUpperBoundTokens < responseBasis) {
+      return stop('reassess', 'context-forecast-below-observed-response-basis');
+    }
+    if (!Number.isSafeInteger(estimate.contextUpperBoundTokens + transferReserve + estimate.nextWorkTokens)) {
+      return stop('unknown', 'forecast-overflow');
+    }
+  }
+  if (nativeRemaining != null) {
+    result.capacityFit = transferReserve + estimate.nextWorkTokens < nativeRemaining ? 'fits' : 'does-not-fit';
+    result.remainingAfterReserves = nativeRemaining - transferReserve;
+    if (efficiency != null) {
+      const efficiencyRemaining = Math.min(window, efficiency) - estimate.contextUpperBoundTokens - transferReserve;
+      result.remainingAfterReserves = Math.min(result.remainingAfterReserves, efficiencyRemaining);
+    }
+    if (result.remainingAfterReserves <= 0) return stop('preserve-recovery', 'transfer-reserve-already-at-risk');
+    if (estimate.nextWorkTokens >= result.remainingAfterReserves) {
+      return stop('prepare-handoff', 'next-span-would-consume-transfer-reserve');
+    }
+    return stop('continue-bounded', efficiency == null
+      ? 'forecast-fits-native-remaining-budget-recheck-before-next-span'
+      : 'forecast-fits-native-budget-and-sourced-range-recheck-before-next-span');
+  }
+  const limit = efficiency == null ? window : Math.min(window, efficiency);
   const reserve = estimate.contextUpperBoundTokens + transferReserve;
-  if (!Number.isSafeInteger(reserve + estimate.nextWorkTokens)) return stop('unknown', 'forecast-overflow');
-  // Capacity uses the hard window; a stricter efficiency range still controls
-  // the combined decision below. A fit is conditional arithmetic, not permission.
+  // Capacity fits do not override the stricter sourced efficiency range.
   result.capacityFit = reserve + estimate.nextWorkTokens < window ? 'fits' : 'does-not-fit';
   result.remainingAfterReserves = limit - reserve;
   if (result.remainingAfterReserves <= 0) return stop('preserve-recovery', 'transfer-reserve-already-at-risk');
@@ -1280,8 +1292,8 @@ const HELP = {
     operation: 'assess-context',
     binding: 'Use status session/cwd/epoch/expectedRevision plus current conditions: threadId, turnId, hostVersion, model, contextGeneration. The native caller must independently bind these; shared session is not thread/writer identity.',
     assessment: 'Provide assessment with matching conditions and epoch, observedAtMs/validUntilMs, sourceRef, integrity (verified/degraded/unknown), and the actual matching thread/tokenUsage/updated notification as usageEvent. With signals, the helper re-observes any first-party get_context_remaining output before using it. Never restamp old evidence as fresh. Change contextGeneration after compaction or other material context changes and recheck affected estimates.',
-    estimates: 'assessment.estimates needs sourceRef, a nonnegative nextWorkTokens bound, and positive handoffTokens (including takeover verification), recoveryTokens and safetyMarginTokens. A bound first-party get_context_remaining result supplies the tighter native compaction/window remainder. Without it, also provide contextUpperBoundTokens; optional efficiencyCeilingTokens requires efficiencySourceRef. All bounds apply to current source-carrier conditions. Target capacity needs its own assessment.',
-    result: 'With a fresh native remaining budget, capacityFit and remainingAfterReserves compare the next span with transfer and recovery reserves inside that tighter budget. The value is not the full model window. Without it, sourced context/work/reserve bounds are compared with the hard native window and any evidenced efficiency ceiling. A strict fit with unknown efficiency permits only bounded continuation after preserving critical state; it does not prove efficiency or prevent earlier native compaction. Reassess after context changes and before the next span. Never override a pause, reassessment or recovery/handoff recommendation with capacityFit.',
+    estimates: 'assessment.estimates needs sourceRef, nonnegative nextWorkTokens, and positive handoffTokens (including takeover verification), recoveryTokens and safetyMarginTokens. Bound first-party get_context_remaining supplies the tighter compaction/window remainder without private occupancy. Without it, provide contextUpperBoundTokens. Optional efficiencyCeilingTokens requires efficiencySourceRef and contextUpperBoundTokens even with native remaining. Bind all bounds to current source-carrier conditions; assess target capacity separately.',
+    result: 'With a fresh native remaining budget, capacityFit compares the next span and reserves with that tighter budget, not the full model window. If a sourced efficiency ceiling is also supplied, remainingAfterReserves and the decision honor the stricter of both constraints; capacityFit alone is not the combined decision. Without native remaining, sourced context/work/reserve bounds are compared with the hard window and any evidenced efficiency ceiling. A strict fit with unknown efficiency permits only bounded continuation after preserving critical state; it does not prove efficiency or prevent earlier native compaction. Reassess after context changes and before the next span. Never override a pause, reassessment or recovery/handoff recommendation with capacityFit.',
     limits: 'Read-only advisory arithmetic; does not authenticate caller evidence, dispatch, compact, transfer, release or change checkpoint state. Native last.totalTokens is only the response-boundary context basis; cumulative total, cached usage and compression count are not occupancy. Later inputs or outputs make remaining-budget evidence stale. Missing data returns unknown; shorten spans and checkpoint early. Never treat a fit as permission or completed handoff.',
   },
   contextSignals: {

@@ -658,6 +658,11 @@ Invalid assessment evidence, pauses and stale bindings leave it unknown.
 `remainingAfterReserves` continues to use the tighter applicable ceiling.
 A capacity fit neither measures live occupancy nor overrides the combined
 recommendation, task authority, integrity checks or source-release protection.
+An optional supplied efficiency ceiling also applies when native remaining
+budget is available. It needs its own sourced context upper bound; omission
+does not add that requirement to the native-only route. The combined available
+margin is the smaller of the native remainder and the evidenced efficiency
+range after all reserves. Invalid supplied constraints remain unknown.
 Large source reads consume the same capacity as other work. Preserve reusable
 verified intermediate results with source and verification references, observed
 effects, uncertainties and remaining work in a task-suitable representation.

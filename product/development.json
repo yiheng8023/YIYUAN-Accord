@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261009151947",
+    "version": "3.3.0-dev.1+codex.20261010102107",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261009151947",
-        "packageSha256": "050e45a6ed66e6e52780092a4e7d8abfe7ebdd136518538d7e7dd0faa17afd3f",
+        "packageVersion": "3.3.0-dev.1+codex.20261010102107",
+        "packageSha256": "357738569d5bca5dcc141c6b70cf552113dce5fa776d36dd0689d348ce8bbfbe",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -5802,6 +5802,16 @@
       "decision": "Stop the Setup-probe wait and automatic prerequisite engineering branch. Explain ordinary prerequisites and share compatible existing Node. Keep optional onboarding metadata/lightweight lifecycle duties; no runtime bundling or zero-Node behavior is a release gate.",
       "preserved": "Necessary compatibility, authority and actual participation checks; all17scopes, F01-F08/A01-A08, prior failures and unverified behavior. No rollback of verified adoption and no retrospective setup success.",
       "next": "Resume material R2/R3 core coordination/continuity/environment-resource/system outcome work; no new case/model/install is dispatched by this projection."
+    },
+    {
+      "id": "remaining-budget-efficiency-correction-20261010",
+      "observedAt": "2026-10-10",
+      "scope": "local-context-assessment-mechanism-not-full-A05-or-host-adoption",
+      "failure": "Native remaining-budget handling returned before validating or applying an explicitly supplied efficiency ceiling. Independent positive, equal-boundary and invalid-input counterexamples failed on the original source.",
+      "correction": "Validate optional efficiency evidence and its sourced context upper bound, then use the tighter native or efficiency margin after all reserves. Native-only assessment still needs no private occupancy or efficiency proof; physical capacityFit is separate from the combined decision and never grants source release.",
+      "validation": "Related219-test run passed218; one MCP version assertion crossed concurrent candidate sealing151947 to102107 and failed. With identity fixed, that method and all3new methods passed. Final source-only independent review found no blocker; original failed logs retained. Maintainer source checks and exact package binding remain separate from full acceptance.",
+      "candidate": "Source102107,25members,canonical package357738569d5bca5dcc141c6b70cf552113dce5fa776d36dd0689d348ce8bbfbe; installed151947/050e unchanged. Hook and ordinary MCP interface unchanged; no immediate rollback or mandatory update.",
+      "limits": "No new case, admission, model business, installation, trust, automatic continuation or default threshold. All17scopes/13cases and F/A remain; ordinary timing, takeover, recovery and current full-composition evidence are still open."
     }
   ],
   "environmentControl": {
