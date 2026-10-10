@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261010102107",
+    "version": "3.3.0-dev.1+codex.20261010110903",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261010102107",
-        "packageSha256": "357738569d5bca5dcc141c6b70cf552113dce5fa776d36dd0689d348ce8bbfbe",
+        "packageVersion": "3.3.0-dev.1+codex.20261010110903",
+        "packageSha256": "659925657116cfd8cec6d024492c98b14954c5d2463d32ad310195de649a35c9",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -261,10 +261,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 3520000,
+      "maxProductCodeAndTestBytes": 3530000,
       "maxTrackedFiles": 192,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current2026-10-09 allocation:3520000 product code/test bytes,192 tracked files and36000 primary-instruction bytes. The named native onboarding variant, package-member checks and six positive/negative regression methods measure3336702 code/test bytes;3510000 leaves173298, below the unchanged175500 five-percent reserve.After adding exact rejection assertions, the final measurement is3337327;3520000 leaves182673 versus176000 required. The original3336702 measurement and failed3510000 reserve check remain above. This bounded10000-byte allocation covers setup metadata and its verification, not third-party payloads, a new runtime, service or arbitrary growth. Package member count stays25 and Skill count stays5. Execution limits, all17scopes/13cases and F/A are unchanged. Earlier3510000-byte allocation and original rationales remain atce270113282bbc913f6caec6079dce1d7bf90f96:product/development.json#/changeBoundary/complexityBudget. The192-file allocation still covers the one linked runtime research report; primary guidance budget remains36000."
+      "rationale": "Current2026-10-10 allocation:3530000 product code/test bytes,192 tracked files and36000 primary-instruction bytes. The necessary ordinary owner-request writer/token guard and seven-condition regression measure3347457 code/test bytes. Previous3520000 leaves172543, below the unchanged176000 five-percent reserve;3530000 leaves182543 versus176500 required. The failed previous allocation is retained in accord-source-writer-guard-20261010-01/verify-before-budget.json and its exact source/rationale atb4c7df57f4bed464a2f05add25cf7aaf3398a5de:product/development.json#/changeBoundary/complexityBudget. This bounded10000-byte allocation supports the existing continuity control defect and meaningful regression, with no new file, service, runtime, default limit or third-party payload. Package members25, Skills5, tracked-file and primary-guidance limits, all17scopes/13cases, F/A and execution windows remain unchanged."
     }
   },
   "source": {
@@ -5812,6 +5812,17 @@
       "validation": "Related219-test run passed218; one MCP version assertion crossed concurrent candidate sealing151947 to102107 and failed. With identity fixed, that method and all3new methods passed. Final source-only independent review found no blocker; original failed logs retained. Maintainer source checks and exact package binding remain separate from full acceptance.",
       "candidate": "Source102107,25members,canonical package357738569d5bca5dcc141c6b70cf552113dce5fa776d36dd0689d348ce8bbfbe; installed151947/050e unchanged. Hook and ordinary MCP interface unchanged; no immediate rollback or mandatory update.",
       "limits": "No new case, admission, model business, installation, trust, automatic continuation or default threshold. All17scopes/13cases and F/A remain; ordinary timing, takeover, recovery and current full-composition evidence are still open."
+    },
+    {
+      "id": "ordinary-owner-request-writer-guard-20261010",
+      "observedAt": "2026-10-10",
+      "scope": "pure-local-source-session-control-not-native-business-or-full-pause-acceptance",
+      "sourceRevision": "b4c7df57f4bed464a2f05add25cf7aaf3398a5de",
+      "failure": "During an ordinary source turn, writer/token change or unreadable scope did not prevent the next owner callback/reply; terminal checking was too late. Independent minimal stub and Root's before/during six-condition counterexamples reproduced this without proving any business write.",
+      "correction": "Reuse requireWritableScope before ownerRequest and before respond. Preserve pending request and failed state, reject replay, and leave legitimate handoff activity on its phase-specific lease path. Business authority/pause interpretation stays with the owner; cooperative checks cannot undo prior callback effects or replace an atomic OS lock.",
+      "validation": "Stable positive and six rejection conditions pass; original44-method run had43pass and one incidental-read-count fixture failure. Fault injection now follows the real resolver boundary; all44methods pass in30.363seconds. Assertions and original failure logs retained. Bounded independent source review found no new blocker and did not execute the final tests.",
+      "candidate": "Source110903,25members,canonical package659925657116cfd8cec6d024492c98b14954c5d2463d32ad310195de649a35c9. User explicitly keeps installed151947/050e; no installation, trust or host configuration effect.",
+      "limits": "No new active case or admission, actual CLI/AppServer/SDK/model episode, new service or automatic continuation. All17scopes/13cases, F/A, old failures and deadlines stay; whole ordinary pause/autonomous timing/system-composition acceptance remains open."
     }
   ],
   "environmentControl": {

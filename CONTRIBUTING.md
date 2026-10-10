@@ -82,6 +82,8 @@ Keep source and package identity stable while a dependent check reads them.
 Finish edits and candidate sealing first; parallel work must be independent of
 those inputs. If a change crosses a running check, retain that result and rerun
 the affected check against the fixed identity rather than changing its assertion.
+Bind fault injection to the relevant action or receipt boundary, rather than an
+incidental number of helper reads that changes when a safety check is added.
 
 For a valid current contract, `verify-development` also emits
 `declarationSummary`: the admission verifier's existing case-binding gaps,

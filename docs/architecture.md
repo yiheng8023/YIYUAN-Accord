@@ -559,6 +559,12 @@ recheck binding before clearing that request. Changed
 bindings lock the session, preserving the request without replay, including when
 one reply was already sent. These guards do not revoke an already delivered reply
 or prove that a frozen native connection can change identity.
+Ordinary owner requests also check the recorder's idle source writer and token
+before the owner callback and again before its reply. Changed or unreadable
+scope locks the session with the pending request retained. The owner still
+checks business authority; these cooperative guards cannot undo callback effects
+or supply an atomic OS lock. Transfer activity uses its existing phase-specific
+lease checks rather than requiring an idle source throughout the handoff.
 Failure retains the source/turn and RPC references for reconciliation
 and cannot be retried through the failed session. A successful transfer stops
 writes to that source. The controller can explicitly adopt its own verified target

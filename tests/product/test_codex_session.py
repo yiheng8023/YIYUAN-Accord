@@ -11,6 +11,37 @@ ROOT = Path(__file__).resolve().parents[2]
 MODULE = ROOT / "runtime" / "codex-session.cjs"
 
 
+SCOPE_REQUEST_SCENARIO = r'''
+const {createCodexSourceSession}=require(process.argv[1]);
+const mode=process.argv[2];
+let scope=null,unreadable=false,ownerCalls=0,replies=0,activity=0;
+const lose=()=>{if(mode.endsWith('unknown'))unreadable=true;
+  else scope={...scope,[mode.endsWith('writer')?'writerThreadId':'token']:'changed'};};
+const recorder={readScope(){if(unreadable)throw Error('scope unavailable');
+  if(!scope)throw Object.assign(Error('missing'),{code:'SCOPE_NOT_FOUND'});return scope;},
+  bindScope(ref,id){scope={scopeRef:ref,writerThreadId:id,activeTransferId:null,token:'one'};
+    return {scope};},begin(){},compareAndSet(){},read(){},settle(){}};
+const request={id:1,method:'approval/request',params:{threadId:'source',turnId:'turn'}};
+const connection={transport:{connectionId:'fixture',hostVersion:'fixture',
+  async request(method){return method==='thread/start'?{thread:{id:'source',ephemeral:false}}:{turn:{id:'turn'}};},
+  waitTerminal(){}},async receiveTurnActivity(){if(!activity++){
+    if(mode.startsWith('before-'))lose();return {type:'request',request};}
+    return {type:'terminal',terminal:{method:'turn/completed',
+      params:{threadId:'source',turn:{id:'turn',status:'completed'}}}};},
+  async respondRequest(){replies++;},replyContext(){},proposalChannel(){}};
+const session=createCodexSourceSession({connection,recorder,scopeRef:'scope',
+  threadStart:{cwd:'C:/fixture',model:'fixture'},planResolver(){},verify(){},current(){},
+  ownerRequest(){ownerCalls++;if(mode.startsWith('during-'))lose();
+    return {result:{decision:'approved'}};}});
+(async()=>{let code=null,retry=null;
+  try{await session.run({input:'fixture',deadlineMs:Date.now()+2000});}
+  catch(error){code=error.code;try{await session.run({input:'no replay',deadlineMs:Date.now()+1000});}
+    catch(next){retry=next.code;}}
+  console.log(JSON.stringify({code,retry,ownerCalls,replies,snapshot:session.snapshot()}));
+})().catch(error=>{console.error(error);process.exitCode=1});
+'''
+
+
 NODE_SCENARIO = r'''
 const {PassThrough, Writable} = require('node:stream');
 const {performance} = require('node:perf_hooks');
@@ -255,7 +286,7 @@ const sessionRecorder = wrappedRecorder ? {
       return {...scope, activeTransferId:'foreign-transfer'};
     if (mode === 'scope-after-terminal' && scopeReads >= 3)
       return {...scope, writerThreadId:'foreign-writer'};
-    if (mode === 'decline-scope-change' && scopeReads >= 3)
+    if (mode === 'decline-scope-change' && planCalls.length > 0)
       return {...scope, writerThreadId:'foreign-writer'};
     if (mode === 'decline-scope-after-send' && serverResponses.some(frame => frame.id === 102))
       return {...scope, writerThreadId:'foreign-writer'};
@@ -534,6 +565,23 @@ const restoreArgs=(basis)=>({...sourceMode?{source:{threadId:mode==='wrong-id'?'
 
 
 class CodexSourceSessionTests(unittest.TestCase):
+    def test_owner_request_rechecks_writer_token_and_unknown_scope_at_both_boundaries(self):
+        for mode in ["stable"] + [f"{point}-{loss}" for point in ("before", "during")
+                                  for loss in ("writer", "token", "unknown")]:
+            with self.subTest(mode=mode):
+                run = subprocess.run([shutil.which("node"), "-e", SCOPE_REQUEST_SCENARIO,
+                    str(MODULE), mode], capture_output=True, text=True, encoding="utf-8", timeout=5)
+                self.assertEqual(run.returncode, 0, run.stderr)
+                result = json.loads(run.stdout)
+                self.assertEqual(result["ownerCalls"], 0 if mode.startswith("before") else 1)
+                self.assertEqual(result["replies"], 1 if mode == "stable" else 0)
+                self.assertEqual(result["code"], None if mode == "stable" else
+                    "SOURCE_SCOPE_UNKNOWN" if mode.endswith("unknown") else "SOURCE_SCOPE_CHANGED")
+                if mode != "stable":
+                    self.assertEqual(result["retry"], "SESSION_FAILED")
+                    self.assertEqual(result["snapshot"]["status"], "failed")
+                    self.assertEqual(result["snapshot"]["pendingRequest"]["id"], 1)
+
     def run_case(self, mode, *, slow_record_ms=0, slow_release_ms=0,
                  handoff_work_ms=0):
         with tempfile.TemporaryDirectory() as temp:

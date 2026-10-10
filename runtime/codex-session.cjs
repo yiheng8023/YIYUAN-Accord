@@ -486,7 +486,7 @@ function createSession(options, restoreMode = false) {
 
   // The recorder coordinates cooperating controllers; it is not an OS lock.
   // The connection owner must not issue source writes outside this serialized
-  // session between this check and turn/start.
+  // session between this check and turn/start or an owner request/reply.
   async function requireWritableScope(sourceThreadId, deadline, phase) {
     let observed;
     try {
@@ -670,8 +670,12 @@ function createSession(options, restoreMode = false) {
           }
           const ownerContext = {threadId: sourceThreadId, turnId, scopeRef,
             deadline: budget.monotonicDeadline};
+          await requireWritableScope(sourceThreadId, budget.monotonicDeadline,
+            'source-scope-before-owner-request');
           const body = requestBody(await callOwner(bound.ownerRequest,
             [nativeRequest, ownerContext], budget.monotonicDeadline, 'ownerRequest'));
+          await requireWritableScope(sourceThreadId, budget.monotonicDeadline,
+            'source-scope-after-owner-request');
           await Reflect.apply(bound.respond, undefined,
             [nativeRequest, body, budget.monotonicDeadline]);
           ensureBindings();
