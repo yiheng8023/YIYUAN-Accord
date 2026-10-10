@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261010110903",
+    "version": "3.3.0-dev.1+codex.20261010135043",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261010110903",
-        "packageSha256": "659925657116cfd8cec6d024492c98b14954c5d2463d32ad310195de649a35c9",
+        "packageVersion": "3.3.0-dev.1+codex.20261010135043",
+        "packageSha256": "4999272fc09df6ebee47e689b8aafba314a73c530e0bb858dc0194aa23ec76d5",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -3768,10 +3768,10 @@
         "id": "correction-and-evolution",
         "name": "纠错、经验吸收与受控演进",
         "goldenTasks": ["GT-05", "GT-18"],
-        "activationWhen": "An error or changed premise affects current work; cross-task reuse or product-rule evolution activates separately when useful and authorized.",
-        "requiredOutcome": "Apply current corrections to affected decisions, actions and necessary task state without waiting for a learning pipeline or global memory. Persist cross-task lessons only when useful, permitted and scoped; verify changed behavior without weakening commitments.",
+        "activationWhen": "An error, obsolete active condition or changed premise materially affects accepted work; reusable lessons activate separately when useful and authorized.",
+        "requiredOutcome": "Correct affected decisions, execution and necessary task state; retire obsolete task conditions and duplicate guidance after reconciling dependencies, authority, original evidence and unfinished duties. Retain scoped lessons whose traceable cause, distinguishing counterexample and expected reuse justify upkeep; use sufficient existing layers, verify changed behavior and preserve commitments.",
         "normalEntry": "The active Agent and supported task state for immediate correction; separately authorized persistence or bounded experiments for reusable learning.",
-        "failureOracle": "Failed learning is reversible where promised; a local lesson cannot become an unconditional global rule.",
+        "failureOracle": "Reject age-only deletion, retrospective success, keeping ended instances without current purpose as active obligations, unconditional adoption of a local lesson, or requiring every correction and cleanup stage each turn. Unrelated history is not adopted by installing Accord; failed learning is reversible where promised.",
         "dependsOn": ["premise-and-consistency"],
         "assessment": "unverified",
         "evidence": []
@@ -3896,7 +3896,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r40",
+    "revision": "r41",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

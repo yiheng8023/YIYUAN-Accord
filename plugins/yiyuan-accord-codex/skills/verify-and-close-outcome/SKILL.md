@@ -1,6 +1,6 @@
 ---
 name: verify-and-close-outcome
-description: Review or reconcile results against source evidence, correct affected work after changes or failures, and close owned resources. Use for result audits, consequential checks, dependency impact or cleanup gaps; preserve domain-specific validation.
+description: Review results against source evidence, correct affected work and obsolete task conditions, retain useful lessons, and close owned resources. Use for consequential checks, changed dependencies, stale active guidance or cleanup gaps; preserve domain-specific validation.
 ---
 
 # Verify and close the outcome
@@ -8,6 +8,8 @@ description: Review or reconcile results against source evidence, correct affect
 Use the current goal and authority. If Accord's coordination duties are absent,
 read the [brief entry](../deliver-demand-driven-outcome/SKILL.md). Keep verification
 proportional to consequences; this Skill neither adds deliverables nor grants access.
+Use the branches required by the actual change, risk or result. Reuse sufficient
+current evidence; a new turn alone does not require a full review or cleanup cycle.
 
 ## Correct changes and failures
 
@@ -26,6 +28,22 @@ and verify the results and dependencies that must remain valid. A future plan or
 change list does not complete correction. Carry consequential unknowns in native
 task state or an existing checkpoint's `unresolved` list; file matches cannot close
 that gap. An explicit reason is not evidence or a new user decision.
+
+When obsolete assumptions, conditions, active obligations or duplicate guidance
+affect current judgment or execution, establish why they no longer apply and
+reconcile their dependent responsibilities before retiring the active burden.
+Keep original evidence, failed conditions and necessary recovery addressable on
+demand. An ended instance does not close an unverified goal; age alone does not
+justify deletion. End this correction when affected work is verified and remaining
+risks and duties are accounted for, without reopening unrelated historical debt.
+
+Generalize a lesson only when its traceable cause, applicable scope, distinguishing
+counterexample and expected reuse justify upkeep. Put stable invariants, conditional
+guidance and reusable checks in the sufficient existing layer; one-off findings may
+remain task evidence. Respect authority for cross-task persistence, verify the
+changed behavior and revise or retire the lesson when later evidence invalidates
+it. Accumulating experience does not require a new component or a fixed sequence
+of every workflow on every turn.
 
 After failure, inspect actual effects and partial artifacts before selecting a
 supported recovery. Distinguish missing evidence from an earlier prerequisite that

@@ -74,7 +74,8 @@ native Hook events. This list specifies responsibilities, not invocation order.
   interruption, recovery or handoff:
   [Maintain continuity](../maintain-task-continuity/SKILL.md).
 - Reviewing or reconciling results; changed dependencies, partial failure,
-  consequential verification gaps, reusable checks, claimed benefits or uncertain cleanup:
+  obsolete active conditions, useful lessons, consequential verification gaps,
+  reusable checks, claimed benefits or uncertain cleanup:
   [Verify and close](../verify-and-close-outcome/SKILL.md).
 - Plugin installation, update, reload, rollback, removal or host upgrade:
   [Manage plugin lifecycle](../manage-plugin-lifecycle/SKILL.md).
