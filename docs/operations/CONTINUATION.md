@@ -7,7 +7,7 @@
 
 - 原检出main，Root为共享目标唯一整合写者。指导b158b772/CI38029525568、清理479de352/CI38026008851、06215771/CI38021072672与写者守卫a088ec35/CI38020844178均success；精确新CI只核材料性终态，不人工重跑。
 - 源码及本机现装221152，25成员/5Skills，规范包SHA2023f0d1ab5ba44e824e211c2cd3aaeda9913482d4dc75f7705f699cf9bbff1f。用户最新授权本地包按需更新，本轮先通过支持的CLI更新150947/cafa；因实际原生格式拒绝修正SDK入口后，再按各终态依次更新marketplace及plugin至221152，25份现装文件与源码逐一相同。配置原始字节仅该marketplace固定ref先1f80fe60→0538fe35、再→2b3852c4，其余模型/审批/第三方保持；旧包和配置恢复保在accord-native-consumer-20261010-01/lifecycle-recovery，后态见root-qa/sdk-format-update-after.json。新现装模块的三项固定本地响应入口核验通过，未重跑旧模型业务。中断后本Root可见Skill目录已指向221152，必要continuity/verify正文已读；这不代原Desktop Hook/MCP/GUI刷新或完整实际参与。原刷新跳过固定ref、来源冲突及过早依赖操作的旧包回执保留，不叫更新成功。Meta4444CRLF/511861ec保持。
-- r42当前17必要scope、6活动定义、11声明覆盖缺口、11无case范围；此为映射，不是完成率。functionalCompletion/candidateEligible=false，完整验收及发布未完成。
+- r42当前17必要scope、7活动定义、11声明覆盖缺口、10无case范围；此为映射，不是完成率。functionalCompletion/candidateEligible=false，完整验收及发布未完成。
 - 当前根回执gpt-6.1-sol/0.162.0-alpha.17.2/default；effort/Fast未独立核定。子代理按任务与有效支持/权限选择，不锁模型或档数，不替用户开启。普通继续不启Plan/Goal，Stop和自动增加回合已退休。
 - 2026-10-10该轮恢复输入epoch85086f52、turn01a1263c曾与Root原生调用一致，present/reconciled为true，replay/resume均false；原中断写入的native-call-turn-conflict及rev7原件保留，以当时真实新输入原生调和至rev8/9，没有重放业务。最新输入与进度从原生状态读取，不沿用此历史epoch。此次compact入口已供应221152协调正文与回执定位；其它Hook场景、MCP worker及GUI采用未全证，不能把单次指导供应当全部组件刷新。旧失效水印归属仍未知。
 - 主线程24已在原main独立核源合同/当前原生输入/HEAD与包后接管，源恢复保留；本轮按需派发Sol/high实现、Astra/high独审，Luna/high只读核活动措辞。私有accord-native-consumer-20261010-01完成CLI0.162.1/Node24.21下150947/cafa SDK模块的两轮真实消费：25row精确delta与7面维护说明，Root逐行oracle后同idle/persistent源与同token续作，未transfer，unsubscribe/自然exit0/close/Job0及输入后态已核。guidance为显式采用、本进程限工具配置不改全局，不冒Root Desktop Hook/MCP/GUI刷新、普通自主择时/完整F-A或默认环境证明。原管道/过期限/gate换读问题、canonical/legacy混合原生拒绝、Root前启动/工序错误均保原失败和修正；live01不通过，修正live02有新前绑完整窗且证据在窗内，旧窗不延长。前段工具30项及独审成品可用，最终记录总窗晚57秒不追认；精确记录见该目录root-qa/RESULT.md和原accord-candidate-consumer-20261010-01。
@@ -64,3 +64,5 @@ accord-dev-delivery-20261010-01已交付当前221152私有检查ZIP、25成员�
 旧workspace/input-loss标记归属不明，不删/replay求绿；SDK sandbox可能的局部ACL影响、旧04/05更新未知与必要恢复资料保留，只有相关后续效果才重核，不强杀未知进程、盲回滚或复活retired cache。闪窗按用户决定搁置。Cloud当前适配取消，两不可删账户草稿按既定决定留置；未来另议。GLM/Gemini工作树已有恢复归档，用户会话无归档许可。
 
 当前清理原件：accord-current-debt-cleanup-20261010-01/development-before、DISPOSITION、专项及回归日志。原长接续精确保于Git06215771，本页未复述的旧结果按其导航取原件，未决责任不得因摘要删除。必要源码原件分别在accord-source-writer-guard-20261010-01、accord-setup-adoption-20261010-01及原CLI/catalog/资源/IDE/手机目录；阶段性事实不能自动成为当前资格。
+
+当前CLI维护案`v33-codex-cli-control-guide-01`前瞻绑定新参数的实际双语说明，Root唯一主仓writer、现装221152、0.162.1/Sol/medium/default，显式danger-full-access且审批never；仅effective-user-environment与四项适用职责，完整CLI的default无额外扩展、恢复和整体验收仍未闭。采用、原生Goal/模式、完整600秒、成品/原件与配置/资源后态须逐项实证；源码摘录首稿缺prepare参数/来源校验调用链，经Root与独审补齐并同步fixture摘要，原发现保留。真实fixture必须预先进入clean Git候选，按现有可修订预算仅增加一份tracked文件至193；3550000字节、5%预留、36000指导及17scope/F-A不变。当前只有定义，尚无执行或准入结论，原件在accord-cli-guide-20261011-01。
