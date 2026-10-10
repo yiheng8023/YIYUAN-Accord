@@ -1,70 +1,49 @@
 # 当前接续
 
-更新：2026-10-11 · N33-20260909 / r42。本页只承载当前事实、未完责任与必要证据定位。
-[计划](PLAN-v3.3.md)拥有共识/工序，[基线](BASELINE-v3.3.md)/[验收](ACCEPTANCE-v3.3.md)保持全部F01–F08/A01–A08；机器投影不授予权限或证明完成。
+更新：2026-10-11 · N33-20260909 / r42。[计划](PLAN-v3.3.md)拥有共识与工序，[基线](BASELINE-v3.3.md)/[验收](ACCEPTANCE-v3.3.md)保持全部 F01–F08/A01–A08。本页只保留当前状态、下一依赖和必要历史定位。
 
-## 当前起点
+## 当前状态
 
-- 原检出main，Root为共享目标唯一整合写者。指导b158b772/CI38029525568、清理479de352/CI38026008851、06215771/CI38021072672与写者守卫a088ec35/CI38020844178均success；精确新CI只核材料性终态，不人工重跑。
-- 源码及本机现装221152，25成员/5Skills，规范包SHA2023f0d1ab5ba44e824e211c2cd3aaeda9913482d4dc75f7705f699cf9bbff1f。用户最新授权本地包按需更新，本轮先通过支持的CLI更新150947/cafa；因实际原生格式拒绝修正SDK入口后，再按各终态依次更新marketplace及plugin至221152，25份现装文件与源码逐一相同。配置原始字节仅该marketplace固定ref先1f80fe60→0538fe35、再→2b3852c4，其余模型/审批/第三方保持；旧包和配置恢复保在accord-native-consumer-20261010-01/lifecycle-recovery，后态见root-qa/sdk-format-update-after.json。新现装模块的三项固定本地响应入口核验通过，未重跑旧模型业务。中断后本Root可见Skill目录已指向221152，必要continuity/verify正文已读；这不代原Desktop Hook/MCP/GUI刷新或完整实际参与。原刷新跳过固定ref、来源冲突及过早依赖操作的旧包回执保留，不叫更新成功。Meta4444CRLF/511861ec保持。
-- r42当前17必要scope、6活动定义、11声明覆盖缺口、11无case范围；此为映射，不是完成率。functionalCompletion/candidateEligible=false，完整验收及发布未完成。
-- 当前根回执gpt-6.1-sol/0.162.0-alpha.17.2/default；effort/Fast未独立核定。子代理按任务与有效支持/权限选择，不锁模型或档数，不替用户开启。普通继续不启Plan/Goal，Stop和自动增加回合已退休。
-- 2026-10-10该轮恢复输入epoch85086f52、turn01a1263c曾与Root原生调用一致，present/reconciled为true，replay/resume均false；原中断写入的native-call-turn-conflict及rev7原件保留，以当时真实新输入原生调和至rev8/9，没有重放业务。最新输入与进度从原生状态读取，不沿用此历史epoch。此次compact入口已供应221152协调正文与回执定位；其它Hook场景、MCP worker及GUI采用未全证，不能把单次指导供应当全部组件刷新。旧失效水印归属仍未知。
-- 主线程24已在原main独立核源合同/当前原生输入/HEAD与包后接管，源恢复保留；本轮按需派发Sol/high实现、Astra/high独审，Luna/high只读核活动措辞。私有accord-native-consumer-20261010-01完成CLI0.162.1/Node24.21下150947/cafa SDK模块的两轮真实消费：25row精确delta与7面维护说明，Root逐行oracle后同idle/persistent源与同token续作，未transfer，unsubscribe/自然exit0/close/Job0及输入后态已核。guidance为显式采用、本进程限工具配置不改全局，不冒Root Desktop Hook/MCP/GUI刷新、普通自主择时/完整F-A或默认环境证明。原管道/过期限/gate换读问题、canonical/legacy混合原生拒绝、Root前启动/工序错误均保原失败和修正；live01不通过，修正live02有新前绑完整窗且证据在窗内，旧窗不延长。前段工具30项及独审成品可用，最终记录总窗晚57秒不追认；精确记录见该目录root-qa/RESULT.md和原accord-candidate-consumer-20261010-01。
+- 在原 `main` 检出继续，Root 是本任务共享目标的唯一整合写者；源主线程23业务静止，恢复资料保留。3.3 的目标仍是 Agent 在授权范围内完成真实任务、纠偏、连续性、恢复、结果核验与资源收尾，完整验收后按已有条件授权发布3.3.0。
+- 17个必要scope、6个活动case定义、11个声明覆盖缺口、11个无case范围。它们是证据映射，不是实现完成率；`functionalCompletion=false`、`candidateEligible=false`。所有必要职责、质量、场景及发布条件保持。
+- 当前开发包为 `3.3.0-dev.1+codex.20261010221152`，25成员/5 Skills，规范SHA `2023f0d1ab5ba44e824e211c2cd3aaeda9913482d4dc75f7705f699cf9bbff1f`。主线程24已通过原生路径更新，当前现装25文件与核定副本一致；本次审计没有改包，无需重装。旧包/配置恢复材料位于私有 `accord-native-consumer-20261010-01/lifecycle-recovery`。
+- 根任务的模型、宿主、模式和输入以当轮原生来源为准，不沿用本页旧值或把permission mode等同collaboration mode。主模型遵守用户选择；子代理模型/推理按任务和有效支持动态调度。普通继续不启Plan/Goal，不请求自动续轮；Stop及自动增轮路线不恢复。
+- 当前输入与未完合同由本线程原生检查点承接。旧输入失效水印、未知共享Node/ACL效应保持未知；不合成输入、重放结束业务、修改共享ACL或按年龄删除恢复资料。回执、接管、单写者和实际结果分别核验。
+- `27e3e58c`的软件CI `38077117160`已11/11成功；后续文档/机器投影提交`40183f2b`的CI `38079260861`最近仍在运行，终态另核。最新运行状态和当前HEAD保存于线程状态/私有核验原件，不用旧提交通过代新提交。
 
-## 本轮已完成的清理
+## 已有结果及限度
 
-活动机器投影移出155条历史观察与7个已结束固定实例，r40终态896998→346152字节。原观察、完整对象/定义摘要、结果及原限额保在Git062157711d6aa2cdab274757d54f0a73423d9201:product/development.json，需要时按精确引用读取。六个现行声明对象/定义指纹不变；全部17scope身份/职责/质量/场景/claim、requiredCoverage/A映射和准入实现保持。
-
-CLI01为已结束、不准入的旧0.154/Terra/source-Hook方法实例，旧暂留已由当前处置取代；不再要求旧实例通过或重放。两个协调父scope不再要求旧0.157/Sol/medium/config摘要、五输入五轮、固定Windows与observer；新案前瞻绑定实际条件和有限完整work/QA/恢复/退出，旧案原限制不改、不追认通过。
-
-catalog固定实例的最终状态是closed-limited-case-admitted，原授权消费。closeout小索引与正式准入原件确认该有限结果；原早期失败和完整连续性缺口分别保留。不得再笼统写catalog失败，也不得因有限准入关闭整个A05。其余N/C01等失败继续保持。
-
-Setup/零Node/一键/私有runtime不在发布关键路径；README说明普通共享Node及必要参与/兼容条件。公共目录、专用决策模型/API、未来宿主和推广不占本版收官。未知标记和恢复资料不能仅按年龄删除。
-
-纠偏Skill和协调入口已补过期活动条件的退役及经验筛选：按实际问题触发、核清受影响职责后结束，保原件/失败/恢复与未完责任；只在适用范围、反例和复用收益足以抵偿维护成本时沉淀到现有层级。此为指导变更，完整普通行为尚未验，不新增常驻流程。
-
-## 可复用的核心结果
-
-| 事实 | 适用边界 |
+| 结果 | 可复用范围与仍缺内容 |
 |---|---|
-| 原生预算与有源效率约束取较严余量；无效约束拒绝，原生单独路线不要求私有占用 | 机制/边界回归，不代普通自主择时或源释放 |
-| 普通owner请求前后核writer/token，变化/不可读锁失败、保实际请求且拒绝重放；七条件及44项源会话回归通过 | 源码/纯fixture，不代业务暂停全功能；不撤销回调既有副作用，不提供OS原子锁，合法交接按阶段租约核 |
-| C02受控能力失效有模型自主proposal/继承/首续作/QA/源释放，另有真实fixed-response跨controller ACK-loss恢复 | 各原条件复用，不拼为同episode或普通自主性/完整F05/A05 |
-| 有限自主Skill选择、受托explicit-only代选、首业务前正文采用、实际交付及独立QA | 保作者源/策略和真实选择/目标控制；不把native activation形式当全路径必要，旧失败不重放 |
-| 已检测proposal失效现传入source/target请求泵，接收后、owner回调后及答复前后检查；关闭后仍拒迟到调用 | 原五失败反例保留，六边界/关闭守卫、45源会话与7proposal方法及独审通过；三维护检查valid。不撤销已发生的回调副作用，不代普通自主择时、暂停全功能或完整F/A；当前安装已更新，Desktop加载另核 |
-| SDK源创建及目标计划组装前拒绝缺失/错误type、混合格式与不支持的namespace，保真转发合规function工具 | 实际0.162.1拒绝触发，旧公开入口回归11处失败、新3项及141项相关回归通过并独审；direct core/恢复原件不转换、不重放，完整F/A未闭。新221152尚未声明真实模型两轮参与；原150947两轮证据保原绑定 |
-| Node24.19/24.21与CI24有受测事实；主用户151947采用及正常后台退出、配置/原件回核完成 | 不代最低版本、全部组合或完整生命周期；旧安装/关闭许可已消费，不复用旧executor/grant |
-| GT11两阶段各40oracle及真实资源变化/退出有原件，原worker终态363.837超360；完整Root语义600内未全证 | 保not-admitted与原窗口。监督器原整轮失败、另2.300秒自然退出修正分开，不重跑或追认 |
+| Source/target请求泵接通已发生的proposal失效/关闭守卫；SDK创建源与组装目标前拒不支持的工具格式，保真传合规字段 | 原失败、机制/边界回归及独审保留；不撤销已发生回调副作用，不代普通自主择时或完整F/A。后补断言错误已在3caa5c5a修正，896项Windows全套与对应11/11 CI通过；旧141项不能担保后加断言的版本 |
+| 私有SDK消费者两轮真实运行，同线程/同inactive token续作、独立逐行结果及自然退出/Job0 | 原150947/cafa包、CLI0.162.1/Node24.21的实际接线证据；无transfer。当前221152的三项固定响应入口核验和后续CLI初轮均各留原界，不能拼为普通自主交接或完整系统结果 |
+| 现有CLI观察器新增显式sandbox选择，108项入口回归及三项源码检查通过 | 默认workspace-write保持；非默认danger-full-access仅installed-plugin/persistent，审批仍never，参数不授予权限或完整继承用户on-request。原生初轮参数/default、入口指导和verify Skill读取、末阶段Goal空值已有本线程原件；真实resume权限行为及完整CLI仍未验 |
+| README范围和CLI维护者用法已纠正，私有检查ZIP/清单/使用说明可用 | Root提供facts/源码摘录曾漏条件，原模型稿、纠正和独审分别保留；普通维护的可用成品不自动取得原执行者自主或正式case通过 |
+| 必要原件/配置及所属资源后态已核 | 当前检查未发现六个工作段的workspace/temp或测试临时目录残留；进程退出按各原回执归属核定，controller、attempt、gate、原始结果、恢复副本等为必要证据保留。没有因审计清理共享进程、用户组件或未知ACL |
 
-原141项回归发生在后补断言前，不能担保最终测试版本。精确2b3852c4/CI38058906743及cb8b91c5/CI38059519330均已failure：两native生命周期job通过、九matrix失败；原Linux py3.11 job114232951665为895项中一条错误断言。Root把“不得回复102”误加到结果未知的发送反例，实际发送尝试应保留。现已仅将该断言移至目标格式前置拒绝例，保既有未知效果与失败锁；两受影响方法通过，Astra/high独审无新增P1/P2，完整Windows本地896项/3160.905秒/exit0通过。修正提交3caa5c5a1924534f36ce330004c71fdc111f5f52的[CI38067581558](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/38067581558)现已11/11成功：九跨平台Python矩阵及两native生命周期job均通过。此为精确源码/软件证据，不代整体验收；包字节未变，不重装。原日志、错误及后续保证修正在accord-native-consumer-20261010-01/root-qa/sdk-format-test-assurance-correction.json分别保留。
+## 本线程审计后的继续顺序
 
-accord-dev-delivery-20261010-01已交付当前221152私有检查ZIP、25成员清单及双语检查/使用/恢复说明；归档、源码、现装一致，39项保护原件/输入的摘要、大小与mtime及用户配置回核通过，冻结租约已在最终核验后结束。该说明由Root补齐并由Sol/medium独审。普通CLI0.162.1/Sol/medium/read-only在业务读取前遇到setup refresh错误，模型草稿保未知；实际未缓存输入40495超过40000，完整QA首次晚于原1500秒窗口914.863秒，原预算和窗口均未通过，不计自主完成或正式准入。执行者自然exit0/Job0，句柄与Job已关闭；共享node_repl文件锁和PCManger读ACL更新失败仅为该宿主初始化观察，helper可能的部分ACL效果未知，没有手动修复或清理共享资源。ZIP仅供维护者检查，原生ZIP安装路线未验；Root辅助成品、原模型失败及所有限额分别保在RESULT.md/evidence/closeout.json，不延长原窗或降低600+20/worker45+10等现行准入上界。
+2026-10-11用户要求先审本线程全部轮次再继续。Root已覆盖请求时点前8个历史执行回合、346项顶层工具调用，并与原生分页轮次交叉核对。除已纠正Remote归属外，发现并处置了来源准备遗漏、测试保证版本错配、安装依赖抢跑、验证负担过重、长时间无进度说明和活动记录滞后；具体结果见[历史核对记录](PROCEDURE-v3.3.md#主线程24全轮次核对2026-10-11)，私有完整索引及两份独审位于 `accord-thread24-audit-20261011-01`。
 
-2026-10-11背景回核已读constitution、两语README及旧主线程23的交接/用户决策，明确产品目标是Agent完整有界自举与可靠协作、真实结果和较低用户负担。两语README顶部把已延期普通Chat独立用途写成待实测的漂移已修正，Work Local本地执行模式与Remote宿主控制通道分开，共有有效证据按需复用。Native Luna/medium请求完成私有proposal，Root提供的首份facts把Work Local误归control，第一稿原件及不批准原因保留；新增纠正输入后worker两语修正，Root独立语义核验并明确共有机制复用后整合，冻结输入SHA/mtime与config保持。Root QA448.755秒在原480秒窗内，最终收尾证明517.950秒，原完整窗仍未通过，不追认普通CLI、默认无额外扩展或完整F/A；仅计可用维护成品及限定Desktop协作观察。私有原件在accord-readme-scope-correction-20261011-01。
+先把已经存在且充分的实现/原生结果对应到必要责任，再补真正缺失的连接。普通维护可直接修正并做适当核验，不把每份说明、每次记账再变成独立资格案例或新增发布门槛。需要正式资格时，才前瞻绑定实际业务、完整适用源码、演员与权限、结果判据及全部退出条件；观察者不得完成其声称被独立观察的业务，但正常协调者的QA/纠偏也不一概视为人工救场。
 
-现有CLI观察器保留用户配置/Hook信任，但实际固定workspace-write/never；用户真实profile为danger-full-access/on-request，不能称完全继承。上一只读隔离CLI的初始化失败保持该条件，未证明整体CLI不可用。现有observer已补显式sandbox-mode，非默认danger-full-access只用于installed-plugin/persistent路径；非法组合在路径/探针操作前拒绝，非默认值进manifest/execution前后绑定和initial/resume参数，漂移在本阶段业务Agent的Job/Popen前拒绝。现装inventory可能已运行，不称所有进程零副作用。旧默认、历史execution对象及审批never保持，新参数不授予Trust或业务范围，不宣称完整继承用户on-request策略或Windowsbackend实际参与。108入口回归及verify/verify-development/host-check通过，Astra独审无新增P1/P2；首源码检查因5%预留不足失败保原件，按现有可修订预算规则有据增加10000至3550000，5%/192文件/36000指导及17scope/F-A保持。observer摘要改变，旧执行证据只按其依赖复用；原生新模式行为、整体CLI采用/普通任务仍待前瞻绑定，当前包21字节不变。原件和初失败在accord-observer-permission-20261011-01。
+当前SDK两项受控case绑定Windows Job、CLI0.154.0和base episode；常规validate中的Linux/macOS原生生命周期是另一控制器/变体，不能直接复制为这两个case的准入。仓库已有 `.github/workflows/sdk-lifecycle-case.yml` 专用Windows工作流，会在原生执行前绑定两项现行定义。优先核对并使用这条既有路径，不为适配一般CI改写已绑定的条件或新增观察器。该受控机制资格仍不代普通Agent行为和完整A06。
 
-## 剩余主线
+随后回到R2/R3的明确组合结果：实际入口中的必要能力调用、普通自主连续性与恢复、可用结果和完整后态。按适用性和材料性差异复用充分机制，单个完整组合的职责/质量/场景与独立结果仍须充分，不能把多个分散PASS拼成A08。
 
-| 工作 | 当前必要责任 |
+| 未完主线 | 下一责任 |
 |---|---|
-| R2能力协调 | research-learning-and-reuse、recovery-and-lifecycle、capability-loss、默认无额外扩展环境及实际结果/反馈；38共享Skill进程控制等事实已证，不能仅目录/配置代行为 |
-| R2连续性 | 普通自主择时、必要变化/暂停/恢复、继承与单写者首续作、相关故障窗口及完整后态；健康任务不强制交接 |
-| R3环境/资源/系统组合 | 必要职责、八质量轴及适用场景在有价值同episode成立；精确演员/输入/包/权限/时钟和独立结果/退出前绑；不造业务凑case |
-| R3生命周期/影响 | 当前采用/变化/失败恢复/退出、必要入口差异、总成本/用户负担及独立净影响；局部软件、安装、Job0不能替代 |
-| R4候选/发布 | 前述必要验收满足后核精确候选、独审、托管与发布后态，沿既有3.3.0条件授权，不重复请示或提前发布 |
+| R2能力协调 | 必要research/reuse、恢复/生命周期、能力失效和默认无额外扩展环境中的实际效果；目录与配置不代调用行为 |
+| R2连续性 | 普通自主择时、必要变化/暂停恢复、继承与单写者首续作、失败回退及资源后态；健康任务不强迫交接 |
+| R3环境/资源/系统组合 | 前瞻绑定有价值的连贯episode，核必要职责、八质量轴、实际条件变化和独立成果/退出；不制造业务凑case |
+| R3生命周期/影响 | 当前采用、变更、失败恢复、退出、必要入口差异及总成本/用户负担；受控软件检查不代完整效果或增量价值 |
+| R4候选/发布 | 前述条件满足后做精确候选、独审、托管和发布后态；沿已有3.3.0条件授权，不重复请示、不提前发布 |
 
-六条已选执行/控制路线和现选模式保持。普通Chat独立用途、网页Chat、JetBrains/Xcode本版deferred且能力unknown。VS Code新线程已证指导/输入/MCP，旧水印隔离仍是特定未决条件；已闭probe与旧v2不replay。Work按真实Hook cwd，不复用错误Root cwd。手机Remote入口和原线程手机输入/本地执行已证；2026-10-11用户直接观察当前结果可见，并在同聊天实际Stop/明确恢复，native新turn与输入可关联。后台caller在已完成唯一CI读取后的等待阶段因恢复输入epoch变化主动退出，19.169秒/exit0/Job0，原件与配置保持，Root QA233.064秒在原300秒窗内；不称手机直接取消active命令或任意后台业务。首90秒窗未点击Stop及早期dispatch前Stop分别保留，不事后准入；原件在accord-mobile-remote-20261011-01。设备画面由用户说明、未由Agent采集；同轮用户按短暂断网重连请求后报告“能看到”，Root同聊天输入及配置/所属退出回核保持，但未独立采集手机网络/时长，不代有状态业务在断连中的后态。上述材料归类为宿主兼容、本地Agent承接及私有caller有限观察，不是Accord实现Remote或控制手机的证据。此前把显示、按钮和手机网络试验泛化为收官缺口已纠正，不再追加这类测试或单列发布闸门；实际任务涉及的输入/授权变化、暂停恢复与未知效果仍需充分承接来源，只补材料性通道差异。本地Agent经已选Remote通道的整体任务承接currentEffect仍unverified，17scope/F-A保持；不重配或在手机部署。
+已选六条执行/控制路线及模式保持。Work Local为本地执行模式；Remote复用连接主机及Agent，只核实际任务输入/授权/暂停恢复等必要差异。普通Chat独立用途、网页Chat、JetBrains/Xcode本版deferred且能力unknown。VS Code与Work的接入/旧水印限度、Cloud取消及两个草稿保留依原决定；不把显示、手机按钮或网络测试单列为Accord发布门槛。
 
-## 权限、未知与接续
+## 历史与恢复导航
 
-正常源码修复、验证、commit/push与已授权原生委派可独立推进，不把CI等待当空转理由。本地Accord包按最新用户授权按需更新；未涵盖的安装/启用/Trust、账户/数据、重要费用、越界外写及用户线程归档仍核对应权限。保持Root主模型/模式、与包更新无关的全局配置及第三方；子代理模型与推理强度按任务及有效支持动态选择。新实例只在实际价值与必要来源充分时前绑并执行，不因全项目未完永久续轮，不复制单次grant或扩大旧限额。
-
-旧workspace/input-loss标记归属不明，不删/replay求绿；SDK sandbox可能的局部ACL影响、旧04/05更新未知与必要恢复资料保留，只有相关后续效果才重核，不强杀未知进程、盲回滚或复活retired cache。闪窗按用户决定搁置。Cloud当前适配取消，两不可删账户草稿按既定决定留置；未来另议。GLM/Gemini工作树已有恢复归档，用户会话无归档许可。
-
-当前清理原件：accord-current-debt-cleanup-20261010-01/development-before、DISPOSITION、专项及回归日志。原长接续精确保于Git06215771，本页未复述的旧结果按其导航取原件，未决责任不得因摘要删除。必要源码原件分别在accord-source-writer-guard-20261010-01、accord-setup-adoption-20261010-01及原CLI/catalog/资源/IDE/手机目录；阶段性事实不能自动成为当前资格。
-
-当前CLI维护案`v33-codex-cli-control-guide-01`已结束，不准入、不重放。原前瞻定义和执行在Git87f5f84f1efa46d801de26c2453f578c1603a448及accord-cli-guide-20261011-01；88d的CRLF/Git字节差异在首次native前发现并修复，首draft缺参数/校验调用链及Root边界路径漏登记也保原发现，未补签。原生0.162.1/Sol medium/现装221152的一轮真实CLI任务自然完成，原turn_context证default/danger-full-access/never，源指导和verify Skill正文实际读取；末阶段Goal/get同thread为null，仅该时点。221024 total、49145未缓存、2919输出均在原上界，金额/占用未知。Root/独审发现封闭源码仍漏670–676的必需期限校验，双语原稿/示例将turn/recovery两个参数误写可选；原业务语义fail，不因原生终态或Root修正变自主/正式pass。Root修正版另路径交付，并将最小正确用法整合architecture。
-
-十个执行源/25包成员及原件SHA/mtime、用户config回核保持；business、Goal reader及四个inventory均exit0/Job0、父71504完成，所属workspace/temp已在保留原件及确认writer后释放，retained回读verified。完整QA/后态461.856秒在原600内，业务失败与时间/后态通过分别保持。该结束定义已从活动cases转为上述历史导航，六现行定义及17scope/F-A要求保持未闭；仅一份fixture仍供保留证据回读与源身份，当前tracked上限193有据保留，3550000/5%/36000不变。原native操作只观察新参数初轮采用，不代真实resume权限行为、默认无额外扩展、完整CLI恢复或全系统验收。手机显示/按钮/网络试验不再追加，实际任务输入/授权/暂停/恢复承接职责保持。
+- 本次精简前的完整接续：[40183f2b原接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/40183f2b75a445b9fc4bd0deffa16c9096aa21aa/docs/operations/CONTINUATION.md)。它保留各工作段、原失败、权限与来源细节，不作为当前下一步。
+- 更早155条观察及7个结束实例：[06215771机器原件](https://github.com/yiheng8023/YIYUAN-Accord/blob/062157711d6aa2cdab274757d54f0a73423d9201/product/development.json)。catalog最终有限准入、GT11超窗/未准入、C02受控交接及其它原未验边界均保持，不重放求绿。
+- 交接与源合同：私有 `accord-mainline24-handoff-20261010-01`；SDK/更新与断言纠正：`accord-native-consumer-20261010-01`；开发ZIP：`accord-dev-delivery-20261010-01`；README：`accord-readme-scope-correction-20261011-01`；观察器修改：`accord-observer-permission-20261011-01`。
+- 结束的CLIguide案：Git `87f5f84f1efa46d801de26c2453f578c1603a448` 与私有 `accord-cli-guide-20261011-01` 保留定义、原fixture、全部原生记录、原稿及Root修正版。业务语义失败/不准入；其完整QA后态461.856秒在600内。`inspect --retained`不读取主仓fixture，已在保全后移出活动树并验证历史回读；文件数上限从193恢复192。旧三次57秒、914.863秒、37.950秒超窗及所有失败不追认通过。
