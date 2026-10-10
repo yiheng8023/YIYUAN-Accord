@@ -312,6 +312,9 @@ function createSession(options, restoreMode = false) {
   const handoffRecorder = Object.freeze({begin: bound.begin, compareAndSet: bound.compareAndSet});
   const ownUnscopedRequests = options.ownUnscopedRequests === true;
   let busy = false;
+  // Capture this proposal's guard in each pump, including target continuation.
+  // Keep its closed verdict available to already-started asynchronous callbacks.
+  let proposalGuard = null;
   let state = {
     status: restoreMode ? 'restore-required' : 'new',
     phase: restoreMode ? 'restore-required' : 'new',
@@ -384,9 +387,12 @@ function createSession(options, restoreMode = false) {
     return activity;
   }
 
-  async function pumpHandoffTerminal(threadId, turnId, deadline, phase = 'handoff-target') {
+  async function pumpHandoffTerminal(threadId, turnId, deadline, phase = 'handoff-target',
+      checkProposal = proposalGuard) {
     for (;;) {
+      if (checkProposal) checkProposal();
       const activity = await receiveBoundActivity(threadId, turnId, deadline);
+      if (checkProposal) checkProposal();
       if (activity?.type === 'terminal') return immutable(activity.terminal);
       if (activity?.type !== 'request' || !plainObject(activity.request)) {
         throw new Error('connection returned invalid handoff activity');
@@ -409,9 +415,11 @@ function createSession(options, restoreMode = false) {
         const ownerContext = {threadId, turnId, scopeRef, deadline, phase};
         const body = requestBody(await callOwner(bound.ownerRequest,
           [nativeRequest, ownerContext], deadline, 'ownerRequest'));
+        if (checkProposal) checkProposal();
         await Reflect.apply(bound.respond, undefined, [nativeRequest, body, deadline]);
       }
       ensureBindings();
+      if (checkProposal) checkProposal();
       state = {...state, pendingRequest: null};
     }
   }
@@ -626,12 +634,18 @@ function createSession(options, restoreMode = false) {
               throw new TypeError('proposal channel requires subscribe, respond and current callbacks');
             }
             const respond = nativeChannel.respond;
-            const respondAndPump = async (response, deadline) => {
+            const respondAndPump = async (response, deadline, checkProposal) => {
+              if (typeof checkProposal !== 'function') {
+                throw new TypeError('proposal response requires its live channel guard');
+              }
+              proposalGuard = checkProposal;
+              checkProposal();
               await Reflect.apply(respond, undefined, [response, deadline]);
+              checkProposal();
               // A queued reply does not finish the source turn. Its other
               // requests still need their owner while the core observes the
               // original tool/terminal receipts. No second receiver is started.
-              await pumpHandoffTerminal(sourceThreadId, turnId, deadline, 'handoff-source');
+              await pumpHandoffTerminal(sourceThreadId, turnId, deadline, 'handoff-source', checkProposal);
             };
             const channel = {
               // Keep the core's callback-identity checks sensitive to changes

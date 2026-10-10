@@ -491,7 +491,7 @@ async function run(config) {
     if (scenario === 'mutate-plan' && stage === 'prepare') {plan.target.cwd = '/foreign'; plan.handoffText = 'changed';}
     return verdict;
   };
-  let result = null, error = null, concurrent = null, proposal = null;
+  let result = null, error = null, concurrent = null, proposal = null, responseGuard = null;
   try {
     if (config.nativeProposal || proposalCase) {
       const nativeRequest = config.nativeProposal || {
@@ -517,7 +517,8 @@ async function run(config) {
               if (scenario === 'proposal-event-release-error') throw new Error('listener removal uncertain');
             };
           },
-          async respond(response) {
+          async respond(response, deadline, checkCurrent) {
+            responseGuard = checkCurrent;
             proposal.respondCount++;
             proposal.callsBeforeDispatch=clone(calls);
             if (config.mode === 'native') {
@@ -598,6 +599,12 @@ async function run(config) {
     } else result = await handoff(plan, {transport, recorder, verify});
   }
     catch (e) {error = {name:e.name, message:e.message, code:e.code, reconciliationRequired:e.reconciliationRequired, state:e.state, details:e.details};}
+  if (scenario === 'proposal-event-guard-closed') {
+    const before = calls.length;
+    proposal.guardAvailable = typeof responseGuard === 'function';
+    try { responseGuard(); } catch (failure) { proposal.closedGuardError = failure.code; }
+    proposal.callsAfterClosedGuard = calls.length - before;
+  }
   let reconciled=null;
   if(config.reconcile){
     const mode=config.reconcile, originalState=clone(state), originalNow=Date.now;

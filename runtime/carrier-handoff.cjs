@@ -1360,6 +1360,8 @@ function createExecution(rawPlan, rawDependencies) {
       if (fault) { bindingCertain = false; throw fault; }
     }
     function checkChannel() {
+      if (!accepting) throw fault || channelError('PROPOSAL_CHANNEL_CLOSED',
+        'proposal processing has ended; a late callback cannot continue its effects');
       ensureBinding('proposal-channel');
       checkChannelCallbacks();
     }
@@ -1419,7 +1421,7 @@ function createExecution(rawPlan, rawDependencies) {
       checkChannel();
       responseStarted = true;
       await bounded(() => Reflect.apply(callbacks.respond, undefined,
-        [prepared.response, workDeadlineMs]), workDeadlineMs, 'proposal.respond');
+        [prepared.response, workDeadlineMs, checkChannel]), workDeadlineMs, 'proposal.respond');
       checkChannel();
       await bounded(() => ready, workDeadlineMs, 'proposal.events');
       checkChannel();

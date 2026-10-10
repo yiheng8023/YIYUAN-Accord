@@ -67,6 +67,9 @@ function serverRequest(id, method, params) {
   }
   emit({jsonrpc:'2.0', id, method, params});
 }
+function invalidateProposalSource() {
+  emit({method:'turn/started', params:{threadId:'source-1', turn:{id:'changed-source-turn'}}});
+}
 function handle(frame) {
   sent.push(frame);
   if (!frame.method) {
@@ -99,6 +102,10 @@ function handle(frame) {
         item:{type:'dynamicToolCall', id:frame.id === 103 ? 'later-handoff-call' : 'handoff-call', tool:'accord_request_handoff',
           namespace:null, status:'completed', success:true,
           contentItems:frame.result.contentItems}}});
+      if (mode.startsWith('fault-source-')) {
+        if (mode.endsWith('-before')) invalidateProposalSource();
+        return serverRequest(105, 'approval/request', {threadId:'source-1', turnId:'source-turn-1'});
+      }
       if (mode === 'handoff-source-queued') return;
       if (mode.startsWith('handoff-source-')) serverRequest(106, 'approval/request', {
         threadId:'unrelated-source', turnId:'other-turn', reason:'not-owned'});
@@ -181,6 +188,9 @@ function handle(frame) {
           serverRequest(300, 'item/tool/call', {threadId:frame.params.threadId, turnId:id,
             callId:'second-handoff-call', tool:'accord_request_handoff', namespace:null,
             arguments:{reason:'Continue to the next fresh carrier.'}});
+        } else if (mode.startsWith('fault-target-') && targetTurn === 1) {
+          if (mode.endsWith('-before')) invalidateProposalSource();
+          serverRequest(200, 'approval/request', {threadId:frame.params.threadId, turnId:id});
         } else if ((mode === 'adopt-chain' || mode.startsWith('binding-handoff-target-')) && targetTurn === 1) {
           serverRequest(200, 'item/tool/call', {threadId:frame.params.threadId, turnId:id,
             callId:'target-context-call', tool:'accord_inspect_context', namespace:null,
@@ -212,9 +222,18 @@ const nativeConnection = createOwnedAppServerConnection({stdin:input, stdout:out
 // Public source sessions also accept borrowed mutable connection adapters.
 // Keep the actual protocol reader; change only the borrower's binding while
 // an asynchronous receive or context reply is in progress.
-const connection = mode.startsWith('binding-') ? {
+const connection = mode.startsWith('binding-') || mode.startsWith('fault-') ? {
   ...nativeConnection, transport:{...nativeConnection.transport},
 } : nativeConnection;
+if (mode.startsWith('fault-')) {
+  connection.receiveTurnActivity = async (...args) => {
+    const activity = await nativeConnection.receiveTurnActivity(...args);
+    if (mode.endsWith('-receive') && activity.type === 'request' &&
+        activity.request.id === (mode.startsWith('fault-source-') ? 105 : 200))
+      invalidateProposalSource();
+    return activity;
+  };
+}
 if (mode.startsWith('binding-')) {
   connection.receiveTurnActivity = async (...args) => {
     const activity = await nativeConnection.receiveTurnActivity(...args);
@@ -349,6 +368,9 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
   ownerRequest(request, context) {
     ownerCalls.push(request);
     ownerPhases.push(context.phase || 'ordinary');
+    if (mode.endsWith('-owner') && mode.startsWith('fault-') &&
+        request.id === (mode.startsWith('fault-source-') ? 105 : 200))
+      invalidateProposalSource();
     if (mode === 'handoff-source-owner-failure' && request.id === 105)
       throw new Error('current source authority cannot be established');
     if (mode === 'owner-reentrant') return session.run({input:'nested turn', deadlineMs:Date.now()+1000});
@@ -565,6 +587,23 @@ const restoreArgs=(basis)=>({...sourceMode?{source:{threadId:mode==='wrong-id'?'
 
 
 class CodexSourceSessionTests(unittest.TestCase):
+    def test_proposal_fault_stops_source_and_target_request_effects_at_live_boundaries(self):
+        for phase, request_id in (('source', 105), ('target', 200)):
+            for point in ('before', 'receive', 'owner'):
+                with self.subTest(phase=phase, point=point):
+                    result = self.run_case(f'fault-{phase}-{point}')
+                    self.assertEqual(result['snapshot']['status'], 'failed')
+                    self.assertEqual(result['second'], 'SESSION_FAILED')
+                    self.assertNotIn(request_id, {frame['id'] for frame in result['serverResponses']})
+                    self.assertEqual(result['ownerCalls'], 2 if point == 'owner' else 1)
+                    self.assertEqual(len(result['starts']), 1 if phase == 'source' else 2)
+                    self.assertEqual(result['snapshot']['failure']['cause']['code'],
+                                     'PROPOSAL_SOURCE_CHANGED')
+                    if point != 'before':
+                        self.assertEqual(result['snapshot']['pendingRequest']['id'], request_id)
+                    self.assertFalse(any(frame.get('method') == 'thread/unsubscribe'
+                                         for frame in result['sent']))
+
     def test_owner_request_rechecks_writer_token_and_unknown_scope_at_both_boundaries(self):
         for mode in ["stable"] + [f"{point}-{loss}" for point in ("before", "during")
                                   for loss in ("writer", "token", "unknown")]:

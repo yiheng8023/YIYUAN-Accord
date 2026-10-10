@@ -739,10 +739,15 @@ choose a context threshold or discover a control connection.
   `params`. These labels are caller provenance, not authentication. Keep the raw
   journal independently; only two correlated receipts (each bounded to the
   adapter's text ceiling) are retained here.
-- `respond(response, deadline)` sends the exact native tool response once and
+- `respond(response, deadline, checkCurrent)` sends the exact native tool response once and
   resolves when that local send completes. Keep the receiver pumping while it
   runs. A send acknowledgment alone is not native tool success; rejection or
-  timeout never causes an automatic resend.
+  timeout never causes an automatic resend. The supplied synchronous guard checks
+  detected proposal invalidation and bound callbacks; invoke it before additional
+  effects and after asynchronous owner work. The source session captures that
+  guard for both source and target request pumps. It rejects late callbacks after
+  proposal processing ends. This guard does not establish business permission or
+  undo effects begun before invalidation; reconcile those actual effects separately.
 - `current(deadline)` independently re-reads and returns
   `{scopeRef, authorityRef, stateRef, writerThreadId}` after both receipts arrive.
   These references do not replace the existing semantic verifier or source-state

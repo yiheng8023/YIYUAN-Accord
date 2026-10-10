@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261010135043",
+    "version": "3.3.0-dev.1+codex.20261010150947",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261010135043",
-        "packageSha256": "4999272fc09df6ebee47e689b8aafba314a73c530e0bb858dc0194aa23ec76d5",
+        "packageVersion": "3.3.0-dev.1+codex.20261010150947",
+        "packageSha256": "cafaee5fe04ad2fadc36c0e92b8271070f4a910f55f987a393ab226968a79951",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -261,10 +261,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 3530000,
+      "maxProductCodeAndTestBytes": 3540000,
       "maxTrackedFiles": 192,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current2026-10-10 allocation:3530000 product code/test bytes,192 tracked files and36000 primary-instruction bytes. The necessary ordinary owner-request writer/token guard and seven-condition regression measure3347457 code/test bytes. Previous3520000 leaves172543, below the unchanged176000 five-percent reserve;3530000 leaves182543 versus176500 required. The failed previous allocation is retained in accord-source-writer-guard-20261010-01/verify-before-budget.json and its exact source/rationale atb4c7df57f4bed464a2f05add25cf7aaf3398a5de:product/development.json#/changeBoundary/complexityBudget. This bounded10000-byte allocation supports the existing continuity control defect and meaningful regression, with no new file, service, runtime, default limit or third-party payload. Package members25, Skills5, tracked-file and primary-guidance limits, all17scopes/13cases, F/A and execution windows remain unchanged."
+      "rationale": "Current2026-10-10 allocation:3540000 product code/test bytes,192 tracked files and36000 primary-instruction bytes. The source/target proposal request-pump invalidation defect has two independently reproduced pure-stub traces and five failing protocol subcases before correction. Its live/closed guard, mirrored runtime and source/target/late-callback regressions need a bounded10000-byte code/test allocation beyond3530000, preserving the minimum five-percent reserve. This adds no file, runtime service, third-party payload, model business or default execution window. The previous allocation and unchanged standards are pinned atb158b7726161dd3116700af3ef185d952032ee5e:product/development.json#/changeBoundary/complexityBudget. All17scope identities,6 current case definitions,13 duties, F/A, execution/permission conditions and192/36000 limits remain intact."
     }
   },
   "source": {

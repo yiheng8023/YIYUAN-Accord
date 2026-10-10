@@ -5,8 +5,8 @@
 
 ## 当前起点
 
-- 原检出main，Root为共享目标唯一整合写者。清理479de352/CI38026008851、06215771/CI38021072672与写者守卫a088ec35/CI38020844178均success；精确新CI只核材料性终态，不人工重跑。
-- 源码135043，25成员/5Skills，规范包SHA4999272fc09df6ebee47e689b8aafba314a73c530e0bb858dc0194aa23ec76d5。本机151947/050e45a6按用户要求保持，不安装、回退或重启。差异仅manifest、预算helper、source-session及两份协调/纠偏Skill；Meta4444CRLF/511861ec保持。
+- 原检出main，Root为共享目标唯一整合写者。指导b158b772/CI38029525568、清理479de352/CI38026008851、06215771/CI38021072672与写者守卫a088ec35/CI38020844178均success；精确新CI只核材料性终态，不人工重跑。
+- 源码150947，25成员/5Skills，规范包SHAcafaee5fe04ad2fadc36c0e92b8271070f4a910f55f987a393ab226968a79951。本机151947/050e45a6按用户要求保持，不安装、回退或重启。差异仅manifest、预算helper、source-session、handoff core、native-handoff参考及两份协调/纠偏Skill；Meta4444CRLF/511861ec保持。
 - r41当前17必要scope、6活动定义、11声明覆盖缺口、11无case范围；此为映射，不是完成率。functionalCompletion/candidateEligible=false，完整验收及发布未完成。
 - 当前根回执gpt-6.1-sol/0.162.0-alpha.17.2/default；effort/Fast未独立核定。子代理按任务与有效支持/权限选择，不锁模型或档数，不替用户开启。普通继续不启Plan/Goal，Stop和自动增加回合已退休。
 
@@ -30,6 +30,7 @@ Setup/零Node/一键/私有runtime不在发布关键路径；README说明普通�
 | 普通owner请求前后核writer/token，变化/不可读锁失败、保实际请求且拒绝重放；七条件及44项源会话回归通过 | 源码/纯fixture，不代业务暂停全功能；不撤销回调既有副作用，不提供OS原子锁，合法交接按阶段租约核 |
 | C02受控能力失效有模型自主proposal/继承/首续作/QA/源释放，另有真实fixed-response跨controller ACK-loss恢复 | 各原条件复用，不拼为同episode或普通自主性/完整F05/A05 |
 | 有限自主Skill选择、受托explicit-only代选、首业务前正文采用、实际交付及独立QA | 保作者源/策略和真实选择/目标控制；不把native activation形式当全路径必要，旧失败不重放 |
+| 已检测proposal失效现传入source/target请求泵，接收后、owner回调后及答复前后检查；关闭后仍拒迟到调用 | 原五失败反例保留，六边界/关闭守卫、45源会话与7proposal方法及独审通过；三维护检查valid。不撤销已发生的回调副作用，不代普通自主择时、暂停全功能或完整F/A；本机保持旧包 |
 | Node24.19/24.21与CI24有受测事实；主用户151947采用及正常后台退出、配置/原件回核完成 | 不代最低版本、全部组合或完整生命周期；旧安装/关闭许可已消费，不复用旧executor/grant |
 | GT11两阶段各40oracle及真实资源变化/退出有原件，原worker终态363.837超360；完整Root语义600内未全证 | 保not-admitted与原窗口。监督器原整轮失败、另2.300秒自然退出修正分开，不重跑或追认 |
 

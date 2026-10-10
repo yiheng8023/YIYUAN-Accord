@@ -30,6 +30,15 @@ def _shared_config_observation():
 
 
 class CarrierHandoffTests(unittest.TestCase):
+    def test_proposal_response_guard_rejects_late_effects_after_success(self):
+        result = self.run_case('proposal-event-guard-closed')
+        self.assertIsNone(result['error'])
+        self.assertTrue(result['proposal']['guardAvailable'])
+        self.assertEqual(result['proposal']['closedGuardError'], 'PROPOSAL_CHANNEL_CLOSED')
+        self.assertEqual(result['proposal']['callsAfterClosedGuard'], 0)
+        self.assertEqual(result['proposal']['respondCount'], 1)
+        self.assertEqual(result['proposal']['releaseCount'], 1)
+
     def run_case(self, scenario='success', **options):
         result = subprocess.run([shutil.which('node'), str(DRIVER)],
             input=json.dumps({'scenario':scenario, **options})+'\n', capture_output=True,
