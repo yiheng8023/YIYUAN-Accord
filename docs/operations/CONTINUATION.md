@@ -93,16 +93,26 @@ turn01a12344/epochee7d0ece，inputReceipt存在，无replay/恢复隔离；新MC
 新版setup正文已用于本轮已有前提复核；宿主原生工具返回bundled Node24.19，
 当前MCP解释器为已有Node24.21，没有新运行时或全局PATH改变。
 
-这条引导链路剩余宿主原生Setup触发的实际只读回执，不能以Root读正文代验。
-SETUP-READONLY-PROBE.md已准备并请求侧栏打开；请用户在插件详情如有设置/Setup
-则打开并发其代码块，无按钮即保留具体unknown，不重装。当前工具不能代点桌面
-端该入口，只需这次必要个人操作，不重新授权安装或信任。新的实际setup消息
-必须按它自己的Hook cwd/身份/输入读取，不能默认为Root仓库或旧Work路径。
+2026-10-10用户回复/截图显示该安装详情中无独立Setup入口，5Skills已启用、版本
+151947已显示。此为当前可见事实，原因仍unknown；旧26.1002源码门控不代当前
+账号或版本诊断，官方可选声明不保证具体界面。SETUP-READONLY-PROBE未执行，
+其等待已撤下，不再找按钮、重装或以额外控制者冒原生入口。
+
+用户进一步明确前置条件按常规依赖处理，README写清必须安装什么、受测推荐、
+宿主可发现/执行及常见问题即可。复用兼容共享Node；不默认各插件重复携带，
+不为省用户步骤扩建自动安装/运行时管理。保留现有轻量生命周期职责与可选元数据，
+专用Setup、零Node自动准备/一键安装/私有runtime打包均退出3.3关键路径；既有尝试
+只作有限事实与历史，缺按钮/未验不追认为成功。没有额外主机Node或全局PATH实验
+需要回退，不回滚已验证的采用。必要兼容、权限和实际效果仍核，全部F/A不减少。
+
+当前前提分支已收口，回到下表核心R2/R3/R4；没有待用户Setup操作或新安装授权。
+按实际未闭职责选择最小有价值组合，复用当前采用、Node兼容与已证控制事实，
+不重放旧业务或制造依赖准备任务。
 
 本次采用原件与完整限界在accord-setup-adoption-20261010-01/post-update，含facts/
 ADOPTION-RESULT/source-digests；原executor/01/02失败、管理员只读查询及03冻结/
 授权/实际回执保留。准备阶段历史在[d5f4744b接续原文](https://github.com/yiheng8023/YIYUAN-Accord/blob/d5f4744b01eb5ff6fc61937650f06d2cce9928a8/docs/operations/CONTINUATION.md)。
-实际setup、缺Node用户、全入口/生命周期及R2/R3/R4尚未闭；17scope和全部F/A保持。
+专用setup/零Node流程未验且非当前发布阻塞；全入口/生命周期及R2/R3/R4尚未闭，17scope和全部F/A保持。
 
 ## 剩余主线与下一依赖
 
