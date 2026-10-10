@@ -37,7 +37,7 @@ Setup/零Node/一键/私有runtime不在发布关键路径；README说明普通�
 | Node24.19/24.21与CI24有受测事实；主用户151947采用及正常后台退出、配置/原件回核完成 | 不代最低版本、全部组合或完整生命周期；旧安装/关闭许可已消费，不复用旧executor/grant |
 | GT11两阶段各40oracle及真实资源变化/退出有原件，原worker终态363.837超360；完整Root语义600内未全证 | 保not-admitted与原窗口。监督器原整轮失败、另2.300秒自然退出修正分开，不重跑或追认 |
 
-原141项回归发生在后补断言前，不能担保最终测试版本。精确2b3852c4/CI38058906743及cb8b91c5/CI38059519330均已failure：两native生命周期job通过、九matrix失败；原Linux py3.11 job114232951665为895项中一条错误断言。Root把“不得回复102”误加到结果未知的发送反例，实际发送尝试应保留。现已仅将该断言移至目标格式前置拒绝例，保既有未知效果与失败锁；两受影响方法通过，Astra/high独审无新增P1/P2，完整Windows本地896项/3160.905秒/exit0通过。新精确托管终态待核；包字节未变，不重装。原日志、错误及后续保证修正在accord-native-consumer-20261010-01/root-qa/sdk-format-test-assurance-correction.json分别保留。
+原141项回归发生在后补断言前，不能担保最终测试版本。精确2b3852c4/CI38058906743及cb8b91c5/CI38059519330均已failure：两native生命周期job通过、九matrix失败；原Linux py3.11 job114232951665为895项中一条错误断言。Root把“不得回复102”误加到结果未知的发送反例，实际发送尝试应保留。现已仅将该断言移至目标格式前置拒绝例，保既有未知效果与失败锁；两受影响方法通过，Astra/high独审无新增P1/P2，完整Windows本地896项/3160.905秒/exit0通过。修正提交3caa5c5a1924534f36ce330004c71fdc111f5f52的[CI38067581558](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/38067581558)现已11/11成功：九跨平台Python矩阵及两native生命周期job均通过。此为精确源码/软件证据，不代整体验收；包字节未变，不重装。原日志、错误及后续保证修正在accord-native-consumer-20261010-01/root-qa/sdk-format-test-assurance-correction.json分别保留。
 
 accord-dev-delivery-20261010-01已交付当前221152私有检查ZIP、25成员清单及双语检查/使用/恢复说明；归档、源码、现装一致，39项保护原件/输入的摘要、大小与mtime及用户配置回核通过，冻结租约已在最终核验后结束。该说明由Root补齐并由Sol/medium独审。普通CLI0.162.1/Sol/medium/read-only在业务读取前遇到setup refresh错误，模型草稿保未知；实际未缓存输入40495超过40000，完整QA首次晚于原1500秒窗口914.863秒，原预算和窗口均未通过，不计自主完成或正式准入。执行者自然exit0/Job0，句柄与Job已关闭；共享node_repl文件锁和PCManger读ACL更新失败仅为该宿主初始化观察，helper可能的部分ACL效果未知，没有手动修复或清理共享资源。ZIP仅供维护者检查，原生ZIP安装路线未验；Root辅助成品、原模型失败及所有限额分别保在RESULT.md/evidence/closeout.json，不延长原窗或降低600+20/worker45+10等现行准入上界。
 
@@ -51,7 +51,7 @@ accord-dev-delivery-20261010-01已交付当前221152私有检查ZIP、25成员�
 | R3生命周期/影响 | 当前采用/变化/失败恢复/退出、必要入口差异、总成本/用户负担及独立净影响；局部软件、安装、Job0不能替代 |
 | R4候选/发布 | 前述必要验收满足后核精确候选、独审、托管与发布后态，沿既有3.3.0条件授权，不重复请示或提前发布 |
 
-六条已选执行/控制路线和现选模式保持。普通Chat独立用途、网页Chat、JetBrains/Xcode本版deferred且能力unknown。VS Code新线程已证指导/输入/MCP，旧水印隔离仍是特定未决条件；已闭probe与旧v2不replay。Work按真实Hook cwd，不复用错误Root cwd。手机Remote入口和原线程手机输入/本地执行已证，设备结果/审批/暂停/撤权/断连后态未验；不重配或在手机部署。
+六条已选执行/控制路线和现选模式保持。普通Chat独立用途、网页Chat、JetBrains/Xcode本版deferred且能力unknown。VS Code新线程已证指导/输入/MCP，旧水印隔离仍是特定未决条件；已闭probe与旧v2不replay。Work按真实Hook cwd，不复用错误Root cwd。手机Remote入口和原线程手机输入/本地执行已证；2026-10-11用户直接观察当前结果可见，并在同聊天实际Stop/明确恢复，native新turn与输入可关联。后台caller在已完成唯一CI读取后的等待阶段因恢复输入epoch变化主动退出，19.169秒/exit0/Job0，原件与配置保持，Root QA233.064秒在原300秒窗内；不称手机直接取消active命令或任意后台业务。首90秒窗未点击Stop及早期dispatch前Stop分别保留，不事后准入；原件在accord-mobile-remote-20261011-01。设备画面由用户说明、未由Agent采集；同轮用户按短暂断网重连请求后报告“能看到”，Root同聊天输入及配置/所属退出回核保持，但未独立采集手机网络/时长，不代有状态业务在断连中的后态。上述材料归类为宿主兼容、本地Agent承接及私有caller有限观察，不是Accord实现Remote或控制手机的证据。此前把显示、按钮和手机网络试验泛化为收官缺口已纠正，不再追加这类测试或单列发布闸门；实际任务涉及的输入/授权变化、暂停恢复与未知效果仍需充分承接来源，只补材料性通道差异。本地Agent经已选Remote通道的整体任务承接currentEffect仍unverified，17scope/F-A保持；不重配或在手机部署。
 
 ## 权限、未知与接续
 
