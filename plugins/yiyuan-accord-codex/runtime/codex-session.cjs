@@ -100,7 +100,10 @@ function continuityTools(rawTools, name) {
   const tools = cloneData(rawTools || []);
   for (const tool of tools) {
     if (!plainObject(tool)) throw new TypeError(`${name} entries must be objects`);
-    if (tool.namespace == null && RESERVED_TOOLS.has(tool.name)) {
+    if (tool.type !== 'function' || tool.namespace != null) {
+      throw new TypeError(`${name} entries must be canonical unnamespaced function tools (type: function)`);
+    }
+    if (RESERVED_TOOLS.has(tool.name)) {
       throw new TypeError(`dynamic tool identity conflict: ${tool.name}`);
     }
   }

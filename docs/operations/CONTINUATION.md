@@ -6,10 +6,10 @@
 ## 当前起点
 
 - 原检出main，Root为共享目标唯一整合写者。指导b158b772/CI38029525568、清理479de352/CI38026008851、06215771/CI38021072672与写者守卫a088ec35/CI38020844178均success；精确新CI只核材料性终态，不人工重跑。
-- 源码150947，25成员/5Skills，规范包SHAcafaee5fe04ad2fadc36c0e92b8271070f4a910f55f987a393ab226968a79951。用户最新授权本地包按需更新，已通过支持的CLI把本机更新为150947并核25成员/cafa一致；仅该marketplace固定提交由1f80fe60改为0538fe35，其余配置/模型/审批/第三方保持，旧151947包和配置恢复原件保在accord-native-consumer-20261010-01/lifecycle-recovery。安装字节不代已有Desktop Hook/MCP刷新或fresh runtime参与；原刷新跳过固定ref、来源冲突及过早依赖操作的旧包回执保留，不叫更新成功。Meta4444CRLF/511861ec保持。
+- 源码221152，25成员/5Skills，规范包SHA2023f0d1ab5ba44e824e211c2cd3aaeda9913482d4dc75f7705f699cf9bbff1f。用户最新授权本地包按需更新，本轮先通过支持的CLI把本机更新为150947并核25成员/cafa一致；随后因实际原生格式拒绝修正SDK入口，源码已绑定新身份，本机仍为150947，待支持的更新及后态核验。仅该marketplace固定提交由1f80fe60改为0538fe35，其余配置/模型/审批/第三方保持，旧包和配置恢复原件保在accord-native-consumer-20261010-01/lifecycle-recovery。安装字节不代已有Desktop Hook/MCP刷新或fresh runtime参与；原刷新跳过固定ref、来源冲突及过早依赖操作的旧包回执保留，不叫更新成功。Meta4444CRLF/511861ec保持。
 - r42当前17必要scope、6活动定义、11声明覆盖缺口、11无case范围；此为映射，不是完成率。functionalCompletion/candidateEligible=false，完整验收及发布未完成。
 - 当前根回执gpt-6.1-sol/0.162.0-alpha.17.2/default；effort/Fast未独立核定。子代理按任务与有效支持/权限选择，不锁模型或档数，不替用户开启。普通继续不启Plan/Goal，Stop和自动增加回合已退休。
-- 主线程24已在原main独立核源合同/当前原生输入/HEAD与包后接管，源恢复保留；本轮按需派发Sol/high实现、Astra/high独审。私有accord-native-consumer-20261010-01完成CLI0.162.1/Node24.21下当前cafa SDK模块的两轮真实消费：25row精确delta与7面维护说明，Root逐行oracle后同idle/persistent源与同token续作，未transfer，unsubscribe/自然exit0/close/Job0及输入后态已核。guidance为显式采用、本进程限工具配置不改全局，不冒Root Desktop Hook/MCP/GUI刷新、普通自主择时/完整F-A或默认环境证明。原管道/过期限/gate换读问题、canonical/legacy混合原生拒绝、Root前启动/工序错误均保原失败和修正；live01不通过，修正live02有新前绑完整窗且证据在窗内，旧窗不延长。前段工具30项及独审成品可用，最终记录总窗晚57秒不追认；精确记录见该目录root-qa/RESULT.md和原accord-candidate-consumer-20261010-01。
+- 主线程24已在原main独立核源合同/当前原生输入/HEAD与包后接管，源恢复保留；本轮按需派发Sol/high实现、Astra/high独审，Luna/high只读核活动措辞。私有accord-native-consumer-20261010-01完成CLI0.162.1/Node24.21下150947/cafa SDK模块的两轮真实消费：25row精确delta与7面维护说明，Root逐行oracle后同idle/persistent源与同token续作，未transfer，unsubscribe/自然exit0/close/Job0及输入后态已核。guidance为显式采用、本进程限工具配置不改全局，不冒Root Desktop Hook/MCP/GUI刷新、普通自主择时/完整F-A或默认环境证明。原管道/过期限/gate换读问题、canonical/legacy混合原生拒绝、Root前启动/工序错误均保原失败和修正；live01不通过，修正live02有新前绑完整窗且证据在窗内，旧窗不延长。前段工具30项及独审成品可用，最终记录总窗晚57秒不追认；精确记录见该目录root-qa/RESULT.md和原accord-candidate-consumer-20261010-01。
 
 ## 本轮已完成的清理
 
@@ -32,6 +32,7 @@ Setup/零Node/一键/私有runtime不在发布关键路径；README说明普通�
 | C02受控能力失效有模型自主proposal/继承/首续作/QA/源释放，另有真实fixed-response跨controller ACK-loss恢复 | 各原条件复用，不拼为同episode或普通自主性/完整F05/A05 |
 | 有限自主Skill选择、受托explicit-only代选、首业务前正文采用、实际交付及独立QA | 保作者源/策略和真实选择/目标控制；不把native activation形式当全路径必要，旧失败不重放 |
 | 已检测proposal失效现传入source/target请求泵，接收后、owner回调后及答复前后检查；关闭后仍拒迟到调用 | 原五失败反例保留，六边界/关闭守卫、45源会话与7proposal方法及独审通过；三维护检查valid。不撤销已发生的回调副作用，不代普通自主择时、暂停全功能或完整F/A；当前安装已更新，Desktop加载另核 |
+| SDK源创建及目标计划组装前拒绝缺失/错误type、混合格式与不支持的namespace，保真转发合规function工具 | 实际0.162.1拒绝触发，旧公开入口回归11处失败、新3项及141项相关回归通过并独审；direct core/恢复原件不转换、不重放，完整F/A未闭。新221152尚未声明真实模型两轮参与；原150947两轮证据保原绑定 |
 | Node24.19/24.21与CI24有受测事实；主用户151947采用及正常后台退出、配置/原件回核完成 | 不代最低版本、全部组合或完整生命周期；旧安装/关闭许可已消费，不复用旧executor/grant |
 | GT11两阶段各40oracle及真实资源变化/退出有原件，原worker终态363.837超360；完整Root语义600内未全证 | 保not-admitted与原窗口。监督器原整轮失败、另2.300秒自然退出修正分开，不重跑或追认 |
 

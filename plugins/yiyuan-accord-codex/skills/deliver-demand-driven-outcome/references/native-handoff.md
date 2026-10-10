@@ -74,8 +74,16 @@ the caller for a newly created source on an already initialized, authorized
 connection; it is not an attachment to an existing GUI task. Supply `connection`,
 `recorder`, `scopeRef`, explicit native `threadStart` settings, `planResolver`,
 `verify`, `current` and `ownerRequest`. Use receiver-free or pre-bound callbacks.
-It preserves the owner's other dynamic tools and appends context/proposal tools;
-conflicting names are rejected before source creation.
+It preserves the owner's canonical unnamespaced function tools and appends
+context/proposal tools. SDK source `threadStart.dynamicTools` and resolver
+`target.dynamicTools` entries must explicitly use `type: "function"` and cannot
+use a non-null legacy `namespace` field or a namespace container. Missing or
+unsupported formats and reserved SDK names are rejected before source creation
+or transfer effects; the SDK does not rewrite caller tools to another format.
+This prevents mixing legacy caller definitions with the SDK's canonical tools,
+which the observed Codex 0.162.1 host rejects. Other native validation and older
+host compatibility still require their own evidence. The direct handoff core's
+existing tool contract and immutable restoration records remain unchanged.
 The source request explicitly uses `ephemeral: false`. The returned thread must
 also report `ephemeral: false` before its writer scope is bound or work is sent.
 Missing or contrary persistence metadata raises `SOURCE_PERSISTENCE_UNVERIFIED`,

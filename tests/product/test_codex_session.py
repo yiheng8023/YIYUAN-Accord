@@ -11,6 +11,34 @@ ROOT = Path(__file__).resolve().parents[2]
 MODULE = ROOT / "runtime" / "codex-session.cjs"
 
 
+SOURCE_TOOL_FORMAT_SCENARIO = r'''
+const {createCodexSourceSession}=require(process.argv[1]);
+const tools=JSON.parse(process.argv[2]), original=JSON.stringify(tools), requests=[];
+let scope=null,scopeWrites=0;
+const connection={transport:{connectionId:'format-fixture',hostVersion:'format-fixture',
+  async request(method,params){requests.push({method,params});
+    if(method==='thread/start'){
+      if(params.dynamicTools.some(tool=>tool.type!=='function'))
+        throw Error('dynamic tools must use either canonical or legacy format consistently');
+      return {thread:{id:'source',ephemeral:false,status:{type:'idle'}}};}
+    return {turn:{id:'turn'}};},waitTerminal(){}},
+  async receiveTurnActivity(){return {type:'terminal',terminal:{method:'turn/completed',
+    params:{threadId:'source',turn:{id:'turn',status:'completed'}}}};},
+  respondRequest(){},replyContext(){},proposalChannel(){}};
+const recorder={readScope(){if(!scope)throw Object.assign(Error('missing'),{code:'SCOPE_NOT_FOUND'});
+    return scope;},bindScope(ref,id){scopeWrites++;scope={scopeRef:ref,writerThreadId:id,
+    activeTransferId:null,token:'fixture'};return {scope};},begin(){},compareAndSet(){},read(){},settle(){}};
+(async()=>{let error=null;
+  try{const session=createCodexSourceSession({connection,recorder,scopeRef:'scope',
+    threadStart:{cwd:'C:/fixture',model:'fixture',dynamicTools:tools},
+    planResolver(){},verify(){},current(){},ownerRequest(){}});
+    await session.run({input:'format fixture',deadlineMs:Date.now()+2000});}
+  catch(e){error={name:e.name,message:e.message,code:e.code};}
+  console.log(JSON.stringify({error,requests,scopeWrites,inputUnchanged:JSON.stringify(tools)===original}));
+})().catch(e=>{console.error(e);process.exitCode=1});
+'''
+
+
 SCOPE_REQUEST_SCENARIO = r'''
 const {createCodexSourceSession}=require(process.argv[1]);
 const mode=process.argv[2];
@@ -52,6 +80,7 @@ const mode = process.argv[4], databasePath = process.argv[5];
 const slowRecordMs = Number(process.argv[6] || 0);
 const slowReleaseMs = Number(process.argv[7] || 0);
 const handoffWorkMs = Number(process.argv[8] || 0);
+const targetTools = process.argv[9] ? JSON.parse(process.argv[9]) : null;
 const adoptionPrecondition = ['adopt-old-lease', 'adopt-stale-ref',
   'adopt-busy', 'adopt-missing-tools'].includes(mode);
 const output = new PassThrough(), sent = [], starts = [], serverResponses = [];
@@ -264,7 +293,11 @@ if (mode.startsWith('binding-')) {
   };
 }
 const storedRecorder = openCarrierRecorder({path:databasePath, create:true});
-const recorder = {...storedRecorder, compareAndSet(...args) {
+let beginCalls = 0;
+const recorder = {...storedRecorder, begin(...args) {
+  beginCalls++;
+  return storedRecorder.begin(...args);
+}, compareAndSet(...args) {
   if (slowRecordMs && args[2].phase === 'writer-transferred')
     Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, slowRecordMs);
   if (slowReleaseMs && args[2].phase === 'source-subscription-released')
@@ -334,7 +367,7 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
       return decision;
     }
     const now = Date.now();
-    return {transferId:`transfer-${ordinal}`, scopeRef:'fixture-scope', authorityRef:'authority-1',
+    const plan = {transferId:`transfer-${ordinal}`, scopeRef:'fixture-scope', authorityRef:'authority-1',
       stateRef:'state-1', source:{threadId:context.threadId, turnId:context.turnId},
       target:{cwd:'C:/fixture', model:`target-model-${ordinal}`, effort:'target-effort'},
       handoffText:'Retain the fixed authorized task and protected inputs.',
@@ -344,6 +377,8 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
       // Deadline regressions opt into a deliberately smaller plan explicitly.
       deadlineMs:handoffWorkMs ? now+handoffWorkMs : context.deadlineMs-8000,
       recoveryDeadlineMs:handoffWorkMs ? now+handoffWorkMs+500 : context.deadlineMs-6000};
+    if (mode === 'target-format') plan.target.dynamicTools = targetTools;
+    return plan;
   },
   verify(stage, facts) {
     verifyCalls.push(stage);
@@ -442,6 +477,7 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
     result.ownerPhases = ownerPhases;
     result.verifyCalls = verifyCalls; result.recordReads = recordReads;
     result.settleCalls = settleCalls;
+    result.beginCalls = beginCalls;
     if (mode.startsWith('decline') || mode.startsWith('resolver-') || mode.startsWith('proposal-') || mode.startsWith('adopt-'))
       result.finalScope = recorder.readScope('fixture-scope');
     if (mode === 'source-ephemeral' || mode === 'source-persistence-missing') {
@@ -622,14 +658,14 @@ class CodexSourceSessionTests(unittest.TestCase):
                     self.assertEqual(result["snapshot"]["pendingRequest"]["id"], 1)
 
     def run_case(self, mode, *, slow_record_ms=0, slow_release_ms=0,
-                 handoff_work_ms=0):
+                 handoff_work_ms=0, target_tools=None):
         with tempfile.TemporaryDirectory() as temp:
             database = Path(temp) / "carrier.sqlite"
             command = [shutil.which("node"), "-e", NODE_SCENARIO,
                        str(ROOT / "runtime" / "codex-connection.cjs"),
                        str(ROOT / "runtime" / "carrier-recorder.cjs"),
                        str(MODULE), mode, str(database), str(slow_record_ms),
-                       str(slow_release_ms), str(handoff_work_ms)]
+                       str(slow_release_ms), str(handoff_work_ms), json.dumps(target_tools)]
             completed = subprocess.run(command, capture_output=True, text=True,
                                        encoding="utf-8", timeout=50 if mode == "adopt-chain" else 30)
             self.assertEqual(completed.returncode, 0, completed.stderr)
@@ -793,6 +829,7 @@ class CodexSourceSessionTests(unittest.TestCase):
                 self.assertEqual(result["error"]["code"], expected)
                 self.assertEqual(result["second"], "SESSION_FAILED")
                 self.assertEqual(result["snapshot"]["pendingRequest"]["id"], 102)
+                self.assertFalse(any(frame["id"] == 102 for frame in result["serverResponses"]))
                 self.assertEqual(result["snapshot"]["transferCount"], 0)
                 self.assertEqual(len(result["starts"]), 1)
                 self.assertEqual(result["verifyCalls"], [])
@@ -939,6 +976,64 @@ class CodexSourceSessionTests(unittest.TestCase):
         result = self.run_case("conflict")
         self.assertIn("dynamic tool identity conflict", result["conflict"])
         self.assertEqual(result["sent"], [])
+
+    @staticmethod
+    def incompatible_dynamic_tools():
+        tool = {"type": "function", "name": "owner_tool", "description": "owner",
+                "inputSchema": {"type": "object", "properties": {}}}
+        return {
+            "legacy": [{key: value for key, value in tool.items() if key != "type"}],
+            "wrong-type": [{**tool, "type": "unknown"}],
+            "mixed": [tool, {**tool, "name": "legacy_tool", "type": None}],
+            "legacy-namespace": [{**tool, "namespace": "owner"}],
+            "namespace-container": [{"type": "namespace", "name": "owner",
+                                     "description": "owner", "tools": [tool]}],
+            "reserved-namespace": [{**tool, "name": "accord_inspect_context",
+                                    "namespace": "owner"}],
+        }
+
+    def test_source_dynamic_tool_format_is_rejected_before_creation_or_scope_binding(self):
+        for name, tools in self.incompatible_dynamic_tools().items():
+            with self.subTest(name=name):
+                run = subprocess.run([shutil.which("node"), "-e", SOURCE_TOOL_FORMAT_SCENARIO,
+                    str(MODULE), json.dumps(tools)], capture_output=True, text=True,
+                    encoding="utf-8", timeout=5)
+                self.assertEqual(run.returncode, 0, run.stderr)
+                result = json.loads(run.stdout)
+                self.assertEqual(result["requests"], [])
+                self.assertEqual(result["scopeWrites"], 0)
+                self.assertEqual(result["error"]["name"], "TypeError")
+                self.assertIn("threadStart.dynamicTools", result["error"]["message"])
+                self.assertTrue(result["inputUnchanged"])
+
+    def test_target_dynamic_tool_format_is_rejected_before_transfer_effects(self):
+        for name, tools in self.incompatible_dynamic_tools().items():
+            with self.subTest(name=name):
+                result = self.run_case("target-format", target_tools=tools)
+                self.assertEqual(len(result["starts"]), 1)
+                self.assertEqual(result["beginCalls"], 0)
+                self.assertEqual(result["planCalls"], 1)
+                self.assertNotIn("first", result)
+                self.assertEqual(result["snapshot"]["status"], "failed")
+                self.assertEqual(result["snapshot"]["pendingRequest"]["id"], 102)
+                self.assertFalse(any(frame.get("method") in ("thread/resume", "thread/fork",
+                    "thread/unsubscribe") for frame in result["sent"]))
+
+    def test_canonical_dynamic_tools_are_forwarded_without_mutation(self):
+        tool = {"type": "function", "name": "owner_tool", "description": "owner",
+                "inputSchema": {"type": "object", "properties": {"text": {"type": "string"}}},
+                "deferLoading": True, "namespace": None}
+        run = subprocess.run([shutil.which("node"), "-e", SOURCE_TOOL_FORMAT_SCENARIO,
+            str(MODULE), json.dumps([tool])], capture_output=True, text=True,
+            encoding="utf-8", timeout=5)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        source = json.loads(run.stdout)
+        self.assertIsNone(source["error"])
+        self.assertTrue(source["inputUnchanged"])
+        self.assertEqual(source["requests"][0]["params"]["dynamicTools"][0], tool)
+        target = self.run_case("target-format", target_tools=[tool])
+        self.assertNotIn("error", target)
+        self.assertEqual(target["starts"][1]["dynamicTools"][0], tool)
 
     def test_same_controller_adopts_target_then_completes_a_second_real_transfer(self):
         result = self.run_case("adopt-chain")
