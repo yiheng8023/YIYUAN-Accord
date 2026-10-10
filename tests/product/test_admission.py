@@ -836,6 +836,66 @@ class DevelopmentEvidenceTests(unittest.TestCase):
 class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     """Committed synthetic current subjects, never real host or review evidence."""
 
+    @classmethod
+    def historical_contract(cls):
+        return json.loads(subprocess.check_output(['git', '-C', str(cls.root), 'show',
+            '062157711d6aa2cdab274757d54f0a73423d9201:product/development.json'], timeout=30))
+
+    def historical_fixture_case(self, case_id):
+        # Only the isolated synthetic subject uses an ended sample. It never
+        # returns to the repository's active acceptance gates.
+        contract = copy.deepcopy(self.contract)
+        case = copy.deepcopy(next(c for c in self.historical_contract()['acceptance']['admission']['cases']
+                                  if c['id'] == case_id))
+        scope = next(s for s in contract['acceptance']['admission']['scopes'] if s['id'] == case['scope'])
+        # Current required semantics win only in this synthetic subject;
+        # the exact historical case remains unchanged in its Git snapshot.
+        case['conditions'] = {**case['conditions'], **copy.deepcopy(scope['conditions'])}
+        contract['acceptance']['admission']['cases'].append(case)
+        return contract, case
+
+    def historical_mapping_fixture(self):
+        contract = copy.deepcopy(self.contract)
+        policy = contract['acceptance']['admission']
+        policy['cases'] = copy.deepcopy(self.historical_contract()['acceptance']['admission']['cases'])
+        for case in policy['cases']:
+            scope = next(s for s in policy['scopes'] if s['id'] == case['scope'])
+            case['conditions'] = {**case['conditions'], **copy.deepcopy(scope['conditions'])}
+        return contract
+
+    def test_ended_current_instances_leave_gates_with_exact_history_and_scope_floors(self):
+        from yiyuan_accord.admission import _definition
+        old = self.historical_contract()
+        record = self.contract['developmentObservations'][0]
+        policy = self.contract['acceptance']['admission']
+        self.assertEqual(record['historicalSource']['observationCount'], len(old['developmentObservations']))
+        self.assertEqual(record['historicalSource']['observationsSha256'], hashlib.sha256(json.dumps(
+            old['developmentObservations'], sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest())
+        for declaration in record['declarations']:
+            case = next(c for c in old['acceptance']['admission']['cases'] if c['id'] == declaration['caseId'])
+            self.assertNotIn(case['id'], {c['id'] for c in policy['cases']})
+            self.assertEqual(declaration['caseObjectSha256'], hashlib.sha256(json.dumps(
+                case, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest())
+            self.assertEqual(declaration['definitionSha256'], _definition(old, case))
+        for key in ('requiredCoverage', 'acceptanceRequirements'):
+            self.assertEqual(policy[key], old['acceptance']['admission'][key])
+        for scope, prior in zip(policy['scopes'], old['acceptance']['admission']['scopes']):
+            for key in ('id', 'host', 'entry', 'duties', 'qualityAxes', 'scenarios', 'claims'):
+                self.assertEqual(scope[key], prior[key])
+        self.assertFalse(self.assess()['candidateEligible'])
+
+    def test_new_coordination_conditions_do_not_force_old_sample_but_keep_control(self):
+        from yiyuan_accord.admission import _conditions_match
+        for sid in ('v33-goal-authority-correction', 'v33-paused-work-recovery'):
+            required = next(s['conditions'] for s in self.contract['acceptance']['admission']['scopes'] if s['id'] == sid)
+            actual = {**required, 'codexVersion': 'new-supported-host', 'model': 'current-model',
+                      'reasoning': 'current-option', 'userConfigBaselineSha256': 'a' * 64,
+                      'input': 'different ordinary input', 'turnCount': 2}
+            self.assertTrue(_conditions_match(actual, required))
+            self.assertFalse(_conditions_match({**actual, 'goalModeActive': True}, required))
+            actual.pop('userControl')
+            self.assertFalse(_conditions_match(actual, required))
+
     def test_current_mode_catalog_rejects_missing_duplicate_and_invalid_declarations(self):
         from yiyuan_accord.admission import _entry_modes
         surfaces = self.contract["capabilityMap"]["entrySurfaces"]
@@ -985,9 +1045,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                                             subject=evidence_subject(self.root))
 
     def execution_fixture(self):
-        contract = copy.deepcopy(self.contract)
-        case = next(row for row in contract["acceptance"]["admission"]["cases"]
-                    if row["id"] == "v33-paused-work-recovery-01")
+        contract, case = self.historical_fixture_case("v33-paused-work-recovery-01")
         execution = {key: case["conditions"][key] for key in (
             "entryProtocol", "model", "reasoning", "windowsSandbox", "codexVersion")}
         execution.update(host=case["host"], entry=case["entry"],
@@ -1011,6 +1069,12 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         from yiyuan_accord.admission import bind_evidence_execution, _definition
         with self.history():
             contract, case, execution, files = self.execution_fixture()
+            with self.assertRaisesRegex(ValueError, "execution case was not prebound"):
+                bind_evidence_execution(self.root, case["id"], execution, files)
+            incomplete = copy.deepcopy(contract)
+            next(c for c in incomplete['acceptance']['admission']['cases']
+                 if c['id'] == case['id'])['conditions'].pop('execution')
+            self.commit(incomplete)
             with self.assertRaisesRegex(ValueError, "prebound case conditions"):
                 bind_evidence_execution(self.root, case["id"], execution, files)
             self.commit(contract)
@@ -1106,10 +1170,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                  "commit", "--quiet", "-m", "Revise synthetic current subject")
 
     def sparse_contract(self):
-        contract = copy.deepcopy(self.contract)
+        contract, case = self.historical_fixture_case("v33-goal-authority-correction-01")
         projection = contract["delivery"]["hostProjections"][0]
-        case = next(row for row in contract["acceptance"]["admission"]["cases"]
-                    if row["id"] == "v33-goal-authority-correction-01")
         case["packageFiles"] = [
             projection["manifest"],
             projection["contract"],
@@ -1275,9 +1337,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                         <= set(integration['missingDimensions']['scenarios']))
         self.assertTrue(integration['jointCaseMissing'])
         continuity = report['caseBindingGaps']['v33-autonomous-continuity']['function']
-        self.assertEqual(continuity['caseIds'], ['v33-continuity-catalog-01'])
-        self.assertEqual(continuity['missingDimensions']['duties'], ['recovery-and-rollback'])
-        self.assertEqual(continuity['missingDimensions']['scenarios'], ['capability-loss'])
+        self.assertEqual(continuity['caseIds'], [])
+        scope = next(s for s in policy['scopes'] if s['id'] == 'v33-autonomous-continuity')
+        for key in ('duties', 'qualityAxes', 'scenarios'):
+            self.assertEqual(set(continuity['missingDimensions'][key]), set(scope[key]))
         self.assertEqual(report['acceptanceRequirements']['A08']['blockedBy'],
                          ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07'])
         self.assertIn('v33-codex-lifecycle',
@@ -1326,7 +1389,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
 
     def without_resource_and_environment_cases(self):
         """An explicit no-case counterexample, with all scope floors intact."""
-        contract = copy.deepcopy(self.contract)
+        contract = self.historical_mapping_fixture()
         policy = contract['acceptance']['admission']
         policy['cases'] = [case for case in policy['cases'] if case['scope'] not in
                            {'v33-resource-pressure-and-exit', 'v33-environment-adaptation'}]
@@ -1344,7 +1407,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         historical = json.loads(subprocess.check_output([
             'git', '-C', str(self.root), 'show',
             '916ff322680ea5f0df6ee45b1fe326ec286a1603:product/development.json'], timeout=30))
-        record = next(r for r in self.contract['developmentObservations']
+        record = next(r for r in self.historical_contract()['developmentObservations']
                       if r['id'] == 'resource-environment-ended-instance-disposition-20260930')
         policy = self.contract['acceptance']['admission']
         self.assertEqual(record['outcome'], 'not-admitted')
@@ -1502,7 +1565,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
 
     def test_ended_fixed_sdk_cases_preserve_original_definitions_and_scope_floors(self):
         from yiyuan_accord.admission import _definition
-        record = next(row for row in self.contract['developmentObservations']
+        record = next(row for row in self.historical_contract()['developmentObservations']
                       if row['id'] == 'ended-fixed-sdk-case-disposition-20261005')
         historical = json.loads(subprocess.check_output([
             'git', '-C', str(self.root), 'show', record['declarations'][0]['declarationSnapshot']], timeout=30))
@@ -1563,7 +1626,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
 
     def test_ended_release_case_preserves_failure_identity_and_continuity_floor(self):
         from yiyuan_accord.admission import _definition
-        record = next(row for row in self.contract['developmentObservations']
+        record = next(row for row in self.historical_contract()['developmentObservations']
                       if row['id'] == 'ended-release-ack-case-disposition-20261006')
         declaration = record['declarations'][0]
         historical = json.loads(subprocess.check_output([
@@ -1603,8 +1666,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report['functionalCompletion'])
         self.assertFalse(report['candidateEligible'])
         gap = report['caseBindingGaps']['v33-autonomous-continuity']['function']
-        self.assertEqual(gap['missingDimensions']['duties'], ['recovery-and-rollback'])
-        self.assertEqual(gap['missingDimensions']['scenarios'], ['capability-loss'])
+        scope = next(s for s in policy['scopes'] if s['id'] == 'v33-autonomous-continuity')
+        self.assertEqual(set(gap['missingDimensions']['duties']), set(scope['duties']))
+        self.assertEqual(set(gap['missingDimensions']['scenarios']), set(scope['scenarios']))
         self.assertFalse(report['acceptanceRequirements']['A05']['complete'])
         self.assertIn('A05', report['acceptanceRequirements']['A08']['blockedBy'])
 
@@ -2446,8 +2510,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             self.update_package_identity(changed)
             self.commit(changed)
             report = self.assess(changed, self.replay(original_records))
-            self.assertNotIn("v33-goal-authority-correction-01", report["acceptedCases"])
-            self.assertNotIn("v33-codex-sdk-lifecycle-01", report["acceptedCases"])
+            current_cases = {case["id"] for case in self.contract["acceptance"]["admission"]["cases"]}
+            self.assertFalse(current_cases & set(report["acceptedCases"]))
             self.assertTrue(report["errors"])
 
     def test_changed_executable_oracle_invalidates_only_dependent_current_cases(self):

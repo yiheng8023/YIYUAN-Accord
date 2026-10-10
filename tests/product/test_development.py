@@ -1161,9 +1161,10 @@ class DeclarationCaseBindingTests(unittest.TestCase):
                           if any(not gap["caseIds"] for gap in claims.values())}, without_cases)
         # The ended one-use recovery instance is history, not a future PASS obligation.
         continuity = gaps["v33-autonomous-continuity"]["function"]
-        self.assertEqual(continuity["caseIds"], ["v33-continuity-catalog-01"])
-        self.assertEqual(continuity["missingDimensions"]["duties"], ["recovery-and-rollback"])
-        self.assertEqual(continuity["missingDimensions"]["scenarios"], ["capability-loss"])
+        self.assertEqual(continuity["caseIds"], [])
+        scope = next(s for s in policy['scopes'] if s['id'] == 'v33-autonomous-continuity')
+        for key in ('duties', 'qualityAxes', 'scenarios'):
+            self.assertEqual(set(continuity['missingDimensions'][key]), set(scope[key]))
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(report["currentHostBehavior"], "unverified")
