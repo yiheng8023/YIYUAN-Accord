@@ -3720,7 +3720,7 @@
               "timeoutSeconds": 300,
               "turnTimeoutSeconds": 240,
               "recoveryTimeoutSeconds": 20,
-              "caseSha256": "3f75d03b1c0c3db8f7bd15de0250cbd9c51ac53599131e97b4edea180d598ce6",
+              "caseSha256": "99d07d81921580004e05450d0f76e8a22310ee6420bf903c30d65c23863b187c",
               "host": "codex",
               "entry": "cx-cli",
               "codexVersion": "0.162.1",
