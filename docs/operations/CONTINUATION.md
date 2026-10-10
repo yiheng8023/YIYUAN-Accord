@@ -13,18 +13,16 @@
 - 4e6a95dd/CI37954912346的9个常规矩阵在native夹具前置检查失败；
   新onboarding声明被仅Hook夹具错误携带，严格投影拒绝。已只修派生夹具，
   保源包及严格拒绝；新增反例先失败后通过，两个受影响模块117项通过。
-  1f80托管修复现已11/11成功，当前151947/050e包与主用户安装均未变。
+  1f80托管修复现已11/11成功，源码151947/050e保持，主用户现已采用该精确包。
 - 主仓保持原检出main。当前17范围、13活动case、7处声明覆盖缺口、5个无case
   父范围；数字不是完成率。functionalCompletion/candidateEligible均false。
 - 源码候选20261009151947，25成员，包SHA
   050e45a6ed66e6e52780092a4e7d8abfe7ebdd136518538d7e7dd0faa17afd3f；
-  主用户现装20261008114112，25成员，包SHA
-  e4c0ce9df44857dc5cc665f292342cd631fc87a08b93d9af70e4267d3de1b435。
-  入口/state及其它Skills相同；manifest、adapter、生命周期Skill及SDK session driver不同。
-  新setup只在一次任务自有隔离安装核元数据，不代主用户更新或实际setup调用。
+  主用户现装20261009151947，同为25成员/050e45a6；旧114112/e4c0
+  保在独立恢复副本。新版Hook/本轮输入及MCP联读已核，宿主原生Setup触发仍未验。
   旧认证隔离profile仍162254；新验证缓存已保全后随自有临时配置清理。
 - Root最新原生观察：gpt-6.1-sol / 0.162.0-alpha.17.2 / default，effort/Fast未独立核定。
-  npm及常驻daemon为0.162.1（dd13bdb1）；本次安装仅复用已保全同字节
+  npm CLI为0.162.1（dd13bdb1），本次绑定两后台已正常关闭；安装仅复用已保全同字节
   0.162.0（dce685d5）普通plugin命令，不降级或启动daemon。旧执行包不能按路径名直接重用。
   实际修复worker为Sol/medium，审查按需指定Sol/high；子代理按任务及实际支持选择，
   不锁定模型或推理档数，不替用户启用。主模型和模式由用户掌控。
@@ -73,50 +71,38 @@ CLI0.162.0一次新隔离安装核到setup元数据，25缓存成员逐字节对
 该结果不代真实setup对话、Hook加载或常驻宿主环境采用。下一步组合实际引导与采用，
 不再重复已证元数据/源码/局部握手，不把所有依赖打包或修改全局PATH。
 
-## 已准备的下一次采用
+## 本机采用结果
 
-2026-10-10为让主宿主读取setup声明，已准备一次114112→151947的官方更新，
-固定已通过11/11 CI的1f80fe60/25成员050e45a6。只有manifest/adapter/lifecycle Skill/
-SDK driver四文件不同，Hook声明和普通MCP/state保持，不新增信任或运行时。
-用户2026-10-10已确认本次更新。原binding9877ed76因npm CLI已变0.162.1及9处当前
-宿主工具/notify配置变化，被即时检查拒绝，未派发。原件保持；派生executor-reconciled01
-复用本机已有同字节0.162.0/dce CLI，并完整保留当前配置为前态，不回退新宿主/CLI。
-三个执行代码文件不变，新binding471945e5；Root22检查通过，独立20运行及范围复审
-有条件通过。已按本轮真实确认登记authorized=true，未消费且无attempt/execution。
-客户端/IDE/CLI关闭后从外部终端执行；任何Codex旁车或未知消费者拒绝，不停后台。
-只用executor-reconciled01/launch.cmd，不运行原包。原范围及全部即时门不放宽；
-详见CONFIRMED-EXECUTION.md、RECONCILIATION.json、RECONCILED-REVIEW.md和
-CONFIRMATION-RECEIPT.json。用户已实际运行；preflight仅被Auto/LocalSystem沙箱服务
-CodexSandboxService.OpenAI.Codex（PID31664）阻止，未有attempt/execution，旧包exact、新包未生，
-许可未消费。该服务不随客户端关闭必然退出，不能盲等或重复执行。SCM登记与磁盘签名已核，
-实际image的LIMITED_INFORMATION读取返回WinError5；不按名字/登记路径直接豁免或停服务。
-用户已允许并完成单次管理员只读查询，固定6a4a2847退出0、句柄闭合，实际服务image/
-创建时间与SCM一致；该权限已消费，不重复提权。普通权限另核Legacy owner为当前用户、
-主home非desktop创建、cache路径不覆盖安装/恢复；已按必要源区分provisioning读者与
-卸载清理写者。实例资格化派生executor-service-qualified02，binding4c7d6026，30项检查
-及独立复审通过，登记原未消费安装确认。逐阶段核实例/登记/签名/所有权，损坏记录、
-进程缺失/复用和其他消费者仍拒绝。用户已正确运行该02目录；真实preflight已保留
-沙箱服务，实际阻挡者仅两个0.162.1常驻进程：managed server20116及updater23784。
-两者不随窗口关闭必然退出，不能继续用关窗口或重试替代处理。没有attempt/execution/
-startup-config，旧包exact、新包未生；原安装许可仍未消费。
+2026-10-10已实际完成114112→151947，固定1f80fe60，25成员和规范包SHA050e45a6
+均由Root及独立复审重算/逐字节核定；官方最终登记为启用。原安装确认与本次两个
+精确后台正常关闭许可都已消费，不重跑executor-graceful03或旧目录。
 
-同socket WinSock只读观察绑定实际server20116/出生134360534040224803/dd13映像和
-原PID登记，完整loaded列表为空，0.543秒退出、连接闭合、config/PID原字节不变；
-loaded-threads恢复候选文件不存在。此时点事实不代未来空闲或停后台权限。
-已在新executor-graceful03准备一次官方正常关闭两实例后接原更新：byte0原生生命周期
-锁、精确updater PID marker、自身HANDLE退出、managed socket精确PID/ACK与退出，
-再进原五步安装。90秒共享关闭时钟、连接/底层收发/控制帧/ACK/关闭同限；不强退、
-删恢复、启服务、重试或停止沙箱服务。有任务/恢复责任、其它消费者/子进程、身份/
-来源/配置变化或未知均拒绝。Python3.14可能把读取错误当路径不存在的守卫已仅在
-派生代码纠正；反向还原该严格缺失守卫后，安装AST与原02相等，原件不动。
-Root13新纯方法和31安装/服务检查通过，新未授启动在所有共享动作前拒绝。
-最终独立复审有条件通过；binding8c63fe84、plan d7f3dec8。用户已明确允许本次
-两个精确实例的限定正常关闭，Root按新turn/epoch登记独立stop授权；原默认未授
-文件另留，原安装确认仍未消费且没有重复申请。当前尚未派发，须关闭客户端/
-IDE/相关CLI，从外部仅执行executor-graceful03/launch.cmd并满足所有即时门。
-最新具体源/观察/冻结与READY位于accord-setup-adoption-20261010-01/daemon-review及
-GRACEFUL-CLOSE-READY.md。旧执行目录全部仅作历史，不重跑；新实际范围成熟获准
-后才从外部执行唯一新launch。安装及真实setup仍未完成，R2/R3/R4和全部F/A保持。
+原20116/23784按官方marker/managed socket正常关闭约15.669秒；两次原始完整
+loaded列表为空，原请求/ACK均20116，原HANDLE退出记录、3连接与租约关闭无错误。
+当前OS原PID已消失，沙箱Auto服务仍Running/PID31664。五个CLI步骤exit0、无强退、
+所属Job均0活进程。原始记录是当时证据，不能事后重新实测已关HANDLE或宣称全局空闲。
+11份配置只完成获准ref转换；重开变化仅已知session pipe，用户选择保持。
+新旧各25文件恢复副本、56份冻结恢复源及125个原安装材料保持；旧活动缓存已按
+官方更新退休，不重建求绿。两次初始化原响应仍有always_allowed_app_ids ignored
+通知，配置保留，不删用户设置消警，不代当前客户端全部功能兼容性。
+
+原线程已收到151947原生SessionStart完整协调正文。当前MCP联读关联真实本轮
+turn01a12344/epochee7d0ece，inputReceipt存在，无replay/恢复隔离；新MCP进程在
+本次安装后启动，helper/声明旧新同字节。响应没有独立MCP worker包根字段，
+精确worker根保unknown，不为这个表示字段重复安装或泛查内存/入口。
+新版setup正文已用于本轮已有前提复核；宿主原生工具返回bundled Node24.19，
+当前MCP解释器为已有Node24.21，没有新运行时或全局PATH改变。
+
+这条引导链路剩余宿主原生Setup触发的实际只读回执，不能以Root读正文代验。
+SETUP-READONLY-PROBE.md已准备并请求侧栏打开；请用户在插件详情如有设置/Setup
+则打开并发其代码块，无按钮即保留具体unknown，不重装。当前工具不能代点桌面
+端该入口，只需这次必要个人操作，不重新授权安装或信任。新的实际setup消息
+必须按它自己的Hook cwd/身份/输入读取，不能默认为Root仓库或旧Work路径。
+
+本次采用原件与完整限界在accord-setup-adoption-20261010-01/post-update，含facts/
+ADOPTION-RESULT/source-digests；原executor/01/02失败、管理员只读查询及03冻结/
+授权/实际回执保留。准备阶段历史在[d5f4744b接续原文](https://github.com/yiheng8023/YIYUAN-Accord/blob/d5f4744b01eb5ff6fc61937650f06d2cce9928a8/docs/operations/CONTINUATION.md)。
+实际setup、缺Node用户、全入口/生命周期及R2/R3/R4尚未闭；17scope和全部F/A保持。
 
 ## 剩余主线与下一依赖
 
