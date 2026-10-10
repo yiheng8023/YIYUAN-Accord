@@ -785,4 +785,4 @@ W02持续承担完整入口处置，W04随受影响历史依赖纠偏，W06/W07�
 
 2026-10-06追加范围裁定：撤回Stop自动续轮的产品化及2次/30分钟预算设计，保15af原始实现和诊断为历史，不继续分发该候选。临时开发需求不能无声迁移成默认用户链路。当前收官R1改为恢复正常链路及采用，R2–R4保原职责。
 
-在r42既定真实普通任务/前瞻准入工序下，新`v33-codex-cli-control-guide-01`只绑定已有observer新增参数的必要维护说明及有效用户环境有限贡献。actual committed fixture使现行tracked文件数193，按既有可修订complexity规则增加一份；不覆写旧fixture，不加observer或服务，code/instruction/5%预留与所有17scope/F-A要求保持。七活动定义、十无case范围只说明当前映射，不代表通过。
+在r42既定真实普通任务/前瞻准入工序下，新`v33-codex-cli-control-guide-01`只绑定已有observer新增参数的必要维护说明及有效用户环境有限贡献。actual committed fixture使现行tracked文件数193，按既有可修订complexity规则增加一份；不覆写旧fixture，不加observer或服务，code/instruction/5%预留与所有17scope/F-A要求保持。该有限案执行后因源摘录遗漏必需deadline校验而业务语义失败，已结束并移出活动cases；原定义/候选/执行/预算及Root来源责任保，六现行定义和十一无case范围只说明映射，不代表通过。唯一fixture为原件回读保留，不形成重放指令。

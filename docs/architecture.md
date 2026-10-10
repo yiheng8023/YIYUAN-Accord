@@ -756,6 +756,26 @@ accepted case. Existing exploration mode remains available. Old cases lacking
 the structured execution binding are rejected by this opt-in, never backfilled
 from their historical results; formal observe/recheck and review are still needed.
 
+For installed-plugin persistent CLI cases, `prepare --sandbox-mode` defaults to
+`workspace-write`; the optional `danger-full-access` value is limited to that
+path and must already be authorized. It does not grant permission, bypass Hook
+trust or inherit the whole caller profile. The observer continues to set
+`approval_policy="never"`. Initial and resumed commands bind the same sandbox
+setting, and the non-default value is included in the manifest and execution
+binding.
+
+A persistent case requires both `--turn-timeout` and `--recovery-timeout`, with
+integer values satisfying `1 <= turn <= work` and `1 <= recovery <= 300`.
+The required `--timeout` work window is limited to 1–900 seconds by CLI prepare.
+The required `--windows-sandbox` flag selects an existing backend preference;
+selecting `danger-full-access` does not prove that backend participated.
+Set these controls during preparation, then execute the prepared observation
+with `run --evidence <directory>`; they are not `run` options. Preparation may
+start model-free native inventory processes and create artifacts. A stage's
+source/command drift guard precedes that business Agent's Job/Popen, while
+inventory or earlier stages may already have run. Prepared settings and offline
+checks still require separate native, business and post-state observations.
+
 For a coordinator-owned composition, the same Python `prepare` API accepts an
 optional `composition={"case": case_id, "execution": coordinator_execution}`.
 The caller supplies the coordinator's `host`, `entry`, a nonempty `coordinator`
