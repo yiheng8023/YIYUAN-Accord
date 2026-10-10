@@ -1,6 +1,6 @@
 # 当前接续
 
-更新：2026-10-10 · N33-20260909 / r42。本页只承载当前事实、未完责任与必要证据定位。
+更新：2026-10-11 · N33-20260909 / r42。本页只承载当前事实、未完责任与必要证据定位。
 [计划](PLAN-v3.3.md)拥有共识/工序，[基线](BASELINE-v3.3.md)/[验收](ACCEPTANCE-v3.3.md)保持全部F01–F08/A01–A08；机器投影不授予权限或证明完成。
 
 ## 当前起点
@@ -9,6 +9,7 @@
 - 源码及本机现装221152，25成员/5Skills，规范包SHA2023f0d1ab5ba44e824e211c2cd3aaeda9913482d4dc75f7705f699cf9bbff1f。用户最新授权本地包按需更新，本轮先通过支持的CLI更新150947/cafa；因实际原生格式拒绝修正SDK入口后，再按各终态依次更新marketplace及plugin至221152，25份现装文件与源码逐一相同。配置原始字节仅该marketplace固定ref先1f80fe60→0538fe35、再→2b3852c4，其余模型/审批/第三方保持；旧包和配置恢复保在accord-native-consumer-20261010-01/lifecycle-recovery，后态见root-qa/sdk-format-update-after.json。新现装模块的三项固定本地响应入口核验通过，未重跑旧模型业务。中断后本Root可见Skill目录已指向221152，必要continuity/verify正文已读；这不代原Desktop Hook/MCP/GUI刷新或完整实际参与。原刷新跳过固定ref、来源冲突及过早依赖操作的旧包回执保留，不叫更新成功。Meta4444CRLF/511861ec保持。
 - r42当前17必要scope、6活动定义、11声明覆盖缺口、11无case范围；此为映射，不是完成率。functionalCompletion/candidateEligible=false，完整验收及发布未完成。
 - 当前根回执gpt-6.1-sol/0.162.0-alpha.17.2/default；effort/Fast未独立核定。子代理按任务与有效支持/权限选择，不锁模型或档数，不替用户开启。普通继续不启Plan/Goal，Stop和自动增加回合已退休。
+- 当前真实输入epoch85086f52、turn01a1263c与Root原生调用一致，present/reconciled为true，replay/resume均false；原中断写入的native-call-turn-conflict及rev7原件保留，以真实新输入原生调和至rev8/9，没有重放业务。此次compact入口已供应221152协调正文与回执定位；其它Hook场景、MCP worker及GUI采用未全证，不能把单次指导供应当全部组件刷新。旧失效水印归属仍未知。
 - 主线程24已在原main独立核源合同/当前原生输入/HEAD与包后接管，源恢复保留；本轮按需派发Sol/high实现、Astra/high独审，Luna/high只读核活动措辞。私有accord-native-consumer-20261010-01完成CLI0.162.1/Node24.21下150947/cafa SDK模块的两轮真实消费：25row精确delta与7面维护说明，Root逐行oracle后同idle/persistent源与同token续作，未transfer，unsubscribe/自然exit0/close/Job0及输入后态已核。guidance为显式采用、本进程限工具配置不改全局，不冒Root Desktop Hook/MCP/GUI刷新、普通自主择时/完整F-A或默认环境证明。原管道/过期限/gate换读问题、canonical/legacy混合原生拒绝、Root前启动/工序错误均保原失败和修正；live01不通过，修正live02有新前绑完整窗且证据在窗内，旧窗不延长。前段工具30项及独审成品可用，最终记录总窗晚57秒不追认；精确记录见该目录root-qa/RESULT.md和原accord-candidate-consumer-20261010-01。
 
 ## 本轮已完成的清理
@@ -35,6 +36,10 @@ Setup/零Node/一键/私有runtime不在发布关键路径；README说明普通�
 | SDK源创建及目标计划组装前拒绝缺失/错误type、混合格式与不支持的namespace，保真转发合规function工具 | 实际0.162.1拒绝触发，旧公开入口回归11处失败、新3项及141项相关回归通过并独审；direct core/恢复原件不转换、不重放，完整F/A未闭。新221152尚未声明真实模型两轮参与；原150947两轮证据保原绑定 |
 | Node24.19/24.21与CI24有受测事实；主用户151947采用及正常后台退出、配置/原件回核完成 | 不代最低版本、全部组合或完整生命周期；旧安装/关闭许可已消费，不复用旧executor/grant |
 | GT11两阶段各40oracle及真实资源变化/退出有原件，原worker终态363.837超360；完整Root语义600内未全证 | 保not-admitted与原窗口。监督器原整轮失败、另2.300秒自然退出修正分开，不重跑或追认 |
+
+原141项回归发生在后补断言前，不能担保最终测试版本。精确2b3852c4/CI38058906743及cb8b91c5/CI38059519330均已failure：两native生命周期job通过、九matrix失败；原Linux py3.11 job114232951665为895项中一条错误断言。Root把“不得回复102”误加到结果未知的发送反例，实际发送尝试应保留。现已仅将该断言移至目标格式前置拒绝例，保既有未知效果与失败锁；两受影响方法通过，Astra/high独审无新增P1/P2，完整Windows本地896项/3160.905秒/exit0通过。新精确托管终态待核；包字节未变，不重装。原日志、错误及后续保证修正在accord-native-consumer-20261010-01/root-qa/sdk-format-test-assurance-correction.json分别保留。
+
+accord-dev-delivery-20261010-01已交付当前221152私有检查ZIP、25成员清单及双语检查/使用/恢复说明；归档、源码、现装一致，39项保护原件/输入的摘要、大小与mtime及用户配置回核通过，冻结租约已在最终核验后结束。该说明由Root补齐并由Sol/medium独审。普通CLI0.162.1/Sol/medium/read-only在业务读取前遇到setup refresh错误，模型草稿保未知；实际未缓存输入40495超过40000，完整QA首次晚于原1500秒窗口914.863秒，原预算和窗口均未通过，不计自主完成或正式准入。执行者自然exit0/Job0，句柄与Job已关闭；共享node_repl文件锁和PCManger读ACL更新失败仅为该宿主初始化观察，helper可能的部分ACL效果未知，没有手动修复或清理共享资源。ZIP仅供维护者检查，原生ZIP安装路线未验；Root辅助成品、原模型失败及所有限额分别保在RESULT.md/evidence/closeout.json，不延长原窗或降低600+20/worker45+10等现行准入上界。
 
 ## 剩余主线
 

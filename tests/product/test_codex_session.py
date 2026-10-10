@@ -829,7 +829,6 @@ class CodexSourceSessionTests(unittest.TestCase):
                 self.assertEqual(result["error"]["code"], expected)
                 self.assertEqual(result["second"], "SESSION_FAILED")
                 self.assertEqual(result["snapshot"]["pendingRequest"]["id"], 102)
-                self.assertFalse(any(frame["id"] == 102 for frame in result["serverResponses"]))
                 self.assertEqual(result["snapshot"]["transferCount"], 0)
                 self.assertEqual(len(result["starts"]), 1)
                 self.assertEqual(result["verifyCalls"], [])
@@ -1016,6 +1015,7 @@ class CodexSourceSessionTests(unittest.TestCase):
                 self.assertNotIn("first", result)
                 self.assertEqual(result["snapshot"]["status"], "failed")
                 self.assertEqual(result["snapshot"]["pendingRequest"]["id"], 102)
+                self.assertFalse(any(frame["id"] == 102 for frame in result["serverResponses"]))
                 self.assertFalse(any(frame.get("method") in ("thread/resume", "thread/fork",
                     "thread/unsubscribe") for frame in result["sent"]))
 
