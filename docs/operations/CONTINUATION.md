@@ -35,7 +35,9 @@
 
 2026-10-11已前瞻登记[库存分配恢复](../../product/cases/ledger-effect-recovery-v3.3.json)，复用当前包、CLI观察器和SDK known-source restore。d324841e首轮监督Agent实际发现私有caller误读`recoveryTimeout`，而既有观察器字段为`recoveryTimeoutSeconds`，在启动业务source前停止；56.514秒自然退出、Job0，原件hash/mtime和窗口内共享设置不变，两业务产物均未生成。该轮未完成，不是SDK恢复失败或正式行为通过；原候选/源码/原始记录保于私有`accord-r23-ledger-recovery-20261011-01`，临时缓存已闭合清理。
 
-当前只修正这一个接线问题，两语言时钟入口均用该轮真实记录验证共同480/600/620秒截止和错误字段拒绝；在独立`...-02`副本前瞻更新原同case源码身份，不增加case或重放已产生业务（原source未启动）。双方预算、全部判据/入口缺口和原失败不改，新候选尚待实际运行。业务/正常退出前480秒、独立QA保120秒，总600+20保持；Root不代写业务。维护者合成阶段输入不冒称真人操作，同线程恢复不代fresh takeover、自主上下文择时、完整A05/A08或全入口。
+修正时钟接线后的8ee3c89e第二轮又在source创建前停止：私有caller试图扩展SDK冻结连接对象，抛TypeError。监督97.910秒、observer102.129秒，无thread/start/turn/start或业务产物；所属controller/native/监督/Goal-reader均已退出且Job0，原件及共享配置未变，TEMP已清。第二轮原源码/失败保于`...-02`。两轮监督合计899867 total、94368未缓存输入、5499输出；不含Root/子代理准备评审，非上下文占用或费用。
+
+已停止盲目追加模型尝试，先在独立`...-03`只修局部初始化：真实SDK不可扩展对象上的旧写法确定失败，新代码用caller局部usage闭包，并与零模型probe共用请求包装/source构造代码。独立运行实际SDK+内存transport+临时真实SQLite，核wrapper、usage、source factory构造（未run）与close，全部通过且临时资源0；这不是实际host/业务通过。当前前瞻更新同一未启动业务case的03来源后才可继续，不增case或改旧失败。整包/标准/缺口保持；业务正常退出480秒、独立QA120秒、总600+20及双方预算不增加。Root不代写业务，source同线程恢复仍不代fresh takeover、自主上下文择时或完整A05/A08。
 
 随后回到R2/R3的明确组合结果：实际入口中的必要能力调用、普通自主连续性与恢复、可用结果和完整后态。按适用性和材料性差异复用充分机制，单个完整组合的职责/质量/场景与独立结果仍须充分，不能把多个分散PASS拼成A08。
 

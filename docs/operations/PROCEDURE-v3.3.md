@@ -2918,3 +2918,10 @@ Root复核后去掉新回归中重复评估及已由完整比较覆盖的重复�
 Root已核四份workspace输入hash/mtime，source工具/源配置未被修改，窗口内共享config SHA `86caaade4b08b56ac911259432898c739f75f63004a9edb1e7bcc2bba802fda9`前后相同，无workspace注册；Goal读取时null，读取器自然exit0/Job0。原`accord-r23-ledger-recovery-20261011-01`保全部必要原件和root-observation.json；新鲜所属进程检查后仅清理任务temp/cache，输入/原源码/恢复材料保持。此config值只描述该窗口，不能覆盖用户后续设置。
 
 根因是私有执行接线遗漏，Root此前提供的字段提示也漏了Seconds。只在独立`...-02`修正两入口，并用首轮实际run-started核两语言相同的原始绝对480/600/620截止；原20离线/4历史shape及11字段拒绝检查通过，独立窄审确认。原轮1次尝试和全部用量/失败不改，前瞻更新同case来源后才允许接续未启动业务；不是事后补证明或新增发布门槛。后续实际结果另记。
+
+
+### 第二轮初始化拒绝与实际SDK接线核对
+
+`8ee3c89e549f65ccb739d42b1128bb15c01513f3`，监督线程`01a12911-c129-7b71-a7e4-94ed8d5ee7e5`。私有caller给真实不可扩展连接赋`__ledgerUsage`，在initialize/initialized/config/read/model/list后抛TypeError，未发thread/start/resume/turn/start，无业务source/产物。监督97.910秒/自然exit0/Job0，observer102.129秒；input612779/cache568832/output3685，total616464、未缓存输入43947。SDK进程因错误被controller终止（SIGTERM，OS exit1），不能说业务source自然完成；controller/native/Goal-reader均退出、Job0。原件/窗口内共享配置不变，任务TEMP清空，全部必要原件在私有`accord-r23-ledger-recovery-20261011-02`。
+
+这是私有integration未覆盖实际SDK冻结对象初始化契约的遗漏。Root先停止更多模型派发，只在独立03副本修局部usage handler，原02来源保持。实际安装SDK、生产共用binding、内存transport和临时真实SQLite的零模型核对使旧写法红、新wrapper/usage/source constructor/close绿；独立审查重核且temp0。原20checks/clock11/历史4保持，真实source运行/恢复/成果仍未验。前瞻更新仍是同case和同未启动业务，不增加case/发布门槛，不重置或改写旧两轮失败、用量和限额；两轮native监督合计899867 total/94368未缓存输入/5499输出，准备/评审开销另保未知，不作净增益声明。
