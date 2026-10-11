@@ -203,7 +203,7 @@ jobs:
               "--timeout", "600", "--request-timeout", "60", "--recovery-timeout", "15"], check=True)
       - name: Observe same paused task through host upgrade
         run: python -B scripts/observe_codex_lifecycle.py run --evidence "$ACCORD_NATIVE_ROOT/host-upgrade"
-      - name: Verify native plugin MCP identity and rejected state mutation
+      - name: Verify native plugin MCP rejection and scoped Hook input
         shell: python
         run: |
           import json, os, pathlib, subprocess, sys
@@ -213,6 +213,10 @@ jobs:
               "--native-codex", manifest["hostReplacement"]["replacement"]["path"],
               "--evidence", str(root / "native-state-mcp"),
               "--preapprove-owned-manage-tool"], check=True)
+          subprocess.run([sys.executable, "-B", "tests/product/test_native_state_mcp.py",
+              "--native-codex", manifest["hostReplacement"]["replacement"]["path"],
+              "--evidence", str(root / "native-state-mcp-scoped"),
+              "--scoped-hook"], check=True)
       - name: Reconcile a lost carrier acknowledgement without replay
         if: always() && steps.prepare_upgrade.outcome == 'success'
         shell: python
@@ -425,11 +429,11 @@ jobs:
           if-no-files-found: warn
           include-hidden-files: true
           path: |
-            ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp/*.json
-            ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp/commands
-            ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp/native
-            ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp/retained
-            ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp/workspace/keep.txt
+            ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp*/*.json
+            ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp*/commands
+            ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp*/native
+            ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp*/retained
+            ${{ env.ACCORD_NATIVE_ROOT }}/native-state-mcp*/workspace/keep.txt
       - name: Independently re-read the host upgrade episode
         if: always() && steps.prepare_upgrade.outcome == 'success'
         shell: python

@@ -1676,6 +1676,25 @@
     {
       "id": "scoped-mcp-environment-forwarding-20261012",
       "state": "source-and-index-bytes-aligned-local-package-updated",
+      "coordinationReview": {
+        "privateEvidence": "accord-mcp-env-fix-20261012-01/continuity-reconciliation",
+        "ordinarySource": "Actual same-thread native compaction followed by current input/checkpoint inspection and continuation; Root is actor and recorder, not independent behavior acceptance.",
+        "checkpointReconciliation": {"beforeRevision": 78, "afterRevision": 79, "beforeConditions": 26, "afterConditions": 8, "originalRetained": true, "inputAndOutputPredicatesPreserved": true},
+        "rootUsage": {
+          "turnId": "01a12c57-9c50-7200-89bc-df0c48f53773",
+          "turnStartedAt": "2026-10-11T19:01:41.639Z",
+          "observedThrough": "2026-10-11T20:29:00.219Z",
+          "totalTokens": 31718051,
+          "inputTokens": 31612123,
+          "cachedInputTokens": 31101056,
+          "uncachedInputTokens": 511067,
+          "outputTokens": 105928,
+          "verification": "Cumulative delta equals last-usage sums at 95 first-seen cumulative boundaries among 112 native token events; repeated post-compaction last fields are not substituted, and reasoning is not added twice.",
+          "limit": "Timestamp-bound Root usage only. Child actors are separate; prices, earlier preparation and whole-project net impact remain unknown. No new budget or acceptance gate."
+        },
+        "independentReview": "Original checkpoint digest, retained duties and usage arithmetic checked against the specified native span; no independent complete-input, autonomous-trigger, default-window, handoff or A05/A08 behavior claim.",
+        "qualificationPassed": false
+      },
       "subject": {
         "version": "3.3.0-dev.1+codex.20261012041313",
         "packageSha256": "c0328e4205d9ea63a3f154d8c763c20a18940cffd8af4647a3e1cab3ee4bd6d0",
@@ -1690,6 +1709,7 @@
           "0.162.1"
         ],
         "nativeNegativeVersion": "0.162.0-alpha.17.2",
+        "hostedPositiveRegression": "Existing native-lifecycle job now also invokes --scoped-hook beside the retained missing-input negative fixture, with separate native-state-mcp-scoped evidence retained by the same artifact step. Linux/macOS CLI 0.156.0 execution remains pending; Windows local results do not substitute for it.",
         "localProviderRepliesPerRun": 3,
         "realModelCalls": 0,
         "sameNativeCallerHookInputAndContext": true,
