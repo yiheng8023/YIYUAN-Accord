@@ -2901,3 +2901,11 @@ Root复核后去掉新回归中重复评估及已由完整比较覆盖的重复�
 修复复用原观察器，保留两次对照的状态映射、线程、Hook状态和单调时钟，并从原生请求/回执、helper与资源记录复算。缺证、错线程/Hook/删除/时序均不能以成功标志替代。首补丁误读原生资源不存在的arguments字段，私有反例修正；第二版前置identity检查遮住5个原信任测试错误，Root恢复原阶段顺序。最终53项相关测试通过，真实Windows状态键金值调用生产计算路径。原失败、旧ZIP及评审保在accord-thread24-audit-20261011-01/session-end-fix，不填改旧原件。后续新候选需按原工作流重新前瞻绑定并核实际原件，不能把单元通过当原生正式准入。
 
 623a90877737afb6c30abd866f4cd93938b69fda / tree a9d5c4e2f4039726d384fb84100338337d6e9e57的新Windows/base38084747919全部成功含所属CLI清理。artifact11681424683的ZIP SHA92657b8a6206de92e6062870a18db7f2b98503ae1723e6520e1e7c02b8565b46，156成员；新增两份SessionEnd前后映射真实对应各自原生线程/Hook和退出时序，启用删除本线程input、禁用保留原hash。Root核25包成员/两次前瞻binding/7native后态，独审核全36 expected字段、6command/12helper及全部条件。两位延续评审均披露inherited-history/shared-environment/Accord可见，四轴通过；Root现有assess_development_evidence执行observe/recheck，acceptedCases恰为原两SDK case，errors=[]、caseRejections={}，functionalCompletion=false、candidateEligible=false。全部原件、review、observer映射与资格报告私有保留；a38原P2和暂缓状态不追认，623成功不代普通Agent或完整系统结果。本段只记录精确623资格，不把随后文档提交自动当相同候选。
+
+## CI终态、普通维护与主线程断流（2026-10-11）
+
+623的38084740803及5f7的38085130660均11/11成功。随后普通CLI worker使用当前221152、CLI0.162.1、Sol/medium解析两组新原日志，复用原严格解析器并实际读取verify Skill；没有注册正式case。两组各8,102项、共16,204条索引、8,093项可比间隔和9项首值null，无增删或状态变化。Root独立原行、全差值、API时长、top5、隔离重跑和独审确认成品可用，24input字节/mtime保持。
+
+原生段约233秒被输出guard终止：output12,065>12,000，total582,986、uncached51,369；无terminal、forced=true，原行为未完整通过。原索引8,960,606字节超过结构reader8MiB，另留.protected-inputs.tmp.json。Root没有把实际预算送给actor，也未事先核产物规模/reader适用性，准备责任明确；不扩旧cap/窗口、不重跑或补签案例。原worker Job remainingOwnedProcesses=0，四次库存查询exit0/Job0；两个后来仍存在的采样PID在窗口后新建，按PID复用处理，未清理共享进程。临时基线保入evidence，原workspace和中断输入作原件保留，Root独立delivery附完整限度。
+
+主线程在01:36:53Z另以stream disconnected before completion结束，request a31c3ed5-84fc-4304-b5ab-7f600d16c329，codex_error_info=other。该服务响应错误没有确定根因，不能归到worker预算、Accord、模型选择或网络；当前新输入后已核恢复资料与文件。原native窗口config rawSHA32687ea0前后保持；之后当前46e24b81的变化归属未知，未覆盖用户设置。所有私有原件位于accord-current-ci-comparison-20261011-01。17scope、6case、F/A与claim ceiling保持，完整普通自主接管/同episode组合未通过。

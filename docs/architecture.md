@@ -576,6 +576,14 @@ a nested proposal while a transfer is in progress is refused without queuing.
 This is a same-controller path, not automatic cold recovery or arbitrary thread
 adoption. Project/sidebar association alone establishes none of these bindings.
 
+When a caller imposes material time or usage limits, communicate them to the
+executing actor before dispatch and preserve capacity for verification and exit.
+A hidden enforcement cap does not demonstrate autonomous budget management.
+Check the declared artifact volume against the chosen reader's limits before
+execution; a reader refusal is not proof that the artifact is incorrect. Keep
+original limits and failed runs intact, and qualify later owner verification
+separately instead of extending a consumed window or repeating completed work.
+
 The source session's run deadline also bounds the handoff plan's recovery
 deadline: `plan.deadlineMs <= plan.recoveryDeadlineMs <= run.deadlineMs`.
 An owner's later process-close allowance or a separate post-release recovery
