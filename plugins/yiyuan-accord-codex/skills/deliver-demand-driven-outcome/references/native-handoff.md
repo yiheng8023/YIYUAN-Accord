@@ -13,6 +13,9 @@ The CommonJS module exports `handoff(plan, {transport, recorder, verify})` and
 connection, account or recovery service.
 `reconcileContinuation` resolves only a verified first-continuation acknowledgement
 loss in the existing recorder, as described below; it does not resume a handoff.
+For a failed handoff that still owns the source writer, use the narrower
+[failed-transfer reconciliation](#close-a-verified-failed-transfer-while-retaining-the-source-writer)
+entry after actual effects and owner quiescence are verified.
 Use an existing suitable controller or establish one within current authority;
 installation does not give ordinary Desktop/IDE Hooks control of those tasks.
 The caller decides when a transfer is needed from current evidence and owns the
@@ -216,7 +219,7 @@ The resumed verdict requires matching references, `decision: "allow"`,
 `continuityToolsRestored`, `targetSettingsMatch`, `historyRetained`, `singleWriter`
 and `effectsVerified` all true, plus the nonempty native tool evidence reference.
 
-### Restore a known ordinary source before a handoff
+### Restore an acknowledged source on an inactive scope
 
 The same `restoreCodexSourceSession` also accepts
 `{source: {threadId, connectionId, authorityRef, stateRef}, expectedScope,
@@ -227,6 +230,8 @@ and the retained source connection must differ from the new owner connection.
 The four source fields locate evidence; they do not authenticate it.
 Verifier facts contain this `source`, with `record: null` and `transferId: null`;
 there is no settled-transfer record to infer for this branch.
+After failed-transfer reconciliation, retain that separate failed history and use
+the returned source/scope receipt; the restoration checks below still apply.
 
 The shared prepare verifier must additionally return `sourceOriginVerified: true`
 and a nonempty `sourceOriginEvidenceRef`. Establish the original native creation,
@@ -258,6 +263,8 @@ clear an active transfer, change writers, expire another owner or grant authorit
 Explicit `settle(transferId, revision, lease)` only releases an active transfer
 whose stored state has the verified source-release shape; it preserves the target
 writer and history, rotates the token and does not grant another action.
+`settleFailedTransfer` supports the separate failed-source reconciliation path
+below and preserves its failed history instead of manufacturing source release.
 
 The recorder lazily uses [Node's built-in SQLite](https://nodejs.org/download/release/v24.8.0/docs/api/sqlite.html)
 `DatabaseSync`, available in the tested Node 24 runtime. That optional API remains
@@ -547,6 +554,61 @@ Late or malformed results require the surviving caller to reconcile actual effec
 and writer ownership before retry, rollback or source release. The module does not
 resume an interrupted transfer; reconcile first rather than blindly calling it
 again with either the same or a new transfer identity.
+
+### Close a verified failed transfer while retaining the source writer
+
+Use `reconcileFailedTransfer(input, {transport, recorder, verify})` when an
+actual failed handoff still blocks its source scope. `input` binds `transferId`,
+`scopeRef`, `authorityRef`, `stateRef`, `expectedRevision`, the exact active
+`expectedLease`, and a fresh bounded `deadlineMs`. Read the retained failure and
+reconcile the owner's actual effects before selecting that basis. This entry
+does not resume the interrupted transfer or replay its requests.
+
+The supported window has a recorded `held` or `reconciliation-required` failure,
+`writer: "source"`, no continuation and `pendingEffect: null`. An absent target
+is accepted only for a failure before target creation was attempted. A known
+target requires a persistent idle or unloaded thread and its exact, fully
+terminal intake history, including the original inputs. Unknown requests,
+unlocated targets, active or changed history and a transferred writer remain
+held. A null pending field, an idle thread or an RPC error alone proves no
+absence of effects. A budget expiry that left no durable failure record is also
+outside this entry; retain its original materials for owner reconciliation.
+
+`verify('failed-transfer-reconcile', facts, deadline)` receives the immutable
+input, exact `ledger`, original/current connection identities, `sourceRead` and
+`targetRead` (null only in the pre-creation window). It must independently verify
+current authority and pauses, cessation of the old controller's/in-flight
+actions, source recoverability, single ownership and all initialization/intake
+effects. A stopped turn does not undo its effects. Keep the source and target
+quiescent through settlement; the recorder fences cooperating controllers only.
+The verdict needs matching scope/authority/state references, `decision: "allow"`,
+`sourceRef`, and these true fields: `pauseStateVerified`, `priorAttemptQuiesced`,
+`pendingEffectsReconciled`, `sourceRecoveryReady`, `singleWriter`,
+`effectsVerified`, `reconciliationAuthorized`. Supply nonempty
+`priorAttemptEvidenceRef`, `effectsEvidenceRef`, `sourceRecoveryEvidenceRef` and
+`targetEvidenceRef` that locate the supporting observations. Retain raw native
+receipts and effect evidence externally; these references and verdict fields
+cannot create that evidence. Native source/target reads are repeated after
+verification and must remain unchanged.
+
+The recorder's `settleFailedTransfer(transferId, revision, lease, reconciliation)`
+atomically retains the original failure and pending field, adds the reconciled
+evidence references/read digests, records `failed-source-reconciled`, closes the
+active transfer and rotates its token while retaining the source writer. The
+existing schema and historical rows remain readable. This storage operation
+does not perform the native/authority verification itself; call it through the
+reconciliation entry for this workflow. Ordinary successful `settle` is unchanged.
+
+Success returns `status: "failed-transfer-reconciled"`, the verified inactive
+`scope`, and `restore: {source, expectedScope}`. Use that receipt with the existing
+known-source `restoreCodexSourceSession` on a fresh controller, adding the explicit
+resume settings and deadline; restoration retains all its existing checks. The
+failed executor remains locked. Reconciliation sends only `thread/read` and
+grants neither a new turn nor source release. Once settlement was invoked, a
+lost, late or malformed acknowledgement or changed readback returns
+`RECORDER_COMMIT_UNKNOWN`: inspect the durable history and scope, reconcile the
+actual outcome, and preserve the receipt before subsequent recovery. Replaying
+the old settlement basis is rejected, not used as a fresh success claim.
 
 The owned connection attaches a frozen `rpcRequest` to a failed allocated call:
 `{connectionId, hostVersion, requestId, method}`. It does not duplicate parameters

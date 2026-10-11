@@ -10,6 +10,7 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const pathModule = require('node:path');
+const {isDeepStrictEqual} = require('node:util');
 
 const MODULE_ID = 'yiyuan-accord/carrier-recorder';
 const SCHEMA_VERSION = '1';
@@ -626,13 +627,65 @@ function openCarrierRecorder(options) {
     });
   }
 
+  function settleFailedTransfer(transferId, revision, expectedLease, reconciliation) {
+    // Effect/authority verification belongs to the caller. This transaction
+    // only closes an exactly observed failed source lease, retaining its history.
+    ensureOpen();
+    text(transferId, 'transferId');
+    safeInteger(revision, 'revision');
+    const lease = exactLease(expectedLease);
+    if (lease.transferId !== transferId) throw new TypeError('lease transfer differs');
+    const receipt = immutable(reconciliation);
+    return transaction(database, 'IMMEDIATE', () => {
+      const transfer = getTransfer.get(transferId);
+      const scope = getScope.get(lease.scopeRef);
+      if (!transfer || transfer.settled !== 0 || transfer.revision !== revision ||
+          transfer.scope_ref !== lease.scopeRef || !scope || scope.active_transfer_id !== transferId ||
+          scope.writer_thread_id !== lease.writerThreadId || scope.fence_token !== lease.token) {
+        reject('CAS_CONFLICT', 'scope lease or transfer revision changed');
+      }
+      const state = parseState(transfer.state_json);
+      const targetId = state.target?.threadId ?? null;
+      if (!['held', 'reconciliation-required'].includes(state.phase) || state.pendingEffect !== null ||
+          state.writer !== 'source' || state.writerThreadId !== lease.writerThreadId ||
+          state.source?.threadId !== lease.writerThreadId || state.sourceRecovery !== 'retained' ||
+          state.continuationTurn !== null || !plainObject(state.failure) ||
+          state.failure.writerTransferred !== false || state.failure.targetThreadId !== targetId ||
+          !plainObject(receipt) || receipt.kind !== 'failed-transfer' ||
+          receipt.originalPhase !== state.phase || receipt.originalPendingEffect !== state.pendingEffect ||
+          !isDeepStrictEqual(receipt.originalFailure, state.failure) ||
+          !plainObject(receipt.connection) || !plainObject(receipt.evidenceRefs) ||
+          typeof receipt.sourceReadDigest !== 'string' || !/^[a-f0-9]{64}$/.test(receipt.sourceReadDigest) ||
+          (targetId === null ? receipt.targetReadDigest !== null :
+            typeof receipt.targetReadDigest !== 'string' || !/^[a-f0-9]{64}$/.test(receipt.targetReadDigest))) {
+        reject('FAILED_TRANSFER_NOT_SETTLEABLE', 'failed source transfer or reconciliation receipt differs');
+      }
+      for (const key of ['connectionId', 'hostVersion']) text(receipt.connection[key], `reconciliation.connection.${key}`);
+      for (const key of ['priorAttempt', 'effects', 'sourceRecovery', 'target']) {
+        text(receipt.evidenceRefs[key], `reconciliation.evidenceRefs.${key}`);
+      }
+      text(receipt.verificationSourceRef, 'reconciliation.verificationSourceRef');
+      if (revision === Number.MAX_SAFE_INTEGER) reject('REVISION_EXHAUSTED', 'transfer revision is exhausted');
+      const next = stateText({...state, phase: 'failed-source-reconciled',
+        expectedLease: lease, observedLease: lease, failedReconciliation: receipt});
+      const nextRevision = revision + 1;
+      const nextToken = rotatedToken(lease.token);
+      database.prepare('UPDATE transfers SET revision = ?, state_json = ?, settled = 1 WHERE transfer_id = ?')
+        .run(nextRevision, next.encoded, transferId);
+      database.prepare('UPDATE scopes SET active_transfer_id = NULL, fence_token = ? WHERE scope_ref = ?')
+        .run(nextToken, lease.scopeRef);
+      return immutable({revision: nextRevision, scope: {scopeRef: lease.scopeRef,
+        writerThreadId: lease.writerThreadId, activeTransferId: null, token: nextToken}});
+    });
+  }
+
   function close() {
     if (closed) return;
     closed = true;
     database.close();
   }
 
-  return Object.freeze({bindScope, readScope, claimScope, begin, compareAndSet, read, settle, close});
+  return Object.freeze({bindScope, readScope, claimScope, begin, compareAndSet, read, settle, settleFailedTransfer, close});
 }
 
 module.exports = {openCarrierRecorder, CarrierRecorderError};

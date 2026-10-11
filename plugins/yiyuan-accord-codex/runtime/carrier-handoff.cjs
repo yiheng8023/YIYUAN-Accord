@@ -1483,6 +1483,174 @@ async function runHandoffProposal(rawPlan, rawDependencies, nativeRequest, chann
 // Resolve only an acknowledged-by-native first continuation whose callback lost
 // the receipt. No native mutation method, new writer, release or storage engine;
 // the host's read API may refresh its own persisted history projection.
+// Close only a failed transfer whose writer never left the source. Unknown
+// requests and unlocated targets remain held; this entry issues reads only.
+async function reconcileFailedTransfer(rawInput, dependencies) {
+  const clock = {wall: Date.now(), monotonic: performance.now()};
+  let input, transport, recorder, verify;
+  try {
+    input = immutable(rawInput);
+    exactKeys(input, ['transferId', 'scopeRef', 'authorityRef', 'stateRef',
+      'expectedRevision', 'expectedLease', 'deadlineMs'], [], 'failed recovery');
+    for (const key of ['transferId', 'scopeRef', 'authorityRef', 'stateRef']) text(input[key], key);
+    if (!Number.isSafeInteger(input.deadlineMs) || input.deadlineMs <= clock.wall ||
+        input.deadlineMs - clock.wall > MAX_TIMER_MS ||
+        !Number.isSafeInteger(input.expectedRevision) || input.expectedRevision < 0) {
+      throw new TypeError('fresh bounded deadline and nonnegative revision required');
+    }
+    exactKeys(input.expectedLease, ['scopeRef', 'transferId', 'writerThreadId', 'token'], [], 'expectedLease');
+    for (const key of Object.keys(input.expectedLease)) text(input.expectedLease[key], `expectedLease.${key}`);
+    if (input.expectedLease.scopeRef !== input.scopeRef || input.expectedLease.transferId !== input.transferId) {
+      throw new TypeError('expected lease differs from recovery scope/transfer');
+    }
+    exactKeys(dependencies, ['transport', 'recorder', 'verify'], [], 'dependencies');
+    ({transport, recorder, verify} = dependencies);
+    if (!plainObject(transport) || typeof transport.request !== 'function' ||
+        !plainObject(recorder) || typeof recorder.read !== 'function' ||
+        typeof recorder.readScope !== 'function' || typeof recorder.settleFailedTransfer !== 'function' ||
+        typeof verify !== 'function') throw new TypeError('bound readers, failed settlement and verifier required');
+    text(transport.connectionId, 'connectionId'); text(transport.hostVersion, 'hostVersion');
+  } catch (error) {
+    throw new CarrierHandoffError('INVALID_INPUT', error.message);
+  }
+  const {transferId} = input;
+  const deadline = clock.monotonic + input.deadlineMs - clock.wall;
+  const binding = immutable({connectionId: transport.connectionId, hostVersion: transport.hostVersion});
+  const callbacks = {request: transport.request, read: recorder.read, scope: recorder.readScope,
+    settle: recorder.settleFailedTransfer, verify};
+  let commitInvoked = false;
+  const reject = (code, message) => fail(code, message, {
+    stage: 'failed-transfer-reconcile', transferId, reconciliationRequired: true});
+  const checkBinding = () => {
+    if (transport.connectionId !== binding.connectionId || transport.hostVersion !== binding.hostVersion ||
+        transport.request !== callbacks.request || recorder.read !== callbacks.read ||
+        recorder.readScope !== callbacks.scope || recorder.settleFailedTransfer !== callbacks.settle ||
+        dependencies.verify !== callbacks.verify) reject('RECOVERY_BINDING_CHANGED', 'failed recovery binding changed');
+  };
+  async function call(name, args) {
+    checkBinding(); before(deadline, name, transferId);
+    const result = immutable(await bounded(() => Reflect.apply(callbacks[name], undefined, args), deadline, name));
+    checkBinding(); before(deadline, name, transferId);
+    return result;
+  }
+  try {
+    const current = await call('read', [transferId, input.scopeRef, deadline]);
+    const {state, lease, revision} = current;
+    if (revision !== input.expectedRevision || canonical(lease) !== canonical(input.expectedLease)) {
+      reject('RECOVERY_SNAPSHOT_CHANGED', 'failed transfer differs from the acknowledged revision/lease');
+    }
+    if (!plainObject(state)) reject('INVALID_RECOVERY_STATE', 'failed state is unavailable');
+    const plan = validatePlan(state.plan, clock.wall, true);
+    if (['transferId', 'scopeRef', 'authorityRef', 'stateRef'].some(k => state[k] !== input[k] || plan[k] !== input[k]) ||
+        state.planDigest !== digest(plan) || canonical(state.source) !== canonical(plan.source) ||
+        !plainObject(state.connection)) reject('RECOVERY_BINDING_MISMATCH', 'original failed plan or references differ');
+    text(state.connection.connectionId, 'original connection'); text(state.connection.hostVersion, 'original host');
+    const sourceId = state.source.threadId, targetId = state.target?.threadId ?? null;
+    if (!['held', 'reconciliation-required'].includes(state.phase) || state.pendingEffect !== null ||
+        state.writer !== 'source' || state.writerThreadId !== sourceId || lease.writerThreadId !== sourceId ||
+        state.continuationTurn !== null || state.sourceRecovery !== 'retained' ||
+        !plainObject(state.failure) || state.failure.writerTransferred !== false ||
+        state.failure.targetThreadId !== targetId || targetId === sourceId ||
+        (targetId === null && (state.target !== null || !['prepare', 'prepare:source-read',
+          'quiesced', 'quiesced:source-read', 'quiesce-source', 'quiesce-source:terminal'].includes(state.failure.stage)))) {
+      reject('FAILED_TRANSFER_UNRESOLVED', 'source writer, failure or native effects are unresolved');
+    }
+    text(state.failure.code, 'original failure code'); text(state.failure.stage, 'original failure stage');
+    const sourceRead = await call('request', ['thread/read', {threadId: sourceId, includeTurns: true}, deadline]);
+    const source = threadFrom(sourceRead, sourceId, 'failed-transfer-reconcile', transferId);
+    const terminal = new Set(['completed', 'interrupted', 'failed']);
+    if (source.ephemeral !== false || !['idle', 'notLoaded'].includes(source.status?.type) ||
+        !Array.isArray(source.turns) || source.turns.some(t => !terminal.has(t.status)) ||
+        (plan.source.turnId && !source.turns.some(t => t.id === plan.source.turnId))) {
+      reject('RECOVERY_NATIVE_MISMATCH', 'source is not a persistent idle source with terminal history');
+    }
+    const intakes = state.intakeTurns ?? [];
+    if (!Array.isArray(intakes) || new Set(intakes.map(t => t.turnId)).size !== intakes.length ||
+        (targetId === null && (intakes.length || state.intakeTurn !== null || state.failure.targetTurnId !== null))) {
+      reject('RECOVERY_EVIDENCE_CONFLICT', 'intake identities are unavailable or contradictory');
+    }
+    let targetRead = null;
+    if (targetId !== null) {
+      text(targetId, 'target thread');
+      targetRead = await call('request', ['thread/read', {threadId: targetId, includeTurns: true}, deadline]);
+      const target = threadFrom(targetRead, targetId, 'failed-transfer-reconcile', transferId);
+      if (target.ephemeral !== false || !['idle', 'notLoaded'].includes(target.status?.type) ||
+          !Array.isArray(target.turns) || target.turns.length !== intakes.length ||
+          (intakes.length ? state.failure.targetTurnId !== intakes[intakes.length - 1].turnId ||
+            state.intakeTurn?.turnId !== state.failure.targetTurnId || state.failure.targetTurnTerminal !== true :
+            state.failure.targetTurnId !== null || state.intakeTurn !== null)) {
+        reject('RECOVERY_NATIVE_MISMATCH', 'target history is active, incomplete or changed');
+      }
+      for (let i = 0; i < intakes.length; i++) {
+        const saved = intakes[i], observed = target.turns[i];
+        const messages = Array.isArray(observed.items) ? observed.items.filter(item => item.type === 'userMessage') : [];
+        if (saved.threadId !== targetId || observed.id !== saved.turnId || !terminal.has(observed.status) ||
+            typeof saved.input !== 'string' || saved.inputDigest !== digest(saved.input) ||
+            (i === 0 && saved.input !== plan.handoffText) || messages.length !== 1 ||
+            canonical(messages[0].content) !== canonical([{type: 'text', text: saved.input}])) {
+          reject('RECOVERY_NATIVE_MISMATCH', 'native intake identity, input or terminal differs');
+        }
+      }
+    }
+    const verdict = await call('verify', ['failed-transfer-reconcile', immutable({input, ledger: current,
+      currentConnection: binding, originalConnection: state.connection, sourceRead, targetRead}), deadline]);
+    if (verdict.decision !== 'allow' || ['scopeRef', 'authorityRef', 'stateRef'].some(k => verdict[k] !== input[k]) ||
+        ['pauseStateVerified', 'priorAttemptQuiesced', 'pendingEffectsReconciled', 'sourceRecoveryReady',
+          'singleWriter', 'effectsVerified', 'reconciliationAuthorized'].some(k => verdict[k] !== true)) {
+      reject('VERIFICATION_DENIED', 'failed-transfer authority, quiescence, effects or recovery denied');
+    }
+    for (const key of ['sourceRef', 'priorAttemptEvidenceRef', 'effectsEvidenceRef', 'sourceRecoveryEvidenceRef', 'targetEvidenceRef']) {
+      text(verdict[key], `verdict.${key}`);
+    }
+    const sourceAfter = await call('request', ['thread/read', {threadId: sourceId, includeTurns: true}, deadline]);
+    const targetAfter = targetId === null ? null : await call('request',
+      ['thread/read', {threadId: targetId, includeTurns: true}, deadline]);
+    if (canonical(sourceAfter) !== canonical(sourceRead) || canonical(targetAfter) !== canonical(targetRead)) {
+      reject('RECOVERY_NATIVE_MISMATCH', 'native state changed during failed-transfer verification');
+    }
+    const reconciliation = immutable({kind: 'failed-transfer', originalPhase: state.phase,
+      originalFailure: state.failure, originalPendingEffect: state.pendingEffect, connection: binding,
+      sourceReadDigest: digest(sourceRead), targetReadDigest: targetRead === null ? null : digest(targetRead),
+      verificationSourceRef: verdict.sourceRef, evidenceRefs: {priorAttempt: verdict.priorAttemptEvidenceRef,
+        effects: verdict.effectsEvidenceRef, sourceRecovery: verdict.sourceRecoveryEvidenceRef, target: verdict.targetEvidenceRef}});
+    // The closure runs only after bounded()'s own deadline check. A late result
+    // after invocation is unknown, even if SQLite already committed atomically.
+    checkBinding(); before(deadline, 'failed settlement', transferId);
+    const committed = immutable(await bounded(() => {
+      checkBinding(); before(deadline, 'failed settlement invoke', transferId);
+      commitInvoked = true;
+      return Reflect.apply(callbacks.settle, undefined, [transferId, revision, lease, reconciliation]);
+    }, deadline, 'recorder.settleFailedTransfer'));
+    checkBinding(); before(deadline, 'failed settlement acknowledgement', transferId);
+    if (committed.revision !== revision + 1 || committed.scope?.scopeRef !== input.scopeRef ||
+        committed.scope.writerThreadId !== sourceId || committed.scope.activeTransferId !== null ||
+        typeof committed.scope.token !== 'string' || !committed.scope.token.trim() || committed.scope.token === lease.token) {
+      reject('INVALID_RECORDER_LEASE', 'failed settlement acknowledgement differs');
+    }
+    const confirmed = await call('read', [transferId, input.scopeRef, deadline]);
+    const scope = await call('scope', [input.scopeRef, deadline]);
+    const expectedState = {...state, phase: 'failed-source-reconciled', expectedLease: lease,
+      observedLease: lease, failedReconciliation: reconciliation};
+    if (confirmed.revision !== committed.revision || canonical(scope) !== canonical(committed.scope) ||
+        canonical(confirmed.lease) !== canonical({scopeRef: scope.scopeRef, transferId: null,
+          writerThreadId: sourceId, token: scope.token}) || canonical(confirmed.state) !== canonical(expectedState)) {
+      reject('RECORDER_READBACK_CHANGED', 'failed settlement post-state changed');
+    }
+    return immutable({status: 'failed-transfer-reconciled', transferId, scopeRef: input.scopeRef,
+      revision: confirmed.revision, scope, restore: {source: {threadId: sourceId,
+        connectionId: state.connection.connectionId, authorityRef: input.authorityRef, stateRef: input.stateRef},
+        expectedScope: scope}, sourceReleaseAllowed: false, continuationAllowed: false,
+      claimLimit: 'Failed transfer closed with source writer retained; source restoration remains a separate verified operation.'});
+  } catch (cause) {
+    if (commitInvoked) throw new CarrierHandoffError('RECORDER_COMMIT_UNKNOWN',
+      'failed settlement requires a fresh read; do not replay', {stage: 'failed-transfer-reconcile',
+        transferId, reconciliationRequired: true, details: {cause: errorData(cause)}});
+    if (cause instanceof CarrierHandoffError) throw cause;
+    throw new CarrierHandoffError('RECONCILIATION_HELD', 'failed transfer could not be reconciled', {
+      stage: 'failed-transfer-reconcile', transferId, reconciliationRequired: true, details: {cause: errorData(cause)}});
+  }
+}
+
 async function reconcileContinuation(rawInput, dependencies) {
   const clock = {wall: Date.now(), monotonic: performance.now()};
   let input, transport, recorder, verify;
@@ -2196,4 +2364,4 @@ function errorData(error) {
 }
 
 module.exports = {HANDOFF_PROPOSAL_TOOL, validateProposalRequest, prepareHandoff, runHandoffProposal, handoff,
-  reconcileContinuation, finalizeReconciledHandoff, CarrierHandoffError};
+  reconcileFailedTransfer, reconcileContinuation, finalizeReconciledHandoff, CarrierHandoffError};

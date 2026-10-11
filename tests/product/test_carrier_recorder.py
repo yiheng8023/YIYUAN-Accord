@@ -69,6 +69,30 @@ try {
       request.transferId, request.revision, request.state, request.lease,
     );
     recorder.close(); reply(value);
+  } else if (['settleFailed', 'waitSettleFailed', 'failSettlement'].includes(request.action)) {
+    if (request.action === 'waitSettleFailed') {
+      const until = Date.now() + 5000;
+      while (!fs.existsSync(request.gate) && Date.now() < until) {
+        Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 10);
+      }
+      if (!fs.existsSync(request.gate)) throw new Error('gate timeout');
+    }
+    const recorder = openCarrierRecorder({path: request.path, busyTimeoutMs: 3000});
+    if (request.action === 'failSettlement') {
+      // Install after opening, then fail the second statement in the actual
+      // transaction. Remove this test-only trigger before reopen validation.
+      const {DatabaseSync} = require('node:sqlite');
+      const fault = new DatabaseSync(request.path);
+      fault.exec("CREATE TRIGGER fail_scope_update BEFORE UPDATE ON scopes BEGIN SELECT RAISE(ABORT, 'fixture scope fault'); END");
+      let error;
+      try { recorder.settleFailedTransfer(request.transferId, request.revision, request.lease, request.receipt); }
+      catch (e) { error = {code: e.code, message: e.message}; }
+      finally {fault.exec('DROP TRIGGER fail_scope_update');fault.close();recorder.close();}
+      reply({error});
+    } else {
+      const value = recorder.settleFailedTransfer(request.transferId, request.revision, request.lease, request.receipt);
+      recorder.close(); reply(value);
+    }
   } else if (request.action === 'settle') {
     const recorder = openCarrierRecorder({path: request.path, busyTimeoutMs: 3000});
     const value = recorder.settle(request.transferId, request.revision, request.lease);
@@ -364,6 +388,76 @@ process.stdout.write(JSON.stringify({guidancePresent: Boolean(guidance), entrySq
             "scopeRef": "scope-a", "transferId": None,
             "token": claimed["token"], "writerThreadId": "target",
         })
+
+    def failed_basis(self):
+        self.create()
+        state = {**self.initial('failed-transfer'), 'phase': 'held', 'failure': {
+            'code': 'VERIFICATION_DENIED', 'stage': 'prepare', 'writerTransferred': False,
+            'targetThreadId': None, 'targetTurnId': None, 'targetTurnTerminal': False}}
+        begun = self.request('begin', path=str(self.db), transferId=state['transferId'],
+                             planDigest=state['planDigest'], state=state)
+        # Storage-contract fixture only; native effect verification is tested by
+        # FailedTransferRecoveryTests using actual handoff execution.
+        receipt = {'kind': 'failed-transfer', 'originalPhase': state['phase'],
+            'originalFailure': state['failure'], 'originalPendingEffect': None,
+            'connection': {'connectionId': 'fixture', 'hostVersion': 'fixture'},
+            'sourceReadDigest': 'a' * 64, 'targetReadDigest': None,
+            'verificationSourceRef': 'fixture:verification',
+            'evidenceRefs': dict.fromkeys(('priorAttempt', 'effects', 'sourceRecovery', 'target'), 'fixture:storage')}
+        return state, begun, receipt
+
+    def test_failed_settlement_validates_receipt_and_rolls_back_both_rows_on_fault(self):
+        state, begun, receipt = self.failed_basis()
+        before = self.request('read', path=str(self.db), transferId=state['transferId'], scopeRef='scope-a')
+        scope = self.request('scope', path=str(self.db), scopeRef='scope-a')
+        invalid = ({**receipt, 'originalPhase': 'fabricated'},
+                   {**receipt, 'originalFailure': {**state['failure'], 'stage': 'different'}},
+                   {**receipt, 'originalPendingEffect': {'method': 'turn/start'}},
+                   {**receipt, 'sourceReadDigest': 'invalid'},
+                   {**receipt, 'evidenceRefs': {**receipt['evidenceRefs'], 'effects': ''}})
+        for candidate in invalid:
+            with self.subTest(candidate=candidate):
+                rejected = self.request('settleFailed', check=False, path=str(self.db),
+                    transferId=state['transferId'], revision=begun['revision'], lease=begun['lease'], receipt=candidate)
+                self.assertFalse(json.loads(rejected.stdout)['ok'])
+                self.assertEqual(self.request('read', path=str(self.db), transferId=state['transferId'], scopeRef='scope-a'), before)
+                self.assertEqual(self.request('scope', path=str(self.db), scopeRef='scope-a'), scope)
+        fault = self.request('failSettlement', path=str(self.db), transferId=state['transferId'],
+                            revision=begun['revision'], lease=begun['lease'], receipt=receipt)
+        self.assertIn('fixture scope fault', fault['error']['message'])
+        self.assertEqual(self.request('read', path=str(self.db), transferId=state['transferId'], scopeRef='scope-a'), before)
+        self.assertEqual(self.request('scope', path=str(self.db), scopeRef='scope-a'), scope)
+        connection = sqlite3.connect(self.db)
+        try:
+            self.assertEqual(connection.execute('SELECT settled FROM transfers').fetchone()[0], 0)
+        finally:
+            connection.close()
+
+    def test_two_processes_close_one_failed_source_lease_only_once(self):
+        state, begun, receipt = self.failed_basis()
+        gate = self.root / 'failed-settlement.gate'
+        encoded = self.encoded_request('waitSettleFailed', path=str(self.db), gate=str(gate),
+            transferId=state['transferId'], revision=begun['revision'], lease=begun['lease'], receipt=receipt)
+        processes = [subprocess.Popen(['node', str(self.runner), encoded], cwd=ROOT, text=True,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE) for _ in range(2)]
+        gate.write_text('go', encoding='ascii')
+        results = []
+        for process in processes:
+            stdout, stderr = process.communicate(timeout=15)
+            self.assertEqual(process.returncode, 0, stderr)
+            results.append(json.loads(stdout))
+        self.assertEqual(sum(result['ok'] for result in results), 1, results)
+        self.assertEqual(next(r for r in results if not r['ok'])['code'], 'CAS_CONFLICT')
+        winner = next(r['value'] for r in results if r['ok'])
+        self.assertEqual(winner['scope']['writerThreadId'], 'source')
+        self.assertIsNone(winner['scope']['activeTransferId'])
+        self.assertNotEqual(winner['scope']['token'], begun['lease']['token'])
+        reopened = self.request('read', path=str(self.db), transferId=state['transferId'], scopeRef='scope-a')
+        self.assertEqual(reopened['state']['failure'], state['failure'])
+        self.assertEqual(reopened['state']['failedReconciliation'], receipt)
+        self.assertEqual(reopened['revision'], begun['revision'] + 1)
+        rebound = self.request('claim', path=str(self.db), scopeRef='scope-a', expectedScope=winner['scope'])
+        self.assertNotEqual(rebound['scope']['token'], winner['scope']['token'])
 
     def test_cas_fences_stale_revision_and_lease_and_reopens(self):
         self.create()

@@ -2994,3 +2994,13 @@ Desktop wait_threads对该入口返回thread/items/list尚不支持，Root转读
 实际101握手后仅initialize/initialized/thread/read Root01a12575且includeTurns=false；返回存档cwd与根检出相同、originator=Codex Desktop、cliVersion=alpha17.2、source=vscode、status=notLoaded。源枚举不单独识别物理宿主，存档存在不证明该daemon承载当前运行Root；没有加载/订阅/恢复线程、模型派发或审批回应。响应保存必要原生字段及原整响应hash/bytes5506，明确是投影，未保preview/正文/历史turns，不从hash重建内容。
 
 读取1.4749131秒结束，实际proxyPID50600先归属父Job，自然exit0/nonforced、Job0，桥线程全部停止、无桥错误，用户配置/版本原件/CLI/helper/client-module hash和mtime保持。Root独立请求/目标/资源/保护复核保于permission-continuity/control-proxy-readonly-root-qa.json，原件在同根control-proxy-readonly-evidence。仅私有任务reader被释放，原共享服务未动；Root继续小段工作，必要迁移时再核当前运行源的实际控制连接。此为既有W05前提诊断，不冒充自主发现/完整接管或新case/发布门槛。
+
+### 失败转移的源恢复入口与本次包采用2026-10-11
+
+实际SQLite红反馈确认：目标创建或接纳失败且写者仍为source时，旧settle、claim与source restore均拒绝active scope，缺少合法失败关闭入口。新增窄reconcileFailedTransfer与原子settleFailedTransfer，复用原生历史、独立权限/暂停/静止/效果核对、SQLite CAS及既有source restore。仅已持久失败、无未知pending、source仍持写权且完整现态核清时关闭active并旋转fence；原failure/pending保留。丢目标身份、活动或不完整历史、写权已转移、旧依据及提交后回执不确定继续持有，后者不重发。低层CAS不是外部授权或原生静止的证明。
+
+相关158项回归通过，两轴独审各0 findings；随后4项恢复测试直接消费返回DTO并通过。开发108项曾在新摘要尚未绑定时留下9个失败（含编码子项），原反馈保留；绑定版本与摘要后，只复验8个受影响测试，全部通过。复杂度初增55,960B及DTO覆盖622B；独立替代/无损削减比较未找到足够等价退路，按既有可重校政策将预算限定为3,620,000B，实测3,438,323B，5%要求181,000B、实际余量181,677B。测量、必要标记、文件/指令预算、17范围、F/A和完成天花板未降低，此额度不供一般增长。
+
+现包20261011221257/SHA0d70f917…c4de的25成员与安装缓存一致；原生5 Skills及6个enabled/trusted Hook选用新root，独立新MCP初始化版本及3工具列表匹配。正确安装请求14.5342s、MCP读取0.2270s，均自然exit0/Job0，配置仍F57b55…7b45。任务局部读者错误、目录参数请求被拒及首次MCP请求缺协议标识的准备失败保在私有accord-failed-transfer-recovery-20261011-01；首个RPC具体错误正文未留，核新缓存不存在、旧选用路径与配置保持后，下一请求使用原生返回的准确marketplace.json路径。只读校验、目录/加载及完整模型行为分别记录，不把新进程归给Root原宿主刷新。
+
+优先复用旧失败的只读审查发现：最终库存v2账本active=null、transfers=0，保留快照亦无可用于新入口的失败转移；takeover的WAL未当作现态。原监督恢复准备失败没有可关闭的transfer，故不启动读取/恢复已完成业务。下一步先核实际SDK源的原生Hook条件，再按既有计划前瞻绑定有完整成品的透明合成维护者任务；健康继续合理，不人为触发迁移。以上是必要实现和采用记录，不增case或发布门槛，不判全W05、R2/R3或A08通过。

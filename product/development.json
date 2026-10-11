@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261010221152",
+    "version": "3.3.0-dev.1+codex.20261011221257",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261010221152",
-        "packageSha256": "2023f0d1ab5ba44e824e211c2cd3aaeda9913482d4dc75f7705f699cf9bbff1f",
+        "packageVersion": "3.3.0-dev.1+codex.20261011221257",
+        "packageSha256": "0d70f9173ada5238ba9e9b1c15e75a69f3cd248bc0cf4b388715ffd6d463c4de",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -261,10 +261,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 3560000,
+      "maxProductCodeAndTestBytes": 3620000,
       "maxTrackedFiles": 192,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Current allocation:3560000 product code/test bytes,192 tracked files and36000 primary-instruction bytes; existing five-percent reserve retained. The consumed ledger fixture is retained at4a356d91/private recovery roots and removed from active execution obligations after its interrupted single attempt. Existing observer now recognizes only safe equivalent Windows extended local-drive rollout paths;110 entry regressions cover matching, namespace refusal, root/file identity and Goal readback. Measured3381741 code/test bytes remains below the3382000 reserved-use threshold. All original limits/failures,17 scopes,F01-F08/A01-A08 and false completion/candidate ceilings remain."
+      "rationale": "Bounded allocation:3620000 product code/test bytes,192 tracked files and36000 primary-instruction bytes; the existing five-percent reserve remains binding. The prior3560000 ceiling left only259 bytes below its reserved-use threshold at1931c271. Failed target creation/intake with a source-owned active transfer exposed a missing safe closure before existing source restore. The narrow reconciliation reuses native history, independent verification, SQLite CAS and unchanged source restore; its mirrored runtime and actual SQLite regression coverage initially add55960 bytes. Independent comparison found no equivalent native/external closure or lossless same-purpose reduction sufficient to restore53701 bytes; deleting required tests, dropping package mirrors or unrelated refactoring would weaken coverage or increase risk. This recalibration funds only that named recovery obligation and direct returned-DTO coverage, with3439000 as the reserved-use threshold; it is not general growth allowance. The consumed ledger fixture and original failures remain retained at4a356d91/private recovery roots. All original limits/failures,17 scopes,F01-F08/A01-A08 and false completion/candidate ceilings remain."
     }
   },
   "source": {
@@ -1563,6 +1563,55 @@
       },
       "remaining": "Same-source version2 business and owned-resource finalization are complete with independently verified results. Reuse that connected evidence, subsequent limited real disabled-policy semantic branch and current codex_vscode guidance/scoped-input recovery; do not recreate the business, repeat fulfilled one-shot IDE work or revive old qualification. Remaining R2/R3 obligations are uncovered applicable Skill-policy behavior, ordinary-entry and material control/continuity differences beyond basic currentIDE input receipt, applicable full system-quality/scenario and measured net-value evidence. All existing F/A, failures and false completion/candidate ceilings remain.",
       "retirement": "Remove the consumed one-attempt fixture/declaration from active obligations; exact Git/private originals retained. All17 scopes,7 continuity duties,8 qualities,F01-F08/A01-A08 and false completion/candidate ceilings remain."
+    },
+    {
+      "id": "source-owned-failed-transfer-recovery-20261011",
+      "authority": "Existing r42 R2/R3 continuation and necessary repair authority; this is a mechanism observation, not a new business case, release gate or qualification.",
+      "state": "mechanism-and-installation-verified-behavior-pending",
+      "subject": "Close a persisted failed target creation/intake transfer while retaining the source writer, then use the unchanged inactive-source restore contract.",
+      "implementation": {
+        "reconcile": "runtime/carrier-handoff.cjs#reconcileFailedTransfer",
+        "atomicClosure": "runtime/carrier-recorder.cjs#settleFailedTransfer",
+        "composition": "Native history reads, independently sourced authority/pause/quiescence/effect verification, existing SQLite CAS and existing source restore. Original failure and pending records remain unchanged; active clears and the fencing token rotates while source retains write ownership.",
+        "heldWindows": "Unknown effects, missing target identity after possible creation, incomplete or active history, transferred writer, stale revision/lease, changed native state or binding remain held. A settlement acknowledgement/deadline/readback failure after invocation is RECORDER_COMMIT_UNKNOWN and cannot be replayed."
+      },
+      "verification": {
+        "kind": "simulated-native-transport-and-actual-SQLite",
+        "relatedRegression": {"tests": 158, "seconds": 77.563, "passed": true},
+        "directReturnedRestoreDto": {"tests": 4, "seconds": 5.416, "passed": true},
+        "independentCoreReview": {"standardsFindings": 0, "specFindings": 0},
+        "incrementalBudgetAndDtoStandardsFindings": 0,
+        "preBindingDevelopmentRun": {"tests": 108, "failuresIncludingSubtests": 9, "seconds": 275.910, "cause": "New package bytes were not yet bound to the delivery digest; original feedback retained."},
+        "postBindingAffectedDevelopmentRecheck": {"tests": 8, "seconds": 81.513, "passed": true},
+        "syntaxAndRuntimeMirrors": true,
+        "sourceAndDevelopmentValidAfterVersionBinding": true,
+        "privateEvidence": "accord-failed-transfer-recovery-20261011-01"
+      },
+      "complexity": {
+        "measuredCodeAndTestBytes": 3438323,
+        "maxCodeAndTestBytes": 3620000,
+        "retainedMinimumHeadroomPercent": 5,
+        "requiredHeadroomBytes": 181000,
+        "actualHeadroomBytes": 181677,
+        "rule": "Named recovery and direct-DTO obligation only; unchanged measurement, required markers, scope, quality and acceptance. Independent comparison is recorded in changeBoundary.complexityBudget.rationale; no general growth allowance."
+      },
+      "installation": {
+        "version": "3.3.0-dev.1+codex.20261011221257",
+        "packageSha256": "0d70f9173ada5238ba9e9b1c15e75a69f3cd248bc0cf4b388715ffd6d463c4de",
+        "membersMatch": 25,
+        "enabledNativeSkillsAtNewRoot": 5,
+        "enabledTrustedNativeHooksAtNewRoot": 6,
+        "configurationBytesUnchanged": true,
+        "priorRecoveryRetained": true,
+        "nativeInstallSeconds": 14.5342468,
+        "naturalExitAndOwnedJobZero": true,
+        "newOwnedMcpInitialization": {"version": "3.3.0-dev.1+codex.20261011221257", "toolCount": 3, "seconds": 0.2269796, "naturalExitAndOwnedJobZero": true},
+        "existingRootHostRefresh": "unobserved; a new owned process does not prove the current Root host or its already injected guidance refreshed",
+        "failedPreparation": "Original premature digest tests, task-local schema reader failure, directory-path native install rejection and MCP request-envelope failure remain retained. Fresh readback confirmed the old selected cache/config before the corrected request used the exact native marketplace file path; no unknown write or closed business was replayed."
+      },
+      "existingFailureReuse": "Final stock-v2 carrier is inactive with zero transfers; retained snapshots likewise contain no eligible failed transfer. Recovery preparation failures did not create a source-owned active transfer. No native restore/read or business replay is needed for a nonexistent transfer; the retained takeover WAL is not treated as a current snapshot.",
+      "resultLimit": "Mechanism repair and scoped native installation only. Actual ordinary entry, autonomous timing, necessary takeover/failure fallback, system quality and incremental value still need applicable evidence. Old stock-v2, Skill and IDE evidence remain separate and reusable; do not replay closed business or promote this observation into full W05/A08.",
+      "qualificationPassed": false
     }
   ],
   "environmentControl": {
@@ -4113,7 +4162,7 @@
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
     "work": "Follow finite R1-R4 closeout in PLAN-v3.3.md. R1 Stop withdrawal and verified main151947 adoption are closed; input/state/recovery/handoff duties remain. Current affected README/LAUNCH copy has been corrected against settled decisions without promoting acceptance. R2 close material remaining capability/continuity changes using existing positive evidence. R3 verify promised selected entries and representative joined outcomes, resources and value without forcing every mechanism. R4 exact candidate independent/hosted checks and conditional3.3 publication. No Stop budget or automatic added turns is a product requirement. canContinue does not dispatch. Retain17 scopes,current active declarations, all F/A and quality floors, exact old failures and consumed grants. Reuse unchanged sufficient evidence; reopen only affected dependencies. Optional optimization, promotion, future-host decisions and cancelled Cloud remain outside this release work. Preserve user main-model/mode, original meta-guidance and third-party choices; ordinary authorized implementation/delegation is not a new permission gate.",
-    "requires": "Continue authorized3.3 core implementation and acceptance in the bound main checkout; use ordinary available native/source work without enabling Goal/Plan or adding user turns. Publish3.3.0 only after retained full acceptance and exact-candidate/review/hosted/poststate conditions. Keep installed151947 as the user selected; preserve main model/mode, effective user/third-party choices, necessary originals, ownership and unfinished recovery. Existing authority covers normal development, verification and commit/push; uncovered installation/enablement, trust/account/data, meaningful cost, unrelated external/shared writes and user-thread archive require their actual bounded authority. Read current sources and relevant environment before effects; past Jev/SDK execution permissions and ended samples are not reusable grants or required routes."
+    "requires": "Continue authorized3.3 core implementation and acceptance in the bound main checkout; use ordinary available native/source work without enabling Goal/Plan or adding user turns. Publish3.3.0 only after retained full acceptance and exact-candidate/review/hosted/poststate conditions. Honor the current lifecycle authority in PLAN-v3.3.md and verify the actually adopted package identity recorded in CONTINUATION.md; the historical151947 hold is not an active update pause. Preserve main model/mode, effective user/third-party choices, necessary originals, ownership and unfinished recovery. Existing authority covers normal development, verification and commit/push; uncovered installation/enablement, trust/account/data, meaningful cost, unrelated external/shared writes and user-thread archive require their actual bounded authority. Read current sources and relevant environment before effects; past Jev/SDK execution permissions and ended samples are not reusable grants or required routes."
   },
   "claimCeiling": {
     "localContractOnly": true,

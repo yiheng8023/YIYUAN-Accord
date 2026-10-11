@@ -20,6 +20,256 @@ DRIVER = Path(__file__).with_name('carrier_handoff_host.cjs')
 PROPOSAL_TOOL = 'accord_request_handoff'
 
 
+FAILED_TRANSFER_SCENARIO = r'''
+const assert = require('node:assert/strict');
+const path = require('node:path');
+const {performance} = require('node:perf_hooks');
+const config = JSON.parse(process.argv[1]);
+const core = require(path.join(config.root, 'runtime/carrier-handoff.cjs'));
+const {openCarrierRecorder} = require(path.join(config.root, 'runtime/carrier-recorder.cjs'));
+const {restoreCodexSourceSession} = require(path.join(config.root, 'runtime/codex-session.cjs'));
+const {CONTEXT_OBSERVATION_TOOL} = require(path.join(config.root, 'runtime/codex-connection.cjs'));
+const clone = value => JSON.parse(JSON.stringify(value));
+let recorder = openCarrierRecorder({path: config.database, create: true});
+const initialScope = recorder.bindScope('failed-scope', 'source').scope;
+const native = {source: {id: 'source', ephemeral: false, status: {type: 'idle'}, turns: []}};
+const calls = [], receipts = [];
+let returned = false, resumed = false;
+const plan = {transferId:'failed-transfer',scopeRef:'failed-scope',authorityRef:'authority',stateRef:'state',
+  source:{threadId:'source'},target:{cwd:'/fixture',model:'fixture-model',
+    dynamicTools:[core.HANDOFF_PROPOSAL_TOOL,CONTEXT_OBSERVATION_TOOL]},handoffText:'Retain the bound task.',
+  continuation:{input:'Continue only after takeover.',sandboxPolicy:{type:'readOnly'}},
+  deadlineMs:Date.now()+5000,recoveryDeadlineMs:Date.now()+6000};
+const transport = {connectionId:'old-controller',hostVersion:'fixture-host',
+  async request(method,params) {
+    calls.push({method,params:clone(params)});
+    let result;
+    if (method==='thread/read') result={thread:clone(native[params.threadId])};
+    else if (method==='thread/start') {
+      native.target={id:'target',ephemeral:false,status:{type:'idle'},turns:[]};
+      result={thread:clone(native.target)};
+      if(config.failure==='ambiguous-start')throw Error('created target but lost acknowledgement');
+      if(config.failure==='malformed-start')result={thread:{status:{type:'idle'}}};
+    } else if (method==='turn/start') {
+      const turn={id:'intake',status:config.failure==='intake-failed'?'failed':'completed',
+        items:[{type:'userMessage',content:params.input}]};
+      native.target.turns.push(turn);result={turn};
+    } else if(method==='thread/resume') {resumed=true;result={thread:clone(native.source)};}
+    else throw Error('unexpected native effect: '+method);
+    receipts.push({method,params:clone(params),result:clone(result)});
+    return result;
+  },async waitTerminal(threadId,turnId) {
+    return {method:'turn/completed',params:{threadId,turn:clone(native[threadId].turns.find(t=>t.id===turnId))}};
+  }};
+const allow = stage => ({decision:'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+  sourceRef:'fixture:'+stage,sourceRecoveryReady:true,quiesced:true,noOtherWriters:true,
+  targetInitializationSafe:true,targetSettingsMatch:true,initializationEffectsVerified:true,
+  accepted:true,sourceIdle:true,intakeEffectsVerified:true,singleWriter:true,effectsVerified:true});
+const oldVerify = async stage => ({...allow(stage),decision:stage===config.failure?'hold':'allow'});
+let originalError;
+try {await core.handoff(plan,{transport,recorder,verify:oldVerify});throw Error('expected handoff rejection');}
+catch(error) {originalError={code:error.code,stage:error.stage};}
+returned=true;
+const original=recorder.read(plan.transferId,plan.scopeRef), active=recorder.readScope(plan.scopeRef);
+const baseline={originalError,original,active,refusals:{}};
+for(const [name,fn] of Object.entries({settle:()=>recorder.settle(plan.transferId,original.revision,original.lease),
+  claim:()=>recorder.claimScope(plan.scopeRef,initialScope)})) {
+  try {fn();baseline.refusals[name]='unexpected-success';}catch(e){baseline.refusals[name]=e.code||e.name;}
+}
+const connection={transport:{...transport,connectionId:'new-controller'},async receiveTurnActivity(){throw Error('unused')},
+  async respondRequest(){throw Error('unused')},async replyContext(){throw Error('unused')},proposalChannel(){throw Error('unused')}};
+const sessionOptions={connection,recorder,scopeRef:plan.scopeRef,verify:async()=>{throw Error('unexpected restore verifier')},
+  planResolver(){throw Error('unused')},current(){throw Error('unused')},ownerRequest(){throw Error('unused')}};
+const restoreInput=scope=>({source:{threadId:'source',connectionId:'old-controller',authorityRef:'authority',stateRef:'state'},
+  expectedScope:scope,deadlineMs:Date.now()+4000,resume:{cwd:'/fixture',sandbox:'read-only',approvalPolicy:'never'}});
+try {await restoreCodexSourceSession(sessionOptions,restoreInput(active));baseline.refusals.restore='unexpected-success';}
+catch(e){baseline.refusals.restore=e.code||e.name;}
+if(config.baseline) {recorder.close();process.stdout.write(JSON.stringify(baseline));process.exit(0);}
+const mode=config.mode||'success';
+const priorCalls=calls.length;
+let stale=null;
+if(mode==='active-target')native.target.status.type='active';
+if(mode==='extra-turn')native.target.turns.push({id:'foreign',status:'completed',items:[]});
+if(mode==='wrong-input')native.target.turns[0].items[0].content=[{type:'text',text:'unbound input'}];
+if(mode==='source-active')native.source.status.type='active';
+if(mode==='source-ephemeral')native.source.ephemeral=true;
+if(mode==='pending'||mode==='target-writer') {
+  const next=clone(original.state);
+  if(mode==='pending')next.pendingEffect={method:'turn/start',params:{threadId:'target'}};
+  else {next.writer='target';next.writerThreadId='target';}
+  recorder.compareAndSet(plan.transferId,original.revision,next,original.lease);
+}
+const basis=recorder.read(plan.transferId,plan.scopeRef);
+const input={transferId:plan.transferId,scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+  expectedRevision:basis.revision,expectedLease:basis.lease,deadlineMs:Date.now()+4000};
+if(mode==='stale-lease')input.expectedLease={...basis.lease,token:'stale'};
+if(mode==='stale-revision')input.expectedRevision--;
+if(mode==='wrong-authority')input.authorityRef='changed';
+if(mode==='expired')input.deadlineMs=Date.now()-1;
+const verifier = async(stage,facts,deadline)=>{
+  assert.equal(stage,'failed-transfer-reconcile');
+  // This fixture derives its verdict from the actual simulated transport calls,
+  // returned handoff and independent native history, not from saved success flags.
+  assert.equal(returned,true);assert.equal(originalError.code,
+    config.failure==='intake-failed'?'TARGET_TURN_UNSUCCESSFUL':'VERIFICATION_DENIED');
+  assert.deepEqual(facts.sourceRead.thread,native.source);
+  const writes=calls.slice(0,priorCalls).filter(c=>c.method!=='thread/read');
+  const expected=config.failure==='prepare'?[]:config.failure==='target-created'?['thread/start']:['thread/start','turn/start'];
+  assert.deepEqual(writes.map(c=>c.method),expected);
+  assert.equal(receipts.filter(r=>r.method!=='thread/read').length,writes.length);
+  if(expected.length)assert.deepEqual(facts.targetRead.thread,native.target);
+  else assert.equal(facts.targetRead,null);
+  if(mode==='race') {
+    stale=recorder.compareAndSet(plan.transferId,basis.revision,{...basis.state,ownerRace:'retained'},basis.lease);
+  }
+  if(mode==='binding-drift')connection.transport.connectionId='replaced';
+  if(mode==='native-race')native.target.status.type='active';
+  if(mode==='late-verifier')Object.defineProperty(performance,'now',{value:()=>deadline+1,configurable:true});
+  return {decision:mode==='denied'?'hold':'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+    sourceRef:'fixture:effect-audit',pauseStateVerified:mode!=='pause-unknown',priorAttemptQuiesced:mode!=='owner-active',
+    pendingEffectsReconciled:mode!=='pending-unreconciled',sourceRecoveryReady:mode!=='recovery-unavailable',
+    singleWriter:true,effectsVerified:mode!=='effects-unverified',reconciliationAuthorized:true,
+    priorAttemptEvidenceRef:mode==='missing-evidence'?'':'fixture:returned-handoff-and-no-inflight',effectsEvidenceRef:'fixture:transport-receipts',
+    sourceRecoveryEvidenceRef:'fixture:persistent-source',targetEvidenceRef:'fixture:complete-native-history'};
+};
+let attempted=0;
+const atomic=recorder.settleFailedTransfer;
+const proxy={...recorder,settleFailedTransfer(...args) {
+  attempted++;const result=atomic(...args);
+  if(mode==='commit-unknown')throw Error('committed but acknowledgement lost');
+  if(mode==='late-commit')Object.defineProperty(performance,'now',{value:()=>Number.MAX_SAFE_INTEGER,configurable:true});
+  return result;
+}};
+let result=null,error=null;
+try {result=await core.reconcileFailedTransfer(input,{transport:connection.transport,recorder:proxy,verify:verifier});}
+catch(e){error={code:e.code||e.name,message:e.message};}
+const after=recorder.read(plan.transferId,plan.scopeRef),scope=recorder.readScope(plan.scopeRef);
+let oldCas=null,restored=null;
+if(result) {
+  try {recorder.compareAndSet(plan.transferId,basis.revision,basis.state,basis.lease);}catch(e){oldCas=e.code;}
+  sessionOptions.verify=async(stage,facts)=>{
+    assert.deepEqual(facts.threadRead?.thread||facts.threadReadAfter?.thread||native.source,native.source);
+    if(stage==='restore-prepare')return {decision:'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+      sourceRef:'fixture:restore-prepare',pauseStateVerified:true,priorControllerQuiesced:true,pendingEffectsReconciled:true,
+      restorationAuthorized:true,singleWriter:true,resumeInitializationSafe:true,sourceOriginVerified:true,
+      sourceOriginEvidenceRef:'fixture:source-origin'};
+    return {decision:'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+      sourceRef:'fixture:restore-resumed',nativeToolEvidenceRef:'fixture:persisted-tools',continuityToolsRestored:true,
+      targetSettingsMatch:true,historyRetained:true,singleWriter:true,effectsVerified:true};
+  };
+  try {restored=(await restoreCodexSourceSession(sessionOptions,{
+    ...result.restore,deadlineMs:Date.now()+4000,
+    resume:{cwd:'/fixture',sandbox:'read-only',approvalPolicy:'never'}})).snapshot();}
+  catch(e){restored={error:e.code,message:e.message};}
+}
+recorder.close();recorder=openCarrierRecorder({path:config.database});
+const reopened=recorder.read(plan.transferId,plan.scopeRef);recorder.close();
+process.stdout.write(JSON.stringify({baseline,basis,result,error,attempted,after,scope,reopened,oldCas,restored,resumed,
+  recoveryCalls:calls.slice(priorCalls),receipts,stale}));
+'''
+
+
+class FailedTransferRecoveryTests(unittest.TestCase):
+    def run_case(self, failure='accepted', mode='success', baseline=False):
+        with tempfile.TemporaryDirectory() as directory:
+            database = Path(directory) / 'failed.sqlite'
+            config = {'root': str(ROOT), 'database': str(database), 'failure': failure,
+                      'mode': mode, 'baseline': baseline}
+            run = subprocess.run([shutil.which('node'), '--input-type=commonjs', '-e',
+                '(async()=>{' + FAILED_TRANSFER_SCENARIO + '})().catch(e=>{console.error(e);process.exitCode=1})',
+                json.dumps(config)], capture_output=True, text=True, encoding='utf-8', timeout=15)
+            self.assertEqual(run.returncode, 0, run.stderr)
+            result = json.loads(run.stdout)
+            connection = sqlite3.connect(database)
+            row = connection.execute('SELECT settled,state_json FROM transfers').fetchone()
+            result['sql'] = {'settled': row[0], 'state': json.loads(row[1])}
+            connection.close()
+            return result
+
+    def test_failed_handoff_blocks_old_entries_without_fabricated_settlement(self):
+        for failure in ('prepare', 'target-created', 'accepted'):
+            with self.subTest(failure=failure):
+                result = self.run_case(failure, baseline=True)
+                self.assertEqual(result['originalError']['code'], 'VERIFICATION_DENIED')
+                self.assertEqual(result['refusals'], {'settle': 'TRANSFER_NOT_SETTLEABLE',
+                    'claim': 'SCOPE_BUSY', 'restore': 'TypeError'})
+                self.assertEqual(result['active']['writerThreadId'], 'source')
+                self.assertEqual(result['active']['activeTransferId'], 'failed-transfer')
+                self.assertEqual(result['sql']['settled'], 0)
+
+    def test_reconciled_failure_restores_source_and_retains_failed_sqlite_history(self):
+        for failure in ('prepare', 'target-created', 'accepted', 'intake-failed'):
+            with self.subTest(failure=failure):
+                result = self.run_case(failure)
+                self.assertIsNone(result['error'], result)
+                self.assertEqual(result['result']['status'], 'failed-transfer-reconciled')
+                self.assertEqual(result['sql']['settled'], 1)
+                self.assertEqual(result['sql']['state']['phase'], 'failed-source-reconciled')
+                self.assertEqual(result['sql']['state']['failure'], result['baseline']['original']['state']['failure'])
+                self.assertEqual(result['oldCas'], 'CAS_CONFLICT')
+                self.assertEqual(result['restored']['status'], 'ready')
+                self.assertEqual(result['restored']['sourceThreadId'], 'source')
+                restore = result['result']['restore']
+                self.assertEqual(restore['source'], {'threadId': 'source', 'connectionId': 'old-controller',
+                    'authorityRef': 'authority', 'stateRef': 'state'})
+                self.assertEqual(restore['expectedScope'], result['scope'])
+                self.assertEqual(result['restored']['restoration']['source'], restore['source'])
+                self.assertEqual(result['restored']['restoration']['expectedScope'], restore['expectedScope'])
+                self.assertTrue(result['resumed'])
+                self.assertTrue(all(c['method'] in ('thread/read', 'thread/resume') for c in result['recoveryCalls']))
+                self.assertEqual(sum(c['method']=='thread/resume' for c in result['recoveryCalls']), 1)
+                self.assertIsNone(result['scope']['activeTransferId'])
+                self.assertNotEqual(result['scope']['token'], result['basis']['lease']['token'])
+                self.assertEqual(result['after']['state'], result['reopened']['state'])
+                self.assertEqual(result['sql']['state']['failedReconciliation']['originalPendingEffect'],
+                                 result['baseline']['original']['state']['pendingEffect'])
+
+    def test_unknown_effects_and_changed_recovery_basis_cannot_close_the_transfer(self):
+        cases = ('active-target', 'extra-turn', 'wrong-input', 'source-active', 'source-ephemeral',
+                 'pending', 'target-writer', 'stale-lease', 'stale-revision', 'wrong-authority',
+                 'expired', 'denied', 'pause-unknown', 'missing-evidence', 'binding-drift',
+                 'native-race', 'late-verifier', 'owner-active', 'pending-unreconciled',
+                 'recovery-unavailable', 'effects-unverified')
+        for mode in cases:
+            with self.subTest(mode=mode):
+                result = self.run_case(mode=mode)
+                self.assertIsNotNone(result['error'], result)
+                self.assertIsNone(result['result'])
+                self.assertEqual(result['attempted'], 0)
+                self.assertEqual(result['after'], result['basis'])
+                self.assertEqual(result['sql']['settled'], 0)
+                self.assertEqual(result['scope']['activeTransferId'], 'failed-transfer')
+                self.assertTrue(all(c['method']=='thread/read' for c in result['recoveryCalls']))
+        for failure in ('ambiguous-start', 'malformed-start'):
+            unknown = self.run_case(failure=failure)
+            self.assertEqual(unknown['error']['code'], 'FAILED_TRANSFER_UNRESOLVED')
+            self.assertEqual(unknown['attempted'], 0)
+            self.assertEqual(unknown['after'], unknown['basis'])
+            if failure == 'malformed-start':
+                self.assertIsNone(unknown['basis']['state']['pendingEffect'])
+
+    def test_concurrent_owner_change_wins_and_atomic_unknown_is_not_replayed(self):
+        race = self.run_case(mode='race')
+        self.assertEqual(race['error']['code'], 'RECORDER_COMMIT_UNKNOWN')
+        self.assertEqual(race['attempted'], 1)
+        self.assertEqual(race['sql']['settled'], 0)
+        self.assertEqual(race['after']['lease'], race['stale']['lease'])
+        self.assertEqual(race['scope']['activeTransferId'], 'failed-transfer')
+        self.assertEqual(race['after']['state']['ownerRace'], 'retained')
+        for mode in ('commit-unknown', 'late-commit'):
+            with self.subTest(mode=mode):
+                result = self.run_case(mode=mode)
+                self.assertEqual(result['error']['code'], 'RECORDER_COMMIT_UNKNOWN')
+                self.assertEqual(result['attempted'], 1)
+                self.assertIsNone(result['result'])
+                self.assertEqual(result['sql']['settled'], 1)
+                self.assertIsNone(result['scope']['activeTransferId'])
+                self.assertNotEqual(result['scope']['token'], result['basis']['lease']['token'])
+                self.assertEqual(result['after'], result['reopened'])
+                self.assertEqual(result['after']['state']['failure'], result['basis']['state']['failure'])
+                self.assertTrue(all(c['method']=='thread/read' for c in result['recoveryCalls']))
+
+
 def _shared_config_observation():
     configured=os.environ.get('CODEX_HOME')
     path=(Path(configured) if configured else Path.home()/'.codex')/'config.toml'
