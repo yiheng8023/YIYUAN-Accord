@@ -2962,3 +2962,19 @@ Root已核四份workspace输入hash/mtime，source工具/源配置未被修改�
 Root改用最小只读finalization，复用已验证SDKrestore、原完整history/工具/权限、最新SQLite一致快照与两写回执，恢复同source，仅确认既有v2，处理器拒绝全部业务读写，不再进入round2写路径。Astra指出的postcheck authority/state遗漏及旧resume通知不能代确认turn新用量已在派发前修；一次Python CREATE_SUSPENDED常量不可用的前Popen失败无进程/业务效果，原准备记录保留，改用Win32既有0x4标志。正式只读段17.408秒natural0/close/Job0，sourcePID确属父Job；原source新增completed 01a129e2-21c5-73d1-b7b2-016ae8ff736c，history completed/interrupted/interrupted/completed，unsubscribe与ready/no-pending核实。确认turn的真实用量绑定turnId，源累计157678/44790/3064；总业务actors3508785/376812/19269不清零。Root QA95.206秒在270内，v2与全部受保护文件bytes/hash/mtime、用户配置32687ea0…d5c保持；空TEMP共20目录已核归属及Job0后清除，原件/SQLite/WAL/scope/native/失败均留。未注册新case，未改仓库代码、包、Skill或配置。
 
 两产物SHA44ba7098acfaf1f4f46ff782d88ac86635356a26996edf59334200d2c846a7de、7a561c7250a8961ce0029fc7b196fa53b3f020167bd7d4a7263a840d829ad4c1。结果可用且同业务的必要接管、恢复、独立QA和资源闭合确已连接；不追认结束资格实例、未知暂停或原私有调用层失败。说明“核验拦截错误”仅为源自述。Root准备/审查总费用和用量未完全计量，本段不足以证明普遍普通入口、Skill停用/变更策略执行、成本净价值及完整A08；既有必要质量/场景/F-A和false候选天花板保持，不重做此业务或添加新发布门槛。原件见私有takeover、complete-v2和ledger-finalize三个工作根，最终root-qa.json及cleanup.json为Root独立记录。
+
+### Skill停用分支与当前IDE依赖2026-10-11
+
+复用Oct4原生implicit-allowed有限正向、Sep25retro/Oct6Implement及本次接管的explicit-only代选/实际采用，不重跑旧任务。Oct1政策材料在捕获时主要是准备记录，后续retro真实段超时/失败，不能补签所有政策分支。Root/Astra据既有ACCEPTANCE r31选当前R2/R3入口依赖判断作为有限语义段，私有`accord-skill-policy-closure-20261011-01`保原件，没有新增case、scope或发布门槛。
+
+同当前main CWD的原生库存先核retro enabled，按进程合并原配置将它停用后确见disabled，WFA/Accord协调保持enabled；用户配置和第三方策略未改。真实模型段为gpt-6.1-sol/medium、readonly/never，shell/apps/web/MCP工具在该段停用，Root委托允许能力选择而非冒充人类点名。首轮私有helper误给未注册accord_state增加enabled=false，原生invalid transport在thread/start前失败，thread/turn/usage为空、exit1/forced/Job0；原prepared和失败保留。修正仅覆盖真实注册MCP后才重新派发，未改产品代码或共享设置。
+
+新线程`01a12a71-eb93-7731-a6eb-bb8a96f027e9`、turn `01a12a71-ed1b-78f3-afa4-6572be29c032`实际completed，32.880秒，25830 total/25136未缓存/694输出且usageTurnId一致。完整Accord指导在原生第9行出现，与现装221152组装正文一致；实际送达不单独证明增量效益。模型选择允许的原生推理，无额外Skill、工具或停用正文，给出具体“VSCode当前绑定差异结论”的下一段、可复用原件、必要本入口输入前提和有限退出；建议仍未执行。Root与Astra独立核其语义及原始记录，仅判有限政策/具体依赖成立，不代无提示发现、人工显式、无委托、全部入口或完整W02/A08。
+
+单轮原生历史、unsubscribe、自然exit0/nonforced、readerStopped、真实PID属于父Job及Job0均已核，Root首次QA在270秒分配内。当前parent输入、用户配置、两份第三方policy、facts/prompt/helper及二进制hash/mtime保持；两库存reader、原失败与成功actor所属资源闭合后，仅清5个已核空的任务TEMP目录。源业务、SQLite、旧水印和原始材料保持。此模型段用量独立记录，Root准备/评审总用量及净价值仍未知。
+
+必要IDE差异核对复用`accord-ide-live-20261009-01/FACTS.json`及原生Oct9 codex_vscode观察；其输入仍隔离，旧输入SHAc3889a4b…864、workspace水印SHAf10e3a3b…7ee均未变。旧聊天“核验当前 IDE 入口状态”已完成一次只读核验，并明确禁止恢复/重放/新业务，不能据Root继续指令去续它。核对时未见Code进程，未找到可用的受支持IDE发送桥；因此仅请求用户在新IDE聊天发送一次限定只读指令，并在确有需要时授权恢复该聊天本条真实新输入。协作请求或答应配合不作输入存在的证明；桌面/CLI/普通SDK来源不能替代当前IDE绑定，旧水印不清除。
+
+随后用户实际打开VS Code、新建并发送限定输入，截图与原生新会话`01a12a93-e2ed-7ba0-8ab3-86bfc2adba79`的codex_vscode/vscode及cwd相符；turn `01a12a93-ea46-78a1-aacb-3c06d062dc4a`实际Sol/medium、on-request/danger-full-access。完整Accord正文在第9行、SHA9ec2…094与现包一致。一次实际MCP inspect观察初始2125f044隔离，真实输入明确授权仅恢复自己；本轮capture与实际用户原文、hash/turn一致，精确recovery_epoch旋转为cb303df0。后续readonly status确认输入present、needsReplay=false，仍unbound/currentInputReconciled=false、无checkpoint。原Oct9输入和workspace水印完整SHA保持。原生task_complete68.492秒，452631 total/58106未缓存/1821输出；Root原件核验保于policy-closure/current-ide-root-review.json。接入基础已补，不重复只读任务，不当业务接管或完整IDE/W02/A08通过。
+
+Desktop wait_threads对该入口返回thread/items/list尚不支持，Root转读实际原件，未反复轮询或消息续旧聊天；该控制桥缺口不判IDE任务失败。编辑器是用户所开资源，任务完成不声称它已关闭或Root Job0。当前global config SHA f57b55d2…7b45、mtime早于IDE turn；此前政策段保护窗口32687ea0…值与其事实保持。窗口外变更归属未知，保留当前用户设置，不归因Source或回退旧值；未从源自述推成整个跨窗口不变。主仓四份记录仅由Root更新，原基线/验收/r42、所有scope/case与完成天花板未变。
