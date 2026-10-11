@@ -1337,10 +1337,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                         <= set(integration['missingDimensions']['scenarios']))
         self.assertTrue(integration['jointCaseMissing'])
         continuity = report['caseBindingGaps']['v33-autonomous-continuity']['function']
-        self.assertEqual(continuity['caseIds'], [])
-        scope = next(s for s in policy['scopes'] if s['id'] == 'v33-autonomous-continuity')
-        for key in ('duties', 'qualityAxes', 'scenarios'):
-            self.assertEqual(set(continuity['missingDimensions'][key]), set(scope[key]))
+        self.assertEqual(continuity['caseIds'], ['v33-ledger-effect-recovery-01'])
+        self.assertEqual(continuity['missingDimensions'], {
+            'duties': [], 'qualityAxes': [], 'scenarios': ['native-sufficient']})
+        self.assertFalse(continuity['jointCaseMissing'])
         self.assertEqual(report['acceptanceRequirements']['A08']['blockedBy'],
                          ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07'])
         self.assertIn('v33-codex-lifecycle',
@@ -1666,9 +1666,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report['functionalCompletion'])
         self.assertFalse(report['candidateEligible'])
         gap = report['caseBindingGaps']['v33-autonomous-continuity']['function']
-        scope = next(s for s in policy['scopes'] if s['id'] == 'v33-autonomous-continuity')
-        self.assertEqual(set(gap['missingDimensions']['duties']), set(scope['duties']))
-        self.assertEqual(set(gap['missingDimensions']['scenarios']), set(scope['scenarios']))
+        self.assertEqual(gap['caseIds'], ['v33-ledger-effect-recovery-01'])
+        self.assertEqual(gap['missingDimensions'], {
+            'duties': [], 'qualityAxes': [], 'scenarios': ['native-sufficient']})
+        self.assertFalse(gap['jointCaseMissing'])
         self.assertFalse(report['acceptanceRequirements']['A05']['complete'])
         self.assertIn('A05', report['acceptanceRequirements']['A08']['blockedBy'])
 
