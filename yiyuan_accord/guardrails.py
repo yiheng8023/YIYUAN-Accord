@@ -528,6 +528,7 @@ def activation_mechanism_errors(
             config_path = repository_relative_path(root, config_locator)
             expected_mcp = {"mcpServers": {"accord-state": {"command": "node",
                 "args": ["runtime/native-state-mcp.cjs"], "cwd": ".",
+                "env_vars": ["YIYUAN_ACCORD_TASK_STATE_DIR", "CODEX_HOME"],
                 "startup_timeout_sec": 10, "tool_timeout_sec": 10}}}
             if (adapter_id != "codex" or delivered is None or canonical_mcp is None
                     or delivered.is_symlink() or canonical_mcp.is_symlink()

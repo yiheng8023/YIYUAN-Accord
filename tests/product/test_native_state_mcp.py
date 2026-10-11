@@ -180,8 +180,13 @@ class NativeStateMcpTests(unittest.TestCase):
 
     def inspect(self, params=None, *, operation='inspectNativeState'):
         code = "const m=require(process.argv[1]);let s='';process.stdin.setEncoding('utf8');process.stdin.on('data',x=>s+=x);process.stdin.on('end',()=>process.stdout.write(JSON.stringify(m[process.argv[2]](JSON.parse(s)))));"
+        # Model the host's cleared environment plus the manifest's explicit forwarding.
+        config = json.loads((ROOT / 'plugins/yiyuan-accord-codex/.mcp.json').read_text(encoding='utf-8'))
+        allowed = {'PATH', 'SYSTEMROOT', 'WINDIR', *config['mcpServers']['accord-state'].get('env_vars', [])}
+        env = {key: value for key, value in self.env.items() if key.upper() in allowed}
+        env.update(HOME=str(self.root), USERPROFILE=str(self.root))
         p = subprocess.run([self.node, '-e', code, str(BRIDGE), operation], input=json.dumps(params or self.params),
-            capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+            capture_output=True, text=True, encoding='utf-8', env=env, timeout=10)
         self.assertEqual(p.returncode, 0, p.stderr)
         return json.loads(p.stdout)
 
@@ -1012,6 +1017,17 @@ class NativeStateMcpTests(unittest.TestCase):
                 self.assertTrue(self.inspect(body)['isError'])
         self.assertFalse(self.state.exists())
 
+    def test_absent_environment_selectors_preserve_unknown_without_default_state_writes(self):
+        for key in ('YIYUAN_ACCORD_TASK_STATE_DIR', 'CODEX_HOME'):
+            self.env.pop(key, None)
+        self.params['arguments']['includeContext'] = True
+        value = self.inspect()['value']
+        self.assertEqual(value['checkpoint']['reason'], 'native-user-input-receipt-missing')
+        self.assertEqual(value['context']['reason'], 'native-user-input-receipt-missing')
+        self.assertFalse((self.root / '.yiyuan-accord').exists())
+        self.assertFalse((self.root / '.codex').exists())
+        self.assertFalse(self.state.exists())
+
     def test_relative_workspace_and_incomplete_call_identity_are_rejected(self):
         for field in ('callId', 'thread_id', 'session_id', 'turn_id'):
             with self.subTest(field=field):
@@ -1130,6 +1146,7 @@ class NativeStateMcpTests(unittest.TestCase):
         config = json.loads((package / '.mcp.json').read_text(encoding='utf-8'))
         self.assertEqual(config, {'mcpServers': {'accord-state': {'command': 'node',
             'args': ['runtime/native-state-mcp.cjs'], 'cwd': '.',
+            'env_vars': ['YIYUAN_ACCORD_TASK_STATE_DIR', 'CODEX_HOME'],
             'startup_timeout_sec': 10, 'tool_timeout_sec': 10}}})
         adapter = json.loads((package / 'adapter.json').read_text(encoding='utf-8'))
         self.assertTrue(adapter['persistentProcessAdded'])
@@ -1238,7 +1255,7 @@ def _finalize_native_integration(result, app, fixture, root, host, *, body_faile
                            ', '.join(item['stage'] for item in cleanup_failures))
 
 
-def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
+def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, scoped_hook=False):
     """Native metadata and host denial or adapter rejection; fixed replies, no model."""
     sys.path.insert(0, str(ROOT))
     from scripts import observe_codex_lifecycle as host
@@ -1280,6 +1297,10 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
         if sha(source) != sha(dest): raise ValueError('source changed while freezing')
     host.save(root/'manifest.json', manifest)
     env = host._owned_environment(manifest)
+    # Even a lost selector must stay inside the fixture's owned default profile.
+    profile = root / 'home/profile'
+    profile.mkdir()
+    env.update(HOME=str(profile), USERPROFILE=str(profile))
     deadline = time.monotonic()+150
     def command(label, arguments):
         record, value = host._run_cli(manifest, label, arguments, env, deadline)
@@ -1307,15 +1328,16 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
 
     def response(body, ordinal):
         if ordinal == 1:
-            namespace, name = exposed_tool(body, 'inspect_task_state')
-            arguments = {'cwd':str(root/'workspace'), 'includeContext':True}
-            identity = ('state_tool_call', 'native_state_call')
+            namespace, name = exposed_tool(body, 'read_task_input' if scoped_hook else 'inspect_task_state')
+            arguments = {'cwd':str(root/'workspace'), **({} if scoped_hook else {'includeContext':True})}
+            identity = ('input_tool_call', 'native_input_call') if scoped_hook else ('state_tool_call', 'native_state_call')
         elif ordinal == 2:
-            namespace, name = exposed_tool(body, 'manage_task_state')
-            arguments = {'cwd':str(root/'workspace'), 'action':'pause',
-                'epoch':'fixture-unobserved-receipt', 'expectedRevision':0,
-                'reason':'Fixture checks missing-receipt rejection only; do not create task state.'}
-            identity = ('manage_tool_call', 'native_manage_call')
+            # Inspect after one completed provider reply, when native token counts exist.
+            namespace, name = exposed_tool(body, 'inspect_task_state' if scoped_hook else 'manage_task_state')
+            arguments = {'cwd':str(root/'workspace'), 'includeContext':True} if scoped_hook else {
+                'cwd':str(root/'workspace'), 'action':'pause', 'epoch':'fixture-unobserved-receipt',
+                'expectedRevision':0, 'reason':'Fixture checks missing-receipt rejection only; do not create task state.'}
+            identity = ('state_tool_call', 'native_state_call') if scoped_hook else ('manage_tool_call', 'native_manage_call')
         else:
             return None
         return {'type':'function_call', 'id':identity[0], 'call_id':identity[1],
@@ -1327,7 +1349,25 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
     result = {'realModelCalls': 0, 'status': 'pending'}
     body_failed = False
     try:
-        extra = ['-c','features.hooks=false','-c','features.code_mode_host=false']
+        extra = ['-c','features.code_mode_host=false']
+        if scoped_hook:
+            app = host._App(manifest, 'hook-discovery', host._argv(manifest, fixture, extra), env, deadline)
+            app.initialize()
+            hooks = app.rpc('hooks/list', {'cwds':[str(root/'workspace')]})
+            owned = [h for h in host._hook_rows(hooks)
+                if h.get('key', '').startswith('yiyuan-accord-codex@yiyuan-accord:')]
+            if len(owned) != host._declared_hook_count(package):
+                raise RuntimeError('owned Hook registrations differ')
+            trust = {h['key']:{'enabled':True, 'trusted_hash':h['currentHash']} for h in owned}
+            result['hookDiscoveryResources'] = app.close(manifest)
+            if (result['hookDiscoveryResources'].get('forced')
+                    or not host._released(result['hookDiscoveryResources']['after'])):
+                raise RuntimeError('Hook discovery resources not naturally released')
+            app = None
+            extra += ['-c', 'hooks.state=' + host._toml(trust)]
+            result['hookTrust'] = trust
+        else:
+            extra += ['-c','features.hooks=false']
         if preapprove_owned_manage_tool:
             # Official per-tool setting, only in this isolated test process. The
             # rejected pause has no receipt and cannot create checkpoint state.
@@ -1338,11 +1378,13 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
         app = host._App(manifest, 'mcp-state', argv, env, deadline)
         app.initialize()
         started = app.rpc('thread/start', {'cwd':str(root/'workspace'), 'model':'fixture-no-model',
-            'ephemeral':True, 'sandbox':'read-only', 'approvalPolicy':'never'})
+            'ephemeral':not scoped_hook, 'sandbox':'read-only', 'approvalPolicy':'never'})
         thread = started['thread']['id']
         if started.get('sandbox', {}).get('type') != 'readOnly': raise RuntimeError('source is not read-only')
+        prompt = ('Inspect this workspace state and read this current captured input. Preserve files and do not bind task state.'
+            if scoped_hook else 'Inspect this workspace state and check that a state-management request with an unobserved receipt is rejected. Preserve files and do not create task state.')
         turn = app.rpc('turn/start', {'threadId':thread,
-            'input':[{'type':'text','text':'Inspect this workspace state and check that a state-management request with an unobserved receipt is rejected. Preserve files and do not create task state.'}]})['turn']['id']
+            'input':[{'type':'text','text':prompt}]})['turn']['id']
         terminal = app.wait_turn(thread, turn)
         calls = [e['params']['item'] for e in app.events if e.get('method') == 'item/completed'
             and e.get('params', {}).get('threadId') == thread
@@ -1350,7 +1392,8 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
             and e.get('params', {}).get('item', {}).get('type') == 'mcpToolCall']
         if terminal != 'completed' or len(calls) != 2: raise RuntimeError('two completed MCP calls required')
         indexed = {call.get('id'): call for call in calls}
-        if set(indexed) != {'native_state_call', 'native_manage_call'}:
+        second_id = 'native_input_call' if scoped_hook else 'native_manage_call'
+        if set(indexed) != {'native_state_call', second_id}:
             raise RuntimeError('native MCP call identities differ')
         call = indexed['native_state_call']
         reply, value = native_tool_result(call)
@@ -1360,14 +1403,37 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
         if (source['threadId'] != thread or source['sessionTreeId'] != thread
                 or source['turnId'] != turn or source['callId'] != call['id']):
             raise RuntimeError('metadata differs from native thread/turn/call receipts')
-        if value['checkpoint'] != {'state':'unavailable','reason':'native-user-input-receipt-missing'}:
-            raise RuntimeError('absent hook receipt was not preserved as unknown')
-        if value.get('context', {}).get('reason') != 'native-user-input-receipt-missing':
-            raise RuntimeError('optional context must preserve absent input as unknown')
-        manage_call = indexed['native_manage_call']
-        manage_disposition = native_manage_disposition(manage_call,
-            preapproved=preapprove_owned_manage_tool)
-        if sha(original) != manifest['protectedSha256'] or list((root/'state').iterdir()):
+        manage_call = indexed[second_id]
+        if scoped_hook:
+            receipts = list((root/'state').glob('*.input.json'))
+            if len(receipts) != 1: raise RuntimeError('one real scoped Hook receipt required')
+            receipt = json.loads(receipts[0].read_text(encoding='utf-8'))
+            snapshot = value['checkpoint'].get('snapshot', {})
+            _, captured = native_tool_result(manage_call)
+            transcript = Path(receipt['nativeContextSource']['transcriptPath'])
+            if (value['checkpoint']['state'] != 'observed' or snapshot.get('epoch') != receipt['epoch']
+                    or snapshot.get('inputReceipt', {}).get('present') is not True
+                    or receipt['turnId'] != turn or receipt['promptSha256'] != hashlib.sha256(prompt.encode()).hexdigest()
+                    or not captured or captured['input']['receiptEpoch'] != receipt['epoch']
+                    or captured['input']['entries'][0]['text'] != prompt
+                    or captured['source']['threadId'] != thread or captured['source']['turnId'] != turn
+                    or not transcript.is_relative_to(root/'home/sessions') or not transcript.is_file()
+                    or value.get('context', {}).get('state') != 'observed'
+                    or value['context']['epoch'] != receipt['epoch']):
+                raise RuntimeError('MCP did not reconcile the scoped Hook input and native context')
+            host.save(root/'retained/hook-input.json', receipt)
+            result['scopedHookInput'] = {'receipt':receipt, 'captured':captured, 'context':value['context']}
+            manage_disposition = 'read-only-captured-input'
+        else:
+            if value['checkpoint'] != {'state':'unavailable','reason':'native-user-input-receipt-missing'}:
+                raise RuntimeError('absent hook receipt was not preserved as unknown')
+            if value.get('context', {}).get('reason') != 'native-user-input-receipt-missing':
+                raise RuntimeError('optional context must preserve absent input as unknown')
+            manage_disposition = native_manage_disposition(manage_call,
+                preapproved=preapprove_owned_manage_tool)
+        state_before = {p.name:sha(p) for p in (root/'state').iterdir()}
+        if (sha(original) != manifest['protectedSha256'] or not scoped_hook and state_before
+                or (profile/'.yiyuan-accord').exists() or (root/'home/.yiyuan-accord').exists()):
             raise RuntimeError('native state calls changed protected files or created task state')
         status_request = {'threadId': thread, 'detail': 'toolsAndAuthOnly'}
         live = app.rpc('mcpServerStatus/list', status_request)
@@ -1394,13 +1460,17 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
             'beforeIdentity': [str(before_cache.st_dev), str(before_cache.st_ino)],
             'afterIdentity': [str(after_cache.st_dev), str(after_cache.st_ino)],
             'afterMcp': after_status}
-        if sha(original) != manifest['protectedSha256'] or list((root/'state').iterdir()):
+        if (sha(original) != manifest['protectedSha256']
+                or {p.name:sha(p) for p in (root/'state').iterdir()} != state_before):
             raise RuntimeError('cache replacement changed original or task state')
         if len(fixture.requests) != 3 or fixture.auth_seen: raise RuntimeError('provider bounds differ')
         result.update(status='passed', threadId=thread, turnId=turn, nativeCall=call,
             nativeManageCall=manage_call, manageDisposition=manage_disposition,
             providerRequests=len(fixture.requests), sourceSettings=started,
             claimLimit='Native plugin MCP registration and declared host-approval boundary. A denied/rejected write request is neither business success nor a completed state change; no real model judgment, GUI adoption or handoff dispatch. Process-scoped fixture preapproval, when selected, is not a user permission or product default.')
+        if scoped_hook:
+            result['nativeInputCall'] = result.pop('nativeManageCall')
+            result['claimLimit'] = 'Native Hook input and context read through the installed MCP environment whitelist; isolated profile, three fixed local provider replies, zero real model calls. No business delivery, GUI adoption or full acceptance claim.'
     except BaseException as error:
         body_failed = True
         result.update(status='failed', failure=type(error).__name__, reason=str(error))
@@ -1408,6 +1478,13 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False):
     finally:
         _finalize_native_integration(result, app, fixture, root, host,
                                      body_failed=body_failed)
+    if scoped_hook:
+        if list((root/'state').iterdir()):
+            result.update(status='failed', reason='native SessionEnd did not retire the scoped receipt')
+            host.save(root/'result.json', result)
+            raise RuntimeError(result['reason'])
+        result['scopedReceiptRetired'] = True
+        host.save(root/'result.json', result)
     if any(sha(ROOT/name) != digest for name,digest in manifest['sources'].items()):
         raise RuntimeError('execution sources changed during the episode')
     shutil.copy2(original, root/'retained/keep.txt')
@@ -1429,8 +1506,9 @@ if __name__ == '__main__':
         parser.add_argument('--evidence', required=True)
         parser.add_argument('--preapprove-owned-manage-tool', action='store_true',
             help='isolated fixture process only: prebind official approval of this one missing-receipt rejection probe')
+        parser.add_argument('--scoped-hook', action='store_true', help='verify native Hook to MCP scoped environment forwarding')
         arguments = parser.parse_args()
         native_integration(arguments.native_codex, arguments.evidence,
-            preapprove_owned_manage_tool=arguments.preapprove_owned_manage_tool)
+            preapprove_owned_manage_tool=arguments.preapprove_owned_manage_tool, scoped_hook=arguments.scoped_hook)
     else:
         unittest.main()

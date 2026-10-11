@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261011221257",
+    "version": "3.3.0-dev.1+codex.20261012034148",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261011221257",
-        "packageSha256": "0d70f9173ada5238ba9e9b1c15e75a69f3cd248bc0cf4b388715ffd6d463c4de",
+        "packageVersion": "3.3.0-dev.1+codex.20261012034148",
+        "packageSha256": "415dd92e0f4b108895d980bce8f744231ce96de8a498e8337466cbbf578d35a6",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -261,10 +261,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 3620000,
+      "maxProductCodeAndTestBytes": 3626000,
       "maxTrackedFiles": 192,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Bounded allocation:3620000 product code/test bytes,192 tracked files and36000 primary-instruction bytes; the existing five-percent reserve remains binding. The prior3560000 ceiling left only259 bytes below its reserved-use threshold at1931c271. Failed target creation/intake with a source-owned active transfer exposed a missing safe closure before existing source restore. The narrow reconciliation reuses native history, independent verification, SQLite CAS and unchanged source restore; its mirrored runtime and actual SQLite regression coverage initially add55960 bytes. Independent comparison found no equivalent native/external closure or lossless same-purpose reduction sufficient to restore53701 bytes; deleting required tests, dropping package mirrors or unrelated refactoring would weaken coverage or increase risk. This recalibration funds only that named recovery obligation and direct returned-DTO coverage, with3439000 as the reserved-use threshold; it is not general growth allowance. The consumed ledger fixture and original failures remain retained at4a356d91/private recovery roots. All original limits/failures,17 scopes,F01-F08/A01-A08 and false completion/candidate ceilings remain."
+      "rationale": "Bounded allocation:3626000 product code/test bytes,192 tracked files and36000 primary-instruction bytes, retaining the five-percent reserve and existing measurement. The prior3620000 allocation measured3438323 bytes with677 bytes below its reserved-use threshold. A real completed SDK task exposed Hook/MCP storage separation because the declared stdio environment omitted the supported TASK_STATE_DIR and CODEX_HOME selectors. The narrow declaration/guard correction plus manifest-filtered and actual-host positive/negative regressions add5944 code/test bytes. Independent review found no equivalent lossless reduction of the resulting5267-byte reserve deficit; required identity, context, missing-input, post-state and resource assertions remain. This6000-byte change funds that named integration defect and its regression only; it is not general growth allowance or proof of whole-task efficiency. Earlier recovery allocation, measurements and failures remain historical. Preparation, model, review and recovery burden require separate whole-outcome accounting; product source size alone does not control delivery cost. Current scopes and quality claims remain pending evidence and may be reassessed under the latest user instruction, never retrospectively relabeled as passed."
     }
   },
   "source": {
@@ -1585,6 +1585,11 @@
         "postBindingAffectedDevelopmentRecheck": {"tests": 8, "seconds": 81.513, "passed": true},
         "syntaxAndRuntimeMirrors": true,
         "sourceAndDevelopmentValidAfterVersionBinding": true,
+        "exactHostedCi": {
+          "sha": "40898c8f1f088fa1e39419805fdbb0171fe72cb4",
+          "run": 38150909069,
+          "result": "success-11/11"
+        },
         "privateEvidence": "accord-failed-transfer-recovery-20261011-01"
       },
       "complexity": {
@@ -1612,6 +1617,111 @@
       "existingFailureReuse": "Final stock-v2 carrier is inactive with zero transfers; retained snapshots likewise contain no eligible failed transfer. Recovery preparation failures did not create a source-owned active transfer. No native restore/read or business replay is needed for a nonexistent transfer; the retained takeover WAL is not treated as a current snapshot.",
       "resultLimit": "Mechanism repair and scoped native installation only. Actual ordinary entry, autonomous timing, necessary takeover/failure fallback, system quality and incremental value still need applicable evidence. Old stock-v2, Skill and IDE evidence remain separate and reusable; do not replay closed business or promote this observation into full W05/A08.",
       "qualificationPassed": false
+    },
+    {
+      "id": "timeline-same-source-outcome-20261012",
+      "authority": "Existing representative maintainer-evaluation authority and current continuation; not a new formal case or release gate.",
+      "subject": {
+        "synthetic": true,
+        "sourceThreadId": "01a12c26-c937-7461-9812-e782d097ed63",
+        "originalInterruptedTurnId": "01a12c26-ca9c-75a3-b487-f5d796ca29d2",
+        "completionTurnId": "01a12c65-7baf-7671-86e6-40bc02e5612c",
+        "packageVersion": "3.3.0-dev.1+codex.20261011221257",
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "outcome": {
+        "artifactCount": 2,
+        "sourceRows": 9,
+        "distinctEvents": 7,
+        "knownUtcEvents": 5,
+        "unknownUtcEvents": 2,
+        "exactJsonOracle": true,
+        "independentMarkdownSemantics": true,
+        "protectedInputsAndConfiguration": true,
+        "history": "interrupted/completed",
+        "singleWriterAndNoPending": true,
+        "naturalExitAndOwnedJobZero": true,
+        "actorSeconds": 114.4493132,
+        "rootQaSecondsAfterActorExit": 94.122,
+        "rootQaAllocationSeconds": 70,
+        "rootQaWithinAllocation": false
+      },
+      "observedContinuationUsage": {
+        "totalTokens": 188530,
+        "uncachedInputTokens": 12291,
+        "outputTokens": 3951,
+        "coverage": "Current native reported source counters; original interrupted-call cost and whole-task preparation remain unknown."
+      },
+      "preservedFailures": [
+        "Initial temporary MCP table overrides failed before initialize; no business dispatch.",
+        "The private consumer rejected the first immutable read before usage arrived; original 16.5869045-second interruption and unknown cost retained.",
+        "An extra fresh-tool-inventory requirement was withdrawn after checking the existing supported restore evidence.",
+        "Prepared parent flags incorrectly conflated absent properties with null; corrected before this continuation ran.",
+        "Root final QA exceeded its own allocation; business correctness does not relabel the timing result."
+      ],
+      "integrationGap": {
+        "nativeMcpCallId": "exec-4fc07392-8a12-4e10-b830-b8f62de94faa",
+        "observed": "Correct source/turn/cwd inspect returned native-user-input-receipt-missing while the same-turn Hook receipt was saved in the configured scoped state directory.",
+        "cause": "The plugin MCP declaration did not allow forwarding the supported state-directory environment variable through the host subprocess environment filter.",
+        "state": "corrected by scoped-mcp-environment-forwarding-20261012; original business response retained"
+      },
+      "privateEvidence": [
+        "accord-timeline-complete-20261012-01",
+        "accord-timeline-root-qa-20261012-01"
+      ],
+      "qualificationPassed": false,
+      "resultLimit": "Completed business and bounded source restoration only. Do not replay this business, equate initialization with tool execution, promote unknown whole-task cost to compliance, or infer full R2/R3/A08 and release readiness."
+    },
+    {
+      "id": "scoped-mcp-environment-forwarding-20261012",
+      "state": "source-fixed-native-fixture-verified-local-package-updated",
+      "subject": {
+        "version": "3.3.0-dev.1+codex.20261012034148",
+        "packageSha256": "415dd92e0f4b108895d980bce8f744231ce96de8a498e8337466cbbf578d35a6",
+        "change": "Forward only the existing YIYUAN_ACCORD_TASK_STATE_DIR and CODEX_HOME selection variables to the plugin stdio process."
+      },
+      "rootCause": "The host clears the MCP child environment and admits default or explicitly listed variables; the old manifest omitted the supported selectors, separating Hook storage and MCP state/context lookup.",
+      "regression": {
+        "manifestFilteredUnitTests": 46,
+        "restoredMissingInputAssertionTests": 2,
+        "nativePositiveVersions": [
+          "0.162.0-alpha.17.2",
+          "0.162.1"
+        ],
+        "nativeNegativeVersion": "0.162.0-alpha.17.2",
+        "localProviderRepliesPerRun": 3,
+        "realModelCalls": 0,
+        "sameNativeCallerHookInputAndContext": true,
+        "scopedReceiptRetired": true,
+        "naturalExitAndOwnedJobZero": true,
+        "defaultUserDirectoriesUntouched": true,
+        "standardsRemainingFindings": 0,
+        "specFindings": 0
+      },
+      "retainedFailure": "The first scoped fixture expected context counts before the first provider response had completed. Its receipt had already arrived; the original failed timing expectation remains, and the corrected fixture reads captured input before asking for response-boundary context.",
+      "privateEvidence": [
+        "accord-mcp-scoped-env-20261012-01",
+        "accord-mcp-scoped-env-20261012-03",
+        "accord-mcp-env-negative-20261012-01",
+        "accord-mcp-scoped-env-01621-20261012-01"
+      ],
+      "qualificationPassed": false,
+      "resultLimit": "Native environment-forwarding regression and source correction only; no model behavior, all-entry adoption, full R2/R3/A08 or release claim. Completed timeline business is retained without replay.",
+      "installation": {
+        "version": "3.3.0-dev.1+codex.20261012034148",
+        "packageSha256": "415dd92e0f4b108895d980bce8f744231ce96de8a498e8337466cbbf578d35a6",
+        "exactMembers": 25,
+        "nativeNewSkillPaths": 5,
+        "nativeNewEnabledHookPaths": 6,
+        "seconds": 12.0478988,
+        "configurationBytesUnchanged": true,
+        "priorRecoveryBytesUnchanged": true,
+        "naturalExitAndOwnedJobZero": true,
+        "readerThreadsStopped": true,
+        "existingHostAdoption": "unverified; new owned-process discovery does not refresh the original host",
+        "privateEvidence": "accord-failed-transfer-recovery-20261011-01/native-mcp-env-install-20261012-01"
+      }
     }
   ],
   "environmentControl": {
