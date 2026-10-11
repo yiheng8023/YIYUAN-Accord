@@ -2978,3 +2978,11 @@ Root改用最小只读finalization，复用已验证SDKrestore、原完整histor
 随后用户实际打开VS Code、新建并发送限定输入，截图与原生新会话`01a12a93-e2ed-7ba0-8ab3-86bfc2adba79`的codex_vscode/vscode及cwd相符；turn `01a12a93-ea46-78a1-aacb-3c06d062dc4a`实际Sol/medium、on-request/danger-full-access。完整Accord正文在第9行、SHA9ec2…094与现包一致。一次实际MCP inspect观察初始2125f044隔离，真实输入明确授权仅恢复自己；本轮capture与实际用户原文、hash/turn一致，精确recovery_epoch旋转为cb303df0。后续readonly status确认输入present、needsReplay=false，仍unbound/currentInputReconciled=false、无checkpoint。原Oct9输入和workspace水印完整SHA保持。原生task_complete68.492秒，452631 total/58106未缓存/1821输出；Root原件核验保于policy-closure/current-ide-root-review.json。接入基础已补，不重复只读任务，不当业务接管或完整IDE/W02/A08通过。
 
 Desktop wait_threads对该入口返回thread/items/list尚不支持，Root转读实际原件，未反复轮询或消息续旧聊天；该控制桥缺口不判IDE任务失败。编辑器是用户所开资源，任务完成不声称它已关闭或Root Job0。当前global config SHA f57b55d2…7b45、mtime早于IDE turn；此前政策段保护窗口32687ea0…值与其事实保持。窗口外变更归属未知，保留当前用户设置，不归因Source或回退旧值；未从源自述推成整个跨窗口不变。主仓四份记录仅由Root更新，原基线/验收/r42、所有scope/case与完成天花板未变。
+
+### 既有CLI与SDK恢复权限的有限收敛2026-10-11
+
+用户同意继续后，Root只读对照既有真实原件，不重开业务或IDE任务。CLI监督01a129ab原生第8/37/116行三个turn实际approval_policy=never、sandbox_policy=danger-full-access，后两轮真实exec/resume；三份native-receipt的原生前缀SHA与完整原件相符。首轮及最后轮natural0/Job0，中间usage-limit/forced124/Job0保持失败。可以有限闭合同CLI续作、显式获准控制维持和所属退出子责任；命令明确重传控制值，不能称自动继承全部用户profile、on-request交互或原case整体通过。
+
+同SDK源ledger-finalize/restore-resumed-proof的requested/nativeResumeParams与真实resumeReceipt均on-request、readOnly/networkAccessfalse，reviewer=user、activePermissionProfile=null；原确认turn/完整history/唯一writer/八单成品及自然exit0/Job0复用。这属于该SDK源恢复，不借给CLI。现有观察器build_command有意固定never，测试也固定这份合同；省略permission字段的旧turnConditions投影不代表原生没有它，Root本次直接按原行读取，未发现产品缺陷。
+
+当前本机CLI0.162.1、二进制SHA dd13bdb1…49a6a，纯帮助读取确认原生交互resume支持指定线程、-a on-request和-s sandbox；exec/resume帮助没有相同的人类交互入口。新鲜Sol/high只读独审同意该有限范围与载体区分。用户审批请求/回应、拒绝或暂停后的继续仍须真正适用工作；没有相应任务便保留限度，不发明业务补格，不修改观察器、包或第三方，不增加case/门槛。私有accord-r23-permission-continuity-20261011-01/review.json保原件摘要、三轮控制和原失败，帮助读取未派发模型。

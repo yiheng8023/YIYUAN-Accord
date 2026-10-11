@@ -1532,6 +1532,21 @@
           },
           "scope": "Same source, no transfer, actual current token re-claimed only on exclusively owned snapshot; database/current writer/native completion independently checked."
         },
+        "permissionContinuityObservation": {
+          "rootReview": {
+            "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-permission-continuity-20261011-01\\review.json",
+            "sha256": "1e6ea9450201afd36afb64aca74b74148332c9c0ac3aa68de991d9b4e5d8d7c1"
+          },
+          "cliThreadId": "01a129ab-0400-7262-b341-c6b83c16823c",
+          "actualNativeControlLines": [8, 37, 116],
+          "actualControls": "All three same-thread native turns report never/danger-full-access; last two are genuine exec/resume. Initial and final actor natural0/Job0; middle original forced budget failure remains failed. Three recorded native prefixes match original stream hashes.",
+          "closedSubresponsibility": "Actual same CLI continuation, maintenance of this explicitly selected permitted control profile and owned exit post-state. Per-resume explicit selection is not automatic host-profile inheritance.",
+          "sdkScope": "Original same SDK source native resumeReceipt on-request/readOnly/networkAccessfalse/approvalsReviewer=user plus completed readonly confirmation and source exit are reused separately; not CLI human approval behavior.",
+          "currentSupportedRoute": "Current0.162.1 interactive resume help exposes on-request and sandbox controls. Noninteractive observer build_command and tests intentionally fix never. Bind a genuinely useful unfinished task when it actually requires approval/refusal/pause interaction, then observe current authority/writer, continuation, result and resources; do not manufacture inventory reruns or cases.",
+          "productDefectEstablished": false,
+          "qualificationPassed": false,
+          "limit": "Bounded source/control/consequence reuse with a fresh read-only Sol/high review; no CLI/SDK business or qualification re-dispatch or new release gate. Full ordinary default-user CLI, human approval interactions, autonomous timing, all qualities/value and A05/A06/A08 remain unaccepted."
+        },
         "resultLimit": "Usable full eight-order v2 plus connected necessary takeover/Skill adoption/source recovery/independent verification/owned resource closure. Original timed qualification remains failed; pause input remains unconfirmed; ordinary multi-entry and Skill disabled/changed-policy execution, all applicable system quality/net-value and fullA08 are not accepted. Root preparation/review cumulative usage and cost unknown. Do not repeat this business or add a gate.",
         "qualificationPassed": false
       },
