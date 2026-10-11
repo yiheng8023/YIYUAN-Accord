@@ -2909,3 +2909,12 @@ Root复核后去掉新回归中重复评估及已由完整比较覆盖的重复�
 原生段约233秒被输出guard终止：output12,065>12,000，total582,986、uncached51,369；无terminal、forced=true，原行为未完整通过。原索引8,960,606字节超过结构reader8MiB，另留.protected-inputs.tmp.json。Root没有把实际预算送给actor，也未事先核产物规模/reader适用性，准备责任明确；不扩旧cap/窗口、不重跑或补签案例。原worker Job remainingOwnedProcesses=0，四次库存查询exit0/Job0；两个后来仍存在的采样PID在窗口后新建，按PID复用处理，未清理共享进程。临时基线保入evidence，原workspace和中断输入作原件保留，Root独立delivery附完整限度。
 
 主线程在01:36:53Z另以stream disconnected before completion结束，request a31c3ed5-84fc-4304-b5ab-7f600d16c329，codex_error_info=other。该服务响应错误没有确定根因，不能归到worker预算、Accord、模型选择或网络；当前新输入后已核恢复资料与文件。原native窗口config rawSHA32687ea0前后保持；之后当前46e24b81的变化归属未知，未覆盖用户设置。所有私有原件位于accord-current-ci-comparison-20261011-01。17scope、6case、F/A与claim ceiling保持，完整普通自主接管/同episode组合未通过。
+
+
+## 库存业务接续首次派发前停止（2026-10-11）
+
+前瞻候选`d324841e96d6806083bedcc2887b699689f83607`、同case `v33-ledger-effect-recovery-01`。CLI监督线程`01a12902-d4cf-7022-9b78-53252ea2e696`实际调用begin/status-seed均因私有caller把既有`recoveryTimeoutSeconds`写作`recoveryTimeout`而拒绝。监督者核原件后hold，无SDK source、无业务产物、未触发预定效果后失联；56.514秒/自然exit0/Job0，整个observer60.917秒，281589输入/231168缓存/1814输出（总283403，未缓存输入50421）。这证明本轮正确停在已识别准备缺口，不能作恢复、业务或正式case通过。
+
+Root已核四份workspace输入hash/mtime，source工具/源配置未被修改，窗口内共享config SHA `86caaade4b08b56ac911259432898c739f75f63004a9edb1e7bcc2bba802fda9`前后相同，无workspace注册；Goal读取时null，读取器自然exit0/Job0。原`accord-r23-ledger-recovery-20261011-01`保全部必要原件和root-observation.json；新鲜所属进程检查后仅清理任务temp/cache，输入/原源码/恢复材料保持。此config值只描述该窗口，不能覆盖用户后续设置。
+
+根因是私有执行接线遗漏，Root此前提供的字段提示也漏了Seconds。只在独立`...-02`修正两入口，并用首轮实际run-started核两语言相同的原始绝对480/600/620截止；原20离线/4历史shape及11字段拒绝检查通过，独立窄审确认。原轮1次尝试和全部用量/失败不改，前瞻更新同case来源后才允许接续未启动业务；不是事后补证明或新增发布门槛。后续实际结果另记。

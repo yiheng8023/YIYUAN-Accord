@@ -3734,69 +3734,79 @@
                   "role": "Frozen task-owned SDK caller and read-only domain checker; ordinary CLI supervisor decides operation. Root is independent observer and never writes business outputs.",
                   "sources": [
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\controller\\native-consumer.cjs",
-                      "sha256": "a2b80d5d2a506a711d76e89463553f477dd32723340d2cd50e81a9080f1a7353",
-                      "bytes": 53790
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\controller\\native-consumer.cjs",
+                      "sha256": "a16ceb888f2e1c0dd595dd10a55a0ab411abeb9eb381a132ede54b65853fddeb",
+                      "bytes": 53808
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\controller\\owned-client.py",
-                      "sha256": "a7d2c8b4ad4bc92c070d7ec22e0e5230152a6b58f989accd059cd45842bc6119",
-                      "bytes": 7827
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\controller\\owned-client.py",
+                      "sha256": "cb22100e46f8f2fcca62275245a462a43d7a6c73855a03d2ace50740c69fbb7e",
+                      "bytes": 7792
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\controller\\recovery.cjs",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\controller\\recovery.cjs",
                       "sha256": "8b83a9c117530672ce7d12cb6203e9c417a8d01be680d996667089d5ddb852f1",
                       "bytes": 12196
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\controller\\seed.json",
-                      "sha256": "882487d2ee8a82301350f00500396810613001ea99d5a8392445b4379e236c19",
-                      "bytes": 10020
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\controller\\observer_clock.py",
+                      "sha256": "c883c636c8d30187288442d5b6f624b1919e1b4eab88578955e3407bcef0a5c6",
+                      "bytes": 1392
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\controller\\supervisor-README.md",
-                      "sha256": "b333e53b2cbc9dd4d2c94aab52e327162e8213b6ae6d333ed7c43c9dfe4db7da",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\controller\\observer-clock.cjs",
+                      "sha256": "8a338d280cbde975ff829fdaf6945074da7a8bd335cdc66f6db1c88c9123ff4e",
+                      "bytes": 1477
+                    },
+                    {
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\controller\\seed.json",
+                      "sha256": "c5fccaac3e7eaffe49c776e7a44d79d83372922cd29e42355db8872bf44310b7",
+                      "bytes": 9826
+                    },
+                    {
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\controller\\supervisor-README.md",
+                      "sha256": "200ab199e1face83abb1b545d0ddaddba3e349d199312235b400d6ad126c0df3",
                       "bytes": 2822
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\spec\\domain-v1.json",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\spec\\domain-v1.json",
                       "sha256": "7c692dbcc51f82a76199225392cb7c296e2c19aa16085cb26155ed34c336e668",
                       "bytes": 991
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\spec\\domain-v2.json",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\spec\\domain-v2.json",
                       "sha256": "0feb78582ccd57f4ff2d1ef6d79e55cd4d2cc21123675b59096bfb7404b441b1",
                       "bytes": 1647
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\spec\\business-contract.md",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\spec\\business-contract.md",
                       "sha256": "fb0bc6122ac12a8f5169147928cad9eb3c8cedcfe98e46f40e7e15af2162c459",
                       "bytes": 1428
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\spec\\worker-initial.txt",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\spec\\worker-initial.txt",
                       "sha256": "d99314017bc8a792dc5fa8aad7481d606e14e1387487d57308561eadf1d52647",
                       "bytes": 536
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\spec\\worker-resume.txt",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\spec\\worker-resume.txt",
                       "sha256": "45cd8aa060fc33d326127f9e475e00ea3ed5ab537a126f74b353629648e73861",
                       "bytes": 565
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\spec\\supervisor-prompts.json",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\spec\\supervisor-prompts.json",
                       "sha256": "7fbee39d2506f736f4ac99780055e0a942744a8f51abc86468d3679d2575a404",
                       "bytes": 1897
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\spec\\oracle.py",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\spec\\oracle.py",
                       "sha256": "a230186ac5b2c33b901de87e1d63a451964a82584f1399fb8e9bb654a1b824f4",
                       "bytes": 3903
                     },
                     {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\register_case.py",
-                      "sha256": "76178fcec1f8ee181557e72c34fb80dcbb868bbdf6ed8530f902ac54ff099aed",
-                      "bytes": 11323
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\register_case.py",
+                      "sha256": "6b02109a449209b4d3cf3bee2407ae741c611ccf829fea1a73b08b60917bf870",
+                      "bytes": 12321
                     }
                   ],
                   "dynamicConfiguration": "Existing observer run-started.time fixes shared deadlines; actual source ACK fixes thread/scope; fresh controller UUID and exact prior basis fix restore. Derived configs and native receipts are retained, not authority by themselves."
@@ -3815,7 +3825,7 @@
                 "timeoutSeconds": 600,
                 "turnTimeoutSeconds": 240,
                 "recoveryTimeoutSeconds": 20,
-                "caseSha256": "0daf00c2e35eb37526bd5a937afd70267d2b35a1224b5418e30a21c5cb3fc509",
+                "caseSha256": "91c11a4c17734575fc306ec1f91f89146746444cbb6d99a20a4c9fb9590e4259",
                 "usageCaps": {
                   "totalTokens": 1600000,
                   "uncachedInputTokens": 120000,
@@ -3827,7 +3837,7 @@
               },
               "runner": "scripts/observe_codex_entry.py",
               "caseFile": "product/cases/ledger-effect-recovery-v3.3.json",
-              "caseSha256": "0daf00c2e35eb37526bd5a937afd70267d2b35a1224b5418e30a21c5cb3fc509"
+              "caseSha256": "91c11a4c17734575fc306ec1f91f89146746444cbb6d99a20a4c9fb9590e4259"
             },
             "episode": {
               "consumer": "Maintainer functional acceptance using transparent synthetic stock/orders; no external customer or money effects.",
@@ -3876,7 +3886,7 @@
                   {
                     "id": "business-contract.md",
                     "file": {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\spec\\business-contract.md",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\spec\\business-contract.md",
                       "sha256": "fb0bc6122ac12a8f5169147928cad9eb3c8cedcfe98e46f40e7e15af2162c459",
                       "bytes": 1428,
                       "mtimeMs": 1791688580149.185
@@ -3885,7 +3895,7 @@
                   {
                     "id": "domain-v1.json",
                     "file": {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\spec\\domain-v1.json",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\spec\\domain-v1.json",
                       "sha256": "7c692dbcc51f82a76199225392cb7c296e2c19aa16085cb26155ed34c336e668",
                       "bytes": 991,
                       "mtimeMs": 1791687904374.6738
@@ -3894,7 +3904,7 @@
                   {
                     "id": "domain-v2.json",
                     "file": {
-                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\spec\\domain-v2.json",
+                      "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\spec\\domain-v2.json",
                       "sha256": "0feb78582ccd57f4ff2d1ef6d79e55cd4d2cc21123675b59096bfb7404b441b1",
                       "bytes": 1647,
                       "mtimeMs": 1791687904374.6738
@@ -3902,7 +3912,7 @@
                   }
                 ],
                 "cliCopies": "Committed fixture exact bytes, protected hash and mtime by existing observer.",
-                "oracleOriginals": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\spec"
+                "oracleOriginals": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-02\\spec"
               },
               "limits": {
                 "attempts": 1,
@@ -3930,6 +3940,13 @@
                 "businessOutputBytesCombined": 32768,
                 "actorStdoutBytes": 8192,
                 "clock": "All model work, native inventory, QA and normal closure share existing observer start; new controllers do not reset deadlines. Root preparation/review usage and latency reported separately; no net-benefit claim."
+              },
+              "priorEpisode": {
+                "candidate": "d324841e96d6806083bedcc2887b699689f83607",
+                "observation": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-recovery-20261011-01\\root-observation.json",
+                "observationSha256": "a74dde52effba07e24db7afd2122e1c91fa239368bed8ca23d2738eef221039d",
+                "disposition": "Held before business dispatch: private caller read recoveryTimeout but existing observer supplies recoveryTimeoutSeconds. Ordinary supervisor preserved inputs and stopped. No source session, business output or injected partial-effect fault occurred. Original 56.514-second invocation,283403 total/50421 uncached input/1814 output and original one-attempt limit remain immutable; new binding preserves this cost and does not reclassify it.",
+                "revisionPurpose": "Correct that identified clock adapter only and prospectively continue the same unstarted business under a new exact candidate. No completed business replay; no added scope or release gate."
               },
               "claimLimit": "Bounded effect-before-business-ACK known-source restoration, pause and same-business rule correction only. Not first-create ACK uncertainty, unprompted context-pressure timing, fresh target takeover, pre-dispatch/in-flight/power/disk failures, all selected entry differences, complete A05/A08 or release readiness."
             }
