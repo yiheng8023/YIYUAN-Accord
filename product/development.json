@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261012034148",
+    "version": "3.3.0-dev.1+codex.20261012041313",
     "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261012034148",
-        "packageSha256": "415dd92e0f4b108895d980bce8f744231ce96de8a498e8337466cbbf578d35a6",
+        "packageVersion": "3.3.0-dev.1+codex.20261012041313",
+        "packageSha256": "c0328e4205d9ea63a3f154d8c763c20a18940cffd8af4647a3e1cab3ee4bd6d0",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -1675,10 +1675,10 @@
     },
     {
       "id": "scoped-mcp-environment-forwarding-20261012",
-      "state": "source-fixed-native-fixture-verified-local-package-updated",
+      "state": "source-and-index-bytes-aligned-local-package-updated",
       "subject": {
-        "version": "3.3.0-dev.1+codex.20261012034148",
-        "packageSha256": "415dd92e0f4b108895d980bce8f744231ce96de8a498e8337466cbbf578d35a6",
+        "version": "3.3.0-dev.1+codex.20261012041313",
+        "packageSha256": "c0328e4205d9ea63a3f154d8c763c20a18940cffd8af4647a3e1cab3ee4bd6d0",
         "change": "Forward only the existing YIYUAN_ACCORD_TASK_STATE_DIR and CODEX_HOME selection variables to the plugin stdio process."
       },
       "rootCause": "The host clears the MCP child environment and admits default or explicitly listed variables; the old manifest omitted the supported selectors, separating Hook storage and MCP state/context lookup.",
@@ -1708,7 +1708,7 @@
       ],
       "qualificationPassed": false,
       "resultLimit": "Native environment-forwarding regression and source correction only; no model behavior, all-entry adoption, full R2/R3/A08 or release claim. Completed timeline business is retained without replay.",
-      "installation": {
+      "priorLocalInstallation": {
         "version": "3.3.0-dev.1+codex.20261012034148",
         "packageSha256": "415dd92e0f4b108895d980bce8f744231ce96de8a498e8337466cbbf578d35a6",
         "exactMembers": 25,
@@ -1721,6 +1721,33 @@
         "readerThreadsStopped": true,
         "existingHostAdoption": "unverified; new owned-process discovery does not refresh the original host",
         "privateEvidence": "accord-failed-transfer-recovery-20261011-01/native-mcp-env-install-20261012-01"
+      },
+      "byteIdentityCorrection": {
+        "failedCommit": "6dfd1e27f0dcc600c2aa1f53e3f3b286eb3888e1",
+        "failedCi": 38170602621,
+        "priorBuild": "3.3.0-dev.1+codex.20261012034148",
+        "workingDeclaredPackageSha256": "415dd92e0f4b108895d980bce8f744231ce96de8a498e8337466cbbf578d35a6",
+        "actualCommittedPackageSha256": "488404479750d1e36447181b093eb72e7ae194f6e78113b00cede8cc035e4c8b",
+        "cause": "Root Windows text-mode serialization added CRLF before hashing; Git stored LF under existing attributes. The current product-contract step failed across the matrix.",
+        "correction": "Write the owned manifest and projection with explicit LF bytes, compare staged package bytes before hashing/adoption, and use a distinct installed version. Preserve the failed commit and prior local package; no runtime/test behavior is rewritten.",
+        "failedCiTerminal": {
+          "conclusion": "failure",
+          "productMatrixFailures": 9,
+          "nativeLifecycleSuccesses": 2
+        }
+      },
+      "installation": {
+        "version": "3.3.0-dev.1+codex.20261012041313",
+        "packageSha256": "c0328e4205d9ea63a3f154d8c763c20a18940cffd8af4647a3e1cab3ee4bd6d0",
+        "exactMembers": 25,
+        "nativeNewSkillPaths": 5,
+        "seconds": 9.7590921,
+        "configurationBytesUnchanged": true,
+        "priorRecoveryBytesUnchanged": true,
+        "naturalExitAndOwnedJobZero": true,
+        "readerThreadsStopped": true,
+        "existingHostAdoption": "unverified; new owned-process discovery does not refresh the original host",
+        "privateEvidence": "accord-failed-transfer-recovery-20261011-01/native-mcp-env-lf-install-20261012-01"
       }
     }
   ],
