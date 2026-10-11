@@ -3021,7 +3021,11 @@ Desktop wait_threads对该入口返回thread/items/list尚不支持，Root转读
 
 同次沿CI调用链复核发现，常规native-lifecycle的MCP步骤只传`--preapprove-owned-manage-tool`，此分支关闭Hook并验证缺回执拒绝；全套单测的环境筛选模拟和生命周期直接helper调用不能替代正向MCP启动链。现同一步追加既有`--scoped-hook`固定响应fixture，分别保留`native-state-mcp`负例与`native-state-mcp-scoped`正例，原artifact同时收集两者。actionlint通过；Windows既有正向证据复用，Linux/macOS与既有CLI0.156.0待后继实际执行，不改成已通过。未增加运行时、包、业务案例或验收判据。
 
+后续终态补记：ec6c0387/38171891543和e218e3d0/38173159309各自11/11成功，原run/jobs分别保在私有`accord-mcp-env-fix-20261012-01/ci-final-ec6.json`和`ci-final-e218.json`。e218的Ubuntu/macOS CLI0.156.0正负两分支原件已下载，Root逐一回核30项源码SHA与该提交相符、scoped输入/context同epoch、原回执正常退休、自然exit0、POSIX同进程组absent、读者停止及所属目录清理；用户目录未动。该结果结束上段当时的CI等待，不改旧失败，不外推逃逸后代、Windows Job0、真实模型行为或完整资格；不作为后继提交的CI证据。
+
 本线程原生rollout在2026-10-11 20:26:37.856Z记录compacted，原行SHA为2a8b984d54c9aedd6ed29a2250cefd8c11c1678cd124bd1e6918260f39b9f147。随后当前Root的真实MCP调用仍指向同thread/turn，输入存在、已reconcile、无需replay/resume reconciliation，四项输出谓词匹配；此时原生响应边界64,209 token、配置窗口828,400，不能写成默认窗口验收。Root未创建新源或重放业务，沿原检出继续。Root既是演员也是记录者，此观察不代独立行为验收、自主择时、完整语义继承或必要迁移。
+
+后续有界独审实读该rollout的byte77211685原行（796212字节，含换行SHA一致）：35项replacement history中可见用户目标、R2/R3、质量和权限原文，助手摘要保留已闭业务不重放、原失败/QA超限、修复及下一职责；但压缩主体encrypted_content不可检阅，retained用户/助手集合的`*_messages_incomplete`均为true（不表示每条记录均不完整），图片亦不完整。byte78007897的world_state含完整原meta-guidance；byte79057665工具响应中连续性Skill全文完整，虽然该次整体输出截断。byte78966645真实状态响应保留单写者和未完职责；旧包/旧fence等失效活动条件是后来纠偏的原状态问题，不能归因于压缩遗漏。可见记录未确认当时协调entry全文，目录路径不代宿主刷新。Root在新turn01a12cd6完整读取现装协调Skill（5576字节，SHA a99e64d049b61adfbc827c07645e5a662ed9b6f2ff30380292c165c227fe05e0），作为当前后续指导补齐，不追认旧Hook送达。独审只支持这些关键状态的有限语义继承，不代全文无损、自主择时、默认窗口、必要迁移或完整A05/A08。
 
 同次核对发现rev78活动未决条目同时包含旧版本待安装、已经闭合的timeline待恢复和失效的旧clone/fence。完整14,724字节原件按SHA f5fd91f9582639a7eef2ac69a6cc6f86211f933bb0f77c2c2db23042d5686036保留；rev79保持输入及全部输出谓词，把26项叠加历史收敛到8项当前责任、5,808字节。原失败、成本未知、未验范围及旧水印不删改；历史引用不再充当当前执行指令。
 

@@ -1678,7 +1678,15 @@
       "state": "source-and-index-bytes-aligned-local-package-updated",
       "coordinationReview": {
         "privateEvidence": "accord-mcp-env-fix-20261012-01/continuity-reconciliation",
-        "ordinarySource": "Actual same-thread native compaction followed by current input/checkpoint inspection and continuation; Root is actor and recorder, not independent behavior acceptance.",
+        "ordinarySource": "Actual same-thread native compaction followed by current input/checkpoint inspection and continuation; Root is actor and recorder, not independent behavior acceptance. A later independent source review confirms visible user goals, quality/permission constraints, retained closed outcomes and failures, and continuation duties; encrypted compaction content and incomplete retained text do not establish complete history preservation.",
+        "semanticRecoveryReview": {
+          "sourceCompactionByte": 77211685,
+          "sourceCompactionLineSha256": "2a8b984d54c9aedd6ed29a2250cefd8c11c1678cd124bd1e6918260f39b9f147",
+          "visibleGuidance": ["full original meta-guidance in world_state", "full maintain-task-continuity Skill in a later tool response"],
+          "unverified": ["encrypted compaction body", "complete retained history and images", "coordination entry body at the old compaction boundary"],
+          "currentGuidanceRecovery": "Root fully read the enabled installed coordination Skill in turn 01a12cd6-62ab-7b11-9dbb-bf091d4fc6e6; this supplies current duties, not retroactive Hook delivery or host-process refresh evidence.",
+          "qualificationPassed": false
+        },
         "checkpointReconciliation": {"beforeRevision": 78, "afterRevision": 79, "beforeConditions": 26, "afterConditions": 8, "originalRetained": true, "inputAndOutputPredicatesPreserved": true},
         "rootUsage": {
           "turnId": "01a12c57-9c50-7200-89bc-df0c48f53773",
@@ -1692,7 +1700,7 @@
           "verification": "Cumulative delta equals last-usage sums at 95 first-seen cumulative boundaries among 112 native token events; repeated post-compaction last fields are not substituted, and reasoning is not added twice.",
           "limit": "Timestamp-bound Root usage only. Child actors are separate; prices, earlier preparation and whole-project net impact remain unknown. No new budget or acceptance gate."
         },
-        "independentReview": "Original checkpoint digest, retained duties and usage arithmetic checked against the specified native span; no independent complete-input, autonomous-trigger, default-window, handoff or A05/A08 behavior claim.",
+        "independentReview": "Original checkpoint digest, retained duties and usage arithmetic checked against the specified native span; a later bounded semantic review also read visible replacement/retained text and actual state/guidance responses. No complete-history, autonomous-trigger, default-window, handoff or A05/A08 behavior claim.",
         "qualificationPassed": false
       },
       "subject": {
@@ -1709,7 +1717,19 @@
           "0.162.1"
         ],
         "nativeNegativeVersion": "0.162.0-alpha.17.2",
-        "hostedPositiveRegression": "Existing native-lifecycle job now also invokes --scoped-hook beside the retained missing-input negative fixture, with separate native-state-mcp-scoped evidence retained by the same artifact step. Linux/macOS CLI 0.156.0 execution remains pending; Windows local results do not substitute for it.",
+        "hostedPositiveRegression": {
+          "state": "passed-within-native-fixture-scope",
+          "subjectCommit": "e218e3d096e0d446586b47da09782cc2f7a2caaf",
+          "runId": 38173159309,
+          "conclusion": "success",
+          "successfulJobs": 11,
+          "platforms": ["ubuntu-latest", "macos-latest"],
+          "hostVersion": "0.156.0",
+          "retainedBranches": ["missing-input-rejection", "scoped-hook-input-and-context"],
+          "sourceMembersVerifiedPerBranch": 30,
+          "privateEvidence": ["accord-mcp-env-fix-20261012-01/ci-final-e218.json", "accord-mcp-env-fix-20261012-01/ci-e218-mcp-ubuntu", "accord-mcp-env-fix-20261012-01/ci-e218-mcp-macos"],
+          "limit": "Fixed local replies, not ordinary model behavior or full A05/A08. POSIX evidence covers direct-child exit and the same process group only. This immutable run does not certify later commits."
+        },
         "localProviderRepliesPerRun": 3,
         "realModelCalls": 0,
         "sameNativeCallerHookInputAndContext": true,
