@@ -2936,3 +2936,17 @@ Root已核四份workspace输入hash/mtime，source工具/源配置未被修改�
 现有scripts/observe_codex_entry.py只归一化安全等价的Windows本地盘符native路径；新prefix中的UNC/device/volume/点路径/尾点空格/ADS等仍拒绝，原普通UNC语义不改；原ordinary-root、reparse、hardlink、resolve与增量inode守卫保留，Goal读回同用边界。Root实际双stderr回读与110项入口回归通过。无模型原source元数据读取确认persistent/notLoaded、cwd/path仍绑定原03，输入/产物不变，读取器exit0/Job0。原失败不追认；私有accord-r23-observer-path-20261011-01保反例、补丁、回读、测试和读取器原件。
 
 所有03所属原生Job和读取器已退出，仅以非递归rmdir移除已核空的TEMP目录；中间遇空目录含空子目录的检查拒绝亦记于temp-cleanup.json，随后逐层删除，业务/SQLite/scope/native/输入保留。一次性资格声明和fixture转为精确Git/私有历史，不挂未来PASS义务；父职责/标准/原时限不减。后续只承接已有v1和真实源状态，先前瞻绑定当前授权、暂停不确定性及新剩余工作段，再做必要恢复/完整v2，不重做v1或扩旧case预算。
+
+
+### 同源剩余段的恢复后路径拒绝
+
+2026-10-11在7398d432上前瞻接续同一业务，新剩余段未注册case。原监督通过真实新输入先hold等待新累计计数，再自行核对并启动原source恢复；新数据库副本已claim换token、原source已获resume回执，但私有caller的nativeMeta又将等价`\\?\C:`路径误判越界，在恢复后核对阶段停止。没有turn/start或业务写入；监督自行核效果后hold，116.991秒自然exit0/Job0，observer119.546秒。source因caller错误经SIGTERM退出/close，不能称正常完成；其PID实际位于Root Job。原v1、全部原件与旧DB的hash/mtime及窗口共享配置保持，Root独立QA192.959秒、TEMP已清。监督累计1124569 total/94653未缓存/6684输出，仍用原1600000/120000/8000上限；新source用量未观察，不假定为零。原件保于私有`accord-r23-ledger-remaining-observer-20261011-01`。
+
+后续恢复基线变化：新副本中的scope token已轮换，旧DB只作证据，禁止删副本或重用旧token盲试。Root无模型`thread/read includeTurns=true`核得原source仍notLoaded、完整一轮历史与原basis相等，读取器exit0/Job0、共享配置不变；实际notLoaded也可返回extended路径。下一步先用这些真实返回修正私有调用层的全部相关路径比较和恢复分支，再按剩余累计预算判断有界续作。旧失败、未确认暂停、v2及完整组合仍未通过；不新增发布门槛。
+
+
+### 私有接续修正及未缓存输入超限
+
+7398d432的CI `38112721785` 已终态成功，11/11 jobs；其121项本地相关回归及源码检查保持。私有new02修正普通/extended路径的全部相关比较，并显式绑定失败后实际scope/DB/connection；15项真实数据无模型检查及独立窄审通过。随后同监督low短续作在15.885秒因未缓存输入超限被守卫强停（exit124/Job0，observer17.233秒）：累计1194464 total/151003未缓存/6789输出，原未缓存上限120000；新请求增加56350，超过此前仅余25347。Root前置预算判断不足，不能以历史缓存命中推断新请求成本。没有remaining调用、SDK派发、新DB副本、业务turn或写入；原v1/原件/旧与failed01数据库hash和mtime保持，窗口配置不变，Root QA84.216秒，TEMP已清。两次实际剩余段分别保于私有`accord-r23-ledger-remaining-observer-20261011-01/02`，原失败和原限额不改。
+
+当前不能再沿原超限监督分配派发。`...remaining-observer-20261011-02/remaining-work-facts.json`用4097字节保存当前业务、实际新scope和上任连接、完整历史/退出原件、修正入口、成本及未完责任。下一责任是按未缓存输入保守估计重新判断有限剩余分配与必要监督接管，再承接同source的v2及独立完整后态；不是复活旧case、把计数归零后补签成功，亦不把这轮维护变成新发布门槛。v2、必要接管和完整组合仍未验收，functionalCompletion/candidateEligible继续false。
