@@ -2986,3 +2986,11 @@ Desktop wait_threads对该入口返回thread/items/list尚不支持，Root转读
 同SDK源ledger-finalize/restore-resumed-proof的requested/nativeResumeParams与真实resumeReceipt均on-request、readOnly/networkAccessfalse，reviewer=user、activePermissionProfile=null；原确认turn/完整history/唯一writer/八单成品及自然exit0/Job0复用。这属于该SDK源恢复，不借给CLI。现有观察器build_command有意固定never，测试也固定这份合同；省略permission字段的旧turnConditions投影不代表原生没有它，Root本次直接按原行读取，未发现产品缺陷。
 
 当前本机CLI0.162.1、二进制SHA dd13bdb1…49a6a，纯帮助读取确认原生交互resume支持指定线程、-a on-request和-s sandbox；exec/resume帮助没有相同的人类交互入口。新鲜Sol/high只读独审同意该有限范围与载体区分。用户审批请求/回应、拒绝或暂停后的继续仍须真正适用工作；没有相应任务便保留限度，不发明业务补格，不修改观察器、包或第三方，不增加case/门槛。私有accord-r23-permission-continuity-20261011-01/review.json保原件摘要、三轮控制和原失败，帮助读取未派发模型。
+
+### 当前Root控制端点的只读辨别2026-10-11
+
+只读daemon version发现本机现有0.162.1运行服务及官方control socket；此服务不是Root创建，版本查询前后用户配置hash/mtime相同。Root先沿现0.162.1 help和原生handoff参考区分byte tunnel与JSONL；Astra以现装Python314/websocket-client1.9.0准备137行最小reader，未连接。Root核三方法allowlist、socketpair字节桥、标准握手、server request不回复、22秒读取/30秒总边界、挂起proxy先入Windows Job及退出，并在原已有授权内执行。没有安装、启动/重启/配对/更改共享服务或用户设置。
+
+实际101握手后仅initialize/initialized/thread/read Root01a12575且includeTurns=false；返回存档cwd与根检出相同、originator=Codex Desktop、cliVersion=alpha17.2、source=vscode、status=notLoaded。源枚举不单独识别物理宿主，存档存在不证明该daemon承载当前运行Root；没有加载/订阅/恢复线程、模型派发或审批回应。响应保存必要原生字段及原整响应hash/bytes5506，明确是投影，未保preview/正文/历史turns，不从hash重建内容。
+
+读取1.4749131秒结束，实际proxyPID50600先归属父Job，自然exit0/nonforced、Job0，桥线程全部停止、无桥错误，用户配置/版本原件/CLI/helper/client-module hash和mtime保持。Root独立请求/目标/资源/保护复核保于permission-continuity/control-proxy-readonly-root-qa.json，原件在同根control-proxy-readonly-evidence。仅私有任务reader被释放，原共享服务未动；Root继续小段工作，必要迁移时再核当前运行源的实际控制连接。此为既有W05前提诊断，不冒充自主发现/完整接管或新case/发布门槛。

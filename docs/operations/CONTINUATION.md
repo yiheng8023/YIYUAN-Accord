@@ -20,6 +20,7 @@
 | Source/target请求泵接通已发生的proposal失效/关闭守卫；SDK创建源与组装目标前拒不支持的工具格式，保真传合规字段 | 原失败、机制/边界回归及独审保留；不撤销已发生回调副作用，不代普通自主择时或完整F/A。后补断言错误已在3caa5c5a修正，896项Windows全套与对应11/11 CI通过；旧141项不能担保后加断言的版本 |
 | 私有SDK消费者两轮真实运行，同线程/同inactive token续作、独立逐行结果及自然退出/Job0 | 原150947/cafa包、CLI0.162.1/Node24.21的实际接线证据；无transfer。当前221152的三项固定响应入口核验和后续CLI初轮均各留原界，不能拼为普通自主交接或完整系统结果 |
 | 同CLI线程的真实续作、显式权限配置维持及所属退出后态已核 | 复用实际监督01a129ab的原生第8/37/116行，初轮及两次exec/resume均never＋danger-full-access；首轮与最终轮自然exit0/Job0，中间预算失败保持，原生前缀hash与三份回执一致。这是本段显式配置维持，不代宿主自动继承或用户on-request审批交互。观察器有意固定never，当前0.162.1原生交互resume支持on-request/sandbox；剩余只在真实工作需要时核请求/回应、拒绝或暂停后继续。SDK on-request/readOnly恢复实证另属同SDK源，不代CLI |
+| 现有控制端点可读根线程存档，但未加载当前Root | 只读version核本机daemon0.162.1已运行；官方proxy＋现装WebSocket客户端完成101握手和准确thread/read(includeTurns=false)，返回Root存档originator=Codex Desktop/版本alpha17.2/cwd一致、status=notLoaded。没有resume/load/订阅或模型调用；proxy自然exit0/Job0、桥线程停、保护文件hash/mtime不变。这是端点范围的存档读取，不是当前Root live控制；必要迁移才补当前源连接 |
 | README范围和CLI维护者用法已纠正，私有检查ZIP/清单/使用说明可用 | Root提供facts/源码摘录曾漏条件，原模型稿、纠正和独审分别保留；普通维护的可用成品不自动取得原执行者自主或正式case通过 |
 | 必要原件/配置及所属资源后态已核 | 当前检查未发现六个工作段的workspace/temp或测试临时目录残留；进程退出按各原回执归属核定，controller、attempt、gate、原始结果、恢复副本等为必要证据保留。没有因审计清理共享进程、用户组件或未知ACL |
 
