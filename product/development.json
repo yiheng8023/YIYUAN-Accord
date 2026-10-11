@@ -1365,7 +1365,128 @@
       "correction": "Existing observer incorrectly distinguished normal Windows path and equivalent extended local-drive spelling. Narrow normalization preserves bounded-root, reparse, hardlink and identity checks;110 entry regressions and original dual-stderr reread pass. This does not retrospectively pass the interrupted native stage.",
       "remainingAttempt": {"subject":"7398d432a6e39f6d676ed22fb3071cf6c8bd73dd","path":"C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-remaining-observer-20261011-01\\root-observation.json","sha256":"c60bf0200fc29450d3694d755bef86d10321a5a1ad9bc4f520a3586cc272458d","purpose":"Ordinary same-business remaining work, not a new admission case or retrospective old PASS.","supervisor":"Same thread completed current-input reconciliation, effects review and hold;116.991s natural exit0/Job0; observer119.546s.","source":"Original source resumed and new SQLite copy scope token claimed; private nativeMeta rejected equivalent Windows extended local-drive path before turn/start. Native SIGTERM/close observed and PID present in Root Job; zero business writes.","protected":"Original database/basis/input and v1 hash+mtime unchanged; shared config unchanged; Root QA192.959s within600s; task temporary residue closed.","usage":{"supervisorCumulativeTotal":1124569,"supervisorCumulativeUncachedInput":94653,"supervisorCumulativeOutput":6684,"sourceLastConfirmedTotal":60536,"sourceLastConfirmedUncachedInput":21163,"sourceLastConfirmedOutput":845,"sourceNewUsage":"unobserved; no new turn/start; not asserted as zero"},"sourceScope":"Same writer, rotated token in preserved new database; old scope must not be replayed.","qualificationPassed":false},
       "latestRemainingAttempt": {"subject":"7398d432a6e39f6d676ed22fb3071cf6c8bd73dd","path":"C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-remaining-observer-20261011-02\\root-observation.json","sha256":"22c9d43f0eb1d56368f7cad334336b80284aea94fe003e72f4928aa61ab7a013","sourceCi":"38112721785 completed success;11/11 jobs","correction":"Private remaining02 fixes both Windows same-file comparisons and explicitly binds actual failed01 claimed scope/DB/connection.15 real-data no-model checks and independent narrow review passed; no native restore/v2 success claim.","supervisor":"Same native thread, low effort, forced124/usage-limit after15.885s; observer17.233s; no terminal, Job0.","usage":{"total":1194464,"uncachedInput":151003,"output":6789,"originalUncachedLimit":120000,"incrementUncached":56350,"priorUncachedHeadroom":25347},"business":"Only readonly status; no remaining operation, no SDK dispatch/DBcopy/turn/write. Original03 and failed01 DBs, inputs and v1 hash+mtime unchanged; shared config unchanged.","qaSeconds":84.216,"tempClosed":true,"responsibility":"Root insufficiently assessed full uncached input; past cache hits do not establish next request cost. Preserve original failed cap; no further old-supervisor dispatch under that allocation.","continuationFacts":"C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-remaining-observer-20261011-02\\remaining-work-facts.json","qualificationPassed":false},
-      "remaining": "Version2 and complete R2/R3 remain unverified. Corrected private caller is ready for a separately justified remaining allocation and necessary supervisory takeover; bind actual failed01 scope/DB/current source and new input, estimate uncached input conservatively, preserve all prior failures/costs, and do not replay v1 or revive the exhausted supervisor under its original cap. This adds no case or release gate.",
+      "continuationCompletion": {
+        "purpose": "Same-business remaining outcome and ordinary recovery; no new admission case or release gate. All prior periods/failures remain historical as originally observed.",
+        "subject": "0d36bbd4aa71ba48924c1df1a3ef1ce7e7367256 code/package unchanged from7398",
+        "supervisorThreadId": "01a129ab-0400-7262-b341-c6b83c16823c",
+        "sourceThreadId": "01a12925-723c-7910-b8d6-647f49e9a386",
+        "skillCoordination": {
+          "nativeEvidence": {
+            "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-takeover-20261011-01\\native-skill-adoption.json",
+            "sha256": "a83d67bb9533760c2d27b8f5c5d62631840315b4e65c97f35300affd35c432fd"
+          },
+          "completeBodiesBeforeFirstTool": {
+            "bodyLines": [
+              13,
+              14
+            ],
+            "firstToolLine": 17
+          },
+          "selection": "Root selected original explicit-only retro and writing-for-agents for necessary supervisory recovery; native supported explicit route used without user naming either Skill.",
+          "policiesAndOriginals": "unchanged",
+          "disableObservation": "Actual per-process inventory reports retro disabled and Root does not invoke it. This is policy-aware selection evidence, not model execution rejection or wholeW02."
+        },
+        "supervisoryTakeover": {
+          "intakeSeconds": 55.225532499986,
+          "intakeNatural0Job0": true,
+          "originalBudgetFailure": {
+            "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-takeover-20261011-01\\evidence\\native-receipt-2.json",
+            "sha256": "ce265099bd3bd15258fdb23453babe41f98e8a860a7b3070b0be9664e59a4b21"
+          },
+          "failedTotalLimit": 600000,
+          "actualFailedCumulative": {
+            "inputTokens": 620262,
+            "cachedInputTokens": 563328,
+            "outputTokens": 2122,
+            "uncachedInputTokens": 56934,
+            "totalTokens": 622384
+          },
+          "prospectiveAbsoluteCaps": {
+            "supervisor": [
+              1600000,
+              1000000,
+              6000
+            ],
+            "source": [
+              900000,
+              220000,
+              6000
+            ],
+            "combined": [
+              4800000,
+              1500000,
+              26000
+            ]
+          },
+          "counterTreatment": "same native cumulative counters, all3 historical supervisors and same source counted once; no retrospective PASS"
+        },
+        "actualVersion2": {
+          "oracleAndIndependentManual": "pass",
+          "orders": 8,
+          "cancelled": 1,
+          "openRequested": 26,
+          "allocated": 20,
+          "openUnfilled": 6,
+          "remaining": {
+            "A": 0,
+            "B": 1,
+            "C": 0
+          },
+          "businessFiles": {
+            "allocation.json": "44ba7098acfaf1f4f46ff782d88ac86635356a26996edf59334200d2c846a7de",
+            "work-note.md": "7a561c7250a8961ce0029fc7b196fa53b3f020167bd7d4a7263a840d829ad4c1"
+          },
+          "postwriteFailure": {
+            "evidence": {
+              "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-complete-v2-20261011-01\\evidence\\source-remaining\\report.json",
+              "sha256": "ccfaf8bf90304da27768605c7a66bd401a4d96a327d64b776f95da6c1ebeff55"
+            },
+            "status": "held-failed",
+            "reason": "Private supervisorUsage reused mutable initial v1 output check after both authorized v2 writes; source SIGTERM, latest turn interrupted.",
+            "correction": "Read historical budget evidence separately from first restore baseline; current-only read-only completion binds latest observed v2 hashes, true current scope/full history and cumulative source usage. No business rewrites."
+          }
+        },
+        "readonlyFinalization": {
+          "rootQa": {
+            "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-finalize-20261011-01\\root-qa.json",
+            "sha256": "0f91d79e3010c7a06d5d624b7c329c4f6e57ccacee9828051dfdc1feb804b159"
+          },
+          "cleanup": {
+            "path": "C:\\Users\\15521\\.codex\\backups\\accord-r23-ledger-finalize-20261011-01\\cleanup.json",
+            "sha256": "b638247462227008cae269540babff5533f2dade72eeaf564c34e432d1fb5623"
+          },
+          "normalSeconds": 17.408434700017096,
+          "rootQaSeconds": 95.20555305480957,
+          "totalSecondsAllocated": 270,
+          "finalTurnId": "01a129e2-21c5-73d1-b7b2-016ae8ff736c",
+          "historyStatuses": [
+            "completed",
+            "interrupted",
+            "interrupted",
+            "completed"
+          ],
+          "sourceNatural0CloseRootJob0": true,
+          "sourcePidInRootJob": true,
+          "businessToolsUsed": false,
+          "businessBytesAndMtimeUnchanged": true,
+          "configUnchanged": true,
+          "configurationSha256": "32687ea03879a51690a7c7fd439c3ebbbc62b00e3fe6b0508430301323de3d5c",
+          "sourceCumulative": {
+            "total": 157678,
+            "uncached": 44790,
+            "sourceOutput": 3064
+          },
+          "allBusinessActorCumulative": {
+            "total": 3508785,
+            "uncached": 376812,
+            "output": 19269
+          },
+          "scope": "Same source, no transfer, actual current token re-claimed only on exclusively owned snapshot; database/current writer/native completion independently checked."
+        },
+        "resultLimit": "Usable full eight-order v2 plus connected necessary takeover/Skill adoption/source recovery/independent verification/owned resource closure. Original timed qualification remains failed; pause input remains unconfirmed; ordinary multi-entry and Skill disabled/changed-policy execution, all applicable system quality/net-value and fullA08 are not accepted. Root preparation/review cumulative usage and cost unknown. Do not repeat this business or add a gate.",
+        "qualificationPassed": false
+      },
+      "remaining": "Same-source version2 business and owned-resource finalization are complete with independently verified results. Reuse the connected evidence; do not recreate the business or revive old qualification. Remaining R2/R3 obligations are actual Skill disabled/changed-policy execution where applicable, necessary ordinary-entry differences, applicable full system-quality/scenario and measured net-value evidence. All existing F/A, failures and false completion/candidate ceilings remain.",
       "retirement": "Remove the consumed one-attempt fixture/declaration from active obligations; exact Git/private originals retained. All17 scopes,7 continuity duties,8 qualities,F01-F08/A01-A08 and false completion/candidate ceilings remain."
     }
   ],

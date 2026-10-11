@@ -7,7 +7,7 @@
 - 在原 `main` 检出继续，Root 是本任务共享目标的唯一整合写者；源主线程23业务静止，恢复资料保留。3.3 的目标仍是 Agent 在授权范围内完成真实任务、纠偏、连续性、恢复、结果核验与资源收尾，完整验收后按已有条件授权发布3.3.0。
 - 17个必要scope、6个活动case定义、11个声明覆盖缺口、11个无case范围。它们是证据映射，不是实现完成率；`functionalCompletion=false`、`candidateEligible=false`。所有必要职责、质量、场景及发布条件保持。
 - 当前开发包为 `3.3.0-dev.1+codex.20261010221152`，25成员/5 Skills，规范SHA `2023f0d1ab5ba44e824e211c2cd3aaeda9913482d4dc75f7705f699cf9bbff1f`。主线程24已通过原生路径更新，当前现装25文件与核定副本一致；本次审计没有改包，无需重装。旧包/配置恢复材料位于私有 `accord-native-consumer-20261010-01/lifecycle-recovery`。
-- 根任务的模型、宿主、模式和输入以当轮原生来源为准，不沿用本页旧值或把permission mode等同collaboration mode。主模型遵守用户选择；子代理模型/推理按任务和有效支持动态调度。普通继续不启Plan/Goal，不请求自动续轮；Stop及自动增轮路线不恢复。
+- 根任务的模型、宿主、模式和输入以当轮原生来源为准，不沿用本页旧值或把permission mode等同collaboration mode。本轮用户选择6.1Sol/max主责、Astra按需破局；子代理模型/推理按任务和有效支持动态调度。普通继续不启Plan/Goal，不请求自动续轮；Stop及自动增轮路线不恢复。
 - 当前输入与未完合同由本线程原生检查点承接。旧输入失效水印、未知共享Node/ACL效应保持未知；不合成输入、重放结束业务、修改共享ACL或按年龄删除恢复资料。回执、接管、单写者和实际结果分别核验。
 - 已核终态：修复提交`623a9087`常规CI `38084740803`与文档提交`5f7f17fb`的`38085130660`均11/11成功；专用SDK Windows/base `38084747919`亦全部成功。后续提交按自身运行核定，不用旧PASS代新提交。d324841e的38108544576已11/11成功；8ee3c89e/4a356d91及本轮修复按各自CI终态核定。
 
@@ -34,25 +34,16 @@
 
 2026-10-11当前CI普通维护段已得到可复用比较工具及16,204条逐测试索引，Root原行/全差值/时长/top5复核与隔离重跑、独审确认可用；私有`accord-current-ci-comparison-20261011-01/delivery`附过程说明。原native worker因输出12,065超过12,000被终止、无terminal，索引另超原观察器8MiB界；Root未向actor告知预算，也未核产物体量适用性。原失败和恢复材料保留，此普通维护不补注册case、不作完整行为通过。所属Job剩余0，遗留临时输入基线已保全移入evidence；原workspace作为原始证据保留。主线程09:36:53响应流错误另记，未证实与上述守卫相关。
 
-2026-10-11已前瞻登记[库存分配恢复](https://github.com/yiheng8023/YIYUAN-Accord/blob/4a356d91ad29aa154617a7a7319e696ca7b9203f/product/cases/ledger-effect-recovery-v3.3.json)，复用当前包、CLI观察器和SDK known-source restore。d324841e首轮监督Agent实际发现私有caller误读`recoveryTimeout`，而既有观察器字段为`recoveryTimeoutSeconds`，在启动业务source前停止；56.514秒自然退出、Job0，原件hash/mtime和窗口内共享设置不变，两业务产物均未生成。该轮未完成，不是SDK恢复失败或正式行为通过；原候选/源码/原始记录保于私有`accord-r23-ledger-recovery-20261011-01`，临时缓存已闭合清理。
+同一库存业务的 v2 和源收尾现已完成。原 SDK source `01a12925-723c-7910-b8d6-647f49e9a386` 保持唯一业务写者，按原始库存及 priority/seq/id 重算全部8单；Root 严格 oracle 和独立逐行守恒核算均通过：取消1单、开放请求26、分配20、未满足6，余额 A0/B1/C0。两产物 SHA 分别为 `44ba7098acfaf1f4f46ff782d88ac86635356a26996edf59334200d2c846a7de`、`7a561c7250a8961ce0029fc7b196fa53b3f020167bd7d4a7263a840d829ad4c1`。说明覆盖旧订单改变、原库存、取消语义和验收限度；其中“核验拦截错误”仅保为源自述，不作为独立证据。
 
-修正时钟接线后的8ee3c89e第二轮又在source创建前停止：私有caller试图扩展SDK冻结连接对象，抛TypeError。监督97.910秒、observer102.129秒，无thread/start/turn/start或业务产物；所属controller/native/监督/Goal-reader均已退出且Job0，原件及共享配置未变，TEMP已清。第二轮原源码/失败保于`...-02`。两轮监督合计899867 total、94368未缓存输入、5499输出；不含Root/子代理准备评审，非上下文占用或费用。
+必要监督接管已实际成立：原监督因累计未缓存用量超限退出后，新 CLI 监督 `01a129ab-0400-7262-b341-c6b83c16823c` 真实接收职责并继续同一 source。Root 为这项恢复工作代选 `$retro` 与 `$writing-for-agents`，完整原生正文在第13/14行出现，首工具在第17行；原 Skill、explicit-only 策略和用户配置未改。受控的每进程停用库存确见 retro disabled，Root未调用它；该观察仅证明宿主库存与协调者尊重策略，不能冒充模型执行负例或全部 W02。
 
-第三轮4a356d91已完成真实首段：同一SDK source `01a12925-723c-7910-b8d6-647f49e9a386`交付v1的3笔订单，Root独立严格重算通过（请求15/分配14/未满足1），controller在结果回执前按预定exit97，native自然exit0/Job0。普通监督者自行核对结果、保原件并hold未授权v2；阶段1为132.469秒，source60536 total/21163未缓存输入/845输出，监督最后完整观测576116/41037/3495。两数不可当上下文占用或费用。
+接管后的首次续作因600k总量上限终止，源读取v2材料后中断且无写入；前瞻调整保留全部旧计数与失败。后续源完成两次合法v2写入，私有预算读取却误重新检查“现文件仍为v1”，又导致 SIGTERM。Root/Astra 核清两写回执、完整原生历史和新scope，以专门只读确认完成收尾，拒绝任何业务工具请求，不再进入重算或写入路径。原源最终新增 completed turn `01a129e2-21c5-73d1-b7b2-016ae8ff736c`，完整历史为 completed/interrupted/interrupted/completed；unsubscribe、源自然exit0/close、源PID实际父Job归属及父Job0均已核。只读收尾17.408秒，Root QA在95.206秒完成，270秒分配内；v2字节/mtime、输入、原Skill和用户配置保持，20个已核空的任务TEMP目录已清。源和恢复资料保留。
 
-原监督线程`01a12925-06dd-7e12-a1b3-5f3e97dc90fb`第二阶段在0.912秒被观察器以`native-rollout-binding-mismatch`强制停止：Windows普通路径和`\\?\`路径实际是同一普通文件，观察器误作不同来源。暂停虽发出且task_started，未见持久化暂停用户消息或当前Hook回执，不能称暂停已验；中断阶段增量用量未知。v2、同source恢复、正常finalize及完整组合均未完成。Root仅无模型thread/read确认source仍可读取、当前notLoaded、两产物与输入不变，读取器自然exit0/Job0；源/监督/全部读取器已退出，空TEMP目录已清，SQLite/scope/原native及v1恢复材料完整保留于私有`...-03`。
+本业务所有三名历史监督、新监督及同一SDK源累计各计一次：3,508,785 total / 376,812未缓存输入 / 19,269输出，沿现4.8m/1.5m/26k总帽；源累计157,678 / 44,790 / 3,064。Root准备、复核和模型审查的总用量及费用仍未知，不能据这些数宣称低成本或净收益。原时限、超限、私有调用层错误与未确认暂停均不改判通过。普通业务已交付并闭合所属资源；完整普通入口、Skill停用/变更策略行为、适用质量/净价值及 A08 仍需充分证据，`functionalCompletion/candidateEligible=false`。不重做此业务，不新增case或发布门槛。
 
-现有观察器已窄修Windows本地盘符等价路径，保越界/reparse/hardlink/文件身份守卫；真实双stderr回读和110项完整入口回归通过。整包未变，无需重装。该修复不追认原强制停止成功；已消耗的一次性case及fixture移出活动义务，三次确切定义/失败/原件转为机器历史记录，文件上限回192，全部17scope/F-A/质量和原预算保持。私有`accord-r23-ledger-recovery-20261011-03/remaining-work-facts.json`以7289字节保所需身份、原scope/SQLite、原件摘要、有效v1及未完/风险定位；它不授予新权限或时限。下一责任是以前瞻的新剩余工作段承接现有v1、源状态与未确认暂停输入，完成必要恢复和v2全结果；不重做v1、不延长旧实例或把构造/静态PASS当行为验收。
+证据集中于私有 `accord-r23-takeover-20261011-01`、`accord-r23-complete-v2-20261011-01`、`accord-r23-ledger-finalize-20261011-01/root-qa.json`。此前01/02/03及两次remaining失败的详细记录保在[本轮前接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/0d36bbd4aa71ba48924c1df1a3ef1ce7e7367256/docs/operations/CONTINUATION.md)、[历史工序观察](PROCEDURE-v3.3.md#同一业务v2与只读收尾2026-10-11)和既有机器观察。源码7398d432的CI `38112721785`已11/11成功，121相关回归复用；本轮只对齐结果记录，包未改无需重装。随后按现行 R2/R3 工序复用这一连贯结果，补实际未覆盖的适用责任与必要入口差异。
 
-2026-10-11在7398d432上前瞻接续同一业务，新剩余段未注册case。原监督通过真实新输入先hold等待新累计计数，再自行核对并启动原source恢复；新数据库副本已claim换token、原source已获resume回执，但私有caller的nativeMeta又将等价`\\?\C:`路径误判越界，在恢复后核对阶段停止。没有turn/start或业务写入；监督自行核效果后hold，116.991秒自然exit0/Job0，observer119.546秒。source因caller错误经SIGTERM退出/close，不能称正常完成；其PID实际位于Root Job。原v1、全部原件与旧DB的hash/mtime及窗口共享配置保持，Root独立QA192.959秒、TEMP已清。监督累计1124569 total/94653未缓存/6684输出，仍用原1600000/120000/8000上限；新source用量未观察，不假定为零。原件保于私有`accord-r23-ledger-remaining-observer-20261011-01`。
-
-当前恢复基线已变化：新副本中的scope token已轮换，旧DB只作证据，禁止删副本或重用旧token盲试。Root无模型`thread/read includeTurns=true`核得原source仍notLoaded、完整一轮历史与原basis相等，读取器exit0/Job0、共享配置不变；实际notLoaded也可返回extended路径。下一步先用这些真实返回修正私有调用层的全部相关路径比较和恢复分支，再按剩余累计预算判断有界续作。旧失败、未确认暂停、v2及完整组合仍未通过；不新增发布门槛。
-
-7398d432的CI `38112721785` 已终态成功，11/11 jobs；其121项本地相关回归及源码检查保持。私有new02修正普通/extended路径的全部相关比较，并显式绑定失败后实际scope/DB/connection；15项真实数据无模型检查及独立窄审通过。随后同监督low短续作在15.885秒因未缓存输入超限被守卫强停（exit124/Job0，observer17.233秒）：累计1194464 total/151003未缓存/6789输出，原未缓存上限120000；新请求增加56350，超过此前仅余25347。Root前置预算判断不足，不能以历史缓存命中推断新请求成本。没有remaining调用、SDK派发、新DB副本、业务turn或写入；原v1/原件/旧与failed01数据库hash和mtime保持，窗口配置不变，Root QA84.216秒，TEMP已清。两次实际剩余段分别保于私有`accord-r23-ledger-remaining-observer-20261011-01/02`，原失败和原限额不改。
-
-当前不能再沿原超限监督分配派发。`...remaining-observer-20261011-02/remaining-work-facts.json`用4097字节保存当前业务、实际新scope和上任连接、完整历史/退出原件、修正入口、成本及未完责任。下一责任是按未缓存输入保守估计重新判断有限剩余分配与必要监督接管，再承接同source的v2及独立完整后态；不是复活旧case、把计数归零后补签成功，亦不把这轮维护变成新发布门槛。v2、必要接管和完整组合仍未验收，functionalCompletion/candidateEligible继续false。
-
-随后回到R2/R3的明确组合结果：实际入口中的必要能力调用、普通自主连续性与恢复、可用结果和完整后态。按适用性和材料性差异复用充分机制，单个完整组合的职责/质量/场景与独立结果仍须充分，不能把多个分散PASS拼成A08。
 
 | 未完主线 | 下一责任 |
 |---|---|

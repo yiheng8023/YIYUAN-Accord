@@ -2949,4 +2949,16 @@ Root已核四份workspace输入hash/mtime，source工具/源配置未被修改�
 
 7398d432的CI `38112721785` 已终态成功，11/11 jobs；其121项本地相关回归及源码检查保持。私有new02修正普通/extended路径的全部相关比较，并显式绑定失败后实际scope/DB/connection；15项真实数据无模型检查及独立窄审通过。随后同监督low短续作在15.885秒因未缓存输入超限被守卫强停（exit124/Job0，observer17.233秒）：累计1194464 total/151003未缓存/6789输出，原未缓存上限120000；新请求增加56350，超过此前仅余25347。Root前置预算判断不足，不能以历史缓存命中推断新请求成本。没有remaining调用、SDK派发、新DB副本、业务turn或写入；原v1/原件/旧与failed01数据库hash和mtime保持，窗口配置不变，Root QA84.216秒，TEMP已清。两次实际剩余段分别保于私有`accord-r23-ledger-remaining-observer-20261011-01/02`，原失败和原限额不改。
 
-当前不能再沿原超限监督分配派发。`...remaining-observer-20261011-02/remaining-work-facts.json`用4097字节保存当前业务、实际新scope和上任连接、完整历史/退出原件、修正入口、成本及未完责任。下一责任是按未缓存输入保守估计重新判断有限剩余分配与必要监督接管，再承接同source的v2及独立完整后态；不是复活旧case、把计数归零后补签成功，亦不把这轮维护变成新发布门槛。v2、必要接管和完整组合仍未验收，functionalCompletion/candidateEligible继续false。
+当时不能再沿原超限监督分配派发。`...remaining-observer-20261011-02/remaining-work-facts.json`用4097字节保存该时点业务、新scope和上任连接、完整历史/退出原件、修正入口、成本及未完责任。后续前瞻接管及v2结果见下节；原失败、原限额和资格判定不变，不复活旧case或把计数归零后补签成功。
+
+### 同一业务v2与只读收尾2026-10-11
+
+用户确认6.1Sol/max主责、Astra按需破局。Root在实际库存恢复责任上代选retro和writing-for-agents，经原生显式入口完整加载第13/14行、首工具第17行，新CLI监督01a129ab-0400-7262-b341-c6b83c16823c接收监督职责；初轮55.226秒natural0/Job0。Root“本目录”表述歧义使intake说明落入原workspace，随后仅把任务说明移到监督私有Root并保hash/mtime；业务文件未改。原Skill/策略/用户配置保持。每进程合并配置停用retro的实际库存返回disabled，Root未调用；不将库存观察当模型执行停用负例。
+
+初次续作在87.333秒因622384total超过600000上限被强停，监督累计56934未缓存/2122输出，observer331.391秒；原SDK source已恢复、换scope并启动turn，仅读取v2有效材料，实际原生interrupted且零业务写入。Root Job闭合，该时点source累计81857/42384/945；原DB/WAL及只读一致快照保全。Root的响应规模和反复轮询预算判断不足，不扩旧cap或改原失败。新前瞻分配沿同监督累计计数，absolute1.6m/1m/6k；源900k/220k/6k/120秒，总业务actors4.8m/1.5m/26k，含三名历史监督一次及同source累计一次。
+
+私有complete-v2的7项实际材料边界检查与Astra窄审先修复恢复refs.origin遗漏。真实同监督139.079秒natural0（observer141.285秒）/Job0，累计1256776/86651/3917；原SDK source仅经accord_write_output写两份v2，Root严格oracle和逐行守恒均PASS8单/取消1/open26/allocated20/unfilled6/A0B1C0，allocated o1..o8为3/5/4/0/0/2/4/2。两写observed后，tokenUsage→supervisorUsage→interrupted.inspect错误把历史v1业务基线重新当运行时预算条件，source被SIGTERM/close，report held-failed/version1 output changed；该失败保持。Root actual full thread/read核原completed前缀和两个interrupted turn、当前daaadf scope/唯一source、131696/44334/2882累计，v2两文件hash/mtime和配置不变，读取器0/Job0。
+
+Root改用最小只读finalization，复用已验证SDKrestore、原完整history/工具/权限、最新SQLite一致快照与两写回执，恢复同source，仅确认既有v2，处理器拒绝全部业务读写，不再进入round2写路径。Astra指出的postcheck authority/state遗漏及旧resume通知不能代确认turn新用量已在派发前修；一次Python CREATE_SUSPENDED常量不可用的前Popen失败无进程/业务效果，原准备记录保留，改用Win32既有0x4标志。正式只读段17.408秒natural0/close/Job0，sourcePID确属父Job；原source新增completed 01a129e2-21c5-73d1-b7b2-016ae8ff736c，history completed/interrupted/interrupted/completed，unsubscribe与ready/no-pending核实。确认turn的真实用量绑定turnId，源累计157678/44790/3064；总业务actors3508785/376812/19269不清零。Root QA95.206秒在270内，v2与全部受保护文件bytes/hash/mtime、用户配置32687ea0…d5c保持；空TEMP共20目录已核归属及Job0后清除，原件/SQLite/WAL/scope/native/失败均留。未注册新case，未改仓库代码、包、Skill或配置。
+
+两产物SHA44ba7098acfaf1f4f46ff782d88ac86635356a26996edf59334200d2c846a7de、7a561c7250a8961ce0029fc7b196fa53b3f020167bd7d4a7263a840d829ad4c1。结果可用且同业务的必要接管、恢复、独立QA和资源闭合确已连接；不追认结束资格实例、未知暂停或原私有调用层失败。说明“核验拦截错误”仅为源自述。Root准备/审查总费用和用量未完全计量，本段不足以证明普遍普通入口、Skill停用/变更策略执行、成本净价值及完整A08；既有必要质量/场景/F-A和false候选天花板保持，不重做此业务或添加新发布门槛。原件见私有takeover、complete-v2和ledger-finalize三个工作根，最终root-qa.json及cleanup.json为Root独立记录。
