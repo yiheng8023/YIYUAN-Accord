@@ -1711,9 +1711,23 @@ def _stdout_thread(lines):
     return None
 
 
+def _native_rollout_path(value):
+    """Accept only the equivalent Windows extended local-drive spelling."""
+    raw = os.fspath(value)
+    if os.name == "nt" and raw.startswith("\\\\?\\"):
+        local = raw[4:]
+        if (not re.match(r"^[A-Za-z]:\\", local)
+                or "/" in local or ":" in local[2:]
+                or any(part in {"", ".", ".."} or part.endswith((".", " "))
+                       for part in local[3:].split("\\"))):
+            raise ValueError("native rollout namespace is not an equivalent local-drive path")
+        raw = local
+    return Path(raw)
+
+
 def _ordinary_rollout(path, sessions_root):
     root = ordinary_dir(sessions_root)
-    candidate = Path(path).absolute()
+    candidate = _native_rollout_path(path).absolute()
     if ".." in candidate.parts:
         raise ValueError("native rollout is outside the sessions root")
     try:
@@ -1736,11 +1750,19 @@ def _ordinary_rollout(path, sessions_root):
     return candidate
 
 
+def _same_ordinary_rollout(path, expected, sessions_root):
+    try:
+        return _ordinary_rollout(path, sessions_root) == expected
+    except (OSError, ValueError, TypeError):
+        return False
+
+
 class NativeRolloutUsage:
     """Task-bound incremental reader for the native persisted usage stream."""
 
     def __init__(self, path, *, sessions_root, thread_id, cwd, caps):
-        self.path = _ordinary_rollout(path, sessions_root)
+        self.sessions_root = Path(sessions_root).absolute()
+        self.path = _ordinary_rollout(path, self.sessions_root)
         self.thread_id, self.cwd, self.caps = thread_id, os.path.normcase(os.path.abspath(cwd)), _usage_caps(caps)
         self.lines = _IncrementalLines(self.path, limit=32 * 1024 * 1024, chunk=1024 * 1024)
         self.meta_bound, self.last_counters, self.last_ordinal = False, None, -1
@@ -1750,7 +1772,7 @@ class NativeRolloutUsage:
     def matches(self, configuration):
         return (configuration["threadId"] == self.thread_id
                 and os.path.normcase(os.path.abspath(configuration["cwd"])) == self.cwd
-                and Path(configuration["rolloutPath"]).absolute() == self.path)
+                and _same_ordinary_rollout(configuration["rolloutPath"], self.path, self.sessions_root))
 
     def poll(self):
         if self.result["decision"] == "over-limit":
@@ -2014,8 +2036,7 @@ def _native_goal_readback(manifest, native, *, stage, env, deadline):
                 or os.path.normcase(os.path.abspath(thread["cwd"]))
                    != os.path.normcase(os.path.abspath(manifest["workspace"]))
                 or not isinstance(thread.get("path"), str) or not os.path.isabs(thread["path"])
-                or os.path.normcase(os.path.abspath(thread["path"]))
-                   != os.path.normcase(os.path.abspath(rollout))):
+                or not _same_ordinary_rollout(thread["path"], rollout, sessions)):
             result["reason"] = "thread-read-persistent-binding-mismatch"
             return result
         result["threadRead"] = {key: thread.get(key) for key in ("id", "cwd", "ephemeral", "path", "cliVersion")}

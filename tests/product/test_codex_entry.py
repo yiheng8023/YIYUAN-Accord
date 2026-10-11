@@ -1813,11 +1813,12 @@ class EntryTests(unittest.TestCase):
             rollout = sessions / 'rollout.jsonl'
             rollout.write_text(json.dumps({'type': 'session_meta', 'payload':
                 {'id': thread_id, 'cwd': str(workspace)}}) + '\n', encoding='utf-8')
+            rollout_alias = '\\\\?\\' + str(rollout) if os.name == 'nt' else str(rollout)
             codex = root / 'codex.exe'; codex.write_bytes(b'fixed executable')
             (evidence / 'stderr-1.txt').write_text(
                 'Codex initialized with event: SessionConfiguredEvent { thread_id: ThreadId { uuid: '
                 + thread_id + ' }, cwd: AbsolutePathBuf(' + json.dumps(str(workspace))
-                + '), rollout_path: Some(' + json.dumps(str(rollout)) + ') }\n', encoding='utf-8')
+                + '), rollout_path: Some(' + json.dumps(rollout_alias) + ') }\n', encoding='utf-8')
             (evidence / 'stdout-1.jsonl').write_text(json.dumps(
                 {'type': 'thread.started', 'thread_id': thread_id}) + '\n', encoding='utf-8')
             for stage in range(2, 17):
@@ -1837,7 +1838,7 @@ class EntryTests(unittest.TestCase):
 
             class Reader:
                 goal_result = {'goal': None}
-                read_path = str(rollout)
+                read_path = rollout_alias
                 ephemeral = False
                 raw_override = {}
                 duplicate_response = False
@@ -2328,6 +2329,50 @@ class EntryTests(unittest.TestCase):
             replacement.write_bytes(rollout.read_bytes() + b"{}\n")
             replacement.replace(rollout)
             self.assertEqual(observer.poll()["decision"], "unknown")
+
+    def test_native_rollout_drive_alias_preserves_file_and_task_guards(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            sessions, workspace = root / 'sessions', root / 'work'
+            sessions.mkdir(); workspace.mkdir()
+            rollout = sessions / 'rollout.jsonl'
+            rollout.write_text(json.dumps({'type': 'session_meta', 'payload': {
+                'id': 'native-thread', 'cwd': str(workspace)}}) + '\n', encoding='utf-8')
+            alias = '\\\\?\\' + str(rollout) if os.name == 'nt' else str(rollout)
+            observer = entry.NativeRolloutUsage(rollout, sessions_root=sessions,
+                thread_id='native-thread', cwd=workspace, caps={'totalTokens': 900000})
+            config = {'threadId': 'native-thread', 'cwd': str(workspace), 'rolloutPath': alias}
+            self.assertTrue(observer.matches(config))
+            self.assertEqual(entry._ordinary_rollout(alias, sessions), rollout)
+            resumed = entry.NativeRolloutUsage(alias, sessions_root=sessions,
+                thread_id='native-thread', cwd=workspace, caps={'totalTokens': 900000})
+            self.assertTrue(resumed.matches({**config, 'rolloutPath': str(rollout)}))
+            self.assertFalse(observer.matches({**config, 'threadId': 'foreign-thread'}))
+            self.assertFalse(observer.matches({**config, 'cwd': str(root)}))
+            outside = root / 'outside.jsonl'; outside.write_bytes(rollout.read_bytes())
+            self.assertFalse(observer.matches({**config, 'rolloutPath': str(outside)}))
+            link = sessions / 'linked.jsonl'
+            os.link(rollout, link)
+            try:
+                self.assertFalse(observer.matches(config))
+            finally:
+                link.unlink()
+            self.assertTrue(observer.matches(config))
+
+    def test_native_rollout_namespace_conversion_rejects_non_equivalent_spellings(self):
+        # Replace this module's OS reference, not global os.name/Path behavior.
+        with patch.object(entry, 'os', argparse.Namespace(name='nt', fspath=os.fspath)):
+            self.assertEqual(entry._native_rollout_path(r'\\?\C:\Users\sample\rollout.jsonl'),
+                             Path(r'C:\Users\sample\rollout.jsonl'))
+            ordinary_unc = r'\\server\share\sessions\rollout.jsonl'
+            self.assertEqual(entry._native_rollout_path(ordinary_unc), Path(ordinary_unc))
+            for raw in (r'\\?\UNC\server\share\rollout.jsonl', r'\\?\GLOBALROOT\Device\rollout',
+                        r'\\?\Volume{abc}\rollout', r'\\?\C:relative', r'\\?\C:\sessions\..\rollout',
+                        r'\\?\C:\sessions\.\rollout', r'\\?\C:\sessions\rollout.',
+                        '\\\\?\\C:\\sessions\\rollout ', r'\\?\C:\sessions\rollout:stream',
+                        r'\\?\C:\sessions/rollout'):
+                with self.subTest(path=raw), self.assertRaises(ValueError):
+                    entry._native_rollout_path(raw)
 
     def test_native_rollout_usage_rejects_foreign_task_and_outside_path(self):
         caps = {"totalTokens": 900000}

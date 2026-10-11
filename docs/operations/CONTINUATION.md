@@ -5,11 +5,11 @@
 ## 当前状态
 
 - 在原 `main` 检出继续，Root 是本任务共享目标的唯一整合写者；源主线程23业务静止，恢复资料保留。3.3 的目标仍是 Agent 在授权范围内完成真实任务、纠偏、连续性、恢复、结果核验与资源收尾，完整验收后按已有条件授权发布3.3.0。
-- 17个必要scope、7个活动case定义、11个声明覆盖缺口、10个无case范围。它们是证据映射，不是实现完成率；`functionalCompletion=false`、`candidateEligible=false`。所有必要职责、质量、场景及发布条件保持。
+- 17个必要scope、6个活动case定义、11个声明覆盖缺口、11个无case范围。它们是证据映射，不是实现完成率；`functionalCompletion=false`、`candidateEligible=false`。所有必要职责、质量、场景及发布条件保持。
 - 当前开发包为 `3.3.0-dev.1+codex.20261010221152`，25成员/5 Skills，规范SHA `2023f0d1ab5ba44e824e211c2cd3aaeda9913482d4dc75f7705f699cf9bbff1f`。主线程24已通过原生路径更新，当前现装25文件与核定副本一致；本次审计没有改包，无需重装。旧包/配置恢复材料位于私有 `accord-native-consumer-20261010-01/lifecycle-recovery`。
 - 根任务的模型、宿主、模式和输入以当轮原生来源为准，不沿用本页旧值或把permission mode等同collaboration mode。主模型遵守用户选择；子代理模型/推理按任务和有效支持动态调度。普通继续不启Plan/Goal，不请求自动续轮；Stop及自动增轮路线不恢复。
 - 当前输入与未完合同由本线程原生检查点承接。旧输入失效水印、未知共享Node/ACL效应保持未知；不合成输入、重放结束业务、修改共享ACL或按年龄删除恢复资料。回执、接管、单写者和实际结果分别核验。
-- 已核终态：修复提交`623a9087`常规CI `38084740803`与文档提交`5f7f17fb`的`38085130660`均11/11成功；专用SDK Windows/base `38084747919`亦全部成功。后续提交按自身运行核定，不用旧PASS代新提交。
+- 已核终态：修复提交`623a9087`常规CI `38084740803`与文档提交`5f7f17fb`的`38085130660`均11/11成功；专用SDK Windows/base `38084747919`亦全部成功。后续提交按自身运行核定，不用旧PASS代新提交。d324841e的38108544576已11/11成功；8ee3c89e/4a356d91及本轮修复按各自CI终态核定。
 
 ## 已有结果及限度
 
@@ -33,11 +33,15 @@
 
 2026-10-11当前CI普通维护段已得到可复用比较工具及16,204条逐测试索引，Root原行/全差值/时长/top5复核与隔离重跑、独审确认可用；私有`accord-current-ci-comparison-20261011-01/delivery`附过程说明。原native worker因输出12,065超过12,000被终止、无terminal，索引另超原观察器8MiB界；Root未向actor告知预算，也未核产物体量适用性。原失败和恢复材料保留，此普通维护不补注册case、不作完整行为通过。所属Job剩余0，遗留临时输入基线已保全移入evidence；原workspace作为原始证据保留。主线程09:36:53响应流错误另记，未证实与上述守卫相关。
 
-2026-10-11已前瞻登记[库存分配恢复](../../product/cases/ledger-effect-recovery-v3.3.json)，复用当前包、CLI观察器和SDK known-source restore。d324841e首轮监督Agent实际发现私有caller误读`recoveryTimeout`，而既有观察器字段为`recoveryTimeoutSeconds`，在启动业务source前停止；56.514秒自然退出、Job0，原件hash/mtime和窗口内共享设置不变，两业务产物均未生成。该轮未完成，不是SDK恢复失败或正式行为通过；原候选/源码/原始记录保于私有`accord-r23-ledger-recovery-20261011-01`，临时缓存已闭合清理。
+2026-10-11已前瞻登记[库存分配恢复](https://github.com/yiheng8023/YIYUAN-Accord/blob/4a356d91ad29aa154617a7a7319e696ca7b9203f/product/cases/ledger-effect-recovery-v3.3.json)，复用当前包、CLI观察器和SDK known-source restore。d324841e首轮监督Agent实际发现私有caller误读`recoveryTimeout`，而既有观察器字段为`recoveryTimeoutSeconds`，在启动业务source前停止；56.514秒自然退出、Job0，原件hash/mtime和窗口内共享设置不变，两业务产物均未生成。该轮未完成，不是SDK恢复失败或正式行为通过；原候选/源码/原始记录保于私有`accord-r23-ledger-recovery-20261011-01`，临时缓存已闭合清理。
 
 修正时钟接线后的8ee3c89e第二轮又在source创建前停止：私有caller试图扩展SDK冻结连接对象，抛TypeError。监督97.910秒、observer102.129秒，无thread/start/turn/start或业务产物；所属controller/native/监督/Goal-reader均已退出且Job0，原件及共享配置未变，TEMP已清。第二轮原源码/失败保于`...-02`。两轮监督合计899867 total、94368未缓存输入、5499输出；不含Root/子代理准备评审，非上下文占用或费用。
 
-已停止盲目追加模型尝试，先在独立`...-03`只修局部初始化：真实SDK不可扩展对象上的旧写法确定失败，新代码用caller局部usage闭包，并与零模型probe共用请求包装/source构造代码。独立运行实际SDK+内存transport+临时真实SQLite，核wrapper、usage、source factory构造（未run）与close，全部通过且临时资源0；这不是实际host/业务通过。当前前瞻更新同一未启动业务case的03来源后才可继续，不增case或改旧失败。整包/标准/缺口保持；业务正常退出480秒、独立QA120秒、总600+20及双方预算不增加。Root不代写业务，source同线程恢复仍不代fresh takeover、自主上下文择时或完整A05/A08。
+第三轮4a356d91已完成真实首段：同一SDK source `01a12925-723c-7910-b8d6-647f49e9a386`交付v1的3笔订单，Root独立严格重算通过（请求15/分配14/未满足1），controller在结果回执前按预定exit97，native自然exit0/Job0。普通监督者自行核对结果、保原件并hold未授权v2；阶段1为132.469秒，source60536 total/21163未缓存输入/845输出，监督最后完整观测576116/41037/3495。两数不可当上下文占用或费用。
+
+原监督线程`01a12925-06dd-7e12-a1b3-5f3e97dc90fb`第二阶段在0.912秒被观察器以`native-rollout-binding-mismatch`强制停止：Windows普通路径和`\\?\`路径实际是同一普通文件，观察器误作不同来源。暂停虽发出且task_started，未见持久化暂停用户消息或当前Hook回执，不能称暂停已验；中断阶段增量用量未知。v2、同source恢复、正常finalize及完整组合均未完成。Root仅无模型thread/read确认source仍可读取、当前notLoaded、两产物与输入不变，读取器自然exit0/Job0；源/监督/全部读取器已退出，空TEMP目录已清，SQLite/scope/原native及v1恢复材料完整保留于私有`...-03`。
+
+现有观察器已窄修Windows本地盘符等价路径，保越界/reparse/hardlink/文件身份守卫；真实双stderr回读和110项完整入口回归通过。整包未变，无需重装。该修复不追认原强制停止成功；已消耗的一次性case及fixture移出活动义务，三次确切定义/失败/原件转为机器历史记录，文件上限回192，全部17scope/F-A/质量和原预算保持。私有`accord-r23-ledger-recovery-20261011-03/remaining-work-facts.json`以7289字节保所需身份、原scope/SQLite、原件摘要、有效v1及未完/风险定位；它不授予新权限或时限。下一责任是以前瞻的新剩余工作段承接现有v1、源状态与未确认暂停输入，完成必要恢复和v2全结果；不重做v1、不延长旧实例或把构造/静态PASS当行为验收。
 
 随后回到R2/R3的明确组合结果：实际入口中的必要能力调用、普通自主连续性与恢复、可用结果和完整后态。按适用性和材料性差异复用充分机制，单个完整组合的职责/质量/场景与独立结果仍须充分，不能把多个分散PASS拼成A08。
 

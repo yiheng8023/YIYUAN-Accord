@@ -1159,12 +1159,12 @@ class DeclarationCaseBindingTests(unittest.TestCase):
         self.assertGreater(summary["coverageWithCaseBindingGaps"], 0)
         self.assertEqual({scope_id for scope_id, claims in gaps.items()
                           if any(not gap["caseIds"] for gap in claims.values())}, without_cases)
-        # The new bounded declaration preserves unobserved healthy-continuation coverage.
+        # Ended one-use instances retain evidence, not a future PASS obligation.
         continuity = gaps["v33-autonomous-continuity"]["function"]
-        self.assertEqual(continuity["caseIds"], ['v33-ledger-effect-recovery-01'])
-        self.assertEqual(continuity['missingDimensions'], {
-            'duties': [], 'qualityAxes': [], 'scenarios': ['native-sufficient']})
-        self.assertFalse(continuity['jointCaseMissing'])
+        self.assertEqual(continuity["caseIds"], [])
+        scope = next(s for s in policy['scopes'] if s['id'] == 'v33-autonomous-continuity')
+        for key in ('duties', 'qualityAxes', 'scenarios'):
+            self.assertEqual(set(continuity['missingDimensions'][key]), set(scope[key]))
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(report["currentHostBehavior"], "unverified")

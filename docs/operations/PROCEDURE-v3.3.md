@@ -2925,3 +2925,14 @@ Root已核四份workspace输入hash/mtime，source工具/源配置未被修改�
 `8ee3c89e549f65ccb739d42b1128bb15c01513f3`，监督线程`01a12911-c129-7b71-a7e4-94ed8d5ee7e5`。私有caller给真实不可扩展连接赋`__ledgerUsage`，在initialize/initialized/config/read/model/list后抛TypeError，未发thread/start/resume/turn/start，无业务source/产物。监督97.910秒/自然exit0/Job0，observer102.129秒；input612779/cache568832/output3685，total616464、未缓存输入43947。SDK进程因错误被controller终止（SIGTERM，OS exit1），不能说业务source自然完成；controller/native/Goal-reader均退出、Job0。原件/窗口内共享配置不变，任务TEMP清空，全部必要原件在私有`accord-r23-ledger-recovery-20261011-02`。
 
 这是私有integration未覆盖实际SDK冻结对象初始化契约的遗漏。Root先停止更多模型派发，只在独立03副本修局部usage handler，原02来源保持。实际安装SDK、生产共用binding、内存transport和临时真实SQLite的零模型核对使旧写法红、新wrapper/usage/source constructor/close绿；独立审查重核且temp0。原20checks/clock11/历史4保持，真实source运行/恢复/成果仍未验。前瞻更新仍是同case和同未启动业务，不增加case/发布门槛，不重置或改写旧两轮失败、用量和限额；两轮native监督合计899867 total/94368未缓存输入/5499输出，准备/评审开销另保未知，不作净增益声明。
+
+
+### 第三轮真实部分业务、CLI恢复误停及来源修正
+
+4a356d91的03副本真实启动SDK source `01a12925-723c-7910-b8d6-647f49e9a386`，source创建/scope回执、completed/idle及两份v1产物实际成立。Root严格重算3笔订单通过：请求15/分配14/未满足1，余额A0/B3/C4，说明无越界宿主/发布声明。controller按预定在业务ACK前exit97，native自然exit0、Job0；普通监督`01a12925-06dd-7e12-a1b3-5f3e97dc90fb`独立核对并hold未授权v2，阶段1自然完成132.469秒。SDK累计60536 total/21163未缓存输入/845输出；监督完整观测576116/41037/3495。
+
+第二阶段原生resume已启动，却被observer在0.912秒强停（exit124、Job0），原因为native-rollout-binding-mismatch。两个stderr相同thread/cwd；normal与extended-drive路径samefile=true，dev/ino/nlink相同，旧Path.absolute文本比较false。暂停指令有发送/task_started回执，但持久化rollout最后用户消息仍是阶段1，当前Hook输入为空；不证明暂停处理完成，不合成回执、不推定中断增量用量为零。原case整体140.831秒停止、不通过，剩余v2/恢复/finalize未验。
+
+现有scripts/observe_codex_entry.py只归一化安全等价的Windows本地盘符native路径；新prefix中的UNC/device/volume/点路径/尾点空格/ADS等仍拒绝，原普通UNC语义不改；原ordinary-root、reparse、hardlink、resolve与增量inode守卫保留，Goal读回同用边界。Root实际双stderr回读与110项入口回归通过。无模型原source元数据读取确认persistent/notLoaded、cwd/path仍绑定原03，输入/产物不变，读取器exit0/Job0。原失败不追认；私有accord-r23-observer-path-20261011-01保反例、补丁、回读、测试和读取器原件。
+
+所有03所属原生Job和读取器已退出，仅以非递归rmdir移除已核空的TEMP目录；中间遇空目录含空子目录的检查拒绝亦记于temp-cleanup.json，随后逐层删除，业务/SQLite/scope/native/输入保留。一次性资格声明和fixture转为精确Git/私有历史，不挂未来PASS义务；父职责/标准/原时限不减。后续只承接已有v1和真实源状态，先前瞻绑定当前授权、暂停不确定性及新剩余工作段，再做必要恢复/完整v2，不重做v1或扩旧case预算。
