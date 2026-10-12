@@ -1587,8 +1587,16 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 self.assertEqual(declaration['limits']['turnTimeoutSeconds'], 240)
                 self.assertEqual(declaration['limits']['recoveryTimeoutSeconds'], 20)
                 scope = next(row for row in policy['scopes'] if row['id'] == old['scope'])
-                self.assertEqual(scope, next(row for row in historical['acceptance']['admission']['scopes']
-                                             if row['id'] == old['scope']))
+                prior = next(row for row in historical['acceptance']['admission']['scopes']
+                             if row['id'] == old['scope'])
+                # Routing prose may evolve.
+                scope, prior = copy.deepcopy((scope, prior))
+                if 'entryScope' in prior['conditions']:
+                    route = scope['conditions'].pop('entryScope')
+                    prior['conditions'].pop('entryScope')
+                    self.assertIsInstance(route, str)
+                    self.assertIn('v33-openai-entry-applicability', route)
+                self.assertEqual(scope, prior)
                 prior_fixture = subprocess.check_output(['git', '-C', str(self.root), 'show',
                                                         record['declarations'][0]['declarationSnapshot'].split(':')[0]
                                                         + ':' + declaration['caseFile']], timeout=30)

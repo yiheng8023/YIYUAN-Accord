@@ -1712,7 +1712,18 @@
             "existingHostAdoption": "Original Root MCP worker refresh unverified; runtime and Hook/MCP declarations unchanged. New owned process paths verified; Root read the new installed continuity Skill.",
             "privateEvidence": "accord-failed-transfer-recovery-20261011-01/native-shared-core-install-20261012-01"
           },
-          "verification": "Source verify and verify-development valid/errors[]; three existing entry-guidance/original-foundation checks passed. Two guidance additions and their affected projections independently reviewed with no actionable findings."
+          "verification": "Source verify and verify-development valid/errors[]; three existing entry-guidance/original-foundation checks passed. Two guidance additions and their affected projections independently reviewed with no actionable findings.",
+          "ciRegression": {
+            "failedCommit": "06b7c7705c9788c674f4aab574799c07cbef09ee",
+            "failedRun": 38202584126,
+            "originalTerminal": "completed failure: nine matrix jobs at declared-case-gap checks; two native lifecycle jobs succeeded",
+            "cause": "The ended-fixed-SDK regression compared a current scope object to its immutable historical snapshot, unintentionally freezing evidence-routing prose changed by the authorized shared-client correction. Only two conditions.entryScope fields differed; duties, quality axes, scenarios, budgets, definitions and historical fixtures were unchanged.",
+            "correction": "The existing test still checks exact historical case/definition/fixture identity and every current scope field except already-existing entryScope prose; that current prose must still be a string referencing v33-openai-entry-applicability. Other scopes remain whole-object exact, and missing coverage cannot promote qualification.",
+            "localValidation": "Original ten-test CI check passed on the final source; source reserve validation passed after equivalent expression/comment reduction. Independent narrow review found no actionable defect; product full suite and successor exact CI are checked separately.",
+            "preserved": "Original failed CI and minimized red output, initial missing-field error, reserve failures and interrupted preliminary full-suite log retained; no budget expansion or retrospective pass.",
+            "privateEvidence": "accord-ci-shared-core-fix-20261012-01",
+            "packageEffect": "None: 115152/03f4 package bytes remain unchanged; no reinstall, business replay, new case or release gate."
+          }
         },
         "privateEvidence": "accord-mcp-env-fix-20261012-01/continuity-reconciliation",
         "ordinarySource": "Actual same-thread native compaction followed by current input/checkpoint inspection and continuation; Root is actor and recorder, not independent behavior acceptance. A later independent source review confirms visible user goals, quality/permission constraints, retained closed outcomes and failures, and continuation duties; encrypted compaction content and incomplete retained text do not establish complete history preservation.",

@@ -1,5 +1,9 @@
 # 3.3 历史试验记录（原工序文件）
 
+## 当前路由说明与历史质量底线的CI修正（2026-10-12）
+
+06b7c770/CI38202584126的9矩阵共同失败、2原生项成功。原始job日志及本地最小红例均指向test_admission.py的历史scope整对象比较，只有两个entryScope当前说明改变。现有回归仍冻结历史case/definition/fixture与其它scope字段，只允许既有路由说明随授权纠正修订，且须保留有效适用性来源引用。修后最终原CI十项检查通过，窄独审零发现；初修缺字段错误及代码预留超196字节的实际失败保留，等价缩减恢复既有5%预留，无预算/包字节/案例/发布标准改变。首次全套因该已知预留失败被Root中止，不宣称全套结果；后续全套与精确CI以实际原件记录。私有证据在accord-ci-shared-core-fix-20261012-01。
+
 ## 共享Codex核心与入口工序纠偏（2026-10-12）
 
 用户指出CLI、Desktop与IDE同源及会话共享。官方[设置说明](https://learn.chatgpt.com/docs/developer-settings)、[App Server](https://learn.chatgpt.com/docs/app-server)和[MCP配置](https://learn.chatgpt.com/docs/extend/mcp)支持共享基础、配置及app/IDE同项目聊天接续。本机app/IDE引擎0.162.0-alpha.17.2、npm CLI0.162.1；IDE原thread01a12a93在Desktop可读且completed/notLoaded。具体二进制不同，存档可读不冒充live控制或写权。此前把frontend标签当成共同证据不可复用的理由，造成重复入口核验；已修两项指导、PLAN/验收方法和两个entryScope。独立Sol/medium只读指导复核无发现，fresh-transfer守卫不变。新包115152/03f4原生更新12.609秒，25成员/5新Skill路径与源码一致，配置字节及原041313备份保持，自然0/Job0、读者停止；Root完整读取新现装连续性Skill，原MCP worker刷新仍未知。源码/开发验证及3项既有指导检查通过；既有业务/失败不改签、不重放，无新增案例/发布门槛或A05/A08通过。
