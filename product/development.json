@@ -2211,7 +2211,7 @@
             "currentNativeAdoptionEvidence": "accord-hook-failure-audit-20261013-01/current-native-mcp-adoption.json, user-ui-error-confirmation.json, current-native-bind.json and current-native-post-bind.json",
             "nativeControl": "Current Desktop17.2 supports config/mcpServer/reload with null params. Private empty-instance reply is{}, not a reload of the actual client; no per-server parameter.",
             "retainedState": "Same project/main; current true input and screenshot source enriched; original history, watermarks and unfinished contract preserved",
-            "nextDependency": "Finish actual current-input reconciliation with fixed compatible runtime, align records, verify/commit/push exact candidate and inspect CI; update local package within standing authority while preserving recovery and verifying actual adoption separately. Then return to existing R2/R3 duties; no new case/release gate.",
+            "nextDependency": "Return to existing R2/R3 ordinary autonomy, necessary recovery and same-business composition using valid delivery/continuity evidence. Do not replay closed work. Recheck original interface at the next supported natural host scope; current compatible helper is usable. Historical9 individual causes remain unknown, not a newly required gate.",
             "manualRestartOrReloadPerformed": false,
             "noBusinessReplay": true,
             "noSharedConfigChange": true,
@@ -2248,7 +2248,37 @@
               }
             },
             "temporalUserClue": "User observes no orange Hook errors early in this thread, appearing only after later changes. Investigate last successful entry, intervening package/cache/protocol changes and first failure. This is a user observation/hypothesis, not per-run attribution.",
-            "mcpCausalityScope": "Standalone guidance Hook does not depend on MCP worker; task-state Hook and MCP share checkpoint/context readers. Shared path/version/state drift can affect both; direct MCP causation of all9 historical process exits is unproved."
+            "mcpCausalityScope": "Standalone guidance Hook does not depend on MCP worker; task-state Hook and MCP share checkpoint/context readers. Shared path/version/state drift can affect both; direct MCP causation of all9 historical process exits is unproved.",
+            "localAdoption": {
+              "sourceCommit": "059d665f6789c2fef47e5c2c80cebbcb86ea3ae1",
+              "version": "3.3.0-dev.1+codex.20261013030209",
+              "packageSha256": "8bc55eec9a6d2a4f9f7bc97a3387814adb6160bf58567914f2c2e4f4efb8adc1",
+              "defaultInstalledEnabled": true,
+              "gitMarketCache25BytesMatch": true,
+              "onlyOwnedRef40BytesChanged": true,
+              "otherConfigPreserved": true,
+              "previousPackageRetained": true,
+              "current53InputsReconciledWithInstalledHelper": true,
+              "originalInterfaceStatus": "Original warm reader still rejects current source prefix; recheck at next supported natural host scope. Compatible installed helper allows authorized work to continue.",
+              "evidence": "package-adoption-059d665f/adoption-verified.json, original-interface-post-upgrade.json and optional-log-current-input-reconciliation.json"
+            },
+            "ci": {
+              "commit": "059d665f6789c2fef47e5c2c80cebbcb86ea3ae1",
+              "run": 38297061276,
+              "status": "completed",
+              "conclusion": "success",
+              "jobs": 11,
+              "allJobsPassed": true,
+              "url": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/38297061276",
+              "evidence": "ci-final-059d665f.json",
+              "watchExited": 0
+            },
+            "diagnosticImprovement": {
+              "status": "Optional proposal; user confirmed logs are not mandatory",
+              "neededEffect": "Durable correlation of host-supported Hook/MCP events with runtime path/version, phase, receipt and error, supplemented by bounded local metadata only when useful",
+              "implementationStarted": false,
+              "newReleaseGate": false
+            }
           }
         },
         "privateEvidence": "accord-mcp-env-fix-20261012-01/continuity-reconciliation",
