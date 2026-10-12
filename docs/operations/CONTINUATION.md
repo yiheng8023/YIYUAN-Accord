@@ -1,10 +1,12 @@
 # 当前接续
 
+本页是自动交接尚未完成期间的临时人工补位。自动交接按既有条件实现并核实实际承接后，撤去人工接续工序与重复记录；不将本页固化为永久产品依赖。
+
 更新：2026-10-12 · N33-20260909 / r42。[计划](PLAN-v3.3.md)拥有共识与工序，[基线](BASELINE-v3.3.md)/[验收](ACCEPTANCE-v3.3.md)保持全部 F01–F08/A01–A08。本页只保留当前状态、下一依赖和必要历史定位。
 
 ## 当前状态
 
-当前修复候选为 3.3.0-dev.1+codex.20261012195519，25成员/5 Skills，规范SHA e5c4a9c44a29765baef38aaae08886b6a18d90a6d32e571bee9b2c6d1a3a030d。247项相关回归通过；独审首版附件/派生turn两旁路已在冻结修正版拒绝。Root真实只读预览已定位原输入与2个未捕获native user-role记录（ambient页面状态与用户截图提醒），state/input保持，latestNativeInputsComplete=false；不能把role当真人授权或把stored epoch一致当完整捕获。附件与超16MiB原锚点仍hold，普通连续性未关闭。精确候选仓库检查、CI和本机采用按各自原件核定；当前修复证据集中于私有accord-consumer-closeout-counterexample-20261012-01/implementation-review，不重放既有业务。
+当前源码候选为 3.3.0-dev.1+codex.20261012214706，25成员/5 Skills，规范SHA 64e5308cf1d979e475d0f7c0b5ee7447cb64443d853f65384abba659312fb999。PNG结构承接及派生后来源终检已254相关回归与独立增量复核通过；首条图片补证不重计输入、后续记录保持顺序，无读取次数或understood闸门。真实冻结helper已取回156915字节原截图，既有viewer展示正确内容，state/input保持，临时副本已清；不代旧MCP刷新或新的MCP调用路由。实际Root对账尚未写，完整连续性未关闭。前一eaa94de候选CI38246121253已11/11成功，本机195519/e5c4与持久Git源及25缓存成员对齐；本候选的精确提交/CI/采用分别核定。所有原件位于私有accord-consumer-closeout-counterexample-20261012-01，继续复用，不重跑业务。
 
 当前优先未完：用户提供home-edge「主线程5」真实反例后，已核automatic/manual容量重试、宿主developer插入、同turn插话未入回执三个输入/连续性缺口；隔离红例确认同turn旧bind仍可成功，必须先补真实输入对账再关联turn，不能只扩retry白名单。消费方已退役业务不重放，不新增formalcase或发布门槛；关闭指导另修协议退役自指。Root当前由用户切为Astra，继续原R2/R3。原570精确CI38225992057已11/11成功，只覆盖先前automatic修复。
 

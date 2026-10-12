@@ -8,6 +8,7 @@ const path = require('node:path');
 const HEAD_BYTES = 64 * 1024;
 const TAIL_BYTES = 1024 * 1024;
 const MAX_TAIL_BYTES = 16 * TAIL_BYTES;
+const MAX_NATIVE_MEDIA_BYTES = 8 * 1024 * 1024; // Existing native-input/receipt byte budget.
 const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
 const ROLLOUT_NAME = new RegExp(
   `^rollout-(\\d{4})-(\\d{2})-(\\d{2})T\\d{2}-\\d{2}-\\d{2}-(${UUID})(?:_(${UUID}))?\\.jsonl$`,
@@ -130,17 +131,18 @@ function defaultSessionsRoot() {
   return path.join(codexHome, 'sessions');
 }
 
-function inputHash(line) {
-  const payload = line?.type === 'response_item' ? line.payload : null;
-  const content = payload?.content;
-  // This observed host wrapper is not extra human text. Match only the saved
-  // Hook text; image completeness remains explicitly unverified below.
-  const wrappedImage = Array.isArray(content) && content.length === 4 &&
+function wrappedImage(content) {
+  return Array.isArray(content) && content.length === 4 &&
     content[0]?.type === 'input_text' && typeof content[0].text === 'string' &&
     content[1]?.type === 'input_text' &&
     /^<image name=\[Image #[1-9]\d*\] path="[^"\u0000-\u001f]+">$/u.test(content[1].text || '') &&
     content[2]?.type === 'input_image' && content[3]?.type === 'input_text' && content[3].text === '</image>';
-  if (payload?.type === 'message' && payload.role === 'user' && wrappedImage) {
+}
+
+function inputHash(line) {
+  const payload = line?.type === 'response_item' ? line.payload : null;
+  const content = payload?.content;
+  if (payload?.type === 'message' && payload.role === 'user' && wrappedImage(content)) {
     return crypto.createHash('sha256').update(content[0].text).digest('hex');
   }
   return payload?.type === 'message' && payload.role === 'user' &&
@@ -148,6 +150,41 @@ function inputHash(line) {
     content.filter(item => item?.type === 'input_text').every(item => typeof item.text === 'string')
     ? crypto.createHash('sha256').update(content.filter(item => item?.type === 'input_text')
       .map(item => item.text).join('\n')).digest('hex') : null;
+}
+
+function pngData(value) {
+  const prefix = 'data:image/png;base64,';
+  if (typeof value !== 'string' || !value.startsWith(prefix)) return null;
+  const encoded = value.slice(prefix.length);
+  if (!encoded || encoded.length % 4 || encoded.length > Math.ceil(MAX_NATIVE_MEDIA_BYTES / 3) * 4 ||
+      !/^[A-Za-z0-9+/]+={0,2}$/u.test(encoded)) return null;
+  const bytes = Buffer.from(encoded, 'base64');
+  if (bytes.length > MAX_NATIVE_MEDIA_BYTES || bytes.length < 8 || bytes.toString('base64') !== encoded ||
+      !bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) return null;
+  // Verify the encoding, MIME signature and byte identity, not pixels/meaning.
+  // The native image consumer owns PNG decoding; no custom PNG parser here.
+  return {data: encoded, mimeType: 'image/png', bytes: bytes.length,
+    sha256: crypto.createHash('sha256').update(bytes).digest('hex')};
+}
+
+function contentEvidence(payload) {
+  const content = payload?.content;
+  const singleText = Array.isArray(content) && content.length === 1 &&
+    content[0]?.type === 'input_text' && typeof content[0].text === 'string';
+  if (payload?.type !== 'message' || !singleText && !wrappedImage(content)) return {supported: false, parts: []};
+  const parts = [];
+  for (let partIndex = 0; partIndex < content.length; partIndex++) {
+    const item = content[partIndex];
+    if (item.type === 'input_text') parts.push({partIndex, type: 'text', textChars: [...item.text].length,
+      sha256: crypto.createHash('sha256').update(item.text).digest('hex')});
+    else {
+      const image = pngData(item.image_url);
+      if (!image) return {supported: false, parts};
+      const {data, ...description} = image;
+      parts.push({partIndex, type: 'image', ...description, encodingScope: 'strict-base64-png-signature'});
+    }
+  }
+  return {supported: true, parts, prompt: content[0].text};
 }
 
 function retryOrigin(rows, binding, promptHash) {
@@ -252,8 +289,9 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
   const start = retryOrigin(rows, binding, scan.anchorHash);
   if (start < 0) return empty('native-input-origin-unavailable');
   const anchorOffset = rows[start].offset;
-  let turn = binding.turnId, model = null, originModel = null, inputIndex = 0, attachments = false;
-  const signals = [], pendingInputs = [];
+  let turn = binding.turnId, model = null, originModel = null, inputIndex = 0;
+  const signals = [], pendingInputs = [], records = [], enrichments = [];
+  let selectedPart = null;
   for (let index = start; index < rows.length; index++) {
     const row = rows[index], line = parseRow(row), payload = line?.payload;
     if (!line) return empty('invalid-complete-tail-record');
@@ -270,20 +308,31 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
     const user = line.type === 'response_item' && payload?.role === 'user';
     const event = line.type === 'event_msg' ? payload?.type : null;
     if (user) {
-      if (Array.isArray(payload.content) && payload.content.some(item => item?.type !== 'input_text')) attachments = true;
       signals.push([row.offset, digest]);
       const expected = scan.captured[inputIndex++];
+      const content = contentEvidence(payload);
+      const record = {turnId: turn, sourceRef: `${sourceRef}#byte=${row.offset}`, recordOffset: row.offset,
+        recordSha256: digest, itemId: payload.id ?? null, captured: Boolean(expected),
+        supported: content.supported, parts: content.parts};
+      records.push(record);
       if (expected) {
         if (expected.recordSha256 ? expected.recordSha256 !== digest : expected.promptSha256 !== inputHash(line)) {
           return empty('native-captured-input-prefix-mismatch');
         }
+        if (!content.supported || content.parts.some(part => part.type === 'image') && !scan.coverage?.some(item =>
+            item.recordOffset === row.offset && item.recordSha256 === digest && canonical(item.parts) === canonical(content.parts))) {
+          enrichments.push(record);
+        }
       } else {
-        const content = payload.content;
-        const supported = payload.type === 'message' && Array.isArray(content) && content.length === 1 &&
-          content[0]?.type === 'input_text' && typeof content[0].text === 'string';
-        pendingInputs.push({turnId: turn, sourceRef: `${sourceRef}#byte=${row.offset}`,
-          recordSha256: digest, itemId: payload.id ?? null, supported,
-          ...(supported ? {prompt: content[0].text, promptSha256: inputHash(line)} : {})});
+        pendingInputs.push({...record,
+          ...(content.supported ? {prompt: content.prompt, promptSha256: inputHash(line)} : {})});
+      }
+      if (scan.readPart?.recordOffset === row.offset && scan.readPart.recordSha256 === digest) {
+        const descriptor = content.parts.find(part => part.partIndex === scan.readPart.partIndex);
+        if (!content.supported || !descriptor) return empty('native-source-part-unsupported');
+        const item = payload.content[scan.readPart.partIndex];
+        selectedPart = descriptor.type === 'text' ? {...descriptor, text: item.text, record}
+          : {...descriptor, image: {type: 'image', mimeType: 'image/png', data: pngData(item.image_url).data}, record};
       }
     }
     if (line.type === 'compacted' || event === 'context_compacted') signals.push([row.offset, digest]);
@@ -316,11 +365,15 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       return empty('native-input-evidence-changed');
     }
   }
-  return {state: 'observed', reason: 'bound-native-input-prefix', cursor, pendingInputs,
+  if (scan.readPart && !selectedPart) return empty('native-source-record-unavailable');
+  const supported = records.every(record => record.supported);
+  return {state: 'observed', reason: 'bound-native-input-prefix', cursor, pendingInputs, records, enrichments,
+    ...(selectedPart ? {selectedPart} : {}),
     capturedPrefixMatched: true, latestInputReconciled: pendingInputs.length === 0,
-    latestNativeInputsComplete: pendingInputs.length === 0 && !attachments,
+    latestNativeInputsComplete: pendingInputs.length === 0 && enrichments.length === 0 && supported,
     currentTurnId: turn, currentModel: model, originModel, sourceRef, sourceReleaseAllowed: false,
-    contentCoverage: attachments ? 'captured-text-only; attachments-unverified' : 'text-records'};
+    contentCoverage: !supported ? 'unsupported-native-content' : records.some(record => record.parts.some(part => part.type === 'image'))
+      ? 'structured-text-png-records' : 'text-records'};
 }
 
 function inspectNativeInputs(binding, scan) {
@@ -414,17 +467,19 @@ function observeNativeTranscript(binding, options = {}) {
   const identity = statIdentity(before);
   if (canonical(suppliedIdentity) !== canonical(identity)) return empty('transcript-changed-before-read');
   if (canonical(identity) !== canonical(statIdentity(after))) return empty('transcript-changed-during-read');
-  try {
-    const supplied = path.resolve(binding.transcriptPath);
-    const finalPathStat = fs.lstatSync(supplied, {bigint: true});
-    if (finalPathStat.isSymbolicLink() || !finalPathStat.isFile() ||
-        canonical(statIdentity(finalPathStat)) !== canonical(identity) ||
-        !samePath(realPath(supplied), transcriptPath)) {
-      return empty('transcript-path-changed-after-read');
-    }
-  } catch (_) {
-    return empty('transcript-path-changed-after-read');
-  }
+  const sourceUnchanged = () => {
+    try {
+      const supplied = path.resolve(binding.transcriptPath);
+      const stat = fs.lstatSync(supplied, {bigint: true});
+      return !stat.isSymbolicLink() && stat.isFile() &&
+        canonical(statIdentity(stat)) === canonical(identity) && samePath(realPath(supplied), transcriptPath);
+    } catch (_) { return false; }
+  };
+  if (!sourceUnchanged()) return empty('transcript-path-changed-after-read');
+  // Parsing, media decoding and proof derivation can outlast the file read.
+  // Recheck the same source after deriving a result; this is a bounded snapshot,
+  // not an atomic transaction with the native writer's future appends.
+  const finish = result => sourceUnchanged() ? result : empty('transcript-path-changed-after-read');
 
   const headRows = completeLines(head, 0, false);
   if (headRows.length === 0) return empty('session-meta-unavailable');
@@ -439,12 +494,12 @@ function observeNativeTranscript(binding, options = {}) {
   if (hasUnterminatedRecord(tail)) return empty('unterminated-tail-record');
   const tailRows = completeLines(tail, tailOffset, tailOffset > 0);
   if (tailRows.length === 0) return empty('bounded-tail-unavailable');
-  if (inputScan) return scanNativeInputs(tailRows, tail, tailOffset, binding, inputScan, identity,
+  if (inputScan) return finish(scanNativeInputs(tailRows, tail, tailOffset, binding, inputScan, identity,
     crypto.createHash('sha256').update(headRows[0].bytes).digest('hex'),
-    `codex-rollout:${relative.split(path.sep).join('/')}`);
+    `codex-rollout:${relative.split(path.sep).join('/')}`));
   const association = retry ? capacityRetry(tailRows, binding, liveHost.host, options.retryInputSha256,
     `codex-rollout:${relative.split(path.sep).join('/')}`, options.capturedInputHashes) : null;
-  if (proofOnly) return association;
+  if (proofOnly) return finish(association);
   if (association && association.state !== 'observed') return empty('current-host-turn-mismatch');
   if (association) binding = {...binding, turnId: association.conditions.turnId, model: association.conditions.model};
   let currentTurn = null;
@@ -542,7 +597,7 @@ function observeNativeTranscript(binding, options = {}) {
   const sourceRef = `codex-rollout:${relative.split(path.sep).join('/')}#byte=${latestToken.offset}`;
   const observationId = sha({conditions, identity, latestToken, sourceRef,
     recordedHostVersion: meta.cli_version, hostSourceRef: liveHost.host?.sourceRef ?? null});
-  return {
+  return finish({
     state: 'observed', reason: 'native-last-response-boundary', conditions,
     lastResponseTokens: latestToken.last, lastResponseScope: 'last-native-response-boundary',
     cumulativeTokens: latestToken.cumulative, cumulativeScope: 'session-cumulative-not-occupancy',
@@ -551,7 +606,7 @@ function observeNativeTranscript(binding, options = {}) {
     observationId, sourceRef, recordedHostVersion: meta.cli_version,
     hostSourceRef: liveHost.host?.sourceRef ?? null,
     ...(association ? {turnAssociation: association} : {}),
-  };
+  });
 }
 
 module.exports = {observeNativeTranscript, associateNativeTurn, inspectNativeInputs};

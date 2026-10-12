@@ -194,7 +194,38 @@ function readNativeInputSnapshot(request, where) {
     return input;
   };
   const input = read();
-  const result = readNativeInput(request, input);
+  let result;
+  if (Object.hasOwn(request, 'sourcePart')) {
+    const selected = request.sourcePart, cursor = selected?.evidenceCursor;
+    if (!selected || typeof selected !== 'object' || Array.isArray(selected) ||
+        Object.keys(selected).sort().join(',') !== 'evidenceCursor,partIndex,recordOffset,recordSha256' ||
+        !Number.isSafeInteger(selected.partIndex) || selected.partIndex < 0 ||
+        !Number.isSafeInteger(selected.recordOffset) || selected.recordOffset < 0 ||
+        !/^[a-f0-9]{64}$/.test(selected.recordSha256) || !cursor || typeof cursor !== 'object' || Array.isArray(cursor) ||
+        Object.keys(cursor).sort().join(',') !== 'anchorOffset,endOffset,headSha256,prefixSha256,signalsSha256,sourceId' ||
+        !text(cursor.sourceId) || cursor.sourceId.length > 200 ||
+        !Number.isSafeInteger(cursor.anchorOffset) || cursor.anchorOffset < 0 ||
+        !Number.isSafeInteger(cursor.endOffset) || cursor.endOffset < cursor.anchorOffset ||
+        !['headSha256', 'prefixSha256', 'signalsSha256'].every(key => /^[a-f0-9]{64}$/.test(cursor[key]))) {
+      fail('invalid-native-source-selection');
+    }
+    if (Object.hasOwn(request, 'index') || request.expectedReceiptEpoch !== input.epoch) fail('native-source-read-basis-required');
+    const evidence = inputEvidence(input, request, request.sourcePart.evidenceCursor, request.sourcePart);
+    if (evidence.state !== 'observed') fail(evidence.reason || 'native-source-read-unavailable');
+    const {text: content, image, record, ...part} = evidence.selectedPart;
+    result = {available: true, coverage: 'bound-native-source-part', receiptEpoch: input.epoch,
+      record, part, next: null, sourceReleaseAllowed: false};
+    if (image) result.imageContent = image;
+    else {
+      const characters = [...content], offset = request.offset ?? 0, limit = request.maxChars ?? 4000;
+      if (!Number.isSafeInteger(offset) || offset < 0 || offset > characters.length ||
+          !Number.isSafeInteger(limit) || limit < 1 || limit > 16000) fail('invalid-input-page');
+      result.text = characters.slice(offset, offset + limit).join('');
+      result.textComplete = offset + limit >= characters.length;
+      if (!result.textComplete) result.next = {sourcePart: request.sourcePart, offset: offset + limit,
+        maxChars: limit, expectedReceiptEpoch: input.epoch};
+    }
+  } else result = readNativeInput(request, input);
   if (canonical(input) !== canonical(read())) fail('input-changed-during-read');
   return result;
 }
@@ -398,7 +429,7 @@ function inputBasis(input) {
     model: original.turnId === input.nativeContextSource.turnId ? input.nativeContextSource.model : null},
     anchorEpoch: original.epoch, promptSha256: original.promptSha256};
 }
-function inputEvidence(input, request, expectedCursor = null) {
+function inputEvidence(input, request, expectedCursor = null, readPart = null) {
   const basis = inputBasis(input);
   if (!basis) return {state: 'unknown', reason: input?.nativeContextSource || input?.nativeInputBasis
     ? 'native-input-basis-unavailable' : 'native-input-source-unbound', pendingInputs: []};
@@ -412,7 +443,8 @@ function inputEvidence(input, request, expectedCursor = null) {
     captured: entries.slice(start).filter(item => item.source !== 'retained-native-replay')
       .map(item => ({promptSha256: item.promptSha256, recordSha256: item.nativeEvidence?.recordSha256})),
     host: request.currentHost, expectedTurnId: request.nativeTurnId, expectedCursor,
-    retainedCursor: input.nativeInputReconciliation?.cursor});
+    retainedCursor: input.nativeInputReconciliation?.cursor,
+    coverage: input.nativeInputReconciliation?.recordCoverage, readPart});
 }
 function projectInputEvidence(evidence) {
   let remaining = 4000;
@@ -904,9 +936,8 @@ function operate(request) {
       }
       const evidence = inputEvidence(currentInput, request, request.evidenceCursor);
       if (evidence.state !== 'observed') fail('native-input-evidence-changed');
-      if (!evidence.pendingInputs.length) fail('native-input-no-pending-input');
-      if (evidence.pendingInputs.some(item => !item.supported)) fail('native-input-content-unsupported');
-      if (evidence.contentCoverage !== 'text-records') fail('native-input-content-coverage-unknown');
+      if (!evidence.pendingInputs.length && !evidence.enrichments?.length) fail('native-input-no-pending-input');
+      if (evidence.records.some(item => !item.supported)) fail('native-input-content-unsupported');
       const observedTurn = currentInput.nativeInputReconciliation?.turnId ??
         currentInput.hostObservation?.turnId ?? currentInput.turnId;
       if (request.nativeTurnId !== observedTurn) {
@@ -925,19 +956,23 @@ function operate(request) {
         if (checked.state !== 'observed') fail('native-input-evidence-changed');
         if (canonical(readInput(where)) !== canonical(after)) fail('latest-user-input-not-reconciled');
         const epoch = crypto.randomUUID(), last = checked.pendingInputs.at(-1);
-        const receipt = {...raw, epoch, inputSource: 'reconciled-native-input',
-          promptSha256: last.promptSha256, turnId: last.turnId, nativeInputBasis: inputBasis(raw),
+        const receipt = {...raw, epoch,
+          ...(last ? {inputSource: 'reconciled-native-input', promptSha256: last.promptSha256, turnId: last.turnId} : {}),
+          nativeInputBasis: inputBasis(raw),
           nativeInputReconciliation: {turnId: checked.currentTurnId, sourceRef: checked.sourceRef,
-            cursor: checked.cursor, previousEpoch: raw.epoch},
+            cursor: checked.cursor, previousEpoch: raw.epoch,
+            recordCoverage: checked.records.map(({recordOffset, recordSha256, sourceRef, parts}) =>
+              ({recordOffset, recordSha256, sourceRef, parts}))},
           nativeInputs: [...retainedInputs(raw), ...checked.pendingInputs.map(item => ({epoch, turnId: item.turnId,
             source: 'reconciled-native-input', prompt: item.prompt, promptSha256: item.promptSha256,
-            nativeEvidence: {sourceRef: item.sourceRef, recordSha256: item.recordSha256, itemId: item.itemId}}))]};
+            nativeEvidence: {sourceRef: item.sourceRef, recordSha256: item.recordSha256, itemId: item.itemId, parts: item.parts}}))]};
         for (const flag of ['needsNativeReplay', 'needsResumeReconciliation', 'interrupted']) {
           if (after[flag] === true) receipt[flag] = true;
         }
         publishInput(where, receipt);
         return {epoch: readInput(where).epoch, revision: prior?.revision || 0,
           capturedInputs: checked.pendingInputs.length, mode: prior?.mode || 'unbound',
+          enrichedRecords: checked.enrichments.length, coverageScope: 'source-record-and-media-byte-descriptions; not-understanding-or-permission',
           requiresExplicitBinding: true};
       }, true);
     }
@@ -1414,7 +1449,11 @@ const HELP = {
     reconcile: {op: 'reconcile-native-input', session_id: 'native-session-id', cwd: 'absolute-workspace',
       epoch: 'from-preview', expectedRevision: 0, nativeTurnId: 'actual-native-turn-id',
       currentHost: 'exact actual currentHost object', evidenceCursor: 'nativeInputEvidence.cursor object'},
-    effect: 'Review source-derived text/coverage, explicitly reconcile pending inputs, read retained input when needed, then bind the reviewed full contract under the new epoch. No caller prompt/path/trigger, synthetic Hook, message, business replay or checkpoint rebind. Original basis/history, pause and watermarks remain; replay/resume/interruption require their separate supported recovery. Cursor accepts benign assistant/tool append but rejects changed old bytes or new input/control. Bound origin unavailable within16MiB and attachments/unknown content hold dependent mutation; no unlimited continuity claim.',
+    sourceRead: {op: 'read-native-input', session_id: 'native-session-id', cwd: 'absolute-workspace',
+      expectedReceiptEpoch: 'from-preview', sourcePart: {evidenceCursor: 'exact preview cursor',
+        recordOffset: 'from records', recordSha256: 'from records', partIndex: 'from ordered parts'},
+      currentHost: 'actual native call metadata; no caller paths'},
+    effect: 'Review actual source content as needed, explicitly reconcile pending records or enrich original structured-media coverage, then bind the reviewed full contract under the new epoch. Initial enrichment does not add an input or change Hook provenance. Only byte/record summaries persist; no base64 cache, read-count gate or understood flag. Plain text and the observed four-part inline PNG shape are supported; strict canonical base64/PNG signature decoding is bounded by the existing8MiB input budget. This is not a PNG pixel parser or Agent-understanding verdict. One sourcePart may return a text page or transient MCP image content; wrapper paths and remote URLs are never read/fetched. Original basis/history, pause and watermarks remain; recovery is separate. Cursor permits benign append but rejects changed old bytes/input/control. Missing16MiB anchor, unknown shape/media or unverified content holds applicable effects; no unlimited continuity claim or human authority inferred.',
   },
   nativeContext: {
     read: {op: 'observe-context', session_id: 'native-session-id', cwd: 'absolute-workspace', maxAgeMs: 30000},

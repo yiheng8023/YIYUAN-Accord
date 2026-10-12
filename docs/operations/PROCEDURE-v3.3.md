@@ -3081,3 +3081,9 @@ Root metadata换行修正：默认CRLF写manifest/dev/docs被提交前diff检查
 在既有helper/MCP中增加只读nativeInputEvidence及显式reconcile-input；按原Hook绑定源保有序输入、原basis、暂停、恢复及失败水印，再以新epoch重绑完整合同。旧合同同turn也检查未捕获记录。完整automatic/manual retry链和宿主developer插入已复用原来源验证，退役自指另修指导。首版独审实际证出附件unknown被忽略、派生turn绕过链两缺陷，修正版保原红例并拒绝；247相关回归通过（214.567秒），7源文件测试前后不变。初轮夹具重写源/枚举与描述断言失败及修正保于私有原件，不伪称首次全绿。
 
 Root首次只读预览因图片包装拼接找不到anchor；16MiB内定位确认原首text精确等Hook哈希。严格包装定位后，原prefix匹配，但ambient页面项与用户截图提醒两条native user-role记录未入旧回执，附件完整性未知。两次state/input均不变，未重放业务、补造Hook或以XML文字白名单授予人类权限；本线程恢复未因此闭合。来源超16MiB、附件、普通自主判断/必要恢复、同业务完整组合仍按原R2/R3未完职责推进。新receipt类型需要兼容执行器，回滚包不等于回滚输入。包安装同时核持久默认source；本机采用与源码回归分别记账。证据：私有accord-consumer-closeout-counterexample-20261012-01/implementation-review。
+
+## 同一缺口的PNG承接与来源末检（2026-10-12）
+
+195519/eaa94de的CI已11/11，持久source与25文件现装字节已核；当时fresh helper只读仍有3条pending native user-role输入，state/input不变。随后在既有scanner/helper/MCP内支持严格四段内嵌PNG，原Hook首文本匹配与后来全记录/媒体补证分开，原条目不重复计数；sourcePart取文字页/单张图片，路径与remote URL不取用，receipt只存摘要。Root从首冻helper读出真实pending截图156915字节/SHA21ac2324c1b03b0f432709c48cf02e74f1e3d4e0da29d99cb4a9e313aefe3821，经既有viewer实际查看，临时副本清除，原状态/原件保持。该组合证明实际取回与查看，不倒推新MCP路由或长寿worker刷新。
+
+首冻253回归绿后，独审实际证出派生PNG期间source追加未被末检、helper缺cursor仍返回两个问题。原Sol供给容量失败保留，由Astra接续同条件反证；最终共同finish在scan/sourcePart、proofOnly/context结果派生后再核路径/identity/stat，helper选择器契约与MCP一致。最终254测试218.879秒、7文件前后SHA不变；独审8条反例/调用者、4条共用末检、5项合法控制通过。原绿、原红与一次success-only harness误用分别保留。更早6b1忽略新字段可写的私有反例仍在，eaa对PNG明确hold；不能宣称任意安全rollback或以假quarantine修旧运行代码。来源末检有界，不是跨文件原子事务，PNG字节覆盖/取回/理解不互推。实际Root对账、必要接管、完整组合与发布仍以自身证据判断；无新业务或发布门槛。原件见同私有目录implementation-review的structured-png系列。

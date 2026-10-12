@@ -1,5 +1,6 @@
 """Bounded MCP task-state entry; native host metadata delivery is checked separately."""
 import json
+import base64
 import hashlib
 import os
 from pathlib import Path
@@ -1169,6 +1170,259 @@ process.stdout.write(JSON.stringify({response,changed}));
                 if change == 'watermark':
                     marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
                     self.assertEqual(json.loads(marker.read_bytes())['generation'], 'late-input-failure')
+
+    def png_fixture(self, red=0):
+        import struct
+        import zlib
+        def chunk(kind, content):
+            return struct.pack('!I', len(content)) + kind + content + struct.pack('!I', zlib.crc32(kind+content))
+        return b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('!IIBBBBB', 1, 1, 8, 2, 0, 0, 0)) + \
+            chunk(b'IDAT', zlib.compress(bytes([0, red, 0, 0]))) + chunk(b'IEND', b'')
+
+    def wrapped_png(self, data, text='Continue this work.', item_id='image-input'):
+        return {'type': 'message', 'role': 'user', 'id': item_id, 'content': [
+            {'type': 'input_text', 'text': text},
+            {'type': 'input_text', 'text': '<image name=[Image #1] path="C:\\not-authorized\\missing.png">'},
+            {'type': 'input_image', 'image_url': 'data:image/png;base64,'+base64.b64encode(data).decode()},
+            {'type': 'input_text', 'text': '</image>'}]}
+
+    def replace_anchor_png(self, data):
+        self.native_context()
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+        rows[2]['payload'] = self.wrapped_png(data)
+        transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+        return transcript
+
+    def test_native_png_initial_only_enrichment_retains_hook_count_and_source_read_is_readonly(self):
+        png = self.png_fixture()
+        self.replace_anchor_png(png)
+        receipt = next(self.state.glob('*.input.json')); original = json.loads(receipt.read_bytes())
+        preview = self.native_input_preview(); evidence = preview['nativeInputEvidence']
+        self.assertFalse(evidence['latestNativeInputsComplete'])
+        self.assertEqual(len(evidence['enrichments']), 1)
+        record = evidence['records'][0]
+        image = record['parts'][2]
+        self.assertEqual((image['bytes'], image['sha256']), (len(png), hashlib.sha256(png).hexdigest()))
+        selector = {'evidenceCursor': evidence['cursor'], 'recordOffset': record['recordOffset'],
+                    'recordSha256': record['recordSha256'], 'partIndex': 2}
+        before = self.files()
+        read = self.read_input(sourcePart=selector, expectedReceiptEpoch=preview['epoch'])
+        self.assertFalse(read['isError'], read)
+        self.assertEqual(base64.b64decode(read['imageContent']['data']), png)
+        self.assertEqual(read['imageContent']['mimeType'], 'image/png')
+        self.assertEqual(self.files(), before)
+        selector['partIndex'] = 1
+        wrapper = self.read_input(sourcePart=selector, expectedReceiptEpoch=preview['epoch'])
+        self.assertEqual(wrapper['value']['input']['text'], self.wrapped_png(png)['content'][1]['text'])
+        reconciled = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                                  evidenceCursor=evidence['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        self.assertEqual(reconciled['value']['observation']['capturedInputs'], 0)
+        saved = json.loads(receipt.read_bytes())
+        self.assertEqual(saved['nativeInputs'], original['nativeInputs'])
+        self.assertEqual(saved['promptSha256'], original['promptSha256'])
+        self.assertEqual(saved['inputSource'], 'native-input-event')
+        self.assertNotIn(base64.b64encode(png).decode(), json.dumps(saved))
+        current = self.native_input_preview()
+        self.assertTrue(current['nativeInputEvidence']['latestNativeInputsComplete'])
+        self.assertFalse(self.manage(action='bind', epoch=current['epoch'], expectedRevision=0,
+            result='Source coverage is not image understanding', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Continue under actual task authority', canContinue=False)['isError'])
+
+    def test_native_png_pending_ambient_and_repeated_media_are_ordered_without_read_gate(self):
+        first, second = self.png_fixture(), self.png_fixture(255)
+        transcript = self.replace_anchor_png(first)
+        self.append_native_message(text='<external_codex_apps_open_page>{}</external_codex_apps_open_page>', id='ambient')
+        with transcript.open('a', encoding='utf-8') as stream:
+            for item_id in ('second-image', 'repeated-image'):
+                stream.write(json.dumps({'type': 'response_item', 'payload': self.wrapped_png(second, item_id=item_id)})+'\n')
+        preview = self.native_input_preview(); evidence = preview['nativeInputEvidence']
+        self.assertEqual([item['itemId'] for item in evidence['pendingInputs']], ['ambient', 'second-image', 'repeated-image'])
+        self.assertNotEqual(evidence['records'][0]['parts'][2]['sha256'], evidence['records'][2]['parts'][2]['sha256'])
+        # No read call is required: structure coverage cannot stand for understanding.
+        reconciled = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                                  evidenceCursor=evidence['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        receipt = next(self.state.glob('*.input.json')); saved = json.loads(receipt.read_bytes())
+        self.assertEqual(len(saved['nativeInputs']), 4)
+        self.assertEqual([item.get('nativeEvidence', {}).get('itemId') for item in saved['nativeInputs'][1:]],
+                         ['ambient', 'second-image', 'repeated-image'])
+        self.assertEqual(saved['nativeInputs'][2]['promptSha256'], saved['nativeInputs'][3]['promptSha256'])
+        self.assertNotIn('data:image/', json.dumps(saved))
+        self.assertNotIn('understood', json.dumps(saved))
+        self.assertTrue(self.native_input_preview()['nativeInputEvidence']['latestNativeInputsComplete'])
+
+    def test_native_png_mcp_stdio_returns_single_image_content_over_old_text_result_bound(self):
+        png = self.png_fixture() + b'\x00'*(156915-len(self.png_fixture()))
+        self.replace_anchor_png(png)
+        preview = self.native_input_preview(); record = preview['nativeInputEvidence']['records'][0]
+        args = {'cwd': str(self.work), 'expectedReceiptEpoch': preview['epoch'], 'sourcePart': {
+            'evidenceCursor': preview['nativeInputEvidence']['cursor'], 'recordOffset': record['recordOffset'],
+            'recordSha256': record['recordSha256'], 'partIndex': 2}}
+        request = {'jsonrpc': '2.0', 'id': 2, 'method': 'tools/call', 'params': {
+            **self.params, 'name': 'read_task_input', 'arguments': args}}
+        handshake = {'jsonrpc': '2.0', 'id': 1, 'method': 'initialize', 'params': {
+            'protocolVersion': '2025-06-18', 'capabilities': {}, 'clientInfo': {'name': 'isolated-image', 'version': '1'}}}
+        before = self.files()
+        notification = {'jsonrpc': '2.0', 'method': 'notifications/initialized'}
+        result = subprocess.run([self.node, str(BRIDGE)], input=json.dumps(handshake)+'\n'+json.dumps(notification)+'\n'+json.dumps(request)+'\n',
+            capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        response = json.loads(result.stdout.splitlines()[-1])['result']
+        self.assertFalse(response['isError'], response)
+        images = [item for item in response['content'] if item['type'] == 'image']
+        self.assertEqual(len(images), 1)
+        self.assertEqual(base64.b64decode(images[0]['data']), png)
+        self.assertNotIn('data:image/', json.dumps(response['structuredContent']))
+        self.assertEqual(self.files(), before)
+
+    def test_native_png_source_selector_and_malformed_media_never_fetch_paths_or_urls(self):
+        for kind in ('remote', 'invalid-base64', 'wrong-signature', 'over-budget', 'extra-human-text'):
+            with self.subTest(kind=kind):
+                for receipt in self.state.glob('*.input.json'):
+                    receipt.unlink()
+                self.native_context()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                payload = self.wrapped_png(self.png_fixture(), text='Pending screenshot')
+                if kind == 'remote': payload['content'][2]['image_url'] = 'https://must-not-fetch.invalid/picture.png'
+                elif kind == 'invalid-base64': payload['content'][2]['image_url'] = 'data:image/png;base64,!!!!'
+                elif kind == 'wrong-signature': payload['content'][2]['image_url'] = 'data:image/png;base64,'+base64.b64encode(b'not a png').decode()
+                elif kind == 'over-budget': payload['content'][2]['image_url'] = 'data:image/png;base64,'+base64.b64encode(b'\x89PNG\r\n\x1a\n'+b'\x00'*(8*1024*1024)).decode()
+                else: payload['content'][1]['text'] = 'Actual additional user instructions'
+                with transcript.open('a', encoding='utf-8') as stream:
+                    stream.write(json.dumps({'type': 'response_item', 'payload': payload})+'\n')
+                preview = self.native_input_preview(); evidence = preview['nativeInputEvidence']
+                self.assertFalse(evidence['pendingInputs'][0]['supported'])
+                record = evidence['pendingInputs'][0]; before = self.files()
+                denied = self.read_input(expectedReceiptEpoch=preview['epoch'], sourcePart={
+                    'evidenceCursor': evidence['cursor'], 'recordOffset': record['recordOffset'],
+                    'recordSha256': record['recordSha256'], 'partIndex': 2})
+                self.assertTrue(denied['isError'], denied)
+                self.assertTrue(self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                                           evidenceCursor=evidence['cursor'])['isError'])
+                self.assertEqual(self.files(), before)
+
+    def test_native_png_source_read_rejects_epoch_selectors_and_source_changes(self):
+        for change in ('epoch', 'index', 'hash', 'part', 'missing-cursor', 'cursor-key',
+                       'old-bytes', 'new-user', 'control', 'watermark'):
+            with self.subTest(change=change):
+                for file in self.state.glob('*.input*.json'):
+                    file.unlink()
+                transcript = self.replace_anchor_png(self.png_fixture())
+                preview = self.native_input_preview(); evidence = preview['nativeInputEvidence']; record = evidence['records'][0]
+                args = {'expectedReceiptEpoch': preview['epoch'], 'sourcePart': {'evidenceCursor': evidence['cursor'],
+                    'recordOffset': record['recordOffset'], 'recordSha256': record['recordSha256'], 'partIndex': 2}}
+                if change == 'epoch': args['expectedReceiptEpoch'] = 'different-epoch'
+                elif change == 'index': args['index'] = 0
+                elif change == 'hash': args['sourcePart']['recordSha256'] = '0'*64
+                elif change == 'part': args['sourcePart']['partIndex'] = 8
+                elif change == 'missing-cursor': del args['sourcePart']['evidenceCursor']
+                elif change == 'cursor-key': args['sourcePart']['evidenceCursor']['unboundClaim'] = True
+                elif change == 'old-bytes':
+                    text = transcript.read_text(encoding='utf-8').replace(base64.b64encode(self.png_fixture()).decode(),
+                        base64.b64encode(self.png_fixture(255)).decode())
+                    transcript.write_text(text, encoding='utf-8')
+                elif change == 'new-user': self.append_native_message(text='Later native input')
+                elif change == 'control':
+                    with transcript.open('a', encoding='utf-8') as stream:
+                        stream.write(json.dumps({'type': 'event_msg', 'payload': {'type': 'thread_settings_applied'}})+'\n')
+                else:
+                    receipt = next(self.state.glob('*.input.json'))
+                    receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json')).write_text(
+                        json.dumps({'schema': 1, 'generation': 'changed-watermark'}), encoding='utf-8')
+                before = self.files(); rejected = self.read_input(**args)
+                self.assertTrue(rejected['isError'], rejected)
+                self.assertEqual(self.files(), before)
+                if change in ('missing-cursor', 'cursor-key'):
+                    meta = self.params['_meta']['x-codex-turn-metadata']
+                    body = {'op': 'read-native-input', **args, 'nativeTurnId': meta['turn_id'],
+                        'currentHost': {'threadId': meta['session_id'], 'turnId': meta['turn_id'],
+                            'model': meta['model'], 'hostVersion': meta['codex_version'],
+                            'sourceRef': 'codex-mcp-call:native-call-1'}, 'session_id': meta['session_id'], 'cwd': str(self.work)}
+                    helper = subprocess.run([self.node, str(CHECKPOINT)], input=json.dumps(body),
+                        capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+                    self.assertNotEqual(helper.returncode, 0, helper.stdout)
+                    self.assertIn('invalid-native-source-selection', helper.stderr)
+                    self.assertEqual(self.files(), before)
+
+    def test_native_png_result_derivation_rechecks_same_source_before_bind_reconcile_or_read(self):
+        for operation in ('bind', 'reconcile-input', 'source-read'):
+            with self.subTest(operation=operation):
+                for file in self.state.glob('*.json'):
+                    file.unlink()
+                transcript = self.replace_anchor_png(self.png_fixture())
+                preview = self.native_input_preview()
+                if operation == 'bind':
+                    self.assertFalse(self.manage(action='reconcile-input', epoch=preview['epoch'],
+                        expectedRevision=0, evidenceCursor=preview['nativeInputEvidence']['cursor'])['isError'])
+                    preview = self.native_input_preview()
+                record = preview['nativeInputEvidence']['records'][0]
+                arguments = {'cwd': str(self.work)}
+                if operation == 'source-read':
+                    arguments.update(expectedReceiptEpoch=preview['epoch'], sourcePart={
+                        'evidenceCursor': preview['nativeInputEvidence']['cursor'],
+                        'recordOffset': record['recordOffset'], 'recordSha256': record['recordSha256'], 'partIndex': 2})
+                else:
+                    arguments.update(action=operation, epoch=preview['epoch'], expectedRevision=0)
+                    if operation == 'reconcile-input':
+                        arguments['evidenceCursor'] = preview['nativeInputEvidence']['cursor']
+                    else:
+                        arguments.update(result='Bind only the actual complete source snapshot', inputs=[],
+                            outputs=[{'path': 'report.txt'}], nextAction='Hold a later input', canContinue=False)
+                params = {**self.params, 'name': 'read_task_input' if operation == 'source-read' else 'manage_task_state',
+                          'arguments': arguments}
+                transcript_key = transcript.relative_to(self.root).as_posix()
+                before = {key: value for key, value in self.files().items() if key != transcript_key}
+                script = r"""
+const fs=require('node:fs');const x=JSON.parse(fs.readFileSync(0,'utf8'));
+const from=Buffer.from;let decodes=0,changed=false;
+Buffer.from=(value,encoding,...rest)=>{
+  const bytes=from(value,encoding,...rest);
+  if(encoding==='base64'&&++decodes===2){changed=true;
+    fs.appendFileSync(x.transcript,JSON.stringify({type:'response_item',payload:{type:'message',role:'user',
+      content:[{type:'input_text',text:'Late native input while deriving the final snapshot'}]}})+'\n');
+  }
+  return bytes;
+};
+const response=require(process.argv[1])[x.operation==='source-read'?'readTaskInput':'manageTaskState'](x.params);
+process.stdout.write(JSON.stringify({response,changed}));
+"""
+                result = subprocess.run([self.node, '-e', script, str(BRIDGE)],
+                    input=json.dumps(dict(params=params, transcript=str(transcript), operation=operation)),
+                    capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                value = json.loads(result.stdout)
+                self.assertTrue(value['changed'])
+                self.assertTrue(value['response']['isError'], value)
+                self.assertEqual({key: value for key, value in self.files().items() if key != transcript_key}, before)
+                self.assertFalse(any(self.state.glob('*.state.json')))
+
+    def test_native_png_enrichment_preserves_pause_and_complete_mixed_retry(self):
+        self.native_context(); session = self.params['_meta']['x-codex-turn-metadata']['session_id']
+        status = self.helper({'op': 'status'}, session=session)
+        contract = dict(result='Retain task and pause', inputs=[], outputs=[{'path': 'report.txt'}],
+                        nextAction='Wait for actual authorized continuation', canContinue=False)
+        self.assertFalse(self.manage(action='bind', epoch=status['epoch'], expectedRevision=0, **contract)['isError'])
+        self.assertFalse(self.manage(action='pause', epoch=status['epoch'], expectedRevision=1, reason='User paused')['isError'])
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'type': 'response_item', 'payload': self.wrapped_png(self.png_fixture())})+'\n')
+        preview = self.native_input_preview()
+        self.automatic_capacity_retry('automatic-png')
+        self.automatic_capacity_retry('manual-png')
+        rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+        rows[-2]['payload']['turn_attribution']['turn_trigger'] = 'capacity_retry_manual'
+        transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+        # New control invalidates the old preview; use a fresh source-bound cursor.
+        preview = self.native_input_preview()
+        reconciled = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=2,
+                                  evidenceCursor=preview['nativeInputEvidence']['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        current = self.native_input_preview()
+        self.assertEqual(current['mode'], 'paused')
+        self.assertFalse(self.manage(action='bind', epoch=current['epoch'], expectedRevision=2, **contract)['isError'])
+        self.assertEqual(self.helper({'op': 'status'}, session=session)['mode'], 'paused')
 
     def test_manage_forwards_only_explicit_input_revision_evidence(self):
         source = self.work / 'source.txt'

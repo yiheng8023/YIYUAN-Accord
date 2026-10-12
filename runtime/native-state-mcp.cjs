@@ -12,6 +12,18 @@ const PROTOCOL = '2025-06-18';
 const MAX_FRAME = 128 * 1024;
 const MAX_RESULT = 128 * 1024;
 const TOKEN_BOUND = {type: 'integer', minimum: 0, maximum: Number.MAX_SAFE_INTEGER};
+const CURSOR_SCHEMA = {type: 'object', properties: {
+  sourceId: {type: 'string'}, headSha256: {type: 'string', pattern: '^[a-f0-9]{64}$'},
+  anchorOffset: TOKEN_BOUND, endOffset: TOKEN_BOUND,
+  prefixSha256: {type: 'string', pattern: '^[a-f0-9]{64}$'},
+  signalsSha256: {type: 'string', pattern: '^[a-f0-9]{64}$'},
+}, required: ['sourceId', 'headSha256', 'anchorOffset', 'endOffset', 'prefixSha256', 'signalsSha256'], additionalProperties: false};
+function validCursor(cursor) {
+  return record(cursor) && Object.keys(cursor).sort().join(',') === CURSOR_SCHEMA.required.slice().sort().join(',') &&
+    text(cursor.sourceId, 200) && Number.isSafeInteger(cursor.anchorOffset) && cursor.anchorOffset >= 0 &&
+    Number.isSafeInteger(cursor.endOffset) && cursor.endOffset >= cursor.anchorOffset &&
+    ['headSha256', 'prefixSha256', 'signalsSha256'].every(key => /^[a-f0-9]{64}$/.test(cursor[key]));
+}
 const CONTEXT_ASSESSMENT = Object.freeze({
   type: 'object',
   description: 'Assess one bounded next work span against a previously observed receipt epoch and context generation. Identity comes only from current native call metadata. Times and sourced estimates are caller evidence and are not refreshed by the adapter.',
@@ -60,12 +72,15 @@ const TOOL = Object.freeze({
 });
 const INPUT_TOOL = Object.freeze({
   name: 'read_task_input',
-  description: 'Read a bounded page of this root task\'s captured input records (Hook, retained replay or explicitly reconciled native source). Follow the returned next cursor and retain receipt/hash identity; recorded text is not new input, complete history or permission. No replay or state change.',
+  description: 'Read saved input text pages, or a sourcePart selected from inspect_task_state(includeNativeInputs) by cursor/record offset/hash/part index. Source selection is mutually exclusive with index and requires expectedReceiptEpoch. It can read an original anchor or pending text/one inline PNG before reconciliation; wrapper paths and remote URLs are never fetched. Image content is transient, bounded to the existing8MiB native-input byte budget. Reading, byte coverage and Agent understanding are separate; no replay, receipt write, read-count gate or permission.',
   inputSchema: {type: 'object', properties: {
     cwd: TOOL.inputSchema.properties.cwd,
     index: {type: 'integer', minimum: 0, maximum: Number.MAX_SAFE_INTEGER, description: 'Captured input index; defaults to zero. Nonzero pagination requires expectedReceiptEpoch.'},
     offset: {type: 'integer', minimum: 0, maximum: Number.MAX_SAFE_INTEGER, description: 'Unicode code-point offset within that input; defaults to zero. Nonzero pagination requires expectedReceiptEpoch.'},
     maxChars: {type: 'integer', minimum: 1, maximum: 16000, description: 'Page character budget; defaults to 4000.'},
+    sourcePart: {type: 'object', properties: {evidenceCursor: CURSOR_SCHEMA,
+      recordOffset: TOKEN_BOUND, recordSha256: {type: 'string', pattern: '^[a-f0-9]{64}$'}, partIndex: TOKEN_BOUND},
+      required: ['evidenceCursor', 'recordOffset', 'recordSha256', 'partIndex'], additionalProperties: false},
     expectedReceiptEpoch: {type: 'string', minLength: 1, maxLength: 256,
       description: 'Use the returned next cursor or prior inspection epoch to reject a changed input basis. This is a read condition, not a recovery token or authorization.'},
   }, required: ['cwd'], additionalProperties: false},
@@ -86,13 +101,7 @@ const MANAGE_TOOL = Object.freeze({
   inputSchema: {type: 'object', properties: {
     cwd: TOOL.inputSchema.properties.cwd,
     action: {type: 'string', enum: ['bind', 'pause', 'retire', 'reconcile-input']},
-    evidenceCursor: {type: 'object', properties: {
-      sourceId: {type: 'string'}, headSha256: {type: 'string', pattern: '^[a-f0-9]{64}$'},
-      anchorOffset: TOKEN_BOUND, endOffset: TOKEN_BOUND,
-      prefixSha256: {type: 'string', pattern: '^[a-f0-9]{64}$'},
-      signalsSha256: {type: 'string', pattern: '^[a-f0-9]{64}$'},
-    }, required: ['sourceId', 'headSha256', 'anchorOffset', 'endOffset', 'prefixSha256', 'signalsSha256'],
-    additionalProperties: false, description: 'Exact prior inspect nativeInputEvidence.cursor; benign later tool/assistant append is permitted, changed input/control or old bytes is rejected.'},
+    evidenceCursor: {...CURSOR_SCHEMA, description: 'Exact prior inspect nativeInputEvidence.cursor; benign later tool/assistant append is permitted, changed input/control or old bytes is rejected.'},
     epoch: {type: 'string', minLength: 1, maxLength: 256,
       description: 'Exact current receipt epoch from inspect_task_state. The adapter never refreshes it automatically.'},
     expectedRevision: {...TOKEN_BOUND,
@@ -129,7 +138,7 @@ const MANAGE_TOOL = Object.freeze({
   annotations: {readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false},
 });
 const CLAIM_LIMIT = 'Native-call metadata is received context, not authentication or permission. The workspace is caller-selected. Saved state and canContinue do not prove current intent, freshness, completion, takeover or control of this thread. No state mutation or task dispatch is performed.';
-const INPUT_CLAIM_LIMIT = 'Captured Hook input is recorded data, not new input or permission, complete history, attachments or work progress. A stable page does not establish that the latest input was captured, restore a task, clear quarantine or resume a pause. Reconcile current native input and authority separately. ' + CLAIM_LIMIT;
+const INPUT_CLAIM_LIMIT = 'Saved text pages and bound native source parts are recorded data, not human origin, permission, complete history or work progress. PNG byte identity, image-content return and Agent understanding are separate. A read does not clear quarantine, resume a pause or authorize effects; reconcile current input and actual authority separately. ' + CLAIM_LIMIT;
 const MANAGE_CLAIM_LIMIT = 'This operation records or retires only the existing root-task checkpoint state under the supplied stale-write conditions. Caller-provided reasons, native metadata, tool annotations and returned inspection are observations, not proof of task completion, user permission, current intent, writer ownership, takeover or external acceptance. The Agent must verify the actual user decision or applicable host-approved source; this adapter performs no keyword or semantic authorization judgment. Bind may read declared workspace files but does not write business outputs, dispatch work, replay input, recover locks or change a host mode.';
 const record = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const text = (value, max = 200) => typeof value === 'string' && value.trim().length > 0
@@ -293,6 +302,14 @@ function readTaskInput(params) {
   if (['index', 'offset'].some(key => own(args, key) && (!Number.isSafeInteger(args[key]) || args[key] < 0))
       || own(args, 'maxChars') && (!Number.isSafeInteger(args.maxChars) || args.maxChars < 1 || args.maxChars > 16000)
       || own(args, 'expectedReceiptEpoch') && !text(args.expectedReceiptEpoch, 256)) return rejected('invalid-input-page');
+  if (own(args, 'sourcePart')) {
+    const selected = args.sourcePart;
+    if (own(args, 'index') || !own(args, 'expectedReceiptEpoch') || !record(selected) ||
+        Object.keys(selected).sort().join(',') !== 'evidenceCursor,partIndex,recordOffset,recordSha256' ||
+        !validCursor(selected.evidenceCursor) || !Number.isSafeInteger(selected.partIndex) || selected.partIndex < 0 ||
+        !Number.isSafeInteger(selected.recordOffset) || selected.recordOffset < 0 ||
+        !/^[a-f0-9]{64}$/.test(selected.recordSha256)) return rejected('invalid-native-source-selection');
+  }
   if (['index', 'offset'].some(key => own(args, key) && args[key] !== 0)
       && !own(args, 'expectedReceiptEpoch')) return rejected('captured-input-basis-required');
   const source = nativeCallSource(params);
@@ -301,7 +318,10 @@ function readTaskInput(params) {
   let input;
   try {
     input = operate({op: 'read-native-input', session_id: source.sessionTreeId, cwd: args.cwd,
-      index: own(args, 'index') ? args.index : undefined,
+      ...(!own(args, 'sourcePart') ? {index: own(args, 'index') ? args.index : undefined} :
+        {sourcePart: args.sourcePart, expectedReceiptEpoch: args.expectedReceiptEpoch,
+          ...(source.model && source.hostVersion ? {currentHost: {threadId: source.threadId, turnId: source.turnId,
+            model: source.model, hostVersion: source.hostVersion, sourceRef: `codex-mcp-call:${source.callId}`}} : {})}),
       offset: own(args, 'offset') ? args.offset : undefined,
       maxChars: own(args, 'maxChars') ? args.maxChars : undefined});
   } catch (error) { return rejected(inspectionReason(error)); }
@@ -310,10 +330,11 @@ function readTaskInput(params) {
   }
   // Pin subsequent pages to this observed basis; never rewrite or replay it.
   if (input.next) input = {...input, next: {...input.next, expectedReceiptEpoch: input.receiptEpoch}};
+  const {imageContent, ...description} = input;
   const value = {schema: 'yiyuan-accord-native-input/v1', state: 'observed-input-page',
-    source, workspace: {cwd: args.cwd, binding: 'caller-selected'}, input, claimLimit: INPUT_CLAIM_LIMIT};
+    source, workspace: {cwd: args.cwd, binding: 'caller-selected'}, input: description, claimLimit: INPUT_CLAIM_LIMIT};
   if (Buffer.byteLength(JSON.stringify(value)) > MAX_RESULT) return rejected('bounded-input-result-exceeded');
-  return {isError: false, value};
+  return {isError: false, value, ...(imageContent ? {imageContent} : {})};
 }
 
 function manageTaskState(params) {
@@ -375,11 +396,7 @@ function manageTaskState(params) {
   } else if (args.action === 'pause') {
     if (!own(args, 'reason') || !boundedText(args.reason, 2048)) return rejected('invalid-task-state-pause');
   } else if (args.action === 'reconcile-input') {
-    const cursor = args.evidenceCursor, keys = ['anchorOffset', 'endOffset', 'headSha256', 'prefixSha256', 'signalsSha256', 'sourceId'];
-    if (!record(cursor) || Object.keys(cursor).sort().join(',') !== keys.join(',') ||
-        !text(cursor.sourceId, 200) || !Number.isSafeInteger(cursor.anchorOffset) || cursor.anchorOffset < 0 ||
-        !Number.isSafeInteger(cursor.endOffset) || cursor.endOffset < cursor.anchorOffset ||
-        ['headSha256', 'prefixSha256', 'signalsSha256'].some(key => !/^[a-f0-9]{64}$/.test(cursor[key]))) {
+    if (!validCursor(args.evidenceCursor)) {
       return rejected('invalid-native-input-evidence-cursor');
     }
   } else if (own(args, 'reason') && !boundedText(args.reason, 2048)
@@ -461,7 +478,8 @@ function createHandler(version = runtimeVersion()) {
       const inspected = request.params.name === TOOL.name ? inspectNativeState(request.params)
         : request.params.name === INPUT_TOOL.name ? readTaskInput(request.params) : manageTaskState(request.params);
       return result(id, {isError: inspected.isError, structuredContent: inspected.value,
-        content: [{type: 'text', text: JSON.stringify(inspected.value)}]});
+        content: [{type: 'text', text: JSON.stringify(inspected.value)},
+          ...(inspected.imageContent ? [inspected.imageContent] : [])]});
     }
     return error(id, -32601, 'Method not found');
   };
