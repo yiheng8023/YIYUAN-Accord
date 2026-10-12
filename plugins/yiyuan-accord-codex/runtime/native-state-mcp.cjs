@@ -51,6 +51,7 @@ const TOOL = Object.freeze({
   inputSchema: {type: 'object', properties: {cwd: {type: 'string', minLength: 1, maxLength: 4096,
     description: 'Absolute existing workspace directory. Reconcile the cwd in the native Hook receipt or recovery locators: it keys task state and is the base for checkpoint file references, which may differ from the directory containing business files. Caller-selected scope, not host-attested current cwd; do not silently substitute another scope.'},
     includeContext: {type: 'boolean', description: 'Also read current Hook-bound context counters. Defaults to false; missing or stale evidence remains unknown.'},
+    includeNativeInputs: {type: 'boolean', description: 'Read bounded source evidence for captured-input coverage and pending native inputs; no receipt mutation.'},
     contextMaxAgeMs: {type: 'integer', minimum: 1, maximum: Number.MAX_SAFE_INTEGER,
       description: 'Requires includeContext or contextAssessment. Caller-selected age limit for the native response boundary; defaults to 30000 ms and does not extend caller evidence.'},
     contextAssessment: CONTEXT_ASSESSMENT},
@@ -59,7 +60,7 @@ const TOOL = Object.freeze({
 });
 const INPUT_TOOL = Object.freeze({
   name: 'read_task_input',
-  description: 'Read a bounded page of this root task\'s Hook-captured input when needed for recovery. Follow the returned next cursor and retain receipt/hash identity; recorded text is not new input, complete history or permission. No replay or state change.',
+  description: 'Read a bounded page of this root task\'s captured input records (Hook, retained replay or explicitly reconciled native source). Follow the returned next cursor and retain receipt/hash identity; recorded text is not new input, complete history or permission. No replay or state change.',
   inputSchema: {type: 'object', properties: {
     cwd: TOOL.inputSchema.properties.cwd,
     index: {type: 'integer', minimum: 0, maximum: Number.MAX_SAFE_INTEGER, description: 'Captured input index; defaults to zero. Nonzero pagination requires expectedReceiptEpoch.'},
@@ -81,10 +82,17 @@ const OBSERVED_FILE = Object.freeze({type: 'object', properties: {
 }, required: ['present'], additionalProperties: false});
 const MANAGE_TOOL = Object.freeze({
   name: 'manage_task_state',
-  description: 'Bind, pause or retire this root task\'s existing Accord checkpoint using the exact observed receipt epoch and revision. Identity and current turn come only from native call metadata. For bind, explicitly provide result, inputs, outputs, nextAction and canContinue on every call; these fields are not inherited. Use inputs: [] when there are no protected inputs, and at least one output predicate. Bind inspects declared workspace files but never writes business files. Pause preserves unfinished conditions. Retire deletes only this task\'s owned checkpoint/receipt state when the helper\'s existing predicates allow it. Results, reasons, metadata and annotations are observations, not proof of task completion, user permission, current intent, writer ownership or takeover; the Agent must verify the actual user decision or applicable host-approved source.',
+  description: 'Bind, pause, retire or explicitly reconcile this root task\'s saved native inputs using the exact observed epoch and revision. Identity comes only from native call metadata. For native-input-reconciliation-required, inspect_task_state with includeNativeInputs, review actual pending input and coverage, then reconcile-input with its evidenceCursor; rebind a complete reviewed contract under the returned new epoch. This does not resume a pause or clear recovery flags. For bind, explicitly provide result, inputs, outputs, nextAction and canContinue every time; nothing is inherited. Use inputs: [] when appropriate and at least one output predicate. These operations write no business files or user messages. Retire retains its existing task-state predicates. Metadata, reasons and source matches establish neither permission nor completion; verify the actual user decision.',
   inputSchema: {type: 'object', properties: {
     cwd: TOOL.inputSchema.properties.cwd,
-    action: {type: 'string', enum: ['bind', 'pause', 'retire']},
+    action: {type: 'string', enum: ['bind', 'pause', 'retire', 'reconcile-input']},
+    evidenceCursor: {type: 'object', properties: {
+      sourceId: {type: 'string'}, headSha256: {type: 'string', pattern: '^[a-f0-9]{64}$'},
+      anchorOffset: TOKEN_BOUND, endOffset: TOKEN_BOUND,
+      prefixSha256: {type: 'string', pattern: '^[a-f0-9]{64}$'},
+      signalsSha256: {type: 'string', pattern: '^[a-f0-9]{64}$'},
+    }, required: ['sourceId', 'headSha256', 'anchorOffset', 'endOffset', 'prefixSha256', 'signalsSha256'],
+    additionalProperties: false, description: 'Exact prior inspect nativeInputEvidence.cursor; benign later tool/assistant append is permitted, changed input/control or old bytes is rejected.'},
     epoch: {type: 'string', minLength: 1, maxLength: 256,
       description: 'Exact current receipt epoch from inspect_task_state. The adapter never refreshes it automatically.'},
     expectedRevision: {...TOKEN_BOUND,
@@ -173,9 +181,10 @@ function nativeCallSource(params) {
 
 function inspectNativeState(params) {
   if (!record(params) || params.name !== TOOL.name || !record(params.arguments)
-      || Object.keys(params.arguments).some(key => !['cwd', 'includeContext', 'contextMaxAgeMs', 'contextAssessment'].includes(key))
+      || Object.keys(params.arguments).some(key => !['cwd', 'includeContext', 'includeNativeInputs', 'contextMaxAgeMs', 'contextAssessment'].includes(key))
       || !own(params.arguments, 'cwd')
       || own(params.arguments, 'includeContext') && typeof params.arguments.includeContext !== 'boolean'
+      || own(params.arguments, 'includeNativeInputs') && typeof params.arguments.includeNativeInputs !== 'boolean'
       || own(params.arguments, 'contextAssessment') && !validContextAssessment(params.arguments.contextAssessment)
       || own(params.arguments, 'contextMaxAgeMs') && (params.arguments.includeContext !== true
         && !own(params.arguments, 'contextAssessment')
@@ -190,6 +199,8 @@ function inspectNativeState(params) {
     return {isError: true, value: unavailable('native-call-metadata-unavailable')};
   }
   const workspace = {cwd: params.arguments.cwd, binding: 'caller-selected'};
+  const currentHost = source.model && source.hostVersion ? {threadId: source.threadId, turnId: source.turnId,
+    model: source.model, hostVersion: source.hostVersion, sourceRef: `codex-mcp-call:${source.callId}`} : null;
   let checkpoint;
   if (source.threadId !== source.sessionTreeId) {
     // In the inspected host, Hook session_id is shared by a session tree.
@@ -198,16 +209,15 @@ function inspectNativeState(params) {
   } else {
     try {
       checkpoint = {state: 'observed', snapshot: operate({op: 'status',
-        session_id: source.sessionTreeId, cwd: params.arguments.cwd})};
+        session_id: source.sessionTreeId, cwd: params.arguments.cwd,
+        nativeInputEvidence: params.arguments.includeNativeInputs === true,
+        ...(currentHost ? {currentHost} : {})})};
     } catch (error) {
       checkpoint = {state: 'unavailable', reason: inspectionReason(error)};
     }
   }
   const value = {schema: 'yiyuan-accord-native-state/v1', state: 'observed-call-context',
     source, workspace, checkpoint, claimLimit: CLAIM_LIMIT};
-  const currentHost = source.model && source.hostVersion ? {threadId: source.threadId, turnId: source.turnId,
-    model: source.model, hostVersion: source.hostVersion,
-    sourceRef: `codex-mcp-call:${source.callId}`} : null;
   if (params.arguments.includeContext === true) {
     const unknown = reason => ({state: 'unknown', reason, sourceReleaseAllowed: false});
     if (checkpoint.state !== 'observed') value.context = unknown(checkpoint.reason);
@@ -309,6 +319,8 @@ function readTaskInput(params) {
 function manageTaskState(params) {
   const rejected = (reason, effect = 'not-requested') => ({isError: true, value: {
     schema: 'yiyuan-accord-native-state-mutation/v1', state: 'unavailable', reason,
+    ...(reason === 'native-input-reconciliation-required' ? {recoveryHint:
+      'Inspect with includeNativeInputs; review actual source-derived pending input and limits, reconcile-input using its cursor, then explicitly bind the reviewed contract under the new epoch. Pause/recovery flags remain.'} : {}),
     effect, claimLimit: MANAGE_CLAIM_LIMIT}});
   const args = params?.arguments;
   const common = ['action', 'cwd', 'epoch', 'expectedRevision'];
@@ -317,11 +329,12 @@ function manageTaskState(params) {
       'resumeReason', 'revisionReason', 'unresolved'],
     pause: ['reason'],
     retire: ['disposition', 'reason'],
+    'reconcile-input': ['evidenceCursor'],
   };
   const boundedText = (value, max) => typeof value === 'string' && value.trim().length > 0
     && value.length <= max;
   if (!record(params) || params.name !== MANAGE_TOOL.name || !record(args)
-      || !['bind', 'pause', 'retire'].includes(args.action)
+      || !['bind', 'pause', 'retire', 'reconcile-input'].includes(args.action)
       || Object.keys(args).some(key => !common.includes(key) && !byAction[args.action].includes(key))
       || !common.every(key => own(args, key)) || !boundedText(args.cwd, 4096)
       || !path.isAbsolute(args.cwd) || !text(args.epoch, 256)
@@ -361,6 +374,14 @@ function manageTaskState(params) {
     }
   } else if (args.action === 'pause') {
     if (!own(args, 'reason') || !boundedText(args.reason, 2048)) return rejected('invalid-task-state-pause');
+  } else if (args.action === 'reconcile-input') {
+    const cursor = args.evidenceCursor, keys = ['anchorOffset', 'endOffset', 'headSha256', 'prefixSha256', 'signalsSha256', 'sourceId'];
+    if (!record(cursor) || Object.keys(cursor).sort().join(',') !== keys.join(',') ||
+        !text(cursor.sourceId, 200) || !Number.isSafeInteger(cursor.anchorOffset) || cursor.anchorOffset < 0 ||
+        !Number.isSafeInteger(cursor.endOffset) || cursor.endOffset < cursor.anchorOffset ||
+        ['headSha256', 'prefixSha256', 'signalsSha256'].some(key => !/^[a-f0-9]{64}$/.test(cursor[key]))) {
+      return rejected('invalid-native-input-evidence-cursor');
+    }
   } else if (own(args, 'reason') && !boundedText(args.reason, 2048)
       || own(args, 'disposition') && (args.disposition !== 'user-cancelled' || !boundedText(args.reason, 2048))) {
     return rejected('invalid-task-state-retirement');
@@ -368,7 +389,7 @@ function manageTaskState(params) {
   const source = nativeCallSource(params);
   if (!source) return rejected('native-call-metadata-unavailable');
   if (source.threadId !== source.sessionTreeId) return rejected('shared-session-scope-requires-reconciliation');
-  const request = {op: args.action, session_id: source.sessionTreeId, cwd: args.cwd,
+  const request = {op: args.action === 'reconcile-input' ? 'reconcile-native-input' : args.action, session_id: source.sessionTreeId, cwd: args.cwd,
     epoch: args.epoch, expectedRevision: args.expectedRevision, nativeTurnId: source.turnId,
     ...(source.model && source.hostVersion ? {currentHost: {threadId: source.threadId, turnId: source.turnId,
       model: source.model, hostVersion: source.hostVersion, sourceRef: `codex-mcp-call:${source.callId}`}} : {})};

@@ -96,6 +96,14 @@ disabling, uninstalling and retiring. For uncertain reuse, prefer reversible
 inactivity and weigh actual reuse, expiry and upkeep before authorized retirement.
 Completion grants no permission to remove user-selected tools or other components.
 
+Order closure by its dependencies: verify business outcomes and resources that
+can close first, retire the resolved task binding through its lifecycle, then
+observe and report that retirement. Keep protocol retirement separate from its
+own prerequisites; a condition requiring this same record to be absent would
+make retirement depend on itself. Retained evidence can remain after protocol
+state is retired. A failed retirement preserves that tail obligation without
+reopening unaffected, already verified business work.
+
 For installation, upgrade or removal itself, use
 [plugin lifecycle](../manage-plugin-lifecycle/SKILL.md). Continue safe authorized
 unfinished work or identify the actual decision, wait or execution boundary.

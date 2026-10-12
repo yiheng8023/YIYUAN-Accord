@@ -76,6 +76,13 @@ restore/verify known-good state within authority. Same-version caches may retain
 bad bytes; do not overwrite shared caches or invent force options. Verify the
 blocker's disposition and post-state. Containment is not task completion.
 
+Verify the persistent source used by the next startup as well as the source
+selected for this installation. Reconcile its repository, revision or local
+catalog with the intended package. A task-local catalog can install correct
+bytes while a persisted old revision later restores an older package. Update
+only the owned source registration within authority, then check default-source
+resolution and fresh loading without the temporary catalog override.
+
 For Accord plugin reloads and relevant host upgrades, distinguish the running host entry/binary,
 installed package, enabled components, current Hook trust, live consumers and
 guidance already injected into task history. Use supported refresh for the affected

@@ -802,6 +802,8 @@ class NativeStateMcpTests(unittest.TestCase):
         for change in ('new-input', 'same-epoch-receipt', 'failure-watermark', 'changing-transcript',
                        'final-proof-watermark', 'final-proof-receipt'):
             with self.subTest(change=change):
+                for receipt in self.state.glob('*.input.json'):
+                    receipt.unlink()
                 meta['turn_id'] = 'current-turn'
                 self.native_context()
                 status = self.helper({'op': 'status'}, session=meta['session_id'])
@@ -829,10 +831,13 @@ const inject=()=>{
     payload:{type:'message',role:'user',content:[{type:'input_text',text:'New human input'}]}})+'\n');
 };
 if(x.change.startsWith('final-proof-')){
-  const open=fs.openSync,close=fs.closeSync,read=fs.readSync;const fds=new Set();let reads=0;
+  const open=fs.openSync,close=fs.closeSync,read=fs.readSync,readFile=fs.readFileSync;
+  const fds=new Set();let finalPhase=false;
+  fs.readFileSync=(file,...args)=>{const value=readFile(file,...args);
+    if(typeof file==='string'&&path.resolve(file)===x.source)finalPhase=true;return value;};
   fs.openSync=(file,...args)=>{const fd=open(file,...args);if(file===x.transcript)fds.add(fd);return fd;};
   fs.closeSync=(fd)=>{fds.delete(fd);return close(fd);};
-  fs.readSync=(fd,...args)=>{const value=read(fd,...args);if(fds.has(fd)&&++reads===3)inject();return value;};
+  fs.readSync=(fd,...args)=>{const value=read(fd,...args);if(fds.has(fd)&&finalPhase)inject();return value;};
 }else if(x.change==='changing-transcript'){
   const read=fs.readSync;fs.readSync=(...args)=>{const value=read(...args);inject();return value;};
 }else{
@@ -899,6 +904,271 @@ process.stdout.write(JSON.stringify({result,changed}));
             self.assertEqual(context['lastResponseTokens'], 4500)
         self.assertEqual(receipt.read_bytes(), original_input)
         self.assertFalse(any(self.state.glob('*.state.json')))
+
+    def native_input_preview(self):
+        params = {**self.params, 'arguments': {'cwd': str(self.work), 'includeNativeInputs': True}}
+        result = self.inspect(params)
+        self.assertFalse(result['isError'], result)
+        return result['value']['checkpoint']['snapshot']
+
+    def append_native_message(self, role='user', text='Native steering', **fields):
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        record = {'type': 'response_item', 'payload': {'type': 'message', 'role': role,
+            'content': [{'type': 'input_text', 'text': text}], **fields}}
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps(record)+'\n')
+        return transcript
+
+    def test_native_input_reconciliation_accepts_benign_append_and_preserves_pause_basis(self):
+        self.native_context()
+        session = self.params['_meta']['x-codex-turn-metadata']['session_id']
+        first = self.helper({'op': 'status'}, session=session)
+        contract = dict(result='Original authorized contract', inputs=[], outputs=[{'path': 'report.txt'}],
+                        nextAction='Create and verify report', canContinue=False)
+        self.assertFalse(self.manage(action='bind', epoch=first['epoch'], expectedRevision=0, **contract)['isError'])
+        self.assertFalse(self.manage(action='pause', epoch=first['epoch'], expectedRevision=1,
+                                     reason='Preserve user pause')['isError'])
+        receipt = next(self.state.glob('*.input.json'))
+        original = json.loads(receipt.read_bytes())
+        # Repeating the original text is still a distinct human input.
+        self.append_native_message(text='Continue this work.', id='steering-item')
+        preview = self.native_input_preview()
+        evidence = preview['nativeInputEvidence']
+        self.assertTrue(preview['storedInputEpochReconciled'])
+        self.assertFalse(evidence['latestInputReconciled'])
+        self.assertNotIn('prompt', evidence['pendingInputs'][0])
+        before = self.files()
+        for action in ('bind', 'pause', 'retire'):
+            fields = contract if action == 'bind' else {'reason': 'Preserve pause'} if action == 'pause' else {}
+            denied = self.manage(action=action, epoch=first['epoch'], expectedRevision=2, **fields)
+            self.assertEqual(denied['value']['reason'], 'native-input-reconciliation-required')
+            self.assertEqual(self.files(), before)
+        self.append_native_message(role='assistant', text='Benign preview follow-up')
+        with next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl')).open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'type': 'response_item', 'payload': {
+                'type': 'custom_tool_call_output', 'call_id': 'preview', 'output': 'Benign tool result'}})+'\n')
+        reconciled = self.manage(action='reconcile-input', epoch=first['epoch'], expectedRevision=2,
+                                  evidenceCursor=evidence['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        current = self.native_input_preview()
+        self.assertNotEqual(current['epoch'], first['epoch'])
+        self.assertEqual((current['revision'], current['mode']), (2, 'paused'))
+        self.assertFalse(current['storedInputEpochReconciled'])
+        self.assertTrue(current['nativeInputEvidence']['latestInputReconciled'])
+        saved = json.loads(receipt.read_bytes())
+        for key in ('hostObservation', 'nativeContextSource', 'failures'):
+            self.assertEqual(saved.get(key), original.get(key))
+        self.assertEqual(saved['nativeInputs'][:-1], original['nativeInputs'])
+        self.assertEqual(saved['nativeInputBasis'], original['nativeInputBasis'])
+        self.assertEqual(saved['nativeInputs'][-1]['nativeEvidence']['itemId'], 'steering-item')
+        self.assertFalse(self.manage(action='bind', epoch=current['epoch'], expectedRevision=2,
+            revisionReason='Reviewed the actual same-text steering', **contract)['isError'])
+        self.assertEqual(self.helper({'op': 'status'}, session=session)['mode'], 'paused')
+
+    def test_native_input_origin_host_context_and_mixed_retry_reuse_captured_prefix(self):
+        self.native_context()
+        session = self.params['_meta']['x-codex-turn-metadata']['session_id']
+        status = self.helper({'op': 'status'}, session=session)
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+        rows.insert(2, {'type': 'response_item', 'payload': {'type': 'message', 'role': 'developer',
+            'content': [{'type': 'input_text', 'text': 'Host timezone context'}]}})
+        transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+        self.append_native_message(text='Reconcile the changed conditions', id='steer-before-retry')
+        steering = self.native_input_preview()
+        reconciled = self.manage(action='reconcile-input', epoch=status['epoch'], expectedRevision=0,
+                                  evidenceCursor=steering['nativeInputEvidence']['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        status = self.helper({'op': 'status'}, session=session)
+        self.automatic_capacity_retry('automatic-turn')
+        self.automatic_capacity_retry('manual-turn')
+        rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+        rows[-2]['payload']['turn_attribution']['turn_trigger'] = 'capacity_retry_manual'
+        transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+        before = self.files()
+        preview = self.native_input_preview()
+        self.assertTrue(preview['nativeInputEvidence']['latestInputReconciled'])
+        self.assertEqual(self.files(), before)
+        result = self.manage(action='bind', epoch=status['epoch'], expectedRevision=0,
+            result='Keep the authorized contract', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Create report', canContinue=True)
+        self.assertFalse(result['isError'], result)
+
+    def test_native_input_reconciliation_cursor_rejects_new_input_control_and_changed_bytes(self):
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        for change in ('human', 'old-bytes', 'control'):
+            with self.subTest(change=change):
+                for receipt in self.state.glob('*.input.json'):
+                    receipt.unlink()
+                meta['turn_id'] = 'current-turn'
+                self.native_context()
+                self.append_native_message(id='first-steering')
+                preview = self.native_input_preview()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                if change == 'human':
+                    self.append_native_message(id='second-steering')
+                elif change == 'old-bytes':
+                    text = transcript.read_text(encoding='utf-8').replace('Native steering', 'Changed steering')
+                    transcript.write_text(text, encoding='utf-8')
+                else:
+                    with transcript.open('a', encoding='utf-8') as stream:
+                        stream.write(json.dumps({'type': 'event_msg', 'payload': {
+                            'type': 'thread_settings_applied', 'thread_id': meta['thread_id']}})+'\n')
+                before = self.files()
+                denied = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                                      evidenceCursor=preview['nativeInputEvidence']['cursor'])
+                self.assertEqual(denied['value']['reason'], 'native-input-evidence-changed')
+                self.assertEqual(self.files(), before)
+
+    def test_native_input_reconciliation_holds_recovery_and_pending_attachments(self):
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        for condition in ('needsNativeReplay', 'needsResumeReconciliation', 'interrupted', 'attachment'):
+            with self.subTest(condition=condition):
+                for receipt in self.state.glob('*.input.json'):
+                    receipt.unlink()
+                meta['turn_id'] = 'current-turn'
+                self.native_context()
+                transcript = self.append_native_message(id='steer')
+                if condition == 'attachment':
+                    rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                    rows[-1]['payload']['content'].append({'type': 'input_image', 'image_url': 'data:image/png;base64,fixture'})
+                    transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                else:
+                    receipt = next(self.state.glob('*.input.json'))
+                    value = json.loads(receipt.read_bytes()); value[condition] = True
+                    receipt.write_text(json.dumps(value), encoding='utf-8')
+                preview = self.native_input_preview()
+                before = self.files()
+                denied = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                                      evidenceCursor=preview['nativeInputEvidence']['cursor'])
+                self.assertEqual(denied['value']['reason'], 'native-input-content-unsupported'
+                                 if condition == 'attachment' else 'native-input-recovery-required')
+                self.assertEqual(self.files(), before)
+                if condition == 'attachment':
+                    self.assertFalse(preview['nativeInputEvidence']['latestNativeInputsComplete'])
+
+    def test_native_input_replay_uses_original_basis_without_new_turn_human_record(self):
+        self.native_context()
+        meta = self.params['_meta']['x-codex-turn-metadata']; session = meta['session_id']
+        receipt = next(self.state.glob('*.input.json'))
+        self.helper({'hook_event_name': 'SessionStart', 'source': 'resume'}, session=session, hook='SessionStart')
+        status = self.helper({'op': 'status'}, session=session)
+        # Emulate a pre-upgrade receipt: only real native input history survives.
+        value = json.loads(receipt.read_bytes()); value.pop('nativeInputBasis')
+        receipt.write_text(json.dumps(value), encoding='utf-8')
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        meta.update(turn_id='resume-turn', model='resumed-model')
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'timestamp': datetime.now(timezone.utc).isoformat(), 'type': 'turn_context',
+                'payload': {'turn_id': meta['turn_id'], 'cwd': str(self.work), 'model': meta['model']}})+'\n')
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Continue this work.',
+            'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript),
+            'recovery_epoch': status['epoch']}, session=session, hook='UserPromptSubmit')
+        before = self.files()
+        preview = self.native_input_preview()
+        self.assertFalse(preview['needsResumeReconciliation'])
+        self.assertTrue(preview['nativeInputEvidence']['latestInputReconciled'], preview)
+        self.assertEqual(self.files(), before)
+        bound = self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0,
+            result='Retain the actual recovered contract', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Create report', canContinue=True)
+        self.assertFalse(bound['isError'], bound)
+        self.append_native_message(text='Actual same-turn post-resume steering', id='resume-steer')
+        pending = self.native_input_preview()
+        self.assertFalse(pending['nativeInputEvidence']['latestInputReconciled'])
+        reconciled = self.manage(action='reconcile-input', epoch=pending['epoch'], expectedRevision=1,
+            evidenceCursor=pending['nativeInputEvidence']['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        saved = json.loads(receipt.read_bytes())
+        self.assertEqual([item['source'] for item in saved['nativeInputs']],
+                         ['native-input-event', 'retained-native-replay', 'reconciled-native-input'])
+
+    def test_native_input_captured_attachment_is_text_only_and_cannot_authorize_mutation(self):
+        self.native_context()
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+        rows[2]['payload']['content'].extend([
+            {'type': 'input_text', 'text': '<image name=[Image #1] path="C:\\fixture\\image.png">'},
+            {'type': 'input_image', 'image_url': 'data:image/png;base64,fixture'},
+            {'type': 'input_text', 'text': '</image>'}])
+        transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+        preview = self.native_input_preview()
+        evidence = preview['nativeInputEvidence']
+        self.assertEqual(evidence['state'], 'observed', evidence)
+        self.assertTrue(evidence['latestInputReconciled'])
+        self.assertFalse(evidence['latestNativeInputsComplete'])
+        before = self.files()
+        rejected = self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0,
+            result='Text-only anchor does not verify image', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Hold attachment-dependent mutation', canContinue=False)
+        self.assertEqual(rejected['value']['reason'], 'native-input-content-coverage-unknown')
+        self.assertEqual(self.files(), before)
+
+    def test_native_input_reconciliation_cannot_attest_unproved_new_execution_turn(self):
+        self.native_context()
+        self.append_native_message(id='steer-on-original-turn')
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        meta['turn_id'] = 'unproved-new-turn'
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'timestamp': datetime.now(timezone.utc).isoformat(), 'type': 'event_msg',
+                'payload': {'type': 'task_started', 'turn_id': meta['turn_id'], 'root_turn_id': meta['turn_id'],
+                    'turn_attribution': {'turn_id': meta['turn_id'], 'root_turn_id': meta['turn_id'],
+                        'turn_trigger': 'composer', 'parent_turn_id': None, 'initiating_agent_path': None}}})+'\n')
+            stream.write(json.dumps({'timestamp': datetime.now(timezone.utc).isoformat(), 'type': 'turn_context',
+                'payload': {'turn_id': meta['turn_id'], 'cwd': str(self.work), 'model': meta['model']}})+'\n')
+        preview = self.native_input_preview()
+        before = self.files()
+        rejected = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                              evidenceCursor=preview['nativeInputEvidence']['cursor'])
+        self.assertEqual(rejected['value']['reason'], 'native-call-turn-conflict')
+        self.assertEqual(self.files(), before)
+
+    def test_native_input_reconciliation_final_proof_rechecks_watermark_and_late_human(self):
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        for change in ('watermark', 'human'):
+            with self.subTest(change=change):
+                for file in self.state.glob('*.input*.json'):
+                    file.unlink()
+                meta['turn_id'] = 'current-turn'
+                self.native_context()
+                self.append_native_message(id='pending-steer')
+                preview = self.native_input_preview()
+                receipt = next(self.state.glob('*.input.json')); original = receipt.read_bytes()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                params = {**self.params, 'name': 'manage_task_state', 'arguments': {
+                    'cwd': str(self.work), 'action': 'reconcile-input', 'epoch': preview['epoch'],
+                    'expectedRevision': 0, 'evidenceCursor': preview['nativeInputEvidence']['cursor']}}
+                script = r"""
+const fs=require('node:fs');const x=JSON.parse(fs.readFileSync(0,'utf8'));
+const open=fs.openSync,close=fs.closeSync,read=fs.readSync;const fds=new Set();let reads=0,changed=false;
+fs.openSync=(file,...args)=>{const fd=open(file,...args);if(file===x.transcript)fds.add(fd);return fd;};
+fs.closeSync=(fd)=>{fds.delete(fd);return close(fd);};
+fs.readSync=(fd,...args)=>{
+  const value=read(fd,...args);
+  if(fds.has(fd)&&++reads===3){changed=true;
+    if(x.change==='watermark')fs.writeFileSync(x.receipt.replace('.input.json','.input-failure.json'),
+      JSON.stringify({schema:1,generation:'late-input-failure'}));
+    else fs.appendFileSync(x.transcript,JSON.stringify({type:'response_item',payload:{type:'message',
+      role:'user',content:[{type:'input_text',text:'Late human input'}]}})+'\n');
+  }
+  return value;
+};
+const response=require(process.argv[1]).manageTaskState(x.params);
+process.stdout.write(JSON.stringify({response,changed}));
+"""
+                result = subprocess.run([self.node, '-e', script, str(BRIDGE)],
+                    input=json.dumps(dict(params=params, receipt=str(receipt), transcript=str(transcript), change=change)),
+                    capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                value = json.loads(result.stdout)
+                self.assertTrue(value['changed'])
+                self.assertTrue(value['response']['isError'], value)
+                self.assertEqual(receipt.read_bytes(), original)
+                self.assertFalse(any(self.state.glob('*.state.json')))
+                if change == 'watermark':
+                    marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+                    self.assertEqual(json.loads(marker.read_bytes())['generation'], 'late-input-failure')
 
     def test_manage_forwards_only_explicit_input_revision_evidence(self):
         source = self.work / 'source.txt'
@@ -1368,7 +1638,7 @@ process.stdout.write(JSON.stringify({result,changed}));
         self.assertFalse(rows[2]['result']['tools'][2]['annotations']['readOnlyHint'])
         self.assertTrue(rows[2]['result']['tools'][2]['annotations']['destructiveHint'])
         self.assertEqual(rows[2]['result']['tools'][2]['inputSchema']['properties']['action']['enum'],
-                         ['bind', 'pause', 'retire'])
+                         ['bind', 'pause', 'retire', 'reconcile-input'])
         manage_tool = rows[2]['result']['tools'][2]
         self.assertIn('For bind, explicitly provide result, inputs, outputs, nextAction and canContinue',
                       manage_tool['description'])

@@ -3065,3 +3065,19 @@ Desktop wait_threads对该入口返回thread/items/list尚不支持，Root转读
 Root metadata换行修正：默认CRLF写manifest/dev/docs被提交前diff检查发现；保五原件后按仓库LF修正并改distinct版本。首次过宽的全包LF断言正确停住，用户批准原meta-guidance的CRLF例外保持精确字节；无原件改写。161615/404384的本地安装/helper99保原边界，runtime七文件与239回归未改、业务不重跑。规范新包及后态按实测补回。
 
 规范163148/2e21后态：10.563秒原生install、25成员/5路径及自然0/Job0/读者停止；用户配置和161615恢复25成员保持。fresh现装helper按新的actual nativecall刷新当前包谓词rev99→100，原epoch/输入SHA2ffe…和全部未完职责不变、四谓词匹配。误写digest7005…在preflight先于spawn/install拒绝，原失败保留后直接从规范身份JSON读取正确实参，不据此重跑业务或改代码。
+
+
+## 消费方连续性反例与持久来源一致性（2026-10-12）
+
+
+当前优先未完：用户提供home-edge「主线程5」真实反例后，已核automatic/manual容量重试、宿主developer插入、同turn插话未入回执三个输入/连续性缺口；隔离红例确认同turn旧bind仍可成功，必须先补真实输入对账再关联turn，不能只扩retry白名单。消费方已退役业务不重放，不新增formalcase或发布门槛；关闭指导另修协议退役自指。Root当前由用户切为Astra，继续原R2/R3。原570精确CI38225992057已11/11成功，只覆盖先前automatic修复。
+
+重连后的实际采用漂移已核并处置：持久market ref仍2b3852c→旧221152，与新local-catalog安装不同源；具体重建writer未知。现仅将同一市场ref的40字节同步570，经named native upgrade、仓库外fresh默认inventory及25Git blob/cache匹配确认163148恢复；其余配置字节保持。当前working source还在补上述连续性与生命周期指导，旧worker刷新不由该结果推断。证据集中于私有 `accord-consumer-closeout-counterexample-20261012-01`。
+
+真实原行14226/14227/14228、14457、15848/15851/15900/15902/15903及16200后关闭字段变更分别支持C2/C3/C1/C4，完整已退休input来源未知不补造。Root恢复本轮保留输入时首次漏hook_event_name导致transport拒绝及新水印，fresh token后正确重放仅实际当前输入，原水印保留并重绑rev101；不是业务重放。此前local-cache安装原验证有效但不覆盖持久注册。marketplace add因同名不同source拒绝后，精确锁定现config、核完整原SHA，仅原位替换该ref，随后native upgrade成功；默认来源复核闭合，旧cache副本与拒绝原件保留。
+
+## 原生输入对账有限修复与未完范围（2026-10-12）
+
+在既有helper/MCP中增加只读nativeInputEvidence及显式reconcile-input；按原Hook绑定源保有序输入、原basis、暂停、恢复及失败水印，再以新epoch重绑完整合同。旧合同同turn也检查未捕获记录。完整automatic/manual retry链和宿主developer插入已复用原来源验证，退役自指另修指导。首版独审实际证出附件unknown被忽略、派生turn绕过链两缺陷，修正版保原红例并拒绝；247相关回归通过（214.567秒），7源文件测试前后不变。初轮夹具重写源/枚举与描述断言失败及修正保于私有原件，不伪称首次全绿。
+
+Root首次只读预览因图片包装拼接找不到anchor；16MiB内定位确认原首text精确等Hook哈希。严格包装定位后，原prefix匹配，但ambient页面项与用户截图提醒两条native user-role记录未入旧回执，附件完整性未知。两次state/input均不变，未重放业务、补造Hook或以XML文字白名单授予人类权限；本线程恢复未因此闭合。来源超16MiB、附件、普通自主判断/必要恢复、同业务完整组合仍按原R2/R3未完职责推进。新receipt类型需要兼容执行器，回滚包不等于回滚输入。包安装同时核持久默认source；本机采用与源码回归分别记账。证据：私有accord-consumer-closeout-counterexample-20261012-01/implementation-review。
