@@ -1687,6 +1687,34 @@
           "currentGuidanceRecovery": "Root fully read the enabled installed coordination Skill in turn 01a12cd6-62ab-7b11-9dbb-bf091d4fc6e6; this supplies current duties, not retroactive Hook delivery or host-process refresh evidence.",
           "qualificationPassed": false
         },
+        "offlineCandidateDelivery": {
+          "state": "delivered-and-independently-verified",
+          "subjectCommit": "11f2702df12364f554b5512d729f7c6b27bd983e",
+          "packageVersion": "3.3.0-dev.1+codex.20261012041313",
+          "packageSha256": "c0328e4205d9ea63a3f154d8c763c20a18940cffd8af4647a3e1cab3ee4bd6d0",
+          "sourceMembers": 26,
+          "sourceBytes": 515512,
+          "archiveBytes": 148815,
+          "archiveSha256": "8c733c8911c5135a85ebfa7f08ade20cf5e252f3f7f387e17cb009b9f0d1e453",
+          "manifestSha256": "9818167eb9717a0ffb4b90ae34b92878918b7310db2e8f30a1bf4d8e3bfb9fb3",
+          "actor": "ordinary Codex Desktop Root, current native model gpt-6.1-sol",
+          "decision": "Model change invalidated old context evidence; the current signal had expired. Choose a short deterministic operation in the healthy existing source, with an independent read-only observer; no new model worker, controller, context transfer, installation or case. A later repository-residue failure requires artifact-retention recovery, not business replay.",
+          "verification": "Prospective baseline and observer; exact 26 ZIP/Git entries and manifest keys/order, canonical 25-member package digest, source/config hashes and mtimes, and exact two outputs passed independent QA.",
+          "resources": "Packaging command returned exit0 in2.388s; no background business worker was started. Existing artifacts were moved unchanged to a distinct owned delivery directory and the empty project .tmp removed. No Job0 or host-wide closure claim; Root retains unfinished project duties.",
+          "privateEvidence": "accord-offline-bundle-20261012-01/inputs.json, build.py and result.json",
+          "delivery": "C:/Users/15521/.codex/backups/accord-offline-bundle-20261012-01/delivery",
+          "retentionRecovery": {
+            "originalFailure": "Repository verify exit1: known task residue remains ['.tmp']; correct content did not establish complete repository post-state.",
+            "preserved": "result.before-retention-recovery.json and retention-recovery-basis.json",
+            "action": "Move the two original artifacts without rebuilding, verify identical hashes, remove only checked empty owned directories, then repeat affected verification.",
+            "independentReview": "Exact two destination files and hashes, old .tmp absent, original failure/report retained, source/config hashes and mtimes unchanged.",
+            "poststate": "verify and verify-development valid with no errors"
+          },
+          "businessEvidenceComplete": true,
+          "qualificationPassed": false,
+          "releaseReady": false,
+          "limit": "A real candidate-delivery phase, bounded healthy judgment and necessary retention recovery, not full autonomous timing, default-context, cross-carrier takeover, every fault window, all-entry acceptance, net value or complete A05/A08. Source outcomes are closed and are not to be replayed for qualification."
+        },
         "checkpointReconciliation": {"beforeRevision": 78, "afterRevision": 79, "beforeConditions": 26, "afterConditions": 8, "originalRetained": true, "inputAndOutputPredicatesPreserved": true},
         "rootUsage": {
           "turnId": "01a12c57-9c50-7200-89bc-df0c48f53773",

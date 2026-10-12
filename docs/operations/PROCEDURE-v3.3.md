@@ -3030,3 +3030,13 @@ Desktop wait_threads对该入口返回thread/items/list尚不支持，Root转读
 同次核对发现rev78活动未决条目同时包含旧版本待安装、已经闭合的timeline待恢复和失效的旧clone/fence。完整14,724字节原件按SHA f5fd91f9582639a7eef2ac69a6cc6f86211f933bb0f77c2c2db23042d5686036保留；rev79保持输入及全部输出谓词，把26项叠加历史收敛到8项当前责任、5,808字节。原失败、成本未知、未验范围及旧水印不删改；历史引用不再充当当前执行指令。
 
 另从本轮19:01:41.639Z开始至20:29:00.219Z的原生计数核Root负担：112个token事件包含95个唯一累计边界，各计数无下降，按每个累计边界首次出现的last用量求和，与起止累计差值一致。独审实读原行确认算术，并指出压缩后同累计边界的重复事件可有不同last，不能任取或以后一次覆盖首次跃迁。增量输入31,612,123（其中缓存31,101,056，非缓存511,067），输出105,928，总31,718,051；reasoning属于输出子集，不再相加。原件保留精确byte定位和时间；这只是有界Root用量，子演员另计、金额与全段净价值仍未知，不据此断言全部由Accord导致。该诊断纠正只统计业务演员的视角，不设置新预算门槛、重开旧业务或追认A08。上述资料位于私有`accord-mcp-env-fix-20261012-01/continuity-reconciliation`。
+
+### 当前开发版离线交付与健康继续（2026-10-12）
+
+用户要求回R2/R3实际工作后，Root停止已闭文档核对。路线核对确认旧库存、timeline及入口诊断均已结束；选择当前3.3候选交付准备作为同一工程的实际下一成果，未重新执行旧业务或注册case。原拟新CLI执行者在工序比较后被撤去：封装是简单确定性操作，当前普通Desktop Root足够，额外模型/控制器没有必要。Root实际模型已6.1 Sol，旧Astra上下文证据失效，当前采样过期；按已知权限采用短小工作段和先保全、后核验，未强制迁移或编造故障。
+
+在写产物前绑定Git11f2702d、041313/c0328、26原件515512字节、两输出及用户配置基线，独立只读观察者先确认ready。Root执行保留的build.py，2.388秒/exit0生成ZIP148815字节（SHA8c733c8911c5135a85ebfa7f08ade20cf5e252f3f7f387e17cb009b9f0d1e453）和manifest（SHA9818167eb9717a0ffb4b90ae34b92878918b7310db2e8f30a1bf4d8e3bfb9fb3）。独审逐项比Git/基线/ZIP，核26个有序regular0644条目、固定1980时间、无目录/重复/逃逸/symlink、manifest精确8键/每文件3键、ZIP与25成员规范摘要、原26文件和配置hash/mtime及仅两输出，均通过。没有安装、发布或背景业务执行者；普通宿主命令返回不外推Job0或全部主机资源关闭。Root仍承担未完项目。
+
+初次输出保留于项目`.tmp/accord-offline-bundle-20261012-01`，暂时的26项live输入保护在独立内容核验后释放。随后全仓verify实际exit1，原因known task residue remains ['.tmp']；初report的内容正确不能代仓库收尾。Root以result.before-retention-recovery.json及retention-recovery-basis.json保留原报告、错误和迁移依据，重开受影响后态；确认只有两已核产物、观察者无写权/待写后，验证源与目标绝对路径，原样迁移到私有`accord-offline-bundle-20261012-01/delivery`，仅移除已核空的原子目录和.tmp父目录。没有重建或改写两产物，独审确认前后SHA同、原26文件及配置hash/mtime同、原错误/报告保留；仓库verify和verify-development恢复valid/errors空。恢复前后的记录分别保留，当前result补记实际纠偏。
+
+最终两产物和源基线/执行源码/结果均在该独立私有目录下保留，项目不再有此残留。该真实交付—发现后态失败—原样迁移—复核的闭环，只证明有限健康判断和本次必要资产恢复；完整默认条件、普通自主择时、跨载体接管、全部故障窗口、全入口及A05/A08仍待实际证据，总Root/委托费用未闭合。businessEvidenceComplete=true而qualificationPassed/releaseReady=false；不新增case、发布门槛或重建产物求绿。
