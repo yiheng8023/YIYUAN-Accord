@@ -244,8 +244,20 @@ function observeStoredContext(input, request, now = Date.now()) {
   }
   if (nativeContextLoadError) throw nativeContextLoadError;
   if (typeof nativeContextReader !== 'function') fail('native-context-reader-unavailable');
+  if (request.currentHost && (input.inputSource === 'retained-native-replay' || input.nativeInputReconciliation ||
+      request.currentHost.turnId !== input.nativeContextSource.turnId)) {
+    const evidence = inputEvidence(input, request), proof = turnProofBasis(input, request, evidence);
+    if (!proof || evidence.state !== 'observed' || !evidence.latestInputReconciled || !evidence.latestNativeInputsComplete) {
+      const execution = retryBinding(input, request);
+      return {state: 'unknown', reason: execution && request.currentHost.turnId !== execution.turnId
+          ? 'current-host-turn-mismatch' : 'current-native-input-or-execution-basis-unavailable',
+        scope: 'native-last-response-context-basis', sourceReleaseAllowed: false};
+    }
+    return nativeContextReader(proof.binding, {now, maxAgeMs: request.maxAgeMs ?? 30000,
+      retryInputSha256: proof.promptHash, capturedInputHashes: proof.captured,
+      acceptedExecution: proof.acceptedExecution, currentHost: request.currentHost});
+  }
   return nativeContextReader(input.nativeContextSource, {now, maxAgeMs: request.maxAgeMs ?? 30000,
-    ...(retryBinding(input, request) ? {retryInputSha256: input.promptSha256} : {}),
     ...(Object.hasOwn(request, 'currentHost') ? {currentHost: request.currentHost} : {})});
 }
 
@@ -460,24 +472,33 @@ function retryBinding(input, request) {
   const source = input?.nativeContextSource;
   const observed = input?.hostObservation?.turnId ?? input?.turnId;
   if (needsInput(input) || input?.interrupted || !source || source.turnId !== observed ||
-      source.turnId !== input.turnId || source.sessionId !== request.session_id ||
+      (!input.nativeInputReconciliation && source.turnId !== input.turnId) ||
+      source.sessionId !== request.session_id ||
       !samePath(path.resolve(source.cwd), path.resolve(request.cwd)) ||
       typeof nativeTurnAssociation !== 'function' || !request.currentHost) return null;
-  return source;
+  const turnId = input.nativeInputReconciliation?.turnId ?? source.turnId;
+  const model = input.nativeInputReconciliation?.model ?? (turnId === source.turnId ? source.model : null);
+  if (!text(turnId) || turnId.length > 200 || !text(model) || model.length > 200) return null;
+  return {...source, turnId, model};
+}
+function turnProofBasis(input, request, evidence, extra = []) {
+  const execution = retryBinding(input, request), basis = inputBasis(input);
+  if (!execution || !basis || evidence.state !== 'observed') return null;
+  const entries = retainedInputs(input), start = entries.findIndex(item => item.epoch === basis.anchorEpoch);
+  if (start < 0) return null;
+  return {binding: {...basis.source, model: basis.source.model || evidence.originModel},
+    promptHash: basis.promptSha256,
+    captured: entries.slice(start).filter(item => item.source !== 'retained-native-replay')
+      .map(item => item.promptSha256).concat(extra),
+    acceptedExecution: {turnId: execution.turnId, model: execution.model}};
 }
 function associateCurrentTurn(input, request) {
-  const source = retryBinding(input, request), basis = inputBasis(input);
-  if (!source) return null;
   const evidence = inputEvidence(input, request);
-  if (!basis || evidence.state !== 'observed' || !evidence.latestInputReconciled) return null;
-  const entries = retainedInputs(input), start = entries.findIndex(item => item.epoch === basis.anchorEpoch);
-  const association = nativeTurnAssociation({...basis.source,
-    model: basis.source.model || parseModelFromEvidence(evidence, source)}, request.currentHost, basis.promptSha256,
-    entries.slice(start).filter(item => item.source !== 'retained-native-replay').map(item => item.promptSha256));
+  const proof = turnProofBasis(input, request, evidence);
+  if (!proof || !evidence.latestInputReconciled) return null;
+  const association = nativeTurnAssociation(proof.binding, request.currentHost, proof.promptHash,
+    proof.captured, proof.acceptedExecution);
   return association.state === 'observed' ? association : null;
-}
-function parseModelFromEvidence(evidence, source) {
-  return evidence.originModel || source.model;
 }
 function requireNativeTurn(request, input, expectedCursor = null) {
   if (!request || !Object.hasOwn(request, 'nativeTurnId')) return;
@@ -941,12 +962,10 @@ function operate(request) {
       const observedTurn = currentInput.nativeInputReconciliation?.turnId ??
         currentInput.hostObservation?.turnId ?? currentInput.turnId;
       if (request.nativeTurnId !== observedTurn) {
-        const basis = inputBasis(currentInput), entries = retainedInputs(currentInput);
-        const start = entries.findIndex(item => item.epoch === basis.anchorEpoch);
-        const captured = entries.slice(start).filter(item => item.source !== 'retained-native-replay')
-          .map(item => item.promptSha256).concat(evidence.pendingInputs.map(item => item.promptSha256));
-        const association = nativeTurnAssociation({...basis.source, model: basis.source.model || evidence.originModel},
-          request.currentHost, basis.promptSha256, captured);
+        const proof = turnProofBasis(currentInput, request, evidence, evidence.pendingInputs.map(item => item.promptSha256));
+        if (!proof) fail('native-call-turn-conflict');
+        const association = nativeTurnAssociation(proof.binding, request.currentHost, proof.promptHash,
+          proof.captured, proof.acceptedExecution);
         if (association.state !== 'observed') fail('native-call-turn-conflict');
       }
       return inputLocked(where, () => {
@@ -959,7 +978,7 @@ function operate(request) {
         const receipt = {...raw, epoch,
           ...(last ? {inputSource: 'reconciled-native-input', promptSha256: last.promptSha256, turnId: last.turnId} : {}),
           nativeInputBasis: inputBasis(raw),
-          nativeInputReconciliation: {turnId: checked.currentTurnId, sourceRef: checked.sourceRef,
+          nativeInputReconciliation: {turnId: checked.currentTurnId, model: checked.currentModel, sourceRef: checked.sourceRef,
             cursor: checked.cursor, previousEpoch: raw.epoch,
             recordCoverage: checked.records.map(({recordOffset, recordSha256, sourceRef, parts}) =>
               ({recordOffset, recordSha256, sourceRef, parts}))},
@@ -1441,7 +1460,7 @@ const HELP = {
   input: 'One JSON object on piped stdin, not an interactive terminal. In PowerShell, pipe $request through ConvertTo-Json -Depth 8 -Compress to node <helper-path>. Use --hook only for native events; other calls need the current native session/cwd receipt.',
   storage: 'YIYUAN_ACCORD_TASK_STATE_DIR selects an explicit scoped directory. Otherwise use ~/.yiyuan-accord/task-state. Exact-session legacy temporary records remain at their original location; competing locations fail without merge. status.storage reports the selected path and kind. No automatic migration, cross-session adoption, scheduler or power-loss guarantee. State file contents are flushed before atomic replacement; filesystem and directory-entry durability need separate validation.',
   operations: ['status', 'read-native-input', 'observe-context', 'assess-context', 'reconcile-native-input', 'bind', 'pause', 'retire', 'recover-lock'],
-  nativeMutationIdentity: 'Native bind/pause/retire callers supply nativeTurnId and actual currentHost metadata. Turn identity remains strict unless a complete automatic/manual capacity retry is proved. Bound native input evidence is checked even within one turn; uncaptured human inputs hold old contracts. Receipt, failure watermarks, source prefix and turn proof are rechecked before publication/deletion. Optional unbound legacy sources retain caller responsibility. This is correlation, not authentication or permission.',
+  nativeMutationIdentity: 'Native bind/pause/retire callers supply nativeTurnId and actual currentHost metadata. Turn identity remains strict unless a complete automatic/manual capacity retry is proved from the saved accepted execution turn. Original input/PNG/prefix evidence still starts at its retained input basis; a legal recovery or proved reconciliation does not invent a new original input. Execution origin comes only from saved native host/source or proved reconciliation, never the caller turn/latest context; missing model/context holds. Bound native input evidence is checked even within one turn; uncaptured human inputs hold old contracts. Receipt, failure watermarks, source prefix and turn proof are rechecked before publication/deletion. Optional unbound legacy sources retain caller responsibility. This is correlation, not authentication or permission.',
   nativeInputReconciliation: {
     preview: {op: 'status', session_id: 'native-session-id', cwd: 'absolute-workspace', nativeInputEvidence: true,
       currentHost: {threadId: 'native-thread-id', turnId: 'native-turn-id', model: 'actual-model',

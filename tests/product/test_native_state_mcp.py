@@ -964,6 +964,9 @@ process.stdout.write(JSON.stringify({result,changed}));
         self.assertEqual(saved['nativeInputs'][-1]['nativeEvidence']['itemId'], 'steering-item')
         self.assertFalse(self.manage(action='bind', epoch=current['epoch'], expectedRevision=2,
             revisionReason='Reviewed the actual same-text steering', **contract)['isError'])
+        self.automatic_capacity_retry('capacity-after-same-turn-reconcile')
+        self.assertFalse(self.manage(action='bind', epoch=current['epoch'], expectedRevision=3,
+            **contract)['isError'])
         self.assertEqual(self.helper({'op': 'status'}, session=session)['mode'], 'paused')
 
     def test_native_input_origin_host_context_and_mixed_retry_reuse_captured_prefix(self):
@@ -1070,19 +1073,55 @@ process.stdout.write(JSON.stringify({result,changed}));
         self.assertFalse(preview['needsResumeReconciliation'])
         self.assertTrue(preview['nativeInputEvidence']['latestInputReconciled'], preview)
         self.assertEqual(self.files(), before)
-        bound = self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0,
-            result='Retain the actual recovered contract', inputs=[], outputs=[{'path': 'report.txt'}],
-            nextAction='Create report', canContinue=True)
+        contract = dict(result='Retain the actual recovered contract', inputs=[], outputs=[{'path': 'report.txt'}],
+                        nextAction='Create report', canContinue=True)
+        bound = self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0, **contract)
         self.assertFalse(bound['isError'], bound)
+        self.automatic_capacity_retry('capacity-after-resume')
+        self.append_context_usage(4500)
+        bound = self.manage(action='bind', epoch=preview['epoch'], expectedRevision=1, **contract)
+        self.assertFalse(bound['isError'], bound)
+        params = {**self.params, 'arguments': {'cwd': str(self.work), 'includeContext': True}}
+        observed = self.inspect(params)['value']
+        self.assertEqual(observed['context']['state'], 'observed', observed)
+        self.assertEqual(observed['context']['conditions']['turnId'], 'capacity-after-resume')
+        params['arguments']['contextAssessment'] = self.context_assessment(observed)
+        self.assertEqual(self.inspect(params)['value']['contextAssessment']['decision'], 'continue-bounded')
         self.append_native_message(text='Actual same-turn post-resume steering', id='resume-steer')
         pending = self.native_input_preview()
         self.assertFalse(pending['nativeInputEvidence']['latestInputReconciled'])
-        reconciled = self.manage(action='reconcile-input', epoch=pending['epoch'], expectedRevision=1,
+        reconciled = self.manage(action='reconcile-input', epoch=pending['epoch'], expectedRevision=2,
             evidenceCursor=pending['nativeInputEvidence']['cursor'])
         self.assertFalse(reconciled['isError'], reconciled)
         saved = json.loads(receipt.read_bytes())
         self.assertEqual([item['source'] for item in saved['nativeInputs']],
                          ['native-input-event', 'retained-native-replay', 'reconciled-native-input'])
+        self.automatic_capacity_retry('capacity-after-resumed-reconcile')
+        self.append_context_usage(4600)
+        bound = self.manage(action='bind', epoch=reconciled['value']['observation']['epoch'],
+                            expectedRevision=2, **contract)
+        self.assertFalse(bound['isError'], bound)
+        params = {**self.params, 'arguments': {'cwd': str(self.work), 'includeContext': True}}
+        observed = self.inspect(params)['value']
+        self.assertEqual(observed['context']['state'], 'observed', observed)
+        self.assertEqual(observed['context']['conditions']['turnId'], 'capacity-after-resumed-reconcile')
+        params['arguments']['contextAssessment'] = self.context_assessment(observed)
+        self.assertEqual(self.inspect(params)['value']['contextAssessment']['decision'], 'continue-bounded')
+        meta['turn_id'] = 'unproved-composer-after-recovery'
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'timestamp': datetime.now(timezone.utc).isoformat(), 'type': 'event_msg',
+                'payload': {'type': 'task_started', 'turn_id': meta['turn_id'], 'root_turn_id': meta['turn_id'],
+                    'turn_attribution': {'turn_id': meta['turn_id'], 'root_turn_id': meta['turn_id'],
+                        'turn_trigger': 'composer', 'parent_turn_id': None, 'initiating_agent_path': None}}})+'\n')
+            stream.write(json.dumps({'timestamp': datetime.now(timezone.utc).isoformat(), 'type': 'turn_context',
+                'payload': {'turn_id': meta['turn_id'], 'cwd': str(self.work), 'model': meta['model']}})+'\n')
+        self.append_native_message(text='Native input cannot prove this execution transition', id='unproved-steer')
+        pending = self.native_input_preview(); before = self.files()
+        for action in ('bind', 'reconcile-input'):
+            fields = contract if action == 'bind' else {'evidenceCursor': pending['nativeInputEvidence']['cursor']}
+            rejected = self.manage(action=action, epoch=pending['epoch'], expectedRevision=3, **fields)
+            self.assertEqual(rejected['value']['reason'], 'native-call-turn-conflict', rejected)
+            self.assertEqual(self.files(), before)
 
     def test_native_input_captured_attachment_is_text_only_and_cannot_authorize_mutation(self):
         self.native_context()
