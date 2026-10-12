@@ -612,6 +612,294 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertEqual(turn_conflict['value']['reason'], 'native-call-turn-conflict')
         self.assertEqual(self.files(), before)
 
+    def automatic_capacity_retry(self, turn='retry-turn'):
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        original = meta['turn_id']
+        records = [
+            {'type': 'event_msg', 'payload': {'type': 'task_complete',
+                'turn_id': original, 'root_turn_id': original, 'error': {
+                    'codex_error_info': 'server_overloaded',
+                    'message': 'Selected model is at capacity. Please try a different model.'}}},
+            {'type': 'event_msg', 'payload': {'type': 'task_started',
+                'turn_id': turn, 'root_turn_id': turn, 'turn_attribution': {
+                    'turn_id': turn, 'root_turn_id': turn,
+                    'turn_trigger': 'capacity_retry_automatic',
+                    'parent_turn_id': None, 'initiating_agent_path': None}}},
+            {'type': 'turn_context', 'payload': {'turn_id': turn,
+                'model': meta['model'], 'cwd': str(self.work)}},
+        ]
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        with transcript.open('a', encoding='utf-8') as stream:
+            for record in records:
+                stream.write(json.dumps({'timestamp': datetime.now(timezone.utc).isoformat(),
+                                         **record}) + '\n')
+        meta['turn_id'] = turn
+        return records
+
+    def test_manage_capacity_retry_uses_bound_native_proof_without_replacing_input(self):
+        self.native_context()
+        session = self.params['_meta']['x-codex-turn-metadata']['session_id']
+        status = self.helper({'op': 'status'}, session=session)
+        contract = dict(result='Retain the bounded contract', inputs=[],
+            outputs=[{'path': 'report.txt'}], nextAction='Create and verify report.txt',
+            canContinue=True)
+        self.assertFalse(self.manage(action='bind', epoch=status['epoch'], expectedRevision=0,
+                                     **contract)['isError'])
+        receipt = next(self.state.glob('*.input.json'))
+        original_input = receipt.read_bytes()
+        self.automatic_capacity_retry()
+        self.append_context_usage(4500)
+        before = self.files()
+        self.assertFalse(self.inspect()['isError'])
+        self.assertEqual(self.files(), before)
+        response = self.manage(action='bind', epoch=status['epoch'], expectedRevision=1,
+                               **contract)
+        self.assertFalse(response['isError'], response)
+        current = self.helper({'op': 'status'}, session=session)
+        self.assertEqual((current['epoch'], current['revision'], current['mode']),
+                         (status['epoch'], 2, 'active'))
+        self.assertEqual(receipt.read_bytes(), original_input)
+        before = self.files()
+        self.params['arguments']['includeContext'] = True
+        context = self.inspect()['value']['context']
+        self.assertEqual(context['state'], 'observed', context)
+        self.assertEqual(context['conditions']['turnId'], 'retry-turn')
+        self.assertEqual(context['lastResponseTokens'], 4500)
+        self.assertEqual(context['epoch'], status['epoch'])
+        self.assertFalse(context['sourceReleaseAllowed'])
+        self.assertEqual(self.files(), before)
+
+    def test_capacity_retry_rejects_missing_changed_foreign_and_new_input_proof(self):
+        def edit(rows, index, key, value):
+            rows[index]['payload'][key] = value
+
+        def attribution(rows, key, value):
+            rows[-2]['payload']['turn_attribution'][key] = value
+
+        cases = [
+            ('missing-origin-context', lambda r, m: r.pop(1)),
+            ('missing-origin-input', lambda r, m: r.pop(2)),
+            ('changed-origin-input', lambda r, m: r[2]['payload']['content'][0].update(text='Changed input.')),
+            ('foreign-session', lambda r, m: edit(r, 0, 'id', 'foreign-thread')),
+            ('subagent-source', lambda r, m: edit(r, 0, 'source', {'subagent': 'actor'})),
+            ('unproven-root-source', lambda r, m: r[0]['payload'].pop('source')),
+            ('foreign-origin-cwd', lambda r, m: edit(r, 1, 'cwd', str(self.root))),
+            ('foreign-current-cwd', lambda r, m: edit(r, -1, 'cwd', str(self.root))),
+            ('missing-capacity-failure', lambda r, m: r.pop(-3)),
+            ('foreign-completion', lambda r, m: edit(r, -3, 'root_turn_id', 'foreign-turn')),
+            ('different-failure', lambda r, m: r[-3]['payload']['error'].update(codex_error_info='other')),
+            ('generic-overload', lambda r, m: r[-3]['payload']['error'].update(message='Server overloaded.')),
+            ('missing-current-context', lambda r, m: r.pop()),
+            ('different-current-turn', lambda r, m: edit(r, -1, 'turn_id', 'foreign-turn')),
+            ('ordinary-start', lambda r, m: attribution(r, 'turn_trigger', 'composer')),
+            ('invented-parent', lambda r, m: attribution(r, 'parent_turn_id', 'current-turn')),
+            ('subagent-start', lambda r, m: attribution(r, 'initiating_agent_path', '/child')),
+            ('foreign-root-start', lambda r, m: attribution(r, 'root_turn_id', 'foreign-turn')),
+            ('missing-attribution', lambda r, m: r[-2]['payload'].pop('turn_attribution')),
+            ('reversed-time', lambda r, m: r[-2].update(timestamp='2020-01-01T00:00:00Z')),
+            ('new-same-text-input', lambda r, m: r.insert(-2, r[2])),
+            ('new-native-input', lambda r, m: r.append({'type': 'event_msg',
+                'payload': {'type': 'user_message', 'message': 'Continue this work.'}})),
+            ('aborted-current-turn', lambda r, m: r.append({'type': 'event_msg',
+                'payload': {'type': 'turn_aborted', 'turn_id': 'retry-turn'}})),
+            ('cancelled-current-turn', lambda r, m: r.append({'type': 'event_msg',
+                'payload': {'type': 'task_cancelled', 'turn_id': 'retry-turn'}})),
+            ('changed-native-model', lambda r, m: m.update(model='different-model')),
+            ('missing-native-model', lambda r, m: m.pop('model')),
+            ('missing-native-version', lambda r, m: m.pop('codex_version')),
+        ]
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        for label, change in cases:
+            with self.subTest(label=label):
+                meta.update(turn_id='current-turn', model='observed-model', codex_version='observed-version')
+                self.native_context()
+                status = self.helper({'op': 'status'}, session=meta['session_id'])
+                self.automatic_capacity_retry()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                change(rows, meta)
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                before = self.files()
+                response = self.manage(action='bind', epoch=status['epoch'], expectedRevision=0,
+                    result='Retain original task', inputs=[], outputs=[{'path': 'report.txt'}],
+                    nextAction='Create report.txt', canContinue=True)
+                self.assertEqual(response['value']['reason'], 'native-call-turn-conflict', response)
+                self.assertEqual(self.files(), before)
+
+    def test_capacity_retry_chain_extends_old_boundary_and_preserves_pause_after_compact(self):
+        self.native_context()
+        session = self.params['_meta']['x-codex-turn-metadata']['session_id']
+        status = self.helper({'op': 'status'}, session=session)
+        contract = dict(result='Retain original task', inputs=[], outputs=[{'path': 'report.txt'}],
+                        nextAction='Create report.txt', canContinue=False,
+                        unresolved=['Retain this unmet condition'])
+        self.assertFalse(self.manage(action='bind', epoch=status['epoch'], expectedRevision=0,
+                                     **contract)['isError'])
+        self.assertFalse(self.manage(action='pause', epoch=status['epoch'], expectedRevision=1,
+                                     reason='User pause remains effective')['isError'])
+        receipt = next(self.state.glob('*.input.json'))
+        original_input = receipt.read_bytes()
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'type': 'response_item', 'payload': {
+                'type': 'message', 'role': 'assistant', 'content': 'x'*(2*1024*1024)}})+'\n')
+        self.automatic_capacity_retry('retry-one')
+        self.automatic_capacity_retry('retry-two')
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'type': 'compacted', 'payload': {'kind': 'fixture'}})+'\n')
+            stream.write(json.dumps({'timestamp': datetime.now(timezone.utc).isoformat(),
+                'type': 'turn_context', 'payload': {'turn_id': 'retry-two',
+                    'cwd': str(self.work), 'model': 'observed-model'}})+'\n')
+        self.append_context_usage(3000)
+        response = self.manage(action='bind', epoch=status['epoch'], expectedRevision=2, **contract)
+        self.assertFalse(response['isError'], response)
+        current = self.helper({'op': 'status'}, session=session)
+        self.assertEqual((current['mode'], current['revision']), ('paused', 3))
+        self.assertEqual(current['checkpoint']['reason'], 'User pause remains effective')
+        self.assertEqual(current['checkpoint']['unresolved'], contract['unresolved'])
+        self.assertEqual(receipt.read_bytes(), original_input)
+        before = self.files()
+        blocked = self.manage(action='retire', epoch=status['epoch'], expectedRevision=3)
+        self.assertEqual(blocked['value']['reason'], 'paused-task-cannot-retire')
+        self.params['arguments']['includeContext'] = True
+        context = self.inspect()['value']['context']
+        self.assertEqual(context['state'], 'observed', context)
+        self.assertEqual(context['turnAssociation']['retryCount'], 2)
+        self.assertEqual(context['turnAssociation']['originalTurnId'], 'current-turn')
+        self.assertEqual(self.files(), before)
+
+    def test_capacity_retry_bounded_origin_and_recovery_flags_cannot_be_bypassed(self):
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        for flag in ('needsNativeReplay', 'needsResumeReconciliation', 'interrupted', 'origin-over-budget'):
+            with self.subTest(flag=flag):
+                meta['turn_id'] = 'current-turn'
+                self.native_context()
+                status = self.helper({'op': 'status'}, session=meta['session_id'])
+                receipt = next(self.state.glob('*.input.json'))
+                original_input = receipt.read_bytes()
+                if flag == 'origin-over-budget':
+                    transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                    with transcript.open('a', encoding='utf-8') as stream:
+                        stream.write(json.dumps({'type': 'response_item', 'payload': {
+                            'role': 'assistant', 'content': 'x'*(16*1024*1024+1024)}})+'\n')
+                else:
+                    value = json.loads(receipt.read_bytes())
+                    value[flag] = True
+                    receipt.write_text(json.dumps(value), encoding='utf-8')
+                self.automatic_capacity_retry()
+                before = self.files()
+                rejected = self.manage(action='bind', epoch=status['epoch'], expectedRevision=0,
+                    result='Retain original task', inputs=[], outputs=[{'path': 'report.txt'}],
+                    nextAction='Create report.txt', canContinue=True)
+                self.assertEqual(rejected['value']['reason'], 'native-call-turn-conflict')
+                self.assertEqual(self.files(), before)
+                receipt.write_bytes(original_input)
+
+    def test_capacity_retry_rechecks_receipt_failure_and_native_proof_before_write(self):
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        source = self.work / 'source.txt'
+        source.write_text('Protected source', encoding='utf-8')
+        for change in ('new-input', 'same-epoch-receipt', 'failure-watermark', 'changing-transcript',
+                       'final-proof-watermark', 'final-proof-receipt'):
+            with self.subTest(change=change):
+                meta['turn_id'] = 'current-turn'
+                self.native_context()
+                status = self.helper({'op': 'status'}, session=meta['session_id'])
+                self.automatic_capacity_retry()
+                receipt = next(self.state.glob('*.input.json'))
+                original_input = receipt.read_bytes()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                params = {**self.params, 'name': 'manage_task_state', 'arguments': dict(
+                    cwd=str(self.work), action='bind', epoch=status['epoch'], expectedRevision=0,
+                    result='Retain original task', inputs=['source.txt'],
+                    outputs=[{'path': 'report.txt'}], nextAction='Create report.txt', canContinue=True)}
+                script = r"""
+const fs=require('node:fs'),path=require('node:path');
+const x=JSON.parse(fs.readFileSync(0,'utf8'));let changed=false;
+const inject=()=>{
+  if(changed)return;changed=true;
+  if(['same-epoch-receipt','final-proof-receipt'].includes(x.change)){
+    const input=JSON.parse(fs.readFileSync(x.receipt,'utf8'));
+    input.hostObservation.values.permissionMode='changed-during-inspection';
+    fs.writeFileSync(x.receipt,JSON.stringify(input));
+  }else if(['failure-watermark','final-proof-watermark'].includes(x.change)){
+    fs.writeFileSync(x.receipt.replace('.input.json','.input-failure.json'),
+      JSON.stringify({schema:1,generation:'later-input-failure'}));
+  }else fs.appendFileSync(x.transcript,JSON.stringify({type:'response_item',
+    payload:{type:'message',role:'user',content:[{type:'input_text',text:'New human input'}]}})+'\n');
+};
+if(x.change.startsWith('final-proof-')){
+  const open=fs.openSync,close=fs.closeSync,read=fs.readSync;const fds=new Set();let reads=0;
+  fs.openSync=(file,...args)=>{const fd=open(file,...args);if(file===x.transcript)fds.add(fd);return fd;};
+  fs.closeSync=(fd)=>{fds.delete(fd);return close(fd);};
+  fs.readSync=(fd,...args)=>{const value=read(fd,...args);if(fds.has(fd)&&++reads===3)inject();return value;};
+}else if(x.change==='changing-transcript'){
+  const read=fs.readSync;fs.readSync=(...args)=>{const value=read(...args);inject();return value;};
+}else{
+  const read=fs.readFileSync;fs.readFileSync=(file,...args)=>{
+    const value=read(file,...args);if(typeof file==='string'&&path.resolve(file)===x.source)inject();
+    return value;
+  };
+}
+const response=require(process.argv[1]).manageTaskState(x.params);
+process.stdout.write(JSON.stringify({response,changed}));
+"""
+                request = dict(params=params, change=change, source=str(source),
+                               receipt=str(receipt), transcript=str(transcript))
+                p = subprocess.run([self.node, '-e', script, str(BRIDGE)], input=json.dumps(request),
+                    text=True, encoding='utf-8', capture_output=True, env=self.env, timeout=10)
+                self.assertEqual(p.returncode, 0, p.stderr)
+                value = json.loads(p.stdout)
+                self.assertTrue(value['changed'])
+                response = value['response']
+                self.assertTrue(response['isError'], response)
+                self.assertIn(response['value']['reason'],
+                              ('native-call-turn-conflict', 'latest-user-input-not-reconciled'))
+                self.assertFalse(any(self.state.glob('*.state.json')))
+                self.assertEqual(source.read_text(encoding='utf-8'), 'Protected source')
+                if change in ('failure-watermark', 'final-proof-watermark'):
+                    marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+                    self.assertEqual(json.loads(marker.read_bytes())['generation'], 'later-input-failure')
+                    self.assertTrue(self.helper({'op': 'status'}, session=meta['session_id'])['needsNativeReplay'])
+                    marker.unlink()
+                if change not in ('same-epoch-receipt', 'final-proof-receipt'):
+                    self.assertEqual(receipt.read_bytes(), original_input)
+                receipt.write_bytes(original_input)
+
+    def test_capacity_retry_context_cannot_combine_proof_with_a_changed_second_snapshot(self):
+        self.native_context()
+        self.automatic_capacity_retry()
+        self.append_context_usage(4500)
+        self.params['arguments']['includeContext'] = True
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        receipt = next(self.state.glob('*.input.json'))
+        original_input = receipt.read_bytes()
+        script = r"""
+const fs=require('node:fs');const x=JSON.parse(fs.readFileSync(0,'utf8'));
+const stat=fs.lstatSync;let observations=0,changed=false;
+fs.lstatSync=(file,...args)=>{
+  if(file===x.transcript&&++observations===3){
+    changed=true;fs.appendFileSync(file,JSON.stringify({type:'response_item',
+      payload:{type:'message',role:'user',content:[{type:'input_text',text:'New input'}]}})+'\n');
+  }
+  return stat(file,...args);
+};
+const result=require(process.argv[1]).inspectNativeState(x.params);
+process.stdout.write(JSON.stringify({result,changed}));
+"""
+        p = subprocess.run([self.node, '-e', script, str(BRIDGE)],
+            input=json.dumps(dict(params=self.params, transcript=str(transcript))),
+            capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+        self.assertEqual(p.returncode, 0, p.stderr)
+        value = json.loads(p.stdout)
+        context = value['result']['value']['context']
+        self.assertFalse(value['changed'] and context['state'] == 'observed', context)
+        if not value['changed']:
+            self.assertEqual(context['state'], 'observed', context)
+            self.assertEqual(context['lastResponseTokens'], 4500)
+        self.assertEqual(receipt.read_bytes(), original_input)
+        self.assertFalse(any(self.state.glob('*.state.json')))
+
     def test_manage_forwards_only_explicit_input_revision_evidence(self):
         source = self.work / 'source.txt'
         source.write_text('version one', encoding='utf-8')
@@ -650,7 +938,9 @@ class NativeStateMcpTests(unittest.TestCase):
         self.params['_meta']['x-codex-turn-metadata']['session_id'] = 'current-thread'
         for key, value in [('op', 'recover-lock'), ('session_id', 'foreign'), ('storage', 'foreign'),
                            ('recovery_epoch', 'invented'), ('replay', True), ('turnId', 'invented'),
-                           ('nativeTurnId', 'invented'), ('result', 'foreign-to-pause')]:
+                           ('nativeTurnId', 'invented'), ('currentHost', {'turnId': 'invented'}),
+                           ('transcriptPath', 'invented'), ('turn_trigger', 'capacity_retry_automatic'),
+                           ('result', 'foreign-to-pause')]:
             with self.subTest(field=key):
                 rejected = self.manage(**base, **{key: value})
                 self.assertTrue(rejected['isError'])
@@ -676,8 +966,11 @@ class NativeStateMcpTests(unittest.TestCase):
         transcript.parent.mkdir(parents=True, exist_ok=True)
         stamp = datetime.fromtimestamp(time.time()-age, timezone.utc).isoformat()
         records = [
-            {'type': 'session_meta', 'payload': {'id': session, 'cwd': str(self.work), 'cli_version': 'recorded-old-version'}},
+            {'type': 'session_meta', 'payload': {'id': session, 'cwd': str(self.work),
+                'cli_version': 'recorded-old-version', 'source': 'cli'}},
             {'type': 'turn_context', 'payload': {'turn_id': meta['turn_id'], 'model': meta['model'], 'cwd': str(self.work)}},
+            {'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+                'content': [{'type': 'input_text', 'text': 'Continue this work.'}]}},
             {'type': 'event_msg', 'payload': {'type': 'token_count', 'info': {
                 'last_token_usage': {'total_tokens': 4000}, 'total_token_usage': {'total_tokens': 500000},
                 'model_context_window': 12000}}},

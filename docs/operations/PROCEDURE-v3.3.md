@@ -3052,3 +3052,16 @@ Desktop wait_threads对该入口返回thread/items/list尚不支持，Root转读
 初次输出保留于项目`.tmp/accord-offline-bundle-20261012-01`，暂时的26项live输入保护在独立内容核验后释放。随后全仓verify实际exit1，原因known task residue remains ['.tmp']；初report的内容正确不能代仓库收尾。Root以result.before-retention-recovery.json及retention-recovery-basis.json保留原报告、错误和迁移依据，重开受影响后态；确认只有两已核产物、观察者无写权/待写后，验证源与目标绝对路径，原样迁移到私有`accord-offline-bundle-20261012-01/delivery`，仅移除已核空的原子目录和.tmp父目录。没有重建或改写两产物，独审确认前后SHA同、原26文件及配置hash/mtime同、原错误/报告保留；仓库verify和verify-development恢复valid/errors空。恢复前后的记录分别保留，当前result补记实际纠偏。
 
 最终两产物和源基线/执行源码/结果均在该独立私有目录下保留，项目不再有此残留。该真实交付—发现后态失败—原样迁移—复核的闭环，只证明有限健康判断和本次必要资产恢复；完整默认条件、普通自主择时、跨载体接管、全部故障窗口、全入口及A05/A08仍待实际证据，总Root/委托费用未闭合。businessEvidenceComplete=true而qualificationPassed/releaseReady=false；不新增case、发布门槛或重建产物求绿。
+
+
+## Root容量自动重试续接（2026-10-12）
+
+2026-10-12真实Root容量自动重试暴露旧Hook回执turn与当前MCP turn冲突。保默认等值守卫，以原输入SHA和原Hook绑定的有界原生Root转换证明续接，publication在proof后再核receipt/水印，context证明与计数使用同一快照；不新增human epoch、业务case、控制器或发布门槛。独审原竞态、原4项错误顺序失败及修正均保留，最终239相关回归通过。该必要兼容修复与有效回归净增35245字节，实测3479940；保5%预留至少需3663095，总额度有界调至3664000，192文件/36000指导上限不变。删除身份/并发回归或放宽turn校验会损失必要结果，另建输入重放控制器会增加归属/维护负担；原3626000额度及预留失败保留，不作一般增长额度。当前R2/R3目标、全部F/A、入口/模式与发布授权不变。
+
+真实原件、原MCP拒绝、红/绿回归、独审及更正定位均保存在私有 `accord-entry-applicability-20261012-01/capacity-retry`；原8ff入口适用性有限准入与6b1记录CI11/11各保原subject，不由本轮补丁扩签。原receipt/旧rev98不手写；本轮新包与Root实际绑定在接续和机器观察按实测对齐，旧MCP worker采用另核。
+
+本段实际后态：原生包更新161615/404384，13.094秒，25成员/5新Skill路径、自然0/Job0及配置/旧恢复字节保持。旧长寿MCP一次仍拒绝，postread确认rev98未改；Root从actual nativecall metadata构造fresh现装helper请求，原日志完整证明关联后成功写rev99，同epoch/原receipt SHA2ffe…不变、四输出谓词匹配。原拒绝与原复核定位笔误（Sol JSON finalLines应411–421）保留并另给更正；不手写state、不声称热worker刷新或完整A05/A08。
+
+Root metadata换行修正：默认CRLF写manifest/dev/docs被提交前diff检查发现；保五原件后按仓库LF修正并改distinct版本。首次过宽的全包LF断言正确停住，用户批准原meta-guidance的CRLF例外保持精确字节；无原件改写。161615/404384的本地安装/helper99保原边界，runtime七文件与239回归未改、业务不重跑。规范新包及后态按实测补回。
+
+规范163148/2e21后态：10.563秒原生install、25成员/5路径及自然0/Job0/读者停止；用户配置和161615恢复25成员保持。fresh现装helper按新的actual nativecall刷新当前包谓词rev99→100，原epoch/输入SHA2ffe…和全部未完职责不变、四谓词匹配。误写digest7005…在preflight先于spawn/install拒绝，原失败保留后直接从规范身份JSON读取正确实参，不据此重跑业务或改代码。

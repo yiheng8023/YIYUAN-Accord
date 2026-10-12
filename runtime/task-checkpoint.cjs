@@ -11,8 +11,8 @@ const crypto = require('node:crypto');
 // A long-lived MCP may outlive its old package directory during native update.
 // Loading code here performs no transcript read; missing optional code is still
 // reported only when a context operation actually needs it.
-let nativeContextReader, nativeContextLoadError;
-try { nativeContextReader = require('./codex-context.cjs').observeNativeTranscript; }
+let nativeContextReader, nativeTurnAssociation, nativeContextLoadError;
+try { ({observeNativeTranscript: nativeContextReader, associateNativeTurn: nativeTurnAssociation} = require('./codex-context.cjs')); }
 catch (error) { nativeContextLoadError = error; }
 const sha = (value) => crypto.createHash('sha256').update(value).digest('hex');
 const canonical = (value) => JSON.stringify(value, function (_, child) {
@@ -210,6 +210,7 @@ function observeStoredContext(input, request, now = Date.now()) {
   if (nativeContextLoadError) throw nativeContextLoadError;
   if (typeof nativeContextReader !== 'function') fail('native-context-reader-unavailable');
   return nativeContextReader(input.nativeContextSource, {now, maxAgeMs: request.maxAgeMs ?? 30000,
+    ...(retryBinding(input, request) ? {retryInputSha256: input.promptSha256} : {}),
     ...(Object.hasOwn(request, 'currentHost') ? {currentHost: request.currentHost} : {})});
 }
 
@@ -381,24 +382,48 @@ function publishInput(where, input) {
   try { atomic(where.input, input, INPUT_RECEIPT_LIMIT); }
   catch (error) { error.inputPublicationFailed = true; throw error; }
 }
+function retryBinding(input, request) {
+  const source = input?.nativeContextSource;
+  const observed = input?.hostObservation?.turnId ?? input?.turnId;
+  if (needsInput(input) || input?.interrupted || !source || source.turnId !== observed ||
+      source.turnId !== input.turnId || source.sessionId !== request.session_id ||
+      !samePath(path.resolve(source.cwd), path.resolve(request.cwd)) ||
+      typeof nativeTurnAssociation !== 'function' || !request.currentHost) return null;
+  return source;
+}
+function associateCurrentTurn(input, request) {
+  const source = retryBinding(input, request);
+  if (!source) return null;
+  const association = nativeTurnAssociation(source, request.currentHost, input.promptSha256);
+  return association.state === 'observed' ? association : null;
+}
 function requireNativeTurn(request, input) {
   if (!request || !Object.hasOwn(request, 'nativeTurnId')) return;
   const expected = request.nativeTurnId;
   const observed = input?.hostObservation?.turnId ??
     (input?.inputSource === 'host-continuation' ? null : input?.turnId);
-  if (!text(expected) || expected.length > 200 || expected !== observed) fail('native-call-turn-conflict');
+  if (!text(expected) || expected.length > 200) fail('native-call-turn-conflict');
+  if (expected !== observed && (request.currentHost?.turnId !== expected || !associateCurrentTurn(input, request))) {
+    fail('native-call-turn-conflict');
+  }
 }
 
-function currentEpoch(where, epoch, request = null) {
+function currentEpoch(where, epoch, request = null, expectedInput = null) {
   const input = readInput(where);
   if (input?.epoch !== epoch) fail('latest-user-input-not-reconciled');
   requireNativeTurn(request, input);
+  // Failure watermarks deliberately publish outside the input lock. Re-read
+  // after bounded transcript proof, immediately before state publication.
+  if (expectedInput && canonical(input) !== canonical(expectedInput) ||
+      canonical(readInput(where)) !== canonical(input)) {
+    fail('latest-user-input-not-reconciled');
+  }
   return input;
 }
 
-function retireFiles(where, epoch, prior = null, request = null) {
+function retireFiles(where, epoch, prior = null, request = null, expectedInput = null) {
   return inputLocked(where, () => {
-    const input = currentEpoch(where, epoch, request);
+    const input = currentEpoch(where, epoch, request, expectedInput);
     const receipt = fs.existsSync(where.input) ? readJson(where.input, INPUT_RECEIPT_LIMIT) : null;
     const files = [[where.state, prior], [where.input, receipt]].filter(([, value]) => value !== null);
     try {
@@ -829,7 +854,7 @@ function operate(request) {
         if (canonical(fingerprint(where.root, item.path)) !== canonical(item.observed)) fail('input-revision-unstable');
       }
       return inputLocked(where, () => {
-        currentEpoch(where, currentInput.epoch, request);
+        currentEpoch(where, currentInput.epoch, request, currentInput);
         atomic(where.state, state);
         return {revision: state.revision, mode: state.mode, inspection};
       });
@@ -840,7 +865,7 @@ function operate(request) {
       if (request.expectedRevision !== 0 || request.epoch !== currentInput.epoch || !text(request.reason)) {
         fail('unbound-retirement-needs-current-receipt-and-reason');
       }
-      retireFiles(where, currentInput.epoch, null, request);
+      retireFiles(where, currentInput.epoch, null, request, currentInput);
       return {retired: true, scope: 'unbound-input-receipt-only', inspection: null};
     }
     if (!prior || request.expectedRevision !== prior.revision || request.epoch !== currentInput.epoch) {
@@ -850,7 +875,7 @@ function operate(request) {
       if (!text(request.reason)) fail('pause-reason-required');
       const pending = inspectDiagnostic(where, prior);
       return inputLocked(where, () => {
-        currentEpoch(where, currentInput.epoch, request);
+        currentEpoch(where, currentInput.epoch, request, currentInput);
         atomic(where.state, {...prior, revision: prior.revision + 1, mode: 'paused', reason: request.reason});
         return {mode: 'paused', revision: prior.revision + 1, pending};
       });
@@ -863,7 +888,7 @@ function operate(request) {
         ? inspectDiagnostic(where, prior) : inspect(where, prior);
       if (result.status !== 'verified-local' && request.disposition !== 'user-cancelled') fail('unmet-output-cannot-retire');
       if (request.disposition === 'user-cancelled' && !text(request.reason)) fail('cancellation-reason-required');
-      retireFiles(where, currentInput.epoch, prior, request);
+      retireFiles(where, currentInput.epoch, prior, request, currentInput);
       return {retired: true, scope: 'task-checkpoint-files-only', inspection: result};
     }
     fail('unknown-operation');
@@ -1274,10 +1299,10 @@ const HELP = {
   input: 'One JSON object on piped stdin, not an interactive terminal. In PowerShell, pipe $request through ConvertTo-Json -Depth 8 -Compress to node <helper-path>. Use --hook only for native events; other calls need the current native session/cwd receipt.',
   storage: 'YIYUAN_ACCORD_TASK_STATE_DIR selects an explicit scoped directory. Otherwise use ~/.yiyuan-accord/task-state. Exact-session legacy temporary records remain at their original location; competing locations fail without merge. status.storage reports the selected path and kind. No automatic migration, cross-session adoption, scheduler or power-loss guarantee. State file contents are flushed before atomic replacement; filesystem and directory-entry durability need separate validation.',
   operations: ['status', 'read-native-input', 'observe-context', 'assess-context', 'bind', 'pause', 'retire', 'recover-lock'],
-  nativeMutationIdentity: 'A native caller may supply nativeTurnId for bind/pause/retire. It must match the current input host observation at initial read and final publication/deletion, including a new host-continuation turn with unchanged human-input epoch. The MCP writer supplies it from native metadata; legacy callers without it retain their existing identity responsibility. This is local correlation, not authentication or user authority.',
+  nativeMutationIdentity: 'A native caller may supply nativeTurnId for bind/pause/retire. It must match the input host observation, or supply actual currentHost metadata whose automatic capacity retry is proved from the original Hook-bound input hash and stable canonical Root rollout within a 16MiB tail. Receipt, failure watermarks and turn proof are rechecked before publication/deletion; retry never rewrites input epoch, provenance or recovery flags. The MCP writer supplies identity from native metadata; legacy callers retain their identity responsibility. This is correlation, not authentication or user authority.',
   nativeContext: {
     read: {op: 'observe-context', session_id: 'native-session-id', cwd: 'absolute-workspace', maxAgeMs: 30000},
-    source: 'Only the native transcript binding retained from a root UserPromptSubmit event is read; request-supplied paths are ignored. Reads are bounded to that file and do not scan other task history. Missing, stale, changing or unbound metadata is unknown. recordedHostVersion is session metadata, not live identity. For current host conditions pass currentHost {threadId, turnId, model, hostVersion, sourceRef} from an actual matching native observation, or use the MCP includeContext option. Without it conditions.hostVersion stays null; caller data is not authentication.',
+    source: 'Only the native transcript binding retained from a root UserPromptSubmit event is read; request-supplied paths are ignored. Reads are bounded to that file and do not scan other task history. Missing, stale, changing or unbound metadata is unknown. recordedHostVersion is session metadata, not live identity. For current host conditions pass currentHost {threadId, turnId, model, hostVersion, sourceRef} from an actual native observation, or use MCP includeContext. A different turn requires automatic capacity-retry proof from the original input hash within the same stable 16MiB-bounded snapshot used for counters; it changes no receipt or authority. Without currentHost conditions.hostVersion stays null; caller data is not authentication.',
     assessment: 'Use assess-context with nativeContext=true, the same independently sourced currentHost and chosen maxAgeMs, current epoch/revision, observation.conditions and your inspected integrity/time/estimate claims. Provide estimates.contextTailUpperBoundTokens for unaccounted history after the latest response, plus nextWorkTokens/handoffTokens/recoveryTokens/safetyMarginTokens and sourceRef. The operation reads counters within that age limit and derives contextUpperBoundTokens from lastResponseTokens plus the tail estimate; normal response growth does not force an observe/assess retry loop. Changed model/turn/context generation still requires reassessment. Returned observationId/nativeSourceRef identify the facts actually used.',
     limit: 'Native last usage is a recent response-boundary basis, cumulative usage is not occupancy, and neither proves inheritance integrity or authority. Existing pauses, input recovery, forecast and ownership checks remain; no automatic mode activation, dispatch or source release.'
   },

@@ -369,7 +369,9 @@ function manageTaskState(params) {
   if (!source) return rejected('native-call-metadata-unavailable');
   if (source.threadId !== source.sessionTreeId) return rejected('shared-session-scope-requires-reconciliation');
   const request = {op: args.action, session_id: source.sessionTreeId, cwd: args.cwd,
-    epoch: args.epoch, expectedRevision: args.expectedRevision, nativeTurnId: source.turnId};
+    epoch: args.epoch, expectedRevision: args.expectedRevision, nativeTurnId: source.turnId,
+    ...(source.model && source.hostVersion ? {currentHost: {threadId: source.threadId, turnId: source.turnId,
+      model: source.model, hostVersion: source.hostVersion, sourceRef: `codex-mcp-call:${source.callId}`}} : {})};
   for (const key of byAction[args.action]) if (own(args, key)) request[key] = args[key];
   let observation;
   try { observation = operate(request); }

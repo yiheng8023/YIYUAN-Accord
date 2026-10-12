@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261012115152",
+    "version": "3.3.0-dev.1+codex.20261012163148",
     "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261012115152",
-        "packageSha256": "03f4b0713d897469d37a804684761156ec7cec27c05c335f03564f91661414c6",
+        "packageVersion": "3.3.0-dev.1+codex.20261012163148",
+        "packageSha256": "2e21d3bc9f1da995fc0132c49fd81eebe68792dc343e57a6eaa11b4831d5cd69",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -261,10 +261,10 @@
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
-      "maxProductCodeAndTestBytes": 3626000,
+      "maxProductCodeAndTestBytes": 3664000,
       "maxTrackedFiles": 192,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Bounded allocation:3626000 product code/test bytes,192 tracked files and36000 primary-instruction bytes, retaining the five-percent reserve and existing measurement. The prior3620000 allocation measured3438323 bytes with677 bytes below its reserved-use threshold. A real completed SDK task exposed Hook/MCP storage separation because the declared stdio environment omitted the supported TASK_STATE_DIR and CODEX_HOME selectors. The narrow declaration/guard correction plus manifest-filtered and actual-host positive/negative regressions add5944 code/test bytes. Independent review found no equivalent lossless reduction of the resulting5267-byte reserve deficit; required identity, context, missing-input, post-state and resource assertions remain. This6000-byte change funds that named integration defect and its regression only; it is not general growth allowance or proof of whole-task efficiency. Earlier recovery allocation, measurements and failures remain historical. Preparation, model, review and recovery burden require separate whole-outcome accounting; product source size alone does not control delivery cost. Current scopes and quality claims remain pending evidence and may be reassessed under the latest user instruction, never retrospectively relabeled as passed."
+      "rationale": "Bounded allocation:3626000 product code/test bytes,192 tracked files and36000 primary-instruction bytes, retaining the five-percent reserve and existing measurement. The prior3620000 allocation measured3438323 bytes with677 bytes below its reserved-use threshold. A real completed SDK task exposed Hook/MCP storage separation because the declared stdio environment omitted the supported TASK_STATE_DIR and CODEX_HOME selectors. The narrow declaration/guard correction plus manifest-filtered and actual-host positive/negative regressions add5944 code/test bytes. Independent review found no equivalent lossless reduction of the resulting5267-byte reserve deficit; required identity, context, missing-input, post-state and resource assertions remain. This6000-byte change funds that named integration defect and its regression only; it is not general growth allowance or proof of whole-task efficiency. Earlier recovery allocation, measurements and failures remain historical. Preparation, model, review and recovery burden require separate whole-outcome accounting; product source size alone does not control delivery cost. Current scopes and quality claims remain pending evidence and may be reassessed under the latest user instruction, never retrospectively relabeled as passed. On2026-10-12 a real Root capacity_retry_automatic changed the native turn without a new human input; the existing MCP equality guard rejected legitimate checkpoint updates. The bounded original-input/Root retry proof, same-snapshot context counters, post-proof receipt/failure CAS, preserved error ordering and actual MCP regressions add35245 bytes across7 existing files. Measured code/tests3479940 bytes require at least3663095 total bytes to retain5-percent reserve. Allocate3664000 (38000 above3626000) only for this named compatibility defect and its verified regressions; 192 files and36000 primary-instruction bytes stay unchanged. Deleting identity/concurrency regressions or weakening native-turn equality would lose the named outcome; a separate input/replay controller would add ownership and maintenance. The original reserve failure and prior allocation remain retained; this is no general growth allowance, new case or release gate."
     }
   },
   "source": {
@@ -1744,7 +1744,93 @@
             "remaining": "Delivery/lifecycle parent cases, ordinary autonomous timing/necessary recovery and full A05/A08/impact/release remain open; operational unknowns and original failures retained.",
             "qualificationPassed": true,
             "functionalCompletion": false,
-            "candidateEligible": false
+            "candidateEligible": false,
+            "recordAlignmentCi": {
+              "revision": "6b1f3aca38b2bb23ff2bfadd4fa002918dc86365",
+              "run": 38215161327,
+              "status": "completed",
+              "conclusion": "success",
+              "jobs": "11/11",
+              "scope": "Exact record-alignment source; original bounded8ff case qualification retains its own subject and package."
+            }
+          },
+          "capacityRetryContinuity": {
+            "originalReceiptTurn": "01a12ead-5c3a-7043-a6a0-053d50283dba",
+            "nativeRetryTurn": "01a12ed6-e3dd-7281-81a6-585c4006b1bc",
+            "trigger": "capacity_retry_automatic",
+            "originalRevision": 98,
+            "cause": "Native Root automatic capacity retry changed turn without new Hook human input; strict old turn guard rejected checkpoint mutation.",
+            "correction": "Original bound input hash and canonical Root source prove each retry; original receipt stays unchanged; context uses one stable snapshot and publication rechecks receipt/failure after proof.",
+            "review": "Independent Astra specification and Sol implementation review; original final-proof watermark race independently reproduced then rejected after repair.",
+            "preserved": "Original input epoch/prompt/history/host observation/context source, pause/replay/resume requirements and old watermarks; default conflict rejection and prior error ordering.",
+            "localRegression": "239 related native MCP/checkpoint/context regressions passed,214.419s,exit0; initial234/238 and independently reproduced final-proof race retained.",
+            "privateEvidence": "accord-entry-applicability-20261012-01/capacity-retry",
+            "sourceVersion": "3.3.0-dev.1+codex.20261012163148",
+            "packageSha256": "2e21d3bc9f1da995fc0132c49fd81eebe68792dc343e57a6eaa11b4831d5cd69",
+            "adoption": "Native Git-canonical163148/2e21 package installed; fresh exact installed helper actually bound same Root epoch99to100; old long-lived MCP rejection retained, no refresh claim.",
+            "limits": "Stable complete original-boundary proof within16MiB and at most64 sourced retry hops; unsupported/missing/foreign/changed proof rejects. No authentication or new user authority.",
+            "qualificationPassed": false,
+            "functionalCompletion": false,
+            "candidateEligible": false,
+            "finalReadonlyRootProof": "Observed original1ead to current1ed6 at byte90575827 with final903e764 context source SHA; original receipt/state bytes unchanged,0.155s; not future mutation authority.",
+            "newlineCorrection": {
+              "cause": "Root metadata writer used Windows default CRLF before commit; Git LF normalization changes manifest digest. Corrected without runtime, Skill policy or business changes.",
+              "originalLocalVersion": "3.3.0-dev.1+codex.20261012161615",
+              "originalLocalPackageSha256": "404384977e0a9ca03fe47c15e550746154550e11d777fe88bebe8fefb3e72353",
+              "originalLocalInstallation": {
+                "privateEvidence": "accord-failed-transfer-recovery-20261011-01/native-capacity-retry-install-20261012-01",
+                "elapsedSeconds": 13.094000000011874,
+                "members": 25,
+                "newSkillPaths": 5,
+                "exitCode": 0,
+                "jobAfterActiveProcesses": 0,
+                "configBytesUnchanged": true,
+                "priorRecoveryBytesUnchanged": true
+              },
+              "originalLocalRootBind": {
+                "beforeRevision": 98,
+                "afterRevision": 99,
+                "receiptEpoch": "c3ef52de-f405-4fee-894c-e9581810596d",
+                "nativeTurn": "01a12ed6-e3dd-7281-81a6-585c4006b1bc",
+                "originalInputSha256": "2ffe6bc26e2deee98a364b4beecf991001a5618928753385adbd981cb180bbbc",
+                "inputBytesUnchanged": true,
+                "outputsMatched": 4,
+                "unfinishedRetained": true,
+                "sourceRef": "codex-mcp-call:exec-8ad7aba8-6069-4349-81c8-26bfb5373d87",
+                "path": "fresh installed helper with actual native metadata, original bound transcript proof and CAS",
+                "originalMcpWorker": "native-call-turn-conflict retained; no forced restart or refresh claim"
+              },
+              "originalEvidence": "actual-poststate-review.md/json and native-capacity-retry-install-20261012-01 retained; local adoption valid, not Git-canonical package equality.",
+              "preservedApprovedOriginal": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md",
+              "originalBytesUnchanged": true
+            },
+            "nativeUpdate": {
+              "sourceVersion": "3.3.0-dev.1+codex.20261012163148",
+              "packageSha256": "2e21d3bc9f1da995fc0132c49fd81eebe68792dc343e57a6eaa11b4831d5cd69",
+              "privateEvidence": "accord-failed-transfer-recovery-20261011-01/native-capacity-retry-lf-install-20261012-01",
+              "elapsedSeconds": 10.563,
+              "members": 25,
+              "newSkillPaths": 5,
+              "exitCode": 0,
+              "jobAfterActiveProcesses": 0,
+              "readerThreadsStopped": true,
+              "configBytesUnchanged": true,
+              "priorRecoveryBytesUnchanged": true
+            },
+            "actualRootBind": {
+              "beforeRevision": 99,
+              "afterRevision": 100,
+              "receiptEpoch": "c3ef52de-f405-4fee-894c-e9581810596d",
+              "nativeTurn": "01a12ed6-e3dd-7281-81a6-585c4006b1bc",
+              "sourceVersion": "3.3.0-dev.1+codex.20261012163148",
+              "originalInputSha256": "2ffe6bc26e2deee98a364b4beecf991001a5618928753385adbd981cb180bbbc",
+              "inputBytesUnchanged": true,
+              "outputsMatched": 4,
+              "unfinishedRetained": true,
+              "sourceRef": "codex-mcp-call:exec-6a637375-d37b-45d8-8ce0-a9fddf91a88f",
+              "path": "fresh exact installed helper with actual native metadata, original bound transcript proof and CAS",
+              "originalMcpWorker": "native-call-turn-conflict retained; no forced restart or refresh claim"
+            }
           }
         },
         "privateEvidence": "accord-mcp-env-fix-20261012-01/continuity-reconciliation",

@@ -130,6 +130,102 @@ function defaultSessionsRoot() {
   return path.join(codexHome, 'sessions');
 }
 
+function inputHash(line) {
+  const payload = line?.type === 'response_item' ? line.payload : null;
+  const content = payload?.content;
+  return payload?.type === 'message' && payload.role === 'user' &&
+    Array.isArray(content) && content.length === 1 && content[0]?.type === 'input_text' &&
+    typeof content[0].text === 'string'
+    ? crypto.createHash('sha256').update(content[0].text).digest('hex') : null;
+}
+
+function retryOrigin(rows, binding, promptHash) {
+  for (let index = 0; index + 1 < rows.length; index++) {
+    const line = parseRow(rows[index]);
+    if (line?.type === 'turn_context' && line.payload?.turn_id === binding.turnId &&
+        inputHash(parseRow(rows[index + 1])) === promptHash) return index;
+  }
+  return -1;
+}
+
+// An automatic retry is not a new human input. Prove the entire transition from
+// the Hook-bound original input; a trigger claim or latest context alone cannot.
+function capacityRetry(rows, binding, host, promptHash, sourceRef) {
+  const start = retryOrigin(rows, binding, promptHash);
+  if (start < 0) return empty('capacity-retry-original-input-unavailable');
+  let turn = binding.turnId;
+  let model = binding.model;
+  let completedAt = null;
+  let pending = null;
+  let boundaryAt = Date.parse(parseRow(rows[start]).timestamp);
+  let retryCount = 0;
+  let retryOffset = null;
+  const visited = new Set([turn]);
+  for (let index = start; index < rows.length; index++) {
+    const line = parseRow(rows[index]);
+    if (!line) return empty('invalid-complete-tail-record');
+    const payload = line.payload;
+    if (index === start + 1) continue; // Exact original input, already hash-checked.
+    if (line.type === 'response_item' && payload?.role === 'user' ||
+        line.type === 'event_msg' && ['user_message', 'task_interrupted', 'turn_aborted',
+          'task_cancelled', 'shutdown_complete'].includes(payload?.type)) {
+      return empty('capacity-retry-input-or-interruption-conflict');
+    }
+    if (line.type === 'turn_context') {
+      if (!text(payload?.turn_id) || !text(payload.model) || !text(payload.cwd) ||
+          !samePath(payload.cwd, binding.cwd) || !integer(Date.parse(line.timestamp))) {
+        return empty('capacity-retry-context-mismatch');
+      }
+      if (index === start && payload.model !== binding.model ||
+          payload.turn_id !== (pending || turn) || completedAt !== null) {
+        return empty('capacity-retry-turn-conflict');
+      }
+      if (pending && Date.parse(line.timestamp) < boundaryAt) return empty('capacity-retry-order-conflict');
+      turn = payload.turn_id;
+      model = payload.model;
+      pending = null;
+      continue;
+    }
+    if (line.type !== 'event_msg') continue;
+    if (payload?.type === 'model_rerouted' && text(payload.to_model)) model = payload.to_model;
+    if (payload?.type === 'task_complete') {
+      const at = Date.parse(line.timestamp);
+      if (pending || completedAt !== null || payload.turn_id !== turn || payload.root_turn_id !== turn ||
+          payload.error?.codex_error_info !== 'server_overloaded' ||
+          payload.error.message !== 'Selected model is at capacity. Please try a different model.' ||
+          !integer(at) || at < boundaryAt) return empty('capacity-retry-failure-unproven');
+      completedAt = at;
+    }
+    if (payload?.type === 'task_started') {
+      const attribution = payload.turn_attribution;
+      const next = payload.turn_id;
+      const at = Date.parse(line.timestamp);
+      if (completedAt === null || pending || !boundedText(next, 200) || visited.has(next) ||
+          payload.root_turn_id !== next || attribution?.turn_id !== next ||
+          attribution.root_turn_id !== next || attribution.turn_trigger !== 'capacity_retry_automatic' ||
+          attribution.parent_turn_id !== null || attribution.initiating_agent_path !== null ||
+          !integer(at) || at < completedAt || ++retryCount > 64) return empty('capacity-retry-start-unproven');
+      pending = next;
+      visited.add(next);
+      completedAt = null;
+      boundaryAt = at;
+      retryOffset = rows[index].offset;
+    }
+  }
+  if (!retryCount || pending || completedAt !== null || turn !== host.turnId || model !== host.model) {
+    return empty('capacity-retry-current-turn-unproven');
+  }
+  return {state: 'observed', reason: 'native-automatic-capacity-retry',
+    originalTurnId: binding.turnId, retryCount,
+    conditions: {threadId: binding.sessionId, turnId: turn, model, hostVersion: host.hostVersion},
+    sourceRef: `${sourceRef}#byte=${retryOffset}`, hostSourceRef: host.sourceRef};
+}
+
+function associateNativeTurn(binding, host, promptHash) {
+  return observeNativeTranscript(binding, {now: Date.now(), maxAgeMs: 1,
+    retryHost: host, retryInputSha256: promptHash});
+}
+
 // Read-only adapter over the one native rollout path supplied by the current Hook.
 // The byte limits bound local I/O only; they are not model capacity or quality limits.
 function observeNativeTranscript(binding, options = {}) {
@@ -139,8 +235,14 @@ function observeNativeTranscript(binding, options = {}) {
   const now = options.now;
   const maxAgeMs = options.maxAgeMs;
   if (!integer(now) || !integer(maxAgeMs) || maxAgeMs === 0) return empty('observation-time-invalid');
-  const liveHost = currentHost(binding, options);
+  const proofOnly = Object.hasOwn(options, 'retryHost');
+  const retry = proofOnly || Object.hasOwn(options, 'retryInputSha256') &&
+    Object.hasOwn(options, 'currentHost') && options.currentHost?.turnId !== binding.turnId;
+  const retryHost = proofOnly ? options.retryHost : options.currentHost;
+  const liveHost = retry ? currentHost({...binding, turnId: retryHost?.turnId,
+    model: retryHost?.model}, {currentHost: retryHost}) : currentHost(binding, options);
   if (liveHost.reason) return empty(liveHost.reason);
+  if (retry && !/^[a-f0-9]{64}$/.test(options.retryInputSha256 || '')) return empty('capacity-retry-input-hash-missing');
 
   let sessionsRoot;
   let transcriptPath;
@@ -167,6 +269,7 @@ function observeNativeTranscript(binding, options = {}) {
     return empty('noncanonical-rollout-path');
   }
   if (match[4].toLowerCase() !== binding.sessionId.toLowerCase()) return empty('rollout-thread-identity-mismatch');
+  if (retry && match[5]) return empty('capacity-retry-subagent-rollout');
 
   let fd;
   let before;
@@ -187,8 +290,12 @@ function observeNativeTranscript(binding, options = {}) {
     // pressure. Extend only until its latest turn boundary is visible, within
     // a fixed local I/O budget and the same file snapshot.
     let tailBytes = TAIL_BYTES;
-    while (tailOffset > 0 && tailBytes < MAX_TAIL_BYTES &&
-        !completeLines(tail, tailOffset, true).some((row) => parseRow(row)?.type === 'turn_context')) {
+    const hasBoundary = () => {
+      const rows = completeLines(tail, tailOffset, tailOffset > 0);
+      return retry ? retryOrigin(rows, binding, options.retryInputSha256) >= 0
+        : rows.some((row) => parseRow(row)?.type === 'turn_context');
+    };
+    while (tailOffset > 0 && tailBytes < MAX_TAIL_BYTES && !hasBoundary()) {
       tailBytes *= 2;
       const expandedOffset = Math.max(0, size - tailBytes);
       tail = Buffer.concat([readSlice(fd, expandedOffset, tailOffset - expandedOffset), tail]);
@@ -223,10 +330,16 @@ function observeNativeTranscript(binding, options = {}) {
     return empty('session-meta-mismatch');
   }
   if (!samePath(meta.cwd, binding.cwd)) return empty('session-cwd-mismatch');
+  if (retry && !['cli', 'vscode', 'exec'].includes(meta.source)) return empty('capacity-retry-root-source-unproven');
 
   if (hasUnterminatedRecord(tail)) return empty('unterminated-tail-record');
   const tailRows = completeLines(tail, tailOffset, tailOffset > 0);
   if (tailRows.length === 0) return empty('bounded-tail-unavailable');
+  const association = retry ? capacityRetry(tailRows, binding, liveHost.host, options.retryInputSha256,
+    `codex-rollout:${relative.split(path.sep).join('/')}`) : null;
+  if (proofOnly) return association;
+  if (association && association.state !== 'observed') return empty('current-host-turn-mismatch');
+  if (association) binding = {...binding, turnId: association.conditions.turnId, model: association.conditions.model};
   let currentTurn = null;
   let currentModel = null;
   let currentCwd = null;
@@ -330,7 +443,8 @@ function observeNativeTranscript(binding, options = {}) {
     sampleAgeMs: now - latestToken.observedAtMs,
     observationId, sourceRef, recordedHostVersion: meta.cli_version,
     hostSourceRef: liveHost.host?.sourceRef ?? null,
+    ...(association ? {turnAssociation: association} : {}),
   };
 }
 
-module.exports = {observeNativeTranscript};
+module.exports = {observeNativeTranscript, associateNativeTurn};
