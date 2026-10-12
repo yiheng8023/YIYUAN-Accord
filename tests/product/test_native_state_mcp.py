@@ -1314,6 +1314,171 @@ process.stdout.write(JSON.stringify({response,changed}));
         self.assertEqual(len(images), 1)
         self.assertEqual(base64.b64decode(images[0]['data']), png)
         self.assertNotIn('data:image/', json.dumps(response['structuredContent']))
+
+    def test_native_multiple_png_wrappers_enrich_one_hook_without_reordering_parts(self):
+        first, second = self.png_fixture(), self.png_fixture(255)
+        transcript = self.replace_anchor_png(first)
+        rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+        group = self.wrapped_png(second)['content'][1:]
+        group[0]['text'] = group[0]['text'].replace('Image #1', 'Image #2')
+        rows[2]['payload']['content'].extend(group)
+        transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+        receipt = next(self.state.glob('*.input.json')); original = json.loads(receipt.read_bytes())
+        preview = self.native_input_preview(); evidence = preview['nativeInputEvidence']
+        self.assertEqual(evidence['state'], 'observed', evidence)
+        record = evidence['records'][0]
+        self.assertEqual([part['partIndex'] for part in record['parts']], list(range(7)))
+        images = [part for part in record['parts'] if part['type'] == 'image']
+        self.assertEqual([part['sha256'] for part in images],
+                         [hashlib.sha256(data).hexdigest() for data in (first, second)])
+        for part, data in zip(images, (first, second)):
+            selected = {'evidenceCursor': evidence['cursor'], 'recordOffset': record['recordOffset'],
+                        'recordSha256': record['recordSha256'], 'partIndex': part['partIndex']}
+            before = self.files()
+            read = self.read_input(sourcePart=selected, expectedReceiptEpoch=preview['epoch'])
+            self.assertFalse(read['isError'], read)
+            self.assertEqual(base64.b64decode(read['imageContent']['data']), data)
+            self.assertEqual(self.files(), before)
+        reconciled = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                                  evidenceCursor=evidence['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        saved = json.loads(receipt.read_bytes())
+        self.assertEqual(saved['nativeInputs'], original['nativeInputs'])
+        self.assertEqual(saved['promptSha256'], original['promptSha256'])
+        self.assertNotIn('data:image/', json.dumps(saved))
+        self.assertTrue(self.native_input_preview()['nativeInputEvidence']['latestNativeInputsComplete'])
+
+    def test_native_typed_ambient_gap_keeps_hook_ledger_and_latest_input(self):
+        self.native_context()
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        prompt = 'Current real user input'
+        self.append_native_message(text=prompt, id='ambient',
+            internal_chat_message_metadata_passthrough={'turn_id': meta['turn_id'],
+                'content_item_kinds': ['additional_content.codex_apps_open_page']})
+        transcript = self.append_native_message(text=prompt, id='current-human')
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt,
+            'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
+            session=meta['session_id'], hook='UserPromptSubmit')
+        receipt = next(self.state.glob('*.input.json')); original = json.loads(receipt.read_bytes())
+        preview = self.native_input_preview(); evidence = preview['nativeInputEvidence']
+        self.assertEqual(evidence['state'], 'observed', evidence)
+        self.assertEqual([record['itemId'] for record in evidence['pendingInputs']], ['ambient'])
+        self.assertTrue(self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0,
+            result='Cannot bind past missing input', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Reconcile source', canContinue=False)['isError'])
+        reconciled = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                                  evidenceCursor=evidence['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        saved = json.loads(receipt.read_bytes())
+        self.assertEqual(saved['nativeInputs'][:2], original['nativeInputs'])
+        for field in ('promptSha256', 'turnId', 'inputSource', 'nativeInputBasis'):
+            self.assertEqual(saved[field], original[field])
+        self.assertEqual(saved['nativeInputs'][-1]['nativeEvidence']['itemId'], 'ambient')
+        current = self.native_input_preview()['nativeInputEvidence']
+        self.assertTrue(current['latestNativeInputsComplete'], current)
+        self.assertEqual([record['itemId'] for record in current['records']], [None, 'ambient', 'current-human'])
+        self.automatic_capacity_retry('retry-after-ambient-gap')
+        current = self.native_input_preview()
+        bound = self.manage(action='bind', epoch=current['epoch'], expectedRevision=0,
+            result='Keep source order for retry proof', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Continue safely', canContinue=False)
+        self.assertFalse(bound['isError'], bound)
+
+    def test_native_multiple_png_second_image_must_meet_shape_and_total_budget(self):
+        for kind in ('invalid-second-wrapper', 'remote-second-image', 'total-budget'):
+            with self.subTest(kind=kind):
+                first, second = self.png_fixture(), self.png_fixture(255)
+                if kind == 'total-budget':
+                    first += b'\x00'*(4*1024*1024-len(first))
+                    second += b'\x00'*(4*1024*1024+1-len(second))
+                transcript = self.replace_anchor_png(first)
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                group = self.wrapped_png(second)['content'][1:]
+                group[0]['text'] = group[0]['text'].replace('Image #1', 'Image #2')
+                if kind == 'invalid-second-wrapper': group[2]['text'] = '<invalid-close>'
+                elif kind == 'remote-second-image': group[1]['image_url'] = 'https://must-not-fetch.invalid/two.png'
+                rows[2]['payload']['content'].extend(group)
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                before = self.files()
+                preview = self.native_input_preview(); evidence = preview['nativeInputEvidence']
+                self.assertFalse(evidence.get('latestNativeInputsComplete', False))
+                if evidence['state'] == 'observed':
+                    self.assertFalse(evidence['records'][0]['supported'])
+                    self.assertTrue(self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                        evidenceCursor=evidence['cursor'])['isError'])
+                self.assertEqual(self.files(), before)
+                shutil.rmtree(self.state)
+
+    def test_native_untyped_gap_before_a_later_hook_stays_unknown(self):
+        for kind in ('label-only', 'wrong-turn', 'mixed-kinds', 'changed-old-human'):
+            with self.subTest(kind=kind):
+                self.native_context()
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                fields = {}
+                if kind in ('wrong-turn', 'mixed-kinds'):
+                    fields['internal_chat_message_metadata_passthrough'] = {
+                        'turn_id': 'foreign' if kind == 'wrong-turn' else meta['turn_id'],
+                        'content_item_kinds': ['additional_content.codex_apps_open_page'] +
+                            (['unknown'] if kind == 'mixed-kinds' else [])}
+                self.append_native_message(text='<external_codex_apps_open_page>{}</external_codex_apps_open_page>'
+                    if kind != 'changed-old-human' else 'Changed old human input', **fields)
+                transcript = self.append_native_message(text='Later matching text')
+                self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Later matching text',
+                    'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
+                    session=meta['session_id'], hook='UserPromptSubmit')
+                before = self.files()
+                evidence = self.native_input_preview()['nativeInputEvidence']
+                self.assertEqual(evidence['state'], 'unknown', evidence)
+                self.assertEqual(evidence['reason'], 'native-captured-input-prefix-mismatch')
+                self.assertEqual(self.files(), before)
+                shutil.rmtree(self.state)
+
+    def test_native_reconciled_human_before_a_later_hook_keeps_source_binding(self):
+        self.native_context()
+        transcript = self.append_native_message(text='Human C', id='human-c')
+        preview = self.native_input_preview()
+        reconciled = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+            evidenceCursor=preview['nativeInputEvidence']['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        original = json.loads(next(self.state.glob('*.input.json')).read_bytes())
+        self.append_native_message(text='Human B', id='human-b')
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Human B',
+            'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
+            session=meta['session_id'], hook='UserPromptSubmit')
+        current = self.native_input_preview(); evidence = current['nativeInputEvidence']
+        self.assertTrue(evidence['latestNativeInputsComplete'], evidence)
+        self.assertEqual([record['itemId'] for record in evidence['records']], [None, 'human-c', 'human-b'])
+        saved = json.loads(next(self.state.glob('*.input.json')).read_bytes())
+        self.assertEqual(saved['nativeInputs'][:2], original['nativeInputs'])
+        self.automatic_capacity_retry('retry-after-reconciled-human')
+        bound = self.manage(action='bind', epoch=current['epoch'], expectedRevision=0,
+            result='Preserve reconciled human source before later Hook', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Continue without replay', canContinue=False)
+        self.assertFalse(bound['isError'], bound)
+
+    def test_native_reconciliation_cursor_survives_same_turn_hook_and_holds_changed_media(self):
+        first, second = self.png_fixture(), self.png_fixture(255)
+        transcript = self.replace_anchor_png(first)
+        preview = self.native_input_preview()
+        reconciled = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+            evidenceCursor=preview['nativeInputEvidence']['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        old = json.loads(next(self.state.glob('*.input.json')).read_bytes())
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        self.append_native_message(text='Later Hook input', id='later-hook')
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Later Hook input',
+            'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
+            session=meta['session_id'], hook='UserPromptSubmit')
+        saved = json.loads(next(self.state.glob('*.input.json')).read_bytes())
+        self.assertEqual(saved['nativeInputReconciliation'], old['nativeInputReconciliation'])
+        transcript.write_text(transcript.read_text(encoding='utf-8').replace(
+            base64.b64encode(first).decode(), base64.b64encode(second).decode()), encoding='utf-8')
+        before = self.files()
+        evidence = self.native_input_preview()['nativeInputEvidence']
+        self.assertEqual(evidence['state'], 'unknown', evidence)
+        self.assertEqual(evidence['reason'], 'native-input-evidence-changed')
+        self.assertEqual(self.files(), before)
         self.assertEqual(self.files(), before)
 
     def test_native_png_source_selector_and_malformed_media_never_fetch_paths_or_urls(self):

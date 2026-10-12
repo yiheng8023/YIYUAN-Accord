@@ -1551,6 +1551,7 @@ def native_release_recovery_integration(codex, evidence):
     original = digest(keep)
     sources = [ROOT/'runtime'/name for name in ('carrier-handoff.cjs', 'carrier-recorder.cjs',
         'codex-connection.cjs', 'task-checkpoint.cjs', 'codex-context.cjs')]
+    sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/codex-context.cjs')
     sources += [DRIVER, Path(__file__), ROOT/'scripts/observe_codex_lifecycle.py',
                 ROOT/'scripts/observe_codex_entry.py', ROOT/'scripts/codex_rpc.py', ROOT/'scripts/inspect_native_resources.py']
     manifest = {'scenario': 'release-recovery', 'evidence': str(root), 'sourceRoot': str(ROOT),
@@ -1784,6 +1785,7 @@ def inspect_release_recovery_evidence(value):
     need(original.is_absolute() and source_root.is_absolute(),'recorded roots unavailable')
     required_sources={'runtime/carrier-handoff.cjs','runtime/carrier-recorder.cjs','runtime/codex-connection.cjs',
         'runtime/codex-context.cjs','runtime/task-checkpoint.cjs','tests/product/carrier_handoff_host.cjs',
+        'plugins/yiyuan-accord-codex/runtime/codex-context.cjs',
         'tests/product/test_carrier_handoff.py','scripts/observe_codex_lifecycle.py','scripts/observe_codex_entry.py',
         'scripts/codex_rpc.py','scripts/inspect_native_resources.py'}
     observed_sources=set()
@@ -1987,6 +1989,7 @@ class SyntheticReleaseRecoveryOracleTests(unittest.TestCase):
     SOURCES = (
         'runtime/carrier-handoff.cjs', 'runtime/carrier-recorder.cjs',
         'runtime/codex-connection.cjs', 'runtime/codex-context.cjs',
+        'plugins/yiyuan-accord-codex/runtime/codex-context.cjs',
         'runtime/task-checkpoint.cjs', 'tests/product/carrier_handoff_host.cjs',
         'tests/product/test_carrier_handoff.py', 'scripts/observe_codex_lifecycle.py',
         'scripts/observe_codex_entry.py', 'scripts/codex_rpc.py',
@@ -2538,6 +2541,7 @@ def native_integration(codex, evidence, scenario=None):
              ROOT/'scripts/observe_codex_entry.py',ROOT/'scripts/codex_rpc.py',ROOT/'scripts/inspect_native_resources.py']
     if any(s in ('owned-connection','source-context','websocket-connection','recover-receipt','finalize-receipt') for s in scenarios):
         sources.extend(ROOT/'runtime'/name for name in ('codex-connection.cjs','task-checkpoint.cjs','codex-context.cjs'))
+        sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/codex-context.cjs')
     if 'finalize-receipt' in scenarios:
         sources.append(ROOT/'runtime/carrier-recorder.cjs')
     manifest['sourceHashes']={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}

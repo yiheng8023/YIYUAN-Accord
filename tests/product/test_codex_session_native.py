@@ -47,6 +47,7 @@ SOURCE_FILES = (
     "runtime/carrier-recorder.cjs",
     "runtime/task-checkpoint.cjs",
     "runtime/codex-context.cjs",
+    "plugins/yiyuan-accord-codex/runtime/codex-context.cjs",
 )
 HOT_TOOL_SEQUENCES = {
     10: {1: "accord_request_handoff", 3: "accord_inspect_context",

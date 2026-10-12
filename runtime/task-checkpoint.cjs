@@ -255,7 +255,7 @@ function observeStoredContext(input, request, now = Date.now()) {
     }
     return nativeContextReader(proof.binding, {now, maxAgeMs: request.maxAgeMs ?? 30000,
       retryInputSha256: proof.promptHash, capturedInputHashes: proof.captured,
-      acceptedExecution: proof.acceptedExecution, currentHost: request.currentHost});
+      acceptedExecution: proof.acceptedExecution, retryInputScan: proof.sourceScan, currentHost: request.currentHost});
   }
   return nativeContextReader(input.nativeContextSource, {now, maxAgeMs: request.maxAgeMs ?? 30000,
     ...(Object.hasOwn(request, 'currentHost') ? {currentHost: request.currentHost} : {})});
@@ -453,7 +453,8 @@ function inputEvidence(input, request, expectedCursor = null, readPart = null) {
   }
   return nativeInputReader(basis.source, {anchorHash: basis.promptSha256,
     captured: entries.slice(start).filter(item => item.source !== 'retained-native-replay')
-      .map(item => ({promptSha256: item.promptSha256, recordSha256: item.nativeEvidence?.recordSha256})),
+      .map(item => ({promptSha256: item.promptSha256, turnId: item.turnId,
+        recordSha256: item.nativeEvidence?.recordSha256, sourceRef: item.nativeEvidence?.sourceRef})),
     host: request.currentHost, expectedTurnId: request.nativeTurnId, expectedCursor,
     retainedCursor: input.nativeInputReconciliation?.cursor,
     coverage: input.nativeInputReconciliation?.recordCoverage, readPart});
@@ -481,15 +482,17 @@ function retryBinding(input, request) {
   if (!text(turnId) || turnId.length > 200 || !text(model) || model.length > 200) return null;
   return {...source, turnId, model};
 }
-function turnProofBasis(input, request, evidence, extra = []) {
+function turnProofBasis(input, request, evidence) {
   const execution = retryBinding(input, request), basis = inputBasis(input);
   if (!execution || !basis || evidence.state !== 'observed') return null;
   const entries = retainedInputs(input), start = entries.findIndex(item => item.epoch === basis.anchorEpoch);
   if (start < 0) return null;
   return {binding: {...basis.source, model: basis.source.model || evidence.originModel},
     promptHash: basis.promptSha256,
-    captured: entries.slice(start).filter(item => item.source !== 'retained-native-replay')
-      .map(item => item.promptSha256).concat(extra),
+    captured: evidence.records.map(item => item.promptSha256),
+    sourceScan: {anchorHash: basis.promptSha256, expectedCursor: evidence.cursor,
+      captured: evidence.records.map(({promptSha256, turnId, recordSha256, sourceRef}) =>
+        ({promptSha256, turnId, recordSha256, sourceRef}))},
     acceptedExecution: {turnId: execution.turnId, model: execution.model}};
 }
 function associateCurrentTurn(input, request) {
@@ -497,7 +500,7 @@ function associateCurrentTurn(input, request) {
   const proof = turnProofBasis(input, request, evidence);
   if (!proof || !evidence.latestInputReconciled) return null;
   const association = nativeTurnAssociation(proof.binding, request.currentHost, proof.promptHash,
-    proof.captured, proof.acceptedExecution);
+    proof.captured, proof.acceptedExecution, proof.sourceScan);
   return association.state === 'observed' ? association : null;
 }
 function requireNativeTurn(request, input, expectedCursor = null) {
@@ -962,10 +965,10 @@ function operate(request) {
       const observedTurn = currentInput.nativeInputReconciliation?.turnId ??
         currentInput.hostObservation?.turnId ?? currentInput.turnId;
       if (request.nativeTurnId !== observedTurn) {
-        const proof = turnProofBasis(currentInput, request, evidence, evidence.pendingInputs.map(item => item.promptSha256));
+        const proof = turnProofBasis(currentInput, request, evidence);
         if (!proof) fail('native-call-turn-conflict');
         const association = nativeTurnAssociation(proof.binding, request.currentHost, proof.promptHash,
-          proof.captured, proof.acceptedExecution);
+          proof.captured, proof.acceptedExecution, proof.sourceScan);
         if (association.state !== 'observed') fail('native-call-turn-conflict');
       }
       return inputLocked(where, () => {
@@ -974,7 +977,10 @@ function operate(request) {
         const checked = inputEvidence(after, request, request.evidenceCursor);
         if (checked.state !== 'observed') fail('native-input-evidence-changed');
         if (canonical(readInput(where)) !== canonical(after)) fail('latest-user-input-not-reconciled');
-        const epoch = crypto.randomUUID(), last = checked.pendingInputs.at(-1);
+        // Receipt append order is not source chronology: a gap before a later
+        // Hook must not replace the latest real input summary.
+        const epoch = crypto.randomUUID(), last = checked.pendingInputs.find(item =>
+          item.recordOffset === checked.records.at(-1)?.recordOffset);
         const receipt = {...raw, epoch,
           ...(last ? {inputSource: 'reconciled-native-input', promptSha256: last.promptSha256, turnId: last.turnId} : {}),
           nativeInputBasis: inputBasis(raw),
@@ -1404,6 +1410,11 @@ function handleHook(event) {
     input.nativeInputBasis = Object.hasOwn(event, 'recovery_epoch') ? previousBasis
       : previousBasis?.source.turnId === input.turnId && previousBasis?.source.transcriptPath === input.nativeContextSource?.transcriptPath
         ? previousBasis : inputBasis(input);
+    if (previous?.nativeInputReconciliation && canonical(input.nativeInputBasis) === canonical(previousBasis) &&
+        previous.nativeInputReconciliation.turnId === input.turnId && input.nativeContextSource) {
+      input.nativeInputReconciliation = {...previous.nativeInputReconciliation,
+        turnId: input.turnId, model: input.nativeContextSource.model};
+    }
     publishInput(where, input);
     return hint(event, where, input, prior);
     }, true); // Preserve a failed publication as a recoverable lock, not stale success.

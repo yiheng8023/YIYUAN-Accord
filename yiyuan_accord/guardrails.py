@@ -475,9 +475,17 @@ def activation_mechanism_errors(
             context_path = repository_relative_path(root, context_locator)
             canonical_context = repository_relative_path(root, "runtime/codex-context.cjs")
             if (adapter_id != "codex" or context_path is None or canonical_context is None
-                    or context_path.is_symlink() or canonical_context.is_symlink()
-                    or _owned_bytes(context_path) != _owned_bytes(canonical_context)):
+                    or context_path.is_symlink() or canonical_context.is_symlink()):
                 errors.append(f"{prefix} native-context module differs from canonical bytes")
+            else:
+                implementation = _owned_bytes(context_path)
+                # Keep exact byte binding without maintaining two implementations.
+                # Historical complete copies remain valid under their original form.
+                facade = ("'use strict';\n// Packaged implementation SHA256: "
+                          + sha256(implementation).hexdigest()
+                          + "\nmodule.exports = require('../plugins/yiyuan-accord-codex/runtime/codex-context.cjs');\n").encode()
+                if _owned_bytes(canonical_context) not in (implementation, facade):
+                    errors.append(f"{prefix} native-context module differs from canonical bytes")
         except OSError:
             errors.append(f"{prefix} native-context module is unreadable")
     if task_checkpoint:

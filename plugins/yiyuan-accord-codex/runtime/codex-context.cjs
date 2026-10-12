@@ -132,11 +132,23 @@ function defaultSessionsRoot() {
 }
 
 function wrappedImage(content) {
-  return Array.isArray(content) && content.length === 4 &&
-    content[0]?.type === 'input_text' && typeof content[0].text === 'string' &&
-    content[1]?.type === 'input_text' &&
-    /^<image name=\[Image #[1-9]\d*\] path="[^"\u0000-\u001f]+">$/u.test(content[1].text || '') &&
-    content[2]?.type === 'input_image' && content[3]?.type === 'input_text' && content[3].text === '</image>';
+  if (!Array.isArray(content) || content.length < 4 || (content.length - 1) % 3 ||
+      content[0]?.type !== 'input_text' || typeof content[0].text !== 'string') return false;
+  for (let index = 1; index < content.length; index += 3) {
+    if (content[index]?.type !== 'input_text' ||
+        !/^<image name=\[Image #[1-9]\d*\] path="[^"\u0000-\u001f]+">$/u.test(content[index].text || '') ||
+        content[index + 1]?.type !== 'input_image' || content[index + 2]?.type !== 'input_text' ||
+        content[index + 2].text !== '</image>') return false;
+  }
+  return true;
+}
+
+// Source shape only: host ambient metadata grants no human authority. A user
+// typing the same wrapper text does not qualify for this narrow capture gap.
+function typedAmbient(payload, turnId) {
+  const metadata = payload?.internal_chat_message_metadata_passthrough;
+  return metadata?.turn_id === turnId && Array.isArray(metadata.content_item_kinds) &&
+    metadata.content_item_kinds.length === 1 && metadata.content_item_kinds[0] === 'additional_content.codex_apps_open_page';
 }
 
 function inputHash(line) {
@@ -173,13 +185,14 @@ function contentEvidence(payload) {
     content[0]?.type === 'input_text' && typeof content[0].text === 'string';
   if (payload?.type !== 'message' || !singleText && !wrappedImage(content)) return {supported: false, parts: []};
   const parts = [];
+  let mediaBytes = 0;
   for (let partIndex = 0; partIndex < content.length; partIndex++) {
     const item = content[partIndex];
     if (item.type === 'input_text') parts.push({partIndex, type: 'text', textChars: [...item.text].length,
       sha256: crypto.createHash('sha256').update(item.text).digest('hex')});
     else {
       const image = pngData(item.image_url);
-      if (!image) return {supported: false, parts};
+      if (!image || (mediaBytes += image.bytes) > MAX_NATIVE_MEDIA_BYTES) return {supported: false, parts};
       const {data, ...description} = image;
       parts.push({partIndex, type: 'image', ...description, encodingScope: 'strict-base64-png-signature'});
     }
@@ -288,9 +301,10 @@ function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [p
     sourceRef: `${sourceRef}#byte=${retryOffset}`, hostSourceRef: host.sourceRef};
 }
 
-function associateNativeTurn(binding, host, promptHash, captured, acceptedExecution) {
+function associateNativeTurn(binding, host, promptHash, captured, acceptedExecution, retryInputScan) {
   return observeNativeTranscript(binding, {now: Date.now(), maxAgeMs: 1,
     retryHost: host, retryInputSha256: promptHash, capturedInputHashes: captured,
+    ...(retryInputScan ? {retryInputScan} : {}),
     ...(acceptedExecution ? {acceptedExecution} : {})});
 }
 
@@ -302,6 +316,9 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
   const anchorOffset = rows[start].offset;
   let turn = binding.turnId, model = null, originModel = null, inputIndex = 0;
   const signals = [], pendingInputs = [], records = [], enrichments = [];
+  const hooks = scan.captured.filter(item => !item.recordSha256);
+  const sourced = scan.captured.filter(item => item.recordSha256);
+  const matchedSources = new Set();
   let selectedPart = null;
   for (let index = start; index < rows.length; index++) {
     const row = rows[index], line = parseRow(row), payload = line?.payload;
@@ -320,16 +337,25 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
     const event = line.type === 'event_msg' ? payload?.type : null;
     if (user) {
       signals.push([row.offset, digest]);
-      const expected = scan.captured[inputIndex++];
+      const sourceRefAtRow = `${sourceRef}#byte=${row.offset}`;
+      const sourceIndex = sourced.findIndex(item => item.recordSha256 === digest && item.sourceRef === sourceRefAtRow &&
+        (!item.turnId || item.turnId === turn));
+      if (sourceIndex >= 0 && matchedSources.has(sourceIndex)) return empty('native-captured-input-prefix-mismatch');
+      const sourceMatch = sourceIndex >= 0;
+      const ambient = typedAmbient(payload, turn);
+      const expected = hooks[inputIndex];
+      const promptHash = inputHash(line);
+      const hookMatch = !sourceMatch && !ambient && expected && expected.promptSha256 === promptHash &&
+        (!expected.turnId || expected.turnId === turn);
+      if (sourceMatch) matchedSources.add(sourceIndex);
+      else if (hookMatch) inputIndex++;
+      else if (expected && !ambient) return empty('native-captured-input-prefix-mismatch');
       const content = contentEvidence(payload);
-      const record = {turnId: turn, sourceRef: `${sourceRef}#byte=${row.offset}`, recordOffset: row.offset,
-        recordSha256: digest, itemId: payload.id ?? null, captured: Boolean(expected),
+      const record = {turnId: turn, sourceRef: sourceRefAtRow, recordOffset: row.offset,
+        recordSha256: digest, promptSha256: promptHash, itemId: payload.id ?? null, captured: Boolean(sourceMatch || hookMatch),
         supported: content.supported, parts: content.parts};
       records.push(record);
-      if (expected) {
-        if (expected.recordSha256 ? expected.recordSha256 !== digest : expected.promptSha256 !== inputHash(line)) {
-          return empty('native-captured-input-prefix-mismatch');
-        }
+      if (record.captured) {
         if (!content.supported || content.parts.some(part => part.type === 'image') && !scan.coverage?.some(item =>
             item.recordOffset === row.offset && item.recordSha256 === digest && canonical(item.parts) === canonical(content.parts))) {
           enrichments.push(record);
@@ -359,7 +385,7 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       }
     }
   }
-  if (inputIndex < scan.captured.length) return empty('native-captured-input-prefix-incomplete');
+  if (inputIndex !== hooks.length || matchedSources.size !== sourced.length) return empty('native-captured-input-prefix-incomplete');
   if (scan.host && (scan.host.threadId !== binding.sessionId || scan.host.turnId !== turn || scan.host.model !== model)) {
     return empty('native-input-current-host-conflict');
   }
@@ -515,6 +541,12 @@ function observeNativeTranscript(binding, options = {}) {
   if (inputScan) return finish(scanNativeInputs(tailRows, tail, tailOffset, binding, inputScan, identity,
     crypto.createHash('sha256').update(headRows[0].bytes).digest('hex'),
     `codex-rollout:${relative.split(path.sep).join('/')}`));
+  if (options.retryInputScan) {
+    const evidence = scanNativeInputs(tailRows, tail, tailOffset, binding, options.retryInputScan, identity,
+      crypto.createHash('sha256').update(headRows[0].bytes).digest('hex'),
+      `codex-rollout:${relative.split(path.sep).join('/')}`);
+    if (evidence.state !== 'observed' || !evidence.latestInputReconciled) return finish(empty('native-input-evidence-changed'));
+  }
   const association = retry ? capacityRetry(tailRows, binding, liveHost.host, options.retryInputSha256,
     `codex-rollout:${relative.split(path.sep).join('/')}`, options.capturedInputHashes, accepted) : null;
   if (proofOnly) return finish(association);
