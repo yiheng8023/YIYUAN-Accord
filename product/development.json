@@ -2211,7 +2211,7 @@
             "currentNativeAdoptionEvidence": "accord-hook-failure-audit-20261013-01/current-native-mcp-adoption.json, user-ui-error-confirmation.json, current-native-bind.json and current-native-post-bind.json",
             "nativeControl": "Current Desktop17.2 supports config/mcpServer/reload with null params. Private empty-instance reply is{}, not a reload of the actual client; no per-server parameter.",
             "retainedState": "Same project/main; current true input and screenshot source enriched; original history, watermarks and unfinished contract preserved",
-            "nextDependency": "Finish this observed first-input-origin correction and actual source reconciliation, retain historical failures, then resume existing R2/R3 using healthy supported paths and existing evidence; do not require another client restart or add a release gate.",
+            "nextDependency": "The exact origin-fix CI and bounded installed-package validation are complete. Follow actual new failure evidence through affected branches while advancing original R2/R3 ordinary autonomy, necessary recovery and same-business composition; reuse closed deliveries and preserve unknown per-run causation, without another mandatory restart or new case/release gate.",
             "manualRestartOrReloadPerformed": false,
             "noBusinessReplay": true,
             "noSharedConfigChange": true,
@@ -2277,7 +2277,40 @@
               "status": "Agent handles actual diagnostic needs: reuse host records, add the necessary lightweight supplement when justified; no separate optional-switch workflow or logger platform.",
               "neededEffect": "Durable correlation of host-supported Hook/MCP events with runtime path/version, phase, receipt and error, supplemented by bounded local metadata only when useful",
               "implementationStarted": false,
-              "newReleaseGate": false
+              "newReleaseGate": false,
+              "hostEvidence": {
+                "investigation": "Bounded current Root host log queries and same-version official-source review completed",
+                "rootSqliteRows": 501,
+                "rootDesktopRows": 202,
+                "rootMcpReadyNotices": 3,
+                "hookExecutionOutputFound": false,
+                "sourceGap": "The same-version SessionStart and UserPromptSubmit generic nonzero-exit result branches omit captured stderr from completed entries; command trace spans do not record raw command/stdout/stderr. Source-level finding, not binary attestation or historical per-run causation.",
+                "sourceCommit": "740e5af33c71225640e0c1c1555c514c2c93ab74",
+                "evidence": "host-diagnostics/current-host-log-review.md, official-source/sources.json and diagnostic-path.md"
+              },
+              "laterScreenshot": {
+                "runs": 7,
+                "completed": 4,
+                "failed": 3,
+                "SessionStart": {
+                  "completed": 2,
+                  "failed": 2
+                },
+                "UserPromptSubmit": {
+                  "completed": 2,
+                  "failed": 1
+                },
+                "visibleError": "hook exited with code 1",
+                "historicalIndividualCauses": "unknown",
+                "notCombinedWithEarlierScreenshot": true,
+                "evidence": "host-diagnostics/mixed-result-screenshot.json"
+              },
+              "longTaskHypothesis": {
+                "basis": "User reports that the previous short turn had no visible error; suggests long-task continuity as a possible trigger",
+                "state": "candidate-cause-not-established",
+                "counterevidence": "The retained short missing-cache executable probe also returns code1; task duration is not a necessary condition for the generic symptom. Per-run comparison of actual source/version/path and event branch/input is still required.",
+                "newReleaseGate": false
+              }
             },
             "restartEntryObservation": {
               "actualTurn": "01a131c6-ee14-7932-8972-e7ffe0e75519",
@@ -2295,7 +2328,37 @@
               "review": "resume-entry/review.md",
               "candidateVersion": "3.3.0-dev.1+codex.20261013044101",
               "evidence": "resume-entry/current-canonical-preview.json, regression.json and review.md",
-              "qualificationPassed": false
+              "qualificationPassed": false,
+              "exactCandidateCi": {
+                "commit": "0c2931ec6cb2de06b9029ee62de9b4d473a9f1ef",
+                "run": 38306392856,
+                "status": "completed",
+                "conclusion": "success",
+                "jobs": 11,
+                "allJobsPassed": true,
+                "watchExited": 0,
+                "evidence": "resume-entry/ci-final-0c2931ec.json"
+              },
+              "nativeUpdate": {
+                "sourceCommit": "0c2931ec6cb2de06b9029ee62de9b4d473a9f1ef",
+                "version": "3.3.0-dev.1+codex.20261013044101",
+                "packageSha256": "84c4f56acf2950235d508bcbf9a1ef25c300c7fded3d231561ec70dc0c51b132",
+                "defaultInstalledEnabled": true,
+                "gitCheckoutMarketCache25BytesMatch": true,
+                "onlyOwnedRef40BytesChanged": true,
+                "otherConfigPreserved": true,
+                "warmPriorCacheRootRetiredByHost": true,
+                "originalWorkerBuildNotAttested": true,
+                "evidence": "resume-entry/source-upgrade/source-refresh.json and adoption-verified.json"
+              },
+              "naturalInputObservation": {
+                "turn": "01a13203-81e3-7381-8a75-ecb6cd47701c",
+                "hookReceiptEpoch": "42e6c32c-c93d-4fad-a18f-7d261f2498ba",
+                "originalMcpInputEvidence": "observed/bound-native-input-prefix/latestNativeInputsComplete=true",
+                "retainedInputCount": 59,
+                "inputRecoveryFlags": false,
+                "claimLimit": "Actual current receipt and original-interface source read; does not attest warm worker build, all Hook branches or R2/R3 qualification."
+              }
             }
           }
         },
