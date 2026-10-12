@@ -30,6 +30,14 @@ sufficient native continuity without adding a server. The presence of this modul
 a saved thread id or an installed MCP server does not establish control of that
 thread or register the proposal tool.
 
+Local CLI, app and IDE clients share Codex configuration; the app and IDE can
+continue the same project chat. A supported same-task resume is native continuity,
+not this fresh-task transfer protocol. Use it when sufficient, checking the actual
+thread, effective settings, pauses, pending effects and current writer. Keep UI
+sharing, stored-history access and live control distinct. Sources: [shared settings
+and chats](https://learn.chatgpt.com/docs/developer-settings),
+[App Server](https://learn.chatgpt.com/docs/app-server).
+
 In the inspected Codex 0.155.1 implementation, `codex app-server daemon version`
 only probes the default official control endpoint. `codex app-server proxy`
 connects raw stdio bytes to an already running control socket; `--sock` selects an

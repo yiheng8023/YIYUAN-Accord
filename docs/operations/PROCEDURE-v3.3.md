@@ -1,5 +1,9 @@
 # 3.3 历史试验记录（原工序文件）
 
+## 共享Codex核心与入口工序纠偏（2026-10-12）
+
+用户指出CLI、Desktop与IDE同源及会话共享。官方[设置说明](https://learn.chatgpt.com/docs/developer-settings)、[App Server](https://learn.chatgpt.com/docs/app-server)和[MCP配置](https://learn.chatgpt.com/docs/extend/mcp)支持共享基础、配置及app/IDE同项目聊天接续。本机app/IDE引擎0.162.0-alpha.17.2、npm CLI0.162.1；IDE原thread01a12a93在Desktop可读且completed/notLoaded。具体二进制不同，存档可读不冒充live控制或写权。此前把frontend标签当成共同证据不可复用的理由，造成重复入口核验；已修两项指导、PLAN/验收方法和两个entryScope。独立Sol/medium只读指导复核无发现，fresh-transfer守卫不变。新包115152/03f4原生更新12.609秒，25成员/5新Skill路径与源码一致，配置字节及原041313备份保持，自然0/Job0、读者停止；Root完整读取新现装连续性Skill，原MCP worker刷新仍未知。源码/开发验证及3项既有指导检查通过；既有业务/失败不改签、不重放，无新增案例/发布门槛或A05/A08通过。
+
 ## 自主源调用者落地与独立复核（2026-10-06）
 
 随后用户明确授权一次实际执行。原ready配置不改，激活副本绑定最新native输入及新grant；源线程01a10e58/turn01a10e59的实际turn_context为gpt-6.1-sol/medium/default、never/read-only、CLI0.160.1。一次accord_inspect_context真实调用返回unknown，未编容量；无handoff proposal或target。单轮762.087秒、控制者S819.219自然exit0、reader/streams关闭和Windows Job0；54冻结来源/配置不变。17范围/12案例和引文检查通过，Root独立复算缺case范围及连续性覆盖缺项，并在S1065.412接受七项有源发现。主仓另修三处旧分母/包身份当前口吻，建议只作规划，不重放历史或强迫机制。原报告、协议流、实际时钟、资源与ROOT-RESULT保于同目录。一次许可消费，当前只读任务闭合；正向自主交接、完整F/A和发布仍未验。

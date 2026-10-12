@@ -75,14 +75,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261012041313",
-    "rule": "Only the current OpenAI distribution is bound here. Bind the exact current package bytes after each affected change. Historical packages remain at their immutable Git revisions, not as current installable packages. Package visibility, actual participation, behavior, recovery and attributable exit require fresh evidence for each claimed entry. Documentation changes do not imply functional acceptance.",
+    "version": "3.3.0-dev.1+codex.20261012115152",
+    "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261012041313",
-        "packageSha256": "c0328e4205d9ea63a3f154d8c763c20a18940cffd8af4647a3e1cab3ee4bd6d0",
+        "packageVersion": "3.3.0-dev.1+codex.20261012115152",
+        "packageSha256": "03f4b0713d897469d37a804684761156ec7cec27c05c335f03564f91661414c6",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -1677,6 +1677,43 @@
       "id": "scoped-mcp-environment-forwarding-20261012",
       "state": "source-and-index-bytes-aligned-local-package-updated",
       "coordinationReview": {
+        "sharedCoreCorrection": {
+          "authority": "2026-10-12 user correction: verify the common CLI/app/IDE foundation, reuse proven common evidence and update the local Accord package as needed without repeated approval.",
+          "sources": [
+            "https://learn.chatgpt.com/docs/developer-settings",
+            "https://learn.chatgpt.com/docs/app-server",
+            "https://learn.chatgpt.com/docs/extend/mcp"
+          ],
+          "observation": {
+            "appAndIdeEngineVersion": "0.162.0-alpha.17.2",
+            "npmCliVersion": "0.162.1",
+            "sharedIdeThread": "01a12a93-e2ed-7ba0-8ab3-86bfc2adba79",
+            "desktopReadState": "completed stored thread; notLoaded",
+            "exactBinariesIdentical": false
+          },
+          "correction": "Local frontend labels do not require separate complete tasks, SDK controllers or fresh-task transfer. Reuse supported common runtime/configuration/task evidence; check consequential differences, pauses, pending effects and writer ownership. Shared history grants no live control or write authority.",
+          "guidanceReview": "Independent Sol/medium read-only review of the two guidance additions: no actionable findings; fresh-transfer safeguards preserved.",
+          "packageVersion": "3.3.0-dev.1+codex.20261012115152",
+          "packageSha256": "03f4b0713d897469d37a804684761156ec7cec27c05c335f03564f91661414c6",
+          "adoption": "native local update verified; Root explicitly read the new installed continuity Skill",
+          "privateEvidence": "accord-shared-core-sync-20261012-01",
+          "qualificationPassed": false,
+          "resultLimit": "Guidance and evidence-reuse correction only; historical deliveries and failures retain their identities. No new case or release gate, no full A05/A08 or release claim.",
+          "installation": {
+            "version": "3.3.0-dev.1+codex.20261012115152",
+            "packageSha256": "03f4b0713d897469d37a804684761156ec7cec27c05c335f03564f91661414c6",
+            "exactMembers": 25,
+            "nativeNewSkillPaths": 5,
+            "seconds": 12.609300599986454,
+            "configurationBytesUnchanged": true,
+            "priorRecoveryBytesUnchanged": true,
+            "naturalExitAndOwnedJobZero": true,
+            "readerThreadsStopped": true,
+            "existingHostAdoption": "Original Root MCP worker refresh unverified; runtime and Hook/MCP declarations unchanged. New owned process paths verified; Root read the new installed continuity Skill.",
+            "privateEvidence": "accord-failed-transfer-recovery-20261011-01/native-shared-core-install-20261012-01"
+          },
+          "verification": "Source verify and verify-development valid/errors[]; three existing entry-guidance/original-foundation checks passed. Two guidance additions and their affected projections independently reviewed with no actionable findings."
+        },
         "privateEvidence": "accord-mcp-env-fix-20261012-01/continuity-reconciliation",
         "ordinarySource": "Actual same-thread native compaction followed by current input/checkpoint inspection and continuation; Root is actor and recorder, not independent behavior acceptance. A later independent source review confirms visible user goals, quality/permission constraints, retained closed outcomes and failures, and continuation duties; encrypted compaction content and incomplete retained text do not establish complete history preservation.",
         "semanticRecoveryReview": {
@@ -2848,7 +2885,7 @@
           ],
           "conditions": {
             "observerCarrierRole": "Codex Desktop coordinates the source and evidence review; this entry label does not attest execution or adoption by any subject entry.",
-            "entryScope": "Use the applicable selected OpenAI entries and their actual responsibility boundaries from v33-openai-entry-applicability. Preserve pending dispositions; an SDK or CLI contribution cannot by itself close this whole functional scope.",
+            "entryScope": "Use applicable selected OpenAI responsibilities from v33-openai-entry-applicability. Reuse verified shared local Codex runtime, effective configuration and task evidence across CLI/app/IDE; check consequential entry differences and preserve unknowns. A contribution missing necessary duties, quality or subject evidence cannot close the whole scope; a frontend label alone does not prohibit valid common evidence reuse.",
             "executionBinding": "Before dispatch, a case must bind its real outcome, actor and subject entry, native host/model/effort and permissions, exact candidate/package and observer sources, protected inputs, sole-writer ownership, finite time/usage/resource limits and independent result/cleanup observations. This scope supplies no executable task or permission.",
             "ordinaryUse": "Ordinary natural-language input does not name Accord or prescribe its Skills, Hooks or internal tools. Preserve the effective user environment and distinguish actual Agent use from fixture or evaluator intervention.",
             "evidenceBoundary": "Keep actual decisions, actions, effects, original failures and their exact conditions. Static wiring, installed components, fixed-response protocol checks and historical cases remain limited contributions, not autonomous behavior or whole-scope acceptance.",
@@ -2895,7 +2932,7 @@
           ],
           "conditions": {
             "observerCarrierRole": "Codex Desktop coordinates the source and evidence review; this entry label does not attest execution or adoption by any subject entry.",
-            "entryScope": "Use the applicable selected OpenAI entries and their actual responsibility boundaries from v33-openai-entry-applicability. Preserve pending dispositions; an SDK or CLI contribution cannot by itself close this whole functional scope.",
+            "entryScope": "Use applicable selected OpenAI responsibilities from v33-openai-entry-applicability. Reuse verified shared local Codex runtime, effective configuration and task evidence across CLI/app/IDE; check consequential entry differences and preserve unknowns. A contribution missing necessary duties, quality or subject evidence cannot close the whole scope; a frontend label alone does not prohibit valid common evidence reuse.",
             "executionBinding": "Before dispatch, a case must bind its real outcome, actor and subject entry, native host/model/effort and permissions, exact candidate/package and observer sources, protected inputs, sole-writer ownership, finite time/usage/resource limits and independent result/cleanup observations. This scope supplies no executable task or permission.",
             "ordinaryUse": "Ordinary natural-language input does not name Accord or prescribe its Skills, Hooks or internal tools. Preserve the effective user environment and distinguish actual Agent use from fixture or evaluator intervention.",
             "evidenceBoundary": "Keep actual decisions, actions, effects, original failures and their exact conditions. Static wiring, installed components, fixed-response protocol checks and historical cases remain limited contributions, not autonomous behavior or whole-scope acceptance.",

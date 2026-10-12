@@ -106,6 +106,13 @@ or unknown effects and unfinished work. On recovery, reuse valid results, reconc
 loss and inspect the next necessary source. Repeated reads or renewals without
 progress call for changing the work unit, representation or permitted topology.
 
+Local Codex CLI, app and IDE clients share the Codex foundation and configuration;
+app and IDE can continue the same project chat. Prefer supported same-task resume
+or compaction when sufficient. A client switch alone needs no SDK transfer or new
+controller. Check the actual thread, effective settings, pauses, pending effects
+and writer before continuing; shared history alone grants no control or write right.
+Reuse proven common behavior and check only consequential entry differences.
+
 For a fresh-task transfer or its unresolved effects through an owned App Server controller, read the
 [native handoff interface](../deliver-demand-driven-outcome/references/native-handoff.md)
 before integration. The adapter coordinates caller-supplied transport, durable
