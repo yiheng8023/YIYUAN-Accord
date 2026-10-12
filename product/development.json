@@ -101,14 +101,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261013030209",
+    "version": "3.3.0-dev.1+codex.20261013044101",
     "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261013030209",
-        "packageSha256": "8bc55eec9a6d2a4f9f7bc97a3387814adb6160bf58567914f2c2e4f4efb8adc1",
+        "packageVersion": "3.3.0-dev.1+codex.20261013044101",
+        "packageSha256": "84c4f56acf2950235d508bcbf9a1ef25c300c7fded3d231561ec70dc0c51b132",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -2211,7 +2211,7 @@
             "currentNativeAdoptionEvidence": "accord-hook-failure-audit-20261013-01/current-native-mcp-adoption.json, user-ui-error-confirmation.json, current-native-bind.json and current-native-post-bind.json",
             "nativeControl": "Current Desktop17.2 supports config/mcpServer/reload with null params. Private empty-instance reply is{}, not a reload of the actual client; no per-server parameter.",
             "retainedState": "Same project/main; current true input and screenshot source enriched; original history, watermarks and unfinished contract preserved",
-            "nextDependency": "Return to existing R2/R3 ordinary autonomy, necessary recovery and same-business composition using valid delivery/continuity evidence. Do not replay closed work. Recheck original interface at the next supported natural host scope; current compatible helper is usable. Historical9 individual causes remain unknown, not a newly required gate.",
+            "nextDependency": "Finish this observed first-input-origin correction and actual source reconciliation, retain historical failures, then resume existing R2/R3 using healthy supported paths and existing evidence; do not require another client restart or add a release gate.",
             "manualRestartOrReloadPerformed": false,
             "noBusinessReplay": true,
             "noSharedConfigChange": true,
@@ -2274,10 +2274,28 @@
               "watchExited": 0
             },
             "diagnosticImprovement": {
-              "status": "Optional proposal; user confirmed logs are not mandatory",
+              "status": "Agent handles actual diagnostic needs: reuse host records, add the necessary lightweight supplement when justified; no separate optional-switch workflow or logger platform.",
               "neededEffect": "Durable correlation of host-supported Hook/MCP events with runtime path/version, phase, receipt and error, supplemented by bounded local metadata only when useful",
               "implementationStarted": false,
               "newReleaseGate": false
+            },
+            "restartEntryObservation": {
+              "actualTurn": "01a131c6-ee14-7932-8972-e7ffe0e75519",
+              "startupGuidanceAndNewReceiptObserved": true,
+              "inputReplayNeeded": false,
+              "defect": "Typed host ambient before the first real input was not skipped by retryOrigin, unlike the later-prefix scanner; read expansion then raced the growing transcript and masked missing-origin as transient changed-read.",
+              "fix": "Same-turn exact typed ambient is skipped while locating the first Hook input; full source scan retains the record as pending. Ordinary human/foreign/mixed/label-only initial rows still hold. Shared input/capacity/context callers use the same function.",
+              "realSourceBytes": [
+                124082164,
+                124098889,
+                124100272
+              ],
+              "rootRegressionTestsPassed": 249,
+              "narrowChecksPassed": 15,
+              "review": "resume-entry/review.md",
+              "candidateVersion": "3.3.0-dev.1+codex.20261013044101",
+              "evidence": "resume-entry/current-canonical-preview.json, regression.json and review.md",
+              "qualificationPassed": false
             }
           }
         },

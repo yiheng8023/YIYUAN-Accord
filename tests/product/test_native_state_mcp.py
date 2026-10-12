@@ -998,6 +998,58 @@ process.stdout.write(JSON.stringify({result,changed}));
             nextAction='Create report', canContinue=True)
         self.assertFalse(result['isError'], result)
 
+    def test_native_origin_skips_typed_ambient_before_first_hook_input(self):
+        for text in ('Host page context', 'Continue this work.'):
+            with self.subTest(text=text):
+                if self.state.exists(): shutil.rmtree(self.state)
+                self.native_context()
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                rows.insert(2, {'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+                    'id': 'initial-ambient', 'content': [{'type': 'input_text', 'text': text}],
+                    'internal_chat_message_metadata_passthrough': {'turn_id': meta['turn_id'],
+                        'content_item_kinds': ['additional_content.codex_apps_open_page']}}})
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                receipt = next(self.state.glob('*.input.json')); original = json.loads(receipt.read_bytes())
+                preview = self.native_input_preview(); evidence = preview['nativeInputEvidence']
+                self.assertEqual(evidence['state'], 'observed', evidence)
+                self.assertEqual([item['itemId'] for item in evidence['pendingInputs']], ['initial-ambient'])
+                reconciled = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                    evidenceCursor=evidence['cursor'])
+                self.assertFalse(reconciled['isError'], reconciled)
+                saved = json.loads(receipt.read_bytes())
+                self.assertEqual(saved['nativeInputs'][:1], original['nativeInputs'])
+                self.assertEqual(saved['promptSha256'], original['promptSha256'])
+                self.assertEqual(saved['inputSource'], 'native-input-event')
+                self.automatic_capacity_retry('retry-after-initial-ambient')
+                bound = self.manage(action='bind', epoch=reconciled['value']['observation']['epoch'],
+                    expectedRevision=0, result='Preserve actual first user input', inputs=[],
+                    outputs=[{'path': 'report.txt'}], nextAction='Continue safely', canContinue=False)
+                self.assertFalse(bound['isError'], bound)
+                shutil.rmtree(self.state)
+
+    def test_native_origin_does_not_skip_untyped_or_foreign_first_user(self):
+        for kind in ('label-only', 'wrong-turn', 'mixed-kinds', 'human'):
+            with self.subTest(kind=kind):
+                self.native_context()
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                payload = {'type': 'message', 'role': 'user', 'content': [{'type': 'input_text',
+                    'text': 'Earlier actual human' if kind == 'human' else '<external_codex_apps_open_page>{}</external_codex_apps_open_page>'}]}
+                if kind in ('wrong-turn', 'mixed-kinds'):
+                    payload['internal_chat_message_metadata_passthrough'] = {
+                        'turn_id': 'foreign' if kind == 'wrong-turn' else meta['turn_id'],
+                        'content_item_kinds': ['additional_content.codex_apps_open_page']+
+                            (['unknown'] if kind == 'mixed-kinds' else [])}
+                rows.insert(2, {'type': 'response_item', 'payload': payload})
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                before = self.files(); evidence = self.native_input_preview()['nativeInputEvidence']
+                self.assertEqual((evidence['state'], evidence['reason']), ('unknown', 'native-input-origin-unavailable'))
+                self.assertEqual(self.files(), before)
+                shutil.rmtree(self.state)
+
     def test_native_input_reconciliation_cursor_rejects_new_input_control_and_changed_bytes(self):
         meta = self.params['_meta']['x-codex-turn-metadata']
         for change in ('human', 'old-bytes', 'control'):

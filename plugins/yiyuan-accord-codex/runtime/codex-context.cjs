@@ -208,6 +208,8 @@ function retryOrigin(rows, binding, promptHash) {
       const candidate = parseRow(rows[next]);
       if (candidate?.type === 'response_item' && candidate.payload?.type === 'message' &&
           candidate.payload.role === 'developer') continue;
+      if (candidate?.type === 'response_item' && candidate.payload?.type === 'message' &&
+          candidate.payload.role === 'user' && typedAmbient(candidate.payload, binding.turnId)) continue;
       if (inputHash(candidate) === promptHash) return index;
       break;
     }
