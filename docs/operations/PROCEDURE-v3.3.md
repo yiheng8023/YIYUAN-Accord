@@ -1,5 +1,9 @@
 # 3.3 历史试验记录（原工序文件）
 
+## 既有入口适用性来源审定与有限准入（2026-10-12）
+
+8ff2415d只修六组既有scope/case条件的SDK/VS Code过期解释，未改任何操作判据或选择。已有case明允有据路径无需重复business实验；Root冻结后审九对象/相关模式/责任与替代路线，原nativeIDE及共享核心/安装/业务贡献按原身份复用，Local-only Work与Work Cloud、手机Remote主机通道及deferred Chat均分开。两位fresh Sol独立四轴检查实际来源/Root末稿，现有assess_development_evidence经observe/recheck接受仅v33-openai-entry-applicability-01，errors[]；完整function/candidate仍false。判据没改成表格自认证，模板expected没有当observed，原IDE水印、业务预算/QA失败及净成本未知保持。私有原件、冻结binding、报告、两审、源HTML/原生行索引、索引解析/list错误及定位修正前稿均保于accord-entry-applicability-20261012-01；source-review进程结束，无新业务/控制器/安装/Plan/Goal，证据目录保留。
+
 ## 当前路由说明与历史质量底线的CI修正（2026-10-12）
 
 06b7c770/CI38202584126的9矩阵共同失败、2原生项成功。原始job日志及本地最小红例均指向test_admission.py的历史scope整对象比较，只有两个entryScope当前说明改变。现有回归仍冻结历史case/definition/fixture与其它scope字段，只允许既有路由说明随授权纠正修订，且须保留有效适用性来源引用。修后最终原CI十项检查通过，窄独审零发现；初修缺字段错误及代码预留超196字节的实际失败保留，等价缩减恢复既有5%预留，无预算/包字节/案例/发布标准改变。首次全套因该已知预留失败被Root中止，不宣称全套结果；后续全套与精确CI以实际原件记录。私有证据在accord-ci-shared-core-fix-20261012-01。

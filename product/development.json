@@ -1723,6 +1723,28 @@
             "preserved": "Original failed CI and minimized red output, initial missing-field error, reserve failures and interrupted preliminary full-suite log retained; no budget expansion or retrospective pass.",
             "privateEvidence": "accord-ci-shared-core-fix-20261012-01",
             "packageEffect": "None: 115152/03f4 package bytes remain unchanged; no reinstall, business replay, new case or release gate."
+          },
+          "entryApplicabilityAcceptance": {
+            "case": "v33-openai-entry-applicability-01",
+            "subject": {
+              "revision": "8ff2415def976f708e2e257c809d6027e62f08db",
+              "tree": "a199ce4f6c0503603d023cd9aca933f9e7af3ac6"
+            },
+            "definitionSha256": "8ce99cc163c503f4cf640458948b163fab0cea827651ea92778d5152df3acd69",
+            "packageSha256": "03f4b0713d897469d37a804684761156ec7cec27c05c335f03564f91661414c6",
+            "acceptedCases": [
+              "v33-openai-entry-applicability-01"
+            ],
+            "errors": [],
+            "scope": "existing bounded entry/mode selection and responsibility feasibility only",
+            "preserved": "Nine subjects, all modes, six selected/three deferred, expected/oracle, quality/budgets and six case IDs unchanged; no old business rerun.",
+            "review": "Two independent fresh Sol reviewers, four axes; actual source/outcome scrutiny then existing observe/recheck.",
+            "privateEvidence": "accord-entry-applicability-20261012-01",
+            "admissionSha256": "1d0467efa8e7917b52821961ff30bab93e75fc62c0fb2ee41000da3aecdd5747",
+            "remaining": "Delivery/lifecycle parent cases, ordinary autonomous timing/necessary recovery and full A05/A08/impact/release remain open; operational unknowns and original failures retained.",
+            "qualificationPassed": true,
+            "functionalCompletion": false,
+            "candidateEligible": false
           }
         },
         "privateEvidence": "accord-mcp-env-fix-20261012-01/continuity-reconciliation",
