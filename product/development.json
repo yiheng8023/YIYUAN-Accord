@@ -101,14 +101,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261013044101",
+    "version": "3.3.0-dev.1+codex.20261013051746",
     "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261013044101",
-        "packageSha256": "84c4f56acf2950235d508bcbf9a1ef25c300c7fded3d231561ec70dc0c51b132",
+        "packageVersion": "3.3.0-dev.1+codex.20261013051746",
+        "packageSha256": "7e196f09c0e3bde6e4395a3375732654179767614fc747b6413439262dfd1037",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -2360,6 +2360,21 @@
                 "claimLimit": "Actual current receipt and original-interface source read; does not attest warm worker build, all Hook branches or R2/R3 qualification."
               }
             }
+          },
+          "reconciledContextBoundary": {
+            "observedOn": "2026-10-13",
+            "subjectRevision": "ea64167cacbc642dd31e0f7c8cf4c200ec311619",
+            "evidence": "private:accord-hook-failure-audit-20261013-01/composition-review",
+            "trigger": "After same-turn input reconciliation or accepted retained recovery, a long native turn has a later repeated turn_context. Input proof is complete but context incorrectly reports native-input-evidence-changed.",
+            "cause": "Context expansion stopped at a recent context boundary before the original anchor required by retryInputScan.",
+            "correction": "Use the existing input-origin boundary for the required scan; retain the 16MiB I/O ceiling, native identity/source checks, pause and unknown-effect handling.",
+            "isolatedBefore": "Both short controls observed; both long compositions failed. Synthetic fixture bytes unchanged.",
+            "isolatedAfter": "Two positive and two negative boundary checks independently passed; all 264 related regression tests passed. Repository and development validation both valid with no errors.",
+            "packageVersion": "3.3.0-dev.1+codex.20261013051746",
+            "packageSha256": "7e196f09c0e3bde6e4395a3375732654179767614fc747b6413439262dfd1037",
+            "qualificationPassed": false,
+            "historicalHookExitCause": "unproven; this context-read defect does not establish the cause of historical Hook code1",
+            "newCaseOrReleaseGate": false
           }
         },
         "privateEvidence": "accord-mcp-env-fix-20261012-01/continuity-reconciliation",

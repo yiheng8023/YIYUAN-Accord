@@ -4,6 +4,8 @@
 
 更新：2026-10-13 · N33-20260909 / r42。[计划](PLAN-v3.3.md)拥有共识与工序，[基线](BASELINE-v3.3.md)/[验收](ACCEPTANCE-v3.3.md)保持全部 F01–F08/A01–A08。本页只保留当前状态、下一依赖和必要历史定位。
 
+2026-10-13正常推进中的组合检查确认并修正长任务Context取证缺口：同轮输入对账或合法恢复后，较近的重复turn_context让扩读提前结束，原输入已完整却误报native-input-evidence-changed。本线程实际原件和两条隔离红例相符；现在按同一输入锚点扩读，16MiB上限、来源/身份检查与pause保持。两个正向复现及两个负边界独核通过，264相关回归及仓库/开发校验通过；精确CI/本地采用分别核验。当前源码候选51746/7e196f09；上一ea与0c的11/11 CI保原身份。此项属于原R2/R3必要组合修正，不判历史Hook code1根因，不新增case或发布门槛。用户已同意原目标内必要证据绑定；当前临时跟踪为60分钟，至本地13:41:03按期限退出，旧30分钟实例已自然关闭，原件保留。
+
 ## 当前状态
 
 当前源码main已提交0c2931ec，精确CI38306392856终态11/11成功，watch3996自然exit0。候选3.3.0-dev.1+codex.20261013044101/84c4f56acf2950235d508bcbf9a1ef25c300c7fded3d231561ec70dc0c51b132，249全MCP/checkpoint及15窄检查、独立审和仓库/开发校验保持；059与9b各自CI及260机制/230入口检查仍保原身份。named native更新和默认inventory installed/enabled、25 Git/checkout/market/cache字节相同已核，config仅同市场ref40字节改变。升级由宿主退休旧030209缓存，不能由安装结果推原暖worker刷新或某次Hook失败。先前兼容helper补首条ambient及后续媒体、新输入；本轮原生44101回执和原MCP实际读源已观察到59完整输入、pending0、两恢复旗标false，旧水印/四谓词/全部未完责任保持；成功读取不认证worker构建或全分支稳定。精确原件在私有accord-hook-failure-audit-20261013-01/resume-entry及host-diagnostics。本段CI和有界采用已闭，回原R2/R3；已闭成品不重建或重放，无新case/发布门槛。

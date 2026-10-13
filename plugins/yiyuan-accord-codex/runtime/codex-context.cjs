@@ -494,7 +494,9 @@ function observeNativeTranscript(binding, options = {}) {
     let tailBytes = TAIL_BYTES;
     const hasBoundary = () => {
       const rows = completeLines(tail, tailOffset, tailOffset > 0);
-      return inputScan ? retryOrigin(rows, binding, inputScan.anchorHash) >= 0
+      // Context after reconciliation also verifies the original input prefix.
+      const requiredScan = inputScan || options.retryInputScan;
+      return requiredScan ? retryOrigin(rows, binding, requiredScan.anchorHash) >= 0
         : retry ? retryOrigin(rows, binding, options.retryInputSha256) >= 0
         : rows.some((row) => parseRow(row)?.type === 'turn_context');
     };

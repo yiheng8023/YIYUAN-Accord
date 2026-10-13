@@ -1029,6 +1029,82 @@ process.stdout.write(JSON.stringify({result,changed}));
                 self.assertFalse(bound['isError'], bound)
                 shutil.rmtree(self.state)
 
+    def append_long_tail_and_repeated_context(self):
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        records = [
+            {'type': 'response_item', 'payload': {'type': 'message', 'role': 'assistant',
+                'content': 'x' * (2 * 1024 * 1024)}},
+            {'type': 'compacted', 'payload': {'kind': 'fixture'}},
+            {'timestamp': datetime.now(timezone.utc).isoformat(),
+             'type': 'turn_context', 'payload': {'turn_id': meta['turn_id'],
+                'model': meta['model'], 'cwd': str(self.work)}},
+        ]
+        with transcript.open('a', encoding='utf-8') as stream:
+            for record in records:
+                stream.write(json.dumps(record) + '\n')
+        self.append_context_usage(4500)
+        return transcript
+
+    def assert_latest_context(self, case):
+        params = {**self.params, 'arguments': {'cwd': str(self.work),
+            'includeContext': True, 'includeNativeInputs': True}}
+        before = self.files()
+        observed = self.inspect(params)['value']
+        evidence = observed['checkpoint']['snapshot']['nativeInputEvidence']
+        context = observed['context']
+        self.assertEqual(self.files(), before)
+        self.assertEqual(evidence['state'], 'observed', evidence)
+        self.assertTrue(evidence['latestInputReconciled'])
+        self.assertTrue(evidence['latestNativeInputsComplete'])
+        self.assertEqual(context['state'], 'observed', context)
+        return observed
+
+    def test_same_turn_reconciliation_long_rollout_context(self):
+        self.native_context()
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        first = self.helper({'op': 'status'}, session=meta['session_id'])
+        contract = dict(result='Preserve the same authorized task', inputs=[],
+            outputs=[{'path': 'report.txt'}], nextAction='Continue after user resume',
+            canContinue=False)
+        self.assertFalse(self.manage(action='bind', epoch=first['epoch'],
+            expectedRevision=0, **contract)['isError'])
+        self.assertFalse(self.manage(action='pause', epoch=first['epoch'],
+            expectedRevision=1, reason='User pause remains effective')['isError'])
+        self.append_native_message(text='Inspect the current conditions.', id='same-turn-steer')
+        pending = self.native_input_preview()
+        reconciled = self.manage(action='reconcile-input', epoch=pending['epoch'],
+            expectedRevision=2, evidenceCursor=pending['nativeInputEvidence']['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        self.assert_latest_context('same-turn-short-control')
+        self.append_long_tail_and_repeated_context()
+        saved = self.helper({'op': 'status'}, session=meta['session_id'])
+        self.assertEqual(saved['mode'], 'paused')
+        self.assertEqual(saved['checkpoint']['reason'], 'User pause remains effective')
+        self.assert_latest_context('same-turn-long-rollout')
+
+    def test_retained_recovery_long_rollout_context(self):
+        self.native_context()
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        session = meta['session_id']
+        self.helper({'hook_event_name': 'SessionStart', 'source': 'resume'},
+            session=session, hook='SessionStart')
+        status = self.helper({'op': 'status'}, session=session)
+        meta.update(turn_id='resume-turn', model='resumed-model')
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'timestamp': datetime.now(
+                timezone.utc).isoformat(), 'type': 'turn_context',
+                'payload': {'turn_id': meta['turn_id'], 'cwd': str(self.work),
+                    'model': meta['model']}}) + '\n')
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Continue this work.',
+            'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript),
+            'recovery_epoch': status['epoch']}, session=session, hook='UserPromptSubmit')
+        self.append_context_usage(4500)
+        self.assert_latest_context('retained-recovery-short-control')
+        self.append_long_tail_and_repeated_context()
+        self.assert_latest_context('retained-recovery-long-rollout')
+
     def test_native_origin_does_not_skip_untyped_or_foreign_first_user(self):
         for kind in ('label-only', 'wrong-turn', 'mixed-kinds', 'human'):
             with self.subTest(kind=kind):
