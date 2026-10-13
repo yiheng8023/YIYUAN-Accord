@@ -1329,18 +1329,15 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         # Compare every scope/claim, case ID, dimension and joint obligation,
         # including newly allocated scopes, against the source declarations.
         self.assertEqual(report['caseBindingGaps'], expected_gaps)
-        integration = report['caseBindingGaps']['v33-system-integration']['function']
-        self.assertEqual(integration['caseIds'], [])
+        integration = report['openCoverage']['v33-system-integration']['claims']['function']
         self.assertTrue({'recovery-and-rollback', 'context-and-task-continuity'}
-                        <= set(integration['missingDimensions']['duties']))
+                        <= set(integration['duties']))
         self.assertTrue({'mid-task-user-steering', 'capability-loss'}
-                        <= set(integration['missingDimensions']['scenarios']))
-        self.assertTrue(integration['jointCaseMissing'])
-        continuity = report['caseBindingGaps']['v33-autonomous-continuity']['function']
-        self.assertEqual(continuity['caseIds'], [])
+                        <= set(integration['scenarios']))
+        continuity = report['openCoverage']['v33-autonomous-continuity']['claims']['function']
         scope = next(s for s in policy['scopes'] if s['id'] == 'v33-autonomous-continuity')
         for key in ('duties', 'qualityAxes', 'scenarios'):
-            self.assertEqual(set(continuity['missingDimensions'][key]), set(scope[key]))
+            self.assertEqual(set(continuity[key]), set(scope[key]))
         self.assertEqual(report['acceptanceRequirements']['A08']['blockedBy'],
                          ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07'])
         self.assertIn('v33-codex-lifecycle',
@@ -1605,7 +1602,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report['functionalCompletion'])
         self.assertFalse(report['candidateEligible'])
         self.assertIn('v33-system-integration', report['acceptanceRequirements']['A08']['missingScopes']['function'])
-        self.assertEqual(report['caseBindingGaps']['v33-system-integration']['function']['caseIds'], [])
+        self.assertEqual(report['caseBindingGaps'], self.source_case_binding_gaps(self.contract)[0])
         allocation = [case for case in policy['cases'] if case['scope'] == 'v33-dynamic-model-routing']
         self.assertEqual(set(report['caseBindingGaps']['v33-dynamic-model-routing']['function']['caseIds']),
                          {case['id'] for case in allocation})
@@ -1673,10 +1670,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertEqual(report['acceptedCases'], [])
         self.assertFalse(report['functionalCompletion'])
         self.assertFalse(report['candidateEligible'])
-        gap = report['caseBindingGaps']['v33-autonomous-continuity']['function']
+        gap = report['openCoverage']['v33-autonomous-continuity']['claims']['function']
         scope = next(s for s in policy['scopes'] if s['id'] == 'v33-autonomous-continuity')
-        self.assertEqual(set(gap['missingDimensions']['duties']), set(scope['duties']))
-        self.assertEqual(set(gap['missingDimensions']['scenarios']), set(scope['scenarios']))
+        self.assertEqual(set(gap['duties']), set(scope['duties']))
+        self.assertEqual(set(gap['scenarios']), set(scope['scenarios']))
         self.assertFalse(report['acceptanceRequirements']['A05']['complete'])
         self.assertIn('A05', report['acceptanceRequirements']['A08']['blockedBy'])
 
@@ -1880,6 +1877,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             if case["scope"] == "v33-codex-entry-coverage":
                 case["conditions"]["selectedModes"]["chatgpt-desktop"].remove("work-local")
                 case["expected"]["effect"]["entryCapabilityCoverage"]["chatgpt-desktop"]["modes"].pop("work-local")
+        self.sync_selected_cases(policy)
         with self.history():
             self.commit(contract)
             report = self.assess(contract, self.observer)
@@ -1954,6 +1952,13 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                          "cleanup": {"unrelatedStateUnchanged": True}},
         })
         return contract
+
+    def sync_selected_cases(self, policy):
+        conditions = next(c['conditions'] for c in policy['cases'] if c['scope'] == 'v33-codex-entry-coverage')
+        for case in policy['cases']:
+            for key in ('subjectEntries', 'selectedModes'):
+                if key in case['conditions']:
+                    case['conditions'][key] = copy.deepcopy(conditions[key])
 
     def test_entry_coverage_rejects_missing_stale_and_weakened_matrices(self):
         from yiyuan_accord.admission import admission_contract_errors
@@ -2038,6 +2043,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         case["conditions"]["subjectEntries"].remove("cx-sdk")
         case["conditions"]["selectedModes"].pop("cx-sdk")
         case["expected"]["effect"]["entryCapabilityCoverage"].pop("cx-sdk")
+        self.sync_selected_cases(policy)
         self.assertEqual(admission_contract_errors(contract), [])
         case["duties"] = case["duties"][:1]
         case["qualityAxes"] = case["qualityAxes"][:1]
@@ -2282,6 +2288,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 matrix = case["expected"]["effect"]["entryCapabilityCoverage"]
                 for key in set(matrix) - set(subjects):
                     matrix.pop(key)
+        self.sync_selected_cases(policy)
         entries = {row["id"]: row["host"] for row in contract["capabilityMap"]["entrySurfaces"]["rows"]}
         self.assertEqual(admission_contract_errors(contract), [])
         self.assertFalse(_entry_selection(policy, entries)["final"])

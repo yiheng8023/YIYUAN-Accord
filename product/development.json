@@ -2560,7 +2560,51 @@
           "limit": "Timestamp-bound Root usage only. Child actors are separate; prices, earlier preparation and whole-project net impact remain unknown. No new budget or acceptance gate."
         },
         "independentReview": "Original checkpoint digest, retained duties and usage arithmetic checked against the specified native span; a later bounded semantic review also read visible replacement/retained text and actual state/guidance responses. No complete-history, autonomous-trigger, default-window, handoff or A05/A08 behavior claim.",
-        "qualificationPassed": false
+        "qualificationPassed": false,
+        "currentEngineeringEpisode": {
+          "episodeId": "v33-live-development-20261013-01",
+          "definitionRevision": "b5ed54d3d3d19dc604920f2a3d84e6880b79c923",
+          "source": "private:accord-r23-live-development-20261013-01",
+          "businessOutcome": "Exact 82dec5ba/63fe552d CI matrix/timeline comparison delivered and independently recomputed; 85 checks passed, protected hashes/mtimes unchanged.",
+          "outputs": [
+            {
+              "path": "C:/Users/15521/.codex/backups/accord-r23-live-development-20261013-01/delivery/candidate-ci-comparison.json",
+              "sha256": "407900ee079c65689c64fc93d804f523298017b27ff2a95f8d10b1b181963820"
+            },
+            {
+              "path": "C:/Users/15521/.codex/backups/accord-r23-live-development-20261013-01/delivery/result.md",
+              "sha256": "4bd2e45d169b7199912ad07be50a529e0845a7e20edd6465ca6336d80b9bc510"
+            }
+          ],
+          "observedTiming": {
+            "currentCreationToLastJobSeconds": 2447,
+            "baselineCreationToLastJobSeconds": 2360,
+            "matchedJobs": 11,
+            "currentSumJobSeconds": 14216,
+            "baselineSumJobSeconds": 14127,
+            "maxParallelJobsBoth": 11
+          },
+          "independentReview": "private:accord-r23-live-development-20261013-01/independent-review/checks-final.json",
+          "firstSpanLimits": "Budget conformity not claimed: incomplete aggregate native/observer/in-flight cost, Root measured native delta 1968374 and full admission regression 943.676 seconds. The deterministic builder duration is not whole cost; original limits/failure retained.",
+          "originalRegression": {
+            "tests": 98,
+            "seconds": 943.676,
+            "exitCode": 1,
+            "failures": 3,
+            "errors": 6,
+            "source": "private:accord-r23-live-development-20261013-01/admission-original-failure.json"
+          },
+          "correction": "Tests assumed integration/continuity scopes remain forever without a declared case and synthetic entry changes omitted newly dependent selected-subject cases. Only fixture/assertion adaptation; full declaration oracle, all unobserved floors and production guards retained.",
+          "patch": {
+            "changed": "tests/product/test_admission.py",
+            "netBytes": 249,
+            "independentChecks": 11,
+            "verification": "Executor seven actual failed methods PASS13.861s; Root same seven PASS14.492s; repository/development validation valid. Original98/943.676s/3F6E retained; whole98 not reclassified or repeated.",
+            "resourceClosure": "Executor and reviewer completed, owned test sessions exited; reviewed patch/logs retained, integrated private clone removed after exact path/HEAD/unique-change/hash checks."
+          },
+          "qualificationPassed": false,
+          "resultLimit": "Finite real engineering delivery and dependent quality correction only; not full A05/A08, default-window/necessary takeover, whole impact, original warm build adoption or causal positive gain. No new scope or quality gate."
+        }
       },
       "subject": {
         "version": "3.3.0-dev.1+codex.20261012041313",
