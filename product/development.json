@@ -2374,7 +2374,39 @@
             "packageSha256": "7e196f09c0e3bde6e4395a3375732654179767614fc747b6413439262dfd1037",
             "qualificationPassed": false,
             "historicalHookExitCause": "unproven; this context-read defect does not establish the cause of historical Hook code1",
-            "newCaseOrReleaseGate": false
+            "newCaseOrReleaseGate": false,
+            "ci": {
+              "subjectRevision": "1346fca0a63d3ffd41d5113503d1045ef7567d06",
+              "runId": "38351033722",
+              "status": "completed",
+              "conclusion": "success",
+              "jobsPassed": 11,
+              "jobsTotal": 11,
+              "source": "private:accord-hook-failure-audit-20261013-01/composition-review/ci-final-1346fca0.json"
+            },
+            "localAdoption": {
+              "version": "3.3.0-dev.1+codex.20261013051746",
+              "gitCheckoutMarketplaceCache25MembersMatch": true,
+              "defaultInstalledEnabled": true,
+              "ownedPersistentSourceRevision": "1346fca0a63d3ffd41d5113503d1045ef7567d06",
+              "source": "private:accord-hook-failure-audit-20261013-01/composition-review/source-upgrade/adoption-verified.json",
+              "warmMcpAdoption": "unverified"
+            },
+            "desktopDeliveryContribution": {
+              "observerRole": "independent-read-only-agent",
+              "source": "private:accord-hook-failure-audit-20261013-01/composition-review/desktop-delivery-contribution.json",
+              "sourceSha256": "a0600453fdbb87e75f097d70d887e905e5fc0542037df3f98cb87a7bd5ba4c05",
+              "facts": "Exact native authorization, patch, correction, submission,264-test execution terminal and independent4-test source chain checked;25 package members independently matched;CI11/11 successful.",
+              "parentCase": "v33-admitted-entry-delivery-01",
+              "parentVerdict": [
+                "partial",
+                "partial",
+                "supported",
+                "supported"
+              ],
+              "qualificationPassed": false,
+              "claimLimit": "Supports this actual engineering delivery; warm Desktop exact-package adoption and full permissions/steering/result paths remain open. No new case or whole A05/A08 acceptance."
+            }
           }
         },
         "privateEvidence": "accord-mcp-env-fix-20261012-01/continuity-reconciliation",
