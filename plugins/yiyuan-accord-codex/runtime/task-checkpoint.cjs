@@ -1599,4 +1599,9 @@ if (require.main === module) {
     });
   }
 }
-module.exports = {operate, hook, assessContext, observeContext, entryGuidance, limitEntryContext};
+// Identify loaded functions without reopening a cache path that may be retired.
+const loadedFunctionSha256 = Object.freeze(Object.fromEntries(
+  Object.entries({handleHook, retireFiles, nativeContextReader}).map(([name, fn]) => [name,
+    typeof fn === 'function' ? crypto.createHash('sha256')
+      .update(Function.prototype.toString.call(fn)).digest('hex') : null])));
+module.exports = {operate, hook, assessContext, observeContext, entryGuidance, limitEntryContext, loadedFunctionSha256};

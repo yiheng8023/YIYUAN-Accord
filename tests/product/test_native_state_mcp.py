@@ -1894,6 +1894,42 @@ process.stdout.write(JSON.stringify({response,changed}));
         with transcript.open('a', encoding='utf-8') as stream:
             stream.write(json.dumps(record) + '\n')
 
+    def test_runtime_observation_keeps_startup_version_and_loaded_functions_after_retirement(self):
+        cached, retired = self.root / 'identity-package', self.root / 'retired-identity-package'
+        shutil.copytree(ROOT / 'plugins/yiyuan-accord-codex', cached)
+        script = '''
+const fs=require('node:fs'), path=require('node:path');
+const x=JSON.parse(fs.readFileSync(0,'utf8'));
+const modulePath=path.join(x.cached,'runtime','native-state-mcp.cjs');
+const manifest=path.join(x.cached,'.codex-plugin','plugin.json');
+const originalVersion=JSON.parse(fs.readFileSync(manifest,'utf8')).version;
+const m=require(modulePath), h=m.createHandler();
+h({jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2025-06-18',
+  capabilities:{},clientInfo:{name:'identity-fixture',version:'1'}}});
+h({jsonrpc:'2.0',method:'notifications/initialized'});
+const call=()=>h({jsonrpc:'2.0',id:2,method:'tools/call',params:x.params}).result.structuredContent;
+const before=call();
+fs.writeFileSync(manifest,JSON.stringify({version:'later-disk-version'}));
+fs.renameSync(x.cached,x.retired);
+const after=call();
+process.stdout.write(JSON.stringify({originalVersion,before,after}));
+'''
+        before_files = {p.name: p.read_bytes() for p in self.state.glob("*") if p.is_file()}
+        p = subprocess.run([self.node, '-e', script], input=json.dumps({
+            'cached': str(cached), 'retired': str(retired), 'params': self.params}),
+            capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+        self.assertEqual(p.returncode, 0, p.stderr)
+        result = json.loads(p.stdout)
+        first, after = result['before']['runtime'], result['after']['runtime']
+        self.assertEqual(first, after)
+        self.assertEqual(after['serverVersion'], result['originalVersion'])
+        self.assertGreater(after['processId'], 0)
+        self.assertEqual(after['modulePathAtLoad'], str(cached / 'runtime/native-state-mcp.cjs'))
+        self.assertEqual(set(after['functionSha256']),
+            {'handleHook', 'retireFiles', 'nativeContextReader', 'inspectNativeState'})
+        self.assertTrue(all(len(value) == 64 for value in after['functionSha256'].values()))
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.glob("*") if p.is_file()}, before_files)
+
     def test_first_context_read_survives_retirement_of_the_loaded_package_path(self):
         self.native_context()
         cached = self.root / 'cached-package'

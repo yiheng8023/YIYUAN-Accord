@@ -5,8 +5,9 @@
 const {once} = require('node:events');
 const path = require('node:path');
 const fs = require('node:fs');
+const crypto = require('node:crypto');
 const {TextDecoder} = require('node:util');
-const {operate} = require('./task-checkpoint.cjs');
+const {operate, loadedFunctionSha256} = require('./task-checkpoint.cjs');
 
 const PROTOCOL = '2025-06-18';
 const MAX_FRAME = 128 * 1024;
@@ -188,7 +189,7 @@ function nativeCallSource(params) {
     hostVersion: text(native.codex_version, 100) ? native.codex_version : null};
 }
 
-function inspectNativeState(params) {
+function inspectNativeState(params, serverVersion = null) {
   if (!record(params) || params.name !== TOOL.name || !record(params.arguments)
       || Object.keys(params.arguments).some(key => !['cwd', 'includeContext', 'includeNativeInputs', 'contextMaxAgeMs', 'contextAssessment'].includes(key))
       || !own(params.arguments, 'cwd')
@@ -227,6 +228,12 @@ function inspectNativeState(params) {
   }
   const value = {schema: 'yiyuan-accord-native-state/v1', state: 'observed-call-context',
     source, workspace, checkpoint, claimLimit: CLAIM_LIMIT};
+  value.runtime = {schema: 'yiyuan-accord-loaded-runtime/v1', serverVersion,
+    processId: process.pid, modulePathAtLoad: __filename,
+    fingerprintFormat: 'sha256-of-function-prototype-toString',
+    functionSha256: {...(loadedFunctionSha256 || {}), inspectNativeState:
+      crypto.createHash('sha256').update(Function.prototype.toString.call(inspectNativeState)).digest('hex')},
+    claimLimit: 'This responder and listed loaded function bodies only; excludes closures, constants, full package, other Hook processes, behavior, authority and process-control permission.'};
   if (params.arguments.includeContext === true) {
     const unknown = reason => ({state: 'unknown', reason, sourceReleaseAllowed: false});
     if (checkpoint.state !== 'observed') value.context = unknown(checkpoint.reason);
@@ -475,7 +482,7 @@ function createHandler(version = runtimeVersion()) {
       if (!record(request.params) || ![TOOL.name, INPUT_TOOL.name, MANAGE_TOOL.name].includes(request.params.name)) {
         return error(id, -32602, 'Unknown tool');
       }
-      const inspected = request.params.name === TOOL.name ? inspectNativeState(request.params)
+      const inspected = request.params.name === TOOL.name ? inspectNativeState(request.params, version)
         : request.params.name === INPUT_TOOL.name ? readTaskInput(request.params) : manageTaskState(request.params);
       return result(id, {isError: inspected.isError, structuredContent: inspected.value,
         content: [{type: 'text', text: JSON.stringify(inspected.value)},
