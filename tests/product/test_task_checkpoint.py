@@ -3458,7 +3458,7 @@ catch (error) { process.stdout.write(error.message); }
         self.assertEqual(self.status()['revision'], current['revision'])
         self.assertEqual(self.event('Stop'), {})
 
-    def check_retirement_deletion_failure(self, suffix, *, injected_input=True):
+    def check_retirement_deletion_failure(self, suffix, *, injected_input=True, session_end=False):
         current = self.status()
         before = {p.name: p.read_bytes() for p in self.state.iterdir() if p.name.endswith(('.state.json', '.input.json'))}
         script = '''
@@ -3478,12 +3478,15 @@ fs.unlinkSync = function(file, ...args) {
   return unlink.call(this, file, ...args);
 };
 let result, error;
-try { result = runtime.operate(request); } catch (e) { error = e.message; }
+try { result = request.hook_event_name ? runtime.hook(request) : runtime.operate(request); }
+catch (e) { error = e.message; }
 process.stdout.write(JSON.stringify({delivered, result, error,
   child: child && {status: child.status, stderr: child.stderr}}));
 '''
         request = {'op': 'retire', 'session_id': 'test-session', 'cwd': str(self.work),
                    'epoch': current['epoch'], 'expectedRevision': current['revision'], 'reason': 'Owned test exit.'}
+        if session_end:
+            request = {'hook_event_name': 'SessionEnd', 'session_id': 'test-session', 'cwd': str(self.work)}
         result = subprocess.run([self.node, '-e', script, str(RUNTIME), json.dumps(request), suffix,
                                  str(injected_input).lower()], env=self.environment, capture_output=True,
                                 text=True, encoding='utf8', timeout=10)
@@ -3518,6 +3521,10 @@ process.stdout.write(JSON.stringify({delivered, result, error,
 
     def test_failed_input_during_unbound_deletion_preserves_receipt(self):
         after = self.check_retirement_deletion_failure('.input.json')
+        self.assertEqual(after['mode'], 'unbound')
+
+    def test_session_end_preserves_receipt_and_watermark_during_deletion(self):
+        after = self.check_retirement_deletion_failure('.input.json', session_end=True)
         self.assertEqual(after['mode'], 'unbound')
 
     def test_partial_checkpoint_deletion_restores_prior_files(self):

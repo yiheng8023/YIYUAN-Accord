@@ -101,14 +101,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261013051746",
+    "version": "3.3.0-dev.1+codex.20261013065737",
     "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261013051746",
-        "packageSha256": "7e196f09c0e3bde6e4395a3375732654179767614fc747b6413439262dfd1037",
+        "packageVersion": "3.3.0-dev.1+codex.20261013065737",
+        "packageSha256": "c781b65f17d99b9edcbb1dc5cf16a399dc3cd0dfeb8b79a6937e3735a6ffdf9b",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -2405,8 +2405,39 @@
                 "supported"
               ],
               "qualificationPassed": false,
-              "claimLimit": "Supports this actual engineering delivery; warm Desktop exact-package adoption and full permissions/steering/result paths remain open. No new case or whole A05/A08 acceptance."
+              "claimLimit": "Supports this actual engineering delivery; warm Desktop exact-package adoption and full permissions/steering/result paths remain open. No new case or whole A05/A08 acceptance.",
+              "denominatorCorrection": {
+                "source": "private:accord-large-progress-20261013-01/r3-feasibility/desktop-adjudication-correction.json",
+                "sourceSha256": "9c12208384479f27c690f8b9c862c9c9e7415e3f43b34f90b92ca8dc624875b7",
+                "independentRecheck": "private:accord-hook-failure-audit-20261013-01/composition-review/desktop-denominator-recheck.json",
+                "independentRecheckSha256": "38c8f7102c929cc0c03661d81f312148afcee78fc5df07386888ae4502f5cd0a",
+                "scopedVerdict": [
+                  "supported",
+                  "partial",
+                  "supported",
+                  "supported"
+                ],
+                "actualCompactionKeyStateReconciled": true,
+                "qualificationPassed": false,
+                "rule": "Five Desktop duties in episode1346fca0/package51746 only. Other entries and wholeA05/A08 cannot lower this cell; exact warm adoption and applicable control differences remain separately unverified. Original partial adjudication and encrypted whole-history unknowns retained."
+              }
             }
+          },
+          "unboundSessionEndSourceProtection": {
+            "observedOn": "2026-10-13",
+            "subjectBefore": "cda2d9cbe7927dd964683c864f12567d915ebb67",
+            "evidence": "private:accord-large-progress-20261013-01/r2-continuity and r2-skill/retirement-review-v2",
+            "defect": "Unbound SessionEnd deleted its input receipt despite uncaptured native input; explicit retire correctly rejected the same source.",
+            "firstCandidateFailure": "Independent unlink-time UserPromptSubmit lock failure published a watermark but the first source-check candidate still deleted the receipt. Original failure retained.",
+            "correction": "Before automatic unbound retirement, require complete/reconciled source or legacy unbound source; recheck cursor under the input lock via an internal sourceGuard and reuse existing post-delete failure-watermark check and receipt restoration.",
+            "independentChecks": "Seven exact candidate controls passed; original nine lifecycle branches and initial red remain separate mechanism evidence.",
+            "regression": "266 related regressions passed in249.348s; repository and development checks valid with no errors. Original red cases and first-candidate failures retained.",
+            "packageVersion": "3.3.0-dev.1+codex.20261013065737",
+            "packageSha256": "c781b65f17d99b9edcbb1dc5cf16a399dc3cd0dfeb8b79a6937e3735a6ffdf9b",
+            "qualificationPassed": false,
+            "historicalHookCode1Cause": "unproven; private injected EEXIST is not a recorded historic Hook run",
+            "newCaseOrReleaseGate": false,
+            "processCorrection": "A message to an already completed child did not dispatch a revision turn; Root corrected this orchestration delay by implementing the shared revision. No claimed child run or original failure was rewritten."
           }
         },
         "privateEvidence": "accord-mcp-env-fix-20261012-01/continuity-reconciliation",

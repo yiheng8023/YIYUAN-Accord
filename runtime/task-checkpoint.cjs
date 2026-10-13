@@ -532,9 +532,10 @@ function currentEpoch(where, epoch, request = null, expectedInput = null, expect
   return input;
 }
 
-function retireFiles(where, epoch, prior = null, request = null, expectedInput = null, expectedCursor = null) {
+function retireFiles(where, epoch, prior = null, request = null, expectedInput = null, expectedCursor = null, sourceGuard = null) {
   return inputLocked(where, () => {
     const input = currentEpoch(where, epoch, request, expectedInput, expectedCursor);
+    if (sourceGuard && !sourceGuard(input)) return;
     const receipt = fs.existsSync(where.input) ? readJson(where.input, INPUT_RECEIPT_LIMIT) : null;
     const files = [[where.state, prior], [where.input, receipt]].filter(([, value]) => value !== null);
     try {
@@ -1434,9 +1435,14 @@ function handleHook(event) {
     const input = inputLocked(where, () => readInput(where));
     const state = fs.existsSync(where.state) ? readJson(where.state) : null;
     if (name === 'SessionEnd') {
-      if (!state) inputLocked(where, () => {
-        if (!needsInput(input) && !input.interrupted && readInput(where)?.epoch === input.epoch) fs.unlinkSync(where.input);
-      });
+      if (!state && !needsInput(input) && !input.interrupted) {
+        const complete = evidence => evidence.state === 'observed'
+          ? evidence.latestInputReconciled && evidence.latestNativeInputsComplete
+          : evidence.reason === 'native-input-source-unbound';
+        const evidence = inputEvidence(input, event);
+        if (complete(evidence)) retireFiles(where, input.epoch, null, null, input, null,
+          current => complete(inputEvidence(current, event, evidence.cursor)));
+      }
       return {}; // Keep unfinished work for an explicitly bound resume/recovery.
     }
     return {};
@@ -1496,7 +1502,7 @@ const HELP = {
     read: {op: 'read-native-input', session_id: 'native-session-id', cwd: 'absolute-workspace', index: 0, offset: 0, maxChars: 4000},
     paging: 'Defaults read from the first captured event, with at most 4000 Unicode code points and 20 entries. maxChars may be 1..16000. Pass returned next.index and next.offset unchanged for the next page; null means the captured end, not the end of all task history. Text hashes cover full original strings, not fragments. Legacy receipts report unavailable instead of inventing text. Reads create no locks or files; observed publication locks or changed input/failure evidence reject the read. A stable snapshot does not establish later freshness or permission to act.',
     scope: 'Retains parsed native input-event text and explicitly identified native replays in the existing local receipt. Input received during prior loss is marked quarantined-native-input with needsNativeReplay still true; readable text is not a ready input basis. A later failed capture may make the last stored entry older than the actual current input. Reconcile source and current input, then read status for the current recovery token before authorized replay. Replay entries preserve the consumed recoveryEpoch; missing is unknown, while null denotes an explicit replay without a prior receipt. Recognized historical Stop callbacks do not add a user input. Events and embedded quotations are not automatically new human decisions. Capture is not complete conversation, attachment content, model reasoning, a semantic checkpoint or an access grant. Reads preserve pause, quarantine and checkpoint state.',
-    lifecycle: 'Input receipts, including captured text, are bounded to 8 MiB and never silently truncated; full storage fails capture and preserves existing failure/replay protection. Named --hook UserPromptSubmit transport accepts up to 8 MiB of JSON for both native capture and token-bound replay; receipt metadata and existing history still count against the same 8 MiB storage limit. Other command transport and bound checkpoint JSON remain limited to 128 KiB. Existing scoped storage and retirement apply: bound work retains the receipt at session end; reconciled unbound receipts end with SessionEnd or verified caller retirement. No new service, transcript scan or model call. Preserve a compatible executor; older versions may not retain or expose text. This local copy may contain sensitive user text and must not be published as routine evidence.'
+    lifecycle: 'Input receipts, including captured text, are bounded to 8 MiB and never silently truncated; full storage fails capture and preserves existing failure/replay protection. Named --hook UserPromptSubmit transport accepts up to 8 MiB of JSON for both native capture and token-bound replay; receipt metadata and existing history still count against the same 8 MiB storage limit. Other command transport and bound checkpoint JSON remain limited to 128 KiB. Existing scoped storage and retirement apply: bound work retains the receipt at session end; reconciled unbound receipts end with SessionEnd or verified caller retirement. SessionEnd rechecks the existing bounded native-source reader and preserves pending or unknown inputs, failure watermarks and recoverable receipts. No new service or model call. Preserve a compatible executor; older versions may not retain or expose text. This local copy may contain sensitive user text and must not be published as routine evidence.'
   },
   contextBudget: {
     operation: 'assess-context',

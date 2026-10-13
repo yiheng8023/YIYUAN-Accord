@@ -1105,6 +1105,31 @@ process.stdout.write(JSON.stringify({result,changed}));
         self.append_long_tail_and_repeated_context()
         self.assert_latest_context('retained-recovery-long-rollout')
 
+    def test_session_end_preserves_uncaptured_or_unknown_native_input(self):
+        for kind in ('complete', 'pending', 'ambient', 'unsupported', 'unavailable'):
+            with self.subTest(kind=kind):
+                if self.state.exists(): shutil.rmtree(self.state)
+                self.native_context()
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                if kind in ('pending', 'ambient'):
+                    fields = {'id': 'uncaptured'}
+                    if kind == 'ambient':
+                        fields['internal_chat_message_metadata_passthrough'] = {
+                            'turn_id': meta['turn_id'],
+                            'content_item_kinds': ['additional_content.codex_apps_open_page']}
+                    self.append_native_message(text='Actual pending source input', **fields)
+                elif kind == 'unsupported':
+                    self.append_native_message(content=[{'type': 'input_audio', 'data': 'unsupported'}])
+                elif kind == 'unavailable':
+                    transcript.unlink()
+                receipt = next(self.state.glob('*.input.json'))
+                before = receipt.read_bytes()
+                self.assertEqual(self.helper({'hook_event_name': 'SessionEnd'},
+                    session=meta['session_id'], hook='SessionEnd'), {})
+                self.assertEqual(receipt.exists(), kind != 'complete')
+                if receipt.exists(): self.assertEqual(receipt.read_bytes(), before)
+
     def test_native_origin_does_not_skip_untyped_or_foreign_first_user(self):
         for kind in ('label-only', 'wrong-turn', 'mixed-kinds', 'human'):
             with self.subTest(kind=kind):
