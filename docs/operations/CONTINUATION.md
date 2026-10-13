@@ -4,7 +4,7 @@
 
 更新：2026-10-13 · N33-20260909 / r42。[计划](PLAN-v3.3.md)拥有共识与工序，[基线](BASELINE-v3.3.md)/[验收](ACCEPTANCE-v3.3.md)保持全部 F01–F08/A01–A08。本页只保留当前状态、下一依赖和必要历史定位。
 
-当前后续推进：63fe552d的CI38360286042已11/11成功，watch98158自然退出。为减少应答组件身份未知，现有inspect只读响应补同initialize闭包版本、PID、加载路径及四个选定函数文本SHA；不新tool/service/state。它辨识此应答进程的这些函数，不证明外部依赖、完整包、其它Hook或行为。缓存/manifest替换后稳定、协议未写窄测已过；原测试快照把主动改缓存列不变输入的准备错误已保并纠正。新候选3.3.0-dev.1+codex.20261013075118/9e3f33ad已254受影响回归、五组独核及仓库/开发校验通过；实际采用与精确CI另核，原warm字段缺失仍unknown，不强制重启或加发布条件。
+当前后续推进：82dec5ba精确CI38366302240已终态11/11成功，watch33231自然exit0；75118/9e3f33ad本地包25成员Git/工作区/市场/cache及默认installed/enabled已核。现有inspect的最小应答身份已254受影响回归、五组独核及仓库/开发校验通过；原本轮连接仍不返回runtime，精确运行构建保持unknown，不强制重启或重复安装。诊断/安装/CI工序已闭，回R2/R3实际普通自主判断、必要恢复和同业务完整组合；现已按原授权前瞻绑定三个剩余scope到同一未结束开发episode；首段交付当前与前一候选的CI比较，定义不算通过；复用已闭交付与既有来源，不重建业务或以维护次数填验收。全部必要职责和资格边界保持。原件见私有accord-runtime-provenance-20261013-01。
 
 本轮大规模推进：SessionEnd无checkpoint分支会删除仍有pending原生输入的唯一回执，已隔离实证；首候选又由独审复现删除时失败水印窗口，原红例保持。现复用retireFiles的删除后水印核验/恢复，并在输入锁内按来源cursor复核；normal/legacy清理保持，七项独核与两项新增回归通过，266相关回归及仓库/开发校验通过。当前源码候选3.3.0-dev.1+codex.20261013065737/c781b65f，精确CI及实际采用分别核。本Desktop旧episode1346fca0/51746的五职责交付经正确分母与真实compaction前后原件复核为supported/partial/supported/supported；整体父资格、暖精确采用和A05/A08仍未过，不改写旧裁定或新增case。
 
@@ -21,7 +21,7 @@ Hook原件核定：截图11运行/9未成功，用户回执及两张展开图确
 重连后的实际采用漂移已核并处置：持久market ref仍2b3852c→旧221152，与新local-catalog安装不同源；具体重建writer未知。当时仅将同一市场ref的40字节同步570，经named native upgrade、仓库外fresh默认inventory及25Git blob/cache匹配确认163148恢复；其余配置字节保持。该段为先前来源纠偏记录；后续候选和当前采用见页首，旧worker刷新不由安装结果推断。证据集中于私有 `accord-consumer-closeout-counterexample-20261012-01`。
 
 - 在原 `main` 检出继续，Root 是本任务共享目标的唯一整合写者；源主线程23业务静止，恢复资料保留。3.3 的目标仍是 Agent 在授权范围内完成真实任务、纠偏、连续性、恢复、结果核验与资源收尾，完整验收后按已有条件授权发布3.3.0。
-- 17个必要scope、6个活动case定义、11个声明覆盖缺口、11个无case范围。它们是证据映射，不是实现完成率；`functionalCompletion=false`、`candidateEligible=false`。所有必要职责、质量、场景及发布条件保持。
+- 17个必要scope、9个活动case定义、8个声明覆盖缺口、8个无case范围。它们是证据映射，不是实现完成率；`functionalCompletion=false`、`candidateEligible=false`。所有必要职责、质量、场景及发布条件保持。
 - 本次修复前已提交570与已核安装包为 `3.3.0-dev.1+codex.20261012163148`，25成员/5 Skills，规范SHA `2e21d3bc9f1da995fc0132c49fd81eebe68792dc343e57a6eaa11b4831d5cd69`；该摘要属于570历史候选，后续提交与当前采用以页首为准。自动容量重试关联、同快照context与proof后CAS已239相关回归及两轴独审通过。Root先前写metadata默认CRLF的疏漏已保原件并修正；用户批准的原meta-guidance按.gitattributes保持精确CRLF，runtime/Skill政策未改。原161615/404384本地原生安装与helper rev99实际结果仍有效，不等于Git归一化包；原163148安装为10.563秒原生更新、25成员/新5Skill路径、自然0/Job0和读者停止；当时config/旧恢复保持。fresh现装helper成功rev99→100，同epoch/原输入、四谓词匹配、未完责任保持。后续重连漂移及持久来源修正见上段；旧长寿MCP拒绝保留，不强制刷新。原件在私有 `accord-entry-applicability-20261012-01/capacity-retry`。
 - 根任务的模型、宿主、模式和输入以当轮原生来源为准，不沿用旧值或把permission mode等同collaboration mode。10月12日重连后当前Root原生身份已为Astra，先前Sol及其它轮次计数不跨模型复用；子代理模型/推理按任务和有效支持动态调度。普通继续不启Plan/Goal，不请求自动续轮；Stop及自动增轮路线不恢复。
 - 当前输入与未完合同由本线程原生检查点承接。旧输入失效水印、未知共享Node/ACL效应保持未知；不合成输入、重放结束业务、修改共享ACL或按年龄删除恢复资料。回执、接管、单写者和实际结果分别核验。

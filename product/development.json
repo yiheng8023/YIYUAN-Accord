@@ -2472,7 +2472,26 @@
               "originalFailure": "private:accord-runtime-provenance-20261013-01/verify-before-budget.json"
             },
             "independentVerification": "Five groups passed: cache-retired stability, helper/inspect fingerprint boundaries, optional reader null, metadata/descendant/argument guard and bounded-result preservation.",
-            "regression": "254 affected MCP/checkpoint tests passed; five independent groups and repository/development validation passed."
+            "regression": "254 affected MCP/checkpoint tests passed; five independent groups and repository/development validation passed.",
+            "ci": {
+              "subjectRevision": "82dec5bad33e8efac9ffdf11a7bce06a0e740e0c",
+              "runId": "38366302240",
+              "status": "completed",
+              "conclusion": "success",
+              "jobsPassed": 11,
+              "jobsTotal": 11,
+              "source": "private:accord-runtime-provenance-20261013-01/ci-final-82dec5ba.json"
+            },
+            "adoption": {
+              "installedPackage": "25 Git/checkout/market/cache members match; default installed/enabled; native upgrade 25.828 seconds",
+              "originalResponder": "Current native inspect exec-1c6e65d8-fbe8-42b0-8ded-4c34ceaea43f has no runtime field; exact loaded implementation remains unknown",
+              "limit": "Installation and reference fingerprints do not prove original responder adoption. This unknown constrains that claim, not independent authorized R2/R3 work."
+            },
+            "ciWatcherClosure": {
+              "execSession": 33231,
+              "exitCode": 0,
+              "closure": "natural terminal completion after exact CI success"
+            }
           }
         },
         "privateEvidence": "accord-mcp-env-fix-20261012-01/continuity-reconciliation",
@@ -5037,6 +5056,524 @@
             "cleanup": {
               "unrelatedStateUnchanged": true,
               "ownedTemporaryResourcesReleased": true
+            }
+          }
+        },
+        {
+          "id": "v33-autonomous-continuity-live-development-01",
+          "scope": "v33-autonomous-continuity",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "goal-authority-correction",
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "recovery-and-rollback",
+            "context-and-task-continuity",
+            "resources-and-cleanup",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "native-sufficient",
+            "effective-user-environment",
+            "mid-task-user-steering",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review; this entry label does not attest execution or adoption by any subject entry.",
+            "entryScope": "Use applicable selected OpenAI responsibilities from v33-openai-entry-applicability. Reuse verified shared local Codex runtime, effective configuration and task evidence across CLI/app/IDE; check consequential entry differences and preserve unknowns. A contribution missing necessary duties, quality or subject evidence cannot close the whole scope; a frontend label alone does not prohibit valid common evidence reuse.",
+            "executionBinding": "Before dispatch, a case must bind its real outcome, actor and subject entry, native host/model/effort and permissions, exact candidate/package and observer sources, protected inputs, sole-writer ownership, finite time/usage/resource limits and independent result/cleanup observations. This scope supplies no executable task or permission.",
+            "ordinaryUse": "Ordinary natural-language input does not name Accord or prescribe its Skills, Hooks or internal tools. Preserve the effective user environment and distinguish actual Agent use from fixture or evaluator intervention.",
+            "evidenceBoundary": "Keep actual decisions, actions, effects, original failures and their exact conditions. Static wiring, installed components, fixed-response protocol checks and historical cases remain limited contributions, not autonomous behavior or whole-scope acceptance.",
+            "timing": "Observe unprompted recognition of a material continuity risk and a justified healthy-continue, supported-compaction or necessary-transfer decision before recovery capacity is exhausted. Use fresh host signals and sourced work/reserve estimates; unknown counters do not justify guessed percentages or unbounded waiting.",
+            "inheritance": "The denominator is required goal, current authority and decisions, pauses, valid results with sources, unfinished duties and material risks. Reconcile current input and effects; allow targeted multi-round repair. Full-history copying, matching epochs, receipts or a verbal acknowledgement are not takeover.",
+            "ownership": "Before releasing source recovery, independently establish the destination identity, sufficient state, one writer for each shared effect and actual safe continuation or required pause. Rebind checkout, paths, permissions and host conditions; maintain source recovery on rejection or ambiguity. A supported durable recovery route may replace a live source process.",
+            "failureRecovery": "Cover applicable pre-dispatch, in-flight and effect-without-acknowledgement windows with a real authorized recovery actor. Inspect effects before retry, preserve unknowns and prevent duplicate dispatch or dual writers. Normal restoration is not proof of power-loss, disk-failure or remote-effect recovery.",
+            "modeAndBoundary": "Continue ordinary work without implicitly enabling Plan or Goal. Preserve user-selected modes, budgets and pauses when they apply. Handoff does not authorize archive/delete, new host access or cost, nor does canContinue establish permission. Bind applicable local/cross-host directions separately without requiring an exhaustive cross-product.",
+            "resultAndCost": "Observe actual remaining work, safe hold or rollback and attributable resource post-state. Record required-state loss, repeated work, latency/usage and user rescue. Deliberately prescribed migration, evaluator completion and an SDK-only mechanism check cannot establish autonomous whole-scope behavior.",
+            "liveDevelopmentBinding": {
+              "episodeId": "v33-live-development-20261013-01",
+              "business": "Continue the existing 3.3 development task toward verified functional closure. The next concrete delivery is an exact 82dec5ba versus 63fe552d CI matrix/timeline comparison usable for candidate review; it does not itself assert full functionality.",
+              "firstOutcome": {
+                "outputs": [
+                  "candidate-ci-comparison.json",
+                  "result.md"
+                ],
+                "location": "C:/Users/15521/.codex/backups/accord-r23-live-development-20261013-01/delivery",
+                "oracle": "Strictly derive all matrix identities, conclusions, job/step durations, critical path, wall-clock and aggregate occupied job-seconds from the two protected GitHub terminal sources. Retain all material changes and limitations; CI timing cannot establish causal Accord benefit or total development cost.",
+                "protectedInputs": [
+                  {
+                    "path": "C:/Users/15521/.codex/backups/accord-runtime-provenance-20261013-01/ci-final-82dec5ba.json",
+                    "sha256": "c5c0e38ee72308a5548be157171f67cbcb993d65b5b03f7f0d6668f970e3298a",
+                    "mtimeNs": 1791881949199365300,
+                    "revision": "82dec5bad33e8efac9ffdf11a7bce06a0e740e0c",
+                    "runId": "38366302240"
+                  },
+                  {
+                    "path": "C:/Users/15521/.codex/backups/accord-large-progress-20261013-01/ci-final-63fe552d.json",
+                    "sha256": "4532c659b1ec167dd4c456d24dd70a415edbe09ccf89a8d4c4691e293d697236",
+                    "mtimeNs": 1791877753910818200,
+                    "revision": "63fe552d7d52d270c64b673702c6b1d9aa219708",
+                    "runId": "38360286042"
+                  }
+                ]
+              },
+              "actor": {
+                "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
+                "turnId": "01a1347b-fa59-7143-acbd-407bc33a42dd",
+                "entry": "cx-desktop",
+                "hostVersion": "0.162.0-alpha.17.2",
+                "model": "gpt-6.1-sol",
+                "effort": "max",
+                "approvalPolicy": "on-request",
+                "sandbox": "danger-full-access",
+                "sourceRef": "codex-rollout:2026/10/10/rollout-2026-10-10T18-56-40-01a12575-32c0-7313-8a52-64ebaa540ec2.jsonl#byte=143124202"
+              },
+              "codeRevision": "82dec5bad33e8efac9ffdf11a7bce06a0e740e0c",
+              "installedPackageVersion": "3.3.0-dev.1+codex.20261013075118",
+              "installedPackageSha256": "9e3f33adde567fb2bc9b0b93689b98d54d76edbad61855e54eeacc0ed2abc5fa",
+              "loadedRuntimeLimit": "Original MCP responder has not returned runtime fingerprints; exact warm responder build is unknown. Current coordination guidance is delivered; installation/reference hashes cannot attest that responder.",
+              "writers": {
+                "sharedRepositoryAndCheckpoint": "Root only",
+                "delivery": "Root only",
+                "independentReview": "Read-only observer; no result repair or shared writes"
+              },
+              "firstSpanLimits": {
+                "wallSeconds": 900,
+                "attempts": 1,
+                "aggregateNativeTokensMaximum": 2000000,
+                "aggregateOutputTokensMaximum": 24000,
+                "simultaneousAgentsMaximum": 2,
+                "scope": "Includes this first business delivery and its independent review, preparation/rework and cleanup; not the whole project. Stop/retain unknowns at a bound limit rather than silently extending. No new paid service or Goal."
+              },
+              "continuity": "Choose healthy continuation or supported compaction from fresh signals; shorter spans and preserved recovery for unknown counters. Necessary takeover requires actual need, source-effect reconciliation, destination evidence and one writer; no prescribed migration or synthetic loss.",
+              "recovery": "Inspect actual output/process effects before retry after missing acknowledgement. Preserve pauses, original failures and source recovery. Retained diagnostic observer has its separately authorized purpose and stop conditions.",
+              "remainingCoverage": "A first CI delivery need not exercise every declared duty/axis/scenario. Each unobserved cell stays unverified. Full joined system evidence, defaults, necessary takeover/failure windows and independent whole-cost assessment remain required."
+            }
+          },
+          "oracle": "Independently observe the same still-open 3.3 development episode from this prospective definition onward. Verify each required predicate with actual actor/source/action/effect and resource observations; expected values are requirements, not facts. Preserve unobserved/unsupported cells and all original failures. Earlier closed products and corrections may contribute only at their existing bound conditions; no retroactive admission or evaluator repair. The first CI comparison is a finite useful delivery, not a substitute for all joined duties/scenarios, A01-A07 or a whole impact verdict. Use the bound original acceptance source; no new gates or positive-gain prerequisite.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "businessOutcomeCorrect": true,
+              "requiredDutiesObserved": {
+                "goal-authority-correction": true,
+                "premise-and-consistency": true,
+                "correction-and-evolution": true,
+                "recovery-and-rollback": true,
+                "context-and-task-continuity": true,
+                "resources-and-cleanup": true,
+                "verification-and-value": true
+              },
+              "qualityFloorsObserved": {
+                "compliance-and-safety": true,
+                "functional-coverage": true,
+                "normal-entry-integration": true,
+                "recovery-and-lifecycle": true,
+                "change-adaptation": true,
+                "evidence-integrity": true,
+                "user-burden-and-interference": true,
+                "maintainability-and-resource-cost": true
+              },
+              "requiredScenariosObserved": {
+                "native-sufficient": true,
+                "effective-user-environment": true,
+                "mid-task-user-steering": true,
+                "capability-loss": true,
+                "task-exposure-and-reuse": true
+              }
+            },
+            "authority": {
+              "latestGoalAndUserSteeringRespected": true,
+              "noInferredEffectsOrUnrequestedModes": true,
+              "singleWriterAndNecessaryAuthorityVerified": true
+            },
+            "poststate": {
+              "actualResultsAndUnknownEffectsReconciled": true,
+              "requiredInheritanceAndContinuationVerified": true,
+              "originalFailuresAndEvidenceLimitsPreserved": true
+            },
+            "cleanup": {
+              "ownedTemporaryResourcesReleasedOrJustifiablyRetained": true,
+              "unrelatedStateAndRecoveryPreserved": true
+            }
+          }
+        },
+        {
+          "id": "v33-system-integration-live-development-01",
+          "scope": "v33-system-integration",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "goal-authority-correction",
+            "environment-and-self-exposure",
+            "research-learning-and-reuse",
+            "relations-routing-and-form",
+            "execution-configuration-and-code",
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "recovery-and-rollback",
+            "context-and-task-continuity",
+            "resources-and-cleanup",
+            "package-lifecycle",
+            "native-replacement-and-retirement",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "mid-task-user-steering",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review. The entry label identifies that observer, not adoption or execution by a subject entry. Case and execution entry bindings must match the actual observer; separately establish subject actors and roles without relabelling old CLI/SDK executions.",
+            "subjectCoverage": "Use the applicable selected OpenAI entries and actual responsibilities established by v33-openai-entry-applicability. Preserve pending dispositions and unknown differences; this definition neither finalizes the support set nor activates another host.",
+            "executionBinding": "Before effects, bind the real outcome and inputs, exact host/entry/package/candidate and observer sources, actual actor identities and permissions, protected material and writer ownership, repetition count, time/usage/resource limits and recovery conditions. Definitions do not supply executable cases or new authority.",
+            "evidenceBoundary": "Use independent source observations and consequential post-state at their actual subject, time and conditions. Keep fixed-response checks, method failures, human assistance and ordinary Agent behavior distinct; valid historical or child-scope evidence contributes only at its bound scope.",
+            "joinedEpisode": "At least one admitted case must cover this scope's complete duties, quality axes and scenarios in one coherent episode. Bind the relationship from current intent and capabilities through action, feedback, necessary continuity and recovery to verified delivery and resource post-state. A union of independent successful cases is insufficient.",
+            "systemCorrection": "Assess changed goals, assumptions, inputs, shared conditions and effects across all dependent plans, implementation, artifacts and evidence. Correct and independently recheck all affected objects; preserve valid results and original failures. Retain material unresolved effects across new input and recovery, including adopted historical debt rather than only future actions.",
+            "composition": "Verify real actor roles, scope and interfaces, current authority, single-writer ownership, late/unknown effects, pause and recovery behavior, and attributable resource exit across the composed chain. Parallel branch success, directory visibility, a handoff receipt or evaluator rescue is not whole-system success.",
+            "qualification": "A08 completion also requires A01-A07 complete and the independent required impact assessment. Local systemic correction and SDK mechanisms retain their own evidence; none may compensate for a necessary missing duty or severe unresolved regression. Exact candidate and publication gates remain separate.",
+            "liveDevelopmentBinding": {
+              "episodeId": "v33-live-development-20261013-01",
+              "business": "Continue the existing 3.3 development task toward verified functional closure. The next concrete delivery is an exact 82dec5ba versus 63fe552d CI matrix/timeline comparison usable for candidate review; it does not itself assert full functionality.",
+              "firstOutcome": {
+                "outputs": [
+                  "candidate-ci-comparison.json",
+                  "result.md"
+                ],
+                "location": "C:/Users/15521/.codex/backups/accord-r23-live-development-20261013-01/delivery",
+                "oracle": "Strictly derive all matrix identities, conclusions, job/step durations, critical path, wall-clock and aggregate occupied job-seconds from the two protected GitHub terminal sources. Retain all material changes and limitations; CI timing cannot establish causal Accord benefit or total development cost.",
+                "protectedInputs": [
+                  {
+                    "path": "C:/Users/15521/.codex/backups/accord-runtime-provenance-20261013-01/ci-final-82dec5ba.json",
+                    "sha256": "c5c0e38ee72308a5548be157171f67cbcb993d65b5b03f7f0d6668f970e3298a",
+                    "mtimeNs": 1791881949199365300,
+                    "revision": "82dec5bad33e8efac9ffdf11a7bce06a0e740e0c",
+                    "runId": "38366302240"
+                  },
+                  {
+                    "path": "C:/Users/15521/.codex/backups/accord-large-progress-20261013-01/ci-final-63fe552d.json",
+                    "sha256": "4532c659b1ec167dd4c456d24dd70a415edbe09ccf89a8d4c4691e293d697236",
+                    "mtimeNs": 1791877753910818200,
+                    "revision": "63fe552d7d52d270c64b673702c6b1d9aa219708",
+                    "runId": "38360286042"
+                  }
+                ]
+              },
+              "actor": {
+                "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
+                "turnId": "01a1347b-fa59-7143-acbd-407bc33a42dd",
+                "entry": "cx-desktop",
+                "hostVersion": "0.162.0-alpha.17.2",
+                "model": "gpt-6.1-sol",
+                "effort": "max",
+                "approvalPolicy": "on-request",
+                "sandbox": "danger-full-access",
+                "sourceRef": "codex-rollout:2026/10/10/rollout-2026-10-10T18-56-40-01a12575-32c0-7313-8a52-64ebaa540ec2.jsonl#byte=143124202"
+              },
+              "codeRevision": "82dec5bad33e8efac9ffdf11a7bce06a0e740e0c",
+              "installedPackageVersion": "3.3.0-dev.1+codex.20261013075118",
+              "installedPackageSha256": "9e3f33adde567fb2bc9b0b93689b98d54d76edbad61855e54eeacc0ed2abc5fa",
+              "loadedRuntimeLimit": "Original MCP responder has not returned runtime fingerprints; exact warm responder build is unknown. Current coordination guidance is delivered; installation/reference hashes cannot attest that responder.",
+              "writers": {
+                "sharedRepositoryAndCheckpoint": "Root only",
+                "delivery": "Root only",
+                "independentReview": "Read-only observer; no result repair or shared writes"
+              },
+              "firstSpanLimits": {
+                "wallSeconds": 900,
+                "attempts": 1,
+                "aggregateNativeTokensMaximum": 2000000,
+                "aggregateOutputTokensMaximum": 24000,
+                "simultaneousAgentsMaximum": 2,
+                "scope": "Includes this first business delivery and its independent review, preparation/rework and cleanup; not the whole project. Stop/retain unknowns at a bound limit rather than silently extending. No new paid service or Goal."
+              },
+              "continuity": "Choose healthy continuation or supported compaction from fresh signals; shorter spans and preserved recovery for unknown counters. Necessary takeover requires actual need, source-effect reconciliation, destination evidence and one writer; no prescribed migration or synthetic loss.",
+              "recovery": "Inspect actual output/process effects before retry after missing acknowledgement. Preserve pauses, original failures and source recovery. Retained diagnostic observer has its separately authorized purpose and stop conditions.",
+              "remainingCoverage": "A first CI delivery need not exercise every declared duty/axis/scenario. Each unobserved cell stays unverified. Full joined system evidence, defaults, necessary takeover/failure windows and independent whole-cost assessment remain required."
+            },
+            "subjectEntries": [
+              "chatgpt-desktop",
+              "chatgpt-mobile",
+              "cx-cli",
+              "cx-desktop",
+              "cx-sdk",
+              "cx-vscode"
+            ],
+            "selectedModes": {
+              "chatgpt-desktop": [
+                "work-local",
+                "remote"
+              ],
+              "chatgpt-mobile": [
+                "remote"
+              ],
+              "cx-cli": [],
+              "cx-desktop": [],
+              "cx-sdk": [],
+              "cx-vscode": []
+            }
+          },
+          "oracle": "Independently observe the same still-open 3.3 development episode from this prospective definition onward. Verify each required predicate with actual actor/source/action/effect and resource observations; expected values are requirements, not facts. Preserve unobserved/unsupported cells and all original failures. Earlier closed products and corrections may contribute only at their existing bound conditions; no retroactive admission or evaluator repair. The first CI comparison is a finite useful delivery, not a substitute for all joined duties/scenarios, A01-A07 or a whole impact verdict. Use the bound original acceptance source; no new gates or positive-gain prerequisite.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "businessOutcomeCorrect": true,
+              "requiredDutiesObserved": {
+                "goal-authority-correction": true,
+                "environment-and-self-exposure": true,
+                "research-learning-and-reuse": true,
+                "relations-routing-and-form": true,
+                "execution-configuration-and-code": true,
+                "premise-and-consistency": true,
+                "correction-and-evolution": true,
+                "recovery-and-rollback": true,
+                "context-and-task-continuity": true,
+                "resources-and-cleanup": true,
+                "package-lifecycle": true,
+                "native-replacement-and-retirement": true,
+                "verification-and-value": true
+              },
+              "qualityFloorsObserved": {
+                "compliance-and-safety": true,
+                "functional-coverage": true,
+                "normal-entry-integration": true,
+                "recovery-and-lifecycle": true,
+                "change-adaptation": true,
+                "evidence-integrity": true,
+                "user-burden-and-interference": true,
+                "maintainability-and-resource-cost": true
+              },
+              "requiredScenariosObserved": {
+                "effective-user-environment": true,
+                "mid-task-user-steering": true,
+                "capability-loss": true,
+                "task-exposure-and-reuse": true
+              },
+              "oneCoherentEpisode": true
+            },
+            "authority": {
+              "latestGoalAndUserSteeringRespected": true,
+              "noInferredEffectsOrUnrequestedModes": true,
+              "singleWriterAndNecessaryAuthorityVerified": true
+            },
+            "poststate": {
+              "actualResultsAndUnknownEffectsReconciled": true,
+              "requiredInheritanceAndContinuationVerified": true,
+              "originalFailuresAndEvidenceLimitsPreserved": true
+            },
+            "cleanup": {
+              "ownedTemporaryResourcesReleasedOrJustifiablyRetained": true,
+              "unrelatedStateAndRecoveryPreserved": true
+            }
+          }
+        },
+        {
+          "id": "v33-system-impact-assessment-live-development-01",
+          "scope": "v33-system-impact-assessment",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "goal-authority-correction",
+            "environment-and-self-exposure",
+            "research-learning-and-reuse",
+            "relations-routing-and-form",
+            "execution-configuration-and-code",
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "recovery-and-rollback",
+            "context-and-task-continuity",
+            "resources-and-cleanup",
+            "package-lifecycle",
+            "native-replacement-and-retirement",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "native-sufficient",
+            "effective-user-environment",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "impact-assessment"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review. The entry label identifies that observer, not adoption or execution by a subject entry. Case and execution entry bindings must match the actual observer; separately establish subject actors and roles without relabelling old CLI/SDK executions.",
+            "subjectCoverage": "Use the applicable selected OpenAI entries and actual responsibilities established by v33-openai-entry-applicability. Preserve pending dispositions and unknown differences; this definition neither finalizes the support set nor activates another host.",
+            "executionBinding": "Before effects, bind the real outcome and inputs, exact host/entry/package/candidate and observer sources, actual actor identities and permissions, protected material and writer ownership, repetition count, time/usage/resource limits and recovery conditions. Definitions do not supply executable cases or new authority.",
+            "evidenceBoundary": "Use independent source observations and consequential post-state at their actual subject, time and conditions. Keep fixed-response checks, method failures, human assistance and ordinary Agent behavior distinct; valid historical or child-scope evidence contributes only at its bound scope.",
+            "comparison": "Independently compare task-relevant native handling, the current version, verifiable historical behavior and the exact candidate under prospectively bound conditions. Record uncontrollable differences, package/host/model/config/memory/helper conditions, quality and attribution limits; historical identities and original negative or no-gain results stay intact.",
+            "outcomesAndBurden": "Measure necessary result quality, errors/omissions and regressions, avoidable reminders and manual coordination/rescue, required-state loss and repeated work, recovery and unauthorized effects. Necessary user decisions, fresh authority and personal identity actions are distinct from avoidable burden; automation remains a required outcome.",
+            "wholeCost": "Account for execution and coordination time, actual available usage/cost signals, cache/warmup/context reprocessing, handoff, review/rework, setup, maintenance and cleanup. Include representative sustained work, resource pressure, normal end/cancel and abnormal exit with bounded host/OS observations. Unknown signals limit conclusions; package size, test counts or short successful runs are not total-cost evidence.",
+            "verdict": "Complete the required net-impact assessment even when no incremental gain is claimed. There is no universal must-be-cheaper or positive-gain prerequisite; reasonable overhead may support necessary automation. Judge contextual tradeoffs only after all applicable floors, preserve material negative findings, and never average away severe unresolved regressions or authority failures.",
+            "qualification": "A concrete impact-assessment case must include expected.comparison and independent observe/recheck evidence. Full A08 also needs A01-A07 and the joined system-integration episode; assessment or neutral qualification cannot assert positive incremental benefit, production readiness or publication on its own.",
+            "liveDevelopmentBinding": {
+              "episodeId": "v33-live-development-20261013-01",
+              "business": "Continue the existing 3.3 development task toward verified functional closure. The next concrete delivery is an exact 82dec5ba versus 63fe552d CI matrix/timeline comparison usable for candidate review; it does not itself assert full functionality.",
+              "firstOutcome": {
+                "outputs": [
+                  "candidate-ci-comparison.json",
+                  "result.md"
+                ],
+                "location": "C:/Users/15521/.codex/backups/accord-r23-live-development-20261013-01/delivery",
+                "oracle": "Strictly derive all matrix identities, conclusions, job/step durations, critical path, wall-clock and aggregate occupied job-seconds from the two protected GitHub terminal sources. Retain all material changes and limitations; CI timing cannot establish causal Accord benefit or total development cost.",
+                "protectedInputs": [
+                  {
+                    "path": "C:/Users/15521/.codex/backups/accord-runtime-provenance-20261013-01/ci-final-82dec5ba.json",
+                    "sha256": "c5c0e38ee72308a5548be157171f67cbcb993d65b5b03f7f0d6668f970e3298a",
+                    "mtimeNs": 1791881949199365300,
+                    "revision": "82dec5bad33e8efac9ffdf11a7bce06a0e740e0c",
+                    "runId": "38366302240"
+                  },
+                  {
+                    "path": "C:/Users/15521/.codex/backups/accord-large-progress-20261013-01/ci-final-63fe552d.json",
+                    "sha256": "4532c659b1ec167dd4c456d24dd70a415edbe09ccf89a8d4c4691e293d697236",
+                    "mtimeNs": 1791877753910818200,
+                    "revision": "63fe552d7d52d270c64b673702c6b1d9aa219708",
+                    "runId": "38360286042"
+                  }
+                ]
+              },
+              "actor": {
+                "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
+                "turnId": "01a1347b-fa59-7143-acbd-407bc33a42dd",
+                "entry": "cx-desktop",
+                "hostVersion": "0.162.0-alpha.17.2",
+                "model": "gpt-6.1-sol",
+                "effort": "max",
+                "approvalPolicy": "on-request",
+                "sandbox": "danger-full-access",
+                "sourceRef": "codex-rollout:2026/10/10/rollout-2026-10-10T18-56-40-01a12575-32c0-7313-8a52-64ebaa540ec2.jsonl#byte=143124202"
+              },
+              "codeRevision": "82dec5bad33e8efac9ffdf11a7bce06a0e740e0c",
+              "installedPackageVersion": "3.3.0-dev.1+codex.20261013075118",
+              "installedPackageSha256": "9e3f33adde567fb2bc9b0b93689b98d54d76edbad61855e54eeacc0ed2abc5fa",
+              "loadedRuntimeLimit": "Original MCP responder has not returned runtime fingerprints; exact warm responder build is unknown. Current coordination guidance is delivered; installation/reference hashes cannot attest that responder.",
+              "writers": {
+                "sharedRepositoryAndCheckpoint": "Root only",
+                "delivery": "Root only",
+                "independentReview": "Read-only observer; no result repair or shared writes"
+              },
+              "firstSpanLimits": {
+                "wallSeconds": 900,
+                "attempts": 1,
+                "aggregateNativeTokensMaximum": 2000000,
+                "aggregateOutputTokensMaximum": 24000,
+                "simultaneousAgentsMaximum": 2,
+                "scope": "Includes this first business delivery and its independent review, preparation/rework and cleanup; not the whole project. Stop/retain unknowns at a bound limit rather than silently extending. No new paid service or Goal."
+              },
+              "continuity": "Choose healthy continuation or supported compaction from fresh signals; shorter spans and preserved recovery for unknown counters. Necessary takeover requires actual need, source-effect reconciliation, destination evidence and one writer; no prescribed migration or synthetic loss.",
+              "recovery": "Inspect actual output/process effects before retry after missing acknowledgement. Preserve pauses, original failures and source recovery. Retained diagnostic observer has its separately authorized purpose and stop conditions.",
+              "remainingCoverage": "A first CI delivery need not exercise every declared duty/axis/scenario. Each unobserved cell stays unverified. Full joined system evidence, defaults, necessary takeover/failure windows and independent whole-cost assessment remain required."
+            }
+          },
+          "oracle": "Independently observe the same still-open 3.3 development episode from this prospective definition onward. Verify each required predicate with actual actor/source/action/effect and resource observations; expected values are requirements, not facts. Preserve unobserved/unsupported cells and all original failures. Earlier closed products and corrections may contribute only at their existing bound conditions; no retroactive admission or evaluator repair. The first CI comparison is a finite useful delivery, not a substitute for all joined duties/scenarios, A01-A07 or a whole impact verdict. Use the bound original acceptance source; no new gates or positive-gain prerequisite.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "businessOutcomeCorrect": true,
+              "requiredDutiesObserved": {
+                "goal-authority-correction": true,
+                "environment-and-self-exposure": true,
+                "research-learning-and-reuse": true,
+                "relations-routing-and-form": true,
+                "execution-configuration-and-code": true,
+                "premise-and-consistency": true,
+                "correction-and-evolution": true,
+                "recovery-and-rollback": true,
+                "context-and-task-continuity": true,
+                "resources-and-cleanup": true,
+                "package-lifecycle": true,
+                "native-replacement-and-retirement": true,
+                "verification-and-value": true
+              },
+              "qualityFloorsObserved": {
+                "compliance-and-safety": true,
+                "functional-coverage": true,
+                "normal-entry-integration": true,
+                "recovery-and-lifecycle": true,
+                "change-adaptation": true,
+                "evidence-integrity": true,
+                "user-burden-and-interference": true,
+                "maintainability-and-resource-cost": true
+              },
+              "requiredScenariosObserved": {
+                "native-sufficient": true,
+                "effective-user-environment": true,
+                "capability-loss": true,
+                "task-exposure-and-reuse": true
+              }
+            },
+            "authority": {
+              "latestGoalAndUserSteeringRespected": true,
+              "noInferredEffectsOrUnrequestedModes": true,
+              "singleWriterAndNecessaryAuthorityVerified": true
+            },
+            "poststate": {
+              "actualResultsAndUnknownEffectsReconciled": true,
+              "requiredInheritanceAndContinuationVerified": true,
+              "originalFailuresAndEvidenceLimitsPreserved": true
+            },
+            "cleanup": {
+              "ownedTemporaryResourcesReleasedOrJustifiablyRetained": true,
+              "unrelatedStateAndRecoveryPreserved": true
+            },
+            "comparison": {
+              "nativeCandidateAndHistoricalConditionsBound": true,
+              "actualQualityAndWholeBurdenIndependentlyAssessed": true,
+              "usageUnknownsAndUncontrolledDifferencesPreserved": true,
+              "neutralOrNegativeFindingsRetained": true,
+              "noUnsupportedCausalGainClaim": true
             }
           }
         }
