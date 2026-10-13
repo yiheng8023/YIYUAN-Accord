@@ -2603,7 +2603,29 @@
             "resourceClosure": "Executor and reviewer completed, owned test sessions exited; reviewed patch/logs retained, integrated private clone removed after exact path/HEAD/unique-change/hash checks."
           },
           "qualificationPassed": false,
-          "resultLimit": "Finite real engineering delivery and dependent quality correction only; not full A05/A08, default-window/necessary takeover, whole impact, original warm build adoption or causal positive gain. No new scope or quality gate."
+          "resultLimit": "Finite real engineering delivery and dependent quality correction only; not full A05/A08, default-window/necessary takeover, whole impact, original warm build adoption or causal positive gain. No new scope or quality gate.",
+          "ciRegression": {
+            "subjectRevision": "485e4c3b43b5687734b08e447bb33e2670143321",
+            "runId": "38380470025",
+            "status": "completed",
+            "conclusion": "failure",
+            "jobsPassed": 2,
+            "jobsTotal": 11,
+            "failedStep": "All nine matrix jobs: Check declared case gaps before the full suite",
+            "source": "private:accord-r23-live-development-20261013-01/ci-final-485e4c3b.json",
+            "scopeLimit": "Bundle logs end at setup; no individual matrix traceback. Exact local workflow command reproduced a CLI stale no-case assumption, not proof of all remote causes."
+          },
+          "ciFollowup": {
+            "originalLocalPreflight": "10 tests/22.393s/9PASS1ERROR, retained ci-preflight-local-485e4c3b.*",
+            "widerClassOriginal": "17 tests/26.243s/16PASS1ERROR, retained ci-preflight-after-cli-fix.*",
+            "correction": "Only CLI test and split-episode synthetic fixture: derive missing dimensions from live required/bound pairs; replace the target scope cases only in a deepcopy to construct the split negative. Actual policy and production gates unchanged.",
+            "verification": "CI original10 preflight plus full7-method DeclarationCaseBindingTests:17PASS/26.274s; two CLI/fixture hunks independently reviewed; all earlier failures retained.",
+            "newQualification": false,
+            "codeBytesNet": 40,
+            "productionChanged": false,
+            "developmentRegression": "All108 tests.product.test_development tests PASS/298.952s after the confirmed CLI/negative-fixture correction; original10 and entire declaration class also17PASS/26.274s.",
+            "independentReview": "private:accord-r23-live-development-20261013-01/independent-review/cli-gap-final-review.json"
+          }
         }
       },
       "subject": {

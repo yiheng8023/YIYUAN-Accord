@@ -1160,11 +1160,11 @@ class DeclarationCaseBindingTests(unittest.TestCase):
         self.assertEqual({scope_id for scope_id, claims in gaps.items()
                           if any(not gap["caseIds"] for gap in claims.values())}, without_cases)
         # Ended one-use instances retain evidence, not a future PASS obligation.
-        continuity = gaps["v33-autonomous-continuity"]["function"]
-        self.assertEqual(continuity["caseIds"], [])
-        scope = next(s for s in policy['scopes'] if s['id'] == 'v33-autonomous-continuity')
-        for key in ('duties', 'qualityAxes', 'scenarios'):
-            self.assertEqual(set(continuity['missingDimensions'][key]), set(scope[key]))
+        for scope_id, claim in required - bound:
+            gap = gaps[scope_id][claim]
+            scope = next(s for s in policy['scopes'] if s['id'] == scope_id)
+            for key in ('duties', 'qualityAxes', 'scenarios'):
+                self.assertEqual(set(gap['missingDimensions'][key]), set(scope[key]))
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(report["currentHostBehavior"], "unverified")
@@ -1192,6 +1192,7 @@ class DeclarationCaseBindingTests(unittest.TestCase):
         contract = copy.deepcopy(self.contract)
         policy = contract["acceptance"]["admission"]
         scope = next(row for row in policy["scopes"] if row["id"] == "v33-system-integration")
+        policy['cases'] = [c for c in policy['cases'] if c['scope'] != scope['id']]
         first = copy.deepcopy(policy["cases"][0])
         first.pop("packageFiles", None)
         first.update({field: copy.deepcopy(scope[field]) for field in (
