@@ -2659,6 +2659,26 @@
             "routeReview": "private:accord-r23-live-20261015-01/astra-route/route.json",
             "reviewLimits": "Astra route180s assembly plus save tail; Sol review195.511s exceeds180s, original resource negatives retained; requested model IDs not deployment proof.",
             "qualificationPassed": false
+          },
+          "desktopRouteFeasibility": {
+            "source": "private:accord-desktop-route-20261015-01/host-probes.json",
+            "sha256": "ee60ae2cc627760ea53a3b99d8085dcc7e07c6ed2de51e3cd8ba038b1843f64e",
+            "nativeSource": "private:accord-desktop-route-20261015-01/native-observation.json",
+            "contextDecision": "private:accord-desktop-route-20261015-01/context-decision.json",
+            "cliVersion": "0.162.1",
+            "desktopVersion": "0.162.0-alpha.17.2",
+            "resumeParamsSha256": "c69d0d08d046e48b2f9e631761e1127c347fac2f8c2776df458559eb3aa4bd83",
+            "resumeHasDynamicTools": false,
+            "startHasDynamicTools": true,
+            "defaultControlEndpoint": "Connection refused10061; historical daemon/notLoaded observation is not current availability. No service started or reconfigured.",
+            "currentRootControl": "A compatible owned live Desktop control connection has not been established; default stdio app-server process is not an accessible controller merely from its PID.",
+            "nativeAlternative": "Supported same-task compaction/restoration remains usable. A fresh zero-history native subagent completed this bounded read-only route review; it is not a persistent Root replacement or proof of survival after Root release.",
+            "decision": "Current finite work fits the sourced native hard-window forecast; continue-bounded, retain Root recovery and writer. Exact compaction threshold/efficiency remain unknown; no forced transfer.",
+            "implementationFinding": "No newly proved adapter defect. Do not create a controller or handoff MCP solely to replace missing ownership/control evidence.",
+            "independentReview": "Native fresh subagent /root/desktop_route_probe completed read-only; requested Sol/high, backend not attested.",
+            "effects": "No new thread/turn, transfer, daemon start, Hook/MCP/config change, package update or closed-business replay.",
+            "qualificationPassed": false,
+            "remaining": "Actual necessary migration/takeover and applicable failure windows remain unverified for ordinary Desktop; full R2/R3 and existing joined quality duties remain open."
           }
         },
         "admissionReadCost": {
