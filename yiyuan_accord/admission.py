@@ -820,7 +820,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             if set(data) != {"records", "reviewBundle"} or not isinstance(data["records"], list):
                 raise ValueError("invalid observation envelope")
             now = datetime.now(timezone.utc)
-            prior, package_snapshots, seen = {}, {}, set()
+            prior, package_snapshots, seen, read_blobs = {}, {}, set(), set()
             package_budget = {"calls": 0, "files": 0, "bytes": 0}
             for record in data["records"]:
                 if (not isinstance(record, dict) or set(record) != _RECORD_FIELDS
@@ -905,9 +905,11 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     if _git(root, "diff", "--name-only", "-z", "--no-ext-diff", "--no-textconv", revision, "--", *diff_files):
                         raise _CaseRejection("execution-dependency-changed")
                     for path in case["oracleFiles"]:
-                        _git(root, "cat-file", "blob", f"{revision}:{path}")
-                        if path in review_files:
-                            _git(root, "cat-file", "blob", f"{subject['revision']}:{path}")
+                        for source_revision in ([revision, subject["revision"]] if path in review_files else [revision]):
+                            locator = f"{source_revision}:{path}"
+                            if locator not in read_blobs:
+                                _git(root, "cat-file", "blob", locator)
+                                read_blobs.add(locator)
                     committed = int(_git(root, "show", "-s", "--format=%ct", revision).strip())
                     if at.timestamp() < committed:
                         raise _CaseRejection("observation-predates-candidate")

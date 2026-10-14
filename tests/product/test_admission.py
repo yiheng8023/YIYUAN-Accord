@@ -2390,6 +2390,45 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             with self.subTest(action=action):
                 self.assertNotEqual(original, _reuse_definition(changed, target))
 
+    def test_oracle_read_failure_recovers_without_leaking_between_assessments(self):
+        from yiyuan_accord import admission
+        first, later = self.contract["acceptance"]["admission"]["cases"][:2]
+        path = sorted(set(first["oracleFiles"]) & set(later["oracleFiles"]))[0]
+        locator = f"{self.git('rev-parse', 'HEAD')}:{path}"
+        original_git = admission._git
+        failed = False
+
+        def observer(request):
+            response = self.observer(request)
+            if request["phase"] == "observe":
+                response["records"] = [record for record in response["records"]
+                                       if record["case"] in {first["id"], later["id"]}]
+            return response
+
+        def transient_read(root, *args):
+            nonlocal failed
+            if args == ("cat-file", "blob", locator) and not failed:
+                failed = True
+                raise subprocess.SubprocessError("synthetic first oracle read failure")
+            return original_git(root, *args)
+
+        with patch.object(admission, "_git", side_effect=transient_read):
+            recovered = self.assess(observer=observer)
+        self.assertNotIn(first["id"], recovered["acceptedCases"])
+        self.assertIn("source-evidence-unavailable", recovered["caseRejections"][first["id"]])
+        self.assertIn(later["id"], recovered["acceptedCases"], recovered["errors"])
+
+        def unavailable_read(root, *args):
+            if args == ("cat-file", "blob", locator):
+                raise subprocess.SubprocessError("synthetic persistent oracle read failure")
+            return original_git(root, *args)
+
+        with patch.object(admission, "_git", side_effect=unavailable_read):
+            unavailable = self.assess(observer=observer)
+        for case in (first, later):
+            self.assertNotIn(case["id"], unavailable["acceptedCases"])
+            self.assertIn("source-evidence-unavailable", unavailable["caseRejections"][case["id"]])
+
     def test_revision_package_snapshot_rejects_shared_assessment_budget_exhaustion(self):
         from yiyuan_accord import admission
         revision = self.git("rev-parse", "HEAD")
