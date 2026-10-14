@@ -2653,7 +2653,7 @@
             "candidateGitBlobCalls": 13,
             "fullSuiteOrWholeCostMeasured": false
           },
-          "verification": "Root integrated the exact independently reviewed patch; new failure/recovery/new-assessment behavioral regression and eight related existing checks passed (9 tests,84.169s; harness84.856s). Product and development source checks valid with no errors. Independent seven-scenario differential and new regression retained; new hosted CI still requires the committed subject.",
+          "verification": "Root integrated the exact independently reviewed patch; new failure/recovery/new-assessment behavioral regression and eight related existing checks passed (9 tests,84.169s; harness84.856s). Product and development source checks valid with no errors. Independent seven-scenario differential and new regression retained; exact hosted CI38555776998 for0bdaf9da completed11/11success; owned watch42326 exited0.",
           "semanticLimit": "Repeated continuous readability diagnostics after a successful immutable lookup are no longer performed; original success-then-transient-failure differential retained. No arbitrary fault-trajectory equivalence claim.",
           "sourceFootprint": {
             "baseline": 3582448,
@@ -2677,6 +2677,15 @@
             "productSourceValid": true,
             "developmentSourceValid": true,
             "scope": "targeted regression and source conformance only"
+          },
+          "ci": {
+            "subjectRevision": "0bdaf9da68911697560d9d461e48907a15ed6332",
+            "runId": 38555776998,
+            "conclusion": "success",
+            "jobsPassed": 11,
+            "watchSession": 42326,
+            "watchExitCode": 0,
+            "source": "private:accord-admission-cost-20261013-01/ci-final-0bdaf9da.json"
           }
         },
         "nativeResumeObservation": {
@@ -2719,9 +2728,42 @@
             },
             "candidateVersion": "3.3.0-dev.1+codex.20261014112838",
             "candidatePackageSha256": "a34c7ddd347a6d4ec73e4a4a35e873c10886ca66d7f120f5bde2457e5ece3f97",
-            "loadedAndReconciled": "pending; original live worker/version75 source unknown retained",
+            "loadedAndReconciled": "Named native update installed14112838;25 Git/checkout/default-market/cache members match and only Accord source ref changed. Fresh byte-verified installed helper source-reconciled and bound Root131; original MCP11380 still reports75/unknown origin and is not claimed refreshed.",
             "qualificationPassed": false,
-            "reviewModelLimit": "Spawn requested gpt-6.1-sol/high with zero history; reviewer self-description is not independently attested deployment identity."
+            "reviewModelLimit": "Spawn requested gpt-6.1-sol/high with zero history; reviewer self-description is not independently attested deployment identity.",
+            "liveReconciliation": {
+              "source": "private:accord-admission-cost-20261013-01/resume-origin/lifecycle",
+              "independentReview": "private:accord-admission-cost-20261013-01/resume-origin/reviewer/live-poststate/poststate-review.json",
+              "checkpointRevision": 131,
+              "capturedBefore": 71,
+              "capturedAfter": 72,
+              "originalInputPrefixAndLatestRealSummaryPreserved": true,
+              "originalBasisAndWatermarksPreserved": true,
+              "pendingNativeInputs": 0,
+              "coverage": "complete under current source anchor; not all historical dialogue",
+              "mode": "active",
+              "unresolvedResponsibilities": 22,
+              "updatedProgressStrings": 2,
+              "historicalInputDispositions": 26,
+              "outputs": 4,
+              "businessOrHookReplayed": false,
+              "originalErrors": "Native marketplace add rejected changed ref; Root postcheck wrongly accessed absent top-level prompt. Both retained; actual effects independently reconciled, no duplicate source write.",
+              "independentReadBytes": 181408,
+              "originalMcpAdoption": "still75, separate from compatible helper effect",
+              "qualificationPassed": false
+            },
+            "ci": {
+              "subjectRevision": "857fff79010d91afcda24c5f35cd408d18e10d6f",
+              "runId": 38558566903,
+              "status": "completed",
+              "watchSession": 10744,
+              "source": "private:accord-admission-cost-20261013-01/resume-origin/ci-final-857fff79.json",
+              "conclusion": "success",
+              "jobsPassed": 11,
+              "watchExitReported": 1,
+              "watchError": "GitHub TCP connection forcibly closed; original error retained, not a CI failure",
+              "terminalRecheckExitCode": 0
+            }
           }
         }
       },
