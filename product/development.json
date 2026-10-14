@@ -2639,6 +2639,26 @@
               "exitCode": 0,
               "closure": "natural terminal completion, original 485 watcher/failure retained"
             }
+          },
+          "availableBurdenAssessment": {
+            "source": "private:accord-r23-live-20261015-01/episode-accounting.json",
+            "sha256": "56d2f8d9f3c09791f6c69d39f0a343901d8b5b521afe2304e53099905af40ca5",
+            "independentReview": "private:accord-r23-live-20261015-01/review/review.json",
+            "rootUniqueResponses": 174,
+            "rootInputTokens": 40811304,
+            "rootCachedInputTokens": 37360640,
+            "rootUncachedInputTokens": 3450664,
+            "rootOutputTokens": 310318,
+            "rootTotalTokens": 41121622,
+            "nativeCumulativeDeltaMatched": true,
+            "scope": "BoundedRoot source143124202..160527771 with retained prefix SHA; not entire history or child actors",
+            "ciSummedOccupiedJobSeconds": 39353,
+            "recordOnlyCiOccupiedSeconds": 13158,
+            "wallTimeOrMonetaryChargeInferred": false,
+            "verdict": "Available sustained burden and limited recovery benefit assessed; material repeated CI occupied time and original failures retained. Whole monetary/child/baseline/causal net impact and fullA08 remain unverified. No positive-gain prerequisite.",
+            "routeReview": "private:accord-r23-live-20261015-01/astra-route/route.json",
+            "reviewLimits": "Astra route180s assembly plus save tail; Sol review195.511s exceeds180s, original resource negatives retained; requested model IDs not deployment proof.",
+            "qualificationPassed": false
           }
         },
         "admissionReadCost": {
@@ -2764,6 +2784,18 @@
               "watchError": "GitHub TCP connection forcibly closed; original error retained, not a CI failure",
               "terminalRecheckExitCode": 0
             }
+          },
+          "nativeContinuation20261015": {
+            "source": "private:accord-r23-live-20261015-01/native-observations.json",
+            "responderVersion": "3.3.0-dev.1+codex.20261014112838",
+            "responderPid": 31172,
+            "entrySource": "actual current original MCP request metadata, current source prefix and guarded reconcile/bind",
+            "actualEffects": "One typed Page null reconciled through current original MCP, then complete existing contract bound134. Original inputs, current genuine continue, watermarks and unfinished work retained; no Hook/business replay.",
+            "capturedBefore": 73,
+            "capturedAfter": 74,
+            "checkpointRevision": 134,
+            "coverage": "Current-anchor original MCP source behavior, not complete history/all loaded helpers/all-entry automatic handoff",
+            "original11380Observation": "Retained at its2026-10-14 subject/time; do not rewrite as refreshed"
           }
         }
       },
