@@ -210,6 +210,9 @@ function retryOrigin(rows, binding, promptHash) {
           candidate.payload.role === 'developer') continue;
       if (candidate?.type === 'response_item' && candidate.payload?.type === 'message' &&
           candidate.payload.role === 'user' && typedAmbient(candidate.payload, binding.turnId)) continue;
+      if (candidate?.type === 'event_msg' && candidate.payload?.type === 'token_count' &&
+          (!Object.hasOwn(candidate.payload, 'turn_id') || candidate.payload.turn_id === binding.turnId) ||
+          candidate?.type === 'token_usage_record' && candidate.payload?.turn_id === binding.turnId) continue;
       if (inputHash(candidate) === promptHash) return index;
       break;
     }

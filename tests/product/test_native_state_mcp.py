@@ -1029,6 +1029,46 @@ process.stdout.write(JSON.stringify({result,changed}));
                 self.assertFalse(bound['isError'], bound)
                 shutil.rmtree(self.state)
 
+    def test_native_origin_skips_usage_without_hiding_input_or_control(self):
+        for kind in ('count', 'usage', 'both', 'foreign-count', 'foreign-usage', 'human', 'interrupt'):
+            with self.subTest(kind=kind):
+                if self.state.exists(): shutil.rmtree(self.state)
+                self.native_context()
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                count = {'type': 'event_msg', 'payload': {'type': 'token_count', 'info': None}}
+                usage = {'type': 'token_usage_record', 'payload': {'turn_id': meta['turn_id']}}
+                inserts = [count] if kind == 'count' else [usage]
+                if kind == 'both': inserts = [count, usage, count]
+                if kind == 'foreign-count':
+                    count['payload']['turn_id'] = 'foreign-turn'
+                    inserts = [count]
+                if kind == 'foreign-usage': usage['payload']['turn_id'] = 'foreign-turn'
+                if kind == 'human':
+                    inserts = [{'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+                        'content': [{'type': 'input_text', 'text': 'An earlier uncaptured human input'}]}}]
+                if kind == 'interrupt':
+                    inserts = [{'type': 'event_msg', 'payload': {'type': 'task_interrupted'}}]
+                rows[2:2] = inserts
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                before = self.files()
+                preview = self.native_input_preview()
+                evidence = preview['nativeInputEvidence']
+                self.assertEqual(self.files(), before)
+                if kind in ('count', 'usage', 'both'):
+                    self.assertEqual(evidence['state'], 'observed', evidence)
+                    self.assertTrue(evidence['latestNativeInputsComplete'])
+                    self.automatic_capacity_retry('retry-after-usage')
+                    bound = self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0,
+                        result='Preserve the actual input across usage records', inputs=[],
+                        outputs=[{'path': 'report.txt'}], nextAction='Continue safely', canContinue=False)
+                    self.assertFalse(bound['isError'], bound)
+                else:
+                    self.assertEqual(evidence['state'], 'unknown', evidence)
+                    self.assertEqual(evidence['reason'], 'native-input-origin-unavailable')
+                shutil.rmtree(self.state)
+
     def append_long_tail_and_repeated_context(self):
         meta = self.params['_meta']['x-codex-turn-metadata']
         transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
