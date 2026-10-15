@@ -3150,7 +3150,7 @@
               "totalTokens": 2285324
             },
             "originalBothQuotaFailuresPreserved": true,
-            "wholeWorkBudget": "not passed/established; wall elapsed exceeds3600",
+            "wholeWorkBudget": "not established: bound3600 active-work seconds; observed4835 wall seconds alone do not prove active-work overrun; two original sampled token-cap failures remain failures",
             "remainingOwnedResidue": [
               "C:\\Users\\15521\\AppData\\Local\\Temp\\accord-native-state-mcp-vb9uhclv"
             ],
@@ -3158,13 +3158,23 @@
             "ci": {
               "head": "b49fe0df78246db3798365abc76ab0ac93a35896",
               "runId": "38758375120",
-              "status": "in_progress",
-              "conclusion": null,
-              "jobsPassed": 7,
+              "status": "completed",
+              "conclusion": "success",
+              "jobsPassed": 11,
               "jobsTotal": 11,
-              "source": "private:accord-cli-validation-diagnostics-20261015-05/ci-current-b49fe0df.json"
+              "source": "private:accord-cli-validation-diagnostics-20261015-05/ci-final-b49fe0df.json",
+              "sha256": "e5ca44b798d20c4e2fe6a3fdd6b14d227ef4f271ee92ea5439b4e6d670ee7bbc",
+              "previousObservation": "private:accord-cli-validation-diagnostics-20261015-05/ci-current-b49fe0df.json"
             },
-            "qualificationLimit": "hold; technical source result and a later normal readonly end do not reverse two original quota failures, unset whole-work budget or restricted fixture tail. No ordinary-case observe/recheck pass claimed."
+            "qualificationLimit": "hold: later verified engineering and normal readonly completion support the technical subresults, without reversing original budget-limited execution or signing unverified active-work and owned-storage predicates. Not a first-attempt-only rule, not a requirement for known whole-cost before acknowledging diagnostic function; no ordinary-case observe/recheck pass claimed.",
+            "followup": {
+              "source": "private:accord-cli-validation-diagnostics-20261015-05/ci-resource-continuity-followup-20261016.json",
+              "sha256": "4f2facd51c73bbf8218d6f4817ab3162a29984074d2c6e217c6694cd9f5e95a0",
+              "currentMcpMutationRecovered": true,
+              "rootCauseUnknown": true,
+              "activeWorkDurationUnknown": true,
+              "storageTailUnresolved": true
+            }
           }
         },
         "admissionReadCost": {
