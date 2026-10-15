@@ -6,6 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 const crypto = require('node:crypto');
+const {TextDecoder} = require('node:util');
 
 // Keep optional reader code with this process's loaded runtime generation.
 // A long-lived MCP may outlive its old package directory during native update.
@@ -39,8 +40,12 @@ function regular(file, limit = 8 * 1024 * 1024) {
   return fs.readFileSync(file);
 }
 
+function parseJsonBytes(bytes) {
+  return JSON.parse(new TextDecoder('utf-8', {fatal: true, ignoreBOM: true}).decode(bytes));
+}
+
 function jsonObject(bytes) {
-  const value = JSON.parse(bytes.toString('utf8'));
+  const value = parseJsonBytes(bytes);
   if (!value || typeof value !== 'object' || Array.isArray(value)) fail('invalid-state-object');
   return value;
 }
@@ -352,7 +357,7 @@ function inspect(where, state) {
     if (matched && output.json) {
       try {
         let finite = true;
-        const parsed = JSON.parse(bytes.toString('utf8'));
+        const parsed = parseJsonBytes(bytes);
         const pending = [parsed];
         while (pending.length && finite) {
           const value = pending.pop();
@@ -366,7 +371,7 @@ function inspect(where, state) {
           return found.present && canonical(found.value) === canonical(expected);
         });
       } catch (error) {
-        if (error instanceof SyntaxError) matched = false;
+        if (error instanceof SyntaxError || error.code === 'ERR_ENCODING_INVALID_ENCODED_DATA') matched = false;
         else throw error;
       }
     }
@@ -890,7 +895,7 @@ function operate(request) {
     const file = inputRecovery ? where.input + '.lock' : where.lock;
     const recover = () => {
     const original = regular(file, 1024);
-    const owner = JSON.parse(original.toString('utf8'));
+    const owner = parseJsonBytes(original);
     if (!Number.isSafeInteger(owner.pid) || owner.pid <= 0) fail('unknown-lock-owner');
     try { process.kill(owner.pid, 0); fail('lock-owner-still-running'); }
     catch (error) { if (error.code !== 'ESRCH') throw error; }
@@ -1563,23 +1568,26 @@ if (require.main === module) {
       transportFailure('interactive-stdin-not-supported: pipe one JSON object or use --help');
       return;
     }
-    process.stdin.setEncoding('utf8');
+    const decoder = new TextDecoder('utf-8', {fatal: true, ignoreBOM: true});
     process.stdin.on('error', () => transportFailure('native-input-read-failed'));
     process.stdin.on('close', () => {
       if (!inputEnded) transportFailure('incomplete-native-input');
     });
     process.stdin.on('data', (chunk) => {
       if (transportFailed) return;
-      inputBytes += Buffer.byteLength(chunk);
+      inputBytes += chunk.length;
       if (inputBytes > transportLimit) {
         transportFailure('oversize-native-input');
         process.exit(1);
       }
-      input += chunk;
+      try { input += decoder.decode(chunk, {stream: true}); }
+      catch (_) { transportFailure('invalid-utf8-input'); process.stdin.destroy(); }
     });
     process.stdin.on('end', () => {
       inputEnded = true;
       if (transportFailed) return;
+      try { input += decoder.decode(); }
+      catch (_) { transportFailure('invalid-utf8-input'); return; }
       let request;
       try { request = JSON.parse(input); }
       catch (_) { transportFailure('invalid-json-input'); return; }

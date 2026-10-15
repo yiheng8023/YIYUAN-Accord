@@ -849,6 +849,85 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
                 self.assertEqual(after['entries'], before['entries'])
                 self.assertNotEqual(after['receiptEpoch'], before['receiptEpoch'])
 
+    def test_malformed_utf8_mutation_does_not_replace_or_publish_task_text(self):
+        self.bind(unresolved=['保留原职责。'])
+        current = self.status()
+        request = {'session_id': 'test-session', 'cwd': str(self.work), 'op': 'bind',
+                   'epoch': current['epoch'], 'expectedRevision': current['revision'],
+                   'result': 'BYTE-MARKER', 'inputs': ['source.json', 'keep.txt'],
+                   'outputs': [{'path': 'summary.json'}], 'nextAction': 'Continue safely.',
+                   'canContinue': True, 'unresolved': ['保留原职责。'],
+                   'revisionReason': 'Rebind authorized metadata without changing the original duties.'}
+        encoded = json.dumps(request, ensure_ascii=False).encode('utf-8')
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        for invalid in (b'\xff', b'\xc0\xaf', b'\xe4\xb8'):
+            with self.subTest(invalid=invalid):
+                result = subprocess.run([self.node, str(RUNTIME)],
+                    input=encoded.replace(b'BYTE-MARKER', invalid), capture_output=True,
+                    env=self.environment, cwd=self.work, timeout=10)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(result.stdout, b'')
+                self.assertIn(b'invalid-utf8-input', result.stderr)
+                self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+
+    def test_malformed_utf8_input_hook_preserves_original_and_marks_loss(self):
+        self.bind()
+        checkpoint = next(self.state.glob('*.state.json'))
+        receipt = next(self.state.glob('*.input.json'))
+        before_state, before_input = checkpoint.read_bytes(), receipt.read_bytes()
+        event = {'session_id': 'test-session', 'cwd': str(self.work),
+                 'hook_event_name': 'UserPromptSubmit', 'prompt': 'BYTE-MARKER'}
+        result = subprocess.run([self.node, str(RUNTIME), '--hook', 'UserPromptSubmit'],
+            input=json.dumps(event).encode('utf-8').replace(b'BYTE-MARKER', b'\xff'),
+            capture_output=True, env=self.environment, cwd=self.work, timeout=10)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, b'')
+        self.assertIn(b'invalid-utf8-input', result.stderr)
+        self.assertEqual(checkpoint.read_bytes(), before_state)
+        self.assertEqual(receipt.read_bytes(), before_input)
+        self.assertTrue(self.status()['needsNativeReplay'])
+
+    def test_entry_hook_rejects_malformed_utf8_without_guidance_or_state_write(self):
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        event = {'hook_event_name': 'SessionStart', 'source': 'startup', 'cwd': 'BYTE-MARKER'}
+        result = subprocess.run([self.node, str(RUNTIME.with_name('accord-hook.cjs'))],
+            input=json.dumps(event).encode('utf-8').replace(b'BYTE-MARKER', b'\xff'),
+            capture_output=True, env=self.environment, cwd=self.work, timeout=10)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, b'')
+        self.assertIn(b'invalid entry hook input', result.stderr)
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+
+    def test_malformed_utf8_saved_state_is_rejected_without_rewriting_it(self):
+        self.bind(result='BYTE-MARKER')
+        checkpoint = next(self.state.glob('*.state.json'))
+        checkpoint.write_bytes(checkpoint.read_bytes().replace(b'BYTE-MARKER', b'\xff'))
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        error = self.invoke({'op': 'status'}, success=False)
+        self.assertIn('invalid-recovery-json:checkpoint', error)
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+
+    def test_malformed_utf8_output_json_cannot_satisfy_a_predicate(self):
+        self.bind()
+        self.write_outputs()
+        output = self.work / 'summary.json'
+        output.write_bytes(b'{"total":60,"text":"\xff"}')
+        before = output.read_bytes()
+        current = self.status()
+        self.assertFalse(current['inspection']['outputs'][0]['matched'])
+        self.assertEqual(output.read_bytes(), before)
+
+    def test_valid_utf8_literal_replacement_character_is_preserved(self):
+        prompt = '保留用户字面字符\ufffd与中文🧭。'
+        event = {'session_id': 'test-session', 'cwd': str(self.work),
+                 'hook_event_name': 'UserPromptSubmit', 'prompt': prompt}
+        result = subprocess.run([self.node, str(RUNTIME), '--hook', 'UserPromptSubmit'],
+            input=json.dumps(event, ensure_ascii=False).encode('utf-8'), capture_output=True,
+            env=self.environment, cwd=self.work, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        receipt = json.loads(next(self.state.glob('*.input.json')).read_text(encoding='utf-8'))
+        self.assertEqual(receipt['nativeInputs'][-1]['prompt'], prompt)
+
     def test_native_hook_stream_error_preserves_input_loss_quarantine(self):
         self.bind()
         checkpoint = next(self.state.glob('*.state.json'))

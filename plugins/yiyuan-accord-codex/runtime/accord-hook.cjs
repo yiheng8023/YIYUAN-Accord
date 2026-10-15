@@ -1,19 +1,25 @@
 'use strict';
 
-let input = '';
-process.stdin.setEncoding('utf8');
+const {TextDecoder} = require('node:util');
+const decoder = new TextDecoder('utf-8', {fatal: true, ignoreBOM: true});
+let input = '', failed = false;
+const fail = () => {
+  if (failed) return;
+  failed = true;
+  input = '';
+  process.stderr.write('YIYUAN Accord: invalid entry hook input; task state remains unchanged.\n');
+  process.exitCode = 1;
+};
 process.stdin.on('data', (chunk) => {
-  input += chunk;
+  if (failed) return;
+  try { input += decoder.decode(chunk, {stream: true}); }
+  catch (_) { fail(); process.stdin.destroy(); }
 });
 process.stdin.on('end', () => {
-  const fail = () => {
-    process.stderr.write(
-      'YIYUAN Accord: invalid entry hook input; task state remains unchanged.\n',
-    );
-    process.exitCode = 1;
-  };
+  if (failed) return;
   let event;
   try {
+    input += decoder.decode();
     event = JSON.parse(input);
   } catch (_) {
     fail();
