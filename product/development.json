@@ -3081,7 +3081,7 @@
             "scope": "v33-codex-cli-ordinary-delivery",
             "prospectiveBinding": "private:accord-cli-validation-diagnostics-20261015-05/prospective-binding.json",
             "sha256": "08a576d0ed87ea975fad668903a4d5c8aafff3313863c95da4cea52cf5f2de91",
-            "status": "recovered-source-delivered-root-verification-pending",
+            "status": "engineering-delivered-installed-and-readonly-finalized-qualification-held",
             "qualificationPassed": false,
             "oldNineDefinitionsUnchanged": true,
             "scopeAndQualityUnchanged": true,
@@ -3109,7 +3109,62 @@
               "uncachedInputTokens": 94030,
               "totalTokens": 1940135
             },
-            "recoveryJobAfter": 0
+            "recoveryJobAfter": 0,
+            "result": "private:accord-cli-validation-diagnostics-20261015-05/outcome.json",
+            "resultSha256": "ab598fcb50746f22005a71e9c2e99e81d293bcd3b53baeb4995d300cdfc1227b",
+            "technicalSubject": {
+              "revision": "b49fe0df78246db3798365abc76ab0ac93a35896",
+              "tree": "c92b30fc7dad6d4ebe0679dc8abb428839ecee79"
+            },
+            "fourAxesTechnicalReview": "pass; two accountable independent reviewers, specification/implementation separated; inherited/shared/Accord exposure disclosed",
+            "regressions": {
+              "nativeMcpAndDeclarations": 94,
+              "sourceAndPackageGuards": 28,
+              "allPassed": true
+            },
+            "productValidation": "valid with strict5percent reserve",
+            "codeAndTestBytes": 3563619,
+            "localInstallation": {
+              "version": "3.3.0-dev.1+codex.20261015143447",
+              "packageSha256": "fa77b3eee23a6335b066703f77b485be7d7fedfbb6dbdf92dfcdd80ba059b565",
+              "sourceRef": "b49fe0df78246db3798365abc76ab0ac93a35896",
+              "exactDefaultSourceAnd25Members": true,
+              "onlyConfigSemanticChange": "Accord marketplace ref",
+              "source": "private:accord-cli-validation-diagnostics-20261015-05/lifecycle-recovery/installation-poststate.json"
+            },
+            "readonlyCliFinalization": {
+              "threadId": "01a13ff4-2009-7462-9a6b-75507c7bac7d",
+              "exitCode": 0,
+              "seconds": 71.40638590000162,
+              "jobActiveProcesses": 0,
+              "nativeTaskCompleteObserved": true,
+              "version15GuidanceDelivered": true,
+              "source": "private:accord-cli-validation-diagnostics-20261015-05/actual-final-source.json",
+              "sha256": "717323908708b17634cb66d4c1e9808ca04876688818e9ea1e90254c20c263ce"
+            },
+            "knownThreadUsageCountedOnce": {
+              "inputTokens": 2267440,
+              "cachedInputTokens": 2159744,
+              "outputTokens": 17884,
+              "uncachedInputTokens": 107696,
+              "totalTokens": 2285324
+            },
+            "originalBothQuotaFailuresPreserved": true,
+            "wholeWorkBudget": "not passed/established; wall elapsed exceeds3600",
+            "remainingOwnedResidue": [
+              "C:\\Users\\15521\\AppData\\Local\\Temp\\accord-native-state-mcp-vb9uhclv"
+            ],
+            "aclChanged": false,
+            "ci": {
+              "head": "b49fe0df78246db3798365abc76ab0ac93a35896",
+              "runId": "38758375120",
+              "status": "in_progress",
+              "conclusion": null,
+              "jobsPassed": 7,
+              "jobsTotal": 11,
+              "source": "private:accord-cli-validation-diagnostics-20261015-05/ci-current-b49fe0df.json"
+            },
+            "qualificationLimit": "hold; technical source result and a later normal readonly end do not reverse two original quota failures, unset whole-work budget or restricted fixture tail. No ordinary-case observe/recheck pass claimed."
           }
         },
         "admissionReadCost": {
