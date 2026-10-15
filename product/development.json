@@ -3193,6 +3193,43 @@
               "default-host-without-extra-extensions"
             ],
             "actualTaskNeededNoInventedBusiness": true
+          },
+          "utf8InputIntegrityCorrection": {
+            "status": "source-pushed-installed16-helper-verified-native-mcp15-ci-running",
+            "source": "private:accord-r23-continuity-contribution-20261016-01/utf8-outcome.json",
+            "sha256": "debe7d9e0caa0ddca8e81891d0a6791236a2c4777bdfd34a5e079fbcc0e11f1b",
+            "subject": {
+              "revision": "53dc0af824ebc4f1ec8ccb8807ce4b6dd32e001d",
+              "tree": "95b1c2c070ab993e4913dbf96a0b0f8520303b55",
+              "pushed": true
+            },
+            "strictInputAndJsonDecoding": true,
+            "validLiteralReplacementCharacterAllowed": true,
+            "regressionsDistinct": 268,
+            "fourAxesTechnicalReview": "pass; 2 read-only independent reviewers, frozen core matches committed source; metadata/source guard checks separate",
+            "codeAndTestBytes": 3570105,
+            "reserveFloorUnchanged": true,
+            "installedVersion": "3.3.0-dev.1+codex.20261015182222",
+            "installedPackageSha256": "95817944e81b214f07364294c9a142e3fe781c9e6ca435e7d0a55a0b5db77969",
+            "defaultSourceAndCache25Exact": true,
+            "onlyConfigSemanticChange": "Accord marketplace ref",
+            "installedHelperReadsActualRootWithoutWrites": true,
+            "actualMcpVersion": "3.3.0-dev.1+codex.20261015143447",
+            "allConnectionsRefreshedClaimed": false,
+            "ci": {
+              "head": "53dc0af824ebc4f1ec8ccb8807ce4b6dd32e001d",
+              "runId": "38785888044",
+              "status": "in_progress",
+              "conclusion": null,
+              "jobsSuccess": 1,
+              "jobsTotal": 11,
+              "sources": [
+                "ci-current-53dc0af8.json",
+                "ci-jobs-53dc0af8.json"
+              ]
+            },
+            "oldCorruptionCauseAndFull25MeaningsUnknown": true,
+            "newCaseOrAdmissionClaimed": false
           }
         },
         "admissionReadCost": {
