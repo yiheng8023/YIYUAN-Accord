@@ -2603,7 +2603,7 @@
             "resourceClosure": "Executor and reviewer completed, owned test sessions exited; reviewed patch/logs retained, integrated private clone removed after exact path/HEAD/unique-change/hash checks."
           },
           "qualificationPassed": false,
-          "resultLimit": "Original3same-episode cases admitted through actual observe/recheck on reviewed9415086e, with6c309013 evaluated source and original assessment time retained. A05 complete in this bound submission; joined/impact scopes accepted, impact assessment complete-for-bound-scopes. WholeA08 remains blocked by A01/A02/A03/A04/A06/A07 and selected parent duties. No full-release, old warm build, first900s/2M conformity or causal positive gain claim.",
+          "resultLimit": "Original three same-episode cases, original lifecycle and new96955f1d delivery parent accepted in the current bound submission with four old records unchanged. A05 complete and impact complete-for-bound-scopes; full A08 still blocked by applicable A01/A02/A03/A04/A06/A07 aggregates. No release, all-GUI, first900s/2M conformity or positive net-value claim.",
           "ciRegression": {
             "subjectRevision": "485e4c3b43b5687734b08e447bb33e2670143321",
             "runId": "38380470025",
@@ -2709,7 +2709,7 @@
             "desktopSameVersionSourceScope": "Reported Desktop backend0.162.0-alpha.17.2 matches official tag at740e5af33c71225640e0c1c1555c514c2c93ab74. Documented loaded-session config/Hook refresh and gated MCP pending consumption/publication close the material normal-path difference with installed UI targeting, current actual adoption/recovery and bounded native effects; no local current uninstall event or all-host worker-exit assertion.",
             "desktopManagementSourceReview": "private:accord-parent-entry-20261015-01/lifecycle-source-review.json",
             "desktopManagementSourceEffect": "Installed Desktop source binds a single plugin enablement upsert/reloadUserConfig or native plugin/uninstall request to discovery refresh. refreshConversationExecutorPlugins refreshes Local Work executor registration; it does not establish all Codex sessions' worker exit.",
-            "desktopLifecycleRemaining": "The original normal-path session-effect difference is supported by the same-version documented route. Retain its failure boundary: uninstall can succeed while config reload fails and only caches clear; current Skill already requires reconciling applied/pending/unknown effects and observing participation without repeating removal. Local unexecuted management-event timelines and all-host/in-flight effects remain unobserved, not new unconditional gates; other selected parent rows and whole-case admission stay open.",
+            "desktopLifecycleRemaining": "Same-version documented route and exact25 source checks support the finite lifecycle role; original parent lifecycle now admitted. Actual local uninstall, all shared worker exits and unobserved in-flight effects remain unknown, not unconditional new gates.",
             "cliReview": "private:accord-parent-entry-20261015-01/cli-parent-review.json",
             "cliCriteriaCalibration": "private:accord-parent-entry-20261015-01/cli-parent-criteria-check.json",
             "cliSourceBinding": "CLIguide01a12731/old221152 remains closed-not-admitted. Distinct CLI supervisor01a129ab has three explicit never/danger-full-access/default turns, first and final exit0/Job0 and middle622384/600000 usage-limit exit124/Job0. CONTINUATION line63 is supported; only this review's initial prompt conflated them.",
@@ -2740,18 +2740,18 @@
               }
             },
             "cliRemaining": "No further execution is required for the finite joined CLI row. Original reviewer, Root effects and current exact lifecycle routes retain their separate identities. Per-action model autonomy, extra pressure experiments and all shared-worker termination are not unconditional predicates.",
-            "qualificationPassed": false,
-            "scopeLimit": "Original lifecycle parent passed source-bound observe/recheck at1ab16e3a. Finite delivery contributions do not clear the remaining original current-IDE loading assertion. Other applicable A01/A02/A03/A04/A06/A07 aggregate duties, full A08 and release remain open. Original failures/costs and exact historical identities preserved; no new case or business replay.",
+            "qualificationPassed": true,
+            "scopeLimit": "Both original parent cases now admitted: lifecycle at original1ab16e3a, delivery at96955f1d with real current14 IDE source. Current submission reuses the unchanged original lifecycle and three R2/R3 records, preserving their times/identities. Remaining applicable aggregates/full A08/release and original costs/failures are separate.",
             "currentSourceClosure": {
               "subject": {
-                "revision": "1ab16e3a000254c7b50c20eb812a192bf0e203ac",
-                "tree": "8273c283c6bd46b1b698a3b380c9b5e67f1cf558"
+                "revision": "96955f1d068257c26b5d6651824b0141c01e41b4",
+                "tree": "f2f216fb2fb27e0d26eb6a56d4112b5ffa6c5612"
               },
-              "source": "private:accord-parent-closure-20261015-02/parent-current-adjudication.json",
-              "sha256": "73832cd63b4ea497a339ad1859862e2acf16f6d31d62ddfa14491e84b71ee946",
+              "source": "private:accord-ide-current-adoption-20261015-04/admission/final-source.json",
+              "sha256": "1282642da1d71f00dfd6399826f6e569ffe27d3b60d1d0f0aa49fe966457d712",
               "sourceIndex": "private:accord-parent-closure-20261015-02/entry-contribution-source-index.json",
               "sourceIndexSha256": "dfc653e04a81e436197dae9f24bd29ced22a7cd6248736536b076490475f44bd",
-              "scope": "Original six selected entries and selected local execution/control modes; actual roles, historical observations and exact current shared routes remain distinct.",
+              "scope": "Original selected entry roles and modes: new current14 real IDE observation closes the prior delivery gap; other roles retain original source identities and times. No complete GUI/control catalog or new business claim.",
               "sdk": {
                 "threadId": "01a13e67-38c1-7323-9036-f6a9021bb2aa",
                 "actualModelSequence": [
@@ -2792,8 +2792,25 @@
                 "sha256": "604005423301c6cd29fc0951f064e2fcddbc51102460df22d7b4c31e5adc88c2",
                 "configurationReview": "private:accord-parent-closure-20261015-02/ide-configuration-effect-review.json",
                 "configurationReviewSha256": "a05819bd0cdcae3b12156821ef2bea502b1e3ea1ce6a446224b9b06d78ef5306",
-                "result": "Original real IDE one-shot inspection/authorized same-input recovery completed its five applicable duties. Prior demand for extra engineering business was overbroad. Current default17.2 and shared14 lifecycle route applicability are supported; no active old IDE consumer requiring refresh observed.",
-                "current14GuiParticipationObserved": false
+                "result": "Original one-shot role remains complete. Human-created new codex_vscode task actually received the exact current14 coordination body and used its own current14 MCP responder. Initial quarantine and missing-hook-kind exit1 retained; corrected same-input recovery ended replayfalse/unbound/no business checkpoint. Public IDE final only says已发送; Root source readback is separately attributed.",
+                "current14GuiParticipationObserved": true,
+                "current14Observation": {
+                  "source": "private:accord-ide-current-adoption-20261015-04/ide-current-effect-facts.json",
+                  "sha256": "a1bbc114faaec8ab14e719f21e47d3503d6a3bdd61f24718e01087d87ea9b9a4",
+                  "nativeSourceIndex": "private:accord-ide-current-adoption-20261015-04/native-source-index.json",
+                  "nativeSourceIndexSha256": "84caae2058aa69102735aee2c1bfed514c8edd3e00272b550afc291a427fadd9",
+                  "nativeSourceSha256": "88e5b12d2d2ce486361c203a728ad0784110856c0c6942723f44eacc857e852d",
+                  "threadId": "01a13f83-1c97-7403-9cd8-ed309fa12416",
+                  "turnId": "01a13f83-230a-7143-acb4-ffbce87460ac",
+                  "sourceKind": "vscode/codex_vscode",
+                  "hostVersion": "0.162.0-alpha.17.2",
+                  "packageVersion": "3.3.0-dev.1+codex.20261014112838",
+                  "mcpProcessId": 14760,
+                  "fullGuidanceSha256": "b1b67fd9bfd5aa858152032735fedad47377512b94a8c625f72c3985174ef26f",
+                  "completedAt": "2026-10-15T12:23:56.610Z",
+                  "businessBindingOrBusinessRecovery": false,
+                  "sourceLimit": "One real IDE task, one inspect response and exact coordination body; listed loaded functions only. Does not authenticate all closures, all host processes, every GUI action or release."
+                }
               },
               "remote": "Reuse original sameRoot mobile result/reconnect observations and the authorized controlled-host role. Unclicked stop is not a stop success; an unobserved desktop control-client operation is not invented or imposed as a universal new gate.",
               "lifecycleParentAdmission": {
@@ -2823,10 +2840,44 @@
                 "scopeLimit": "Only this original lifecycle parent and documented applicable shared routes; no actual local uninstall, all shared-process exit, delivery parent, full A06/A08 or release inferred."
               },
               "deliveryParent": {
-                "qualificationPassed": false,
-                "remaining": "Original oracle still requires current GUI/IDE loading and instruction/event participation. Current14 actual IDE GUI participation is not established by old221152 role completion, installed bytes, absent warm consumer or SDK-generated vscode metadata. Keep this precise condition open; no repeated closed business is required.",
+                "qualificationPassed": true,
+                "remaining": "No remaining condition for this original delivery parent. Applicable A01/A02/A03/A04/A06/A07 aggregates and full A08/candidate remain open.",
                 "eligibilityReview": "private:accord-parent-closure-20261015-02/parent-formal-eligibility-review.json",
-                "eligibilityReviewSha256": "284295f225e91f2391010ee796b52a3e88cfbd4807dd5b922a22c65c8f87c93b"
+                "eligibilityReviewSha256": "284295f225e91f2391010ee796b52a3e88cfbd4807dd5b922a22c65c8f87c93b",
+                "previousEligibilityReview": {
+                  "eligibilityReview": "private:accord-parent-closure-20261015-02/parent-formal-eligibility-review.json",
+                  "eligibilityReviewSha256": "284295f225e91f2391010ee796b52a3e88cfbd4807dd5b922a22c65c8f87c93b"
+                },
+                "caseId": "v33-admitted-entry-delivery-01",
+                "subject": {
+                  "revision": "96955f1d068257c26b5d6651824b0141c01e41b4",
+                  "tree": "f2f216fb2fb27e0d26eb6a56d4112b5ffa6c5612"
+                },
+                "report": "private:accord-ide-current-adoption-20261015-04/admission/admission-observe-recheck.json",
+                "reportSha256": "c42278b9f437d0e0dd40ffdc722e57014c789c3bba8e2ab97735afa1d5f74def",
+                "run": "private:accord-ide-current-adoption-20261015-04/admission/run.json",
+                "runSha256": "cebb2a4ae9f8ffddc10cc803aa87d4f969c954aee97854b48b5ee7b9fb67d5bc",
+                "observedAt": "2026-10-15T13:12:22.744724+00:00",
+                "phases": [
+                  "observe",
+                  "recheck"
+                ],
+                "acceptedCases": [
+                  "v33-admitted-entry-delivery-01",
+                  "v33-admitted-entry-lifecycle-01",
+                  "v33-autonomous-continuity-live-development-01",
+                  "v33-system-impact-assessment-live-development-01",
+                  "v33-system-integration-live-development-01"
+                ],
+                "caseRejections": {},
+                "errors": [],
+                "fourAxesReview": "pass; two fresh accountable reviewers; specification/implementation separated; shared environment and Accord exposure disclosed",
+                "finalResourcePoststate": "private:accord-ide-current-adoption-20261015-04/admission/resource-poststate.json",
+                "finalResourcePoststateSha256": "3f8871936a499ae5b582715c46a5facd1d1ad73fdb4649b725989fad71d5d456",
+                "oldFourRecordsUnchanged": true,
+                "sourceInputsUnchanged": true,
+                "failurePreservation": "Initial IDE quarantine, first missing-kind exit1, SDK failures, Root CRLF/22-member evidence-preparation errors and review disposition format refusal retained. Successful retry does not erase them.",
+                "qualificationScope": "Original delivery parent plus compatibility reuse of unchanged original four records; not full A08, new case, business replay or release."
               },
               "ci": {
                 "revision": "1ab16e3a000254c7b50c20eb812a192bf0e203ac",
@@ -2840,8 +2891,74 @@
               "packageChanged": false,
               "newCase": false,
               "functionalCompletion": false,
-              "candidateEligible": false
-            }
+              "candidateEligible": false,
+              "previousClosureSource": {
+                "subject": {
+                  "revision": "1ab16e3a000254c7b50c20eb812a192bf0e203ac",
+                  "tree": "8273c283c6bd46b1b698a3b380c9b5e67f1cf558"
+                },
+                "source": "private:accord-parent-closure-20261015-02/parent-current-adjudication.json",
+                "sha256": "73832cd63b4ea497a339ad1859862e2acf16f6d31d62ddfa14491e84b71ee946",
+                "sourceIndex": "private:accord-parent-closure-20261015-02/entry-contribution-source-index.json",
+                "sourceIndexSha256": "dfc653e04a81e436197dae9f24bd29ced22a7cd6248736536b076490475f44bd"
+              },
+              "combinedSourceBoundSubmission": {
+                "subject": {
+                  "revision": "96955f1d068257c26b5d6651824b0141c01e41b4",
+                  "tree": "f2f216fb2fb27e0d26eb6a56d4112b5ffa6c5612"
+                },
+                "report": "private:accord-ide-current-adoption-20261015-04/admission/admission-observe-recheck.json",
+                "reportSha256": "c42278b9f437d0e0dd40ffdc722e57014c789c3bba8e2ab97735afa1d5f74def",
+                "run": "private:accord-ide-current-adoption-20261015-04/admission/run.json",
+                "runSha256": "cebb2a4ae9f8ffddc10cc803aa87d4f969c954aee97854b48b5ee7b9fb67d5bc",
+                "acceptedCases": [
+                  "v33-admitted-entry-delivery-01",
+                  "v33-admitted-entry-lifecycle-01",
+                  "v33-autonomous-continuity-live-development-01",
+                  "v33-system-impact-assessment-live-development-01",
+                  "v33-system-integration-live-development-01"
+                ],
+                "oldFourRecordsUnchanged": true,
+                "qualificationScope": "Original delivery parent plus compatibility reuse of unchanged original four records; not full A08, new case, business replay or release.",
+                "reusedRecordProvenance": [
+                  {
+                    "case": "v33-autonomous-continuity-live-development-01",
+                    "evaluatedRevision": "6c309013a01f52f1285b7aa368467bf39ad1d2ec",
+                    "observedAt": "2026-10-15T05:55:37.379Z",
+                    "sourceRef": "private:accord-cli-adoption-20261015-01/current-consequence-adjudication.json"
+                  },
+                  {
+                    "case": "v33-system-integration-live-development-01",
+                    "evaluatedRevision": "6c309013a01f52f1285b7aa368467bf39ad1d2ec",
+                    "observedAt": "2026-10-15T05:55:37.379Z",
+                    "sourceRef": "private:accord-cli-adoption-20261015-01/current-consequence-adjudication.json"
+                  },
+                  {
+                    "case": "v33-system-impact-assessment-live-development-01",
+                    "evaluatedRevision": "6c309013a01f52f1285b7aa368467bf39ad1d2ec",
+                    "observedAt": "2026-10-15T05:55:37.379Z",
+                    "sourceRef": "private:accord-cli-adoption-20261015-01/current-consequence-adjudication.json"
+                  },
+                  {
+                    "case": "v33-admitted-entry-lifecycle-01",
+                    "evaluatedRevision": "1ab16e3a000254c7b50c20eb812a192bf0e203ac",
+                    "observedAt": "2026-10-15T08:21:07.452035+00:00",
+                    "sourceRef": "private:accord-parent-closure-20261015-02/lifecycle-admission/final-source.json"
+                  }
+                ],
+                "A05CompleteForBoundSubmission": true,
+                "fullA08Complete": false,
+                "fullA08BlockedBy": [
+                  "A01",
+                  "A02",
+                  "A03",
+                  "A04",
+                  "A06",
+                  "A07"
+                ]
+              }
+            },
+            "qualificationScope": "Original selected-entry delivery and lifecycle parent cases only; not full A08/candidate or all GUI controls."
           },
           "boundedQuotaValidation": {
             "authorityBasis": "Original A07/A08 and ACCEPTANCE-v3.3.md line217; existing episode and case declarations, no new gate or closed-business replay.",
@@ -2888,7 +3005,7 @@
             "resourcesAndVerificationDuties": "Supported at observed poststate and bounded independent assessment; past reviewer overrun and cost unknown remain.",
             "budgetCorrection": "943.676s98-check overlaps first delivery but membership/tail not established. Cannot infer first900s violation from bare numeric comparison; first900s/2M remains unknown, original98 failure and195.511/180s failure retained.",
             "impact": "Attribution-limited measured burden with material negative findings; no must-be-cheaper or positive gain prerequisite. Native/current/historical/candidate conditions and helper differences explicit.",
-            "remaining": "Original3R2/R3 cases remain accepted at their original6c309013 evaluated source/time; no replay or revocation. Original lifecycle parent separately passed current1ab16e3a source-bound observe/recheck. Remaining: delivery parent current IDE loading/event evidence and applicable A01/A02/A03/A04/A06/A07 aggregate duties. Full A08/candidate remain false; finite roles are not all product use.",
+            "remaining": "Original three R2/R3 and lifecycle records retain their evaluated source/time/facts. New original delivery parent passed source-bound96955f1d observe/recheck; current submission accepted all five without changing old records. Remaining original A01/A02/A03/A04/A06/A07 aggregate duties and eight scope-binding gaps; omitted previously accepted cases are not revoked. Full A08/candidate remain false.",
             "reusedOsEvidence": "private:accord-r23-semantic-20261015-01/ci-os-evidence/inspection.json; current857 artifact confirms POSIX direct/group exit only, CPU/RAM unobserved, no-model fixture not Agent pressure proof.",
             "qualificationPassed": false,
             "boundedOsEvidence": "private:accord-r23-semantic-20261015-01/bounded-os-validation/resource-result.json",

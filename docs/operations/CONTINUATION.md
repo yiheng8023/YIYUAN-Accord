@@ -4,11 +4,13 @@
 
 更新：2026-10-15 · N33-20260909 / r42。[计划](PLAN-v3.3.md)拥有共识与工序，[基线](BASELINE-v3.3.md)/[验收](ACCEPTANCE-v3.3.md)保持全部 F01–F08/A01–A08。本页只保留当前状态、下一依赖和必要历史定位。
 
-当前工序：原R2/R3同一工程的三个case已通过observe/recheck，仍绑定原复核subject9415086e、实际执行源6c309013和原时间05:55:37.379Z；A05在该提交中完整、组合链与有界影响评估通过。本轮原父生命周期case又在精确1ab16e3a通过原observe/recheck，四轴/两名独立审阅及最终所属资源退出后验完整，case拒绝和errors均空。下一依赖是交付父项的当前IDE加载/事件参与事实，以及A01/A02/A03/A04/A06/A07的适用汇总职责；不将未提交的旧case撤销或重验，完整A08、functionalCompletion/candidateEligible仍未通过。原98项失败、900秒/2M未知、195.511/180失败和成本负项保留；判据、17scope/9case、包及发布条件未改。
+当前工序：原R2/R3三个case和父生命周期记录保持原事实、来源、时间与evaluatedRevision。本轮真实VS Code新聊天已补齐现装14的完整指导及自身MCP采用，原交付父case在精确96955f1d经两名独立审阅四轴、最终资源后态及原observe/recheck通过；本次共同提交接受五项，拒绝和errors均空，四旧记录逐字段未改。A05在该提交中完整，组合链与有界影响评估通过；原A01/A02/A03/A04/A06/A07适用汇总职责及八个scope绑定缺口仍未完，完整A08、functionalCompletion/candidateEligible保持false。未提交的旧case不撤销，不重验已闭业务，17scope/9case、判据和5%预留未改。
 
-2026-10-15父入口推进：Desktop原实际交付/恢复与当前14采用、CLI真实reviewer到Root落实/配额调节和稳定退出的职责链继续复用；同17.2/740e5af3配置刷新、Hook/MCP发布、更新拒绝/恢复及卸载失败边界与精确25成员后台原件支持适用生命周期路线，不声称本机发生卸载或全部共享worker退出。本轮SDK实际参与后两次未按时交付JSON，原生均interrupted；Root在Job0/订阅和写者全闭后，以独立路径接管整合有用原生判断，有限职责链获独核，原两失败不改签。Work原图及真实input70已证明同Root历史Work界面参与，结合当前本地执行/配置/14采用与localWork映射可复用，不再等待当前前台UI答复。IDE旧221152只读/当条恢复任务五职责已完整，额外工程业务要求已纠正；当前默认17.2与共同14生命周期路线适用，但未冒认当前14 GUI实际加载。Remote复用同一获准主机与原手机结果/断连事实，不再新立控制端实验。原件与完整边界在私有accord-parent-closure-20261015-02及机器currentSourceClosure。
+2026-10-15当前IDE事实：用户新建“核验当前 VS Code Accord 采用”，原生vscode/codex_vscode主体01a13f83-1c97-7403-9cd8-ed309fa12416、turn01a13f83-230a-7143-acb4-ffbce87460ac；17.2、Sol/high，完整10912字符指导与现装14112838/a34c7ddd精确相同，真实一次inspect应答为该IDE自身MCP14/PID14760。初始workspace隔离、首次恢复漏hook_event_name而exit1保留；修正后只恢复同条真实输入，最终replayfalse/unbound/无业务checkpoint，任务completed。IDE公开final仅“已发送”，Root另依原件形成说明，不冒称IDE写过完整诊断报告或业务接管。Root受同workspace保守水印影响的当条输入亦已按现有支持路线恢复，原86输入前缀、basis与水印保留，不重放业务。原件、独审、后态和正式报告在私有accord-ide-current-adoption-20261015-04/admission；Root换行/22成员取证错误和审阅格式拒绝均保原并纠正。
 
-精确1ab16e3a的CI38690191939已终态11/11成功；本轮只对齐实际验收记录，生产代码/测试及分发25成员未变，无需重复安装。原生命周期准入只签本case，交付父项保留原current-loading条款，不以有限旧角色或生成的vscode元数据替代当前IDE采用。后续先汇总尚未完成的原职责；必要真实IDE使用时只补该材料性事实，不重放已闭业务。
+原父入口职责继续复用：Desktop交付/恢复、CLI真实reviewer到Root落实与配额调节、SDK两次超时后的静止确认与Root有用判断整合、同Root历史Work及Remote有限角色均保原身份与失败。生命周期父项仍绑1ab16e3a及原08:21:07Z；三R2/R3原评估源6c309013、复核subject9415086e及05:55:37.379Z未改。本轮新增交付父项只补原current-IDE条件，原共享25成员/配置刷新/Hook-MCP发布与卸载失败边界沿已有证据适用，不声称本机卸载或全部共享worker退出。
+
+精确1ab16e3a的CI38690191939已终态11/11成功；本次验收记录整合的后继提交需按其精确HEAD另核CI，不借旧成功代签。生产代码/测试、分发25成员与现装包未变，无需重复安装。用户配置当前74190e04001adc8d48610e46883d955576c89942846bcc5dcddc22c7b973e6b5，mtime12:21:54Z早于新IDE12:21:59Z；Accord选择与旧投影相同，变化owner未知、保留当前值，不归因probe或恢复旧配置。
 
 2026-10-15用户明确停止并移除私有Hook观察器：已确认各原实例不在运行，8个执行文件逐字节压缩留证后从原路径移除，22份原日志/owner/closed材料hash与mtime不变，剩余执行文件0；health.active=null，旧每日accord-hook已删除且注册不存在。原continuous缺封存回执的退出原因仍未知，不伪造closed；用户报告近期未复现不作根因修复证明。此前长期观察及每日检查职责到此撤销，不自动恢复。私有removal.json见accord-hook-failure-audit-20261013-01/observer-removal-20261015-01；分发包/Hook/MCP/用户配置不变，R2/R3责任保留。
 
@@ -106,7 +108,7 @@ Hook原件核定：截图11运行/9未成功，用户回执及两张展开图确
 
 已选六条执行/控制路线及模式保持。Work Local为本地执行模式；Remote复用连接主机及Agent，只核实际任务输入/授权/暂停恢复等必要差异。普通Chat独立用途、网页Chat、JetBrains/Xcode本版deferred且能力unknown。VS Code与Work的接入/旧水印限度、Cloud取消及两个草稿保留依原决定；不把显示、手机按钮或网络测试单列为Accord发布门槛。
 
-当前用户配置SHA为`f57b55d21ecabc346e97c695697b3e98cf0cc563ecb58a23051afc15be407b45`，mtime早于新IDE任务开始；此前有限政策段保护窗口内的32687ea0…值仍有效。窗口之外变更归属未知，保留现设置，后续按实际有效条件重新感知，不恢复旧值或据源自述宣称跨窗口配置不变。
+较早用户配置SHA f57b55d2及有限政策窗口32687ea0均仅属各自历史时点。当前新IDE窗口的74190e04来源、mtime与归属限度见本页顶部；不据跨窗口hash变化归因或回滚用户设置。
 
 ## 历史与恢复导航
 
