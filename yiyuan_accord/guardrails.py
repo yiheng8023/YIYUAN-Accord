@@ -16,6 +16,20 @@ from .identity import (
 )
 
 
+_NATIVE_MCP_REPOSITORY_ENTRY = b"""'use strict';
+
+// Repository entry; the packaged adapter owns the implementation.
+const path = require('node:path');
+const shared = require('../plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs');
+const version = () => shared.runtimeVersion(path.resolve(__dirname, '..'));
+module.exports = {...shared,
+  createHandler: (value = version()) => shared.createHandler(value),
+  serve: (input = process.stdin, output = process.stdout, value = version()) => shared.serve(input, output, value),
+};
+if (require.main === module) shared.main(version);
+"""
+
+
 _AUTH_FIELDS = set((
     "state candidateRevision namedHuman authorizedAt claimCeilingAccepted "
     "publicationAuthorized releaseAuthorized"
@@ -540,7 +554,12 @@ def activation_mechanism_errors(
                 "startup_timeout_sec": 10, "tool_timeout_sec": 10}}}
             if (adapter_id != "codex" or delivered is None or canonical_mcp is None
                     or delivered.is_symlink() or canonical_mcp.is_symlink()
-                    or _owned_bytes(delivered) != _owned_bytes(canonical_mcp)):
+                    # Historical copies retain their exact-byte check. The current
+                    # source entry may instead delegate through this fixed launcher;
+                    # package bytes, safe paths and MCP configuration stay checked.
+                    or (_owned_bytes(delivered) != _owned_bytes(canonical_mcp)
+                        and _owned_bytes(canonical_mcp).replace(b"\r\n", b"\n")
+                        != _NATIVE_MCP_REPOSITORY_ENTRY)):
                 errors.append(f"{prefix} native-state MCP module differs from canonical bytes")
             if (config_path is None or config_path.is_symlink()
                     or json.loads(_owned_text(config_path)) != expected_mcp):

@@ -1716,6 +1716,24 @@ class DevelopmentDeliveryTests(unittest.TestCase):
                 self.assertFalse(report["valid"])
                 self.assertTrue(any(fragment in error for error in report["errors"]), report["errors"])
 
+    def test_native_mcp_shared_entry_is_exact_and_preserves_source_binding(self):
+        locator = "runtime/native-state-mcp.cjs"
+        original = (self.root / locator).read_bytes().replace(b"\r\n", b"\n")
+        self.assertTrue(self.report()["valid"])
+        with self.changed(locator, original.replace(b"\n", b"\r\n")):
+            self.assertTrue(self.report()["valid"])
+        for altered in (
+            original.replace(b"plugins/yiyuan-accord-codex", b"plugins/unbound-adapter"),
+            original + b"process.exit(0);\n",
+            original.replace(b"shared.main(version)", b"shared.main()"),
+            original.replace(b"shared.runtimeVersion(path.resolve(__dirname, '..'))",
+                             b"shared.runtimeVersion()"),
+        ):
+            with self.subTest(altered=altered[-60:]), self.changed(locator, altered):
+                report = self.report()
+                self.assertFalse(report["valid"])
+                self.assertTrue(any("native-state MCP" in error for error in report["errors"]))
+
     def test_retired_installation_entry_cannot_reenter_current_distribution(self):
         directory = self.root / ".claude-plugin"
         directory.mkdir()
