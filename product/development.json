@@ -2732,11 +2732,116 @@
               "result": "revise; technical review delivered, not resource-validation execution",
               "originalsAndUserConfigHashMtimeUnchanged": true,
               "lifecycleContribution": "Five predicates supported at documented common AppServer route plus actual current CLI adoption and retained bounded mechanism/exit evidence; no local update/uninstall event asserted.",
-              "remainingLimit": "Whole-entry bound delivery remains partial; other selected entries and whole-parent admission are not supplied by the reviewer role. CloseHandle BOOL was not separately captured; existing helper returned and controller exited after observedJob0."
+              "remainingLimit": "The original isolated reviewer lacked the later implementation/resource effects. The independently joined parent-cli-row-delta now supports this finite CLI responsibility chain. Its original uncaptured CloseHandle BOOL remains unknown; another Job closure does not rewrite that observation. Whole delivery parent and other aggregate duties remain separate.",
+              "joinedDeliveryReview": {
+                "source": "private:accord-cli-adoption-20261015-01/parent-cli-row-delta.json",
+                "sha256": "8f0f261d8c6a127ba21f721959a38abe96146dff2c7c9dc2b813747fc3318188",
+                "result": "Four delivery predicates supported for the real CLI review -> Root implementation/validation responsibility chain; original CLIguide failure unchanged."
+              }
             },
-            "cliRemaining": "Current CLI adoption is supported at this real reviewer role. Complete joined delivery, implementation/resource effects and other selected parent responsibilities remain separate. Per-action model autonomy, CPU/RAM pressure, all descendants/all shared workers and every host session are not unconditional parent lifecycle predicates.",
+            "cliRemaining": "No further execution is required for the finite joined CLI row. Original reviewer, Root effects and current exact lifecycle routes retain their separate identities. Per-action model autonomy, extra pressure experiments and all shared-worker termination are not unconditional predicates.",
             "qualificationPassed": false,
-            "scopeLimit": "Finite contributions to existing parent cases; no new case, gate, model business, plugin management action or observer. Original failures and pressure-adjustment-recovery/necessary comparison/other selected-entry responsibilities remain at their own scopes."
+            "scopeLimit": "Original lifecycle parent passed source-bound observe/recheck at1ab16e3a. Finite delivery contributions do not clear the remaining original current-IDE loading assertion. Other applicable A01/A02/A03/A04/A06/A07 aggregate duties, full A08 and release remain open. Original failures/costs and exact historical identities preserved; no new case or business replay.",
+            "currentSourceClosure": {
+              "subject": {
+                "revision": "1ab16e3a000254c7b50c20eb812a192bf0e203ac",
+                "tree": "8273c283c6bd46b1b698a3b380c9b5e67f1cf558"
+              },
+              "source": "private:accord-parent-closure-20261015-02/parent-current-adjudication.json",
+              "sha256": "73832cd63b4ea497a339ad1859862e2acf16f6d31d62ddfa14491e84b71ee946",
+              "sourceIndex": "private:accord-parent-closure-20261015-02/entry-contribution-source-index.json",
+              "sourceIndexSha256": "dfc653e04a81e436197dae9f24bd29ced22a7cd6248736536b076490475f44bd",
+              "scope": "Original six selected entries and selected local execution/control modes; actual roles, historical observations and exact current shared routes remain distinct.",
+              "sdk": {
+                "threadId": "01a13e67-38c1-7323-9036-f6a9021bb2aa",
+                "actualModelSequence": [
+                  "gpt-6-astra/high",
+                  "gpt-6.1-sol/high"
+                ],
+                "sdkRequestedJsonDelivered": false,
+                "nativeTerminals": [
+                  "interrupted",
+                  "interrupted"
+                ],
+                "allocatedWorkSeconds": [
+                  300,
+                  120
+                ],
+                "actualWallSeconds": [
+                  307.625,
+                  127.235
+                ],
+                "sampledCumulativeTokens": 436522,
+                "sampledCumulativeUncachedInputTokens": 136697,
+                "sampledCumulativeOutputTokens": 3889,
+                "ownedJobActiveProcesses": [
+                  0,
+                  0
+                ],
+                "rootTakeover": "Useful native SDK scope judgment -> Root-owned distinct scope consolidation after both owners closed. No third SDK round, fabricated SDK output or new core/Hook defect inferred.",
+                "independentReview": "private:accord-parent-closure-20261015-02/sdk-current-effect-review.json",
+                "independentReviewSha256": "f0c26ed060479df62deb1c23a9153df19d8c070efc834e1c41b7fb9a3739c702"
+              },
+              "workLocal": {
+                "source": "private:accord-parent-closure-20261015-02/work-existing-ui-effect-review.json",
+                "sha256": "b48f40427a3e9600c95a243aefbad6b9240c235a13441a193ac6cd566ae66f13",
+                "result": "Original user screenshot and native input70 establish historical sameRoot Work UI participation; current actual local host/14 adoption and compatible localWork -> Codex session route support the finite role. No new Work actor or current foreground UI inference; earlier UI question no longer needed."
+              },
+              "ide": {
+                "source": "private:accord-parent-closure-20261015-02/ide-role-final-review.json",
+                "sha256": "604005423301c6cd29fc0951f064e2fcddbc51102460df22d7b4c31e5adc88c2",
+                "configurationReview": "private:accord-parent-closure-20261015-02/ide-configuration-effect-review.json",
+                "configurationReviewSha256": "a05819bd0cdcae3b12156821ef2bea502b1e3ea1ce6a446224b9b06d78ef5306",
+                "result": "Original real IDE one-shot inspection/authorized same-input recovery completed its five applicable duties. Prior demand for extra engineering business was overbroad. Current default17.2 and shared14 lifecycle route applicability are supported; no active old IDE consumer requiring refresh observed.",
+                "current14GuiParticipationObserved": false
+              },
+              "remote": "Reuse original sameRoot mobile result/reconnect observations and the authorized controlled-host role. Unclicked stop is not a stop success; an unobserved desktop control-client operation is not invented or imposed as a universal new gate.",
+              "lifecycleParentAdmission": {
+                "caseId": "v33-admitted-entry-lifecycle-01",
+                "subject": {
+                  "revision": "1ab16e3a000254c7b50c20eb812a192bf0e203ac",
+                  "tree": "8273c283c6bd46b1b698a3b380c9b5e67f1cf558"
+                },
+                "report": "private:accord-parent-closure-20261015-02/lifecycle-admission/admission-observe-recheck.json",
+                "reportSha256": "3b08dfbecfc3f151771d6bcff68cf2e96aa8eb217c7195fa708feaacbe1916a0",
+                "run": "private:accord-parent-closure-20261015-02/lifecycle-admission/run.json",
+                "runSha256": "6692372fd71360bc3a7d23cf68757aa98ea50cd4fa2e5e247d54a58b0963ccf0",
+                "originalObservedAt": "2026-10-15T08:21:07.452035+00:00",
+                "phases": [
+                  "observe",
+                  "recheck"
+                ],
+                "fourAxesReview": "pass; two independent accountable reviewers; specification/implementation separated; actual inherited history/shared environment/Accord exposure disclosed",
+                "acceptedCases": [
+                  "v33-admitted-entry-lifecycle-01"
+                ],
+                "caseRejections": {},
+                "errors": [],
+                "finalResourcePoststate": "private:accord-parent-closure-20261015-02/final-observer-resource-poststate.json",
+                "finalResourcePoststateSha256": "672b74048ebb91144b070886fabf5ad8a80353bdc8554993459d9a406e691bdf",
+                "qualificationPassed": true,
+                "scopeLimit": "Only this original lifecycle parent and documented applicable shared routes; no actual local uninstall, all shared-process exit, delivery parent, full A06/A08 or release inferred."
+              },
+              "deliveryParent": {
+                "qualificationPassed": false,
+                "remaining": "Original oracle still requires current GUI/IDE loading and instruction/event participation. Current14 actual IDE GUI participation is not established by old221152 role completion, installed bytes, absent warm consumer or SDK-generated vscode metadata. Keep this precise condition open; no repeated closed business is required.",
+                "eligibilityReview": "private:accord-parent-closure-20261015-02/parent-formal-eligibility-review.json",
+                "eligibilityReviewSha256": "284295f225e91f2391010ee796b52a3e88cfbd4807dd5b922a22c65c8f87c93b"
+              },
+              "ci": {
+                "revision": "1ab16e3a000254c7b50c20eb812a192bf0e203ac",
+                "runId": "38690191939",
+                "status": "completed",
+                "conclusion": "success",
+                "jobsPassed": 11,
+                "source": "private:accord-parent-closure-20261015-02/ci-final-1ab16e3a.json",
+                "sha256": "a73a075249cf4516b26c0787638ba81f1fa60e913051f8543e38465a1a6d7351"
+              },
+              "packageChanged": false,
+              "newCase": false,
+              "functionalCompletion": false,
+              "candidateEligible": false
+            }
           },
           "boundedQuotaValidation": {
             "authorityBasis": "Original A07/A08 and ACCEPTANCE-v3.3.md line217; existing episode and case declarations, no new gate or closed-business replay.",
@@ -2783,7 +2888,7 @@
             "resourcesAndVerificationDuties": "Supported at observed poststate and bounded independent assessment; past reviewer overrun and cost unknown remain.",
             "budgetCorrection": "943.676s98-check overlaps first delivery but membership/tail not established. Cannot infer first900s violation from bare numeric comparison; first900s/2M remains unknown, original98 failure and195.511/180s failure retained.",
             "impact": "Attribution-limited measured burden with material negative findings; no must-be-cheaper or positive gain prerequisite. Native/current/historical/candidate conditions and helper differences explicit.",
-            "remaining": "Original3case observe/recheck completed, no case rejections/errors; A05 complete in this source-bound submission. Remaining: applicable selected parent delivery/lifecycle and the retained A01/A02/A03/A04/A06/A07 aggregate duties; A08 not complete. Historical cases omitted here are not re-evaluated or revoked. No new gate or closed-business rerun.",
+            "remaining": "Original3R2/R3 cases remain accepted at their original6c309013 evaluated source/time; no replay or revocation. Original lifecycle parent separately passed current1ab16e3a source-bound observe/recheck. Remaining: delivery parent current IDE loading/event evidence and applicable A01/A02/A03/A04/A06/A07 aggregate duties. Full A08/candidate remain false; finite roles are not all product use.",
             "reusedOsEvidence": "private:accord-r23-semantic-20261015-01/ci-os-evidence/inspection.json; current857 artifact confirms POSIX direct/group exit only, CPU/RAM unobserved, no-model fixture not Agent pressure proof.",
             "qualificationPassed": false,
             "boundedOsEvidence": "private:accord-r23-semantic-20261015-01/bounded-os-validation/resource-result.json",
