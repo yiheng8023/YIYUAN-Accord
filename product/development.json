@@ -2680,6 +2680,39 @@
             "qualificationPassed": false,
             "remaining": "Actual necessary migration/takeover and applicable failure windows remain unverified for ordinary Desktop; full R2/R3 and existing joined quality duties remain open."
           },
+          "parentEntryEvidence": {
+            "source": "private:accord-parent-entry-20261015-01/desktop-root-adjudication.json",
+            "sha256": "fd5f446664ff7bc9880acc3d6f7a518fc5605072b00cb57444ae2210a1d34fb0",
+            "episodeId": "v33-live-development-20261013-01",
+            "packageVersion": "3.3.0-dev.1+codex.20261014112838",
+            "desktopDeliveryReview": "private:accord-parent-entry-20261015-01/review.json",
+            "desktopDelivery": {
+              "boundResponsibilitiesDelivered": "supported",
+              "entryDifferencesVerified": "supported",
+              "reusedEvidenceApplicable": "supported",
+              "unfinishedResponsibilitiesAccounted": "supported"
+            },
+            "desktopDeliveryLimit": "Bounded actual Desktop engineering episode only. Current native responder participation, applicable permission/steering and current-account same-thread result access support the material entry differences; old warm-build unknown remains historical. No other entry, parent case or whole scope is promoted.",
+            "backendLifecycleReuse": "private:accord-parent-entry-20261015-01/backend-lifecycle-reuse.json",
+            "exactBackendPackageBinding": "Current857 CI artifact25 member hashes match worktree, default marketplace and installed cache. Its no-model lifecycle mechanisms and POSIX process-group exit remain reusable at their original scope.",
+            "desktopLifecycleReview": "private:accord-parent-entry-20261015-01/lifecycle-reuse-review.json",
+            "desktopLifecycle": {
+              "loadAndSelectionVerified": "supported",
+              "updateFailureRecoveryVerified": "supported",
+              "pauseAndStatePreserved": "supported",
+              "disableUninstallAndExitVerified": "partial",
+              "sharedResourcesPreserved": "partial"
+            },
+            "desktopManagementSourceReview": "private:accord-parent-entry-20261015-01/lifecycle-source-review.json",
+            "desktopManagementSourceEffect": "Installed Desktop source binds a single plugin enablement upsert/reloadUserConfig or native plugin/uninstall request to discovery refresh. refreshConversationExecutorPlugins refreshes Local Work executor registration; it does not establish all Codex sessions' worker exit.",
+            "desktopLifecycleRemaining": "Only consequential existing-session Hook/tool exposure after disable/uninstall remains unobserved in these source spans. Resolve when that management responsibility is material through same-version session invalidation sources or an authorized natural event; no immediate global kill, live shared-plugin uninstall or repeated business experiment is required.",
+            "cliReview": "private:accord-parent-entry-20261015-01/cli-parent-review.json",
+            "cliCriteriaCalibration": "private:accord-parent-entry-20261015-01/cli-parent-criteria-check.json",
+            "cliSourceBinding": "CLIguide01a12731/old221152 remains closed-not-admitted. Distinct CLI supervisor01a129ab has three explicit never/danger-full-access/default turns, first and final exit0/Job0 and middle622384/600000 usage-limit exit124/Job0. CONTINUATION line63 is supported; only this review's initial prompt conflated them.",
+            "cliRemaining": "Current CLI task participation/input-to-package binding and concrete consequential entry control/session/permission/shared-responsibility differences remain to reconcile from existing sources. Per-action model autonomy, CPU/RAM pressure, all descendants/all shared workers and every host session are not unconditional parent lifecycle predicates.",
+            "qualificationPassed": false,
+            "scopeLimit": "Finite contributions to existing parent cases; no new case, gate, model business, plugin management action or observer. Original failures and pressure-adjustment-recovery/necessary comparison/other selected-entry responsibilities remain at their own scopes."
+          },
           "sameEpisodeAdjudication": {
             "source": "private:accord-r23-semantic-20261015-01/root-adjudication.json",
             "sha256": "821471eafcb2e59eab14c7e3cd923adf9e93832b24f4de2981c971c74ba3f49a",
