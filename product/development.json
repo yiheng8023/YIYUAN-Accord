@@ -3249,11 +3249,24 @@
             "qualificationPassed": false
           },
           "sourceReadGuidanceCorrection": {
-            "status": "conditional-entry-guidance-revised-source-verified",
+            "status": "source-pushed-installed17-warm-responder16-ci-running",
             "source": "private:accord-native-sufficiency-20261016-01/guidance-correction.json",
             "sha256": "eac6e40d6707581e6ae95d8375655622bb6f5c2869ffdbcb6c8a6de1a63151dc",
             "behaviorImprovement": "unverified; original observation not rerun",
-            "newRuntimeModuleOrCase": false
+            "newRuntimeModuleOrCase": false,
+            "followup": {
+              "source": "private:accord-native-sufficiency-20261016-01/guidance-followup.json",
+              "sha256": "cda9d9811f811e4b7624f2ea89fa77924f38ea0a8b77ccdb7e8371435460ea0f"
+            },
+            "ci": {
+              "observedAt": "2026-10-15T23:14:06.527468+00:00",
+              "head": "e34b5c5d41a5d7eb681e60fe758f323ddc730e6e",
+              "runId": "38821630157",
+              "status": "in_progress",
+              "conclusion": null,
+              "jobsTotal": 11,
+              "jobsSuccess": 1
+            }
           }
         },
         "admissionReadCost": {
