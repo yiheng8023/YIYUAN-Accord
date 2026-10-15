@@ -3192,10 +3192,11 @@
               "native-sufficient",
               "default-host-without-extra-extensions"
             ],
-            "actualTaskNeededNoInventedBusiness": true
+            "actualTaskNeededNoInventedBusiness": true,
+            "optionalOrdinaryTaskReply": "User currently has no additional ordinary task; keep that scenario unverified and the Accord project active without inventing business."
           },
           "utf8InputIntegrityCorrection": {
-            "status": "source-pushed-installed16-helper-verified-native-mcp15-ci-running",
+            "status": "source-ci-passed-installed16-current-native-mcp16-observed",
             "source": "private:accord-r23-continuity-contribution-20261016-01/utf8-outcome.json",
             "sha256": "debe7d9e0caa0ddca8e81891d0a6791236a2c4777bdfd34a5e079fbcc0e11f1b",
             "subject": {
@@ -3214,19 +3215,26 @@
             "defaultSourceAndCache25Exact": true,
             "onlyConfigSemanticChange": "Accord marketplace ref",
             "installedHelperReadsActualRootWithoutWrites": true,
-            "actualMcpVersion": "3.3.0-dev.1+codex.20261015143447",
+            "actualMcpVersion": "3.3.0-dev.1+codex.20261015182222",
+            "actualMcpProcessId": 40424,
             "allConnectionsRefreshedClaimed": false,
             "ci": {
               "head": "53dc0af824ebc4f1ec8ccb8807ce4b6dd32e001d",
               "runId": "38785888044",
-              "status": "in_progress",
-              "conclusion": null,
-              "jobsSuccess": 1,
+              "status": "completed",
+              "conclusion": "success",
+              "jobsSuccess": 11,
               "jobsTotal": 11,
               "sources": [
                 "ci-current-53dc0af8.json",
-                "ci-jobs-53dc0af8.json"
+                "ci-jobs-53dc0af8.json",
+                "ci-terminal-53dc0af8-run.json",
+                "ci-terminal-53dc0af8-jobs.json"
               ]
+            },
+            "completionFollowup": {
+              "source": "private:accord-r23-continuity-contribution-20261016-01/utf8-closure-followup.json",
+              "sha256": "5bbe98637a90fd79df2a50ebe4a2b77c46cc5d213503b6fc590e2a68cc5953c0"
             },
             "oldCorruptionCauseAndFull25MeaningsUnknown": true,
             "newCaseOrAdmissionClaimed": false
