@@ -2603,7 +2603,7 @@
             "resourceClosure": "Executor and reviewer completed, owned test sessions exited; reviewed patch/logs retained, integrated private clone removed after exact path/HEAD/unique-change/hash checks."
           },
           "qualificationPassed": false,
-          "resultLimit": "Finite real engineering delivery and dependent quality correction only; not full A05/A08, default-window/necessary takeover, whole impact, original warm build adoption or causal positive gain. No new scope or quality gate.",
+          "resultLimit": "Original3same-episode cases admitted through actual observe/recheck on reviewed9415086e, with6c309013 evaluated source and original assessment time retained. A05 complete in this bound submission; joined/impact scopes accepted, impact assessment complete-for-bound-scopes. WholeA08 remains blocked by A01/A02/A03/A04/A06/A07 and selected parent duties. No full-release, old warm build, first900s/2M conformity or causal positive gain claim.",
           "ciRegression": {
             "subjectRevision": "485e4c3b43b5687734b08e447bb33e2670143321",
             "runId": "38380470025",
@@ -2783,7 +2783,7 @@
             "resourcesAndVerificationDuties": "Supported at observed poststate and bounded independent assessment; past reviewer overrun and cost unknown remain.",
             "budgetCorrection": "943.676s98-check overlaps first delivery but membership/tail not established. Cannot infer first900s violation from bare numeric comparison; first900s/2M remains unknown, original98 failure and195.511/180s failure retained.",
             "impact": "Attribution-limited measured burden with material negative findings; no must-be-cheaper or positive gain prerequisite. Native/current/historical/candidate conditions and helper differences explicit.",
-            "remaining": "All3 original case consequence candidates now match the original predicates after independent delta/scope/participation/authority source judgments. Original observe/recheck and fresh current candidate review remain; no admission is claimed. Selected parent delivery/lifecycle duties and wholeA07/A08/release stay separate.",
+            "remaining": "Original3case observe/recheck completed, no case rejections/errors; A05 complete in this source-bound submission. Remaining: applicable selected parent delivery/lifecycle and the retained A01/A02/A03/A04/A06/A07 aggregate duties; A08 not complete. Historical cases omitted here are not re-evaluated or revoked. No new gate or closed-business rerun.",
             "reusedOsEvidence": "private:accord-r23-semantic-20261015-01/ci-os-evidence/inspection.json; current857 artifact confirms POSIX direct/group exit only, CPU/RAM unobserved, no-model fixture not Agent pressure proof.",
             "qualificationPassed": false,
             "boundedOsEvidence": "private:accord-r23-semantic-20261015-01/bounded-os-validation/resource-result.json",
@@ -2800,8 +2800,51 @@
             "authoritySourceSupplement": "private:accord-cli-adoption-20261015-01/authority-source-supplement.json",
             "authoritySourceSupplementSha256": "8adb607cf7a41b6d23111d5e5703be260efcfdb029bb4772ca8c6589b487a7fe",
             "currentConsequenceSource": "private:accord-cli-adoption-20261015-01/current-consequence-adjudication.json",
-            "currentConsequenceSourceSha256": "c55388b24c30f64dd6cccea4dc2d8f3c646d09d93826d4f353c640dfb71b90dd"
-          }
+            "currentConsequenceSourceSha256": "c55388b24c30f64dd6cccea4dc2d8f3c646d09d93826d4f353c640dfb71b90dd",
+            "qualificationScope": "fullA08/candidate; not the3case admission result",
+            "originalCaseAdmission": {
+              "report": "private:accord-cli-adoption-20261015-01/source-bound-recheck/current-admission-observe-recheck.json",
+              "reportSha256": "88c4c24f707f21649235f67150b6ee977c668556f4a45677157f5219d43de52e",
+              "run": "private:accord-cli-adoption-20261015-01/source-bound-recheck/current-observation-run.json",
+              "runSha256": "4f28be22aec599fb9a1d28e15a2fe7cd8ce41ae115e8b1cd437f975a0e4519b8",
+              "subject": {
+                "revision": "9415086ef0fbf35e2298a7ae93effadadcb3766e",
+                "tree": "7ff1fe44db5389af302596bdcc0a2847cf258df0"
+              },
+              "evaluatedSourceRevision": "6c309013a01f52f1285b7aa368467bf39ad1d2ec",
+              "originalReviewedAt": "2026-10-15T05:55:37.379Z",
+              "phases": [
+                "observe",
+                "recheck"
+              ],
+              "acceptedCases": [
+                "v33-autonomous-continuity-live-development-01",
+                "v33-system-impact-assessment-live-development-01",
+                "v33-system-integration-live-development-01"
+              ],
+              "caseRejections": {},
+              "errors": [],
+              "fourAxesReview": "2 independent accountable reviewers; product/specification/implementation/standards pass for exact9415086e",
+              "A05CompleteForBoundSubmission": true,
+              "impactAssessment": "complete-for-bound-scopes",
+              "fullA08Complete": false,
+              "fullA08BlockedBy": [
+                "A01",
+                "A02",
+                "A03",
+                "A04",
+                "A06",
+                "A07"
+              ],
+              "functionalCompletion": false,
+              "candidateEligible": false,
+              "sourceInputsUnchanged": true,
+              "originalRefusalPreserved": "First attempt bound later9415086e as evaluated source and correctly rejected3observation-predates-candidate. Fixed caller uses actual6c309013 source, unchanged observedAt, same definitions/package; independent correction review supports. No business replay or guard change.",
+              "bindingCorrectionReview": "private:accord-cli-adoption-20261015-01/observation-binding-correction-review.json"
+            }
+          },
+          "firstDeliveryResultLimit": "Finite real engineering delivery and dependent quality correction only; not full A05/A08, default-window/necessary takeover, whole impact, original warm build adoption or causal positive gain. No new scope or quality gate.",
+          "qualificationScope": "qualificationPassed remains false for fullA08/candidate, distinct from the now admitted3original cases."
         },
         "admissionReadCost": {
           "source": "private:accord-admission-cost-20261013-01",
