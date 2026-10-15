@@ -108,7 +108,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1+codex.20261015143447",
-        "packageSha256": "8163037e85524c77d929c4cd1828cef87baa1102b91dd72450905dc3c530774e",
+        "packageSha256": "fa77b3eee23a6335b066703f77b485be7d7fedfbb6dbdf92dfcdd80ba059b565",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -3081,7 +3081,7 @@
             "scope": "v33-codex-cli-ordinary-delivery",
             "prospectiveBinding": "private:accord-cli-validation-diagnostics-20261015-05/prospective-binding.json",
             "sha256": "08a576d0ed87ea975fad668903a4d5c8aafff3313863c95da4cea52cf5f2de91",
-            "status": "actor-interrupted-at-original-token-cap-source-review-pending",
+            "status": "recovered-source-delivered-root-verification-pending",
             "qualificationPassed": false,
             "oldNineDefinitionsUnchanged": true,
             "scopeAndQualityUnchanged": true,
@@ -3096,9 +3096,20 @@
               "totalTokens": 1247876
             },
             "ownedJobAfter": 0,
-            "rootIntegration": "After actor exit/Job0 and exact changed-path check, copied delivered module bytes to the required source mirror; no primary logic correction or failed-check rewrite. New exact package identity for actual changed bytes.",
+            "rootIntegration": "CLI independently wrote all three source/test paths. Root changes only current package digest/progress after actor Job0; no primary-code takeover. Recovered candidate removes duplicate source body, keeps distinct repository/package version lookup, and adds public-schema names plus positional ranges for private unknown keys.",
             "currentPackageVersion": "3.3.0-dev.1+codex.20261015143447",
-            "currentPackageSha256": "8163037e85524c77d929c4cd1828cef87baa1102b91dd72450905dc3c530774e"
+            "currentPackageSha256": "fa77b3eee23a6335b066703f77b485be7d7fedfbb6dbdf92dfcdd80ba059b565",
+            "recoveryResult": "private:accord-cli-validation-diagnostics-20261015-05/execution-recovery/result.json",
+            "recoveryExitCode": 124,
+            "recoveryFailure": "cumulative sampled native total-token limit exceeded; original stage limits/failures not changed",
+            "cumulativeActorUsage": {
+              "inputTokens": 1923790,
+              "cachedInputTokens": 1829760,
+              "outputTokens": 16345,
+              "uncachedInputTokens": 94030,
+              "totalTokens": 1940135
+            },
+            "recoveryJobAfter": 0
           }
         },
         "admissionReadCost": {

@@ -1866,7 +1866,8 @@ process.stdout.write(JSON.stringify({response,changed}));
                 rejected = self.manage(**base, **{key: value})
                 self.assertTrue(rejected['isError'])
                 self.assertEqual(rejected['value']['reason'], 'invalid-task-state-operation')
-                self.assertEqual(rejected['value']['unsupportedFields'], [key])
+                self.assertEqual(rejected['value']['unsupportedFields'], [key] if key == 'result' else [])
+                self.assertEqual(rejected['value']['unknownFieldRanges'], [] if key == 'result' else [[5, 5]])
                 self.assertEqual(rejected['value']['effect'], 'not-requested')
                 self.assertEqual(self.files(), before)
         invalid_binding = self.manage(action='bind', epoch=status['epoch'], expectedRevision=status['revision'],
@@ -1893,9 +1894,82 @@ process.stdout.write(JSON.stringify({response,changed}));
                 value = response['value']
                 self.assertEqual(value['reason'], 'invalid-task-state-operation')
                 self.assertEqual(value['effect'], 'not-requested')
-                self.assertEqual(value['unsupportedFields'], sorted([*fields, 'session_id', 'unknown']))
+                self.assertEqual(value['unsupportedFields'], sorted(fields))
+                self.assertEqual(value['unknownFieldRanges'], [[4 + len(fields), 5 + len(fields)]])
                 self.assertNotIn('PRIVATE_', json.dumps(response))
                 self.assertEqual(self.files(), before)
+
+    def test_private_field_names_and_complete_wire_response_are_bounded(self):
+        args = {'cwd': str(self.work), 'action': 'pause', 'epoch': 'PRIVATE_EPOCH', 'expectedRevision': 0}
+        args.update({('PRIVATE_PATH_\\secret\n\"' + str(i)): 'PRIVATE_VALUE' for i in range(1000)})
+        args['reason'] = 'PRIVATE_REASON'
+        args['PRIVATE_TOKEN'] = 'PRIVATE_VALUE'
+        messages = [
+            {'jsonrpc': '2.0', 'id': 0, 'method': 'initialize', 'params': {
+                'protocolVersion': '2025-06-18', 'capabilities': {},
+                'clientInfo': {'name': 'bounds', 'version': '1'}}},
+            {'jsonrpc': '2.0', 'method': 'notifications/initialized'},
+            {'jsonrpc': '2.0', 'id': 1, 'method': 'tools/call',
+             'params': {**self.params, 'name': 'manage_task_state', 'arguments': args}}]
+        wire = ('\n'.join(map(json.dumps, messages)) + '\n').encode()
+        self.assertLess(len(wire.splitlines()[-1]), 128 * 1024)
+        for bridge in (BRIDGE, ROOT / 'runtime/native-state-mcp.cjs'):
+            with self.subTest(bridge=bridge):
+                process = subprocess.run([self.node, str(bridge)], input=wire,
+                    capture_output=True, env=self.env, cwd=self.work, timeout=10)
+                self.assertEqual(process.returncode, 0, process.stderr)
+                response = process.stdout.splitlines()[-1]
+                self.assertLessEqual(len(response) + 1, 128 * 1024)
+                self.assertNotIn(b'PRIVATE_', response)
+                result = json.loads(response)['result']
+                value = result['structuredContent']
+                self.assertTrue(result['isError'])
+                self.assertEqual(value['unsupportedFields'], [])
+                self.assertEqual(value['unknownFieldRanges'], [[4, 1003], [1005, 1005]])
+                self.assertEqual(json.loads(result['content'][0]['text']), value)
+                self.assertEqual(value['effect'], 'not-requested')
+        self.assertFalse(self.state.exists())
+
+    def test_repository_entry_preserves_version_paths_and_transport_failure(self):
+        original = BRIDGE
+        try:
+            # Reuse the original full protocol, relative-env and bad-frame cases
+            # through the repository entry as well as the packaged entry.
+            globals()['BRIDGE'] = ROOT / 'runtime/native-state-mcp.cjs'
+            self.test_invalid_utf8_oversize_and_truncated_input_have_no_state_effect()
+            self.test_real_stdio_negotiation_zero_id_unknown_method_and_eof()
+            self.test_relative_state_override_keeps_its_startup_directory_base()
+        finally:
+            globals()['BRIDGE'] = original
+
+    def test_shared_entries_keep_distinct_version_sources_and_failed_start_exit(self):
+        repo = self.root / 'repo'
+        (repo / 'runtime').mkdir(parents=True)
+        (repo / 'product').mkdir()
+        shutil.copy(ROOT / 'runtime/native-state-mcp.cjs', repo / 'runtime/native-state-mcp.cjs')
+        package = repo / 'plugins/yiyuan-accord-codex'
+        shutil.copytree(BRIDGE.parent.parent, package)
+        development = repo / 'product/development.json'
+        development.write_text(json.dumps({'delivery': {'version': 'repository-fixture'}}), encoding='utf-8')
+        manifest = package / '.codex-plugin/plugin.json'
+        manifest.write_text(json.dumps({'version': 'package-fixture'}), encoding='utf-8')
+        request = {'jsonrpc': '2.0', 'id': 1, 'method': 'initialize', 'params': {
+            'protocolVersion': '2025-06-18', 'capabilities': {},
+            'clientInfo': {'name': 'version', 'version': '1'}}}
+        script = "const m=require(process.argv[1]);const r=JSON.parse(process.argv[2]);process.stdout.write(JSON.stringify(m.createHandler()(r)));"
+        for entry, expected in ((repo / 'runtime/native-state-mcp.cjs', 'repository-fixture'),
+                                (package / 'runtime/native-state-mcp.cjs', 'package-fixture')):
+            for arguments in ([str(entry)], ['-e', script, str(entry), json.dumps(request)]):
+                process = subprocess.run([self.node, *arguments], input=json.dumps(request)+'\n',
+                    text=True, encoding='utf-8', capture_output=True, env=self.env, timeout=10)
+                self.assertEqual(process.returncode, 0, process.stderr)
+                self.assertEqual(json.loads(process.stdout)['result']['serverInfo']['version'], expected)
+        development.write_text('{}', encoding='utf-8')
+        process = subprocess.run([self.node, str(repo / 'runtime/native-state-mcp.cjs')],
+            input=b'', capture_output=True, env=self.env, timeout=10)
+        self.assertEqual(process.returncode, 1)
+        self.assertEqual(process.stdout, b'')
+        self.assertIn(b'Accord native-state transport stopped;', process.stderr)
 
     def test_manage_other_validation_and_identity_failures_keep_their_diagnostics(self):
         base = dict(action='pause', epoch='unobserved-epoch', expectedRevision=0, reason='Pause')
@@ -1924,9 +1998,9 @@ process.stdout.write(JSON.stringify({response,changed}));
         self.assertTrue(response['isError'])
         self.assertEqual(response['value']['reason'], 'invalid-task-state-operation')
         self.assertEqual(response['value']['effect'], 'not-requested')
-        self.assertEqual(response['value']['unsupportedFields'], ['op'])
-        self.assertEqual(response['value']['unsupportedFieldCount'], 2)
-        self.assertTrue(response['value']['unsupportedFieldsTruncated'])
+        self.assertEqual(response['value']['unsupportedFields'], [])
+        self.assertEqual(response['value']['unknownFieldRanges'], [[4, 5]])
+        self.assertNotIn('界', json.dumps(response, ensure_ascii=False))
         self.assertLessEqual(len(json.dumps(response, ensure_ascii=False).encode('utf-8')), 128 * 1024)
         self.assertNotIn('PRIVATE_', json.dumps(response))
         self.assertFalse(self.state.exists())
@@ -1952,7 +2026,8 @@ process.stdout.write(JSON.stringify({response,changed}));
         for response in responses[1:]:
             result = response['result']
             self.assertTrue(result['isError'])
-            self.assertEqual(result['structuredContent']['unsupportedFields'], ['op', 'session_id'])
+            self.assertEqual(result['structuredContent']['unsupportedFields'], [])
+            self.assertEqual(result['structuredContent']['unknownFieldRanges'], [[4, 5]])
             self.assertEqual(result['structuredContent']['effect'], 'not-requested')
             self.assertEqual(json.loads(result['content'][0]['text']), result['structuredContent'])
         self.assertNotIn(b'PRIVATE_', process.stdout)
@@ -2484,7 +2559,11 @@ process.stdout.write(JSON.stringify({originalVersion,before,after}));
         adapter = json.loads((package / 'adapter.json').read_text(encoding='utf-8'))
         self.assertTrue(adapter['persistentProcessAdded'])
         self.assertEqual(adapter['nativeTaskStateMcp']['storage'], 'existing-task-checkpoint-only')
-        self.assertEqual((ROOT / 'runtime/native-state-mcp.cjs').read_bytes(), BRIDGE.read_bytes())
+        script = "const a=require(process.argv[1]),b=require(process.argv[2]);process.stdout.write(JSON.stringify(['inspectNativeState','readTaskInput','manageTaskState','main','runtimeVersion'].every(k=>a[k]===b[k])));"
+        process = subprocess.run([self.node, '-e', script, str(ROOT / 'runtime/native-state-mcp.cjs'),
+            str(BRIDGE)], capture_output=True, text=True, timeout=10)
+        self.assertEqual(process.returncode, 0, process.stderr)
+        self.assertEqual(process.stdout, 'true')
 
     def test_running_stdio_server_does_not_pin_plugin_cache_directory(self):
         cache = self.root / 'cache'

@@ -369,19 +369,19 @@ function manageTaskState(params) {
     .filter(key => !common.includes(key) && !byAction[args.action].includes(key)).sort();
   if (unsupportedFields.length) {
     const error = rejected('invalid-task-state-operation');
-    // Diagnose field names only; never copy caller values or the request body.
-    // Caller-chosen names can themselves exceed the bounded response budget.
-    let budget = MAX_RESULT - Buffer.byteLength(JSON.stringify(error.value)) - 128;
-    error.value.unsupportedFields = unsupportedFields.filter(field => {
-      const bytes = Buffer.byteLength(JSON.stringify(field)) + 1;
-      if (bytes > budget) return false;
-      budget -= bytes;
-      return true;
+    // Only schema-owned names are public. Locate other keys by their key-order
+    // positions, never by reflecting caller-chosen names or values.
+    error.value.unsupportedFields = unsupportedFields.filter(key => own(MANAGE_TOOL.inputSchema.properties, key));
+    const ranges = [];
+    Object.keys(args).forEach((key, index) => {
+      if (own(MANAGE_TOOL.inputSchema.properties, key)) return;
+      const last = ranges[ranges.length - 1];
+      if (last && last[1] === index - 1) last[1] = index;
+      else ranges.push([index, index]);
     });
-    if (error.value.unsupportedFields.length !== unsupportedFields.length) {
-      error.value.unsupportedFieldCount = unsupportedFields.length;
-      error.value.unsupportedFieldsTruncated = true;
-    }
+    // Inclusive zero-based Object.keys positions keep even many private names
+    // locatable with bounded diagnostics (at most one range per public key gap).
+    error.value.unknownFieldRanges = ranges;
     return error;
   }
   if (!common.every(key => own(args, key)) || !boundedText(args.cwd, 4096)
@@ -455,8 +455,7 @@ function manageTaskState(params) {
   return {isError: false, value};
 }
 
-function runtimeVersion() {
-  const root = path.resolve(__dirname, '..');
+function runtimeVersion(root = path.resolve(__dirname, '..')) {
   const manifest = path.join(root, '.codex-plugin', 'plugin.json');
   const packaged = fs.existsSync(manifest);
   const data = JSON.parse(fs.readFileSync(packaged ? manifest : path.join(root, 'product', 'development.json'), 'utf8'));
@@ -533,9 +532,9 @@ async function serve(input = process.stdin, output = process.stdout, version = r
   if (pending.length) throw new Error('incomplete-mcp-input');
 }
 
-if (require.main === module) {
-  Promise.resolve().then(() => {
-    const version = runtimeVersion();
+function main(versionReader = runtimeVersion) {
+  return Promise.resolve().then(() => {
+    const version = versionReader();
     // Windows cannot replace a cache directory held as a live process cwd.
     // Modules are loaded; every task workspace is supplied as an absolute path.
     // Preserve the original base of configured state, session, home and temp paths.
@@ -549,4 +548,5 @@ if (require.main === module) {
     process.exitCode = 1;
   });
 }
-module.exports = {inspectNativeState, readTaskInput, manageTaskState, createHandler, serve};
+if (require.main === module) main();
+module.exports = {inspectNativeState, readTaskInput, manageTaskState, createHandler, serve, main, runtimeVersion};
