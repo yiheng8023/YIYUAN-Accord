@@ -101,14 +101,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261014112838",
+    "version": "3.3.0-dev.1+codex.20261015143447",
     "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261014112838",
-        "packageSha256": "a34c7ddd347a6d4ec73e4a4a35e873c10886ca66d7f120f5bde2457e5ece3f97",
+        "packageVersion": "3.3.0-dev.1+codex.20261015143447",
+        "packageSha256": "8163037e85524c77d929c4cd1828cef87baa1102b91dd72450905dc3c530774e",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -3081,10 +3081,24 @@
             "scope": "v33-codex-cli-ordinary-delivery",
             "prospectiveBinding": "private:accord-cli-validation-diagnostics-20261015-05/prospective-binding.json",
             "sha256": "08a576d0ed87ea975fad668903a4d5c8aafff3313863c95da4cea52cf5f2de91",
-            "status": "prospectively-bound-not-dispatched",
+            "status": "actor-interrupted-at-original-token-cap-source-review-pending",
             "qualificationPassed": false,
             "oldNineDefinitionsUnchanged": true,
-            "scopeAndQualityUnchanged": true
+            "scopeAndQualityUnchanged": true,
+            "actorThreadId": "01a13ff4-2009-7462-9a6b-75507c7bac7d",
+            "actorResult": "private:accord-cli-validation-diagnostics-20261015-05/execution-retry-header/result.json",
+            "originalExitCode": 124,
+            "originalUsage": {
+              "inputTokens": 1237605,
+              "cachedInputTokens": 1161984,
+              "outputTokens": 10271,
+              "uncachedInputTokens": 75621,
+              "totalTokens": 1247876
+            },
+            "ownedJobAfter": 0,
+            "rootIntegration": "After actor exit/Job0 and exact changed-path check, copied delivered module bytes to the required source mirror; no primary logic correction or failed-check rewrite. New exact package identity for actual changed bytes.",
+            "currentPackageVersion": "3.3.0-dev.1+codex.20261015143447",
+            "currentPackageSha256": "8163037e85524c77d929c4cd1828cef87baa1102b91dd72450905dc3c530774e"
           }
         },
         "admissionReadCost": {

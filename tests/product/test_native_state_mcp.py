@@ -16,8 +16,8 @@ from unittest import mock
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
-BRIDGE = ROOT / 'runtime/native-state-mcp.cjs'
-CHECKPOINT = ROOT / 'runtime/task-checkpoint.cjs'
+BRIDGE = ROOT / 'plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs'
+CHECKPOINT = BRIDGE.with_name('task-checkpoint.cjs')
 
 
 def native_tool_result(call):
@@ -1866,6 +1866,7 @@ process.stdout.write(JSON.stringify({response,changed}));
                 rejected = self.manage(**base, **{key: value})
                 self.assertTrue(rejected['isError'])
                 self.assertEqual(rejected['value']['reason'], 'invalid-task-state-operation')
+                self.assertEqual(rejected['value']['unsupportedFields'], [key])
                 self.assertEqual(rejected['value']['effect'], 'not-requested')
                 self.assertEqual(self.files(), before)
         invalid_binding = self.manage(action='bind', epoch=status['epoch'], expectedRevision=status['revision'],
@@ -1873,6 +1874,89 @@ process.stdout.write(JSON.stringify({response,changed}));
             nextAction='Create report.txt', canContinue=True)
         self.assertEqual(invalid_binding['value']['reason'], 'invalid-task-state-binding')
         self.assertEqual(self.files(), before)
+
+    def test_manage_unsupported_fields_are_action_specific_names_without_values_or_writes(self):
+        status = self.receive_current_input('PRIVATE_INPUT_DO_NOT_RETURN')
+        before = self.files()
+        cases = {
+            'bind': {'reason': 'PRIVATE_REASON', 'disposition': 'PRIVATE_DISPOSITION'},
+            'pause': {'canContinue': False, 'result': 'PRIVATE_RESULT'},
+            'retire': {'inputs': ['PRIVATE_PATH'], 'resumeReason': 'PRIVATE_RESUME'},
+            'reconcile-input': {'reason': 'PRIVATE_REASON', 'outputs': [{'path': 'PRIVATE_PATH'}]},
+        }
+        for action, fields in cases.items():
+            with self.subTest(action=action):
+                response = self.manage(action=action, epoch=status['epoch'],
+                    expectedRevision=status['revision'], **fields,
+                    session_id='PRIVATE_IDENTITY', unknown={'secret': 'PRIVATE_VALUE'})
+                self.assertTrue(response['isError'])
+                value = response['value']
+                self.assertEqual(value['reason'], 'invalid-task-state-operation')
+                self.assertEqual(value['effect'], 'not-requested')
+                self.assertEqual(value['unsupportedFields'], sorted([*fields, 'session_id', 'unknown']))
+                self.assertNotIn('PRIVATE_', json.dumps(response))
+                self.assertEqual(self.files(), before)
+
+    def test_manage_other_validation_and_identity_failures_keep_their_diagnostics(self):
+        base = dict(action='pause', epoch='unobserved-epoch', expectedRevision=0, reason='Pause')
+        for changes, reason in (
+                ({'action': 'constructor'}, 'invalid-task-state-operation'),
+                ({'action': None}, 'invalid-task-state-operation'),
+                ({'cwd': '.'}, 'invalid-task-state-operation'),
+                ({'epoch': ''}, 'invalid-task-state-operation'),
+                ({'expectedRevision': -1}, 'invalid-task-state-operation'),
+                ({'reason': ''}, 'invalid-task-state-pause')):
+            with self.subTest(changes=changes):
+                response = self.manage(**{**base, **changes})
+                self.assertTrue(response['isError'])
+                self.assertEqual(response['value']['reason'], reason)
+                self.assertNotIn('unsupportedFields', response['value'])
+                self.assertEqual(response['value']['effect'], 'not-requested')
+        self.params.pop('_meta')
+        response = self.manage(**base)
+        self.assertEqual(response['value']['reason'], 'native-call-metadata-unavailable')
+        self.assertNotIn('unsupportedFields', response['value'])
+        self.assertFalse(self.state.exists())
+
+    def test_manage_unsupported_field_diagnostic_is_bounded_even_for_oversize_names(self):
+        response = self.manage(action='pause', epoch='unobserved', expectedRevision=0,
+            **{'op': 'PRIVATE_OPERATION', '\u754c' * 44000: 'PRIVATE_VALUE'})
+        self.assertTrue(response['isError'])
+        self.assertEqual(response['value']['reason'], 'invalid-task-state-operation')
+        self.assertEqual(response['value']['effect'], 'not-requested')
+        self.assertEqual(response['value']['unsupportedFields'], ['op'])
+        self.assertEqual(response['value']['unsupportedFieldCount'], 2)
+        self.assertTrue(response['value']['unsupportedFieldsTruncated'])
+        self.assertLessEqual(len(json.dumps(response, ensure_ascii=False).encode('utf-8')), 128 * 1024)
+        self.assertNotIn('PRIVATE_', json.dumps(response))
+        self.assertFalse(self.state.exists())
+
+    def test_manage_unsupported_fields_are_returned_over_real_stdio_without_state_effect(self):
+        messages = [
+            {'jsonrpc': '2.0', 'id': 0, 'method': 'initialize', 'params': {
+                'protocolVersion': '2025-06-18', 'capabilities': {},
+                'clientInfo': {'name': 'diagnostic-test', 'version': '1'}}},
+            {'jsonrpc': '2.0', 'method': 'notifications/initialized'},
+        ]
+        for index, action in enumerate(('bind', 'pause', 'retire', 'reconcile-input'), 1):
+            messages.append({'jsonrpc': '2.0', 'id': index, 'method': 'tools/call',
+                'params': {**self.params, 'name': 'manage_task_state', 'arguments': {
+                    'cwd': str(self.work), 'action': action, 'epoch': 'PRIVATE_EPOCH',
+                    'expectedRevision': 0, 'session_id': 'PRIVATE_IDENTITY',
+                    'op': {'secret': 'PRIVATE_VALUE'}}}})
+        process = self.run_wire(('\n'.join(map(json.dumps, messages)) + '\n').encode())
+        self.assertEqual(process.returncode, 0, process.stderr)
+        self.assertEqual(process.stderr, b'')
+        responses = [json.loads(line) for line in process.stdout.splitlines()]
+        self.assertEqual(len(responses), 5)
+        for response in responses[1:]:
+            result = response['result']
+            self.assertTrue(result['isError'])
+            self.assertEqual(result['structuredContent']['unsupportedFields'], ['op', 'session_id'])
+            self.assertEqual(result['structuredContent']['effect'], 'not-requested')
+            self.assertEqual(json.loads(result['content'][0]['text']), result['structuredContent'])
+        self.assertNotIn(b'PRIVATE_', process.stdout)
+        self.assertFalse(self.state.exists())
 
     def files(self):
         return {p.relative_to(self.root).as_posix(): p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
@@ -2392,7 +2476,6 @@ process.stdout.write(JSON.stringify({originalVersion,before,after}));
 
     def test_package_registers_exact_source_without_an_account_or_network_endpoint(self):
         package = ROOT / 'plugins/yiyuan-accord-codex'
-        self.assertEqual(BRIDGE.read_bytes(), (package / 'runtime/native-state-mcp.cjs').read_bytes())
         config = json.loads((package / '.mcp.json').read_text(encoding='utf-8'))
         self.assertEqual(config, {'mcpServers': {'accord-state': {'command': 'node',
             'args': ['runtime/native-state-mcp.cjs'], 'cwd': '.',
@@ -2401,6 +2484,7 @@ process.stdout.write(JSON.stringify({originalVersion,before,after}));
         adapter = json.loads((package / 'adapter.json').read_text(encoding='utf-8'))
         self.assertTrue(adapter['persistentProcessAdded'])
         self.assertEqual(adapter['nativeTaskStateMcp']['storage'], 'existing-task-checkpoint-only')
+        self.assertEqual((ROOT / 'runtime/native-state-mcp.cjs').read_bytes(), BRIDGE.read_bytes())
 
     def test_running_stdio_server_does_not_pin_plugin_cache_directory(self):
         cache = self.root / 'cache'

@@ -362,9 +362,29 @@ function manageTaskState(params) {
   const boundedText = (value, max) => typeof value === 'string' && value.trim().length > 0
     && value.length <= max;
   if (!record(params) || params.name !== MANAGE_TOOL.name || !record(args)
-      || !['bind', 'pause', 'retire', 'reconcile-input'].includes(args.action)
-      || Object.keys(args).some(key => !common.includes(key) && !byAction[args.action].includes(key))
-      || !common.every(key => own(args, key)) || !boundedText(args.cwd, 4096)
+      || !['bind', 'pause', 'retire', 'reconcile-input'].includes(args.action)) {
+    return rejected('invalid-task-state-operation');
+  }
+  const unsupportedFields = Object.keys(args)
+    .filter(key => !common.includes(key) && !byAction[args.action].includes(key)).sort();
+  if (unsupportedFields.length) {
+    const error = rejected('invalid-task-state-operation');
+    // Diagnose field names only; never copy caller values or the request body.
+    // Caller-chosen names can themselves exceed the bounded response budget.
+    let budget = MAX_RESULT - Buffer.byteLength(JSON.stringify(error.value)) - 128;
+    error.value.unsupportedFields = unsupportedFields.filter(field => {
+      const bytes = Buffer.byteLength(JSON.stringify(field)) + 1;
+      if (bytes > budget) return false;
+      budget -= bytes;
+      return true;
+    });
+    if (error.value.unsupportedFields.length !== unsupportedFields.length) {
+      error.value.unsupportedFieldCount = unsupportedFields.length;
+      error.value.unsupportedFieldsTruncated = true;
+    }
+    return error;
+  }
+  if (!common.every(key => own(args, key)) || !boundedText(args.cwd, 4096)
       || !path.isAbsolute(args.cwd) || !text(args.epoch, 256)
       || !Number.isSafeInteger(args.expectedRevision) || args.expectedRevision < 0
       || Buffer.byteLength(JSON.stringify(args)) > MAX_FRAME) return rejected('invalid-task-state-operation');
