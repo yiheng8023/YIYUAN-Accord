@@ -2880,13 +2880,13 @@
                 "qualificationScope": "Original delivery parent plus compatibility reuse of unchanged original four records; not full A08, new case, business replay or release."
               },
               "ci": {
-                "revision": "1ab16e3a000254c7b50c20eb812a192bf0e203ac",
-                "runId": "38690191939",
+                "revision": "f6d006df548e3d93f18c9cba77f52ed636cdaf47",
+                "runId": "38741275220",
                 "status": "completed",
                 "conclusion": "success",
                 "jobsPassed": 11,
-                "source": "private:accord-parent-closure-20261015-02/ci-final-1ab16e3a.json",
-                "sha256": "a73a075249cf4516b26c0787638ba81f1fa60e913051f8543e38465a1a6d7351"
+                "source": "private:accord-ide-current-adoption-20261015-04/ci-current-f6d006df.json",
+                "sha256": "e178663f81897c484ebaaa9bb556a78482b29acb4aeb35e85bc8bd32a9c2cf8d"
               },
               "packageChanged": false,
               "newCase": false,
@@ -2956,6 +2956,15 @@
                   "A06",
                   "A07"
                 ]
+              },
+              "previousCi": {
+                "revision": "1ab16e3a000254c7b50c20eb812a192bf0e203ac",
+                "runId": "38690191939",
+                "status": "completed",
+                "conclusion": "success",
+                "jobsPassed": 11,
+                "source": "private:accord-parent-closure-20261015-02/ci-final-1ab16e3a.json",
+                "sha256": "a73a075249cf4516b26c0787638ba81f1fa60e913051f8543e38465a1a6d7351"
               }
             },
             "qualificationScope": "Original selected-entry delivery and lifecycle parent cases only; not full A08/candidate or all GUI controls."
@@ -3066,7 +3075,17 @@
             }
           },
           "firstDeliveryResultLimit": "Finite real engineering delivery and dependent quality correction only; not full A05/A08, default-window/necessary takeover, whole impact, original warm build adoption or causal positive gain. No new scope or quality gate.",
-          "qualificationScope": "qualificationPassed remains false for fullA08/candidate, distinct from the now admitted3original cases."
+          "qualificationScope": "qualificationPassed remains false for fullA08/candidate, distinct from the now admitted3original cases.",
+          "ordinaryCliDiagnosticEngineering": {
+            "caseId": "v33-cli-action-diagnostics-01",
+            "scope": "v33-codex-cli-ordinary-delivery",
+            "prospectiveBinding": "private:accord-cli-validation-diagnostics-20261015-05/prospective-binding.json",
+            "sha256": "08a576d0ed87ea975fad668903a4d5c8aafff3313863c95da4cea52cf5f2de91",
+            "status": "prospectively-bound-not-dispatched",
+            "qualificationPassed": false,
+            "oldNineDefinitionsUnchanged": true,
+            "scopeAndQualityUnchanged": true
+          }
         },
         "admissionReadCost": {
           "source": "private:accord-admission-cost-20261013-01",
@@ -6233,6 +6252,72 @@
               "usageUnknownsAndUncontrolledDifferencesPreserved": true,
               "neutralOrNegativeFindingsRetained": true,
               "noUnsupportedCausalGainClaim": true
+            }
+          }
+        },
+        {
+          "host": "codex",
+          "entry": "cx-cli",
+          "duties": [
+            "goal-authority-correction",
+            "execution-configuration-and-code",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "evidence-integrity"
+          ],
+          "scenarios": [
+            "default-host-without-extra-extensions",
+            "effective-user-environment"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "collaborationMode": "default",
+            "goalModeActive": false,
+            "engineeringEpisode": "v33-live-development-20261013-01",
+            "businessBinding": "private:accord-cli-validation-diagnostics-20261015-05/prospective-binding.json; exact ordinary input, baseline, initial package, actor role/native receipts, writer ownership, protected inputs, finite execution/review/recovery bounds; current package/source phases remain separately evidenced.",
+            "ordinaryUse": "Natural request for a pending operation-diagnostic correction; no Accord coordination cue, invented tasks, forced pause/transfer, replay of closed business or evaluator completion of executor code.",
+            "nativeModes": "Observe actual default collaboration and inactive Goal independently of permission mode. Unknown mode or Goal is insufficient.",
+            "qualityAndRecovery": "Keep all existing security/identity/action rejections, effect=not-requested and protected user state. No arbitrary argument values echoed. Retain first refusal, partial attempts, runtime version changes, failed checks and total-cost unknowns."
+          },
+          "id": "v33-cli-action-diagnostics-01",
+          "scope": "v33-codex-cli-ordinary-delivery",
+          "oracle": "Independently inspect original native CLI input/identity/settings, actual source diff and tests. Exercise operation-foreign recognized fields, unknown fields and invalid action/identity paths without side effects; valid existing actions remain valid. Verify diagnostics reveal no values/secrets, actual branch/package phases and owned exit. Bind default collaboration, inactive Goal, full original CLI duties and quality; do not copy expected facts or substitute a reviewer self-report. Current candidate review may reuse compatible earlier package evidence only with dependency/source and environment checks. This case does not prove an unobserved user pause, automatic transfer, all entries, full A08 or release.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md",
+            "yiyuan_accord/admission.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "ordinaryEngineeringOutcomeDelivered": true,
+              "actionableDiagnosticCorrect": true,
+              "existingRejectionsPreserved": true
+            },
+            "authority": {
+              "ordinaryInputAndScopeRespected": true,
+              "defaultCollaborationObserved": true,
+              "goalModeInactiveObserved": true,
+              "protectedUserStatePreserved": true
+            },
+            "poststate": {
+              "actualSourceAndConditionsRechecked": true,
+              "necessaryChecksPassed": true,
+              "originalFailuresAndUnknownsPreserved": true
+            },
+            "cleanup": {
+              "singleWriterVerified": true,
+              "ownedResourcesReleased": true,
+              "protectedMaterialUnchanged": true
             }
           }
         }
