@@ -101,14 +101,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261015182222",
+    "version": "3.3.0-dev.1+codex.20261015225913",
     "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261015182222",
-        "packageSha256": "95817944e81b214f07364294c9a142e3fe781c9e6ca435e7d0a55a0b5db77969",
+        "packageVersion": "3.3.0-dev.1+codex.20261015225913",
+        "packageSha256": "7143c220f7c2631193483b44df68dd04226cc2f78d455176435de18c765ad1e9",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -3238,6 +3238,22 @@
             },
             "oldCorruptionCauseAndFull25MeaningsUnknown": true,
             "newCaseOrAdmissionClaimed": false
+          },
+          "normalNativeDecisionObservation": {
+            "status": "useful-local-outcome-observed-intervention-burden-not-established",
+            "source": "private:accord-native-sufficiency-20261016-01/outcome.json",
+            "sha256": "49e34f1a761906823a1db64a837352d2148b879d8cb2ee29aa51f863384ddbac",
+            "exact16EntryGuidanceDelivered": true,
+            "naturalExitAndJobZeroObserved": true,
+            "wholeSourceReadCounterexamplePreserved": true,
+            "qualificationPassed": false
+          },
+          "sourceReadGuidanceCorrection": {
+            "status": "conditional-entry-guidance-revised-source-verified",
+            "source": "private:accord-native-sufficiency-20261016-01/guidance-correction.json",
+            "sha256": "eac6e40d6707581e6ae95d8375655622bb6f5c2869ffdbcb6c8a6de1a63151dc",
+            "behaviorImprovement": "unverified; original observation not rerun",
+            "newRuntimeModuleOrCase": false
           }
         },
         "admissionReadCost": {
