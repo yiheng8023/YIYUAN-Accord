@@ -2817,6 +2817,21 @@
             "coverage": "Current-anchor original MCP source behavior, not complete history/all loaded helpers/all-entry automatic handoff",
             "original11380Observation": "Retained at its2026-10-14 subject/time; do not rewrite as refreshed"
           }
+        },
+        "hookObserverRetirement": {
+          "userDecisionDate": "2026-10-15",
+          "status": "removed-and-verified",
+          "source": "private:accord-hook-failure-audit-20261013-01/observer-removal-20261015-01/removal.json",
+          "sha256": "364c9ef1561b30259f70d8157ef03dc558c6f1eabc0b8fd4253e9f7014bfea7a",
+          "executableFilesRemoved": 8,
+          "remainingExecutableFiles": 0,
+          "preservedEvidenceFiles": 22,
+          "historicalEvidenceHashesAndWriteTimesUnchanged": true,
+          "heartbeat": "accord-hook deleted in the prior heartbeat; current registration absent",
+          "currentHealth": "active=null; old owner/trace/closed history retained",
+          "originalContinuousStopCause": "unknown; no original process closure receipt fabricated",
+          "userObservation": "No recent Hook recurrence reported; not root-cause proof",
+          "scope": "User-authorized removal of private temporary observer only. Package, Hook, MCP and user settings untouched; no new case, release gate or change to remaining R2/R3."
         }
       },
       "subject": {
