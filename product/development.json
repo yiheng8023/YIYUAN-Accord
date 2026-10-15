@@ -3175,6 +3175,24 @@
               "activeWorkDurationUnknown": true,
               "storageTailUnresolved": true
             }
+          },
+          "currentTaskContinuityRepair": {
+            "status": "necessary-current-summary-rebuilt-original-corrupt-meanings-unknown",
+            "source": "private:accord-r23-continuity-contribution-20261016-01/facts.json",
+            "sha256": "36e847e92eccd8de6036bd90cdd4b4d8d727ff6a86d2c2ec6b438b2733a5f9fe",
+            "beforeRevision": 169,
+            "afterRevision": 170,
+            "historicalCorruptEntries": 25,
+            "historicalReplacementCharacters": 7156,
+            "currentSummaryReplacementCharacters": 0,
+            "all26InputRevisionsAndOriginalContractPreserved": true,
+            "original5AdmissionsNotRelabelled": true,
+            "newAdmissionClaimed": false,
+            "nextNormalRoutingDifference": [
+              "native-sufficient",
+              "default-host-without-extra-extensions"
+            ],
+            "actualTaskNeededNoInventedBusiness": true
           }
         },
         "admissionReadCost": {
