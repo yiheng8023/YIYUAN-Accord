@@ -2679,6 +2679,26 @@
             "effects": "No new thread/turn, transfer, daemon start, Hook/MCP/config change, package update or closed-business replay.",
             "qualificationPassed": false,
             "remaining": "Actual necessary migration/takeover and applicable failure windows remain unverified for ordinary Desktop; full R2/R3 and existing joined quality duties remain open."
+          },
+          "sameEpisodeAdjudication": {
+            "source": "private:accord-r23-semantic-20261015-01/root-adjudication.json",
+            "sha256": "821471eafcb2e59eab14c7e3cd923adf9e93832b24f4de2981c971c74ba3f49a",
+            "independentR2": "private:accord-r23-semantic-20261015-01/r2-review/r2-verdict.json",
+            "independentR3": "private:accord-r23-semantic-20261015-01/r3-review/r3-verdict.json",
+            "scopeReview": "private:accord-r23-semantic-20261015-01/scope-review/scope-verdict.json",
+            "adjudicationRecheck": "private:accord-r23-semantic-20261015-01/scope-review/root-adjudication-review.json",
+            "coherentEpisode": "supported",
+            "ordinaryHealthyContinue": "supported-at-observed-branch",
+            "actualRecovery": "Supported pre-dispatch interruption→inspect unchanged effects→first apply once→9PASS; post-reconcile bad-postcheck no replay and watcher loss→readonly exact-run success also sourced.",
+            "D2EffectiveEnvironment": "supported at actual Root/CLI dependency/MCP/writer responsibilities; not all six entry success",
+            "resourcesAndVerificationDuties": "Supported at observed poststate and bounded independent assessment; past reviewer overrun and cost unknown remain.",
+            "budgetCorrection": "943.676s98-check overlaps first delivery but membership/tail not established. Cannot infer first900s violation from bare numeric comparison; first900s/2M remains unknown, original98 failure and195.511/180s failure retained.",
+            "impact": "Attribution-limited measured burden with material negative findings; no must-be-cheaper or positive gain prerequisite. Native/current/historical/candidate conditions and helper differences explicit.",
+            "remaining": "Actual pressure→adjustment→load recovery and necessary whole comparison/selected parent entry responsibilities remain at original scopes. No forced migration, frontend repetition or new case.",
+            "reusedOsEvidence": "private:accord-r23-semantic-20261015-01/ci-os-evidence/inspection.json; current857 artifact confirms POSIX direct/group exit only, CPU/RAM unobserved, no-model fixture not Agent pressure proof.",
+            "qualificationPassed": false,
+            "boundedOsEvidence": "private:accord-r23-semantic-20261015-01/bounded-os-validation/resource-result.json",
+            "boundedOsScope": "Current required static checks only; no artificial pressure or model work, no whole pressure-recovery pass inferred."
           }
         },
         "admissionReadCost": {
