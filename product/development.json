@@ -3569,9 +3569,30 @@
                 "packageAndEntryChecks": 16,
                 "sourceValidation": "product/development valid",
                 "independentReview": "Two scoped reviewers support the narrow operational guidance and qualified attribution; original failure remains."
+              },
+              "localInstallation": {
+                "sourceRef": "4dbb6d723e511c5c38956c6fb41905da36653943",
+                "version": "3.3.0-dev.1+codex.20261016180116",
+                "packageSha256": "76e56ead79fc1ad03ca49e212ea9293785e12662e8f2428f5c7b53c869ad13ad",
+                "exactMembers": 25,
+                "recovery19Members": 25,
+                "onlyConfigSemanticChange": "Accord marketplace ref",
+                "threeNativeCommandsNatural0Job0": true,
+                "source": "private:accord-real-consumer-review-20261017-01/lifecycle20/installation-poststate.json",
+                "currentRootMcpVersion": "3.3.0-dev.1+codex.20261016120824",
+                "currentRootMcpProcessId": 37112,
+                "runtimeSourceUnchanged": true,
+                "newGuidanceBehaviorVerified": false
               }
             },
-            "consumerIdentity": "User-selected real local network task; exact native IDs retained in the private source-facts artifact."
+            "consumerIdentity": "User-selected real local network task; exact native IDs retained in the private source-facts artifact.",
+            "sourceProjectionCorrection": {
+              "source": "private:accord-real-consumer-review-20261017-01/projection-followup.json",
+              "sha256": "4082c292c264d227eedad5145ecac8ed298bceed3f5442b0803a4e9eb8ce1198",
+              "owner": "Root evidence projection, not Accord runtime or consumer mutation",
+              "contentHashesUnchanged": 5,
+              "exactHistoricalNanosecondComparison": null
+            }
           }
         },
         "admissionReadCost": {
