@@ -3351,7 +3351,7 @@
             }
           },
           "inputQuarantineHintCorrection": {
-            "status": "committed-pushed-installed-exact-bytes-adoption-unverified",
+            "status": "committed-pushed-installed-root-responder-observed-actor-adoption-unverified",
             "basis": "C:/Users/15521/.codex/backups/accord-native-complete-20261016-01/protocol-exception-followup.json",
             "basisSha256": "bd1af78a478359d26352a242be43c1fff5aa417c952295167d2c2dd0690aa17d",
             "sourcePackageVersion": "3.3.0-dev.1+codex.20261016003128",
@@ -3387,13 +3387,26 @@
             "ci": {
               "runId": "38898896680",
               "head": "b297b7dd2f9c4029e78ee0bf6536148afd1ff6c1",
-              "status": "in_progress",
-              "conclusion": null,
-              "jobsSuccess": 3,
+              "status": "completed",
+              "conclusion": "success",
+              "jobsSuccess": 11,
               "jobsTotal": 11,
               "laterReadError": "One GitHub API EOF, followed by a successful retry confirming the same run still in progress; not a CI failure.",
               "snapshotSource": "C:/Users/15521/.codex/backups/accord-native-complete-20261016-01/ci-b297b7dd-span-end-proof.json",
-              "snapshotSha256": "20a11c8da8dda59a57e3eed59a4419747d5b5c7e312f731c0129c6e27f156ae3"
+              "snapshotSha256": "20a11c8da8dda59a57e3eed59a4419747d5b5c7e312f731c0129c6e27f156ae3",
+              "terminalSource": "C:/Users/15521/.codex/backups/accord-r23-remaining-20261016-02/ci-b297b7dd-terminal-proof.json",
+              "terminalSourceSha256": "3fb4f5cbf69cbd402dfd09f70fd6922ee2d7111063b1cbc50b0b879de4ad4de7"
+            },
+            "loadedRuntimeFollowup": {
+              "source": "C:/Users/15521/.codex/backups/accord-r23-remaining-20261016-02/mcp-current-proof.json",
+              "sha256": "7847fa5e79f32fe0c3c3b59064ff02f00ee27a29a24056ceb1b98dd165e7f3a2",
+              "serverVersion": "3.3.0-dev.1+codex.20261016120824",
+              "processId": 37112,
+              "nativeHostVersion": "0.163.0-alpha.10.2",
+              "sameRootThread": true,
+              "originalOldWorkerObservationPreserved": true,
+              "oldWorkerExit": "unknown",
+              "quarantineActorAdoptionImprovement": "unverified"
             }
           }
         },
