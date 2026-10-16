@@ -101,14 +101,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261016003128",
+    "version": "3.3.0-dev.1+codex.20261016120824",
     "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261016003128",
-        "packageSha256": "76e7433b5806ea5cea0b4047cb32e8a9a5336d674f56bb009b014999af9219d5",
+        "packageVersion": "3.3.0-dev.1+codex.20261016120824",
+        "packageSha256": "9d09a59c1498555d721aba69009c5a0c12eedc49da608c2cb2eb897cd4ed403d",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -3292,10 +3292,10 @@
             "ci": {
               "headSha": "7e8856f7094c2c46b24362762645322f0a5de437",
               "databaseId": 38831071637,
-              "status": "in_progress",
-              "conclusion": "",
+              "status": "completed",
+              "conclusion": "success",
               "jobsTotal": 11,
-              "jobsSuccess": 7
+              "jobsSuccess": 11
             },
             "nativeExposureRoute": {
               "source": "private:accord-node-review-20261016-01/native-exposure-route.json",
@@ -3304,7 +3304,63 @@
             "ciFollowup": {
               "source": "private:accord-node-review-20261016-01/ci-7e8856f7-latest-summary.json",
               "sha256": "fe7323de4cb94e083d0c301c4976fdd103aec73ef9ffba2d71948888be6c76eb"
+            },
+            "ciTerminalFollowup": {
+              "source": "private:accord-native-complete-20261016-01/ci-7e8856f7-terminal-proof.json",
+              "sha256": "a504b3ca859eb691dcc8f236b221242a15394031bd5d54de54248bfce6ce4e82"
             }
+          },
+          "normalSdkCompleteObservation": {
+            "status": "functional-delivered-native-source-verified-root-allocation-not-qualified",
+            "source": "private:accord-native-complete-20261016-01/outcome.json",
+            "sha256": "1c3ed4776e11fc65ec9f2df16473122d12543a4ea1a865981aa09549831c0753",
+            "independentReview": {
+              "source": "private:accord-native-complete-20261016-01/independent-review.json",
+              "sha256": "d8e5260b60fe8d6f679b6166f1377fb6ccb4d6b4c579a2d3887a3e4c4afd2c1a"
+            },
+            "entry": "caller-owned-sdk",
+            "nativeThread": "01a14480-7279-7e31-91eb-a5ecf5562ac8",
+            "functionalOutcomeDelivered": true,
+            "actualModelVisibleExtraSkillDescriptions": 0,
+            "modelVisibleSkillCount": 9,
+            "qualificationPassed": false,
+            "rootQaWallLowerBoundSeconds": 199.43840837478638,
+            "rootQaAllocatedSeconds": 120,
+            "actorOutputTokens": 5703,
+            "actorOutputCap": 6000,
+            "remainingOutputTokens": 297,
+            "scopeLimit": "Bounded transparent complete task, not ordinaryCLI/literal clean-host/all-entry/Goal-or-pause/handoff/fullA08 or value proof. Preserve original phase-budget miss and do not rerun to make green.",
+            "deliveredFiles": "C:/Users/15521/.codex/backups/accord-native-complete-20261016-01/retained-work/current",
+            "inputProtocolFollowup": {
+              "source": "C:/Users/15521/.codex/backups/accord-native-complete-20261016-01/protocol-exception-followup.json",
+              "sha256": "bd1af78a478359d26352a242be43c1fff5aa417c952295167d2c2dd0690aa17d",
+              "nativeInputExactlyMatchesRequest": true,
+              "actorPerformedQuarantineInspection": false,
+              "exceptionHandlingQualified": false,
+              "quarantineRecovered": false,
+              "posthocReplayPerformed": false,
+              "scopeLimit": "Independent native input and verified artifacts remain valid; later Root source matching is not Actor exception handling or recovery acceptance."
+            }
+          },
+          "inputQuarantineHintCorrection": {
+            "status": "source-guidance-adjusted-adoption-unverified",
+            "basis": "C:/Users/15521/.codex/backups/accord-native-complete-20261016-01/protocol-exception-followup.json",
+            "basisSha256": "bd1af78a478359d26352a242be43c1fff5aa417c952295167d2c2dd0690aa17d",
+            "sourcePackageVersion": "3.3.0-dev.1+codex.20261016003128",
+            "candidateVersion": "3.3.0-dev.1+codex.20261016120824",
+            "candidatePackageSha256": "9d09a59c1498555d721aba69009c5a0c12eedc49da608c2cb2eb897cd4ed403d",
+            "scope": "Codex quarantine hint and existing byte-identical root mirror only; front-load inspection and apply dependency-based holds, preserving state algorithms, pauses, watermarks, recovery authorization and no business replay.",
+            "verification": {
+              "existingQuarantineStateTestsPassed": 6,
+              "actorAdoptionAfterChange": "unverified",
+              "causalRootCause": "not-established",
+              "sourceAndDevelopmentValid": true,
+              "independentReview": "supported; no findings; semantics and mirror scope only",
+              "source": "C:/Users/15521/.codex/backups/accord-native-complete-20261016-01/hint-correction-review.json",
+              "sourceSha256": "f5511e57cb7f4a2d09975cb8488015b44008ab224a43c33a17402d2e2d945df6"
+            },
+            "qualificationPassed": false,
+            "claimLimit": "Guidance projection is clearer and aligned with existing client semantics. This does not prove Actor adoption, protocol recovery, ordinary CLI scope completion or full R2/R3."
           }
         },
         "admissionReadCost": {

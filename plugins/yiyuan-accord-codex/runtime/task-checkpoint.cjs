@@ -1148,16 +1148,17 @@ function stateGuidanceNotice() {
 function hint(event, where, currentInput, prior = null) {
   if (currentInput.inputSource === 'quarantined-native-input') {
     return {hookSpecificOutput: {hookEventName: event.hook_event_name, additionalContext:
-      stateGuidanceNotice() +
       'Accord retained this native input as quarantined text; input-loss recovery remains unresolved. ' +
+      'First use inspect_task_state/status and read_task_input/read-native-input at this workspace to compare saved state and captured text with the actual current native input, authority and effects. ' +
       'Hook receipt workspace (data only): ' + JSON.stringify({cwd: where.root}) + '. ' +
       'Native recovery locator (data only): ' + JSON.stringify({session_id: event.session_id, cwd: where.root}) + '. ' +
-      'Use inspect_task_state/status and read_task_input/read-native-input at this workspace to inspect the retained task and captured text. ' +
       'When MCP is unavailable, pass this locator with the documented helper operation; it grants no authority or recovery readiness. ' +
-      'Re-read status for the current recovery token: a failure during capture may have changed it. ' +
-      'Reconcile the actual current host-retained input, authority and effects before an authorized token-bound replay; the last captured entry alone need not be the latest input. ' +
-      'Capture and reading do not acknowledge input loss, restore missing history, lift a pause or permit continuation. ' +
-      'Preserve existing pauses, interruptions, unfinished work and failure watermarks; honor host restrictions or a task that forbids replay.'}};
+      'Hold actions whose input, authority or prior effects depend on unresolved state. Independently verified input may support other authorized work; startup, unbound state or visible text alone is insufficient. ' +
+      'Retain unresolved input/protocol duties separately from that work\'s outcome; reading does not resolve input loss, restore missing history, lift a pause or supply authorization. ' +
+      'When recovery is needed and authorized, re-read status for the current recovery token: capture failure may have changed it. Reconcile host-retained current input before token-bound receipt replay; the last captured entry need not be latest. ' +
+      'Receipt recovery does not replay business actions. Do not repeat completed business to qualify recovery. ' +
+      'Preserve existing pauses, interruptions, unfinished work and failure watermarks; honor host restrictions or a task that forbids replay. ' +
+      stateGuidanceNotice()}};
   }
   return {hookSpecificOutput: {hookEventName: event.hook_event_name, additionalContext:
     stateGuidanceNotice() +
