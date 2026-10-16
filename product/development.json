@@ -3389,9 +3389,11 @@
               "head": "b297b7dd2f9c4029e78ee0bf6536148afd1ff6c1",
               "status": "in_progress",
               "conclusion": null,
-              "jobsSuccess": 1,
+              "jobsSuccess": 3,
               "jobsTotal": 11,
-              "laterReadError": "One GitHub API EOF, followed by a successful retry confirming the same run still in progress; not a CI failure."
+              "laterReadError": "One GitHub API EOF, followed by a successful retry confirming the same run still in progress; not a CI failure.",
+              "snapshotSource": "C:/Users/15521/.codex/backups/accord-native-complete-20261016-01/ci-b297b7dd-span-end-proof.json",
+              "snapshotSha256": "20a11c8da8dda59a57e3eed59a4419747d5b5c7e312f731c0129c6e27f156ae3"
             }
           }
         },
