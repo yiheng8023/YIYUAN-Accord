@@ -1217,6 +1217,71 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             return result
         return observer
 
+    def test_current_historical_facts_keep_time_with_fresh_applicability_review(self):
+        class Later(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return datetime.now(tz) + timedelta(days=2)
+
+        retained = []
+        def observer(request):
+            result = self.observer(request)
+            if request['phase'] == 'observe':
+                retained.extend(copy.deepcopy(result['records']))
+                for review in result['reviewBundle']['reviews']:
+                    review['reviewedAt'] = Later.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+            return result
+
+        with patch('yiyuan_accord.admission.datetime', Later):
+            report = self.assess(observer=observer)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(report['acceptedCases'], sorted(row['case'] for row in retained))
+        self.assertTrue(all(datetime.fromisoformat(row['observedAt']) < Later.now(timezone.utc)
+                            - timedelta(days=1) for row in retained))
+
+    def test_current_applicability_window_covers_observe_recheck_and_final_checks(self):
+        from yiyuan_accord import admission
+        limit = min(case['maxAgeSeconds'] for case in self.contract['acceptance']['admission']['cases'])
+        for stage in ('observe', 'recheck', 'final'):
+            clock = [0]
+            rechecked = [False]
+            original_subject = admission.evidence_subject
+
+            def observer(request):
+                result = self.observer(request)
+                if request['phase'] == stage:
+                    clock[0] = limit
+                if request['phase'] == 'recheck':
+                    rechecked[0] = True
+                return result
+
+            def subject(root):
+                if stage == 'final' and rechecked[0]:
+                    clock[0] = limit
+                return original_subject(root)
+
+            with self.subTest(stage=stage), patch('yiyuan_accord.admission.monotonic',
+                    side_effect=lambda: clock[0], create=True), patch(
+                    'yiyuan_accord.admission.evidence_subject', side_effect=subject):
+                report = self.assess(observer=observer)
+                self.assertEqual(report['acceptedCases'], [])
+                self.assertTrue(all('current-applicability-expired' in reasons
+                                    for reasons in report['caseRejections'].values()))
+
+    def test_current_applicability_expiry_is_case_scoped_and_rejects_clock_rollback(self):
+        contract = copy.deepcopy(self.contract)
+        cases = contract['acceptance']['admission']['cases']
+        cases[0]['maxAgeSeconds'] = 1
+        all_ids = {case['id'] for case in cases}
+        with self.history():
+            self.commit(contract)
+            for elapsed, rejected in ((0.999, set()), (1, {cases[0]['id']}), (-1, all_ids)):
+                with self.subTest(elapsed=elapsed), patch('yiyuan_accord.admission.monotonic',
+                                                        side_effect=[100, 100 + elapsed]):
+                    report = self.assess(contract, self.observer)
+                    self.assertEqual(set(report['acceptedCases']), all_ids - rejected)
+                    self.assertEqual(set(report['caseRejections']), rejected)
+
     def test_current_case_can_be_admitted_without_closing_missing_requirements(self):
         # This counterexample deliberately has no resource/environment cases;
         # future declarations must not change what its observer can discharge.
@@ -1426,13 +1491,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 self.assertEqual({k:scope[k] for k in floor_keys},
                                  {k:prior[k] for k in floor_keys})
                 self.assertEqual(scope['entry'], 'cx-desktop')
-                self.assertEqual(scope['conditions']['limitSemantics'], 'maximum')
+                self.assertNotIn('limitSemantics', scope['conditions'])
                 self.assertEqual(scope['conditions']['collaborationMode'], 'default')
                 self.assertIs(scope['conditions']['goalModeActive'], False)
-                self.assertEqual(scope['conditions']['limits'], {
-                    'wholeWorkSeconds': 600, 'recoverySeconds': 20,
-                    'workerInvocationSeconds': 45, 'workerRecoverySeconds': 10,
-                    'usageCaps': {'totalTokens': 2500000, 'uncachedInputTokens': 200000, 'outputTokens': 14000}})
+                self.assertNotIn('limits', scope['conditions'])
 
     def test_resource_scope_allows_fresh_prebinding_without_replaying_ended_case(self):
         from yiyuan_accord.admission import admission_contract_errors
@@ -1445,13 +1507,17 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     oracleFiles=['docs/operations/ACCEPTANCE-v3.3.md', 'docs/operations/PLAN-v3.3.md'], maxAgeSeconds=86400,
                     expected=copy.deepcopy(policy['cases'][0]['expected']))
         case['conditions'].update(codexVersion='0.158.0', model='gpt-6-sol', reasoning='high',
-                                  input='Distinct prospective input, no execution.', ordinaryUserInputs=2)
+                                  input='Distinct prospective input, no execution.', ordinaryUserInputs=2,
+                                  limits={'wholeWorkSeconds': 3600, 'recoverySeconds': 120,
+                                          'workerInvocationSeconds': 300, 'workerRecoverySeconds': 30,
+                                          'usageCaps': {'totalTokens': 3000000,
+                                                        'uncachedInputTokens': 300000, 'outputTokens': 20000}})
         policy['cases'].append(case)
         self.assertEqual(admission_contract_errors(contract), [])
         report = self.assess(contract)
         self.assertEqual(report['acceptedCases'], [])
         self.assertFalse(report['functionalCompletion'])
-        case['conditions']['limits']['wholeWorkSeconds'] += 1
+        case['conditions']['goalModeActive'] = True
         self.assertTrue(admission_contract_errors(contract))
 
     def bounded_resource_declaration(self, scope_id='v33-environment-adaptation'):
@@ -1460,6 +1526,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         scope = next(row for row in policy['scopes'] if row['id'] == scope_id)
         # A typed ceiling is a prospective policy fixture, never host evidence.
         scope['conditions']['limitSemantics'] = 'maximum'
+        scope['conditions']['limits'] = {
+            'wholeWorkSeconds': 600, 'recoverySeconds': 20,
+            'workerInvocationSeconds': 45, 'workerRecoverySeconds': 10,
+            'usageCaps': {'totalTokens': 2500000, 'uncachedInputTokens': 200000, 'outputTokens': 14000}}
         case = {key: copy.deepcopy(scope[key]) for key in
                 ('host', 'entry', 'duties', 'qualityAxes', 'scenarios', 'claims', 'conditions')}
         case.update(id='bounded-resource-policy-fixture', scope=scope_id,

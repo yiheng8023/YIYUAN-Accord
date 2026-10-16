@@ -2,6 +2,10 @@
 
 The caller owns provenance, independence, bounded read-only observation and
 review authenticity. A callable is a delegation seam, NOT proof of those facts.
+For v5, retained execution times remain historical; observe/recheck must freshly
+verify applicable host, configuration, authority and continuing-state dependencies.
+Missing current evidence is not an unchanged condition. maxAgeSeconds bounds this
+observe-through-final-check window, not the age of an immutable, still-applicable result.
 No data can select code, commands, imports, credentials or remote access here.
 """
 
@@ -12,6 +16,7 @@ import json
 from pathlib import Path, PurePosixPath
 import re
 import subprocess
+from time import monotonic
 
 from .identity import _bounded_git_bytes, _strict_json_object
 from .guardrails import clean_git_checkout
@@ -816,6 +821,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                       "packageSha256": hosts[case["host"]]["packageSha256"]}
                 for key, case in cases.items()}}
             # Copy before invoking foreign code; never let it rewrite expected facts.
+            observation_started = monotonic()
             data = _strict_json_object(_json(observer(copy.deepcopy(request))))
             if set(data) != {"records", "reviewBundle"} or not isinstance(data["records"], list):
                 raise ValueError("invalid observation envelope")
@@ -924,7 +930,8 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                             raise _CaseRejection("facet-episode-mismatch")
                     # Only attributable consequences can leave independent claims intact.
                     unmet = []
-                    if _fresh(record["observedAt"], case["maxAgeSeconds"], now) is None:
+                    if (policy["schema"] != CURRENT_SCHEMA
+                            and _fresh(record["observedAt"], case["maxAgeSeconds"], now) is None):
                         unmet.append("observation-expired")
                     if _json(record["conditions"]) != _json(case["conditions"]):
                         unmet.append("execution-conditions-mismatch")
@@ -970,13 +977,18 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             if not report["checkoutClean"] or evidence_subject(root) != subject:
                 raise ValueError("subject or checkout changed before final qualification")
             final_now = datetime.now(timezone.utc)
+            observation_elapsed = monotonic() - observation_started
             for record in data["records"]:
                 if isinstance(record, dict) and record.get("case") in admitted:
                     key = record["case"]
-                    if _fresh(record["observedAt"], cases[key]["maxAgeSeconds"], final_now) is None:
+                    current = policy["schema"] == CURRENT_SCHEMA
+                    expired = (not 0 <= observation_elapsed < cases[key]["maxAgeSeconds"] if current
+                               else _fresh(record["observedAt"], cases[key]["maxAgeSeconds"], final_now) is None)
+                    if expired:
                         admitted.remove(key)
-                        reject_case(key, "observation-expired")
-                        case_errors.append(f"{key}: observation expired before final qualification")
+                        reason = "current-applicability-expired" if current else "observation-expired"
+                        reject_case(key, reason)
+                        case_errors.append(f"{key}: {reason} before final qualification")
             if review_result["decision"] == "pass" and any(
                     _fresh(v["reviewedAt"], contract["acceptance"]["admission"]["reviewMaxAgeSeconds"], final_now) is None
                     for v in review["reviews"]):
