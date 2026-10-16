@@ -213,6 +213,14 @@ function retryOrigin(rows, binding, promptHash) {
       if (candidate?.type === 'event_msg' && candidate.payload?.type === 'token_count' &&
           (!Object.hasOwn(candidate.payload, 'turn_id') || candidate.payload.turn_id === binding.turnId) ||
           candidate?.type === 'token_usage_record' && candidate.payload?.turn_id === binding.turnId) continue;
+      // Initial settings may precede the first input. Locate only within this
+      // bound thread/context; the input scan still retains the full control digest.
+      const settings = candidate?.payload?.thread_settings;
+      if (candidate?.type === 'event_msg' && candidate.payload?.type === 'thread_settings_applied' &&
+          candidate.payload.thread_id === binding.sessionId &&
+          (!Object.hasOwn(candidate.payload, 'turn_id') || candidate.payload.turn_id === binding.turnId) &&
+          text(settings?.model) && settings.model === line.payload.model &&
+          text(settings.cwd) && path.isAbsolute(settings.cwd) && samePath(settings.cwd, binding.cwd)) continue;
       if (inputHash(candidate) === promptHash) return index;
       break;
     }

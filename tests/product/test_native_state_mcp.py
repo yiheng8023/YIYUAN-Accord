@@ -1069,6 +1069,63 @@ process.stdout.write(JSON.stringify({result,changed}));
                     self.assertEqual(evidence['reason'], 'native-input-origin-unavailable')
                 shutil.rmtree(self.state)
 
+    def test_native_origin_accepts_only_bound_initial_thread_settings(self):
+        for kind in ('matching', 'matching-turn', 'missing-thread', 'foreign-thread',
+                     'foreign-turn', 'missing-settings', 'missing-model', 'foreign-model',
+                     'foreign-cwd', 'unknown-event', 'human', 'interrupt'):
+            with self.subTest(kind=kind):
+                if self.state.exists(): shutil.rmtree(self.state)
+                self.native_context()
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                # Observed CLI0.163 shape: a thread-scoped applied-settings event
+                # between turn_context and the first real user input, no turn_id.
+                payload = {'type': 'thread_settings_applied', 'thread_id': meta['thread_id'],
+                           'thread_settings': {'model': meta['model'], 'cwd': str(self.work),
+                                               'reasoning_effort': 'high'}}
+                if kind == 'matching-turn': payload['turn_id'] = meta['turn_id']
+                if kind == 'missing-thread': payload.pop('thread_id')
+                if kind == 'foreign-thread': payload['thread_id'] = 'foreign-thread'
+                if kind == 'foreign-turn': payload['turn_id'] = 'foreign-turn'
+                if kind == 'missing-settings': payload.pop('thread_settings')
+                if kind == 'missing-model': payload['thread_settings'].pop('model')
+                if kind == 'foreign-model': payload['thread_settings']['model'] = 'foreign-model'
+                if kind == 'foreign-cwd': payload['thread_settings']['cwd'] = str(self.work.parent / 'elsewhere')
+                if kind == 'unknown-event': payload['type'] = 'thread_settings_unrecognized'
+                inserts = [{'type': 'event_msg', 'payload': payload}]
+                if kind == 'human':
+                    inserts.append({'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+                        'content': [{'type': 'input_text', 'text': 'Earlier uncaptured instruction'}]}})
+                if kind == 'interrupt':
+                    inserts.append({'type': 'event_msg', 'payload': {'type': 'task_interrupted'}})
+                rows[2:2] = inserts
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                before = self.files()
+                preview = self.native_input_preview()
+                evidence = preview['nativeInputEvidence']
+                self.assertEqual(self.files(), before)
+                if kind in ('matching', 'matching-turn'):
+                    self.assertEqual(evidence['state'], 'observed', evidence)
+                    self.assertTrue(evidence['latestNativeInputsComplete'])
+                    payload['thread_settings']['reasoning_effort'] = 'medium'
+                    transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                    changed = self.native_input_preview()['nativeInputEvidence']
+                    self.assertNotEqual(changed['cursor']['signalsSha256'], evidence['cursor']['signalsSha256'])
+                    rejected = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                                          evidenceCursor=evidence['cursor'])
+                    self.assertTrue(rejected['isError'])
+                    self.assertEqual(rejected['value']['reason'], 'native-input-evidence-changed')
+                    self.automatic_capacity_retry('retry-after-settings')
+                    bound = self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0,
+                        result='Preserve input across attributable settings', inputs=[],
+                        outputs=[{'path': 'report.txt'}], nextAction='Continue safely', canContinue=False)
+                    self.assertFalse(bound['isError'], bound)
+                else:
+                    self.assertEqual((evidence['state'], evidence['reason']),
+                                     ('unknown', 'native-input-origin-unavailable'))
+                shutil.rmtree(self.state)
+
     def append_long_tail_and_repeated_context(self):
         meta = self.params['_meta']['x-codex-turn-metadata']
         transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
