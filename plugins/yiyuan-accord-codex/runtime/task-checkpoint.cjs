@@ -1135,7 +1135,9 @@ function entryGuidance() {
     `\n\nEntry source: "${skill}". Runtime helper: node "${__filename}" --help. ` +
     'State operations require the actual current native input receipt and compatible runtime; ' +
     'this guidance creates no receipt, recovered goal or new authority.';
-  return limitEntryContext(guidance, 12000);
+  // Managed absolute paths can exceed 12000 bytes without changing the Skill.
+  // Keep 2000 bytes for recovery/fork hints inside the whole-entry 16000 bound.
+  return limitEntryContext(guidance, 14000);
 }
 
 function stateGuidanceNotice() {

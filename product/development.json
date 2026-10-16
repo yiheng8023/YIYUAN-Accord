@@ -101,14 +101,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261016191602",
+    "version": "3.3.0-dev.1+codex.20261016203116",
     "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261016191602",
-        "packageSha256": "8cf639a37a16eb70a7e2b37e2dcdc85c45eae0cb9a6b9d1ff816d77213d20b25",
+        "packageVersion": "3.3.0-dev.1+codex.20261016203116",
+        "packageSha256": "ca15c1886ff69d74b9a8d2ce9354f1ae99c33bd77c933d7cbe3c1f031bfe0e98",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -3714,6 +3714,34 @@
               "configSemanticChangeOnlyAccordRef": true,
               "nativeCommandsNatural0Job0": true,
               "source": "private:accord-r23-behavior-20261017-02/lifecycle21/installation-poststate.json"
+            }
+          },
+          "longPathGuidanceCorrection": {
+            "source": "private:accord-ci-6ebfc3a4-20261017/correction.json",
+            "sha256": "6ec0fb4ec4175aba2b72fd79939b054a90e09a0caa38565343618fa82cf90db5",
+            "failedCommit": "6ebfc3a41c28742b868bf300e3632c862e26b3bb",
+            "failedCiRunId": "38957000727",
+            "macosPreparationErrorsPerJob": 24,
+            "oldEntryBytes": 12000,
+            "entryBytes": 14000,
+            "wholeContextBytes": 16000,
+            "hostAdditionalContextLimit": 4000,
+            "candidateVersion": "3.3.0-dev.1+codex.20261016203116",
+            "candidateSha256": "ca15c1886ff69d74b9a8d2ce9354f1ae99c33bd77c933d7cbe3c1f031bfe0e98",
+            "localRegression": "406 tests passed in287.725s; exact long-path reproduction and text-only differential passed",
+            "liveAdoptionVerified": false,
+            "historicalHookRootCauseEstablished": false,
+            "qualificationPassed": false,
+            "verification": {
+              "source": "private:accord-ci-6ebfc3a4-20261017/local-verification.json",
+              "sha256": "d4d372156dca111747f85417cafea98b596d15b4ee9fa47231fb41ce72bb1ac7",
+              "originalCiConclusion": "failure",
+              "originalCiJobsPassed": 9,
+              "originalCiJobsFailed": 2,
+              "sourceAndDevelopmentValid": true,
+              "actionlintPassed": true,
+              "independentReviewPassed": true,
+              "runtimeTestsPassed": 406
             }
           }
         },

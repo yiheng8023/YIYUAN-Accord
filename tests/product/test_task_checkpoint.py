@@ -620,6 +620,53 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
         entry.unlink()
         self.assertNotEqual(read().returncode, 0)
 
+    def test_long_install_paths_keep_full_entry_and_recovery_within_context_limit(self):
+        source = RUNTIME.parents[1] / 'plugins/yiyuan-accord-codex'
+        original = (source / 'skills/deliver-demand-driven-outcome/references/meta-guidance.md').read_bytes()
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        for component in ('long-install-', '安装目录-'):
+            with self.subTest(path=component):
+                package = self.root / component
+                while len(str(package).encode('utf-8')) < 200:
+                    package /= component
+                shutil.copytree(source, package)
+                hook = package / 'runtime/accord-hook.cjs'
+                def invoke(source=None):
+                    request = ({'hook_event_name': 'SessionStart', 'source': source,
+                                'model': 'm' * 256, 'permission_mode': 'p' * 256}
+                               if source else {'hook_event_name': 'SubagentStart',
+                                               'agent_id': 'child', 'agent_type': 'reviewer'})
+                    return subprocess.run([self.node, str(hook)], input=json.dumps(request).encode(),
+                        capture_output=True, env=self.environment, cwd=self.work, timeout=10)
+                for event in ('startup', 'clear', 'resume', 'compact', 'fork', None):
+                    result = invoke(event)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    context = json.loads(result.stdout)['hookSpecificOutput']['additionalContext']
+                    self.assertEqual(context.encode().count(original), 1)
+                    self.assertIn('State operations require the actual current native input receipt', context)
+                    self.assertLessEqual(len(context.encode()), 16000)
+                    for name in ('coordinate-capabilities', 'maintain-task-continuity',
+                                 'verify-and-close-outcome', 'manage-plugin-lifecycle'):
+                        self.assertIn(str(package / 'skills' / name / 'SKILL.md'), context)
+                entry = package / 'skills/deliver-demand-driven-outcome/SKILL.md'
+                base = json.loads(invoke('startup').stdout)['hookSpecificOutput']['additionalContext']
+                self.assertGreater(len(base.encode()), 12000, 'exercise the former failure boundary')
+                # The largest entry must still leave space for the maximal valid fork hints.
+                entry.write_bytes(entry.read_bytes().rstrip(b'\r\n') + b'\n' +
+                                  b'x' * (14000 - len(base.encode()) - 2) + b'!')
+                result = invoke('startup')
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(len(json.loads(result.stdout)['hookSpecificOutput']['additionalContext'].encode()), 14000)
+                result = invoke('fork')
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertLessEqual(len(json.loads(result.stdout)['hookSpecificOutput']['additionalContext'].encode()), 16000)
+                with entry.open('ab') as stream:
+                    stream.write(b'y')
+                result = invoke('fork')
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(result.stdout, b'', 'never emit a truncated foundation or entry')
+                self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+
     def test_default_entry_includes_exact_original_and_rejects_changed_foundation(self):
         package = self.root / 'meta-package'
         shutil.copytree(RUNTIME.parent.parent / 'plugins/yiyuan-accord-codex', package)
