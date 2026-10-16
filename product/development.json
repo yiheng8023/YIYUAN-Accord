@@ -101,14 +101,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.0-dev.1+codex.20261016120824",
+    "version": "3.3.0-dev.1+codex.20261016180116",
     "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.0-dev.1+codex.20261016120824",
-        "packageSha256": "9d09a59c1498555d721aba69009c5a0c12eedc49da608c2cb2eb897cd4ed403d",
+        "packageVersion": "3.3.0-dev.1+codex.20261016180116",
+        "packageSha256": "76e56ead79fc1ad03ca49e212ea9293785e12662e8f2428f5c7b53c869ad13ad",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -3517,7 +3517,7 @@
               "No automatic qualification, historical timestamp rewrite, closed-business replay or package change."
             ],
             "evidence": "private:accord-r23-progress-20261017-01",
-            "status": "implemented-and-locally-verified-current-ci-pending",
+            "status": "implemented-locally-and-ci-verified",
             "remaining": "B5 restricted fixture remains unreadable; its result/active-work unknowns are not silently closed. R2/R3 current applicability and full result acceptance remain to complete.",
             "verification": {
               "admissionTests": 102,
@@ -3529,7 +3529,49 @@
               "fivePercentReservePreserved": true,
               "currentDefinitionsUnchanged": 10,
               "sourceValidation": "product and development valid; final changed commit CI is separate."
+            },
+            "ci": {
+              "head": "1843af37c6df2fe3352d4f9efdf175c64386e6b6",
+              "runId": "38937547021",
+              "status": "completed",
+              "conclusion": "success",
+              "jobsPassed": 11,
+              "jobsTotal": 11
             }
+          },
+          "realConsumerObservation": {
+            "source": "private:accord-real-consumer-review-20261017-01/source-facts.json",
+            "sha256": "d51dd41ff90a8952d76c94c40cda1be16e7566030c08ec944651ad4f8d85a287",
+            "observedPackage": "3.3.0-dev.1+codex.20261016120824",
+            "ordinaryTask": true,
+            "explicitUserSkillSelection": false,
+            "fullVerifySkillAfterNativeCompaction": true,
+            "networkRecordsIndependentlyVerified": 24,
+            "installedBinaryMatchesRetainedOfficialManifest": true,
+            "preservedNegatives": [
+              "Nested diagnostic object exposed credential despite prior redact duty.",
+              "User requested release of Computer Use before manual operation.",
+              "Home-network failover, zero-human-rescue, complete ordinary CLI and fresh automatic handoff not established."
+            ],
+            "contribution": "Real normal-entry selection/use, same-task compaction continuity, source-based correction and scoped outcomes; no new business or retrospective formal case.",
+            "formalAdmission": false,
+            "businessReplayed": false,
+            "otherThreadMessaged": false,
+            "otherProjectMutated": false,
+            "guidanceCorrection": {
+              "path": "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+              "scope": "Project necessary safe fields or derived facts before tool output; nested objects are not safe by parent relevance or URL handling. Existing privacy duty, host limits and third-party Skills retained.",
+              "candidateVersion": "3.3.0-dev.1+codex.20261016180116",
+              "candidateSha256": "76e56ead79fc1ad03ca49e212ea9293785e12662e8f2428f5c7b53c869ad13ad",
+              "changedBehaviorVerified": false,
+              "claimLimit": "Targeted operational guidance improvement, not a proven detector, prevention guarantee or erasure of the incident.",
+              "verification": {
+                "packageAndEntryChecks": 16,
+                "sourceValidation": "product/development valid",
+                "independentReview": "Two scoped reviewers support the narrow operational guidance and qualified attribution; original failure remains."
+              }
+            },
+            "consumerIdentity": "User-selected real local network task; exact native IDs retained in the private source-facts artifact."
           }
         },
         "admissionReadCost": {
