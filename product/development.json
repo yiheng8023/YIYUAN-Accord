@@ -3275,14 +3275,35 @@
             }
           },
           "goalProgressSeparationCorrection": {
-            "status": "source-verified-independent-review-complete-not-yet-installed",
+            "status": "source-pushed-installed18-root18-observed-controlled-semantics-supported",
             "source": "private:accord-node-review-20261016-01/node-review.json",
             "sha256": "b21c29857ff866cb243897912318a6ed85c6a4eccd63cbdaacd4a4f4810b087f",
-            "behaviorImprovement": "unverified; assess within next necessary execution rather than a new release gate",
+            "behaviorImprovement": "unverified; five controlled semantic decisions supported without pre-change comparison or ordinary-business qualification",
             "newRuntimeModuleOrCase": false,
             "checks": {
               "source": "private:accord-node-review-20261016-01/correction-checks.json",
               "sha256": "1a5a32d320a4af0ad4097c0b1e940384860d54482e4ecb7637b8f9cc3233960f"
+            },
+            "followup": {
+              "source": "private:accord-node-review-20261016-01/node-followup.json",
+              "sha256": "2748bfb5f61edd829c407c8955c57dd202f349ee2abfd4b2a50e867dd8d98a17"
+            },
+            "minimalHost": "unverified; owned SDK skills/list original controls show49total/10active=5Accord+5system and no active third-party/user Skill. Earlier CLI model context still had39 extra descriptions. Same-subject model-visible scope and complete behavior remain unverified.",
+            "ci": {
+              "headSha": "7e8856f7094c2c46b24362762645322f0a5de437",
+              "databaseId": 38831071637,
+              "status": "in_progress",
+              "conclusion": "",
+              "jobsTotal": 11,
+              "jobsSuccess": 7
+            },
+            "nativeExposureRoute": {
+              "source": "private:accord-node-review-20261016-01/native-exposure-route.json",
+              "sha256": "55122f8b65087f58b55407cdf921fa24b9b748b9e1faa0d35ab2a23e6ccdf9f9"
+            },
+            "ciFollowup": {
+              "source": "private:accord-node-review-20261016-01/ci-7e8856f7-latest-summary.json",
+              "sha256": "fe7323de4cb94e083d0c301c4976fdd103aec73ef9ffba2d71948888be6c76eb"
             }
           }
         },
