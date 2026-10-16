@@ -3680,7 +3680,7 @@
             "candidateSha256": "8cf639a37a16eb70a7e2b37e2dcdc85c45eae0cb9a6b9d1ff816d77213d20b25",
             "historicalHookFailuresExplained": false,
             "inputIsolationRecovered": false,
-            "liveCandidateMcpAdoptionVerified": false,
+            "liveCandidateMcpAdoptionVerified": true,
             "qualificationPassed": false,
             "verification": {
               "runtimeRegressionTests": 282,
@@ -3694,6 +3694,26 @@
               "primaryInstructionBytes": 20216,
               "budgetUnchanged": true,
               "recordReview": "/root/node_drift_review confirmed parser/guidance/input-policy distinctions and no missing required correction"
+            },
+            "loadedRuntimeFollowup": {
+              "source": "private:accord-r23-behavior-20261017-02/restart21-followup.json",
+              "sha256": "28f9f1b30dc6f3d4457054281d37354a992c647e9c38d442fa89e120b355cdb0",
+              "serverVersion": "3.3.0-dev.1+codex.20261016191602",
+              "processId": 21064,
+              "currentInputSourceReconciled": true,
+              "checkpointRevision": 202,
+              "scope": "Actual Root MCP responder after user restart and same-task source-bound input reconciliation; no other consumer, closure-fingerprint or full continuity claim.",
+              "oldMcpProcess40564AbsentAtFollowup": true,
+              "newMcpCreationTime": "2026-10-17T04:03:09.033346+08:00"
+            },
+            "localInstallation": {
+              "sourceRef": "6ebfc3a41c28742b868bf300e3632c862e26b3bb",
+              "packageVersion": "3.3.0-dev.1+codex.20261016191602",
+              "membersVerified": 25,
+              "recovery20Files": 25,
+              "configSemanticChangeOnlyAccordRef": true,
+              "nativeCommandsNatural0Job0": true,
+              "source": "private:accord-r23-behavior-20261017-02/lifecycle21/installation-poststate.json"
             }
           }
         },
