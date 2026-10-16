@@ -36,10 +36,11 @@ integrity evidence and sourced tail/work/handoff/recovery/safety estimates.
 The helper consumes fresh counters; changed input, revision or generation requires
 reassessment. A fit grants neither permission nor takeover. Choose `contextMaxAgeMs`
 for the work without restamping evidence or ignoring the unobserved tail.
-For necessary checkpoint changes, use `manage_task_state` with the
-inspected epoch/revision and current authority. `bind` retains input baselines,
-output predicates and unresolved work. Supply required revision reasons and
-dispositions; pauses remain until an authorized resume is recorded.
+For checkpoint changes, use `manage_task_state` with current authority and the
+inspected epoch/revision. Retain input baselines, output predicates, pauses and
+unmet work; supply required revision reasons and dispositions.
+At rebind or recovery, align `result` with the authorized outcome and scope;
+put progress in `nextAction`, unmet conditions and sourced results.
 Retire only state whose responsibilities are resolved or explicitly cancelled.
 Reasons and local file matches do not prove user permission or whole-task completion.
 Inspect uncertain effects before retry. Honor host approval; do not bypass denial.

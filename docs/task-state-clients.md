@@ -22,7 +22,9 @@
 
 ## bind：每次完整绑定当前合同
 
-五字段每次必填且不默认继承：`result` 是当前授权结果；`inputs` 是完整受保护输入列表（无保护输入时 `[]` 合法）；`outputs` 是完整非空输出谓词列表；`nextAction` 是具体下一动作；`canContinue` 兼容保留为当前安全且已授权工作是否仍可进行的判断记录，不触发新回合或执行。输入与输出合计最多 100 项；path-only 输出仅检查文件，精确要求用 sha256 或 JSON Pointer 值谓词表达。[schema 73–105](../runtime/native-state-mcp.cjs#L73)、[bind guard 330–360](../runtime/native-state-mcp.cjs#L330)。
+五字段每次必填且不默认继承：`result` 是当前受托、待实现的完整目标及范围；`inputs` 是完整受保护输入列表（无保护输入时 `[]` 合法）；`outputs` 是完整非空输出谓词列表；`nextAction` 是具体下一动作；`canContinue` 兼容保留为当前安全且已授权工作是否仍可进行的判断记录，不触发新回合或执行。输入与输出合计最多 100 项；path-only 输出仅检查文件，精确要求用 sha256 或 JSON Pointer 值谓词表达。[schema](../plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs#L102)、[bind guard](../plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs#L392)。
+
+`result` 跨工作段保留总体目标；阶段成果、版本和 CI 进度放在 `nextAction`、必要的 `unresolved` 及有来源的结果记录中。必要重绑或恢复时核对这些字段是否仍服务同一目标；局部工序完成或局部等待只影响其依赖，不替代完整目标，也不阻断独立可做工作。目标确因实际用户决定或已授权范围变化而改变时，核实依据和影响后修订；文字变化本身既不证明也不否定授权。运行时只保存正文，不判断目标语义。
 
 以下三段是调用参数模板：只生成 MCP tools/call 的 params，不连接、不调用工具、不自动判断 permission。`latest` 必须是真实最新 inspect 结果的 structuredContent（或宿主规范化结果中已解析的同一对象）；所有文字、路径、布尔判断由接入者按当前任务证据填入。准备参数后若输入或状态变化，重新 inspect 并审查。禁止用本指南里的占位名称当任务事实。
 

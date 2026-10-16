@@ -108,7 +108,7 @@ const MANAGE_TOOL = Object.freeze({
     expectedRevision: {...TOKEN_BOUND,
       description: 'Exact current checkpoint revision from inspect_task_state. The adapter never refreshes it automatically.'},
     result: {type: 'string', minLength: 1, maxLength: 16384,
-      description: 'Required for bind: the current authorized result; explicitly supply it on every bind.'},
+      description: 'Required for bind: the intended authorized outcome and its scope, preserved across work spans. Put progress in nextAction, necessary unresolved conditions and sourced result records. Reconcile an actual authorized goal change; explicitly supply the reviewed outcome on every bind.'},
     inputs: {type: 'array', maxItems: 100, items: {type: 'string', minLength: 1, maxLength: 4096},
       description: 'Required for bind: the complete protected input list, not inherited. Use [] when there are no protected inputs; reconcile any removal of prior inputs.'},
     outputs: {type: 'array', minItems: 1, maxItems: 100, items: OUTPUT_CHECK,

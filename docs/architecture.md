@@ -9,6 +9,14 @@ is the machine validation projection. Version 3.3 distributes only the applicabl
 OpenAI adaptation. Earlier releases and host observations keep their historical
 identities; current implementation or documentation does not grant publication.
 
+The portable outcome and authority contracts do not require Codex events or
+protocols. `runtime/native-state-mcp.cjs` forwards to the packaged Codex adapter;
+`runtime/task-checkpoint.cjs` and its byte-checked packaged mirror are this
+adaptation's state implementation, including its optional `codex-context` reader.
+Their repository location does not make those interfaces universal requirements.
+Keep host formats, observations and controls within the applicable adaptation;
+replace them by evidenced equivalents when adapting another host.
+
 The 3.3 default foundation is the byte-preserved [original meta-guidance](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md).
 The package has one original reference and one task coordination body. The existing
 entry reader supplies both at supported root lifecycle/input events, and a

@@ -32,9 +32,12 @@ Choose work spans using uncertainty, consequence, feedback and the user's intend
 participation. Continue safe authorized work, shorten spans when premises change,
 keep progress visible and return only necessary decisions to the user. A completed
 task does not become new work; ordinary continuation needs no routine reminders.
-For ordinary interaction, choose a finite useful work package and its exit
-condition. Preserve remaining duties when the current turn ends. Closed-loop
-responsibility does not require additional user turns: Accord does not register
+Choose finite useful work spans within the authorized outcome. After a span,
+reconcile progress with that outcome and take the next concrete safe authorized
+step. A local milestone or wait holds only dependent work. When a necessary user
+decision, external condition or host execution boundary ends the current turn,
+preserve the goal and unmet duties. Closed-loop responsibility does not require
+additional user turns: Accord does not register
 a Stop hook or request automatic continuation. Use the host's ordinary task,
 recovery and handoff capabilities within the user's authority; long-running
 controls remain the user's explicit choice.
