@@ -3340,10 +3340,18 @@
               "quarantineRecovered": false,
               "posthocReplayPerformed": false,
               "scopeLimit": "Independent native input and verified artifacts remain valid; later Root source matching is not Actor exception handling or recovery acceptance."
+            },
+            "hostCatalogSourceFollowup": {
+              "source": "C:/Users/15521/.codex/backups/accord-native-complete-20261016-01/host-catalog-source-followup.json",
+              "sha256": "7774ab6d031eb91197576ee1eea2abd2384956de0bf6dc7e6c51e7a3076ddf51",
+              "sameFieldProjectionDifferenceVerified": true,
+              "cliVsSdkProjectionCause": "unknown",
+              "newProbeRequiredNow": false,
+              "limit": "Do not equate disabled configuration or metadata with actual model exposure; B9 SDK extra0 does not qualify ordinary CLI or literal clean-host acceptance."
             }
           },
           "inputQuarantineHintCorrection": {
-            "status": "source-guidance-adjusted-adoption-unverified",
+            "status": "committed-pushed-installed-exact-bytes-adoption-unverified",
             "basis": "C:/Users/15521/.codex/backups/accord-native-complete-20261016-01/protocol-exception-followup.json",
             "basisSha256": "bd1af78a478359d26352a242be43c1fff5aa417c952295167d2c2dd0690aa17d",
             "sourcePackageVersion": "3.3.0-dev.1+codex.20261016003128",
@@ -3360,7 +3368,31 @@
               "sourceSha256": "f5511e57cb7f4a2d09975cb8488015b44008ab224a43c33a17402d2e2d945df6"
             },
             "qualificationPassed": false,
-            "claimLimit": "Guidance projection is clearer and aligned with existing client semantics. This does not prove Actor adoption, protocol recovery, ordinary CLI scope completion or full R2/R3."
+            "claimLimit": "Guidance projection is clearer and aligned with existing client semantics. This does not prove Actor adoption, protocol recovery, ordinary CLI scope completion or full R2/R3.",
+            "sourceRevision": "b297b7dd2f9c4029e78ee0bf6536148afd1ff6c1",
+            "localInstallation": {
+              "source": "C:/Users/15521/.codex/backups/accord-native-complete-20261016-01/lifecycle19/installation-poststate.json",
+              "sha256": "0fb0cf8206156c288d1db578af3d7487f2a83c975cb8bf4ef974a5ae6d146eb1",
+              "exactMembers": 25,
+              "onlyConfigChange": "marketplaces.yiyuan-accord.ref",
+              "recovery18Files": 25,
+              "nativeCommandsNatural0Job0": true,
+              "currentRootMcp": {
+                "serverVersion": "3.3.0-dev.1+codex.20261016003128",
+                "processId": 32852
+              },
+              "installed19HelperReadOnlyStatusPassed": true,
+              "claimLimit": "Exact installation and installed helper status do not establish Root19 MCP, Hook exception adoption, recovery or full acceptance."
+            },
+            "ci": {
+              "runId": "38898896680",
+              "head": "b297b7dd2f9c4029e78ee0bf6536148afd1ff6c1",
+              "status": "in_progress",
+              "conclusion": null,
+              "jobsSuccess": 1,
+              "jobsTotal": 11,
+              "laterReadError": "One GitHub API EOF, followed by a successful retry confirming the same run still in progress; not a CI failure."
+            }
           }
         },
         "admissionReadCost": {
