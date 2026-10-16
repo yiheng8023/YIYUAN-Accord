@@ -3408,6 +3408,100 @@
               "oldWorkerExit": "unknown",
               "quarantineActorAdoptionImprovement": "unverified"
             }
+          },
+          "s4CurrentSystemDecision": {
+            "status": "bounded-assessment-delivered-through-native-agent-takeover-cli-failure-retained",
+            "scope": "Existing S4 responsibility; no new case or whole-case admission.",
+            "originalCli": {
+              "source": "C:/Users/15521/.codex/backups/accord-r23-remaining-20261016-02/s4/execution/result.json",
+              "threadId": "01a1454d-f58c-7072-8a81-133736f2edf4",
+              "version": "0.163.0",
+              "wallSeconds": 153.77126510000016,
+              "exitCode": 124,
+              "forced": true,
+              "jobActiveAfter": 0,
+              "totalTokens": 668959,
+              "cachedInputTokens": 568832,
+              "uncachedInputTokens": 95814,
+              "outputTokens": 4313,
+              "originalHardTotalCap": 600000,
+              "originalWorkReserveLine": 570000,
+              "budgetPassed": false,
+              "finalReportDelivered": false,
+              "protectedRepositoryChanges": [],
+              "protectedExternalChanges": [],
+              "configAndPackageUnchanged": true,
+              "actualCatalogSnapshot": {
+                "source": "C:/Users/15521/.codex/backups/accord-r23-remaining-20261016-02/s4/actual-skill-exposure.json",
+                "bodyChars": 65029,
+                "catalogEntries": 173,
+                "extraDescriptions": 164,
+                "projectionFlags": [
+                  {
+                    "line": 7,
+                    "hostSkillsIncludeInstructions": true,
+                    "skillsIncludeInstructions": true
+                  }
+                ],
+                "limit": "Actual failed CLI0.163 subject only. Catalog visibility is separate from enabled capabilities; not minimal-host behavior or a cause of old B8/B9 differences."
+              }
+            },
+            "takeover": {
+              "source": "C:/Users/15521/.codex/backups/accord-r23-remaining-20261016-02/s4-takeover/product-spec-review.json",
+              "sha256": "590a5210afc6ec2bce977b450af4884d0f779c12c78b05bf9f9d0a8e442e0b2b",
+              "role": "Existing independent product/spec reviewer; prior review history and shared Accord environment disclosed. Original CLI does not receive its result or qualification.",
+              "secondsAfterExclusiveDestinationCreated": 86.89803552627563,
+              "reportKeys": 8,
+              "jsonPointersChecked": 35,
+              "locatorErrors": []
+            },
+            "implementationStandardsReview": {
+              "reviewer": "node_drift_review",
+              "context": "Reused prior independent review context; shared environment and Accord exposure disclosed.",
+              "verdict": "Continue bounded actual work; preserve existing CLI route and all original quality/identity/negative evidence. No whole R2/R3 or release verdict."
+            },
+            "protocolStepObservation": {
+              "source": "C:/Users/15521/.codex/backups/accord-r23-remaining-20261016-02/s4/protocol-source-response-proof.json",
+              "inspectAndReadActuallyExecuted": true,
+              "nativeRequest441CharsExact": true,
+              "inputStillQuarantined": true,
+              "fullExceptionHandlingAccepted": false,
+              "causalImprovement": "unverified; task and host version differ"
+            },
+            "burden": {
+              "actorExceededOriginalTotalBudget": true,
+              "wholeRootCost": "unknown",
+              "rootAndTakeoverWallAtQaSeconds": 721.6710999011993,
+              "rootAllocationSeconds": 360,
+              "qualificationPassed": false,
+              "scopeLimit": "Combined post-actor wall is not isolated Root CPU time; it does not establish the Root allocation passed. Whole current span and original failed execution limits remain distinct. No gain requirement or new release gate."
+            },
+            "retainedResourcePath": {
+              "source": "C:/Users/15521/.codex/backups/accord-r23-remaining-20261016-02/resource-path-readback.json",
+              "directoryObserved": true,
+              "listingStillDeniedWinerror5": true,
+              "aclOrOwnershipChanged": false
+            },
+            "nextDecision": "Clarify current route versus portable duty with unchanged binding, validators, independent ordinary CLI obligation and all historical case identities.",
+            "routeLesson": "Use an adequate existing native reviewer for bounded S4 judgment; reserve new ordinary CLI execution for a genuinely needed outcome, with forecasts based on that entry/context and repeated cached processing. Preserve original allocation failures rather than rerun for a pass."
+          },
+          "scopeEntryRouteDisposition": {
+            "status": "current-cli-binding-retained-portable-duty-clarified",
+            "source": "C:/Users/15521/.codex/backups/accord-r23-remaining-20261016-02/entry-binding-lineage-source.json",
+            "sourceSha256": "4958435998351fb2d3ebeb6b672afdf258fedfcfe0a13de0ab1fc57df9f47ccd",
+            "scopeIds": [
+              "v33-goal-authority-correction",
+              "v33-paused-work-recovery",
+              "v33-systemic-correction"
+            ],
+            "existingEntriesChanged": false,
+            "scopeCount": 17,
+            "caseCount": 10,
+            "existingTenCaseDefinitionDigestsUnchanged": true,
+            "separateOrdinaryCliRequirementPreserved": true,
+            "validatorsOrSchemaChanged": false,
+            "pastEvidenceReclassified": false,
+            "authority": "Existing r42 common-mechanism reuse and dynamic task-fit interpretation; not a new release condition or current-route replacement."
           }
         },
         "admissionReadCost": {
@@ -4163,7 +4257,7 @@
             "verification-and-value"
           ],
           "id": "v33-goal-authority-correction",
-          "rule": "Ordinary agreement plus a side question executes the already authorized work. Reconcile later goal/authority corrections and every affected result without losing valid work or unfinished responsibility. Actual inputs and interaction are bound per case; no fixed old sample or inferred all-entry coverage."
+          "rule": "Ordinary agreement plus a side question executes the already authorized work. Reconcile later goal/authority corrections and every affected result without losing valid work or unfinished responsibility. Actual inputs and interaction are bound per case; no fixed old sample or inferred all-entry coverage. The declared cx-cli entry remains a binding admission condition for the currently selected verification route; it is not a permanent CLI-exclusive definition of the portable duty. A future route change needs an actual task-fit basis, sourced common-mechanism and material-difference review, and consistent prospective scope/case/execution identities before effects. Preserve the separate ordinary CLI delivery obligation, every behavior/quality/scenario requirement and ended definitions/failures. This explanation does not replace the current entry, relabel SDK evidence or retroactively qualify an ended instance."
         },
         {
           "host": "codex",
@@ -4201,7 +4295,7 @@
             "verification-and-value"
           ],
           "id": "v33-paused-work-recovery",
-          "rule": "Respect an explicit pause and unresolved decision through supported same-task continuity. Continue only under actual sufficient authority after effects/state reconciliation, preserving any still-missing decision; complete only after necessary decisions and results are accounted for. This is not scheduling or proof of autonomous carrier transfer."
+          "rule": "Respect an explicit pause and unresolved decision through supported same-task continuity. Continue only under actual sufficient authority after effects/state reconciliation, preserving any still-missing decision; complete only after necessary decisions and results are accounted for. This is not scheduling or proof of autonomous carrier transfer. The declared cx-cli entry remains a binding admission condition for the currently selected verification route; it is not a permanent CLI-exclusive definition of the portable duty. A future route change needs an actual task-fit basis, sourced common-mechanism and material-difference review, and consistent prospective scope/case/execution identities before effects. Preserve the separate ordinary CLI delivery obligation, every behavior/quality/scenario requirement and ended definitions/failures. This explanation does not replace the current entry, relabel SDK evidence or retroactively qualify an ended instance."
         },
         {
           "host": "codex",
@@ -4233,7 +4327,7 @@
             "verification-and-value"
           ],
           "id": "v33-systemic-correction",
-          "rule": "One current decision must correct all affected earlier artifacts and preserve still-valid work within the same episode. Retain immutable source and clearly labelled history; the claim does not establish arbitrary-domain or full-system invariance. Ended instance-specific execution/configuration conditions remain at their immutable declaration and historical record. New useful episodes bind their own current conditions before dispatch; this scope retains the same correction, source preservation, quality and scenario requirements."
+          "rule": "One current decision must correct all affected earlier artifacts and preserve still-valid work within the same episode. Retain immutable source and clearly labelled history; the claim does not establish arbitrary-domain or full-system invariance. Ended instance-specific execution/configuration conditions remain at their immutable declaration and historical record. New useful episodes bind their own current conditions before dispatch; this scope retains the same correction, source preservation, quality and scenario requirements. The declared cx-cli entry remains a binding admission condition for the currently selected verification route; it is not a permanent CLI-exclusive definition of the portable duty. A future route change needs an actual task-fit basis, sourced common-mechanism and material-difference review, and consistent prospective scope/case/execution identities before effects. Preserve the separate ordinary CLI delivery obligation, every behavior/quality/scenario requirement and ended definitions/failures. This explanation does not replace the current entry, relabel SDK evidence or retroactively qualify an ended instance."
         },
         {
           "id": "v33-openai-entry-applicability",
