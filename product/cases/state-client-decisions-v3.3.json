@@ -1,7 +1,7 @@
 {
   "schema": "yiyuan-state-client-prospective-case-draft/v1",
   "caseId": "v33-state-client-decisions-01",
-  "status": "prepared-not-authorized",
+  "status": "historical-template-current-derivative-closed",
   "purpose": "Maintainer representative acceptance: consume the existing calling guide into a usable client decision table and revise it after one explicitly authorized sample requirement change.",
   "boundaries": {
     "materialClassification": "SYNTHETIC",
@@ -726,5 +726,12 @@
       "New formal case ID; raw Git guide binding; explicit state enum; semantic text review instead of literal sentences; equivalent retention allowed."
     ],
     "claimLimit": "Preparation and oracle checks do not establish ordinary behavior or admission."
+  },
+  "currentDisposition": {
+    "originalTemplateExecuted": false,
+    "currentDerivative": "private:accord-state-client-current-20261017-01",
+    "businessArtifactsVerified": true,
+    "originalDerivativeExecutionPassed": false,
+    "reason": "Current-guide derivative delivered both stages of material; stage2 ended on output limit. Reuse verified outputs and retain the failed execution. Do not repeat this closed material task for a green terminal. Old source/authority/oracle remain historical; W02 legitimate non-intervention was corrected before dispatch."
   }
 }

@@ -3826,7 +3826,8 @@
               "standards"
             ],
             "ownedProcessRecords": 25,
-            "scope": "Current package refresh of the same two historically admitted controlled SDK cases. Exact native input/state, SessionEnd order, exposure and resource sources checked; no new case or whole-host/ordinary-agent/R2R3 completion."
+            "scope": "Current package refresh of the same two historically admitted controlled SDK cases. Exact native input/state, SessionEnd order, exposure and resource sources checked; no new case or whole-host/ordinary-agent/R2R3 completion.",
+            "laterCandidateApplicability": "Retains its original22/f755/c170 qualification. Changed full-package candidate23 is not automatically admitted; refresh only at a necessary final candidate boundary, not after every progress record."
           },
           "boundedNativeEvidenceCorrection": {
             "source": "private:accord-native-evidence-bound-20261017-01/correction.json",
@@ -3838,14 +3839,68 @@
             "fullSourceBudgetUnchanged": true,
             "currentActualAdoptionVerified": false,
             "qualificationPassed": false,
-            "remaining": "Exact CI, local package adoption and ordinary client-material delivery pending; original failures and fullR2R3 remain.",
+            "remaining": "Owning Desktop MCP connection still22; user restart then actual23 adoption check. FullR2R3 still incomplete.",
             "ciPackagingCorrection": {
               "source": "private:accord-native-evidence-bound-20261017-01/ci-package-identity-correction.json",
               "sha256": "c036442e1176152dec145126df786feddec6d02b2ff05ef61caf0397ce049496",
               "failedRunId": "38999745341",
               "failedCommit": "12887461d838fbc5217227d155e9b54133169fc9",
               "sourceMembersMatched": 25
+            },
+            "ci": {
+              "head": "3d3b7f5fe57a020d70ccedd9dfe4c5d94dafd7d2",
+              "runId": "38999998424",
+              "status": "completed",
+              "conclusion": "success",
+              "jobsPassed": 11,
+              "jobsTotal": 11
+            },
+            "installationFollowup": {
+              "source": "private:accord-native-evidence-bound-20261017-01/post-install23-followup.json",
+              "sha256": "b0b00f98f8f4199b9e346911eed4f175c46866478917ed51f4739b5c96ddd498",
+              "installedVersion": "3.3.0-dev.1+codex.20261017033947",
+              "actualRootMcpVersion": "3.3.0-dev.1+codex.20261016203116",
+              "actualRootMcpPid": 38988,
+              "requiresOwningClientRefresh": true
             }
+          },
+          "clientDecisionDelivery": {
+            "source": "private:accord-state-client-current-20261017-01/closeout.json",
+            "sha256": "3220967e6f6d76da326a42d6ac0c840f4d83502f3a88b2f3f77bc7b3697028bd",
+            "sourceRevision": "3d3b7f5fe57a020d70ccedd9dfe4c5d94dafd7d2",
+            "actorThreadId": "01a147fd-7b5d-7380-924e-2ed8f7842527",
+            "actorPackageVersion": "3.3.0-dev.1+codex.20261016203116",
+            "actorModel": "gpt-6.1-sol",
+            "actorEffort": "high",
+            "businessArtifactsVerified": true,
+            "stage1NaturalExit0": true,
+            "stage2ForcedExit124": true,
+            "stage2Failure": "usage-limit: observed cumulative output17313 exceeded16000; no normal second terminal",
+            "observedNativeUsage": {
+              "totalTokens": 562278,
+              "uncachedInputTokens": 71365,
+              "outputTokens": 17313,
+              "scope": "one source thread, latest observation; not complete Root cost"
+            },
+            "rootQaSeconds": 429.9790451526642,
+            "rootQaBudgetSeconds": 600,
+            "rootReserveSeconds": 170.02095484733582,
+            "protectedSharedFilesUnchanged": 218,
+            "remainingOwnedJobProcesses": 0,
+            "artifacts": [
+              {
+                "path": "private:accord-state-client-current-20261017-01/retained-work/client-decisions.json",
+                "sha256": "7886439b151bf718b800ddec967310cbf0a5bdeb809dc5b36b495c70a6e6a31e"
+              },
+              {
+                "path": "private:accord-state-client-current-20261017-01/retained-work/client-note.md",
+                "sha256": "931040221c0c21869438114acd56a4bc3c5b0454a0e5fdd9c45084d5df7219e6"
+              }
+            ],
+            "semanticReviewSha256": "0feae739e0d6be2f2363c24d463c0badcef4ade8527620f951214cc2ce873669",
+            "allocationObservationSha256": "d6e6163fb96b29f55e5f7cd21081cd8fd92ab1ffd42f3809ea54d588419961ee",
+            "qualificationPassed": false,
+            "scope": "First material delivery plus linked W02 revision; synthetic calls remained inert. Additional memory/22 operating guidance read is disclosed. Content reuse and verified transfer do not relabel forced termination, prove actual pause/recovery, candidate23 behavior or wholeR2R3."
           }
         },
         "admissionReadCost": {
