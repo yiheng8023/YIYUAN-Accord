@@ -246,13 +246,14 @@ class EntryTests(unittest.TestCase):
             self.assertIsNone(after["workspaceRegistrations"])
             self.assertNotIn("do-not-emit", json.dumps(before))
 
-    def prepared(self, root, case=None):
+    def prepared(self, root, case=None, *, controls=None):
         package = root / "package"
         (package / "runtime").mkdir(parents=True)
         (package / "runtime/task-checkpoint.cjs").write_text("// fixture", encoding="utf-8")
         args = argparse.Namespace(package=str(package), evidence=str(root / "evidence"), workspace=str(root / "work"),
                                   codex=PYTHON, node=PYTHON, model="explicit-offline-model",
                                   reasoning="high", timeout=10, windows_sandbox="elevated")
+        vars(args).update(controls or {})
         fake = subprocess.CompletedProcess([], 0, b"app-server --ephemeral --ignore-user-config --dangerously-bypass-hook-trust --sandbox --output-last-message", b"")
         with patch.object(entry.subprocess, "run", return_value=fake) as calls:
             entry.prepare(args, app_server_case=case)
@@ -286,7 +287,7 @@ class EntryTests(unittest.TestCase):
         entry.save(metadata_path, metadata)
 
     def prepared_persistent(self, root, case_path=None, *, native_hooks=False, installed=False, admission_case=None,
-                            composition=None):
+                            composition=None, controls=None):
         package = (root / "home/plugins/cache/yiyuan-accord/yiyuan-accord-codex" / PACKAGE_VERSION
                    if installed else root / "package")
         if native_hooks:
@@ -302,6 +303,7 @@ class EntryTests(unittest.TestCase):
             timeout=600, turn_timeout=180, recovery_timeout=20, windows_sandbox="elevated",
             native_package_hooks=native_hooks, installed_plugin="yiyuan-accord-codex@yiyuan-accord" if installed else None,
             admission_case=admission_case)
+        vars(args).update(controls or {})
         case_path = case_path or SCRIPT.parents[1] / "product/cases/coordination-v3.3.json"
         help_exec = subprocess.CompletedProcess([], 0, b"--dangerously-bypass-hook-trust --sandbox --output-last-message --ignore-user-config --disable", b"")
         help_resume = subprocess.CompletedProcess([], 0, b"--json --output-last-message --model", b"")
@@ -507,6 +509,285 @@ class EntryTests(unittest.TestCase):
                     entry._hook_configuration(manifest)
                 with self.assertRaisesRegex(ValueError, "cannot use the checkpoint wrapper"):
                     entry.hook(argparse.Namespace(evidence=manifest["evidence"], event="Stop"))
+
+    def control_skills(self, root):
+        paths = []
+        for name in ('one', 'two', 'unselected'):
+            path = root / 'synthetic-skills' / name / 'SKILL.md'
+            path.parent.mkdir(parents=True)
+            path.write_text('---\nname: ' + name + '\ndescription: offline fixture\n---\nLocal only.\n', encoding='utf-8')
+            paths.append(path)
+        return paths
+
+    def parsed_cli_config(self, command):
+        # Model the native command boundary, then parse actual TOML overrides.
+        # This checks values and exact scope, not keyword presence.
+        self.assertEqual(command[1], 'exec')
+        self.assertNotIn('-c', command[:2])
+        parsed = {}
+        for index, argument in enumerate(command):
+            if argument == '-c':
+                value = entry.tomllib.loads(command[index + 1])
+                self.assertFalse(set(parsed) & set(value))
+                parsed.update(value)
+        return parsed
+
+    def test_process_controls_default_argv_and_manifest_remain_legacy(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest = self.prepared(root)
+            self.assertNotIn('controls', manifest)
+            self.assertNotIn('controlsSha256', manifest)
+            self.assertEqual(entry._prepare_controls(argparse.Namespace(), 'exec'), {})
+            self.assertEqual(entry._prepare_controls(argparse.Namespace(exclude_skill=[], project_doc_max_bytes=None), 'exec'), {})
+            expected = dict(manifest)
+            expected.pop('command')
+            self.assertEqual(manifest['command'], entry.build_command(expected))
+            config = self.parsed_cli_config(manifest['command'])
+            self.assertNotIn('skills', config)
+            self.assertNotIn('project_doc_max_bytes', config)
+            self.assertEqual(config['approval_policy'], 'never')
+        self.test_sandbox_mode_preserves_legacy_default_and_binds_initial_and_resume()
+
+    def test_process_controls_reject_invalid_parameters_before_any_probe_or_root(self):
+        invalid = [dict(project_doc_max_bytes=value) for value in (-1, True, 1.5, '42', 2**63)]
+        invalid += [dict(exclude_skill=value) for value in ('SKILL.md', False, [None], [''], ['relative/SKILL.md'])]
+        for controls in invalid:
+            with self.subTest(controls=controls), patch.object(entry.subprocess, 'run') as probe, \
+                    patch.object(entry, 'ordinary_dir') as directory, patch.object(entry, 'WindowsJob') as job:
+                with self.assertRaises((ValueError, OSError)):
+                    entry.prepare(argparse.Namespace(**controls))
+                probe.assert_not_called()
+                directory.assert_not_called()
+                job.assert_not_called()
+        with patch.object(entry.subprocess, 'run') as probe:
+            with self.assertRaisesRegex(ValueError, 'require a CLI'):
+                entry.prepare(argparse.Namespace(project_doc_max_bytes=0), app_server_case={})
+            probe.assert_not_called()
+
+    def test_process_controls_reject_missing_directory_duplicate_and_hardlink_skills(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            one, two, _ = self.control_skills(root)
+            wrong = root / 'wrong.md'; wrong.write_text('fixture')
+            hard = root / 'hard' / 'SKILL.md'; hard.parent.mkdir()
+            os.link(two, hard)
+            cases = [[str(root / 'missing/SKILL.md')], [str(one.parent)], [str(wrong)],
+                     [str(one), str(one)], [str(hard)]]
+            for paths in cases:
+                with self.subTest(paths=paths), patch.object(entry.subprocess, 'run') as probe:
+                    with self.assertRaises((ValueError, OSError)):
+                        entry.prepare(argparse.Namespace(exclude_skill=paths))
+                    probe.assert_not_called()
+                    self.assertFalse((root / 'evidence').exists())
+
+    def test_process_controls_prepare_binds_exact_identities_and_native_toml(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            one, two, other = self.control_skills(root)
+            before = {p: (p.read_bytes(), p.stat().st_mtime_ns) for p in (one, two, other)}
+            manifest = self.prepared(root, controls={'exclude_skill': [str(two), str(one)], 'project_doc_max_bytes': 0})
+            self.assertEqual([row['path'] for row in manifest['controls']['excludedSkills']], [str(two), str(one)])
+            self.assertEqual(manifest['controls']['excludedSkills'], [entry._skill_identity(str(two)), entry._skill_identity(str(one))])
+            self.assertEqual(manifest['controlsSha256'], entry._controls_sha256(manifest['controls']))
+            config = self.parsed_cli_config(manifest['command'])
+            self.assertEqual(config['skills']['config'], [{'path': str(two), 'enabled': False}, {'path': str(one), 'enabled': False}])
+            self.assertEqual(config['project_doc_max_bytes'], 0)
+            self.assertEqual({p: (p.read_bytes(), p.stat().st_mtime_ns) for p in before}, before)
+
+    def test_process_controls_document_only_and_skill_only_have_no_implicit_overrides(self):
+        for kind in ('doc', 'skill'):
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve(); one, _, _ = self.control_skills(root)
+                controls = {'project_doc_max_bytes': 2**63-1} if kind == 'doc' else {'exclude_skill': [str(one)]}
+                manifest = self.prepared(root, controls=controls)
+                config = self.parsed_cli_config(manifest['command'])
+                if kind == 'doc':
+                    self.assertEqual(config['project_doc_max_bytes'], 2**63-1)
+                    self.assertNotIn('skills', config)
+                else:
+                    self.assertEqual(config['skills']['config'], [{'path': str(one), 'enabled': False}])
+                    self.assertNotIn('project_doc_max_bytes', config)
+
+    def test_process_controls_source_and_parameter_drift_refuse_before_run_receipt(self):
+        for mutation in ('content', 'mtime', 'replacement', 'missing', 'parameter', 'rehashed-parameter', 'command'):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve(); one, _, _ = self.control_skills(root)
+                manifest = self.prepared(root, controls={'exclude_skill': [str(one)], 'project_doc_max_bytes': 64})
+                if mutation == 'content': one.write_text('changed')
+                elif mutation == 'mtime': os.utime(one, ns=(one.stat().st_atime_ns, one.stat().st_mtime_ns+1000000000))
+                elif mutation == 'replacement':
+                    stat = one.stat(); replacement = one.with_name('new.md'); replacement.write_bytes(one.read_bytes())
+                    os.utime(replacement, ns=(stat.st_atime_ns, stat.st_mtime_ns)); os.replace(replacement, one)
+                elif mutation == 'missing': one.unlink()
+                elif mutation in ('parameter', 'rehashed-parameter'):
+                    manifest['controls']['projectDocMaxBytes'] = 65
+                    if mutation == 'rehashed-parameter': manifest['controlsSha256'] = entry._controls_sha256(manifest['controls'])
+                else: manifest['command'].insert(-1, '-c'); manifest['command'].insert(-1, 'project_doc_max_bytes=9')
+                entry.save(root / 'evidence/manifest.json', manifest)
+                with patch.object(entry.subprocess, 'Popen') as process, patch.object(entry, 'WindowsJob') as job, \
+                        patch.object(entry, 'shared_config_snapshot') as shared:
+                    with self.assertRaises((ValueError, OSError)):
+                        entry.run(argparse.Namespace(evidence=manifest['evidence']))
+                    process.assert_not_called(); job.assert_not_called(); shared.assert_not_called()
+                self.assertFalse((root / 'evidence/run-started.json').exists())
+
+    def test_process_controls_preparation_drift_is_not_silently_adopted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve(); one, _, _ = self.control_skills(root)
+            package = root / 'package'; (package / 'runtime').mkdir(parents=True)
+            (package / 'runtime/task-checkpoint.cjs').write_text('// fixture')
+            args = argparse.Namespace(package=str(package), evidence=str(root/'evidence'), workspace=str(root/'work'),
+                codex=PYTHON, node=PYTHON, model='offline', reasoning='high', timeout=10,
+                windows_sandbox='elevated', exclude_skill=[str(one)], project_doc_max_bytes=0)
+            def mutate(*args, **kwargs):
+                one.write_text('changed during help probe')
+                return subprocess.CompletedProcess([], 0, b'--ephemeral --ignore-user-config --dangerously-bypass-hook-trust --sandbox --output-last-message', b'')
+            with patch.object(entry.subprocess, 'run', side_effect=mutate), patch.object(entry.subprocess, 'Popen') as process:
+                with self.assertRaisesRegex(ValueError, 'prepared excluded Skill changed'):
+                    entry.prepare(args)
+                process.assert_not_called()
+            self.assertFalse((root/'evidence').exists())
+            self.assertFalse((root/'work').exists())
+
+    def test_process_controls_initial_resume_actual_dispatch_and_receipts_match_manifest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve(); one, two, other = self.control_skills(root)
+            manifest = self.prepared_persistent(root, controls={'exclude_skill': [str(one), str(two)], 'project_doc_max_bytes': 17})
+            actual = []
+            process = Mock(returncode=0); process.poll.return_value = 0
+            job = Mock(); job.sample.return_value = {'activeProcesses': 0}
+            def spawn(command, **kwargs):
+                actual.append(list(command))
+                stage = len(actual)
+                events = [{'type':'thread.started','thread_id':'native-thread'}, {'type':'turn.started'},
+                          {'type':'item.completed','item':{'type':'agent_message','text':'done'}},
+                          {'type':'turn.completed','usage':{'input_tokens':100,'cached_input_tokens':0,'output_tokens':1}}]
+                kwargs['stdout'].write(('\n'.join(map(json.dumps, events))+'\n').encode())
+                (root / f'evidence/last-message-{stage}.txt').write_text('done')
+                return process
+            with patch.object(entry.subprocess, 'Popen', side_effect=spawn), patch.object(entry, 'WindowsJob', return_value=job):
+                receipts = [entry._run_persistent_stage(manifest, i, 'native-thread' if i else None, {}, time.monotonic()+10) for i in (0,1)]
+            initial = manifest['initialCommand']
+            resumed = list(manifest['stageCommandTemplates'][1]); resumed[-2] = 'native-thread'
+            self.assertEqual(actual, [initial, resumed])
+            for receipt, command in zip(receipts, actual):
+                self.assertTrue(receipt['valid'], receipt)
+                self.assertEqual(receipt['command'], command)
+                config = self.parsed_cli_config(command)
+                self.assertEqual(config['skills']['config'], [{'path':str(one),'enabled':False},{'path':str(two),'enabled':False}])
+                self.assertEqual(config['project_doc_max_bytes'], 17)
+                self.assertEqual(config['approval_policy'], 'never')
+                self.assertEqual(config['sandbox_mode'], 'workspace-write')
+            self.assertEqual(job.close.call_count, 2)
+            self.assertEqual(other.read_text().splitlines()[1], 'name: unselected')
+
+    def test_process_controls_resume_drift_rejects_before_resources(self):
+        for mutation in ('skill', 'controls', 'template', 'removed'):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve(); one, _, _ = self.control_skills(root)
+                manifest = self.prepared_persistent(root, controls={'exclude_skill':[str(one)], 'project_doc_max_bytes': 20})
+                if mutation == 'skill': one.write_text('changed between turns')
+                elif mutation == 'controls': manifest['controls']['projectDocMaxBytes'] = 21
+                elif mutation == 'template': manifest['stageCommandTemplates'][1].insert(-1, 'unexpected')
+                else: manifest.pop('controls'); manifest.pop('controlsSha256')
+                failed = []
+                with patch.object(entry.subprocess, 'Popen') as process, patch.object(entry, 'WindowsJob') as job:
+                    with self.assertRaises((ValueError, OSError)):
+                        entry._run_persistent_stage(manifest, 1, 'native-thread', {}, time.monotonic()+10, preflight_failure=failed)
+                    process.assert_not_called(); job.assert_not_called()
+                self.assertEqual(failed, [True])
+
+    def test_process_controls_cli_arguments_reach_preparation_without_passthrough(self):
+        argv = ['observe_codex_entry.py', 'prepare']
+        for key in ('package', 'evidence', 'workspace', 'codex', 'node', 'model', 'reasoning'):
+            argv += ['--'+key, 'offline-'+key]
+        argv += ['--timeout','10','--windows-sandbox','elevated', '--exclude-skill','first/SKILL.md',
+                 '--exclude-skill','second/SKILL.md', '--project-doc-max-bytes','0']
+        with patch.object(sys, 'argv', argv), patch.object(entry, 'prepare', return_value={'prepared': True}) as prepare, \
+                patch.object(sys, 'stdout'):
+            entry.main()
+        args = prepare.call_args.args[0]
+        self.assertEqual(args.exclude_skill, ['first/SKILL.md', 'second/SKILL.md'])
+        self.assertEqual(args.project_doc_max_bytes, 0)
+        with patch.object(sys, 'argv', argv + ['--config', 'arbitrary=true']), patch.object(sys, 'stderr'), \
+                patch.object(entry, 'prepare') as prepare:
+            with self.assertRaises(SystemExit) as rejected:
+                entry.main()
+            self.assertEqual(rejected.exception.code, 2)
+            prepare.assert_not_called()
+
+    def test_process_controls_malformed_manifest_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve(); one, _, _ = self.control_skills(root)
+            manifest = self.prepared(root, controls={'exclude_skill':[str(one)]})
+            for mutation in ('unknown', 'boolean', 'identity', 'missing-binding', 'wrong-binding'):
+                changed = json.loads(json.dumps(manifest))
+                if mutation == 'unknown': changed['controls']['toml'] = 'arbitrary=true'
+                elif mutation == 'boolean': changed['controls']['projectDocMaxBytes'] = True
+                elif mutation == 'identity': changed['controls']['excludedSkills'][0]['sha256'] = 'unknown'
+                elif mutation == 'missing-binding': changed.pop('controlsSha256')
+                else: changed['controlsSha256'] = '0'*64
+                entry.save(root/'evidence/manifest.json', changed)
+                with self.subTest(mutation=mutation), self.assertRaises(ValueError):
+                    entry.load_manifest(manifest['evidence'])
+
+    def test_process_controls_ephemeral_dispatch_uses_manifest_argv(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve(); one, _, _ = self.control_skills(root)
+            manifest = self.prepared(root, controls={'exclude_skill':[str(one)], 'project_doc_max_bytes': 7})
+            process = Mock(pid=123, returncode=0); process.poll.return_value = 0
+            job = Mock(); job.sample.return_value = {'activeProcesses':0}
+            actual = []
+            def spawn(command, **kwargs):
+                actual.append(list(command))
+                self.assertEqual(kwargs['cwd'], manifest['workspace'])
+                return process
+            observation = {'state':'observed','sha256':'offline'}
+            with patch.dict(os.environ, {'CODEX_HOME':str(root/'isolated-home')}), \
+                    patch.object(entry, 'shared_config_snapshot', return_value=observation), \
+                    patch.object(entry, 'inspect', return_value={'runtimeStateResidue':[]}), \
+                    patch.object(entry, 'WindowsJob', return_value=job), patch.object(entry.subprocess, 'Popen', side_effect=spawn):
+                result = entry.run(argparse.Namespace(evidence=manifest['evidence']))
+            self.assertEqual(actual, [manifest['command']])
+            self.assertEqual(self.parsed_cli_config(actual[0])['skills']['config'], [{'path':str(one),'enabled':False}])
+            self.assertEqual(self.parsed_cli_config(actual[0])['project_doc_max_bytes'], 7)
+            self.assertEqual(json.loads((root/'evidence/run-started.json').read_bytes())['command'], actual[0])
+            self.assertEqual(result['process']['remainingOwnedProcesses'], 0)
+            job.close.assert_called_once()
+
+    def test_process_controls_direct_hook_modes_share_the_same_native_overrides(self):
+        for mode in ('native', 'installed'):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve(); one, _, _ = self.control_skills(root)
+                with patch.dict(os.environ, {'CODEX_HOME': str(root/'home')}):
+                    manifest = self.prepared_persistent(root, native_hooks=mode=='native', installed=mode=='installed',
+                        controls={'exclude_skill':[str(one)], 'project_doc_max_bytes':11})
+                for stage in (0,1):
+                    command = entry.build_command(manifest, stage=stage, thread_id='thread' if stage else None)
+                    config = self.parsed_cli_config(command)
+                    self.assertEqual(config['skills']['config'], [{'path':str(one),'enabled':False}])
+                    self.assertEqual(config['project_doc_max_bytes'], 11)
+                    self.assertEqual(config['approval_policy'], 'never')
+                execution = entry._execution_settings({**manifest, 'nativeVersion':'codex-cli 0.156.1'})
+                self.assertEqual(execution['controls'], manifest['controls'])
+                execution['controls']['projectDocMaxBytes'] = 12
+                self.assertEqual(manifest['controls']['projectDocMaxBytes'], 11)
+
+    def test_process_controls_drift_in_final_dispatch_window_releases_job_without_popen(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve(); one, _, _ = self.control_skills(root)
+            manifest = self.prepared_persistent(root, controls={'exclude_skill':[str(one)]})
+            job = Mock(); job.sample.return_value = {'activeProcesses':0}
+            def changed_after_preflight():
+                one.write_text('changed before dispatch')
+                return job
+            with patch.object(entry, 'WindowsJob', side_effect=changed_after_preflight), patch.object(entry.subprocess, 'Popen') as process:
+                receipt = entry._run_persistent_stage(manifest, 0, None, {}, time.monotonic()+10)
+                process.assert_not_called()
+            self.assertFalse(receipt['valid'])
+            self.assertIn('prepared excluded Skill changed', receipt['failure'])
+            job.close.assert_called_once()
 
     def sandbox_manifest(self):
         # Pure offline declaration: no native inventory, sandbox or fixture roots.

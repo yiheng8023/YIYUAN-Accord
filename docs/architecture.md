@@ -780,6 +780,21 @@ trust or inherit the whole caller profile. The observer continues to set
 setting, and the non-default value is included in the manifest and execution
 binding.
 
+A CLI preparation can also request `--exclude-skill <absolute SKILL.md>`
+(repeatable) and `--project-doc-max-bytes <nonnegative integer>`. These optional
+controls bind the selected ordinary file identities and exact values in the
+manifest and execution settings. Preparation, source checks and final dispatch
+checks reject changed controls or files; initial and resume commands place their
+native `skills.config` exclusions and `project_doc_max_bytes` at the same command
+layer as the existing overrides. Omitting both preserves the legacy command.
+This is a precise file-selector interface, not arbitrary configuration forwarding
+or permission to change shared settings. Native Codex 0.163.0 resolves Skill rules
+across User and SessionFlags layers: a distinct false rule preserves an unrelated
+User-disabled selector. The observer does not implement its own merger.
+`project_doc_max_bytes=0` does not establish isolation from global AGENTS, account
+state or every instruction source. Actual model exposure and outcomes still need
+their own observations; file hashes do not eliminate the final filesystem race.
+
 A persistent case requires both `--turn-timeout` and `--recovery-timeout`, with
 integer values satisfying `1 <= turn <= work` and `1 <= recovery <= 300`.
 The required `--timeout` work window is limited to 1–900 seconds by CLI prepare.

@@ -237,6 +237,7 @@ def load_manifest(evidence, *, require_workspace=True):
     protocol = manifest.get("entryProtocol", "exec")
     _hook_mode(manifest)
     _sandbox_mode(manifest)
+    _control_configuration(manifest)
     if protocol not in ("exec", "exec-resume", "app-server"):
         raise ValueError("unsupported entry protocol")
     if (protocol == "exec-resume" and manifest.get("caseSchema", "yiyuan-accord-coordination-case/v1")
@@ -288,6 +289,107 @@ def _toml_value(value):
     if isinstance(value, (str, bool)) or type(value) is int:
         return json.dumps(value, ensure_ascii=False)
     raise ValueError("hook field cannot be faithfully projected to TOML")
+
+
+def _skill_identity(value):
+    """Bind one explicitly named file; never enumerate a Skill directory."""
+    if not isinstance(value, str) or not value or "\x00" in value:
+        raise ValueError("exclude-skill requires an absolute SKILL.md file")
+    path = Path(value)
+    if not path.is_absolute() or path.name != "SKILL.md" or path.resolve() != path:
+        raise ValueError("exclude-skill requires an absolute ordinary SKILL.md file")
+    ordinary_dir(path.parent)  # Also rejects aliases in ancestor directories.
+    before = path.lstat()
+    sha256 = digest(path)
+    after = path.lstat()
+    fields = ("st_dev", "st_ino", "st_size", "st_mtime_ns")
+    if any(getattr(before, key) != getattr(after, key) for key in fields):
+        raise ValueError("excluded Skill changed while binding")
+    return {"path": str(path), "sha256": sha256, "size": after.st_size,
+            "mtimeNs": after.st_mtime_ns, "device": after.st_dev, "inode": after.st_ino}
+
+
+def _controls_sha256(controls):
+    return hashlib.sha256(json.dumps(controls, sort_keys=True, separators=(",", ":"),
+                                     ensure_ascii=True, allow_nan=False).encode("utf-8")).hexdigest()
+
+
+def _prepare_controls(args, protocol):
+    excluded = getattr(args, "exclude_skill", None)
+    maximum = getattr(args, "project_doc_max_bytes", None)
+    if excluded is not None and (not isinstance(excluded, (list, tuple))
+                                 or any(not isinstance(item, str) for item in excluded)):
+        raise ValueError("exclude-skill requires a list of explicit paths")
+    if maximum is not None and (type(maximum) is not int or not 0 <= maximum <= 2**63 - 1):
+        raise ValueError("project-doc-max-bytes must be an integer in 0..2^63-1")
+    if not excluded and maximum is None:
+        return {}
+    if protocol not in ("exec", "exec-resume"):
+        raise ValueError("process controls require a CLI case")
+    skills = [_skill_identity(item) for item in (excluded or [])]
+    if len({os.path.normcase(item["path"]) for item in skills}) != len(skills):
+        raise ValueError("duplicate excluded Skill path")
+    controls = {"excludedSkills": skills}
+    if maximum is not None:
+        controls["projectDocMaxBytes"] = maximum
+    return {"controls": controls, "controlsSha256": _controls_sha256(controls)}
+
+
+def _control_configuration(manifest, *, verify_sources=False):
+    if "controls" not in manifest and "controlsSha256" not in manifest:
+        return []  # Keep legacy manifests and default argv unchanged.
+    controls = manifest.get("controls")
+    if (manifest.get("entryProtocol", "exec") not in ("exec", "exec-resume")
+            or not isinstance(controls, dict) or "excludedSkills" not in controls
+            or set(controls) - {"excludedSkills", "projectDocMaxBytes"}
+            or not isinstance(controls["excludedSkills"], list)):
+        raise ValueError("invalid process controls")
+    maximum = controls.get("projectDocMaxBytes")
+    if "projectDocMaxBytes" in controls and (type(maximum) is not int or not 0 <= maximum <= 2**63 - 1):
+        raise ValueError("invalid project-doc-max-bytes control")
+    skills = controls["excludedSkills"]
+    if not skills and maximum is None:
+        raise ValueError("empty process controls")
+    seen = set()
+    for item in skills:
+        if (not isinstance(item, dict)
+                or set(item) != {"path", "sha256", "size", "mtimeNs", "device", "inode"}
+                or not isinstance(item["path"], str) or "\x00" in item["path"]
+                or not Path(item["path"]).is_absolute() or Path(item["path"]).name != "SKILL.md"
+                or not isinstance(item["sha256"], str) or not re.fullmatch(r"[0-9a-f]{64}", item["sha256"])
+                or any(type(item[key]) is not int or item[key] < 0 for key in ("size", "mtimeNs", "device", "inode"))):
+            raise ValueError("invalid excluded Skill identity")
+        key = os.path.normcase(str(Path(item["path"])))
+        if key in seen:
+            raise ValueError("duplicate excluded Skill path")
+        seen.add(key)
+    if manifest.get("controlsSha256") != _controls_sha256(controls):
+        raise ValueError("prepared process controls changed")
+    if verify_sources:
+        for item in skills:
+            if _skill_identity(item["path"]) != item:
+                raise ValueError("prepared excluded Skill changed; prepare a fresh observation")
+    config = []
+    if skills:
+        config += ["-c", "skills.config=" + _toml_value([
+            {"path": item["path"], "enabled": False} for item in skills])]
+    if maximum is not None:
+        config += ["-c", "project_doc_max_bytes=" + str(maximum)]
+    return config
+
+
+def _verify_control_stage(manifest, stage, thread_id):
+    _control_configuration(manifest, verify_sources=True)
+    if "controls" not in manifest and "stageCommandTemplates" not in manifest:
+        return
+    command = build_command(manifest, stage=stage, thread_id=thread_id)
+    expected = list(manifest["stageCommandTemplates"][stage])
+    if stage:
+        if expected[-2] != "__OBSERVED_NATIVE_THREAD_ID__":
+            raise ValueError("prepared control stage template changed")
+        expected[-2] = thread_id
+    if command != expected or (stage == 0 and command != manifest["initialCommand"]):
+        raise ValueError("prepared stage command changed")
 
 
 def _native_hook_shell():
@@ -454,6 +556,7 @@ def _native_hook_projection(package, node):
 
 def _verify_prepared_sources(manifest, *, inventory_label="run-preflight"):
     mode = _hook_mode(manifest)
+    _control_configuration(manifest, verify_sources=True)
     installed_observation = None
     for key, expected in manifest["sourceHashes"].items():
         if digest(manifest[key], os_shell=key == "hookShell") != expected:
@@ -497,6 +600,9 @@ def _execution_settings(manifest):
                      caseFile=Path(manifest["case"]).relative_to(project).as_posix())
     if sandbox_mode != "workspace-write":
         execution["sandboxMode"] = sandbox_mode
+    if "controls" in manifest:
+        _control_configuration(manifest)
+        execution["controls"] = json.loads(json.dumps(manifest["controls"]))
     return execution
 
 
@@ -576,6 +682,7 @@ def build_command(manifest, *, stage=0, thread_id=None):
     if protocol not in ("exec", "exec-resume"):
         raise ValueError("CLI command cannot represent an App Server case")
     sandbox_mode = _sandbox_mode(manifest)
+    controls = _control_configuration(manifest)
     installed = _hook_mode(manifest) == "installed-plugin"
     hooks = None if installed else _hook_configuration(manifest)
     trust = [] if installed else ["--dangerously-bypass-hook-trust"]
@@ -592,6 +699,7 @@ def build_command(manifest, *, stage=0, thread_id=None):
                   "-c", "windows.sandbox=" + json.dumps(manifest["windowsSandbox"])]
         if hooks is not None:
             config += ["-c", hooks]
+        config += controls
         if stage == 0:
             if thread_id is not None:
                 raise ValueError("initial persistent stage cannot resume a thread")
@@ -612,7 +720,7 @@ def build_command(manifest, *, stage=0, thread_id=None):
             "--add-dir", str(Path(manifest["evidence"]) / "state"),
             "-c", "approval_policy=\"never\"", "-c", "model_reasoning_effort=" + json.dumps(manifest["reasoning"]),
             "-c", "windows.sandbox=" + json.dumps(manifest["windowsSandbox"]),
-            "-c", hooks, "-"]
+            "-c", hooks, *controls, "-"]
 
 
 def load_persistent_case(path):
@@ -636,6 +744,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
     installed_id = getattr(args, "installed_plugin", None)
     direct_hooks = native_hooks or installed_id is not None
     protocol = "app-server" if app_server_case is not None else "exec-resume" if persistent_case is not None else "exec"
+    control_binding = _prepare_controls(args, protocol)
     # Reject unsupported controls before paths, inventory, fixtures or resources.
     sandbox_mode = _sandbox_mode({"sandboxMode": getattr(args, "sandbox_mode", "workspace-write"),
                                  "entryProtocol": protocol,
@@ -747,6 +856,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
             "timeoutSeconds": args.timeout, "turnTimeoutSeconds": turn_timeout,
             "recoveryTimeoutSeconds": recovery_timeout, "caseSha256": hashlib.sha256(case_bytes).hexdigest(),
             "limits": {"usageCaps": usage_caps, "usageScope": case["limits"]["usageScope"]}}
+        binding_manifest.update(control_binding)
         if sandbox_mode != "workspace-write":
             binding_manifest["sandboxMode"] = sandbox_mode
         if admission_case is not None:
@@ -754,6 +864,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
         if composition is not None:
             composition_binding = _composition_binding(binding_manifest, composition)
     entry_guide = _entry_guide(paths["node"], paths["runtime"]) if direct_hooks else None
+    _control_configuration({**control_binding, "entryProtocol": protocol}, verify_sources=True)
     evidence.mkdir()
     workspace.mkdir()
     ordinary_dir(evidence)
@@ -796,6 +907,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
                              "summary": {"ready_ids": ["A", "B"], "total_units": 140}}, "limits": LIMITS,
                 "docs": ["https://learn.chatgpt.com/docs/hooks", "https://learn.chatgpt.com/docs/config-file/config-reference",
                          "https://learn.chatgpt.com/docs/config-file/config-basic#windows-sandbox-mode"]}
+    manifest.update(control_binding)
     manifest["hookMode"] = "installed-plugin" if installed is not None else "native-package-hooks" if native_hooks else "checkpoint-wrapper"
     if sandbox_mode != "workspace-write":
         manifest["sandboxMode"] = sandbox_mode
@@ -834,7 +946,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
                                     "acceptance": "native execution receipt; business semantics and admission remain separate"},
                          "initialCommand": build_command({**manifest, "entryProtocol": protocol,
                                                           "prompts": [stage["prompt"] for stage in case["stages"]]})})
-        if direct_hooks:
+        if direct_hooks or control_binding:
             manifest["stageCommandTemplates"] = [build_command(manifest, stage=index,
                 thread_id="__OBSERVED_NATIVE_THREAD_ID__" if index else None)
                 for index in range(len(manifest["prompts"]))]
@@ -861,6 +973,7 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
                 "retainedRoots": {"evidence": str(evidence), "workspace": str(workspace)},
                 "recovery": "Caller must review retained preparation/inventory receipts and release these owned roots; no run manifest was published."})
             raise
+    _control_configuration(manifest, verify_sources=True)
     save(evidence / "manifest.json", manifest)
     return {"prepared": True, "evidence": str(evidence), "workspace": str(workspace), "modelCalled": False}
 
@@ -2120,6 +2233,7 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
                           preflight_failure=None):
     native_hooks = _direct_package_hooks(manifest)
     try:
+        _verify_control_stage(manifest, stage, thread_id)
         bound_prompt, bound_command, installed_before = (_verify_native_stage(manifest, stage, thread_id)
                                                          if native_hooks else (None, None, None))
         evidence = Path(manifest["evidence"])
@@ -2149,6 +2263,9 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
                 if stdin.read() != bound_prompt:
                     raise ValueError("prepared stage prompt changed before dispatch")
                 stdin.seek(0)
+            _verify_control_stage(manifest, stage, thread_id)
+            if command != build_command(manifest, stage=stage, thread_id=thread_id):
+                raise ValueError("prepared control command changed before dispatch")
             process = subprocess.Popen(command, cwd=manifest["workspace"], env=env, stdin=stdin,
                                        stdout=stdout, stderr=stderr,
                                        creationflags=subprocess.CREATE_NO_WINDOW | 4)
@@ -2453,6 +2570,7 @@ def run(args):
     if manifest.get("entryProtocol", "exec") != "exec":
         raise ValueError("App Server case requires its caller-owned dispatcher; CLI run cannot execute it")
     evidence = Path(args.evidence)
+    _control_configuration(manifest, verify_sources=True)
     for key, expected in manifest["sourceHashes"].items():
         if digest(manifest[key]) != expected:
             raise ValueError("prepared source changed; prepare a fresh observation: " + key)
@@ -2480,6 +2598,9 @@ def run(args):
     started = time.monotonic()
     try:
         with (evidence / "prompt.txt").open("rb") as stdin, (evidence / "stdout.jsonl").open("xb") as stdout, (evidence / "stderr.txt").open("xb") as stderr:
+            _control_configuration(manifest, verify_sources=True)
+            if build_command(manifest) != manifest["command"]:
+                raise ValueError("prepared control command changed before dispatch")
             process = subprocess.Popen(manifest["command"], cwd=manifest["workspace"], env=env,
                                        stdin=stdin, stdout=stdout, stderr=stderr,
                                        creationflags=subprocess.CREATE_NO_WINDOW | 4)  # CREATE_SUSPENDED
@@ -2542,6 +2663,10 @@ def main():
     for name in ("package", "evidence", "workspace", "codex", "node", "model", "reasoning"):
         prep.add_argument("--" + name, required=True)
     prep.add_argument("--timeout", type=int, required=True, help="one invocation wall-clock cap, 1..900 seconds")
+    prep.add_argument("--exclude-skill", action="append", metavar="ABSOLUTE_SKILL_MD",
+                      help="this CLI process only: disable exactly this ordinary SKILL.md path; repeat for each exclusion")
+    prep.add_argument("--project-doc-max-bytes", type=int,
+                      help="this CLI process only: native project document byte cap, 0..2^63-1 (0 disables project documents)")
     prep.add_argument("--persistent-case", help="existing coordination case to run through native exec/resume")
     prep.add_argument("--admission-case", help="optional committed admission case ID; requires matching conditions.execution, not an admission verdict")
     prep.add_argument("--native-package-hooks", action="store_true",
