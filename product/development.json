@@ -3729,7 +3729,7 @@
             "candidateVersion": "3.3.0-dev.1+codex.20261016203116",
             "candidateSha256": "ca15c1886ff69d74b9a8d2ce9354f1ae99c33bd77c933d7cbe3c1f031bfe0e98",
             "localRegression": "406 tests passed in287.725s; exact long-path reproduction and text-only differential passed",
-            "liveAdoptionVerified": false,
+            "liveAdoptionVerified": true,
             "historicalHookRootCauseEstablished": false,
             "qualificationPassed": false,
             "verification": {
@@ -3762,6 +3762,15 @@
               "actualRootMcpVersion": "3.3.0-dev.1+codex.20261016191602",
               "actualRootMcpPid": 21064,
               "requiresOwningClientRefresh": true
+            },
+            "loadedRuntimeFollowup": {
+              "source": "private:accord-ci-6ebfc3a4-20261017/restart22-followup.json",
+              "sha256": "729169eda3dd91f0d77ccb31e5c2f1f3b30a88d164ca48c62606b5cebedbaf7f",
+              "serverVersion": "3.3.0-dev.1+codex.20261016203116",
+              "processId": 38988,
+              "oldProcess21064Absent": true,
+              "checkpointRevision": 208,
+              "scope": "Actual Root responder after user restart; current host ambient input read and reconciled without business replay. No all-consumer or fullR2R3 claim."
             }
           }
         },
