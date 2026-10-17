@@ -108,7 +108,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.0-dev.1+codex.20261017033947",
-        "packageSha256": "04834f0a4254c992e5b690c5ae82007be6e8be5e9ef4f7a9479ef3b7a2440b8f",
+        "packageSha256": "39254f2f4f40511ca745f844ec62b8cd0437e4bb4e9152215c9b0ac2dcaf8436",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -3832,13 +3832,20 @@
             "source": "private:accord-native-evidence-bound-20261017-01/correction.json",
             "sha256": "9fe907894331b2ac651a72ecbda858d142ca6705ce77e3475bcbcb932bc3a015",
             "version": "3.3.0-dev.1+codex.20261017033947",
-            "packageSha256": "04834f0a4254c992e5b690c5ae82007be6e8be5e9ef4f7a9479ef3b7a2440b8f",
+            "packageSha256": "39254f2f4f40511ca745f844ec62b8cd0437e4bb4e9152215c9b0ac2dcaf8436",
             "regressionsPassed": 90,
             "nativeResultLimitBytes": 131072,
             "fullSourceBudgetUnchanged": true,
             "currentActualAdoptionVerified": false,
             "qualificationPassed": false,
-            "remaining": "Exact CI, local package adoption and ordinary client-material delivery pending; original failures and fullR2R3 remain."
+            "remaining": "Exact CI, local package adoption and ordinary client-material delivery pending; original failures and fullR2R3 remain.",
+            "ciPackagingCorrection": {
+              "source": "private:accord-native-evidence-bound-20261017-01/ci-package-identity-correction.json",
+              "sha256": "c036442e1176152dec145126df786feddec6d02b2ff05ef61caf0397ce049496",
+              "failedRunId": "38999745341",
+              "failedCommit": "12887461d838fbc5217227d155e9b54133169fc9",
+              "sourceMembersMatched": 25
+            }
           }
         },
         "admissionReadCost": {
