@@ -3910,7 +3910,81 @@
             "semanticReviewSha256": "0feae739e0d6be2f2363c24d463c0badcef4ade8527620f951214cc2ce873669",
             "allocationObservationSha256": "d6e6163fb96b29f55e5f7cd21081cd8fd92ab1ffd42f3809ea54d588419961ee",
             "qualificationPassed": false,
-            "scope": "First material delivery plus linked W02 revision; synthetic calls remained inert. Additional memory/22 operating guidance read is disclosed. Content reuse and verified transfer do not relabel forced termination, prove actual pause/recovery, candidate23 behavior or wholeR2R3."
+            "scope": "First material delivery plus linked W02 revision; synthetic calls remained inert. Additional memory/22 operating guidance read is disclosed. Content reuse and verified transfer do not relabel forced termination, prove actual pause/recovery, candidate23 behavior or wholeR2R3.",
+            "historicalTemplateDisposition": {
+              "originalTemplateExecuted": false,
+              "currentDerivative": "private:accord-state-client-current-20261017-01",
+              "businessArtifactsVerified": true,
+              "originalDerivativeExecutionPassed": false,
+              "reason": "Current-guide derivative delivered both stages of material; stage2 ended on output limit. Reuse verified outputs and retain the failed execution. Do not repeat this closed material task for a green terminal. Old source/authority/oracle remain historical; W02 legitimate non-intervention was corrected before dispatch."
+            },
+            "historicalTemplateRestoration": {
+              "source": "private:accord-ordinary-recovery-20261017-01/ci-historical-fixture-correction.json",
+              "sha256": "3c6fc772b787f848038cff6ebc7b2c9850e8da06e7ea4258dc6b2f1d3dd9f461",
+              "restoredOriginalSha256": "a0b99747bb2a3a98c43b9ded2f1216c5a702bc189596ac7a8d66e1d33fd842b1",
+              "originalCiFailurePreserved": true
+            }
+          },
+          "ordinaryToolRecovery": {
+            "status": "business-delivered-source-reviewed-and-retained-qualification-held",
+            "caseId": "v33-cli-tool-recovery-01",
+            "sourceRevision": "0bf3487d29d14545248ca03ee031689920caf08c",
+            "source": "private:accord-ordinary-recovery-20261017-01/root-qa.json",
+            "sha256": "c27bb1db2729862d566a5461910053134026f940266385eb2b51b81af1fc8c8d",
+            "closeoutSource": "private:accord-ordinary-recovery-20261017-01/closeout.json",
+            "closeoutSha256": "66e4c7ee45dc555cca05f86a478f5d10cf1396a4f30c6f5d4e8d3d0db059734f",
+            "actorThreadId": "01a148a7-f8e4-7662-85b2-485e30a0c917",
+            "actorPackageVersion": "3.3.0-dev.1+codex.20261017033947",
+            "actorSeconds": 101.21516049999627,
+            "actorNativeUsage": {
+              "inputTokens": 452745,
+              "cachedInputTokens": 398080,
+              "outputTokens": 3762,
+              "uncachedInputTokens": 54665,
+              "totalTokens": 456507
+            },
+            "normalActorTerminal": true,
+            "documentedRecoveryObserved": true,
+            "businessArtifactsVerified": true,
+            "originalInputsPreserved": 4,
+            "protectedSharedFilesUnchanged": 219,
+            "ownedProcessesAtClose": 0,
+            "artifacts": [
+              {
+                "name": "details.csv",
+                "sha256": "1ac02a2a27296f39ea1b7430306200598bf8cdb561dfdf6361db666fa5eee30a",
+                "bytes": 25
+              },
+              {
+                "name": "summary.json",
+                "sha256": "1806436773ec0611ac2308a1263d1ae796cbbd381326310c4fb605efe8fd51d4",
+                "bytes": 315
+              },
+              {
+                "name": "report.md",
+                "sha256": "ee3546af969bd712875bf37a2fd1a48b85e73364d979b4650cf47209b78553fc",
+                "bytes": 1230
+              }
+            ],
+            "rootCoreQaSeconds": 244.89186143875122,
+            "rootQaAndTransferObservedWallSeconds": 2137.2217609882355,
+            "rootQaBoundSeconds": 600,
+            "rootQaWholeBoundPassed": false,
+            "innerExit75DirectlyObserved": false,
+            "outerShellExitCode": 1,
+            "qualificationPassed": false,
+            "reviews": [
+              {
+                "source": "private:accord-ordinary-recovery-20261017-01/spec-result-review.json",
+                "sha256": "2f03e60dce2549722baa00cc12acb62087dfcb78a8fe274cb8ccc8f371df566d"
+              },
+              {
+                "source": "private:accord-ordinary-recovery-20261017-01/impl-result-review.json",
+                "sha256": "9eca0413c5ed7c460ca3d7a51227d9097cd6d638a19543d8a5603a3784330690"
+              }
+            ],
+            "reason": "One actual begin returned unknown; same-ID status, exact result consumption, three correct deliveries and API close completed naturally. The original oracle asks direct native begin75, but only outer shell1 was recorded; branch75 is source inference. Root core QA244.892s passed, but combined QA/transfer wall time exceeded600 and its final reserve assertion failed. Preserve both limits and no formal qualification. Do not rerun the closed business or rewrite its original criterion for green.",
+            "scope": "Transparent documented/preannounced SYNTHETIC protocol, effective user environment only. No surprise recovery, minimal host, actual-user-pause, fresh takeover, wholeR2R3 or net-value claim. Original materials retained; temporary execution directory removed."
           }
         },
         "admissionReadCost": {
