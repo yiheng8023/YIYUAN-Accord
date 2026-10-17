@@ -4065,7 +4065,7 @@
           "posixEntryEngineering": {
             "source": "private:accord-posix-entry-20261017-01/integration-outcome.json",
             "sha256": "7b8aa4385414f077e2a75acae8a4baf8590879590cd57a6b05bf0a391a2737a2",
-            "status": "reviewed-and-integrated-cross-platform-ci-pending",
+            "status": "reviewed-and-integrated-exact-ci-passed-and-owned-resources-closed",
             "qualificationPassed": false,
             "resourceScope": "Windows Job semantics retained. POSIX direct-child exit and same-process-group absence only; counts, CPU, RAM and escaped descendants unknown. Nondefault controller/scope is bound before admission and composition.",
             "verification": {
@@ -4075,10 +4075,83 @@
               "reportSha256": "a414c8798bcd0abcb87519b64a368000b8a8abc8a495b19b25a5f39d70881bba",
               "independentImplementationAndSpecReviewPassed": true,
               "fixtureGitIsolationReviewPassed": true,
-              "crossPlatformCi": "pending",
+              "crossPlatformCi": "success",
               "rootVerify": true,
               "rootVerifyDevelopment": true,
-              "rootHostCheck": true
+              "rootHostCheck": true,
+              "ciTerminal": {
+                "databaseId": 39043416794,
+                "url": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/39043416794",
+                "status": "completed",
+                "conclusion": "success",
+                "headSha": "59e98b154aa7caa145911c3b3c9df8a9589fb784",
+                "jobs": [
+                  {
+                    "name": "Native lifecycle / ubuntu-latest",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "windows-latest / Python 3.14",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "macos-latest / Python 3.10",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "ubuntu-latest / Python 3.10",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Native lifecycle / macos-latest",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "ubuntu-latest / Python 3.12",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "windows-latest / Python 3.10",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "macos-latest / Python 3.14",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "ubuntu-latest / Python 3.13",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "ubuntu-latest / Python 3.11",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "ubuntu-latest / Python 3.14",
+                    "status": "completed",
+                    "conclusion": "success"
+                  }
+                ],
+                "jobsPassed": 11,
+                "privateEvidence": "C:\\Users\\15521\\.codex\\backups\\accord-posix-entry-20261017-01\\ci-terminal.json",
+                "sha256": "26d875cf5364a8e332c264b7acad5dda82b097451d6caffc4a3b47effd726682"
+              },
+              "platformFullTests": {
+                "ubuntu314FullTests": 1000,
+                "macos310FullTests": 1000,
+                "windows314FullTests": 996,
+                "platformSpecificTestsNotAggregated": true
+              }
             },
             "originalFailures": "Preserve initial Windows-only refusal, v1 resource-binding omission, WSL missing Node, private inherited-GitDir incident, Root failed-preflight sequencing/invalid hash projection, and rejected CRLF patch. Known core.bare restored; full pre-incident Git config unknown.",
             "budget": {
@@ -4088,7 +4161,25 @@
               "trackedFiles": 193
             },
             "packageChanged": false,
-            "limits": "Engineering and real Python-process observations do not establish ordinary model behavior, complete R2/R3 or publication readiness. Existing17scopes/9cases and original quality conditions unchanged."
+            "limits": "Engineering and real Python-process observations do not establish ordinary model behavior, complete R2/R3 or publication readiness. Existing17scopes/9cases and original quality conditions unchanged.",
+            "ownedResourceClosure": {
+              "observedAtUtc": "2026-10-17T15:54:32.1548440Z",
+              "removedOwnedRoots": [
+                "C:\\Users\\15521\\.codex\\backups\\accord-posix-entry-20261017-01\\workspace",
+                "C:\\Users\\15521\\.codex\\backups\\accord-posix-entry-20261017-01\\validation",
+                "C:\\Users\\15521\\.codex\\backups\\accord-posix-entry-20261017-01\\owned-history"
+              ],
+              "allAbsentAfter": true,
+              "retentionRecordSha256": "ef11426cafb7d897a693973c1566cf41a9e87db647cc25ee21e186f14c5b564b",
+              "historicalEvidencePreserved": true,
+              "activeLocalVerificationRemaining": false,
+              "privateEvidence": "C:\\Users\\15521\\.codex\\backups\\accord-posix-entry-20261017-01\\verified-clone-cleanup.json",
+              "sha256": "90c392717b66afea2cbc595116e89f04394ffdf0b19f39e0b6609bf78b4bf0f2",
+              "retentionRecord": "C:\\Users\\15521\\.codex\\backups\\accord-posix-entry-20261017-01\\cleanup-retention.json"
+            },
+            "packageVersion": "3.3.0-dev.1+codex.20261017033947",
+            "mcpActualVersionSame": true,
+            "requiresRestart": false
           }
         },
         "admissionReadCost": {
