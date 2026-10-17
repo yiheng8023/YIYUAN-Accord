@@ -12,6 +12,8 @@
 
 ## 输入隔离不等于本轮正文缺失
 
+`includeNativeInputs:true` 的证据摘要过大时，`nativeInputEvidence.details` 为 `omitted-bounded-result`，保留真实来源、完整性和恢复标志，并给出各列表的 `counts`；列表和对账 cursor 被省略，不表示空输入或已读完。按其 `detailRead` 使用可用、兼容的现有 helper 执行只读 `status` 请求，保持相同的宿主环境和状态存储选择。核对返回的 storage、epoch、revision 及原生来源/宿主，再读取完整证据与需要的源部件；任何变化或不可用仍待核。只有取得并审查完整来源后，才使用其新鲜 cursor 对账。回退不安装组件、不改共享配置、不写状态，也不授予新的权限；helper 路径不可用时保留未决并寻找已获授权的兼容入口。
+
 `needsNativeReplay=true` 表示助手的输入基准尚不能用于绑定或续轮，不单独证明本轮正文漏收。先区分 `inputReceipt.present`、`failureWatermarkScopes` 和 `inputSource`，再将捕获文本与实际当前任务的原生输入、身份及轮次核对。完整捕获可以与 `quarantined-native-input` 同时存在；这既不是恢复成功，也不是输入必然缺失。
 
 未能确定会话归属的工作区故障标记会影响同工作区尚未确认该标记的会话。旧标记只含 generation 时，文件时间不能补出原事件、原会话或丢失内容。不得因新会话、标记较旧或当前正文完整便删除共享标记、设置自动过期或宣称旧责任已恢复。

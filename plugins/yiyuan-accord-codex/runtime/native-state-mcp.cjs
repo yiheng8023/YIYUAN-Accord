@@ -293,6 +293,25 @@ function inspectNativeState(params, serverVersion = null) {
         + 'a changed or unavailable source remains unresolved. Do not replace omitted details with empty values.';
       if (Buffer.byteLength(JSON.stringify(value)) <= MAX_RESULT) return {isError: false, value};
     }
+    const evidence = snapshot?.nativeInputEvidence;
+    if (evidence && Array.isArray(evidence.records)) {
+      // Keep the observation and all recovery gates; missing detail is not an
+      // empty input set. The existing helper can read the complete evidence.
+      const {records, pendingInputs, enrichments, cursor, ...summary} = evidence;
+      value.checkpoint.snapshot.nativeInputEvidence = {...summary,
+        details: 'omitted-bounded-result',
+        counts: {records: records.length, pendingInputs: pendingInputs?.length ?? 0,
+          enrichments: enrichments?.length ?? 0},
+        detailRead: {helperPath: path.join(__dirname, 'task-checkpoint.cjs'),
+          request: {op: 'status', session_id: source.sessionTreeId, cwd: workspace.cwd,
+            nativeInputEvidence: true, ...(currentHost ? {currentHost} : {})},
+          expected: {epoch: snapshot.epoch, revision: snapshot.revision, storage: snapshot.storage},
+          rule: 'Use an available compatible helper with the same storage selection and host environment. '
+            + 'This status request is read-only; inspect its complete evidence and source parts before reconciliation. '
+            + 'Compare storage, epoch, revision and native source/host; changed or unavailable evidence remains unresolved. '
+            + 'Omitted lists are not empty; this reply supplies no reconciliation cursor or new authority.'}};
+      if (Buffer.byteLength(JSON.stringify(value)) <= MAX_RESULT) return {isError: false, value};
+    }
     return {isError: true, value: unavailable('bounded-state-result-exceeded')};
   }
   return {isError: false, value};

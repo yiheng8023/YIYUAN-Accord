@@ -920,6 +920,72 @@ process.stdout.write(JSON.stringify({result,changed}));
             stream.write(json.dumps(record)+'\n')
         return transcript
 
+    def test_large_native_evidence_retains_state_and_readonly_helper_route(self):
+        self.check_large_native_evidence()
+
+    def test_large_native_evidence_preserves_large_paused_contract(self):
+        self.check_large_native_evidence(paused=True)
+
+    def check_large_native_evidence(self, paused=False):
+        self.native_context()
+        initial = self.native_input_preview()
+        revision = 0
+        if paused:
+            self.assertFalse(self.manage(action='bind', epoch=initial['epoch'], expectedRevision=0,
+                result='Preserve the authorized outcome', inputs=[], outputs=[{'path': 'out.json'}],
+                nextAction='Wait for user resume', canContinue=False,
+                unresolved=['unresolved-' + 'x' * 1900 + str(index) for index in range(32)])['isError'])
+            self.assertFalse(self.manage(action='pause', epoch=initial['epoch'], expectedRevision=1,
+                                        reason='Real pause')['isError'])
+            revision = 2
+        for index in range(300):
+            self.append_native_message(text='Follow next authorized step', id=f'ordinary-{index}')
+        before = self.files()
+        params = {**self.params, 'arguments': {'cwd': str(self.work), 'includeNativeInputs': True}}
+        result = self.inspect(params)
+        self.assertFalse(result['isError'], result)
+        self.assertLessEqual(len(json.dumps(result['value'], ensure_ascii=False).encode()), 128 * 1024)
+        snapshot = result['value']['checkpoint']['snapshot']
+        evidence = snapshot['nativeInputEvidence']
+        self.assertEqual(evidence['details'], 'omitted-bounded-result')
+        self.assertEqual(evidence['counts'], {'records': 301, 'pendingInputs': 300, 'enrichments': 0})
+        for key in ('records', 'pendingInputs', 'enrichments', 'cursor'):
+            self.assertNotIn(key, evidence)
+        fallback = evidence['detailRead']
+        self.assertEqual(fallback['request']['op'], 'status')
+        self.assertTrue(fallback['request']['nativeInputEvidence'])
+        self.assertEqual(fallback['expected']['storage'], snapshot['storage'])
+        self.assertEqual(snapshot['mode'], 'paused' if paused else 'unbound')
+        if paused:
+            self.assertEqual(snapshot['checkpoint']['details'], 'omitted-bounded-result')
+            self.assertFalse(snapshot['checkpoint']['canContinue'])
+        full = subprocess.run([self.node, fallback['helperPath']], input=json.dumps(fallback['request']),
+                              capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+        self.assertEqual(full.returncode, 0, full.stderr)
+        restored = json.loads(full.stdout)
+        self.assertEqual(restored['epoch'], fallback['expected']['epoch'])
+        self.assertEqual(restored['revision'], fallback['expected']['revision'])
+        self.assertEqual(restored['storage'], fallback['expected']['storage'])
+        full_evidence = restored['nativeInputEvidence']
+        for key in ('state', 'reason', 'latestInputReconciled', 'latestNativeInputsComplete', 'contentCoverage'):
+            self.assertEqual(evidence[key], full_evidence[key])
+        self.assertFalse(evidence['latestInputReconciled'])
+        self.assertEqual(len(full_evidence['pendingInputs']), 300)
+        self.assertEqual(self.files(), before)
+        self.assertTrue(self.manage(action='reconcile-input', epoch=snapshot['epoch'],
+                                    expectedRevision=revision)['isError'])
+        accepted = self.manage(action='reconcile-input', epoch=snapshot['epoch'], expectedRevision=revision,
+                               evidenceCursor=full_evidence['cursor'])
+        self.assertFalse(accepted['isError'], accepted)
+        before = self.files()
+        captured = self.native_input_preview()['nativeInputEvidence']
+        self.assertEqual(captured['counts'], {'records': 301, 'pendingInputs': 0, 'enrichments': 0})
+        self.assertTrue(captured['latestInputReconciled'])
+        self.assertNotIn('cursor', captured)
+        self.assertEqual(self.files(), before)
+        self.assertEqual(self.helper({'op': 'status'}, session=fallback['request']['session_id'])['mode'],
+                         'paused' if paused else 'unbound')
+
     def test_native_input_reconciliation_accepts_benign_append_and_preserves_pause_basis(self):
         self.native_context()
         session = self.params['_meta']['x-codex-turn-metadata']['session_id']
