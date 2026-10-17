@@ -3742,6 +3742,26 @@
               "actionlintPassed": true,
               "independentReviewPassed": true,
               "runtimeTestsPassed": 406
+            },
+            "ci": {
+              "head": "f755a3395f44cd19a8fb820bb69809e7089fcdc0",
+              "runId": "38963654095",
+              "status": "completed",
+              "conclusion": "success",
+              "jobsPassed": 11,
+              "jobsTotal": 11
+            },
+            "installationFollowup": {
+              "source": "private:accord-ci-6ebfc3a4-20261017/post-install22-followup.json",
+              "sha256": "37b0be8900b00e826c562823bbd05cc33fa65824e343b3ec89286d6d64bfbc55",
+              "installedVersion": "3.3.0-dev.1+codex.20261016203116",
+              "installedMembersMatched": 25,
+              "recovery21Files": 25,
+              "onlyAccordRefChanged": true,
+              "nativeCommandsNatural0Job0": true,
+              "actualRootMcpVersion": "3.3.0-dev.1+codex.20261016191602",
+              "actualRootMcpPid": 21064,
+              "requiresOwningClientRefresh": true
             }
           }
         },
