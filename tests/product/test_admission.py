@@ -1747,6 +1747,41 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report['acceptanceRequirements']['A05']['complete'])
         self.assertIn('A05', report['acceptanceRequirements']['A08']['blockedBy'])
 
+    def test_ended_ordinary_instances_keep_history_without_erasing_live_scope(self):
+        from yiyuan_accord.admission import _definition
+        record = next(row for row in self.contract['developmentObservations']
+                      if row['id'] == 'ended-ordinary-cli-case-disposition-20261017')
+        policy = self.contract['acceptance']['admission']
+        historical = json.loads(subprocess.check_output(['git', '-C', str(self.root), 'show',
+            record['declarations'][0]['declarationSnapshot']], timeout=30))
+        prior = historical['acceptance']['admission']
+        ended = {row['caseId'] for row in record['declarations']}
+        self.assertEqual(ended, {'v33-cli-action-diagnostics-01', 'v33-cli-tool-recovery-01'})
+        self.assertEqual(record['outcome'], 'not-admitted')
+        self.assertFalse(ended & {c['id'] for c in policy['cases']})
+        for row in record['declarations']:
+            old = next(c for c in prior['cases'] if c['id'] == row['caseId'])
+            self.assertEqual(row['outcome'], 'not-admitted')
+            self.assertFalse(row['replayAllowed'])
+            self.assertEqual(row['definitionSha256'], _definition(historical, old))
+            self.assertEqual(row['caseObjectSha256'], hashlib.sha256(json.dumps(
+                old, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest())
+            if 'caseFile' in row:
+                original = subprocess.check_output(['git', '-C', str(self.root), 'show',
+                    row['declarationSnapshot'].split(':')[0] + ':' + row['caseFile']], timeout=30)
+                self.assertEqual((self.root / row['caseFile']).read_bytes(), original)
+                self.assertEqual(hashlib.sha256(original).hexdigest(), row['caseFileSha256'])
+                self.assertEqual(row['execution'], old['conditions']['execution'])
+        for key in ('requiredCoverage', 'acceptanceRequirements'):
+            self.assertEqual(policy[key], prior[key])
+        # Freeze ended evidence, not future cases, host methods or routing prose.
+        sid = 'v33-codex-cli-ordinary-delivery'
+        scope = next(s for s in policy['scopes'] if s['id'] == sid)
+        old_scope = next(s for s in prior['scopes'] if s['id'] == sid)
+        for key in ('duties', 'qualityAxes', 'scenarios', 'claims'):
+            self.assertEqual(scope[key], old_scope[key])
+        self.assert_current_declaration_reports_missing_coverage(self.contract)
+
     def test_partial_allocation_case_keeps_uncovered_duties_and_scenarios_open(self):
         contract = self.without_resource_and_environment_cases()
         policy = contract['acceptance']['admission']
