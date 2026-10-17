@@ -519,18 +519,38 @@ class EntryTests(unittest.TestCase):
             paths.append(path)
         return paths
 
-    def parsed_cli_config(self, command):
-        # Model the native command boundary, then parse actual TOML overrides.
-        # This checks values and exact scope, not keyword presence.
+    def cli_config_overrides(self, command):
+        # Check exact native assignments on every supported Python version.
+        # A standard TOML parser adds syntax checking where available (3.11+).
         self.assertEqual(command[1], 'exec')
         self.assertNotIn('-c', command[:2])
         parsed = {}
+        roots = set()
         for index, argument in enumerate(command):
             if argument == '-c':
-                value = entry.tomllib.loads(command[index + 1])
-                self.assertFalse(set(parsed) & set(value))
-                parsed.update(value)
+                assignment = command[index + 1]
+                key, separator, value = assignment.partition('=')
+                self.assertEqual(separator, '=')
+                self.assertRegex(key, r'\A[A-Za-z_][A-Za-z_0-9]*(?:\.[A-Za-z_][A-Za-z_0-9]*)*\Z')
+                root = key.split('.', 1)[0]
+                self.assertNotIn(root, roots)
+                roots.add(root)
+                if entry.tomllib is not None:
+                    entry.tomllib.loads(assignment)
+                parsed[key] = value
         return parsed
+
+    def expected_skill_exclusions(self, *paths):
+        return '[' + ','.join('{"path"=' + json.dumps(str(p), ensure_ascii=False) + ',"enabled"=false}' for p in paths) + ']'
+
+    def test_process_controls_override_oracle_rejects_aliases_and_preserves_unicode(self):
+        for parser in (entry.tomllib, None):
+            with patch.object(entry, 'tomllib', parser):
+                for alias in ('skills = {config=[]}', '"skills"={config=[]}'):
+                    with self.subTest(alias=alias, parser=parser is not None), self.assertRaises(AssertionError):
+                        self.cli_config_overrides(['codex', 'exec', '-c', 'skills.config=[]', '-c', alias])
+        self.assertEqual(self.expected_skill_exclusions('C:/测试/😀/SKILL.md'),
+                         '[{"path"="C:/测试/😀/SKILL.md","enabled"=false}]')
 
     def test_process_controls_default_argv_and_manifest_remain_legacy(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -543,10 +563,10 @@ class EntryTests(unittest.TestCase):
             expected = dict(manifest)
             expected.pop('command')
             self.assertEqual(manifest['command'], entry.build_command(expected))
-            config = self.parsed_cli_config(manifest['command'])
-            self.assertNotIn('skills', config)
+            config = self.cli_config_overrides(manifest['command'])
+            self.assertFalse(any(k == 'skills' or k.startswith('skills.') for k in config))
             self.assertNotIn('project_doc_max_bytes', config)
-            self.assertEqual(config['approval_policy'], 'never')
+            self.assertEqual(config['approval_policy'], '"never"')
         self.test_sandbox_mode_preserves_legacy_default_and_binds_initial_and_resume()
 
     def test_process_controls_reject_invalid_parameters_before_any_probe_or_root(self):
@@ -590,9 +610,9 @@ class EntryTests(unittest.TestCase):
             self.assertEqual([row['path'] for row in manifest['controls']['excludedSkills']], [str(two), str(one)])
             self.assertEqual(manifest['controls']['excludedSkills'], [entry._skill_identity(str(two)), entry._skill_identity(str(one))])
             self.assertEqual(manifest['controlsSha256'], entry._controls_sha256(manifest['controls']))
-            config = self.parsed_cli_config(manifest['command'])
-            self.assertEqual(config['skills']['config'], [{'path': str(two), 'enabled': False}, {'path': str(one), 'enabled': False}])
-            self.assertEqual(config['project_doc_max_bytes'], 0)
+            config = self.cli_config_overrides(manifest['command'])
+            self.assertEqual(config['skills.config'], self.expected_skill_exclusions(two, one))
+            self.assertEqual(config['project_doc_max_bytes'], '0')
             self.assertEqual({p: (p.read_bytes(), p.stat().st_mtime_ns) for p in before}, before)
 
     def test_process_controls_document_only_and_skill_only_have_no_implicit_overrides(self):
@@ -601,12 +621,12 @@ class EntryTests(unittest.TestCase):
                 root = Path(tmp).resolve(); one, _, _ = self.control_skills(root)
                 controls = {'project_doc_max_bytes': 2**63-1} if kind == 'doc' else {'exclude_skill': [str(one)]}
                 manifest = self.prepared(root, controls=controls)
-                config = self.parsed_cli_config(manifest['command'])
+                config = self.cli_config_overrides(manifest['command'])
                 if kind == 'doc':
-                    self.assertEqual(config['project_doc_max_bytes'], 2**63-1)
-                    self.assertNotIn('skills', config)
+                    self.assertEqual(config['project_doc_max_bytes'], str(2**63-1))
+                    self.assertFalse(any(k == 'skills' or k.startswith('skills.') for k in config))
                 else:
-                    self.assertEqual(config['skills']['config'], [{'path': str(one), 'enabled': False}])
+                    self.assertEqual(config['skills.config'], self.expected_skill_exclusions(one))
                     self.assertNotIn('project_doc_max_bytes', config)
 
     def test_process_controls_source_and_parameter_drift_refuse_before_run_receipt(self):
@@ -666,7 +686,9 @@ class EntryTests(unittest.TestCase):
                 kwargs['stdout'].write(('\n'.join(map(json.dumps, events))+'\n').encode())
                 (root / f'evidence/last-message-{stage}.txt').write_text('done')
                 return process
-            with patch.object(entry.subprocess, 'Popen', side_effect=spawn), patch.object(entry, 'WindowsJob', return_value=job):
+            with patch.object(entry.subprocess, 'Popen', side_effect=spawn), \
+                    patch.object(entry.subprocess, 'CREATE_NO_WINDOW', 0, create=True), \
+                    patch.object(entry, 'WindowsJob', return_value=job):
                 receipts = [entry._run_persistent_stage(manifest, i, 'native-thread' if i else None, {}, time.monotonic()+10) for i in (0,1)]
             initial = manifest['initialCommand']
             resumed = list(manifest['stageCommandTemplates'][1]); resumed[-2] = 'native-thread'
@@ -674,11 +696,11 @@ class EntryTests(unittest.TestCase):
             for receipt, command in zip(receipts, actual):
                 self.assertTrue(receipt['valid'], receipt)
                 self.assertEqual(receipt['command'], command)
-                config = self.parsed_cli_config(command)
-                self.assertEqual(config['skills']['config'], [{'path':str(one),'enabled':False},{'path':str(two),'enabled':False}])
-                self.assertEqual(config['project_doc_max_bytes'], 17)
-                self.assertEqual(config['approval_policy'], 'never')
-                self.assertEqual(config['sandbox_mode'], 'workspace-write')
+                config = self.cli_config_overrides(command)
+                self.assertEqual(config['skills.config'], self.expected_skill_exclusions(one, two))
+                self.assertEqual(config['project_doc_max_bytes'], '17')
+                self.assertEqual(config['approval_policy'], '"never"')
+                self.assertEqual(config['sandbox_mode'], '"workspace-write"')
             self.assertEqual(job.close.call_count, 2)
             self.assertEqual(other.read_text().splitlines()[1], 'name: unselected')
 
@@ -747,11 +769,12 @@ class EntryTests(unittest.TestCase):
             with patch.dict(os.environ, {'CODEX_HOME':str(root/'isolated-home')}), \
                     patch.object(entry, 'shared_config_snapshot', return_value=observation), \
                     patch.object(entry, 'inspect', return_value={'runtimeStateResidue':[]}), \
+                    patch.object(entry.subprocess, 'CREATE_NO_WINDOW', 0, create=True), \
                     patch.object(entry, 'WindowsJob', return_value=job), patch.object(entry.subprocess, 'Popen', side_effect=spawn):
                 result = entry.run(argparse.Namespace(evidence=manifest['evidence']))
             self.assertEqual(actual, [manifest['command']])
-            self.assertEqual(self.parsed_cli_config(actual[0])['skills']['config'], [{'path':str(one),'enabled':False}])
-            self.assertEqual(self.parsed_cli_config(actual[0])['project_doc_max_bytes'], 7)
+            self.assertEqual(self.cli_config_overrides(actual[0])['skills.config'], self.expected_skill_exclusions(one))
+            self.assertEqual(self.cli_config_overrides(actual[0])['project_doc_max_bytes'], '7')
             self.assertEqual(json.loads((root/'evidence/run-started.json').read_bytes())['command'], actual[0])
             self.assertEqual(result['process']['remainingOwnedProcesses'], 0)
             job.close.assert_called_once()
@@ -765,10 +788,10 @@ class EntryTests(unittest.TestCase):
                         controls={'exclude_skill':[str(one)], 'project_doc_max_bytes':11})
                 for stage in (0,1):
                     command = entry.build_command(manifest, stage=stage, thread_id='thread' if stage else None)
-                    config = self.parsed_cli_config(command)
-                    self.assertEqual(config['skills']['config'], [{'path':str(one),'enabled':False}])
-                    self.assertEqual(config['project_doc_max_bytes'], 11)
-                    self.assertEqual(config['approval_policy'], 'never')
+                    config = self.cli_config_overrides(command)
+                    self.assertEqual(config['skills.config'], self.expected_skill_exclusions(one))
+                    self.assertEqual(config['project_doc_max_bytes'], '11')
+                    self.assertEqual(config['approval_policy'], '"never"')
                 execution = entry._execution_settings({**manifest, 'nativeVersion':'codex-cli 0.156.1'})
                 self.assertEqual(execution['controls'], manifest['controls'])
                 execution['controls']['projectDocMaxBytes'] = 12
