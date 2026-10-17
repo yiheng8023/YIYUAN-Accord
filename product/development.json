@@ -3772,6 +3772,61 @@
               "checkpointRevision": 208,
               "scope": "Actual Root responder after user restart; current host ambient input read and reconciled without business replay. No all-consumer or fullR2R3 claim."
             }
+          },
+          "currentCliSdkFilterComparison": {
+            "source": "private:accord-cli-skill-scope-20261017-01/independent-review-and-boundary.json",
+            "sha256": "f7c52e7495db3a483b79d6bdc1606623d2c760a2d1621e7f6e5f869b8fdbfebc",
+            "resultSha256": "31912aeb6e3af35ce559155d023396074e02d263711f7f86abb872e760dd49f8",
+            "codexVersion": "0.163.0",
+            "model": "fixture-no-model",
+            "providerRequests": 2,
+            "selectedControlAbsentInBoth": true,
+            "positiveControlPresentInBoth": true,
+            "sameHostSkillBodySha256": "6b77570df4345d204d5ca13af7bbdac9cd126de8544ea5d99ebbd34b7a7d3325",
+            "realUserSkillDescriptionsStillVisible": 15,
+            "fullSkillRootIsolationEstablished": false,
+            "protectedFilesUnchanged": 220,
+            "naturalExitAndJobZero": true,
+            "historicalCliSdkDifferenceExplained": false,
+            "qualificationPassed": false,
+            "scope": "One current fixed-response control comparison; shared owned home/order, real user Skill metadata exposure and absent historical binary limit conclusions. No ordinary Agent or default-host completion claim."
+          },
+          "currentSdkCaseRefresh": {
+            "source": "private:accord-sdk-current-candidate-20261017-01/ADMISSION.json",
+            "sha256": "aaca8b064b7629328989d9c053bd7a992df10db17d646b5c4c46864e795ef5af",
+            "subject": {
+              "revision": "c170bffd492b5459926dd0d39c0b53851a04264a",
+              "tree": "bdea32284cbaa2b00805f2224961be0f61f6b37a"
+            },
+            "evaluatedRevision": "f755a3395f44cd19a8fb820bb69809e7089fcdc0",
+            "originalObservedAt": "2026-10-17T02:51:54.111209+00:00",
+            "workflowRunId": "38996536035",
+            "workflowConclusion": "success",
+            "artifactSha256": "01ed5e85f40da4f9d31e82d55d0b012c4ed4724f4bfbb165bac65d0d6498c7d0",
+            "githubArtifactDigestMatched": true,
+            "codexVersion": "0.154.0",
+            "variant": "windows-base",
+            "model": "fixture-no-model",
+            "acceptedCases": [
+              "v33-codex-sdk-lifecycle-01",
+              "v33-codex-sdk-scoped-exposure-01"
+            ],
+            "qualificationPassed": true,
+            "observerCalls": [
+              "observe",
+              "recheck"
+            ],
+            "rawRecheckSha256": "07c6aac87823ce3658fa7c9439d144ca8fe83e5285f25bd3dc5daa17b3b4ad37",
+            "callerSha256": "f3c6fdcf1707bb81b4814f07e9ccd61ab360ed96b96dea85f67a98ea1e027d2d",
+            "independentReviewers": 2,
+            "reviewAxes": [
+              "product",
+              "specification",
+              "implementation",
+              "standards"
+            ],
+            "ownedProcessRecords": 25,
+            "scope": "Current package refresh of the same two historically admitted controlled SDK cases. Exact native input/state, SessionEnd order, exposure and resource sources checked; no new case or whole-host/ordinary-agent/R2R3 completion."
           }
         },
         "admissionReadCost": {
