@@ -1,4 +1,4 @@
-"""Offline oracle and Windows ownership tests; never call a model."""
+"""Offline oracle and native Windows/POSIX ownership tests; never call a model."""
 
 import argparse
 import importlib.util
@@ -95,6 +95,33 @@ def _run_copied_runtime(command, *, runtime, owned_root, cwd, executable=None, e
 
 
 class EntryTests(unittest.TestCase):
+    def setUp(self):
+        # These pre-existing mocked Job tests exercise the Windows branch on all
+        # CI hosts. They provide no POSIX execution or containment evidence.
+        windows_units = {
+            'test_config_observation_survives_a_failed_business_inspection',
+            'test_process_controls_reject_invalid_parameters_before_any_probe_or_root',
+            'test_process_controls_source_and_parameter_drift_refuse_before_run_receipt',
+            'test_process_controls_initial_resume_actual_dispatch_and_receipts_match_manifest',
+            'test_process_controls_resume_drift_rejects_before_resources',
+            'test_process_controls_ephemeral_dispatch_uses_manifest_argv',
+            'test_process_controls_drift_in_final_dispatch_window_releases_job_without_popen',
+            'test_sandbox_mode_rejects_invalid_or_inapplicable_controls_before_resources',
+            'test_sandbox_mode_drift_is_rejected_by_command_and_binding_before_stage_resources',
+            'test_installed_stage_retains_before_and_after_even_for_last_or_failed_turn',
+            'test_stage_resource_creation_failure_keeps_native_execution_phase',
+            'test_failure_after_agent_popen_keeps_native_execution_phase',
+            'test_native_stage_checks_the_opened_prompt_before_starting_a_process',
+            'test_persistent_stage_stops_on_running_usage_without_terminal',
+            'test_persistent_stage_allows_natural_job_drain_before_termination',
+            'test_persistent_stage_forces_timeout_without_a_second_recovery_window',
+            'test_windows_copied_runtime_reaps_unassigned_child_if_job_termination_fails',
+        }
+        if self._testMethodName in windows_units:
+            selection = patch.object(entry, '_controller_kind', return_value='windows-job-object')
+            selection.start()
+            self.addCleanup(selection.stop)
+
     def usage_event(self, **changes):
         counters = {"totalTokens": 360404, "inputTokens": 355272,
                     "cachedInputTokens": 316800, "outputTokens": 5132}
@@ -456,14 +483,18 @@ class EntryTests(unittest.TestCase):
                 project, case_id, execution, package_files = bind.call_args.args
                 self.assertEqual(project, SCRIPT.parents[1])
                 self.assertEqual(case_id, "formal-case")
-                self.assertEqual(execution, {
+                expected = {
                     "host": "codex", "entry": "cx-cli", "codexVersion": "0.156.1",
                     "entryProtocol": "exec-resume", "hookMode": "installed-plugin",
                     "model": "explicit-offline-model", "reasoning": "high", "windowsSandbox": "elevated",
                     "timeoutSeconds": 600, "turnTimeoutSeconds": 180, "recoveryTimeoutSeconds": 20,
                     "caseSha256": manifest["caseSha256"], "usageCaps": manifest["limits"]["usageCaps"],
                     "usageScope": manifest["limits"]["usageScope"],
-                    "runner": "scripts/observe_codex_entry.py", "caseFile": "product/cases/coordination-v3.3.json"})
+                    "runner": "scripts/observe_codex_entry.py", "caseFile": "product/cases/coordination-v3.3.json"}
+                if manifest.get("resourceController") == "posix-session-process-group":
+                    expected.update(resourceController=manifest["resourceController"],
+                                    resourceEvidenceScope=manifest["resourceEvidenceScope"])
+                self.assertEqual(execution, expected)
                 self.assertEqual(package_files, manifest["installedPlugin"]["packageFiles"])
 
     def test_admission_prepare_drift_retains_failed_receipt_without_runnable_manifest(self):
@@ -2139,6 +2170,9 @@ class EntryTests(unittest.TestCase):
                  'processGroupId': 1234, 'rootPid': 1234, 'rootExitCode': 0})
             normal_release = {'controller': controller, 'exitCode': 0, 'forced': False,
                 'failure': None, 'readerStopped': True, 'after': after}
+            manifest.update(resourceController=controller, resourceEvidenceScope=entry._resource_scope(controller))
+            native.update(controller=controller, evidenceScope=entry._resource_scope(controller), after=after,
+                          exitCode=0, remainingOwnedProcesses=0 if os.name == 'nt' else None)
 
             class Reader:
                 goal_result = {'goal': None}
@@ -3402,9 +3436,358 @@ class EntryTests(unittest.TestCase):
         self.assertEqual(group.sample()["processGroupState"], "absent")
 
 
+class ResourceExecutionBindingTests(unittest.TestCase):
+    def manifests(self, root):
+        manifest = EntryTests().prepared_persistent(root)
+        manifest['nativeVersion'] = 'codex-cli 0.158.0'
+        variants = {}
+        for controller in ('windows-job-object', 'posix-session-process-group'):
+            variants[controller] = {**manifest, 'resourceController': controller,
+                                    'resourceEvidenceScope': entry._resource_scope(controller)}
+        return variants
+
+    def bind_against_fixture(self, manifest, planned, *, composition=None):
+        # Exercise the real admission comparison. Only immutable source reads,
+        # schema eligibility and package provenance are synthetic here; this is
+        # not a committed case, observed condition or product admission claim.
+        from yiyuan_accord import admission
+        package = {path: entry.read_regular(Path(manifest['package']) / path)
+                   for path in entry._package_hashes(manifest['package'])}
+        fixture = entry.read_regular(manifest['case'])
+        case_id = composition['case'] if composition else 'resource-fixture'
+        case = {'id': case_id, 'scope': 'synthetic-resource-comparison',
+                'host': planned['host'], 'entry': planned['entry'],
+                'conditions': {'execution': planned},
+                'oracleFiles': [planned['runner'], planned['caseFile']]}
+        contract = {'acceptance': {'admission': {'cases': [case]}}, 'delivery': {'hostProjections': [
+            {'id': 'codex', 'manifest': 'plugins/fixture/.codex-plugin/plugin.json', 'packageSha256': 'f' * 64}]}}
+        def read_git(_root, _operation, target):
+            return json.dumps(contract).encode() if target.endswith(':product/development.json') else fixture
+        with patch.object(admission, 'clean_git_checkout', return_value=True), \
+                patch.object(admission, 'evidence_subject', return_value={'revision': 'a' * 40}), \
+                patch.object(admission, '_git', side_effect=read_git), \
+                patch.object(admission, 'admission_contract_errors', return_value=[]), \
+                patch.object(admission, '_definition', return_value='synthetic-definition'), \
+                patch.object(admission, '_revision_package_snapshot', return_value={
+                    'sha256': 'f' * 64, 'files': {'plugins/fixture/' + path: raw for path, raw in package.items()}}):
+            return (entry._composition_binding(manifest, composition) if composition else
+                    entry._admission_binding(manifest, case_id))
+
+    def test_nondefault_resources_are_execution_identity_and_windows_stays_legacy(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            variants = self.manifests(Path(temporary).resolve())
+            windows = variants['windows-job-object']
+            legacy = {key: value for key, value in windows.items()
+                      if key not in ('resourceController', 'resourceEvidenceScope')}
+            old = entry._execution_settings(legacy)
+            self.assertEqual(entry._execution_settings(windows), old)
+            self.assertNotIn('resourceController', old)
+            self.assertNotIn('resourceEvidenceScope', old)
+            posix = entry._execution_settings(variants['posix-session-process-group'])
+            self.assertNotEqual(posix, old)
+            self.assertEqual(posix['resourceController'], 'posix-session-process-group')
+            self.assertEqual(posix['resourceEvidenceScope'], entry._resource_scope('posix-session-process-group'))
+
+    def test_old_windows_prebinding_rejects_posix_and_explicit_posix_is_accepted(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            variants = self.manifests(Path(temporary).resolve())
+            windows, posix = variants['windows-job-object'], variants['posix-session-process-group']
+            old, explicit = entry._execution_settings(windows), entry._execution_settings(posix)
+            self.assertEqual(self.bind_against_fixture(windows, old)['execution'], old)
+            with self.assertRaisesRegex(ValueError, 'prebound case conditions'):
+                self.bind_against_fixture(posix, old)
+            self.assertEqual(self.bind_against_fixture(posix, explicit)['execution'], explicit)
+            with self.assertRaisesRegex(ValueError, 'prebound case conditions'):
+                self.bind_against_fixture(windows, explicit)
+
+    def test_composition_worker_carries_scope_and_rejects_prebound_or_current_drift(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            variants = self.manifests(Path(temporary).resolve())
+            request = EntryTests().composition_request()
+            plans = {}
+            for controller, manifest in variants.items():
+                worker = entry._execution_settings(manifest)
+                plans[controller] = {**request['execution'], 'worker': worker,
+                    **{key: worker[key] for key in ('runner', 'caseFile', 'caseSha256')}}
+                self.assertEqual(self.bind_against_fixture(manifest, plans[controller], composition=request)['execution'],
+                                 plans[controller])
+            old, explicit = plans['windows-job-object'], plans['posix-session-process-group']
+            self.assertNotIn('resourceController', old['worker'])
+            self.assertEqual(explicit['worker']['resourceController'], 'posix-session-process-group')
+            self.assertNotEqual(old, explicit)
+            for current, planned in ((variants['posix-session-process-group'], old),
+                                     (variants['windows-job-object'], explicit)):
+                with self.subTest(current=current['resourceController']), \
+                        self.assertRaisesRegex(ValueError, 'prebound case conditions'):
+                    self.bind_against_fixture(current, planned, composition=request)
+            malformed = {**variants['posix-session-process-group'], 'resourceEvidenceScope': 'all descendants contained'}
+            with self.assertRaisesRegex(ValueError, 'controller binding mismatch'):
+                self.bind_against_fixture(malformed, explicit, composition=request)
+
+    def test_preparation_binds_same_resources_before_and_after_fixture_creation(self):
+        for composition in (False, True):
+            with self.subTest(composition=composition), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary).resolve()
+                observations = []
+                def bind(manifest, _request):
+                    observations.append((manifest['resourceController'], manifest['resourceEvidenceScope'],
+                                         (root / 'evidence').exists()))
+                    return {'case': 'synthetic-resource-binding'}
+                with patch.dict(os.environ, {'CODEX_HOME': str(root / 'home')}), \
+                        patch.object(entry, '_entry_guide', return_value='Accord task entry: synthetic'), \
+                        patch.object(entry, '_composition_binding' if composition else '_admission_binding', side_effect=bind):
+                    manifest = EntryTests().prepared_persistent(root, installed=True, controls={'node': PYTHON},
+                        composition=EntryTests().composition_request() if composition else None,
+                        admission_case=None if composition else 'synthetic-resource-binding')
+                expected = (manifest['resourceController'], manifest['resourceEvidenceScope'])
+                self.assertEqual(observations, [(*expected, False), (*expected, True)])
+
+    def test_resource_helper_comes_from_sibling_despite_cached_other_checkout(self):
+        import types
+        cached = types.ModuleType('scripts.inspect_native_resources')
+        cached.native_processes_released = Mock(return_value=True)
+        sibling_spec = importlib.util.spec_from_file_location('isolated_candidate_entry', SCRIPT)
+        sibling = importlib.util.module_from_spec(sibling_spec)
+        with patch.dict(sys.modules, {'scripts.inspect_native_resources': cached}):
+            sibling_spec.loader.exec_module(sibling)
+            self.assertIsNot(sibling.native_processes_released, cached.native_processes_released)
+            self.assertEqual(Path(sibling.native_processes_released.__code__.co_filename).resolve(),
+                             SCRIPT.with_name('inspect_native_resources.py').resolve())
+            self.assertFalse(sibling._released({'activeProcesses': 1}, 'windows-job-object'))
+        cached.native_processes_released.assert_not_called()
+
+
+class PosixEntryRunnerTests(unittest.TestCase):
+    def test_resource_release_requires_bound_scope_and_observed_group_absence(self):
+        controller = 'posix-session-process-group'
+        manifest = {'resourceController': controller, 'resourceEvidenceScope': entry._resource_scope(controller)}
+        after = {'controller': controller, 'activeProcesses': None, 'processGroupState': 'absent',
+                 'processGroupId': 1234, 'rootPid': 1234, 'rootExitCode': 0}
+        record = {'controller': controller, 'evidenceScope': entry._resource_scope(controller),
+                  'exitCode': 0, 'remainingOwnedProcesses': None, 'pid': 1234, 'after': after}
+        self.assertTrue(entry._entry_resources_released(record, manifest))
+        for changes in ({'processGroupState': 'alive'}, {'processGroupState': 'unobservable'},
+                        {'activeProcesses': 0}, {'rootExitCode': None}, {'rootPid': 999},
+                        {'observationError': {'type': 'PermissionError'}}):
+            with self.subTest(changes=changes):
+                changed = {**record, 'after': {**after, **changes}}
+                self.assertFalse(entry._entry_resources_released(changed, manifest))
+                self.assertFalse(entry._resource_observation(changed, manifest)['releasedWithinScope'])
+        for changes in ({'controller': 'windows-job-object'}, {'remainingOwnedProcesses': 0},
+                        {'exitCode': 1}, {'pid': 999}, {'evidenceScope': 'all descendants contained'},
+                        {'after': None}):
+            with self.subTest(changes=changes):
+                self.assertFalse(entry._entry_resources_released({**record, **changes}, manifest))
+
+    def test_resource_controller_drift_refuses_before_receipt_and_stage_resources(self):
+        for persistent in (False, True):
+            with self.subTest(persistent=persistent), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                fixture = EntryTests()
+                manifest = fixture.prepared_persistent(root) if persistent else fixture.prepared(root)
+                other = 'posix-session-process-group' if os.name == 'nt' else 'windows-job-object'
+                manifest.update(resourceController=other, resourceEvidenceScope=entry._resource_scope(other))
+                entry.save(root / 'evidence/manifest.json', manifest)
+                marker = []
+                with patch.object(entry, '_new_controller') as controller, patch.object(entry.subprocess, 'Popen') as child:
+                    with self.assertRaisesRegex(ValueError, 'differs from this host'):
+                        if persistent:
+                            with self.assertRaisesRegex(ValueError, 'differs from this host'):
+                                entry.run_persistent(argparse.Namespace(evidence=manifest['evidence']))
+                            entry._run_persistent_stage(manifest, 0, None, {}, time.monotonic()+5,
+                                                        preflight_failure=marker)
+                        else:
+                            entry.run(argparse.Namespace(evidence=manifest['evidence']))
+                controller.assert_not_called(); child.assert_not_called()
+                self.assertEqual(marker, [True] if persistent else [])
+                self.assertFalse((root / 'evidence/run-started.json').exists())
+
+    def test_retained_resource_observation_requires_the_original_stage_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            evidence = Path(tmp).resolve()
+            controller = 'posix-session-process-group'
+            manifest = {'resourceController': controller, 'resourceEvidenceScope': entry._resource_scope(controller)}
+            record = {'controller': controller, 'evidenceScope': entry._resource_scope(controller),
+                      'exitCode': 0, 'pid': 1234, 'remainingOwnedProcesses': None,
+                      'after': {'controller': controller, 'activeProcesses': None, 'processGroupState': 'absent',
+                                'processGroupId': 1234, 'rootPid': 1234, 'rootExitCode': 0}}
+            path = evidence / 'native-receipt-1.json'
+            entry.save(path, record)
+            observed = entry._retained_resource_observations(evidence, manifest, [record])[0]
+            self.assertTrue(observed['releasedWithinScope'])
+            entry.save(path, {**record, 'after': {**record['after'], 'processGroupState': 'alive'}})
+            observed = entry._retained_resource_observations(evidence, manifest, [record])[0]
+            self.assertFalse(observed['matchesRecordedStage'])
+            self.assertFalse(observed['releasedWithinScope'])
+            path.unlink()
+            self.assertFalse(entry._retained_resource_observations(evidence, manifest, [record])[0]['releasedWithinScope'])
+
+    def assert_reaped_group(self, process, receipt):
+        self.assertIsNotNone(process.poll())
+        self.assertIsNone(receipt['remainingOwnedProcesses'])
+        self.assertEqual(receipt['controller'], 'posix-session-process-group')
+        self.assertEqual(receipt['after']['processGroupState'], 'absent')
+        self.assertEqual(receipt['after']['rootPid'], process.pid)
+        self.assertEqual(receipt['after']['rootExitCode'], process.returncode)
+        for field in ('activeProcesses', 'totalProcesses', 'cpuSeconds', 'processes'):
+            self.assertIsNone(receipt['after'][field])
+        with self.assertRaises(ProcessLookupError):
+            os.killpg(process.pid, 0)
+
+    def posix_persistent_runner_uses_real_cli_terminal_and_resume(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            fixture = EntryTests()
+            one, two, _ = fixture.control_skills(root)
+            manifest = fixture.prepared_persistent(root,
+                controls={'exclude_skill': [str(one), str(two)], 'project_doc_max_bytes': 17})
+            children, commands = [], []
+            real_popen = subprocess.Popen
+            code = '''import json,sys
+from pathlib import Path
+args = sys.argv[1:]
+Path(args[args.index('--output-last-message')+1]).write_text('done', encoding='utf-8')
+events = [{'type':'thread.started','thread_id':'native-thread'}, {'type':'turn.started'},
+ {'type':'item.completed','item':{'type':'agent_message','text':'done'}},
+ {'type':'turn.completed','usage':{'input_tokens':100,'cached_input_tokens':0,'output_tokens':1}}]
+for event in events: print(json.dumps(event), flush=True)
+'''
+            def spawn(command, **options):
+                self.assertEqual(options.get('start_new_session'), True)
+                self.assertNotIn('creationflags', options)
+                commands.append(list(command))
+                child = real_popen([PYTHON, '-B', '-c', code, *command[1:]], **options)
+                children.append(child)
+                return child
+            with patch.object(entry.subprocess, 'Popen', side_effect=spawn):
+                receipts = [entry._run_persistent_stage(manifest, stage,
+                    'native-thread' if stage else None, {}, time.monotonic()+10)
+                    for stage in (0, 1)]
+            self.assertEqual(commands[0], manifest['initialCommand'])
+            self.assertIn('resume', commands[1])
+            self.assertIn('native-thread', commands[1])
+            for child, receipt in zip(children, receipts):
+                self.assertTrue(receipt['valid'], receipt)
+                self.assertEqual(receipt['terminal'], 'completed')
+                self.assertFalse(receipt['forced'])
+                self.assert_reaped_group(child, receipt)
+                settings = fixture.cli_config_overrides(receipt['command'])
+                self.assertEqual(settings['skills.config'], fixture.expected_skill_exclusions(one, two))
+                self.assertEqual(settings['project_doc_max_bytes'], '17')
+            # Both bound controls and resume command drift remain guarded on POSIX.
+            for changes in ('controls', 'command'):
+                changed = json.loads(json.dumps(manifest))
+                thread = 'native-thread'
+                if changes == 'controls':
+                    changed['controls']['projectDocMaxBytes'] = 18
+                else:
+                    changed['stageCommandTemplates'][1].append('--unreviewed')
+                with self.subTest(changes=changes), patch.object(entry, '_new_controller') as controller, \
+                        patch.object(entry.subprocess, 'Popen') as forbidden:
+                    with self.assertRaises(ValueError):
+                        entry._run_persistent_stage(changed, 1, thread, {}, time.monotonic()+5)
+                controller.assert_not_called(); forbidden.assert_not_called()
+
+    def posix_ephemeral_runner_records_actual_scoped_release(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest = EntryTests().prepared(root)
+            real_popen, children = subprocess.Popen, []
+            def spawn(command, **options):
+                self.assertEqual(command, manifest['command'])
+                self.assertIs(options.get('start_new_session'), True)
+                self.assertNotIn('creationflags', options)
+                child = real_popen([PYTHON, '-B', '-c', 'print("{}")'], **options)
+                children.append(child)
+                return child
+            with patch.dict(os.environ, {'CODEX_HOME': str(root / 'isolated-home')}), \
+                    patch.object(entry.subprocess, 'Popen', side_effect=spawn):
+                result = entry.run(argparse.Namespace(evidence=manifest['evidence']))
+            self.assert_reaped_group(children[0], result['process'])
+            self.assertFalse(result['process']['forced'])
+            self.assertTrue(result['retainedResourceObservation']['releasedWithinScope'])
+            self.assertFalse(result['outputsMatch'])  # This process fixture does no business work.
+            launch = json.loads((root / 'evidence/process.json').read_bytes())
+            self.assertFalse(launch['jobAssignedBeforeResume'])
+            self.assertTrue(launch['newSessionProcessGroup'])
+
+    def posix_persistent_deadline_kills_and_reaps_real_child(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = EntryTests().prepared_persistent(Path(tmp).resolve())
+            manifest.update(turnTimeoutSeconds=0.2, recoveryTimeoutSeconds=2)
+            real_popen, children = subprocess.Popen, []
+            def spawn(command, **options):
+                child = real_popen([PYTHON, '-B', '-c', 'import time; time.sleep(60)'], **options)
+                children.append(child)
+                return child
+            started = time.monotonic()
+            with patch.object(entry.subprocess, 'Popen', side_effect=spawn):
+                receipt = entry._run_persistent_stage(manifest, 0, None, {}, started+5)
+            self.assertLess(time.monotonic()-started, 3)
+            self.assertTrue(receipt['forced'])
+            self.assertEqual(receipt['failure'], 'turn-time-or-output-limit')
+            self.assertFalse(receipt['valid'])
+            self.assert_reaped_group(children[0], receipt)
+
+    def posix_observation_failure_cannot_sign_release_even_after_root_exit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = EntryTests().prepared_persistent(Path(tmp).resolve())
+            manifest['recoveryTimeoutSeconds'] = 1
+            real_popen, children = subprocess.Popen, []
+            controller = entry.PosixProcessGroup()
+            def spawn(command, **options):
+                child = real_popen([PYTHON, '-B', '-c', 'pass'], **options)
+                children.append(child)
+                return child
+            with patch.object(entry, '_new_controller', return_value=controller), \
+                    patch.object(controller, 'sample', side_effect=PermissionError('fixture observation unavailable')), \
+                    patch.object(entry.subprocess, 'Popen', side_effect=spawn):
+                receipt = entry._run_persistent_stage(manifest, 0, None, {}, time.monotonic()+5)
+            self.assertIsNotNone(children[0].poll())
+            with self.assertRaises(ProcessLookupError):
+                os.killpg(children[0].pid, 0)
+            self.assertIsNone(receipt['remainingOwnedProcesses'])
+            self.assertFalse(receipt['valid'])
+            self.assertEqual(receipt['after']['processGroupState'], 'unobservable')
+            self.assertEqual(receipt['failure'], 'resource-release-unobserved')
+            self.assertFalse(entry._entry_resources_released(receipt, manifest))
+
+    def posix_cleanup_interrupt_reaps_owned_child_without_signing_receipt(self):
+        for phase in ('sample', 'drain'):
+            with self.subTest(phase=phase):
+                child = subprocess.Popen([PYTHON, '-B', '-c', 'import time; time.sleep(60)'], start_new_session=True)
+                controller = entry.PosixProcessGroup()
+                controller.attach_and_resume(child)
+                target, method = (controller, 'sample') if phase == 'sample' else (entry.time, 'sleep')
+                original, interrupted = getattr(target, method), []
+                def interrupt_once(*args, **kwargs):
+                    if not interrupted:
+                        interrupted.append(True)
+                        raise KeyboardInterrupt('fixture cleanup interruption')
+                    return original(*args, **kwargs)
+                try:
+                    with patch.object(target, method, side_effect=interrupt_once):
+                        with self.assertRaises(KeyboardInterrupt):
+                            entry._close_processes(controller, child, 'posix-session-process-group', 2, natural=True)
+                    self.assertIsNotNone(child.poll())
+                    with self.assertRaises(ProcessLookupError):
+                        os.killpg(child.pid, 0)
+                finally:
+                    if child.poll() is None:
+                        controller.terminate()
+                    child.wait(timeout=2)
+                    controller.close()
+
+
 # Register actual POSIX syscall cases only where they apply. Shared record and
 # failure tests remain discovered everywhere; Windows keeps its native Job case.
 if os.name == "posix":
+    for case in ('posix_persistent_runner_uses_real_cli_terminal_and_resume',
+                 'posix_ephemeral_runner_records_actual_scoped_release',
+                 'posix_persistent_deadline_kills_and_reaps_real_child',
+                 'posix_observation_failure_cannot_sign_release_even_after_root_exit',
+                 'posix_cleanup_interrupt_reaps_owned_child_without_signing_receipt'):
+        setattr(PosixEntryRunnerTests, 'test_' + case, getattr(PosixEntryRunnerTests, case))
     for case in ("posix_controller_observes_direct_root_and_never_claims_process_counts",
                  "posix_controller_rejects_unisolated_process_without_signalling_caller_group",
                  "posix_descendant_can_leave_group_and_is_not_counted_as_contained"):

@@ -16,7 +16,7 @@ import textwrap
 from scripts import observe_codex_lifecycle as lifecycle
 
 
-def legacy_close_helper_sources(root):
+def legacy_close_helper_sources(root, *, env=None):
     """Read the closed fixture's pinned sources, or identify an unmet prerequisite."""
     import subprocess
     revision = 'da70842705d333e619669bc64c2b1f79c87dd346'
@@ -26,7 +26,7 @@ def legacy_close_helper_sources(root):
             relative = 'scripts/' + name + '.py'
             sources[relative] = subprocess.check_output(
                 ['git', 'show', revision + ':' + relative], cwd=root,
-                stderr=subprocess.PIPE, timeout=30)
+                env=env, stderr=subprocess.PIPE, timeout=30)
     except subprocess.CalledProcessError as error:
         raise RuntimeError(
             'Historical fixture sources are unavailable. Product validation needs '
@@ -175,14 +175,41 @@ class ControlledOwnerCloseDeadlineTests(unittest.TestCase):
 
 
 class CodexLifecycleTests(unittest.TestCase):
+    def test_fixture_git_init_ignores_other_owned_repository_routes(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as temporary:
+            protected = Path(temporary).resolve() / 'protected'
+            protected.mkdir()
+            (protected / 'keep.txt').write_bytes(b'protected original')
+            clean = {key: value for key, value in os.environ.items() if not key.startswith('GIT_')}
+            clean.update(GIT_CONFIG_NOSYSTEM='1', GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_SYSTEM=os.devnull)
+            subprocess.run(['git', 'init', '--quiet', str(protected)], env=clean, check=True, timeout=30)
+            subprocess.run(['git', 'add', '.'], cwd=protected, env=clean, check=True, timeout=30)
+            def snapshot():
+                return {name: (protected / name).read_bytes() for name in ('.git/config', '.git/index', 'keep.txt')}
+            before = snapshot()
+            original, targets = subprocess.run, []
+            def observe(command, **options):
+                result = original(command, **options)
+                if command[:2] == ['git', 'init']:
+                    targets.append((Path(command[-1]) / '.git').is_dir())
+                return result
+            with patch.dict(os.environ, {**clean, 'GIT_DIR': str(protected / '.git')}, clear=True), \
+                    patch.object(subprocess, 'run', side_effect=observe):
+                self.test_legacy_fixture_missing_history_reports_prerequisite_without_native_execution()
+            self.assertEqual(snapshot(), before)
+            self.assertEqual(targets, [True])
+
     def test_legacy_fixture_missing_history_reports_prerequisite_without_native_execution(self):
         import subprocess
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            subprocess.run(['git', 'init', '--quiet', str(root)], check=True, timeout=30)
+            git_env = {key: value for key, value in os.environ.items() if not key.startswith('GIT_')}
+            git_env.update(GIT_CONFIG_NOSYSTEM='1', GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_SYSTEM=os.devnull)
+            subprocess.run(['git', 'init', '--quiet', str(root)], env=git_env, check=True, timeout=30)
             with patch.object(lifecycle, '_App') as native:
                 with self.assertRaisesRegex(RuntimeError, 'pinned Git history.*Candidate behavior was not tested'):
-                    legacy_close_helper_sources(root)
+                    legacy_close_helper_sources(root, env=git_env)
                 native.assert_not_called()
 
     def legacy_native_config_preflight_close(self):

@@ -807,6 +807,27 @@ source/command drift guard precedes that business Agent's Job/Popen, while
 inventory or earlier stages may already have run. Prepared settings and offline
 checks still require separate native, business and post-state observations.
 
+CLI preparation also binds the host's resource controller and its evidence scope.
+Windows keeps its suspended-start Job assignment and descendant accounting.
+POSIX uses a new session/process group and observes the direct child's exit and
+that group's absence; process counts, CPU, memory and escaped descendants remain
+unknown. It supplies no Job-style containment or kill-on-close guarantee.
+The non-default POSIX controller and scope enter admission execution and the
+derived composition worker, so a Windows binding cannot silently authorize a
+different resource guarantee. Untagged historical records retain their Windows
+meaning. Dispatch rejects a changed controller or resource-inspector source.
+Stage validity, post-stage Goal readback and retained inspection use the same
+scoped resource predicate; retained inspection compares original receipts and
+does not query old process IDs as if they were live allocations.
+
+Temporary Git fixtures also need their own repository namespace. A different
+working directory does not contain `git init`, index updates or removal when
+inherited Git routing points elsewhere. Fixture writers isolate that environment
+and use independent metadata; read-only historical inputs stay separate from
+mutating suites. Source-file hashes alone cannot establish that shared Git
+metadata was preserved. These controls concern test-owned resources and do not
+replace the user's Git environment for ordinary business commands.
+
 For a coordinator-owned composition, the same Python `prepare` API accepts an
 optional `composition={"case": case_id, "execution": coordinator_execution}`.
 The caller supplies the coordinator's `host`, `entry`, a nonempty `coordinator`

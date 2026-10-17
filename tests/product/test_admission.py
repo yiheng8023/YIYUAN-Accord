@@ -24,6 +24,45 @@ FACTS = {"effect": {"total": 130}, "authority": {"inputPreserved": True},
                         "matchedConditions": True}}
 
 
+class OwnedGitFixtureRoutingTests(unittest.TestCase):
+    def test_fixture_mutations_and_history_restore_ignore_other_owned_repository(self):
+        import os
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            protected, target = root / 'protected', root / 'target'
+            helper = development_fixtures.WorkingTreeOverlayTests()
+            clean = helper.protected_repository(protected)
+            target.mkdir()
+            subprocess.run(['git', 'init', '--quiet', str(target)], env=clean, check=True, timeout=30)
+            def snapshot():
+                paths = [protected / name for name in ('.git/config', '.git/index', '.git/HEAD', 'keep.txt', 'retired.txt')]
+                paths.extend(path for path in (protected / '.git/refs').rglob('*') if path.is_file())
+                return {path.relative_to(protected).as_posix(): path.read_bytes() for path in paths}
+            before = snapshot()
+            class OwnedFixture(DevelopmentEvidenceTests):
+                pass
+            OwnedFixture.root = target
+            (target / 'payload.txt').write_text('first')
+            with patch.dict(os.environ, {**clean, 'GIT_DIR': str(protected / '.git'), 'GIT_WORK_TREE': str(protected),
+                                        'GIT_INDEX_FILE': str(protected / '.git/index')}, clear=True):
+                OwnedFixture.git('add', '.')
+                OwnedFixture.git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
+                                 'commit', '--quiet', '-m', 'Own first revision')
+                self.assertEqual(snapshot(), before)
+                first = OwnedFixture.git('rev-parse', 'HEAD')
+                (target / 'payload.txt').write_text('second')
+                OwnedFixture.git('add', '.')
+                OwnedFixture.git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
+                                 'commit', '--quiet', '-m', 'Own second revision')
+                second = OwnedFixture.git('rev-parse', 'HEAD')
+                with OwnedFixture().history():
+                    OwnedFixture.git('checkout', '--quiet', '--detach', first)
+                    self.assertEqual((target / 'payload.txt').read_text(), 'first')
+                self.assertEqual(OwnedFixture.git('rev-parse', 'HEAD'), second)
+                self.assertEqual((target / 'payload.txt').read_text(), 'second')
+            self.assertEqual(snapshot(), before)
+
+
 class DevelopmentEvidenceTests(unittest.TestCase):
     def test_successor_cannot_promote_retained_cases_even_with_an_observer(self):
         from pathlib import Path
@@ -49,9 +88,10 @@ class DevelopmentEvidenceTests(unittest.TestCase):
         cls.addClassCleanup(temporary.cleanup)
         cls.root = Path(temporary.name) / 'repository'
         subprocess.run(['git', 'clone', '--quiet', '--no-hardlinks', str(development_fixtures.ROOT), str(cls.root)],
-                       check=True, timeout=60)
+                       env=development_fixtures.owned_git_environment(), check=True, timeout=60)
         subprocess.run(['git', '-C', str(cls.root), 'checkout', '--quiet', '--detach',
-                        'cf13486db9e5d0e9a6eef2d9df187d5e0405ee88'], check=True, timeout=60)
+                        'cf13486db9e5d0e9a6eef2d9df187d5e0405ee88'],
+                       env=development_fixtures.owned_git_environment(), check=True, timeout=60)
         cls.contract = json.loads((cls.root / DEVELOPMENT_FILE).read_text(encoding='utf-8'))
         c = cls.contract
         # Isolate admission regressions from the separately tested production budget.
@@ -99,6 +139,7 @@ class DevelopmentEvidenceTests(unittest.TestCase):
     @classmethod
     def git(cls, *args):
         return subprocess.check_output(["git", "-C", str(cls.root), *args],
+                                       env=development_fixtures.owned_git_environment(),
                                        stderr=subprocess.DEVNULL, timeout=30).decode().strip()
 
     @classmethod
@@ -1032,7 +1073,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         cls.addClassCleanup(temporary.cleanup)
         cls.root = Path(temporary.name) / "repository"
         subprocess.run(["git", "clone", "--quiet", "--no-hardlinks", str(development_fixtures.ROOT), str(cls.root)],
-                       check=True, timeout=60)
+                       env=development_fixtures.owned_git_environment(), check=True, timeout=60)
         development_fixtures.overlay_current_tree(cls.root)
         cls.contract = json.loads((cls.root / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
         cls.git("add", ".")

@@ -34,6 +34,8 @@ Inspect --retained reads persistent stage copies after workspace cleanup without
 calling a model or replaying the original checker. It verifies retained byte and
 record consistency, leaving original outcomes and semantic/admission verdicts intact.
 Windows Job Objects contain descendants before the suspended CLI starts executing.
+POSIX CLI processes start a new session/process group. Its direct child exit and
+group absence are observed; escaped descendants, counts, CPU and RAM stay unknown.
 The caller selects an existing Windows sandbox backend preference explicitly;
 danger-full-access does not establish that this backend participates. This runner
 does not initialize/install a sandbox or directly edit shared configuration.
@@ -51,6 +53,7 @@ import argparse
 import csv
 import ctypes
 import hashlib
+import importlib.util
 import io
 import json
 import os
@@ -64,6 +67,17 @@ import subprocess
 import sys
 import time
 import uuid
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+# The documented Python API may coexist with another checkout in one process.
+# Load this bound sibling explicitly rather than reuse its package-cache entry.
+_RESOURCE_INSPECTOR_PATH = Path(__file__).with_name("inspect_native_resources.py").resolve()
+_resource_spec = importlib.util.spec_from_file_location("accord_entry_resource_inspector", _RESOURCE_INSPECTOR_PATH)
+_resource_module = importlib.util.module_from_spec(_resource_spec)
+_resource_spec.loader.exec_module(_resource_module)
+native_processes_released = _resource_module.native_processes_released
 
 try:
     import tomllib
@@ -238,6 +252,7 @@ def load_manifest(evidence, *, require_workspace=True):
     _hook_mode(manifest)
     _sandbox_mode(manifest)
     _control_configuration(manifest)
+    _resource_controller(manifest)
     if protocol not in ("exec", "exec-resume", "app-server"):
         raise ValueError("unsupported entry protocol")
     if (protocol == "exec-resume" and manifest.get("caseSchema", "yiyuan-accord-coordination-case/v1")
@@ -603,6 +618,12 @@ def _execution_settings(manifest):
     if "controls" in manifest:
         _control_configuration(manifest)
         execution["controls"] = json.loads(json.dumps(manifest["controls"]))
+    controller = _resource_controller(manifest)
+    if controller != "windows-job-object":
+        # Missing/default Windows fields retain their immutable legacy mapping.
+        # A weaker POSIX guarantee needs its own prospective execution binding.
+        execution.update(resourceController=controller,
+                         resourceEvidenceScope=manifest["resourceEvidenceScope"])
     return execution
 
 
@@ -805,7 +826,8 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
             raise ValueError("fresh root with ordinary existing parent required: " + str(path))
     paths = {"codex": Path(args.codex).resolve(), "node": Path(args.node).resolve(),
              "python": Path(sys.executable).resolve(), "runner": Path(__file__).resolve(),
-             "runtime": package / "runtime/task-checkpoint.cjs"}
+             "runtime": package / "runtime/task-checkpoint.cjs",
+             "resourceInspector": _RESOURCE_INSPECTOR_PATH}
     if native_hooks:
         paths["hookShell"] = Path(projection["hookShell"])
     if installed_id is not None or persistent_case is not None:
@@ -857,6 +879,8 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
             "recoveryTimeoutSeconds": recovery_timeout, "caseSha256": hashlib.sha256(case_bytes).hexdigest(),
             "limits": {"usageCaps": usage_caps, "usageScope": case["limits"]["usageScope"]}}
         binding_manifest.update(control_binding)
+        binding_manifest.update(resourceController=_controller_kind(),
+                                resourceEvidenceScope=_resource_scope(_controller_kind()))
         if sandbox_mode != "workspace-write":
             binding_manifest["sandboxMode"] = sandbox_mode
         if admission_case is not None:
@@ -908,6 +932,9 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
                 "docs": ["https://learn.chatgpt.com/docs/hooks", "https://learn.chatgpt.com/docs/config-file/config-reference",
                          "https://learn.chatgpt.com/docs/config-file/config-basic#windows-sandbox-mode"]}
     manifest.update(control_binding)
+    if protocol in ("exec", "exec-resume"):
+        manifest.update(resourceController=_controller_kind(),
+                        resourceEvidenceScope=_resource_scope(_controller_kind()))
     manifest["hookMode"] = "installed-plugin" if installed is not None else "native-package-hooks" if native_hooks else "checkpoint-wrapper"
     if sandbox_mode != "workspace-write":
         manifest["sandboxMode"] = sandbox_mode
@@ -973,6 +1000,8 @@ def prepare(args, *, app_server_case=None, persistent_case=None, composition=Non
                 "retainedRoots": {"evidence": str(evidence), "workspace": str(workspace)},
                 "recovery": "Caller must review retained preparation/inventory receipts and release these owned roots; no run manifest was published."})
             raise
+    if protocol in ("exec", "exec-resume"):
+        manifest["limits"] = {**manifest["limits"], "resources": manifest["resourceEvidenceScope"]}
     _control_configuration(manifest, verify_sources=True)
     save(evidence / "manifest.json", manifest)
     return {"prepared": True, "evidence": str(evidence), "workspace": str(workspace), "modelCalled": False}
@@ -1182,6 +1211,161 @@ class PosixProcessGroup:
 
     def close(self):
         pass  # POSIX has no Job handle or kill-on-close guarantee.
+
+
+def _controller_kind():
+    if os.name == "nt":
+        return "windows-job-object"
+    if os.name == "posix":
+        return "posix-session-process-group"
+    raise ValueError("CLI process control requires Windows or POSIX")
+
+
+def _new_controller():
+    return WindowsJob() if _controller_kind() == "windows-job-object" else PosixProcessGroup()
+
+
+def _spawn_options():
+    if _controller_kind() == "windows-job-object":
+        return {"creationflags": subprocess.CREATE_NO_WINDOW | 4}  # CREATE_SUSPENDED
+    return {"start_new_session": True}
+
+
+def _resource_scope(controller):
+    if controller == "windows-job-object":
+        return "Windows Job assigned before execution; Job process counts and working sets"
+    return "POSIX direct child exit and same process group only; escaped descendants, process counts, CPU and memory unobserved; no kill-on-close guarantee"
+
+
+def _resource_controller(manifest, *, verify_host=False):
+    # Old, immutable records without a controller retain their Windows meaning.
+    controller = manifest.get("resourceController", "windows-job-object")
+    if (controller not in {"windows-job-object", "posix-session-process-group"}
+            or "resourceController" in manifest
+            and manifest.get("resourceEvidenceScope") != _resource_scope(controller)):
+        raise ValueError("CLI resource controller binding mismatch")
+    if verify_host and controller != _controller_kind():
+        raise ValueError("prepared resource controller differs from this host")
+    if (verify_host and "resourceInspector" in manifest
+            and digest(manifest["resourceInspector"]) != manifest["sourceHashes"]["resourceInspector"]):
+        raise ValueError("bound resource inspection source changed")
+    return controller
+
+
+def _released(sample, controller):
+    return native_processes_released(sample, controller)
+
+
+def _entry_resources_released(record, manifest):
+    if not isinstance(record, dict):
+        return False
+    controller = _resource_controller(manifest)
+    after = record.get("after", record.get("afterCleanup"))
+    return (isinstance(after, dict)
+            and record.get("controller", "windows-job-object") == controller
+            and ("resourceController" not in manifest
+                 or record.get("evidenceScope") == _resource_scope(controller))
+            and type(record.get("exitCode")) is int
+            and (controller != "posix-session-process-group"
+                 or record["exitCode"] == after.get("rootExitCode")
+                 and record.get("remainingOwnedProcesses") is None
+                 and record.get("evidenceScope") == _resource_scope(controller)
+                 and after.get("observationError") is None
+                 and record.get("pid", after.get("rootPid")) == after.get("rootPid"))
+            and _released(after, controller))
+
+
+def _sample_resources(job, controller):
+    try:
+        return job.sample()
+    except Exception as error:
+        return {"controller": controller, "activeProcesses": None,
+                "processGroupState": "unobservable",
+                "observationError": {"type": type(error).__name__, "message": str(error)[:1024]}}
+
+
+def _close_processes(job, process, controller, recovery_seconds, *, natural):
+    """One bounded recovery window, using the lifecycle controller's exit scope."""
+    deadline = time.monotonic() + recovery_seconds
+    before = after = {"controller": controller, "activeProcesses": None,
+                      "processGroupState": "unobservable"}
+    forced, failure = False, None
+    try:
+        before = after = _sample_resources(job, controller)
+        if process is None:
+            return before, after, False, None
+        # POSIX follows lifecycle's reserved forced-release allowance. Preserve
+        # the Windows persistent runner's original natural-drain window.
+        graceful = deadline if controller == "windows-job-object" else deadline - recovery_seconds / 2
+        while natural and not _released(after, controller) and time.monotonic() < graceful:
+            time.sleep(min(0.1, max(0, graceful - time.monotonic())))
+            after = _sample_resources(job, controller)
+        if not _released(after, controller):
+            forced = True
+            try:
+                job.terminate()
+            except Exception as error:
+                failure = "controller-termination: " + type(error).__name__
+        if process is not None:
+            # Also handles attach failure before a controller owns the root.
+            if process.poll() is None and (forced or _released(after, controller)):
+                forced = True
+                try:
+                    process.kill()
+                except ProcessLookupError:
+                    pass
+                except OSError as error:
+                    failure = failure or "root-termination: " + type(error).__name__
+            try:
+                process.wait(timeout=max(0, deadline - time.monotonic()))
+            except subprocess.TimeoutExpired:
+                forced, failure = True, failure or "recovery-time-limit"
+        after = _sample_resources(job, controller)
+        while not _released(after, controller) and time.monotonic() < deadline:
+            time.sleep(min(0.1, max(0, deadline - time.monotonic())))
+            after = _sample_resources(job, controller)
+        if not _released(after, controller):
+            failure = failure or "resource-release-unobserved"
+    except BaseException:
+        # A POSIX close has no kill-on-close safety net. An interrupt in the
+        # drain itself must still release only this controller's owned group,
+        # reap the direct child within the same deadline, and preserve failure.
+        try:
+            job.terminate()
+        finally:
+            if process is not None:
+                try:
+                    if process.poll() is None:
+                        process.kill()
+                finally:
+                    process.wait(timeout=max(0, deadline - time.monotonic()))
+        raise
+    finally:
+        job.close()
+    return before, after, forced, failure
+
+
+def _resource_observation(record, manifest):
+    return {"controller": _resource_controller(manifest),
+            "evidenceScope": _resource_scope(_resource_controller(manifest)),
+            "releasedWithinScope": _entry_resources_released(record, manifest),
+            "liveRecheck": False}
+
+
+def _retained_resource_observations(evidence, manifest, stages):
+    observations = []
+    fields = ("controller", "evidenceScope", "exitCode", "pid", "remainingOwnedProcesses", "after")
+    for index, stage in enumerate(stages, 1):
+        try:
+            native = json.loads(read_regular(Path(evidence) / f"native-receipt-{index}.json"))
+            matches = isinstance(native, dict) and all(native.get(key) == stage.get(key) for key in fields)
+        except (OSError, ValueError):
+            native, matches = None, False
+        observed = _resource_observation(native, manifest)
+        observed.update(stage=index, matchesRecordedStage=matches)
+        observed["releasedWithinScope"] &= matches
+        observations.append(observed)
+    return observations
 
 
 def source_recovery_from_events(stream, python, *, protocol="exec", request_stream=None, workspace=None):
@@ -1422,7 +1606,6 @@ def _installed_evidence_valid(manifest, recorded):
     repo = str(Path(__file__).resolve().parents[1])
     if repo not in sys.path:
         sys.path.insert(0, repo)
-    from scripts.inspect_native_resources import native_processes_released
     try:
         binding = manifest["installedPlugin"]
         stages = recorded["stages"]
@@ -1595,6 +1778,7 @@ def _inspect_retained(evidence, manifest):
             raise ValueError("retained evidence changed during inspection")
     return {"entryProtocol": "exec-resume", "inspectionMode": "retained-only",
             "recordedExecution": recorded, "retainedStages": results,
+            "retainedResourceObservations": _retained_resource_observations(evidence, manifest, recorded["stages"]),
             "currentFileObservation": {"decision": "unknown", "reason": "retained-only-no-live-workspace-check",
                                        "semanticDecision": "unreviewed", "files": {}},
             "claimLimit": "Retained byte hashes and record consistency only; no authentication of caller records, live workspace check, original mtime verification, semantic verdict, installed-state or resource recheck, or admission. Original results are unchanged."}
@@ -1602,6 +1786,8 @@ def _inspect_retained(evidence, manifest):
 
 def inspect(evidence, *, retained=False):
     manifest = load_manifest(evidence, require_workspace=not retained)
+    if "resourceInspector" in manifest and digest(manifest["resourceInspector"]) != manifest["sourceHashes"]["resourceInspector"]:
+        raise ValueError("bound resource inspection source changed")
     if retained:
         return _inspect_retained(evidence, manifest)
     if manifest.get("entryProtocol") == "exec-resume":
@@ -1632,6 +1818,7 @@ def inspect(evidence, *, retained=False):
             installed_checks = _installed_evidence_valid(manifest, recorded)
         return {"entryProtocol": "exec-resume", "caseSchema": manifest.get("caseSchema"),
                 "recordedExecution": recorded,
+                "retainedResourceObservations": _retained_resource_observations(evidence, manifest, recorded["stages"]),
                 "retainedInstalledChecksValid": installed_checks,
                 "currentFileObservation": current,
                 "claimLimit": "Fresh file check and retained execution receipts; a current file pass does not revise an earlier failed or unverified execution. No automatic admission."}
@@ -1687,7 +1874,13 @@ def inspect(evidence, *, retained=False):
         except (OSError, ValueError, KeyError, TypeError):
             input_binding = False
     state = sorted(p.name for p in (evidence / "state").iterdir())
+    try:
+        resources = json.loads(read_regular(evidence / "resources.json"))
+    except (OSError, ValueError):
+        resources = None
     return {"outputs": {"details": details, "summary": summary, "report": report},
+            **({"retainedResourceObservation": _resource_observation(resources, manifest)}
+               if manifest.get("entryProtocol", "exec") == "exec" else {}),
             "outputsMatch": input_binding is not False and details == manifest["expected"]["details"] and summary == manifest["expected"]["summary"] and bool(report and report.strip()),
             "caseInputsMatch": input_binding,
             "reportSemanticReview": "manual; nonempty report is not semantic verification",
@@ -2093,7 +2286,7 @@ def _native_goal_readback(manifest, native, *, stage, env, deadline):
             result["reason"] = "cli-turn-not-completed"
             return result
         if (not isinstance(thread_id, str) or not thread_id.strip()
-                or native.get("remainingOwnedProcesses") != 0
+                or not _entry_resources_released(native, manifest)
                 or not isinstance(manifest.get("codex"), str)
                 or digest(manifest["codex"]) != manifest["sourceHashes"]["codex"]):
             result["reason"] = "cli-thread-or-host-unbound"
@@ -2131,7 +2324,6 @@ def _native_goal_readback(manifest, native, *, stage, env, deadline):
             result["reason"] = "observation-deadline"
             return result
         from scripts.observe_codex_lifecycle import _App, _controller_kind
-        from scripts.inspect_native_resources import native_processes_released
         (evidence / "native").mkdir(exist_ok=True)
         reader_manifest = {"evidence": str(evidence), "codex": manifest["codex"],
             "ownedRoots": {"workspace": manifest["workspace"]},
@@ -2233,6 +2425,7 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
                           preflight_failure=None):
     native_hooks = _direct_package_hooks(manifest)
     try:
+        controller = _resource_controller(manifest, verify_host=True)
         _verify_control_stage(manifest, stage, thread_id)
         bound_prompt, bound_command, installed_before = (_verify_native_stage(manifest, stage, thread_id)
                                                          if native_hooks else (None, None, None))
@@ -2249,7 +2442,7 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
     prompt_path = evidence / f"prompt-{stage + 1}.txt"
     stdout_path = evidence / f"stdout-{stage + 1}.jsonl"
     stderr_path = evidence / f"stderr-{stage + 1}.txt"
-    process, job, samples = None, WindowsJob(), []
+    process, job, samples = None, _new_controller(), []
     stdout_lines = _IncrementalLines(stdout_path, limit=32 * 1024 * 1024)
     stderr_lines = _IncrementalLines(stderr_path, limit=32 * 1024 * 1024)
     configured, started_thread = None, None
@@ -2264,14 +2457,16 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
                     raise ValueError("prepared stage prompt changed before dispatch")
                 stdin.seek(0)
             _verify_control_stage(manifest, stage, thread_id)
+            if _resource_controller(manifest, verify_host=True) != controller:
+                raise ValueError("prepared resource controller changed before dispatch")
             if command != build_command(manifest, stage=stage, thread_id=thread_id):
                 raise ValueError("prepared control command changed before dispatch")
             process = subprocess.Popen(command, cwd=manifest["workspace"], env=env, stdin=stdin,
                                        stdout=stdout, stderr=stderr,
-                                       creationflags=subprocess.CREATE_NO_WINDOW | 4)
+                                       **_spawn_options())
             job.attach_and_resume(process)
             while process.poll() is None:
-                samples.append(job.sample())
+                samples.append(_sample_resources(job, controller))
                 configured = configured or _session_configuration(stderr_lines.read())
                 started_thread = started_thread or _stdout_thread(stdout_lines.read())
                 if configured and started_thread:
@@ -2308,37 +2503,10 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
     except BaseException as error:
         failure = type(error).__name__ + ": " + str(error)
     finally:
-        try:
-            recovery_deadline = time.monotonic() + manifest["recoveryTimeoutSeconds"]
-            before = job.sample()
-            naturally_exited = process is not None and process.poll() is not None and failure is None
-            after = before
-            while naturally_exited and after["activeProcesses"] and time.monotonic() < recovery_deadline:
-                time.sleep(0.1)
-                after = job.sample()
-            if after["activeProcesses"]:
-                forced = True
-                job.terminate()
-            if process is not None:
-                if process.poll() is None and not after["activeProcesses"]:
-                    forced = True
-                    process.kill()
-                try:
-                    process.wait(timeout=max(0, recovery_deadline - time.monotonic()))
-                except subprocess.TimeoutExpired:
-                    forced = True
-                    if failure is None:
-                        failure = "recovery-time-limit"
-                    if process.poll() is None:
-                        process.kill()
-            after = job.sample()
-            while after["activeProcesses"] and time.monotonic() < recovery_deadline:
-                time.sleep(0.1)
-                after = job.sample()
-            if after["activeProcesses"] and failure is None:
-                failure = "recovery-time-limit"
-        finally:
-            job.close()
+        before, after, cleanup_forced, cleanup_failure = _close_processes(
+            job, process, controller, manifest["recoveryTimeoutSeconds"],
+            natural=process is not None and process.poll() is not None and failure is None)
+        forced, failure = forced or cleanup_forced, failure or cleanup_failure
     try:
         stream = read_regular(stdout_path, 32 * 1024 * 1024).decode("utf-8")
         final = read_regular(evidence / f"last-message-{stage + 1}.txt").decode("utf-8")
@@ -2361,9 +2529,13 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
             receipt["usageObservation"] = live_usage
     receipt.update({"stage": stage + 1, "command": command, "exitCode": process.returncode if process else None,
                     "forced": forced, "failure": failure, "elapsedSeconds": time.monotonic() - started,
-                    "remainingOwnedProcesses": after["activeProcesses"], "samples": samples})
+                    "remainingOwnedProcesses": after.get("activeProcesses"), "samples": samples,
+                    "pid": process.pid if process else None, "controller": controller,
+                    "evidenceScope": _resource_scope(controller), "beforeCleanup": before, "after": after,
+                    "cleanupState": "released-within-controller-scope" if _released(after, controller) else "unobserved"})
+    receipt["cleanupFailure"] = cleanup_failure
     receipt["valid"] &= (receipt["exitCode"] == 0 and not forced and failure is None
-                         and receipt["remainingOwnedProcesses"] == 0)
+                         and _entry_resources_released(receipt, manifest))
     if _hook_mode(manifest) == "installed-plugin":
         receipt["installedBefore"] = installed_before
         try:
@@ -2413,6 +2585,7 @@ def run_persistent(args):
     manifest = load_manifest(args.evidence)
     if manifest.get("entryProtocol") != "exec-resume":
         raise ValueError("persistent runner requires an exec-resume case")
+    _resource_controller(manifest, verify_host=True)
     evidence = Path(args.evidence)
     _verify_prepared_sources(manifest)
     for index, expected in enumerate(manifest["promptSha256s"]):
@@ -2569,6 +2742,7 @@ def run(args):
     manifest = load_manifest(args.evidence)
     if manifest.get("entryProtocol", "exec") != "exec":
         raise ValueError("App Server case requires its caller-owned dispatcher; CLI run cannot execute it")
+    controller = _resource_controller(manifest, verify_host=True)
     evidence = Path(args.evidence)
     _control_configuration(manifest, verify_sources=True)
     for key, expected in manifest["sourceHashes"].items():
@@ -2593,21 +2767,25 @@ def run(args):
         "limit": "config.toml only; changed content may include concurrent work, so no automatic shared cleanup",
     }
     save(evidence / "shared-config.json", config_observation)
-    process, job, samples = None, WindowsJob(), []
+    process, job, samples = None, _new_controller(), []
     forced, failure, before_cleanup = False, None, None
     started = time.monotonic()
     try:
         with (evidence / "prompt.txt").open("rb") as stdin, (evidence / "stdout.jsonl").open("xb") as stdout, (evidence / "stderr.txt").open("xb") as stderr:
             _control_configuration(manifest, verify_sources=True)
+            if _resource_controller(manifest, verify_host=True) != controller:
+                raise ValueError("prepared resource controller changed before dispatch")
             if build_command(manifest) != manifest["command"]:
                 raise ValueError("prepared control command changed before dispatch")
             process = subprocess.Popen(manifest["command"], cwd=manifest["workspace"], env=env,
                                        stdin=stdin, stdout=stdout, stderr=stderr,
-                                       creationflags=subprocess.CREATE_NO_WINDOW | 4)  # CREATE_SUSPENDED
+                                       **_spawn_options())
             job.attach_and_resume(process)
-            save(evidence / "process.json", {"pid": process.pid, "jobAssignedBeforeResume": True})
+            save(evidence / "process.json", {"pid": process.pid, "controller": controller,
+                "jobAssignedBeforeResume": controller == "windows-job-object",
+                "newSessionProcessGroup": controller == "posix-session-process-group"})
             while process.poll() is None:
-                samples.append(job.sample())
+                samples.append(_sample_resources(job, controller))
                 output_size = (evidence / "stdout.jsonl").stat().st_size + (evidence / "stderr.txt").stat().st_size
                 if time.monotonic() - started > manifest["timeoutSeconds"] or output_size > 32 * 1024 * 1024:
                     forced = True
@@ -2618,23 +2796,12 @@ def run(args):
         failure = type(error).__name__ + ": " + str(error)
     finally:
         try:
-            before_cleanup = job.sample()
-            if before_cleanup["activeProcesses"]:
-                forced = True
-                job.terminate()
-            if process is not None:
-                # Handles assignment failure while the owned root remains suspended.
-                if process.poll() is None and not before_cleanup["activeProcesses"]:
-                    forced = True
-                    process.kill()
-                process.wait(timeout=10)
-            deadline = time.monotonic() + 10
-            after = job.sample()
-            while after["activeProcesses"] and time.monotonic() < deadline:
-                time.sleep(0.1)
-                after = job.sample()
+            before_cleanup, after, cleanup_forced, cleanup_failure = _close_processes(
+                job, process, controller, 10,
+                natural=controller == "posix-session-process-group"
+                        and process is not None and process.poll() is not None and failure is None)
+            forced, failure = forced or cleanup_forced, failure or cleanup_failure
         finally:
-            job.close()
             config_after = shared_config_snapshot(shared_config, manifest["workspace"])
             config_observation.update({
                 "after": config_after,
@@ -2644,11 +2811,17 @@ def run(args):
             save(evidence / "shared-config.json", config_observation)
     save(evidence / "resources.json", {"samples": samples, "beforeCleanup": before_cleanup, "afterCleanup": after,
                                        "elapsedSeconds": time.monotonic() - started, "forced": forced, "failure": failure,
-                                       "exitCode": process.returncode if process else None})
+                                       "exitCode": process.returncode if process else None, "controller": controller,
+                                       "pid": process.pid if process else None, "cleanupFailure": cleanup_failure,
+                                       "evidenceScope": _resource_scope(controller),
+                                       "cleanupState": "released-within-controller-scope" if _released(after, controller) else "unobserved"})
     result = inspect(evidence)
     result["sharedConfigObservation"] = config_observation
     result["process"] = {"pid": process.pid if process else None, "exitCode": process.returncode if process else None,
-                         "forced": forced, "failure": failure, "remainingOwnedProcesses": after["activeProcesses"]}
+                         "forced": forced, "failure": failure, "remainingOwnedProcesses": after.get("activeProcesses"),
+                         "controller": controller, "evidenceScope": _resource_scope(controller), "after": after,
+                         "cleanupFailure": cleanup_failure,
+                         "cleanupState": "released-within-controller-scope" if _released(after, controller) else "unobserved"}
     result["runtimeStateRetainedForReview"] = bool(result["runtimeStateResidue"])
     save(evidence / "result.json", result)
     return result

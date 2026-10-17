@@ -27,10 +27,18 @@ def historical_development():
         ["git", "show", f"{V4_REVISION}:{DEVELOPMENT_FILE}"], cwd=ROOT))
 
 
+def owned_git_environment():
+    """Route only task-owned fixture commands, never the user's Git process."""
+    env = {key: value for key, value in os.environ.items() if not key.startswith('GIT_')}
+    env.update(GIT_CONFIG_NOSYSTEM='1', GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_SYSTEM=os.devnull)
+    return env
+
+
 def overlay_current_tree(destination):
     """Carry working-tree deletions into a task-owned clone before overlaying it."""
     destination = Path(destination).resolve()
-    tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=destination).decode("utf-8")
+    git_env = owned_git_environment()
+    tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=destination, env=git_env).decode("utf-8")
     removed = []
     for locator in filter(None, tracked.split("\0")):
         source = ROOT / locator
@@ -42,27 +50,103 @@ def overlay_current_tree(destination):
     if removed:
         # Removing from the clone's index also keeps active-tree inventory honest.
         subprocess.run(["git", "rm", "--quiet", "--force", "--", *removed],
-                       cwd=destination, check=True, timeout=30)
+                       cwd=destination, env=git_env, check=True, timeout=30)
     shutil.copytree(ROOT, destination, dirs_exist_ok=True, ignore=shutil.ignore_patterns(
         ".git", ".tmp", ".remember", "__pycache__", "*.pyc"))
 
 
 class WorkingTreeOverlayTests(unittest.TestCase):
+    def protected_repository(self, root):
+        env = {key: value for key, value in os.environ.items() if not key.startswith('GIT_')}
+        env.update(GIT_CONFIG_NOSYSTEM='1', GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_SYSTEM=os.devnull)
+        root.mkdir()
+        for name in ('keep.txt', 'retired.txt'):
+            (root / name).write_text('protected-' + name, encoding='utf-8')
+        subprocess.run(['git', 'init', '--quiet', str(root)], env=env, check=True, timeout=30)
+        subprocess.run(['git', 'add', '.'], cwd=root, env=env, check=True, timeout=30)
+        return env
+
+    def protected_bytes(self, root):
+        return {name: (root / name).read_bytes() if (root / name).exists() else None
+                for name in ('.git/config', '.git/index', 'keep.txt', 'retired.txt')}
+
+    def test_overlay_git_commands_ignore_other_owned_repository_routes(self):
+        for routing in ('all', 'work-tree', 'index'):
+            with self.subTest(routing=routing), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary).resolve()
+                protected, source, clone = (root / name for name in ('protected', 'source', 'clone'))
+                clean = self.protected_repository(protected)
+                source.mkdir(); clone.mkdir()
+                (source / 'keep.txt').write_text('current')
+                for name in ('keep.txt', 'retired.txt'):
+                    (clone / name).write_text('old')
+                subprocess.run(['git', 'init', '--quiet', str(clone)], env=clean, check=True, timeout=30)
+                subprocess.run(['git', 'add', '.'], cwd=clone, env=clean, check=True, timeout=30)
+                routes = {'GIT_DIR': str(protected / '.git'), 'GIT_WORK_TREE': str(protected),
+                          'GIT_INDEX_FILE': str(protected / '.git/index')}
+                if routing == 'work-tree': routes = {'GIT_WORK_TREE': routes['GIT_WORK_TREE']}
+                if routing == 'index': routes = {'GIT_INDEX_FILE': routes['GIT_INDEX_FILE']}
+                before = self.protected_bytes(protected)
+                with patch.dict(os.environ, {**clean, **routes}, clear=True), patch(__name__ + '.ROOT', source):
+                    overlay_current_tree(clone)
+                self.assertEqual(self.protected_bytes(protected), before)
+                self.assertEqual((clone / 'keep.txt').read_text(), 'current')
+                self.assertFalse((clone / 'retired.txt').exists())
+                self.assertNotIn(b'retired.txt', subprocess.check_output(['git', 'ls-files'], cwd=clone, env=clean))
+
+    def test_overlay_fixture_init_and_add_ignore_other_owned_repository(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            protected = Path(temporary).resolve() / 'protected'
+            clean = self.protected_repository(protected)
+            before = self.protected_bytes(protected)
+            with patch.dict(os.environ, {**clean, 'GIT_DIR': str(protected / '.git'), 'GIT_WORK_TREE': str(protected),
+                                        'GIT_INDEX_FILE': str(protected / '.git/index')}, clear=True):
+                self.test_deleted_sources_are_not_restored_by_a_clone_overlay()
+            self.assertEqual(self.protected_bytes(protected), before)
+
+    def test_delivery_clone_fixture_ignores_other_owned_repository_routes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary).resolve()
+            protected, source = root / 'protected', root / 'source'
+            clean = self.protected_repository(protected)
+            self.protected_repository(source)
+            (source / 'product').mkdir()
+            (source / 'product/development.json').write_text('{"fixture":"owned-clone"}', encoding='utf-8')
+            subprocess.run(['git', 'add', '.'], cwd=source, env=clean, check=True, timeout=30)
+            subprocess.run(['git', '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
+                            'commit', '--quiet', '-m', 'Own synthetic source'],
+                           cwd=source, env=clean, check=True, timeout=30)
+            before = self.protected_bytes(protected)
+            class OwnedClone(DevelopmentDeliveryTests):
+                pass
+            try:
+                with patch.dict(os.environ, {**clean, 'GIT_DIR': str(protected / '.git'), 'GIT_WORK_TREE': str(protected),
+                                            'GIT_INDEX_FILE': str(protected / '.git/index')}, clear=True), \
+                        patch(__name__ + '.ROOT', source):
+                    OwnedClone.setUpClass()
+                self.assertEqual(OwnedClone.contract, {'fixture': 'owned-clone'})
+                self.assertTrue((OwnedClone.root / '.git').is_dir())
+                self.assertEqual((OwnedClone.root / 'keep.txt').read_text(), 'protected-keep.txt')
+                self.assertEqual(self.protected_bytes(protected), before)
+            finally:
+                OwnedClone.doClassCleanups()
+
     def test_deleted_sources_are_not_restored_by_a_clone_overlay(self):
         with tempfile.TemporaryDirectory() as temporary:
+            git_env = owned_git_environment()
             source, clone = Path(temporary) / "source", Path(temporary) / "clone"
             source.mkdir()
             clone.mkdir()
             (source / "keep.txt").write_text("current")
             (clone / "keep.txt").write_text("old")
             (clone / "retired.txt").write_text("old-only")
-            subprocess.run(["git", "init", "--quiet", str(clone)], check=True, timeout=30)
-            subprocess.run(["git", "add", "."], cwd=clone, check=True, timeout=30)
+            subprocess.run(["git", "init", "--quiet", str(clone)], env=git_env, check=True, timeout=30)
+            subprocess.run(["git", "add", "."], cwd=clone, env=git_env, check=True, timeout=30)
             with patch(__name__ + ".ROOT", source):
                 overlay_current_tree(clone)
             self.assertEqual((clone / "keep.txt").read_text(), "current")
             self.assertFalse((clone / "retired.txt").exists())
-            self.assertNotIn(b"retired.txt", subprocess.check_output(["git", "ls-files"], cwd=clone))
+            self.assertNotIn(b"retired.txt", subprocess.check_output(["git", "ls-files"], cwd=clone, env=git_env))
             self.assertEqual((source / "keep.txt").read_text(), "current")
 
 
@@ -1313,7 +1397,7 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         cls.addClassCleanup(temporary.cleanup)
         cls.root = Path(temporary.name) / "repository"
         subprocess.run(["git", "clone", "--quiet", "--no-hardlinks", str(ROOT), str(cls.root)],
-                       check=True, timeout=60)
+                       env=owned_git_environment(), check=True, timeout=60)
         overlay_current_tree(cls.root)
         cls.contract = json.loads((cls.root / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
 
@@ -1583,10 +1667,11 @@ class DevelopmentDeliveryTests(unittest.TestCase):
             f"{repository}.invalid/blob/{revision}/README.md",
         ]
         tree = subprocess.check_output(["git", "rev-parse", f"{revision}^{{tree}}"],
-                                       cwd=self.root, encoding="ascii").strip()
+                                       cwd=self.root, env=owned_git_environment(), encoding="ascii").strip()
         orphan = subprocess.check_output(
             ["git", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
-             "commit-tree", tree], input=b"isolated unrelated history\n", cwd=self.root).decode().strip()
+             "commit-tree", tree], input=b"isolated unrelated history\n", cwd=self.root,
+            env=owned_git_environment()).decode().strip()
         urls += [f"{repository}/commit/{orphan}", f"{repository}/commit/{tree}"]
         for url in urls:
             with self.subTest(url=url), self.changed("fixture.md", f"[{title}]({url})".encode()):
