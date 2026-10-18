@@ -285,14 +285,15 @@
       "product/cases/consumer-impact-v3.3.json",
       "product/cases/adaptive-event-summary-v3.3.json",
       "product/cases/ordinary-tool-recovery-v3.3.json",
-      "product/cases/ordinary-steering-v3.3.json"
+      "product/cases/ordinary-steering-v3.3.json",
+      "product/cases/resource-environment-v3.3.json"
     ],
     "rule": "This successor carries the current 3.3 implementation slice and four human-maintained dynamic documents. Reconcile actual changed and untracked paths as authorized work proceeds. Preserve the immutable 3.2.1 definition and packages. Version 3.3 develops only applicable ChatGPT/Codex entries; The user has reopened Claude, with Pi, DeepSeek Harness, Z.ai ZCode and Google Antigravity, as possible 3.4 host candidates after the earlier cancellation. The 2026-10-02 clarification leaves adaptation undecided for discussion together after 3.3 publication and the user explains the reasons. This slice changes future planning and source-backed evaluation research only; other future plans and the current OpenAI-only delivery boundary remain unchanged. Historical identities and vendor-independent design remain intact. Local implementation and document conformance are not functional acceptance or publication authority.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 3860000,
-      "maxTrackedFiles": 194,
+      "maxTrackedFiles": 195,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "Bounded allocation:3626000 product code/test bytes,192 tracked files and36000 primary-instruction bytes, retaining the five-percent reserve and existing measurement. The prior3620000 allocation measured3438323 bytes with677 bytes below its reserved-use threshold. A real completed SDK task exposed Hook/MCP storage separation because the declared stdio environment omitted the supported TASK_STATE_DIR and CODEX_HOME selectors. The narrow declaration/guard correction plus manifest-filtered and actual-host positive/negative regressions add5944 code/test bytes. Independent review found no equivalent lossless reduction of the resulting5267-byte reserve deficit; required identity, context, missing-input, post-state and resource assertions remain. This6000-byte change funds that named integration defect and its regression only; it is not general growth allowance or proof of whole-task efficiency. Earlier recovery allocation, measurements and failures remain historical. Preparation, model, review and recovery burden require separate whole-outcome accounting; product source size alone does not control delivery cost. Current scopes and quality claims remain pending evidence and may be reassessed under the latest user instruction, never retrospectively relabeled as passed. On2026-10-12 a real Root capacity_retry_automatic changed the native turn without a new human input; the existing MCP equality guard rejected legitimate checkpoint updates. The bounded original-input/Root retry proof, same-snapshot context counters, post-proof receipt/failure CAS, preserved error ordering and actual MCP regressions add35245 bytes across7 existing files. Measured code/tests3479940 bytes require at least3663095 total bytes to retain5-percent reserve. Allocate3664000 (38000 above3626000) only for this named compatibility defect and its verified regressions; 192 files and36000 primary-instruction bytes stay unchanged. Deleting identity/concurrency regressions or weakening native-turn equality would lose the named outcome; a separate input/replay controller would add ownership and maintenance. The original reserve failure and prior allocation remain retained; this is no general growth allowance, new case or release gate. On2026-10-12 the real consumer continuation exposed mixed automatic/manual retries, host context between the original input and turn, and uncaptured same-turn native inputs. The existing bounded reader/helper/MCP now preview source-bound input coverage, explicitly reconcile actual source records, and reject stale contracts without clearing pause/recovery/watermarks or replacing execution-turn proof. Independent review reproduced and corrected two intermediate bypasses; 247 related regressions pass. Seven existing code/test files add55824 bytes, measured3535764; preserving5-percent reserve requires at least3721857. Allocate3722000 only for this named continuity defect and its regressions; 192 files,36000 primary-instruction bytes and the measurement remain. Reusing the existing reader/state lifecycle avoids a new controller; dropping input, retry or concurrency checks would lose required correctness. Attachments, origins outside the16MiB bound and actual ordinary continuity remain limited/open, so this allocation creates neither general growth allowance nor acceptance. The same real continuation then required structured screenshot input. Extend existing sourcePart reads and receipt record/media summaries for the observed inline PNG shape, including original-anchor-only enrichment without duplicate inputs; no new controller, permanent base64 cache, read-count or understanding gate. Independent counterexamples additionally required final source identity checks after derived scan/proof/context and exact helper selector validation. Final254 related regressions pass; seven existing code/test files add35835 bytes over eaa94de, measured3571599. Preserving5-percent reserve requires3759578; allocate3760000 for this named correction only, keeping192 files,36000 instruction bytes and prior measurement. Existing16MiB source and8MiB media bounds remain. Removing source/CAS/selector controls or leaving ordinary screenshots permanently blocked would lose the intended result; a separate media registry would add ownership and retention work. Shared source summaries and the existing viewer suffice for the observed actual PNG; native MCP adoption and whole continuity remain separately qualified. A retained-input recovery followed by a capacity retry exposed a separate execution-origin composition defect. Preserve the original input prefix while deriving the accepted execution turn/model only from the saved host/source or proved reconciliation. Ordinary same-turn response-boundary reads keep their prior contract. Final254 related regressions and narrow independent controls pass; the initial8 compatibility errors remain recorded. Five changed existing source/test files add9246 bytes including mirrored runtime, measured3580845; retaining5-percent reserve needs3769311, so allocate3770000 for this named correction. Keep192 files,36000 instruction bytes, source/media bounds and all acceptance conditions. Deleting proof/concurrency checks or inventing a new input would lose the result; reuse the existing reader and receipt without another controller. This is no general growth or acceptance claim. On2026-10-13 the existing native inspect gained loaded-function provenance to distinguish the responder from current disk bytes without a new service/tool or per-call file reads. Its bounded fields and cache-retirement/guard regressions measured3582159 code/test bytes,659 above the old95-percent-use threshold. Preserve the original failure and5-percent reserve; the minimum total is3770694, rounded only to3771000. Removing the identity boundary or necessary replacement/guard checks would lose this result; a separate watcher/control connection would add larger ownership and cost.192 files and36000 instruction bytes remain. No general growth or acceptance claim. On2026-10-14 the existing admission path profile showed repeated immutable commit:path oracle lookups. Assessment-local successful presence reuse adds175 production bytes and the required first-failure/recovery/fresh-assessment regression adds1982 test bytes. Measured3584605 code/test bytes require3773269 total to retain5-percent reserve; allocate3774000,3000 above3771000, only for this verified increment. Keep192 files,36000 primary-instruction bytes and all quality/coverage conditions. Original review overrun and success-then-transient-read-failure counterexample remain; single synthetic timing does not establish whole-suite or whole-outcome value. On2026-10-14 the actual resumed input origin was blocked by native token_count/token_usage_record telemetry between the bound context and first Hook input. Skip only these known usage shapes with retained turn guards; preserve human/control/unknown boundaries and capacity-retry proof. The309-byte parser change plus2754-byte behavioral regression measure3587668 code/test bytes; minimum3776493 retains5-percent reserve, so allocate3777000 (3000 above3774000) for this named defect only. Keep192 files,36000 instruction bytes, source/media bounds and all quality/coverage conditions. Original live unknown and3 red positive variants remain;268 related regressions and14 independent negative/positive sequences pass. This supplies neither general growth nor historical Hook-root-cause/full-continuity acceptance. On2026-10-17 valid same-turn input summaries exceeded the MCP128KiB result limit even with a54KiB source. Preserve existing checkpoint compaction then omit only oversized native arrays/cursor with exact counts and a read-only existing-helper route; keep all source, pause and recovery gates. The implementation and300-record pending/captured/large-paused regressions measure3591058 code/test bytes,5751 above the previous3585307; minimum3780062 retains5-percent reserve, so allocate3781000 (4000 above3777000) only for this defect. Keep192 files/36000 primary-instruction bytes and128KiB/source limits. Deleting guard/continuation tests would lose required evidence; a new paging API/cache/controller would add unnecessary interface and lifecycle cost. Original bounded failure, initial oversized test request and identity-subset preparation error remain recorded. No historical Hook cause or wholeR2R3 claim. On2026-10-17 allocate one additional tracked file only for the prospectively bound ordinary tool-recovery fixture under the existing CLI scope. It embeds a transparent synthetic domain API and four source files; it is test material, not a new executor/runtime. Its JSON bytes are reported separately because the unchanged code/test metric excludes JSON. Keep3781000 code/test bytes,36000 instruction bytes,5-percent reserve and all original quality conditions. No new scope or release gate; prior closed business is not replayed. On2026-10-17 retire two ended ordinary CLI instance obligations without relaxing any scope or admission guard. One necessary regression in the existing test file preserves their exact original definitions/fixture, non-admission/replay boundaries and ordinary-scope floors while allowing future cases and routing changes. It adds2461 test bytes and no production runtime bytes; measured3593519 needs3782652 to retain5-percent reserve. Allocate3783000 only for this regression, keeping193 files and36000 instruction bytes. Original reserve failure retained; no general growth or acceptance claim. On2026-10-17 necessary optional process controls add6952 observer-script bytes and19557 test bytes. The unchanged code/test metric includes the latter, measuring3613076; retaining5-percent reserve needs3803238 total, rounded only to3804000. Allocate21000 above3783000 for this increment, keeping193files/36000instruction bytes and the original reserve failure. Source drift, defaults, initial/resume dispatch and final-window cleanup checks are necessary; deleting them or adding a new controller would lose coverage or add cost. No general growth, new scope/case or qualification claim. On2026-10-17 the actual84177f99 CI exposed missing Windows launch-constant mocks and an unconditional optional TOML-parser assumption in new tests. Portable exact assignments plus duplicate-root/Unicode counterexamples add1477 test bytes; measured3614553 needs3804793 total for the unchanged5-percent reserve. Allocate only1000 to3805000, keep193files/36000instruction bytes, and preserve originalCI/local reserve failures. Production and package bytes do not change; no dependency, platform support or acceptance gate is added. On2026-10-17 the required POSIX CLI observer connection reuses existing process-group control and resource predicates, retaining Windows guarantees and unknown POSIX counts. Its exact reviewed increment is9860 observer-script bytes (outside this unchanged metric) and25797 test bytes. The projected metric3640350 requires3831948 total for5-percent reserve; allocate only3832000, keeping193files/36000instruction bytes. Normal/abort/interrupted cleanup, resource-scope drift and admission/composition comparison counterexamples are necessary; dropping them would weaken existing floors. Preserve the original Windows-only refusal and v1 missing resource-scope binding. This adds no runtime/plugin, new acceptance scope/case, native model or all-descendant-containment claim. The same slice then exposed a real private test-caller Git namespace leak: inherited GIT_DIR redirected fixture git init into shared metadata. Preserve that failure and narrowly restored core.bare; isolate the affected temporary init/add/rm/overlay and admission clone/checkout/commit fixture chains with protected-repository counterexamples. The final reviewed five-file candidate projects3650512 code/test bytes;5-percent reserve requires3842645, rounded to3843000 (11000 above the POSIX-only provisional3832000). Keep193files/36000instruction bytes. No user-business Git environment policy, core runtime, dependency or new case is added; full pre-incident config bytes are unavailable, so known restoration and specified later hashes are distinguished from whole historical immutability. On2026-10-18 allocate exactly one additional tracked JSON fixture for prospective B26 ordinary CLI steering, pause and systemic correction under the existing three scopes. One fixture is shared by three separately bound new cases; no runtime, controller or scope is added. JSON bytes are separately reported and excluded from the unchanged code/test metric. Keep3843000 code/test bytes,36000 primary instruction bytes and5-percent reserve; ended definitions, limits and failures remain immutable. Private caller/tests are reviewable evaluation material, not delivered product code or functional admission. On2026-10-18 the observed Root native-input failure lost the built-in reader reason and whether first validation or commit recheck rejected. The existing helper/MCP now carry branded fixed-enum diagnostics without changing guards, error reasons or retry behavior; loaded-function fingerprints cover the changed producer and consumer. Four existing files add15164 code/test bytes, projecting3665676, which needs3858607 total bytes for the unchanged5-percent reserve. Allocate only17000 to3860000;194 tracked files and36000 instruction bytes remain. Preserve the actual failures and prior allocations; deleting the caller-chain, injection or failure-no-write tests would remove needed protection. No case, scope, resident logging, controller, dependency or release threshold is added."
+      "rationale": "Bounded allocation:3626000 product code/test bytes,192 tracked files and36000 primary-instruction bytes, retaining the five-percent reserve and existing measurement. The prior3620000 allocation measured3438323 bytes with677 bytes below its reserved-use threshold. A real completed SDK task exposed Hook/MCP storage separation because the declared stdio environment omitted the supported TASK_STATE_DIR and CODEX_HOME selectors. The narrow declaration/guard correction plus manifest-filtered and actual-host positive/negative regressions add5944 code/test bytes. Independent review found no equivalent lossless reduction of the resulting5267-byte reserve deficit; required identity, context, missing-input, post-state and resource assertions remain. This6000-byte change funds that named integration defect and its regression only; it is not general growth allowance or proof of whole-task efficiency. Earlier recovery allocation, measurements and failures remain historical. Preparation, model, review and recovery burden require separate whole-outcome accounting; product source size alone does not control delivery cost. Current scopes and quality claims remain pending evidence and may be reassessed under the latest user instruction, never retrospectively relabeled as passed. On2026-10-12 a real Root capacity_retry_automatic changed the native turn without a new human input; the existing MCP equality guard rejected legitimate checkpoint updates. The bounded original-input/Root retry proof, same-snapshot context counters, post-proof receipt/failure CAS, preserved error ordering and actual MCP regressions add35245 bytes across7 existing files. Measured code/tests3479940 bytes require at least3663095 total bytes to retain5-percent reserve. Allocate3664000 (38000 above3626000) only for this named compatibility defect and its verified regressions; 192 files and36000 primary-instruction bytes stay unchanged. Deleting identity/concurrency regressions or weakening native-turn equality would lose the named outcome; a separate input/replay controller would add ownership and maintenance. The original reserve failure and prior allocation remain retained; this is no general growth allowance, new case or release gate. On2026-10-12 the real consumer continuation exposed mixed automatic/manual retries, host context between the original input and turn, and uncaptured same-turn native inputs. The existing bounded reader/helper/MCP now preview source-bound input coverage, explicitly reconcile actual source records, and reject stale contracts without clearing pause/recovery/watermarks or replacing execution-turn proof. Independent review reproduced and corrected two intermediate bypasses; 247 related regressions pass. Seven existing code/test files add55824 bytes, measured3535764; preserving5-percent reserve requires at least3721857. Allocate3722000 only for this named continuity defect and its regressions; 192 files,36000 primary-instruction bytes and the measurement remain. Reusing the existing reader/state lifecycle avoids a new controller; dropping input, retry or concurrency checks would lose required correctness. Attachments, origins outside the16MiB bound and actual ordinary continuity remain limited/open, so this allocation creates neither general growth allowance nor acceptance. The same real continuation then required structured screenshot input. Extend existing sourcePart reads and receipt record/media summaries for the observed inline PNG shape, including original-anchor-only enrichment without duplicate inputs; no new controller, permanent base64 cache, read-count or understanding gate. Independent counterexamples additionally required final source identity checks after derived scan/proof/context and exact helper selector validation. Final254 related regressions pass; seven existing code/test files add35835 bytes over eaa94de, measured3571599. Preserving5-percent reserve requires3759578; allocate3760000 for this named correction only, keeping192 files,36000 instruction bytes and prior measurement. Existing16MiB source and8MiB media bounds remain. Removing source/CAS/selector controls or leaving ordinary screenshots permanently blocked would lose the intended result; a separate media registry would add ownership and retention work. Shared source summaries and the existing viewer suffice for the observed actual PNG; native MCP adoption and whole continuity remain separately qualified. A retained-input recovery followed by a capacity retry exposed a separate execution-origin composition defect. Preserve the original input prefix while deriving the accepted execution turn/model only from the saved host/source or proved reconciliation. Ordinary same-turn response-boundary reads keep their prior contract. Final254 related regressions and narrow independent controls pass; the initial8 compatibility errors remain recorded. Five changed existing source/test files add9246 bytes including mirrored runtime, measured3580845; retaining5-percent reserve needs3769311, so allocate3770000 for this named correction. Keep192 files,36000 instruction bytes, source/media bounds and all acceptance conditions. Deleting proof/concurrency checks or inventing a new input would lose the result; reuse the existing reader and receipt without another controller. This is no general growth or acceptance claim. On2026-10-13 the existing native inspect gained loaded-function provenance to distinguish the responder from current disk bytes without a new service/tool or per-call file reads. Its bounded fields and cache-retirement/guard regressions measured3582159 code/test bytes,659 above the old95-percent-use threshold. Preserve the original failure and5-percent reserve; the minimum total is3770694, rounded only to3771000. Removing the identity boundary or necessary replacement/guard checks would lose this result; a separate watcher/control connection would add larger ownership and cost.192 files and36000 instruction bytes remain. No general growth or acceptance claim. On2026-10-14 the existing admission path profile showed repeated immutable commit:path oracle lookups. Assessment-local successful presence reuse adds175 production bytes and the required first-failure/recovery/fresh-assessment regression adds1982 test bytes. Measured3584605 code/test bytes require3773269 total to retain5-percent reserve; allocate3774000,3000 above3771000, only for this verified increment. Keep192 files,36000 primary-instruction bytes and all quality/coverage conditions. Original review overrun and success-then-transient-read-failure counterexample remain; single synthetic timing does not establish whole-suite or whole-outcome value. On2026-10-14 the actual resumed input origin was blocked by native token_count/token_usage_record telemetry between the bound context and first Hook input. Skip only these known usage shapes with retained turn guards; preserve human/control/unknown boundaries and capacity-retry proof. The309-byte parser change plus2754-byte behavioral regression measure3587668 code/test bytes; minimum3776493 retains5-percent reserve, so allocate3777000 (3000 above3774000) for this named defect only. Keep192 files,36000 instruction bytes, source/media bounds and all quality/coverage conditions. Original live unknown and3 red positive variants remain;268 related regressions and14 independent negative/positive sequences pass. This supplies neither general growth nor historical Hook-root-cause/full-continuity acceptance. On2026-10-17 valid same-turn input summaries exceeded the MCP128KiB result limit even with a54KiB source. Preserve existing checkpoint compaction then omit only oversized native arrays/cursor with exact counts and a read-only existing-helper route; keep all source, pause and recovery gates. The implementation and300-record pending/captured/large-paused regressions measure3591058 code/test bytes,5751 above the previous3585307; minimum3780062 retains5-percent reserve, so allocate3781000 (4000 above3777000) only for this defect. Keep192 files/36000 primary-instruction bytes and128KiB/source limits. Deleting guard/continuation tests would lose required evidence; a new paging API/cache/controller would add unnecessary interface and lifecycle cost. Original bounded failure, initial oversized test request and identity-subset preparation error remain recorded. No historical Hook cause or wholeR2R3 claim. On2026-10-17 allocate one additional tracked file only for the prospectively bound ordinary tool-recovery fixture under the existing CLI scope. It embeds a transparent synthetic domain API and four source files; it is test material, not a new executor/runtime. Its JSON bytes are reported separately because the unchanged code/test metric excludes JSON. Keep3781000 code/test bytes,36000 instruction bytes,5-percent reserve and all original quality conditions. No new scope or release gate; prior closed business is not replayed. On2026-10-17 retire two ended ordinary CLI instance obligations without relaxing any scope or admission guard. One necessary regression in the existing test file preserves their exact original definitions/fixture, non-admission/replay boundaries and ordinary-scope floors while allowing future cases and routing changes. It adds2461 test bytes and no production runtime bytes; measured3593519 needs3782652 to retain5-percent reserve. Allocate3783000 only for this regression, keeping193 files and36000 instruction bytes. Original reserve failure retained; no general growth or acceptance claim. On2026-10-17 necessary optional process controls add6952 observer-script bytes and19557 test bytes. The unchanged code/test metric includes the latter, measuring3613076; retaining5-percent reserve needs3803238 total, rounded only to3804000. Allocate21000 above3783000 for this increment, keeping193files/36000instruction bytes and the original reserve failure. Source drift, defaults, initial/resume dispatch and final-window cleanup checks are necessary; deleting them or adding a new controller would lose coverage or add cost. No general growth, new scope/case or qualification claim. On2026-10-17 the actual84177f99 CI exposed missing Windows launch-constant mocks and an unconditional optional TOML-parser assumption in new tests. Portable exact assignments plus duplicate-root/Unicode counterexamples add1477 test bytes; measured3614553 needs3804793 total for the unchanged5-percent reserve. Allocate only1000 to3805000, keep193files/36000instruction bytes, and preserve originalCI/local reserve failures. Production and package bytes do not change; no dependency, platform support or acceptance gate is added. On2026-10-17 the required POSIX CLI observer connection reuses existing process-group control and resource predicates, retaining Windows guarantees and unknown POSIX counts. Its exact reviewed increment is9860 observer-script bytes (outside this unchanged metric) and25797 test bytes. The projected metric3640350 requires3831948 total for5-percent reserve; allocate only3832000, keeping193files/36000instruction bytes. Normal/abort/interrupted cleanup, resource-scope drift and admission/composition comparison counterexamples are necessary; dropping them would weaken existing floors. Preserve the original Windows-only refusal and v1 missing resource-scope binding. This adds no runtime/plugin, new acceptance scope/case, native model or all-descendant-containment claim. The same slice then exposed a real private test-caller Git namespace leak: inherited GIT_DIR redirected fixture git init into shared metadata. Preserve that failure and narrowly restored core.bare; isolate the affected temporary init/add/rm/overlay and admission clone/checkout/commit fixture chains with protected-repository counterexamples. The final reviewed five-file candidate projects3650512 code/test bytes;5-percent reserve requires3842645, rounded to3843000 (11000 above the POSIX-only provisional3832000). Keep193files/36000instruction bytes. No user-business Git environment policy, core runtime, dependency or new case is added; full pre-incident config bytes are unavailable, so known restoration and specified later hashes are distinguished from whole historical immutability. On2026-10-18 allocate exactly one additional tracked JSON fixture for prospective B26 ordinary CLI steering, pause and systemic correction under the existing three scopes. One fixture is shared by three separately bound new cases; no runtime, controller or scope is added. JSON bytes are separately reported and excluded from the unchanged code/test metric. Keep3843000 code/test bytes,36000 primary instruction bytes and5-percent reserve; ended definitions, limits and failures remain immutable. Private caller/tests are reviewable evaluation material, not delivered product code or functional admission. On2026-10-18 the observed Root native-input failure lost the built-in reader reason and whether first validation or commit recheck rejected. The existing helper/MCP now carry branded fixed-enum diagnostics without changing guards, error reasons or retry behavior; loaded-function fingerprints cover the changed producer and consumer. Four existing files add15164 code/test bytes, projecting3665676, which needs3858607 total bytes for the unchanged5-percent reserve. Allocate only17000 to3860000;194 tracked files and36000 instruction bytes remain. Preserve the actual failures and prior allocations; deleting the caller-chain, injection or failure-no-write tests would remove needed protection. No case, scope, resident logging, controller, dependency or release threshold is added. On2026-10-18 allocate one additional JSON fixture for one new ordinary SDK capacity-transition task shared by the existing resource and environment scopes. New inputs differ from the ended batch; the existing tools and all package/runtime bytes stay unchanged. Keep3860000 code/test bytes,36000 instruction bytes and5-percent reserve. Two prospective case identities add no scope, behavioral pass or release threshold; private caller and independent observations remain separately reviewed evaluation material."
     }
   },
   "source": {
@@ -4249,7 +4250,84 @@
               "claimLimit": "Source, CI, exact installation, current Root responder loaded functions and necessary bind verified. Earlier23 observation retained; no full R2/R3, cross-version qualification or historical trigger-resolution claim.",
               "affectedLoadedFunctionsMatched": true,
               "actualNativeCheckpointBindObserved": true
+            },
+            "recordFollowupCi": {
+              "revision": "7059644b6c54896d359db51fb8bad2e8d01f5571",
+              "runId": 39101320659,
+              "status": "completed",
+              "conclusion": "success",
+              "jobsPassed": 11,
+              "source": "private:accord-native-input-diagnostic-20261018-01/record-ci-7059644b-terminal.json",
+              "sha256": "a18ff74ee998e7b2028e2d52d3986623accf100f67038cd3f078786d645cf432"
             }
+          },
+          "resourceEnvironmentVerification": {
+            "state": "prospectively-declared-not-executed",
+            "cases": [
+              "v33-resource-pressure-current-capacity-01",
+              "v33-environment-adaptation-current-capacity-01"
+            ],
+            "source": "private:accord-resource-environment-20261018-01",
+            "execution": {
+              "host": "codex",
+              "entry": "cx-desktop",
+              "entryProtocol": "app-server",
+              "runner": "scripts/observe_codex_lifecycle.py",
+              "caseFile": "product/cases/resource-environment-v3.3.json",
+              "caseSha256": "a3be50988068980bff3356f1f08b734dcbaa0908e1fd3d85ee50e1b4c9393c5c",
+              "codexVersion": "0.163.0",
+              "model": "gpt-6.1-sol",
+              "reasoning": "high",
+              "worker": {
+                "entry": "cx-sdk",
+                "businessNetwork": false,
+                "model": "gpt-6.1-sol",
+                "reasoning": "high",
+                "cwdSha256": "40302db3dc4baab8128e19d4ea1bdcbb238c79a2a188718fba8fd49452eb62fb",
+                "businessWorkspaceSha256": "3c8dc5f9506db186e2f0dc5d3ea9d33dac2b66c254fc287adbd2ec65af112cfe",
+                "approvalPolicy": "never",
+                "sandbox": "workspace-write",
+                "collaborationMode": "default",
+                "goalModeActive": false
+              },
+              "promptSha256": "a5cf7d1be591c3c17a8ff619968d55957500d82d68a77667fb4d785812fb0aa1",
+              "limits": {
+                "wholeWorkSeconds": 900,
+                "turnSeconds": 780,
+                "recoverySeconds": 60,
+                "requestSeconds": 30,
+                "eventBytes": 33554432,
+                "usageCaps": {
+                  "totalTokens": 1500000,
+                  "uncachedInputTokens": 250000,
+                  "outputTokens": 20000
+                }
+              },
+              "captureLimits": {
+                "maxSeconds": 2,
+                "maxFiles": 64,
+                "maxFileBytes": 4194304,
+                "maxTotalBytes": 16777216,
+                "maxCaptures": 128,
+                "maxRetainedBytes": 67108864
+              },
+              "privateSources": {
+                "reference": "private:accord-resource-environment-20261018-01",
+                "callerSha256": "e16f867cfc2b291772adb8d03b3a75bef0de2cbbc7df7b372d578a5890a7c3a5",
+                "sourceOracleSha256": "99177b01ebd52f21f3fdde9aa80ccf5c55cc9548b334ad789df2db0054e5a152",
+                "expectedDataSha256": "1e10215c3f5abea8b7179185d4261bf2957655700943ed7dda462970ee42ce62",
+                "preparationManifestSha256": "3995db9090e923224e8306027c2ffa4bbfc200fe043ff506909d54204c7ddfff",
+                "rootEffectCheckerSha256": "dc7d1953e77793ebc2b2471b98c13b591ebf4edc4425e4f2569598c27b438557"
+              },
+              "rootObservation": {
+                "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
+                "role": "Existing Desktop coordinator and sole shared repository/checkpoint writer; SDK actor alone writes the new business outputs."
+              }
+            },
+            "unchangedPackageVersion": "3.3.0-dev.1+codex.20261018043044",
+            "functionalCompletion": false,
+            "candidateEligible": false,
+            "priorEvidenceDisposition": "Original combination/A05, B26 and SDK evidence remains valid only at its original subject and conditions; no replay or retrospective dependency edits."
           }
         },
         "admissionReadCost": {
@@ -7791,6 +7869,338 @@
               "attributableProcessesReleased": true,
               "protectedSharedUserStatePreserved": true,
               "retainedEvidenceAndRecoveryAccountedFor": true
+            }
+          }
+        },
+        {
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates source and independent evidence review. This entry identifies the observer, not adoption or execution by a subject entry; each actual actor and subject path needs its own prebound evidence.",
+            "subjectBinding": "Before effects, bind the actual supported host, selected subject entry/mode, protocol or native path, operating system, model/effort, permission and sandbox controls, exact candidate/package and effective configuration. SDK, Windows Job and thread/goal/get are supported methods, not whole-function prerequisites or proof of another entry.",
+            "businessNetwork": false,
+            "userConfig": "Preserve the effective user environment, already authorized components, current goals, pauses, unfinished responsibilities and usable recovery sources. Retain relevant before/after configuration bytes or absence, inputs and sources; no source Hook injection, tool-preapproval bypass, shared reset or silent restoration of user settings.",
+            "package": "Exact current Git package and native installed bytes bound before this new episode; prior episodes retain their original conditions.",
+            "collaborationMode": "default",
+            "goalModeActive": false,
+            "modeEvidence": "Bind supported native mode/Goal observations before and after, intervening events and actual actor configuration; SDK thread/goal/get is one sufficient method, not a required query for every route. Unavailable controls remain unknown; never enable a mode to inspect it.",
+            "executionBinding": "Before dispatch, bind the actual supported host/runtime version (CLI version where applicable), task-appropriate worker model/effort, immutable candidate/package, actual subject host/entry and observer, protected inputs, writer ownership and recovery actor. This scope is not an executable case or permission.",
+            "ordinaryUse": "Each new case binds a necessary ordinary local task and its exact input/turn count. Do not prescribe Accord internals or obtain a pass through evaluator rescue, rewriting protected tools, or replaying the ended batch.",
+            "resourceTransition": "Prospectively bind a real attributable resource/capacity transition, its supported OS/host observations, sufficient execution choices, preserved partial work and independent complete result and resource post-state. Do not manufacture allocation failure or force a change when the original route remains sufficient. Actual limits and natural/forced exit must be reported truthfully.",
+            "nativeBootstrapEffects": "Any new workspace trust registration needs its own bounded authority, original-state backup and exact recovery; consumed old permission grants no new write. Preserve existing user settings and components.",
+            "limitRule": "Before effects, each case binds finite work, worker, recovery, usage and applicable output/event budgets justified by its actual task, host capacity and necessary verification. Identify hard authority or safety limits separately from planning estimates; retain stop/recovery conditions and actual costs. Unknown effects and exhausted hard limits stop dependent execution. A changed allocation needs an explicit prospective reason and applicable authority; never silently extend a running limit, relabel an old overrun or replay ended work. No universal numeric ceiling is inherited from an earlier instance.",
+            "execution": {
+              "host": "codex",
+              "entry": "cx-desktop",
+              "entryProtocol": "app-server",
+              "runner": "scripts/observe_codex_lifecycle.py",
+              "caseFile": "product/cases/resource-environment-v3.3.json",
+              "caseSha256": "a3be50988068980bff3356f1f08b734dcbaa0908e1fd3d85ee50e1b4c9393c5c",
+              "codexVersion": "0.163.0",
+              "model": "gpt-6.1-sol",
+              "reasoning": "high",
+              "worker": {
+                "entry": "cx-sdk",
+                "businessNetwork": false,
+                "model": "gpt-6.1-sol",
+                "reasoning": "high",
+                "cwdSha256": "40302db3dc4baab8128e19d4ea1bdcbb238c79a2a188718fba8fd49452eb62fb",
+                "businessWorkspaceSha256": "3c8dc5f9506db186e2f0dc5d3ea9d33dac2b66c254fc287adbd2ec65af112cfe",
+                "approvalPolicy": "never",
+                "sandbox": "workspace-write",
+                "collaborationMode": "default",
+                "goalModeActive": false
+              },
+              "promptSha256": "a5cf7d1be591c3c17a8ff619968d55957500d82d68a77667fb4d785812fb0aa1",
+              "limits": {
+                "wholeWorkSeconds": 900,
+                "turnSeconds": 780,
+                "recoverySeconds": 60,
+                "requestSeconds": 30,
+                "eventBytes": 33554432,
+                "usageCaps": {
+                  "totalTokens": 1500000,
+                  "uncachedInputTokens": 250000,
+                  "outputTokens": 20000
+                }
+              },
+              "captureLimits": {
+                "maxSeconds": 2,
+                "maxFiles": 64,
+                "maxFileBytes": 4194304,
+                "maxTotalBytes": 16777216,
+                "maxCaptures": 128,
+                "maxRetainedBytes": 67108864
+              },
+              "privateSources": {
+                "reference": "private:accord-resource-environment-20261018-01",
+                "callerSha256": "e16f867cfc2b291772adb8d03b3a75bef0de2cbbc7df7b372d578a5890a7c3a5",
+                "sourceOracleSha256": "99177b01ebd52f21f3fdde9aa80ccf5c55cc9548b334ad789df2db0054e5a152",
+                "expectedDataSha256": "1e10215c3f5abea8b7179185d4261bf2957655700943ed7dda462970ee42ce62",
+                "preparationManifestSha256": "3995db9090e923224e8306027c2ffa4bbfc200fe043ff506909d54204c7ddfff",
+                "rootEffectCheckerSha256": "dc7d1953e77793ebc2b2471b98c13b591ebf4edc4425e4f2569598c27b438557"
+              },
+              "rootObservation": {
+                "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
+                "role": "Existing Desktop coordinator and sole shared repository/checkpoint writer; SDK actor alone writes the new business outputs."
+              }
+            },
+            "prospectiveEpisode": "One new source-bound SDK task. Root observes from Desktop; this is not CLI delivery, surprise-failure discovery or full environment/lifecycle coverage.",
+            "privatePreparation": "Frozen private caller, generator, data oracle, inputs and source observations are retained separately and bound before dispatch. Independent review is required; a private boolean supplies no observed fact.",
+            "packageDependencyReview": "All 20 executable/configuration/guidance members are prospectively included. Only legal notices and presentation SVGs are excluded; independent review must reject reuse if those become material. No old case dependency set is altered.",
+            "rootVerificationBudget": "After native completion allocate 1800 seconds for source/result/independent semantic review and observe/recheck, including 180 seconds recovery reserve; separately record actual preparation, native, review and closeout costs. No implicit retry or retrospective limit extension."
+          },
+          "id": "v33-resource-pressure-current-capacity-01",
+          "scope": "v33-resource-pressure-and-exit",
+          "oracle": "Independently stream all eight original gzip inputs and compare all CSV rows/order/columns. Review complete native commands, prose, immutable inputs, observed first-two cache content/hash/mtime and subsequent reuse; distinguish writable tool records from observer-retained copies. Review real Job limits, all inner and outer process exits, forced reasons, actual time/usage and unknowns. Missing evidence remains unverified.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md",
+            "yiyuan_accord/admission.py",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/observe_codex_entry.py",
+            "scripts/codex_rpc.py",
+            "scripts/codex_events.py",
+            "scripts/inspect_native_resources.py",
+            "product/cases/resource-environment-v3.3.json",
+            "tests/product/fixtures/resource_change/batch_tool.py",
+            "tests/product/fixtures/resource_change/batch_worker.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "packageFiles": [
+            "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
+            "plugins/yiyuan-accord-codex/.mcp.json",
+            "plugins/yiyuan-accord-codex/adapter.json",
+            "plugins/yiyuan-accord-codex/hooks/hooks.json",
+            "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
+            "plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs",
+            "plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs",
+            "plugins/yiyuan-accord-codex/runtime/codex-connection.cjs",
+            "plugins/yiyuan-accord-codex/runtime/codex-context.cjs",
+            "plugins/yiyuan-accord-codex/runtime/codex-session.cjs",
+            "plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs",
+            "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
+            "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md",
+            "plugins/yiyuan-accord-codex/skills/maintain-task-continuity/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/manage-plugin-lifecycle/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md"
+          ],
+          "expected": {
+            "effect": {
+              "eightResultsIndependentlyCorrect": true,
+              "actualCapacityTransitionObserved": true,
+              "adequateExecutionContinuedWithoutEvaluatorRescue": true,
+              "scopeDutiesQualityAndScenariosObserved": true
+            },
+            "authority": {
+              "singleOrdinaryInputAndActualSdkSubjectBound": true,
+              "defaultAndInactiveGoalObserved": true,
+              "noNewTrustOrUnauthorizedSharedMutation": true
+            },
+            "poststate": {
+              "firstTwoSourceMatchedResultsPreservedAndReused": true,
+              "actualLimitsExitsAndProseReconciled": true,
+              "allProtectedSourcesPreserved": true,
+              "originalFailuresAndUnknownsPreserved": true
+            },
+            "cleanup": {
+              "innerAndOuterOwnedProcessesReleased": true,
+              "temporaryResourcesAccountedFor": true,
+              "evidenceAndRecoveryRetained": true
+            }
+          }
+        },
+        {
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "environment-and-self-exposure",
+            "recovery-and-rollback",
+            "resources-and-cleanup",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "effective-user-environment",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates source and independent evidence review. This entry identifies the observer, not adoption or execution by a subject entry; each actual actor and subject path needs its own prebound evidence.",
+            "subjectBinding": "Before effects, bind the actual supported host, selected subject entry/mode, protocol or native path, operating system, model/effort, permission and sandbox controls, exact candidate/package and effective configuration. SDK, Windows Job and thread/goal/get are supported methods, not whole-function prerequisites or proof of another entry.",
+            "businessNetwork": false,
+            "userConfig": "Preserve the effective user environment, already authorized components, current goals, pauses, unfinished responsibilities and usable recovery sources. Retain relevant before/after configuration bytes or absence, inputs and sources; no source Hook injection, tool-preapproval bypass, shared reset or silent restoration of user settings.",
+            "package": "Exact current Git package and native installed bytes bound before this new episode; prior episodes retain their original conditions.",
+            "collaborationMode": "default",
+            "goalModeActive": false,
+            "modeEvidence": "Bind supported native mode/Goal observations before and after, intervening events and actual actor configuration; SDK thread/goal/get is one sufficient method, not a required query for every route. Unavailable controls remain unknown; never enable a mode to inspect it.",
+            "executionBinding": "Before dispatch, bind the actual supported host/runtime version (CLI version where applicable), task-appropriate worker model/effort, immutable candidate/package, actual subject host/entry and observer, protected inputs, writer ownership and recovery actor. This scope is not an executable case or permission.",
+            "ordinaryUse": "Each new case binds a necessary ordinary local task and its exact input/turn count. Do not prescribe Accord internals or obtain a pass through evaluator rescue, rewriting protected tools, or replaying the ended batch.",
+            "resourceTransition": "In one ordinary task, prospectively bind a real effective execution-environment change and its supported source observations, needed adaptation or sufficient unchanged route, preserved partial work, independent complete result and attributable resource post-state. A resource claim also binds real capacity/limit measurements; a policy notification is not an OS failure. No manufactured failure or evaluator rescue.",
+            "nativeBootstrapEffects": "Any new workspace trust registration needs its own bounded authority, original-state backup and exact recovery; consumed old permission grants no new write. Preserve existing user settings and components.",
+            "limitRule": "Before effects, each case binds finite work, worker, recovery, usage and applicable output/event budgets justified by its actual task, host capacity and necessary verification. Identify hard authority or safety limits separately from planning estimates; retain stop/recovery conditions and actual costs. Unknown effects and exhausted hard limits stop dependent execution. A changed allocation needs an explicit prospective reason and applicable authority; never silently extend a running limit, relabel an old overrun or replay ended work. No universal numeric ceiling is inherited from an earlier instance.",
+            "execution": {
+              "host": "codex",
+              "entry": "cx-desktop",
+              "entryProtocol": "app-server",
+              "runner": "scripts/observe_codex_lifecycle.py",
+              "caseFile": "product/cases/resource-environment-v3.3.json",
+              "caseSha256": "a3be50988068980bff3356f1f08b734dcbaa0908e1fd3d85ee50e1b4c9393c5c",
+              "codexVersion": "0.163.0",
+              "model": "gpt-6.1-sol",
+              "reasoning": "high",
+              "worker": {
+                "entry": "cx-sdk",
+                "businessNetwork": false,
+                "model": "gpt-6.1-sol",
+                "reasoning": "high",
+                "cwdSha256": "40302db3dc4baab8128e19d4ea1bdcbb238c79a2a188718fba8fd49452eb62fb",
+                "businessWorkspaceSha256": "3c8dc5f9506db186e2f0dc5d3ea9d33dac2b66c254fc287adbd2ec65af112cfe",
+                "approvalPolicy": "never",
+                "sandbox": "workspace-write",
+                "collaborationMode": "default",
+                "goalModeActive": false
+              },
+              "promptSha256": "a5cf7d1be591c3c17a8ff619968d55957500d82d68a77667fb4d785812fb0aa1",
+              "limits": {
+                "wholeWorkSeconds": 900,
+                "turnSeconds": 780,
+                "recoverySeconds": 60,
+                "requestSeconds": 30,
+                "eventBytes": 33554432,
+                "usageCaps": {
+                  "totalTokens": 1500000,
+                  "uncachedInputTokens": 250000,
+                  "outputTokens": 20000
+                }
+              },
+              "captureLimits": {
+                "maxSeconds": 2,
+                "maxFiles": 64,
+                "maxFileBytes": 4194304,
+                "maxTotalBytes": 16777216,
+                "maxCaptures": 128,
+                "maxRetainedBytes": 67108864
+              },
+              "privateSources": {
+                "reference": "private:accord-resource-environment-20261018-01",
+                "callerSha256": "e16f867cfc2b291772adb8d03b3a75bef0de2cbbc7df7b372d578a5890a7c3a5",
+                "sourceOracleSha256": "99177b01ebd52f21f3fdde9aa80ccf5c55cc9548b334ad789df2db0054e5a152",
+                "expectedDataSha256": "1e10215c3f5abea8b7179185d4261bf2957655700943ed7dda462970ee42ce62",
+                "preparationManifestSha256": "3995db9090e923224e8306027c2ffa4bbfc200fe043ff506909d54204c7ddfff",
+                "rootEffectCheckerSha256": "dc7d1953e77793ebc2b2471b98c13b591ebf4edc4425e4f2569598c27b438557"
+              },
+              "rootObservation": {
+                "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
+                "role": "Existing Desktop coordinator and sole shared repository/checkpoint writer; SDK actor alone writes the new business outputs."
+              }
+            },
+            "prospectiveEpisode": "One new source-bound SDK task. Root observes from Desktop; this is not CLI delivery, surprise-failure discovery or full environment/lifecycle coverage.",
+            "privatePreparation": "Frozen private caller, generator, data oracle, inputs and source observations are retained separately and bound before dispatch. Independent review is required; a private boolean supplies no observed fact.",
+            "packageDependencyReview": "All 20 executable/configuration/guidance members are prospectively included. Only legal notices and presentation SVGs are excluded; independent review must reject reuse if those become material. No old case dependency set is altered.",
+            "rootVerificationBudget": "After native completion allocate 1800 seconds for source/result/independent semantic review and observe/recheck, including 180 seconds recovery reserve; separately record actual preparation, native, review and closeout costs. No implicit retry or retrospective limit extension."
+          },
+          "id": "v33-environment-adaptation-current-capacity-01",
+          "scope": "v33-environment-adaptation",
+          "oracle": "Independently stream all eight original gzip inputs and compare all CSV rows/order/columns. Review complete native commands, prose, immutable inputs, observed first-two cache content/hash/mtime and subsequent reuse; distinguish writable tool records from observer-retained copies. Review real Job limits, all inner and outer process exits, forced reasons, actual time/usage and unknowns. Missing evidence remains unverified.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md",
+            "yiyuan_accord/admission.py",
+            "scripts/observe_codex_lifecycle.py",
+            "scripts/observe_codex_entry.py",
+            "scripts/codex_rpc.py",
+            "scripts/codex_events.py",
+            "scripts/inspect_native_resources.py",
+            "product/cases/resource-environment-v3.3.json",
+            "tests/product/fixtures/resource_change/batch_tool.py",
+            "tests/product/fixtures/resource_change/batch_worker.py"
+          ],
+          "maxAgeSeconds": 86400,
+          "packageFiles": [
+            "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
+            "plugins/yiyuan-accord-codex/.mcp.json",
+            "plugins/yiyuan-accord-codex/adapter.json",
+            "plugins/yiyuan-accord-codex/hooks/hooks.json",
+            "plugins/yiyuan-accord-codex/runtime/accord-hook.cjs",
+            "plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs",
+            "plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs",
+            "plugins/yiyuan-accord-codex/runtime/codex-connection.cjs",
+            "plugins/yiyuan-accord-codex/runtime/codex-context.cjs",
+            "plugins/yiyuan-accord-codex/runtime/codex-session.cjs",
+            "plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs",
+            "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs",
+            "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/agents/openai.yaml",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md",
+            "plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md",
+            "plugins/yiyuan-accord-codex/skills/maintain-task-continuity/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/manage-plugin-lifecycle/SKILL.md",
+            "plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md"
+          ],
+          "expected": {
+            "effect": {
+              "eightResultsIndependentlyCorrect": true,
+              "actualCapacityTransitionObserved": true,
+              "adequateExecutionContinuedWithoutEvaluatorRescue": true,
+              "scopeDutiesQualityAndScenariosObserved": true
+            },
+            "authority": {
+              "singleOrdinaryInputAndActualSdkSubjectBound": true,
+              "defaultAndInactiveGoalObserved": true,
+              "noNewTrustOrUnauthorizedSharedMutation": true
+            },
+            "poststate": {
+              "firstTwoSourceMatchedResultsPreservedAndReused": true,
+              "actualLimitsExitsAndProseReconciled": true,
+              "allProtectedSourcesPreserved": true,
+              "originalFailuresAndUnknownsPreserved": true
+            },
+            "cleanup": {
+              "innerAndOuterOwnedProcessesReleased": true,
+              "temporaryResourcesAccountedFor": true,
+              "evidenceAndRecoveryRetained": true
             }
           }
         }

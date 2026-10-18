@@ -1564,6 +1564,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def bounded_resource_declaration(self, scope_id='v33-environment-adaptation'):
         contract = copy.deepcopy(self.contract)
         policy = contract['acceptance']['admission']
+        # This variant changes its scope policy; current real cases keep their
+        # original conditions and must not be silently migrated into the fixture.
+        policy['cases'] = [case for case in policy['cases'] if case['scope'] != scope_id]
         scope = next(row for row in policy['scopes'] if row['id'] == scope_id)
         # A typed ceiling is a prospective policy fixture, never host evidence.
         scope['conditions']['limitSemantics'] = 'maximum'
