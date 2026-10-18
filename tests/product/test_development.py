@@ -1480,6 +1480,9 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         locator = (Path(projection["manifest"]).parent.parent /
                    NativeOnboardingContractTests.SKILL[2:]).as_posix()
         projection["supportingSkills"].remove(locator)
+        for case in declaration["acceptance"]["admission"]["cases"]:
+            if locator in case.get("packageFiles", []):
+                case["packageFiles"].remove(locator)
         with self.changed(DEVELOPMENT_FILE, json.dumps(declaration).encode()):
             undeclared = self.report()
         with self.changed(locator, None):
@@ -1581,6 +1584,9 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         self.assertTrue(any('original meta guidance bytes differ' in x for x in invalid['errors']))
         altered = copy.deepcopy(self.contract)
         altered['delivery']['hostProjections'][0]['referenceFiles'].remove(locator)
+        for case in altered['acceptance']['admission']['cases']:
+            if locator in case.get('packageFiles', []):
+                case['packageFiles'].remove(locator)
         with self.changed(DEVELOPMENT_FILE, json.dumps(altered).encode()):
             undeclared = self.report()
         self.assertFalse(undeclared['valid'])
