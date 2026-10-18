@@ -4629,6 +4629,73 @@
               "hostConsolidationOrFutureInjectionVerified": false
             },
             "productMechanismAssessment": "Current capability/closeout guidance already separates configured intent from actual behavior, requires scoped conflict correction and accounts for memory in value claims. No new general memory ban or product-runtime defect is established by these observations."
+          },
+          "minimalEffectiveRouteRecovery": {
+            "source": "private:accord-cli-catalog-reuse-20261018-01/root-profile-takeover-verified.json",
+            "sourceSha256": "67cf1e035e2e21d6948497398866775c52b19478b8a19b3b1e8a36d55229da04",
+            "userAuthorizedIndependentLoginAndExact24HookTrust": true,
+            "mainProfileChanged": false,
+            "credentialCopyOrLink": false,
+            "authentication": "Official isolated keyring login and official Logged in using ChatGPT status verified; in-app regional rejection retained, external browser completed the same device flow. No network/account-security change or regional-support generalization.",
+            "installation": "Native owned-local marketplace registration/add; current24 exact25-file hashes independently matched; six Hook definitions trusted from newly observed currentHash, no trust copy or bypass.",
+            "initialInventoryFailure": "CLI plugin list --json had no output and hit30-second request limit, exit124/forced/Job0; retained. Supported0.163 App Server plugin/list with local marketplaceKinds, forceRefetch=false returned empty local inventory without errors; no global remote/managed absence claim.",
+            "extraSkills": "Fresh inventory initially exposed43 enabled entries:5 Accord and38 cc-switch. Supported config/batchWrite disabled only those38 paths in the new owned profile, preserving existing Hook trust, original Skill sources and main settings.",
+            "actualReadback": {
+              "accordEnabled": 5,
+              "otherEnabled": 0,
+              "targetDisabled": 38,
+              "trustedEnabledHooks": 6,
+              "accordMcpTools": 3
+            },
+            "actualContext": {
+              "source": "private:accord-cli-catalog-reuse-20261018-01/minimal-route-evidence-20261018-01/skill-exclusion-context-r5/report.json",
+              "sourceSha256": "6846806af241767d85b3022a4d5a76dc4d053df00680ffe79b173bae5d7844dc",
+              "threadId": "01a14f48-1804-7770-a203-bc3423fa9bd1",
+              "model": "gpt-6.1-sol",
+              "effort": "high",
+              "mode": "default",
+              "sandbox": "read-only",
+              "transport": "plain stdout; neither output-schema nor JSONL",
+              "singleJsonMarkerExact": true,
+              "toolCalls": 0,
+              "memoryGuidanceMatches": 0,
+              "agentsGuidanceMatches": 0,
+              "skillCatalogueFileReferences": 5,
+              "skillCatalogueCharacters": 2210,
+              "inputTokens": 14843,
+              "outputTokens": 11,
+              "totalTokens": 14854,
+              "cachedInputTokens": 0,
+              "twoAppsPlusCliExecutionSeconds": 28.18520869999702,
+              "fullPreparationTime": "not independently reconstructed"
+            },
+            "poststate": "All12 recorded native scopes released with Job0, App readers stopped; one earlier inventory scope remains forced failure. Root verified no matching native processes, exact package bytes, final owned config hash, empty workspace and no plaintext auth.json.",
+            "retainedPurpose": "Independent login and owned environment retained only for the authorized remaining verification. Root accepted sole writer/recovery responsibility; official logout and safe owned-root cleanup are still owed after bounded use.",
+            "qualificationPassed": false,
+            "ordinaryDefaultScenarioPassed": false,
+            "claimLimit": "Limited actual context feasibility, not ordinary business or complete R2/R3 composition. Different profile/controls were changed together; no attribution to one selector or general fix for main-profile memory controls."
+          },
+          "nativeStateLongTurnWindowObservation": {
+            "source": "private:accord-cli-catalog-reuse-20261018-01/root-origin-window-observation.json",
+            "sourceSha256": "fbaa16cbb4b244bca4d2b95785411c68b6b291023b325e0a164997c185558426",
+            "state": "current native checkpoint update held",
+            "lastVerifiedRevision": 255,
+            "failure": {
+              "reason": "native-input-evidence-unavailable",
+              "stage": "initial-validation",
+              "readerReason": "native-input-origin-unavailable"
+            },
+            "observedReadWindow": {
+              "bytes": 16777216,
+              "sourceBytesAtObservation": 353564667,
+              "stableDuringRead": true,
+              "matchingTurnContexts": 2,
+              "originalAnchorPromptMatches": 0,
+              "invalidCompleteRows": 0
+            },
+            "retained": "Original checkpoint255 and all137 captured inputs preserved byte-for-byte in private recovery copies; recent profile effects, actual authority and pending cleanup retained separately, native task plan updated. No direct native state edit, guard weakening, replay or claim of restoration.",
+            "supportedNextCondition": "Current UserPromptSubmit code selects a new input basis when the actual native turn changes, retaining old inputs. A subsequent genuine native turn must be inspected and successfully bound before claiming restored native checkpoint updates; no additional replay/clear-watermark permission is inferred.",
+            "remaining": "Follow this actual long-turn boundary through necessary continuity recovery. No unlimited continuity, new case, acceptance-floor change or automatic global failure is inferred."
           }
         },
         "admissionReadCost": {
