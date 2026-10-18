@@ -1,0 +1,185 @@
+{
+  "schema": "yiyuan-accord-scoped-task-case/v1",
+  "purpose": "Prospective transparent synthetic metadata v2-to-v3 ordinary CLI result and recoverable legacy schema incompatibility verification; effective-user-environment only, not customer work, a product defect, prior-case replay or minimum-host evidence.",
+  "inputs": {
+    "catalog.json": {
+      "schemaVersion": 2,
+      "catalogId": "synthetic-catalog-migration-20261018-01",
+      "description": "Transparent synthetic metadata only; no paths or physical-file evidence.",
+      "records": [
+        {
+          "opaqueId": "9007199254740993",
+          "title": "设计说明 α",
+          "statusCode": "R",
+          "version": {
+            "major": 2,
+            "minor": 0,
+            "patch": 1
+          },
+          "declaredBytes": "9007199254740993"
+        },
+        {
+          "opaqueId": "0000000000000042",
+          "title": "预算目录",
+          "statusCode": "D",
+          "version": {
+            "major": 0,
+            "minor": 9,
+            "patch": 0
+          },
+          "declaredBytes": "00012"
+        },
+        {
+          "opaqueId": "cat-archived-003",
+          "title": "历史索引",
+          "statusCode": "A",
+          "version": {
+            "major": 1,
+            "minor": 2,
+            "patch": 3
+          },
+          "declaredBytes": "0"
+        },
+        {
+          "opaqueId": "18446744073709551617",
+          "title": "多语种 notes",
+          "statusCode": "R",
+          "version": {
+            "major": 12,
+            "minor": 10,
+            "patch": 0
+          },
+          "declaredBytes": "18446744073709551617"
+        },
+        {
+          "opaqueId": "meta-005",
+          "title": "待确认状态",
+          "statusCode": "Q",
+          "version": {
+            "major": 3,
+            "minor": 1,
+            "patch": 4
+          },
+          "declaredBytes": "2048"
+        },
+        {
+          "opaqueId": "meta-006",
+          "title": "缺申报量",
+          "statusCode": "D",
+          "version": {
+            "major": 1,
+            "minor": 0,
+            "patch": 0
+          }
+        },
+        {
+          "opaqueId": "meta-007",
+          "title": "版本片段",
+          "statusCode": "R",
+          "version": {
+            "major": 1,
+            "minor": 7
+          },
+          "declaredBytes": "4096"
+        },
+        {
+          "opaqueId": "meta-008",
+          "title": "缺状态",
+          "version": {
+            "major": 0,
+            "minor": 0,
+            "patch": 0
+          },
+          "declaredBytes": "128"
+        },
+        {
+          "opaqueId": "meta-009",
+          "title": "缺版本",
+          "statusCode": "A",
+          "declaredBytes": "64"
+        },
+        {
+          "opaqueId": "0010",
+          "title": "边界总量",
+          "statusCode": "R",
+          "version": {
+            "major": 100,
+            "minor": 0,
+            "patch": 9
+          },
+          "declaredBytes": "999999999999999999999999999999"
+        }
+      ]
+    },
+    "schema-mapping.md": "# 冻结映射规则：目录元数据 v2 → v3\n\n这是维护者功能验收用透明合成资料。所有记录只陈述元数据，不证明对应文件存在、可访问或真实大小。\n\n规则参数：\n```json\n{\n  \"statusMap\": {\n    \"D\": \"draft\",\n    \"R\": \"ready\",\n    \"A\": \"archived\"\n  },\n  \"versionParts\": [\n    \"major\",\n    \"minor\",\n    \"patch\"\n  ],\n  \"targetSchemaVersion\": 3\n}\n```\n\n输出 migrated.json 顶层恰为 schemaVersion、source、items、issues、totals、migrationComplete、sourceComplete。\nsource 恰为 file=\"catalog.json\"、schemaVersion=2、recordCount=原 records 长度、byteMeaning=\"declared-metadata-only\"。\nitems 保留原 records 顺序且不合并，逐项恰为 sourceIndex（从0开始）、opaqueId、title、rawStatusCode、status、sourceVersion、version、declaredBytes。\nopaqueId 和 title 原样保留。opaqueId 是不透明字符串，包括大十进制和前导零，不得转数字。\nrawStatusCode 保留原代码，缺失用 null。status 按 statusMap 映射；未知或缺失为 null，分别增加 unmapped-status-code 或 missing-field 问题。\nsourceVersion 保留原 version 对象，缺失为 null。version 仅在三个指定字段均为非负整数（非布尔值）时依顺序用十进制点连接，例如 {major:2,minor:0,patch:1} → \"2.0.1\"；不补零、不推测缺项。对象缺项/无效用 null，增加 incomplete-version；整个字段缺失增加 missing-field。\ndeclaredBytes 是非负十进制数字组成的字符串，必须逐字符保留，包括前导零和大于2^53的值；缺失用 null 并增加 missing-field。它是申报元数据，不是实际测量。\nissues 每项恰为 sourceIndex、field、code、rawValue。按原记录顺序，每条记录内按 statusCode、version、declaredBytes 顺序列问题。缺失字段的 rawValue=null；未知代码或不完整版本保留原值。无问题不得添加问题。\ntotals 恰为 knownDeclaredBytes（所有存在 declaredBytes 的任意精度整数求和后规范十进制字符串，不含逗号/指数/多余前导零）、unknownDeclaredBytesCount（缺失数）。不得把未知当0后声称总量完整。\nmigrationComplete 在全部记录按以上规则转换、核验后为 true；sourceComplete 仅当 issues 为空时为 true。本资料有未决项，二者不可混同。null 在本契约中表示 unknown，不是推定的默认业务值。\nmigration-note.md 用中文交代输入/输出、实际遇到的兼容反馈和处理、脚本实际调用方式、精度与未知问题、已完成迁移及源资料不完整的边界。不得声称 OS 故障、实测磁盘大小或真实客户交付。\n",
+    "README.md": "# 合成目录迁移委托\n\n消费者：维护者的普通 CLI 功能验收；不是客户业务，也不是产品 bug 修复。\n本目录 catalog.json 是冻结的 v2 文件目录元数据，schema-mapping.md 是目标规则，legacy_export.py 是随资料附带的旧只读导出入口。\n现有入口使用：python -B legacy_export.py catalog.json。它只从给定文件读取并向 stdout/stderr 报告，不写业务文件；不保证支持本份资料。请先用这个现有入口读本份目录，依据实际反馈继续；如不兼容，可使用已具备的本地能力按映射完成迁移，不修改旧入口，不安装新依赖，不重新登录。\n仅允许新增或修改 migrate_catalog.py、migrated.json、migration-note.md 三个平面文件，四份输入原样保护；不得创建缓存、日志、临时业务文件或子目录。Python 一律 -B。脚本接口由执行者自行选择并在说明中记录，需能重复用于符合该映射的输入，不把这10条结果硬编码进脚本。\n不联网、不发布、不改共享设置。没有对应实体文件：不要探测或虚构实体存在、真实磁盘大小、内容哈希。\n",
+    "legacy_export.py": "\"\"\"Frozen legacy read-only stdout exporter. Supports catalog schema v1 only.\"\"\"\nimport argparse\nimport json\nimport sys\nfrom pathlib import Path\n\ndef main():\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"catalog\")\n    args = parser.parse_args()\n    data = json.loads(Path(args.catalog).read_text(encoding=\"utf-8\"))\n    version = data.get(\"schemaVersion\")\n    if type(version) is not int or version != 1:\n        print(json.dumps({\"error\": \"unsupported-schema\", \"supportedSchemaVersions\": [1],\n                          \"receivedSchemaVersion\": version, \"writesPerformed\": False},\n                         ensure_ascii=False), file=sys.stderr)\n        return 2\n    print(json.dumps({\"schemaVersion\": 1, \"entries\": data.get(\"records\", [])},\n                     ensure_ascii=False))\n    return 0\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n"
+  },
+  "allowedPaths": [
+    "migrate_catalog.py",
+    "migrated.json",
+    "migration-note.md"
+  ],
+  "deliverables": [
+    "migrate_catalog.py",
+    "migrated.json",
+    "migration-note.md"
+  ],
+  "limits": {
+    "usageCaps": {
+      "totalTokens": 2500000,
+      "uncachedInputTokens": 250000,
+      "outputTokens": 24000
+    },
+    "usageScope": "One future native ordinary CLI thread, single stage, cumulative counters once; native whole900/turn720/unique exit30 seconds. Root independent verification1800 seconds including180 reserve; prior preparation, unknown costs and native failures separately retained. No default-host claim."
+  },
+  "stages": [
+    {
+      "id": "migrate-catalog",
+      "prompt": "请完成本目录 README.md 委托的透明合成目录元数据 v2→v3 迁移。先使用随资料现有的只读导出入口读取 catalog.json，根据实际反馈继续；若入口不支持本份资料，可以用已有本地能力按 schema-mapping.md 完成，不修改遗留工具、不安装依赖。交付可重复使用的 migrate_catalog.py、migrated.json 和 migration-note.md，脚本接口由你选择并说明。完整处理全部条目并逐项追溯来源；保持 opaqueId 与 declaredBytes 十进制字符串精度和原样，准确映射状态与版本，缺失和未知按规则保留，不猜补。核对全部关联结果，区分迁移完成与资料完整，只允许写上述三个文件，四份输入保持原样，Python使用-B避免缓存。不联网、不发布、不改共享设置、不登录；无需探测任何实体文件。整个工作900秒、单轮720秒、所属进程退出预留唯一30秒；累计用量上限total2500000、uncached input250000、output24000。请在完成后简短说明结果、实际兼容反馈及未决资料问题。",
+      "files": {
+        "catalog.json": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "schema-mapping.md": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "README.md": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "legacy_export.py": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "migrate_catalog.py": {
+          "state": "required",
+          "format": "utf8",
+          "nonempty": true
+        },
+        "migrated.json": {
+          "state": "required",
+          "format": "json",
+          "jsonType": "object",
+          "requiredKeys": [
+            "schemaVersion",
+            "source",
+            "items",
+            "issues",
+            "totals",
+            "migrationComplete",
+            "sourceComplete"
+          ]
+        },
+        "migration-note.md": {
+          "state": "required",
+          "format": "utf8",
+          "nonempty": true
+        }
+      },
+      "semanticReview": "Independent source-derived oracle for record/order/index/type/precision/mapping/unknown/issues/totals; human semantic review of actual legacy invocation and complete feedback, recovery actions, reusable script interface, note truthfulness, default mode/no Goal instant/history limits, protected inputs, usage and normal owned-resource exit. Structure alone is not admission."
+    }
+  ]
+}
