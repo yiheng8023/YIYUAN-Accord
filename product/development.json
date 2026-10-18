@@ -4181,6 +4181,33 @@
             "packageVersion": "3.3.0-dev.1+codex.20261017033947",
             "mcpActualVersionSame": true,
             "requiresRestart": false
+          },
+          "ordinarySteeringVerification": {
+            "subject": {
+              "revision": "88cb6b088c67f0614fdb50d2fdafacf239d2f706",
+              "tree": "8ee52bf1f08319716e0920af1790a61aa0d3a102"
+            },
+            "source": "private accord-ordinary-steering-20261018-01/outcome-r2.json",
+            "sourceSha256": "772e9975b95c385ea7242066021416f16768034a86f950b4be70342fd4fb029d",
+            "acceptedCases": [
+              "v33-goal-authority-correction-steering-01",
+              "v33-paused-work-recovery-steering-01",
+              "v33-systemic-correction-steering-01"
+            ],
+            "sameBusinessNativeStages": 4,
+            "nativeExit": "normal;4 actors and4 Goal readers released;10 execution inventories released",
+            "workerSeconds": 243.46845310000936,
+            "protectedFilesPreserved": 200,
+            "pauseBytesAndMtimesPreserved": true,
+            "ci": {
+              "run": 39057778749,
+              "jobsPassed": 11,
+              "terminal": "success"
+            },
+            "remaining": "Full R2/R3 and all overall acceptance requirements remain open; this observer submitted only these three records, not a negation or replay of older evidence. Root input diagnostic detail loss and historical cost/timing failures retained.",
+            "functionalCompletion": false,
+            "candidateEligible": false,
+            "packageChanged": false
           }
         },
         "admissionReadCost": {
