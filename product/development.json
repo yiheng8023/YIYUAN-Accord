@@ -4227,7 +4227,29 @@
               "seconds": 286.16459850000683,
               "source": "private scoped-regression.json"
             },
-            "integrationChecks": "Main candidate with new manifest:6 targeted methods and verify/verify-development passed. Initial stale live delivery version/digest refusals retained; only live delivery projection corrected, historical identities unchanged."
+            "integrationChecks": "Main candidate with new manifest:6 targeted methods and verify/verify-development passed. Initial stale live delivery version/digest refusals retained; only live delivery projection corrected, historical identities unchanged.",
+            "closeout": {
+              "source": "private accord-native-input-diagnostic-20261018-01/outcome.json",
+              "sourceSha256": "4489119373b86808758d2096e0f22ed021ce7545fe4ea57b88ccfcb2170eaf77",
+              "codeRevision": "5cbded85b27d701f7adf8f791505b0e8ef245977",
+              "ci": {
+                "run": 39097580258,
+                "jobsPassed": 11,
+                "terminal": "success"
+              },
+              "localInstallation": {
+                "version": "3.3.0-dev.1+codex.20261018043044",
+                "packageSha256": "189ae1afcd272686255e23bafaad045b10c900a30b40d6edcec88403eeb4559c",
+                "membersMatched": 25,
+                "recovery23Members": 25,
+                "onlyConfigSemanticChange": "Accord source ref"
+              },
+              "actualDesktopResponderVersion": "3.3.0-dev.1+codex.20261018043044",
+              "actual24AdoptionPending": false,
+              "claimLimit": "Source, CI, exact installation, current Root responder loaded functions and necessary bind verified. Earlier23 observation retained; no full R2/R3, cross-version qualification or historical trigger-resolution claim.",
+              "affectedLoadedFunctionsMatched": true,
+              "actualNativeCheckpointBindObserved": true
+            }
           }
         },
         "admissionReadCost": {
