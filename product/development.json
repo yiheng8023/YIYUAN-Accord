@@ -3354,6 +3354,12 @@
               "cliVsSdkProjectionCause": "unknown",
               "newProbeRequiredNow": false,
               "limit": "Do not equate disabled configuration or metadata with actual model exposure; B9 SDK extra0 does not qualify ordinary CLI or literal clean-host acceptance."
+            },
+            "memoryContextDisclosure": {
+              "source": "private:accord-cli-catalog-reuse-20261018-01/reviews/memory-cross-node-impact-review.json",
+              "sourceSha256": "9f78a3d5e189e2c1b2ec891df71aff45bf54e88cd88eebda923c60def710765b",
+              "observed": "B9 native Memory summary and indexed memory reads.",
+              "claimEffect": "Original zero-extra host catalogue observation is a catalogue-only fact, not absence of all remembered guidance. Original artifacts and quarantine inspection/recovery failure remain unchanged."
             }
           },
           "inputQuarantineHintCorrection": {
@@ -4210,7 +4216,13 @@
             "remaining": "Full R2/R3 and all overall acceptance requirements remain open; this observer submitted only these three records, not a negation or replay of older evidence. Root input diagnostic detail loss and historical cost/timing failures retained.",
             "functionalCompletion": false,
             "candidateEligible": false,
-            "packageChanged": false
+            "packageChanged": false,
+            "memoryContextDisclosure": {
+              "source": "private:accord-cli-catalog-reuse-20261018-01/reviews/memory-cross-node-impact-review.json",
+              "sourceSha256": "9f78a3d5e189e2c1b2ec891df71aff45bf54e88cd88eebda923c60def710765b",
+              "observed": "B26 native Memory summary and indexed memory read.",
+              "claimEffect": "Disclose effective context; original goal/authority correction, pause/no-write, authorized recovery and corrected artifacts remain source-supported. No minimum-combination or independent-value qualification is inferred."
+            }
           },
           "nativeInputFailureDiagnosticCorrection": {
             "source": "private accord-native-input-diagnostic-20261018-01/implementation.json",
@@ -4424,7 +4436,13 @@
               "Native worker counters do not measure Root/peer/preparation/money or full value.",
               "Original failed feedback and Root UTF-8 summary-read error retained; no evaluator business repair or replay.",
               "Package24 unchanged; no installation/restart needed."
-            ]
+            ],
+            "memoryContextDisclosure": {
+              "source": "private:accord-cli-catalog-reuse-20261018-01/reviews/memory-cross-node-impact-review.json",
+              "sourceSha256": "9f78a3d5e189e2c1b2ec891df71aff45bf54e88cd88eebda923c60def710765b",
+              "observed": "B29 native Memory guidance and actual memory-derived protected-source Skill participation.",
+              "claimEffect": "Compatible with original effective-user-environment scope; not host-plus-Accord-only, unprompted entry choice, zero-history or independent incremental value. Original admitted effects and subject remain unchanged."
+            }
           },
           "ordinaryCliMinimalReuseObservation": {
             "source": "private:accord-cli-catalog-reuse-20261018-01/outcome.json",
@@ -4550,6 +4568,32 @@
                 "correctedInterpretation": "project_doc_max_bytes limits project files, not existing global user/host instructions; global AGENTS presence does not demonstrate a lost override.",
                 "officialPath": "v0.163.0 exec uses NoopThreadConfigLoader; per_turn_config feeds HostSkillsLoadInput and HostSkillsSnapshot; provider and world-state catalogue apply enabled/prompt-visible filters.",
                 "unknown": "Actual effective configuration layers, Skill rules, snapshot identity and full correspondence of the running binary with reviewed public implementation are not yet observed. No proof of upstream world-state replacement or necessity of new HOME/login."
+              },
+              "actualContextFollowup": {
+                "source": "private:accord-cli-catalog-reuse-20261018-01/context-probe-json/comparison-r2.json",
+                "sourceSha256": "7ec3d849028fe27df0cb42a36819aa4f0ecddda482eb4977d9cc709a7db729c4",
+                "featureSource": "private:accord-cli-catalog-reuse-20261018-01/context-probe-feature/report.json",
+                "featureSourceSha256": "2337df4be1aef0b367301fa518761fa220ec0f1f4e84f2f26da6de5aef7bed7e",
+                "matchedOfficialSource": "private:accord-cli-catalog-reuse-20261018-01/reviews/memory-control-source-followup.json",
+                "matchedOfficialSourceSha256": "3268250b77b308c32f654c07ce7e19183deaf747b779564f06613db0c714f076",
+                "observedArms": [
+                  "baseline with common generate_memories=false",
+                  "same baseline plus memories.use_memories=false",
+                  "same baseline plus features.memories=false"
+                ],
+                "nativeMode": "ordinary stdout with output-schema; different from B30 JSONL business mode",
+                "toolCallsPerArm": 0,
+                "markerExactAll": true,
+                "naturalExitZeroAndOwnedJobsReleasedAll": true,
+                "pairedNativeSeconds": 49.71969059999901,
+                "featureScriptSeconds": 23.32419360000131,
+                "sameMemoryContentCharacters": 16399,
+                "sameCatalogueMatchedFileReferences": 48,
+                "sameAgentsInstructionContentBytes": 4499,
+                "allThreeContentClassHashesUnchanged": true,
+                "selectedSharedSourceAndBoundBinaryHashesMtimesUnchanged": true,
+                "cause": "unknown; running configuration consumption and actual publisher not observed",
+                "limits": "No inference that switches are universally ineffective, memory generally harmful, all memory storage unchanged, catalogue count is structured total, B30 now qualified, or a product/runtime repair occurred. Native probing stopped after these three arms."
               }
             },
             "ci": {
@@ -4568,6 +4612,23 @@
               "No proof that this is an Accord runtime defect or that all 173 visible Skills were adopted. No change to shared configuration, credentials or package24.",
               "Full R2/R3, default ordinary scene, dynamic coordination and product release remain open."
             ]
+          },
+          "memoryCrossNodeReconciliation": {
+            "source": "private:accord-cli-catalog-reuse-20261018-01/reviews/memory-cross-node-impact-review.json",
+            "sourceSha256": "9f78a3d5e189e2c1b2ec891df71aff45bf54e88cd88eebda923c60def710765b",
+            "scope": "Bounded source-linked review of ten claims across B9/B22/B26/B29/B30 and review provenance, not a full scan of all prior work.",
+            "affected": "Supplement actual assistance disclosures and restrict independent attribution; B30 minimum-combination remains failed.",
+            "preserved": "B9/B26/B29 original source-correct outcomes and directly observed authority/recovery facts; B22 different original exposure sources and qualification=false; independent review remains disclosed-context review, not zero-history.",
+            "unknown": "Counterfactual dependence and incremental value, later unexamined B22 participation, and uninspected other nodes.",
+            "personalMemoryCorrection": {
+              "userAuthorized": true,
+              "correctionReceipt": "private:accord-cli-catalog-reuse-20261018-01/memory-update-written.json",
+              "correctionNoteSha256": "c5a7cebaeb09dd65258a9f7ae91ba1d7aad28a3b14c8b0416fb79582e0a77163",
+              "scope": "Retire current applicability of obsolete Stop continuation wording; qualify old file-based handoff, v3.1 stage/four-reviewer/Goal projection/other-host expansion and release-readiness versus existing conditional authority. Preserve dated evidence and useful source-verification guidance.",
+              "originalMemorySourcesUnchanged": true,
+              "hostConsolidationOrFutureInjectionVerified": false
+            },
+            "productMechanismAssessment": "Current capability/closeout guidance already separates configured intent from actual behavior, requires scoped conflict correction and accounts for memory in value claims. No new general memory ban or product-runtime defect is established by these observations."
           }
         },
         "admissionReadCost": {
