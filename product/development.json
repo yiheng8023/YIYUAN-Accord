@@ -4378,6 +4378,52 @@
               "whole applicable lifecycle",
               "current-candidate reconciliation of remaining original evidence and complete R2/R3/release conditions"
             ]
+          },
+          "ordinaryCliCatalogVerification": {
+            "source": "private:accord-cli-migration-20261018-01/outcome.json",
+            "sourceSha256": "0f14b572f802d6414f7c6bc078f9f76f442d95ba029fae6f1df9158b64c79710",
+            "subject": {
+              "revision": "40068b9c54ced2542048f85d5ee0cc3fed4c82dd",
+              "tree": "fdddab6eab484efd9c15fb5bdf55148a38b337fa"
+            },
+            "acceptedCases": [
+              "v33-cli-catalog-migration-01"
+            ],
+            "formalSourceVerified": true,
+            "admissionReportSha256": "12c2a7f1835783504d871284abe1b3d11b70d7cc02f3004ff40f4d83f1a53265",
+            "actualEntry": "cx-cli",
+            "scenario": "effective-user-environment",
+            "threadId": "01a14e83-12df-7fe2-9dce-3e401f2c0b1a",
+            "turnId": "01a14e83-1c8d-7a02-864b-76dad511cabd",
+            "outcome": "Ten new synthetic metadata records migrated with three complete artifacts; real legacy incompatibility and actor-corrected stdout line endings retained. Five unresolved source facts remain explicitly unknown.",
+            "verification": "Independent full-source oracle, five new pure-function source variants and two reviewers/four axes; public observe/recheck clean.196 tracked/four business inputs/main config and25 package members preserved; runtime empty roots removed after owned Jobs and reader exit, all business/source/negative evidence retained.",
+            "elapsedSeconds": 242.3856682000005,
+            "usage": {
+              "inputTokens": 353367,
+              "cachedInputTokens": 316672,
+              "outputTokens": 11010,
+              "uncachedInputTokens": 36695,
+              "totalTokens": 364377
+            },
+            "rootVerificationSeconds": 772.4160392284393,
+            "rootVerificationLimitSeconds": 1800,
+            "rootReserveSeconds": 180,
+            "ci": {
+              "runId": 39118512440,
+              "head": "40068b9c54ced2542048f85d5ee0cc3fed4c82dd",
+              "status": "in_progress",
+              "conclusion": null,
+              "successfulJobs": 7,
+              "failedJobs": 0,
+              "totalJobs": 11
+            },
+            "limits": [
+              "Specified existing business exporter is not unprompted entry choice or independent Accord value.",
+              "Default-host scenario remains unaccepted; ordinary parent scope and full R2/R3 remain open.",
+              "Native worker counters do not measure Root/peer/preparation/money or full value.",
+              "Original failed feedback and Root UTF-8 summary-read error retained; no evaluator business repair or replay.",
+              "Package24 unchanged; no installation/restart needed."
+            ]
           }
         },
         "admissionReadCost": {
