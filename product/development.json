@@ -4425,6 +4425,149 @@
               "Original failed feedback and Root UTF-8 summary-read error retained; no evaluator business repair or replay.",
               "Package24 unchanged; no installation/restart needed."
             ]
+          },
+          "ordinaryCliMinimalReuseObservation": {
+            "source": "private:accord-cli-catalog-reuse-20261018-01/outcome.json",
+            "sourceSha256": "70c81d6b5572b851c857087acd2b5dd76b5dd27cee48ebb9332eaaa8c53bf8ad",
+            "subject": {
+              "revision": "19bb80c88c9289d7e0190cb818bee86779c0e1ee",
+              "tree": "ed72b089e1b9a6b47546b0ea39bf66ca3a4eec64"
+            },
+            "case": "v33-cli-catalog-reuse-minimal-01",
+            "episode": "5d2ca9b270db46ffa4fe9448bc4e30c5",
+            "businessComplete": true,
+            "qualificationPassed": false,
+            "acceptedCases": [],
+            "caseRejections": {
+              "v33-cli-catalog-reuse-minimal-01": [
+                "consequence-mismatch"
+              ]
+            },
+            "formalSourceVerified": true,
+            "admissionReportSha256": "e91007e29bf1a25dc3699cd7c19c75a00e0b716be1db9f8900c50dc11f72fdbc",
+            "actualEntry": "cx-cli",
+            "declaredScenario": "default-host-without-extra-extensions",
+            "scenarioObserved": false,
+            "threadId": "01a14ec9-1ddc-7c93-ac6b-7c1efc2974ac",
+            "turnId": "01a14ec9-2fc6-7c10-8e55-e3bf31834ce6",
+            "business": {
+              "complete": true,
+              "records": 8,
+              "deliverables": [
+                "next-migrated.json",
+                "next-note.md"
+              ],
+              "frozenInputs": 4,
+              "sourceIssues": 3,
+              "knownDeclaredBytes": "123456789012363693299744074489",
+              "unknownDeclaredBytesCount": 1,
+              "migrationComplete": true,
+              "sourceComplete": false,
+              "priorScriptReusedUnchanged": true,
+              "priorBatchReplayed": false,
+              "rootBusinessRepair": false
+            },
+            "execution": {
+              "version": "0.163.0",
+              "packageVersion": "3.3.0-dev.1+codex.20261018043044",
+              "model": "gpt-6.1-sol",
+              "reasoning": "high",
+              "collaborationMode": "default",
+              "goalObservation": "No activation observed; post-stage same-thread goal null only at read",
+              "outerCommandSeconds": 127.85995388031006,
+              "runnerSeconds": 125.31964329999937,
+              "exitCode": 0,
+              "forced": false,
+              "ownedJobActiveProcesses": 0,
+              "usage": {
+                "inputTokens": 396177,
+                "cachedInputTokens": 352640,
+                "outputTokens": 4450,
+                "uncachedInputTokens": 43537,
+                "totalTokens": 400627
+              }
+            },
+            "qualification": {
+              "truePredicates": 12,
+              "falsePredicates": 1,
+              "falsePredicate": "authority.declaredMinimalEffectiveCombinationObserved",
+              "independentAxes": {
+                "product": "fail",
+                "specification": "fail",
+                "implementation": "fail",
+                "standards": "pass"
+              },
+              "reason": "Actual memory-derived external Skill was read and explicitly adopted; directory flags did not establish the declared minimal effective combination.",
+              "ordinaryDefaultScenarioPassed": false,
+              "wholeProductPassed": false
+            },
+            "counterevidence": {
+              "nativePrefixSha256": "f1a28c03693ec0561f5f9a262adf64fcf9451fd19cd2ba0bcb3e9137f57e35df",
+              "nativeBytes": 1064908,
+              "visibleSkillDescriptors": 173,
+              "descriptorsMatchingDisabledRules": 16,
+              "systemDescriptorsDespiteBundledFalse": 4,
+              "agentsMdCharacters": 4442,
+              "extraSkillActuallyAdopted": "protected-source-derivation from existing memory",
+              "catalogueVisibilityIsNotAllSkillAdoption": true,
+              "memoryDisableControlWasNotIncluded": true,
+              "actualPublisherCause": "unknown"
+            },
+            "verification": {
+              "independentSourceDerivedResultCorrect": true,
+              "protectedTrackedFiles": 197,
+              "sharedConfigAndGlobalAgentsUnchanged": true,
+              "fourBusinessInputsHashMtimeUnchanged": true,
+              "packageMembersUnchanged": 25,
+              "retainedInspectionSucceeded": true
+            },
+            "cleanup": {
+              "ownedRuntimeEmptyRootsRemoved": [
+                "execution/temp",
+                "execution/state"
+              ],
+              "allBusinessOriginalsOutputsAndFailuresRetained": true,
+              "nativeGoalReaderStopped": true,
+              "inventoryJobsReleased": true
+            },
+            "rootVerification": {
+              "elapsedSeconds": 2054.856456041336,
+              "limitSeconds": 1800,
+              "reserveSeconds": 180,
+              "withinOriginalLimit": false,
+              "scope": "Post-run source/semantic/resource/independent/core negative adjudication and this retained outcome only; preparation/whole-peer/money costs not established."
+            },
+            "rootFailure": "Unscoped private transport token replacement altered an immutable helper hash; source guard rejected before observation. Original retained; exact-token replacement corrected the derived transport without business replay or product changes.",
+            "boundedDiagnosis": {
+              "source": "private:accord-cli-catalog-reuse-20261018-01/reviews/context-origin-diagnostic.json",
+              "sourceSha256": "69bd08af421748be6ad0a43604f0faa0c34b20d392c9948cfb77c3ed3177c5d0",
+              "sourceFinding": "Official exec and app-server sources carry CLI overrides into config loading; no evidence that argument placement or thread/start config omission drops them. Memory use had no disabling control. Actual Skill/AGENTS publisher remains unknown.",
+              "contextProbe": "Held before native execution: current JSON-only lifecycle reader and raw-file stdout interface do not directly support the selected safe JSONL context probe. No models or new native resources created.",
+              "contextProbeSourceSha256": "12d6d465815f8e006b3cffc88d3a39479b99994a5fde930e6f069b1244d47eb5",
+              "publisherFollowup": {
+                "source": "private:accord-cli-catalog-reuse-20261018-01/reviews/context-publisher-followup.json",
+                "sourceSha256": "b95f3aba9aef0d068b89601b112e72f5cbaa55e2b7796973e361556a1b55dc3f",
+                "correctedInterpretation": "project_doc_max_bytes limits project files, not existing global user/host instructions; global AGENTS presence does not demonstrate a lost override.",
+                "officialPath": "v0.163.0 exec uses NoopThreadConfigLoader; per_turn_config feeds HostSkillsLoadInput and HostSkillsSnapshot; provider and world-state catalogue apply enabled/prompt-visible filters.",
+                "unknown": "Actual effective configuration layers, Skill rules, snapshot identity and full correspondence of the running binary with reviewed public implementation are not yet observed. No proof of upstream world-state replacement or necessity of new HOME/login."
+              }
+            },
+            "ci": {
+              "runId": 39123502390,
+              "head": "19bb80c88c9289d7e0190cb818bee86779c0e1ee",
+              "status": "completed",
+              "conclusion": "success",
+              "successfulJobs": 11,
+              "failedJobs": 0,
+              "totalJobs": 11
+            },
+            "limits": [
+              "Business success does not qualify the declared minimum effective combination. Original case, criteria, failure and sources retain their execution identity.",
+              "B29 remains admitted only at its original subject and effective-user-environment scope; its business is not replayed.",
+              "The 1800-second Root limit was exceeded by 254.856 seconds; neither the original budget nor failure is rewritten. Whole preparation/peer/money costs remain unknown.",
+              "No proof that this is an Accord runtime defect or that all 173 visible Skills were adopted. No change to shared configuration, credentials or package24.",
+              "Full R2/R3, default ordinary scene, dynamic coordination and product release remain open."
+            ]
           }
         },
         "admissionReadCost": {
@@ -4762,6 +4905,56 @@
         "jobsPassed": 11,
         "source": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/39018459485"
       }
+    },
+    {
+      "id": "ended-minimal-cli-reuse-disposition-20261018",
+      "authority": "Existing PLAN historical-disposition policy and current user-authorized continuation; preserve original qualification requirements and ended execution evidence.",
+      "outcome": "not-admitted",
+      "declarations": [
+        {
+          "caseId": "v33-cli-catalog-reuse-minimal-01",
+          "scope": "v33-codex-cli-ordinary-delivery",
+          "declarationSnapshot": "19bb80c88c9289d7e0190cb818bee86779c0e1ee:product/development.json",
+          "caseObjectSha256": "3d3d629fd934f232fda32d497413d7a918f88c3481ab9c59c7e06f6113656e22",
+          "definitionSha256": "130176e627fc8ecee43ab687dc0ef285b057ff9f7b096836a8cff7cda5b0d79a",
+          "caseFile": "product/cases/catalog-reuse-minimal-v3.3.json",
+          "caseFileSha256": "8c7f3b7e4f9041990c4c6be368f1fb3f0b2a9eca33fd3231a45a0cae162ccc60",
+          "execution": {
+            "entryProtocol": "exec-resume",
+            "hookMode": "installed-plugin",
+            "model": "gpt-6.1-sol",
+            "reasoning": "high",
+            "windowsSandbox": "elevated",
+            "timeoutSeconds": 600,
+            "turnTimeoutSeconds": 420,
+            "recoveryTimeoutSeconds": 30,
+            "caseSha256": "8c7f3b7e4f9041990c4c6be368f1fb3f0b2a9eca33fd3231a45a0cae162ccc60",
+            "host": "codex",
+            "entry": "cx-cli",
+            "codexVersion": "0.163.0",
+            "usageCaps": {
+              "totalTokens": 1000000,
+              "uncachedInputTokens": 125000,
+              "outputTokens": 16000
+            },
+            "usageScope": "One future native ordinary CLI thread, single stage; cumulative counters once. Native600/turn420/unique exit30 seconds, Root independent verification1800 including180 reserve. Preparation and unobservable whole-cost components separate. Minimal-host qualification remains subject to real entry/Guidance/catalogue/result evidence and independent review.",
+            "runner": "scripts/observe_codex_entry.py",
+            "caseFile": "product/cases/catalog-reuse-minimal-v3.3.json"
+          },
+          "outcome": "not-admitted",
+          "replayAllowed": false,
+          "source": "private:accord-cli-catalog-reuse-20261018-01/outcome.json",
+          "sourceSha256": "70c81d6b5572b851c857087acd2b5dd76b5dd27cee48ebb9332eaaa8c53bf8ad",
+          "formalAdmissionSha256": "e91007e29bf1a25dc3699cd7c19c75a00e0b716be1db9f8900c50dc11f72fdbc",
+          "independentReviewSha256": [
+            "a2945fb627f0576ea2a91a4f42fd3a503d02aada6016ffa0643b6195d7549a47",
+            "500bb5b4455b49dc97d3e85e22763ea30f1dc14cd45b42848eb8295a6e817061"
+          ]
+        }
+      ],
+      "reason": "The new eight-record business completed correctly, but the declared minimal effective host combination was false because an extra memory-derived Skill was actually adopted. The original observer rejected the case. An ended unreplayable instance must not remain a mandatory future pass.",
+      "retained": "Original criteria, source fixture, exact execution subject, native observations, reviews, business artifacts, Root transport failure and Root budget overrun remain retained. No retrospective pass or business replay.",
+      "remainingDuty": "Ordinary CLI default-host-without-extra-extensions remains unaccepted. All 17 scopes, requiredCoverage, A01-A08 mappings, scope dimensions, joint requirements, admission algorithm and B29 original subject/qualification remain unchanged."
     }
   ],
   "environmentControl": {
@@ -8392,120 +8585,6 @@
               "attributableProcessesReleased": true,
               "protectedSourcesAndSharedUserStatePreserved": true,
               "retainedEvidenceAndRecoveryAccountedFor": true
-            }
-          }
-        },
-        {
-          "host": "codex",
-          "entry": "cx-cli",
-          "duties": [
-            "goal-authority-correction",
-            "execution-configuration-and-code",
-            "resources-and-cleanup",
-            "verification-and-value"
-          ],
-          "qualityAxes": [
-            "compliance-and-safety",
-            "functional-coverage",
-            "normal-entry-integration",
-            "recovery-and-lifecycle",
-            "evidence-integrity"
-          ],
-          "claims": [
-            "function"
-          ],
-          "id": "v33-cli-catalog-reuse-minimal-01",
-          "scope": "v33-codex-cli-ordinary-delivery",
-          "scenarios": [
-            "default-host-without-extra-extensions"
-          ],
-          "conditions": {
-            "collaborationMode": "default",
-            "goalModeActive": false,
-            "execution": {
-              "entryProtocol": "exec-resume",
-              "hookMode": "installed-plugin",
-              "model": "gpt-6.1-sol",
-              "reasoning": "high",
-              "windowsSandbox": "elevated",
-              "timeoutSeconds": 600,
-              "turnTimeoutSeconds": 420,
-              "recoveryTimeoutSeconds": 30,
-              "caseSha256": "8c7f3b7e4f9041990c4c6be368f1fb3f0b2a9eca33fd3231a45a0cae162ccc60",
-              "host": "codex",
-              "entry": "cx-cli",
-              "codexVersion": "0.163.0",
-              "usageCaps": {
-                "totalTokens": 1000000,
-                "uncachedInputTokens": 125000,
-                "outputTokens": 16000
-              },
-              "usageScope": "One future native ordinary CLI thread, single stage; cumulative counters once. Native600/turn420/unique exit30 seconds, Root independent verification1800 including180 reserve. Preparation and unobservable whole-cost components separate. Minimal-host qualification remains subject to real entry/Guidance/catalogue/result evidence and independent review.",
-              "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/catalog-reuse-minimal-v3.3.json"
-            },
-            "caseKind": "prospective-transparent-synthetic-ordinary-cli-functional-verification",
-            "sourceAndInput": "New eight-record metadata batch, with the prior verified migration script and mapping frozen as explicit business inputs. Two new outputs only; do not repeat the completed prior batch or rebuild its script. This is transparent maintainer functional verification, not customer work.",
-            "effectiveEnvironment": "Fresh ordinary CLI0.163.0, installed package24 and original user account/home/trust. Private source-bound global overrides constrain extra capabilities in this process; public conditions expose hashes/counts, not private paths or configuration contents. Actual minimal effective Skill/Hook/tool/instruction exposure and no additional extension contribution must be observed in this new turn. This is not a claim of physically clean installation or absent remote/managed metadata.",
-            "qualification": "Independent source derivation, actual complete native guidance/commands/responses/catalogue, mode/Goal temporal evidence, immutable four inputs and shared configuration, two truthful outputs, budget and owned resource release; fresh exact-subject independent review and original observe/recheck. Prior model-free catalogues establish feasibility only. No expected-to-observed copying, evaluator repair, specific tool mandate or forced failure.",
-            "budgetAccounting": "Native600 seconds whole/420 per turn/unique30 recovery, cumulative1M total/125k uncached/16k output. Reusing the verified script and two outputs narrows work from prior242.386-second three-output implementation; this is a ceiling rationale, not predicted cost or proof of savings. Root post-run independent verification1800 seconds including180 reserve; preparation and all-peer/money/net-value unknowns separately retained. No extension of original failed windows or whole-cost/A08 claim.",
-            "privateOracleSha256": "de0e6f787b9048b081eab7ee3755ed451ec13d52fc8234eb7d0b57f5fc3aa5ba",
-            "choiceAttribution": "The prior verified script and mapping are explicit source artifacts. The actor chooses a sufficient permitted local method; no specified Skill, Hook or MCP action and no artificial compatibility failure. This case does not relabel prior B29 recovery as new recovery.",
-            "privateBootstrap": {
-              "schema": "accord-cli-private-bootstrap/v2",
-              "mechanism": "Task-local Python assembles native global arguments; the fresh ordinary CLI worker is the business actor; Root Desktop coordinates and reviews only.",
-              "callerSha256": "054eac039d979b01c2ac523bff8b29ec78b10a25cd2320ce1a67e4ded65832a0",
-              "controlSha256": "4378fee26d98069f81415079370a8c28be15d95c960e991ba04e00616532c196",
-              "fixtureSha256": "8c7f3b7e4f9041990c4c6be368f1fb3f0b2a9eca33fd3231a45a0cae162ccc60",
-              "fullGlobalArgumentsSha256": "ded17fece2d251e3f96a981709f9673995d3d0304b50285c1e4bdc7025a35cb5",
-              "originalRulesSha256": "f815586f7ff5c104a37cf05ea336463a1f22a719cc4c777303073bc37164fc33",
-              "exposureSelectionSha256": "dda87ce43866658d4fd23c9590b52ca3477b53c7e8a9fa1fb7a4ee1a409549a6",
-              "controlledSkillSourcesSha256": "e5dd84ffd544dc1e12c7c6f9d76d493b455179c2d3c62f9cf8cf3d5bb7ba9243",
-              "sourceProbeSha256": "81efccc6256dcc1dcfb4cb0994c598206e25d594061204cf1b0fe5e01eec8222",
-              "counts": {
-                "globalArgumentPairs": 29,
-                "originalRules": 1,
-                "additionalSkillExclusions": 39,
-                "effectiveSkillRules": 40,
-                "disabledPluginKeys": 19,
-                "disabledStandaloneMcpKeys": 6
-              }
-            }
-          },
-          "oracle": "Independently verify this prospectively bound fresh ordinary CLI task and the declared minimal effective combination, without claiming physical clean installation. Compare exact private bootstrap source/control hashes, full actual arguments and original disabled rules; observe full native instruction/Skill/Hook/tool exposure and any additional extension contribution before treating the scenario as supported. No development-dialogue or hidden prior-answer injection; the frozen previous script is an explicitly authorized business input. Independently derive all eight new records, order/source indices, exact opaque IDs and decimal strings, status/version mappings, three ordered unknown issues and exact known-declaration total with one unknown amount. Confirm both new outputs and truthful method/note; preserve all four inputs including the existing script and mapping. Verify default mode, actual Goal read/time limits, cumulative worker usage, natural owned process/reader/Job exit and protected shared state/retained sources. Independent source review must precede observer judgment; formal admission is produced by the core, never a prewritten fact prerequisite. Existing B29 recovery evidence retains its original identity; no forced failure, extra scenario, comparative value, whole R2/R3 or release claim.",
-          "oracleFiles": [
-            "docs/operations/PLAN-v3.3.md",
-            "docs/operations/ACCEPTANCE-v3.3.md",
-            "yiyuan_accord/admission.py",
-            "scripts/observe_codex_entry.py",
-            "scripts/inspect_coordination.py",
-            "scripts/observe_codex_lifecycle.py",
-            "scripts/inspect_native_resources.py",
-            "scripts/codex_rpc.py",
-            "product/cases/catalog-reuse-minimal-v3.3.json"
-          ],
-          "maxAgeSeconds": 86400,
-          "expected": {
-            "effect": {
-              "twoSourceCorrectDeliverables": true,
-              "sufficientAuthorizedMethodAndTruthfulReuse": true,
-              "completeSourceIndexedNewBatch": true
-            },
-            "authority": {
-              "freshCliAndPrivateControlsActuallyBound": true,
-              "declaredMinimalEffectiveCombinationObserved": true,
-              "defaultModeAndNoUnrequestedGoalObserved": true,
-              "inputAndEffectAuthorityPreserved": true
-            },
-            "poststate": {
-              "exactStringsTotalsAndThreeUnknownsPreserved": true,
-              "frozenToolAndMappingUnchanged": true,
-              "allAffectedResultsAndCompletionClaimsConsistent": true
-            },
-            "cleanup": {
-              "attributableProcessesReleased": true,
-              "protectedSharedStateAndInputsPreserved": true,
-              "retainedEvidenceAndIndependentSourceReviewReady": true
             }
           }
         }
