@@ -4262,12 +4262,12 @@
             }
           },
           "resourceEnvironmentVerification": {
-            "state": "prospectively-declared-not-executed",
+            "state": "two-bound-scopes-admitted-business-closed",
             "cases": [
               "v33-resource-pressure-current-capacity-01",
               "v33-environment-adaptation-current-capacity-01"
             ],
-            "source": "private:accord-resource-environment-20261018-01",
+            "source": "private:accord-resource-environment-20261018-01/outcome.json",
             "execution": {
               "host": "codex",
               "entry": "cx-desktop",
@@ -4327,7 +4327,56 @@
             "unchangedPackageVersion": "3.3.0-dev.1+codex.20261018043044",
             "functionalCompletion": false,
             "candidateEligible": false,
-            "priorEvidenceDisposition": "Original combination/A05, B26 and SDK evidence remains valid only at its original subject and conditions; no replay or retrospective dependency edits."
+            "priorEvidenceDisposition": "Original combination/A05, B26 and SDK evidence remains valid only at its original subject and conditions; no replay or retrospective dependency edits.",
+            "sourceSha256": "c4d4a2831e3621b0831f08a140f257241b7f2c8d15bf27f2a3a0ff25622fdf2a",
+            "executionSubject": {
+              "revision": "a0eb42c2b58ba9d6e786390a4053b73fdfabf34a",
+              "tree": "0c38aa7c8231ab5c2aa4bacbdbc31859587930c3"
+            },
+            "admissionSubject": {
+              "revision": "dedfc13a43452adeff99e00eae9d3a43b7d2f220",
+              "tree": "471743d6c4934940b8c6a1e0e0e930a598e35c9d"
+            },
+            "acceptedCases": [
+              "v33-environment-adaptation-current-capacity-01",
+              "v33-resource-pressure-current-capacity-01"
+            ],
+            "formalSourceVerified": true,
+            "businessSummary": {
+              "delivered": 8,
+              "expandedBytes": 536870912,
+              "partialResultsReused": 2,
+              "memoryLimitsMiB": [
+                160,
+                96
+              ],
+              "naturalExit": true,
+              "workerSeconds": 361.60983350000015
+            },
+            "ci": {
+              "original": {
+                "revision": "a0eb42c2b58ba9d6e786390a4053b73fdfabf34a",
+                "runId": 39110013184,
+                "conclusion": "failure",
+                "successfulJobs": 2,
+                "failedJobs": 9
+              },
+              "repair": {
+                "revision": "dedfc13a43452adeff99e00eae9d3a43b7d2f220",
+                "runId": 39111724236,
+                "conclusion": "success",
+                "successfulJobs": 11
+              }
+            },
+            "rootVerificationSeconds": 1667.440458,
+            "rootVerificationAllocationSeconds": 1800,
+            "laterCleanupPrecheckPassed": false,
+            "remaining": [
+              "ordinary CLI full delivery",
+              "dynamic capability/model routing",
+              "whole applicable lifecycle",
+              "current-candidate reconciliation of remaining original evidence and complete R2/R3/release conditions"
+            ]
           }
         },
         "admissionReadCost": {
