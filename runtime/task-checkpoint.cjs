@@ -24,6 +24,37 @@ const canonical = (value) => JSON.stringify(value, function (_, child) {
 const samePath = (left, right) => process.platform === 'win32'
   ? left.toLowerCase() === right.toLowerCase() : left === right;
 const fail = (message) => { throw new Error(message); };
+// Only failures made here carry diagnostics; caller-owned Error properties are
+// never evidence. Values are finite built-in reader codes, not exception text.
+const nativeInputFailures = new WeakMap();
+const nativeInputReaderReasons = new Set((
+  'accepted-execution-fields-invalid binding-missing bounded-tail-unavailable ' +
+  'capacity-retry-accepted-execution-unavailable capacity-retry-context-mismatch ' +
+  'capacity-retry-current-turn-unproven capacity-retry-failure-unproven capacity-retry-input-hash-missing ' +
+  'capacity-retry-input-or-interruption-conflict capacity-retry-order-conflict capacity-retry-original-input-unavailable ' +
+  'capacity-retry-root-source-unproven capacity-retry-start-unproven capacity-retry-subagent-rollout capacity-retry-turn-conflict ' +
+  'current-host-fields-invalid current-host-model-mismatch current-host-thread-mismatch current-host-turn-mismatch ' +
+  'current-turn-context-not-in-bounded-tail current-turn-not-latest invalid-complete-tail-record invalid-turn-context ' +
+  'native-captured-input-prefix-incomplete native-captured-input-prefix-mismatch native-input-basis-unavailable ' +
+  'native-input-context-conflict native-input-control-needs-reconciliation native-input-control-unrecognized ' +
+  'native-input-current-host-conflict native-input-current-turn-conflict native-input-evidence-changed ' +
+  'native-input-origin-unavailable native-input-reader-unavailable native-source-part-unsupported native-source-record-unavailable ' +
+  'noncanonical-rollout-path observation-time-invalid rollout-thread-identity-mismatch session-cwd-mismatch ' +
+  'session-meta-mismatch session-meta-unavailable token-count-expired token-count-from-future transcript-changed-before-read ' +
+  'transcript-changed-during-read transcript-empty-or-too-large transcript-not-regular-file transcript-outside-sessions-root ' +
+  'transcript-path-changed-after-read transcript-read-failed transcript-unavailable turn-cwd-mismatch turn-model-mismatch ' +
+  'unterminated-tail-record').split(' '));
+function nativeInputDiagnostic(error) {
+  const value = nativeInputFailures.get(error);
+  return value ? {...value} : null;
+}
+function failNativeInput(stage, reason) {
+  const error = new Error('native-input-evidence-unavailable');
+  nativeInputFailures.set(error, Object.freeze({
+    stage: stage === 'commit-recheck' ? 'commit-recheck' : 'initial-validation',
+    readerReason: nativeInputReaderReasons.has(reason) ? reason : 'reader-reason-unavailable'}));
+  throw error;
+}
 const text = (value) => typeof value === 'string' && value.trim().length > 0;
 const needsInput = (input) => input?.needsNativeReplay || input?.needsResumeReconciliation;
 const INPUT_RECEIPT_LIMIT = 8 * 1024 * 1024;
@@ -508,7 +539,7 @@ function associateCurrentTurn(input, request) {
     proof.captured, proof.acceptedExecution, proof.sourceScan);
   return association.state === 'observed' ? association : null;
 }
-function requireNativeTurn(request, input, expectedCursor = null) {
+function requireNativeTurn(request, input, expectedCursor = null, stage = 'initial-validation') {
   if (!request || !Object.hasOwn(request, 'nativeTurnId')) return;
   const expected = request.nativeTurnId;
   const observed = input?.nativeInputReconciliation?.turnId ?? input?.hostObservation?.turnId ??
@@ -520,14 +551,14 @@ function requireNativeTurn(request, input, expectedCursor = null) {
   const evidence = inputEvidence(input, request, expectedCursor);
   if (evidence.state === 'observed' && !evidence.latestInputReconciled) fail('native-input-reconciliation-required');
   if (evidence.state === 'observed' && !evidence.latestNativeInputsComplete) fail('native-input-content-coverage-unknown');
-  if (evidence.state !== 'observed' && evidence.reason !== 'native-input-source-unbound') fail('native-input-evidence-unavailable');
+  if (evidence.state !== 'observed' && evidence.reason !== 'native-input-source-unbound') failNativeInput(stage, evidence.reason);
   return evidence.cursor;
 }
 
 function currentEpoch(where, epoch, request = null, expectedInput = null, expectedCursor = null) {
   const input = readInput(where);
   if (input?.epoch !== epoch) fail('latest-user-input-not-reconciled');
-  requireNativeTurn(request, input, expectedCursor);
+  requireNativeTurn(request, input, expectedCursor, 'commit-recheck');
   // Failure watermarks deliberately publish outside the input lock. Re-read
   // after bounded transcript proof, immediately before state publication.
   if (expectedInput && canonical(input) !== canonical(expectedInput) ||
@@ -1606,6 +1637,8 @@ if (require.main === module) {
           : process.argv.includes('--hook') ? hook(request) : operate(request)) + '\n');
       } catch (error) {
         process.stderr.write(`YIYUAN Accord task checkpoint unavailable: ${error.code || error.message}.\n`);
+        const diagnostic = nativeInputDiagnostic(error);
+        if (diagnostic) process.stderr.write(JSON.stringify({nativeInputDiagnostic: diagnostic}) + '\n');
         process.exitCode = 1;
       }
     });
@@ -1613,7 +1646,7 @@ if (require.main === module) {
 }
 // Identify loaded functions without reopening a cache path that may be retired.
 const loadedFunctionSha256 = Object.freeze(Object.fromEntries(
-  Object.entries({handleHook, retireFiles, nativeContextReader}).map(([name, fn]) => [name,
+  Object.entries({handleHook, retireFiles, nativeContextReader, nativeInputDiagnostic}).map(([name, fn]) => [name,
     typeof fn === 'function' ? crypto.createHash('sha256')
       .update(Function.prototype.toString.call(fn)).digest('hex') : null])));
-module.exports = {operate, hook, assessContext, observeContext, entryGuidance, limitEntryContext, loadedFunctionSha256};
+module.exports = {operate, hook, assessContext, observeContext, entryGuidance, limitEntryContext, loadedFunctionSha256, nativeInputDiagnostic};

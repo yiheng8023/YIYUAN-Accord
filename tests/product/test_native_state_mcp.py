@@ -2156,6 +2156,122 @@ process.stdout.write(JSON.stringify({response,changed}));
         self.assertNotIn(b'PRIVATE_', process.stdout)
         self.assertFalse(self.state.exists())
 
+    def test_builtin_reader_failure_phase_survives_mcp_without_state_write(self):
+        for action in ('bind', 'pause', 'retire', 'retire-unbound'):
+            for phase in ('initial-validation', 'commit-recheck'):
+                with self.subTest(action=action, phase=phase):
+                    f = NativeStateMcpTests(); f.setUp(); self.addCleanup(f.doCleanups)
+                    f.native_context()
+                    session = f.params['_meta']['x-codex-turn-metadata']['session_id']
+                    status = f.helper({'op': 'status'}, session=session)
+                    source = f.work/'source.txt'; source.write_text('Protected original', encoding='utf-8')
+                    contract = dict(result='Keep the authorized task', inputs=['source.txt'],
+                        outputs=[{'path':'report.txt'}], nextAction='Complete report', canContinue=True)
+                    revision = 0
+                    if action not in ('bind', 'retire-unbound'):
+                        bound = f.manage(action='bind', epoch=status['epoch'], expectedRevision=0, **contract)
+                        self.assertFalse(bound['isError'], bound); revision = 1
+                    args = dict(cwd=str(f.work), action='retire' if action == 'retire-unbound' else action,
+                                epoch=status['epoch'], expectedRevision=revision)
+                    if action == 'bind': args.update(contract)
+                    elif action == 'pause': args['reason'] = 'Explicit pause'
+                    else: args.update(disposition='user-cancelled', reason='Explicit cancellation')
+                    params = {**f.params, 'name':'manage_task_state', 'arguments':args}
+                    transcript = next(Path(f.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                    before = {p.name:p.read_bytes() for p in f.state.glob('*.json')}
+                    if phase == 'initial-validation': transcript.unlink()
+                    script = r"""
+const fs=require('node:fs'),path=require('node:path');const x=JSON.parse(fs.readFileSync(0,'utf8'));
+if(x.recheck&&x.unbound){const open=fs.openSync;let count=0;
+ fs.openSync=(file,...args)=>{if(typeof file==='string'&&file.endsWith('.input.json.lock')&&++count===2)fs.unlinkSync(x.transcript);return open(file,...args);};
+}else if(x.recheck){const read=fs.readFileSync;let changed=false;
+ fs.readFileSync=(file,...args)=>{const value=read(file,...args);
+  if(!changed&&typeof file==='string'&&path.resolve(file)===x.source){changed=true;fs.unlinkSync(x.transcript);}return value;};}
+process.stdout.write(JSON.stringify(require(process.argv[1]).manageTaskState(x.params)));
+"""
+                    p = subprocess.run([f.node,'-e',script,str(BRIDGE)], input=json.dumps(dict(params=params,
+                        source=str(source),transcript=str(transcript),recheck=phase=='commit-recheck',
+                        unbound=action=='retire-unbound')),
+                        capture_output=True,text=True,encoding='utf-8',env=f.env,timeout=10)
+                    self.assertEqual(p.returncode,0,p.stderr)
+                    response = json.loads(p.stdout)
+                    self.assertTrue(response['isError'],response)
+                    self.assertEqual(response['value']['reason'],'native-input-evidence-unavailable')
+                    self.assertEqual(response['value'].get('nativeInputDiagnostic'),
+                        {'stage':phase,'readerReason':'transcript-unavailable'})
+                    self.assertEqual({p.name:p.read_bytes() for p in f.state.glob('*.json')},before)
+                    self.assertEqual(source.read_text(encoding='utf-8'),'Protected original')
+
+    def test_helper_retains_reason_and_safe_machine_diagnostic(self):
+        self.native_context(); meta=self.params['_meta']['x-codex-turn-metadata']
+        status=self.helper({'op':'status'},session=meta['session_id'])
+        next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl')).unlink()
+        body=dict(op='bind',session_id=meta['session_id'],cwd=str(self.work),epoch=status['epoch'],
+            expectedRevision=0,nativeTurnId=meta['turn_id'],result='Retain objective',inputs=[],
+            outputs=[{'path':'report.txt'}],nextAction='Continue safely',canContinue=True)
+        p=subprocess.run([self.node,str(CHECKPOINT)],input=json.dumps(body),capture_output=True,
+            text=True,encoding='utf-8',env=self.env,timeout=10)
+        self.assertEqual(p.returncode,1)
+        self.assertIn('native-input-evidence-unavailable',p.stderr)
+        lines=[json.loads(line) for line in p.stderr.splitlines() if line.startswith('{')]
+        self.assertEqual(lines,[{'nativeInputDiagnostic':{'stage':'initial-validation','readerReason':'transcript-unavailable'}}])
+
+    def test_forged_error_diagnostic_is_not_projected(self):
+        status=self.receive_current_input()
+        params={**self.params,'name':'manage_task_state','arguments':dict(cwd=str(self.work),action='pause',
+            epoch=status['epoch'],expectedRevision=0,reason='Pause')}
+        script=r"""
+const fs=require('node:fs');const x=JSON.parse(fs.readFileSync(0,'utf8'));
+const checkpoint=require(process.argv[2]);checkpoint.operate=()=>{const e=new Error('native-input-evidence-unavailable');
+ e.nativeInputDiagnostic=x.metadata;throw e;};
+process.stdout.write(JSON.stringify(require(process.argv[1]).manageTaskState(x.params)));
+"""
+        for metadata in ({'stage':'initial-validation','readerReason':'transcript-unavailable'},
+                         {'stage':'PRIVATE_PATH','readerReason':'PRIVATE_INPUT','extra':'PRIVATE_EXCEPTION'}):
+            p=subprocess.run([self.node,'-e',script,str(BRIDGE),str(CHECKPOINT)],
+                input=json.dumps(dict(params=params,metadata=metadata)),capture_output=True,text=True,
+                encoding='utf-8',env=self.env,timeout=10)
+            self.assertEqual(p.returncode,0,p.stderr)
+            value=json.loads(p.stdout)['value']
+            self.assertNotIn('nativeInputDiagnostic',value)
+            self.assertNotIn('PRIVATE_',p.stdout)
+
+    def test_unknown_reader_reason_is_fixed_not_injected_text(self):
+        self.native_context(); meta=self.params['_meta']['x-codex-turn-metadata']
+        status=self.helper({'op':'status'},session=meta['session_id'])
+        params={**self.params,'name':'manage_task_state','arguments':dict(cwd=str(self.work),action='bind',
+            epoch=status['epoch'],expectedRevision=0,result='Keep task',inputs=[],outputs=[{'path':'report.txt'}],
+            nextAction='Continue',canContinue=True)}
+        script=r"""
+const fs=require('node:fs'),path=require('node:path');const x=JSON.parse(fs.readFileSync(0,'utf8'));
+require(path.join(path.dirname(process.argv[1]),'codex-context.cjs')).inspectNativeInputs=()=>({state:'unknown',reason:x.reason});
+process.stdout.write(JSON.stringify(require(process.argv[1]).manageTaskState(x.params)));
+"""
+        for reason in ('PRIVATE_PATH/PRIVATE_INPUT', {'exception':'PRIVATE_EXCEPTION'}, None):
+            p=subprocess.run([self.node,'-e',script,str(BRIDGE)],input=json.dumps(dict(params=params,reason=reason)),
+                capture_output=True,text=True,encoding='utf-8',env=self.env,timeout=10)
+            self.assertEqual(p.returncode,0,p.stderr)
+            value=json.loads(p.stdout)['value']
+            self.assertEqual(value['nativeInputDiagnostic'],
+                {'stage':'initial-validation','readerReason':'reader-reason-unavailable'})
+            self.assertNotIn('PRIVATE_',p.stdout)
+
+    def test_root_shim_preserves_safe_diagnostic_and_checkpoint_mirror(self):
+        self.native_context(); meta=self.params['_meta']['x-codex-turn-metadata']
+        status=self.helper({'op':'status'},session=meta['session_id'])
+        next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl')).unlink()
+        params={**self.params,'name':'manage_task_state','arguments':dict(cwd=str(self.work),action='bind',
+            epoch=status['epoch'],expectedRevision=0,result='Keep task',inputs=[],outputs=[{'path':'report.txt'}],
+            nextAction='Continue',canContinue=True)}
+        root=BRIDGE.parents[3]
+        self.assertEqual((root/'runtime/task-checkpoint.cjs').read_bytes(),CHECKPOINT.read_bytes())
+        code="const fs=require('node:fs');process.stdout.write(JSON.stringify(require(process.argv[1]).manageTaskState(JSON.parse(fs.readFileSync(0,'utf8')))));"
+        p=subprocess.run([self.node,'-e',code,str(root/'runtime/native-state-mcp.cjs')],input=json.dumps(params),
+            capture_output=True,text=True,encoding='utf-8',env=self.env,timeout=10)
+        self.assertEqual(p.returncode,0,p.stderr)
+        self.assertEqual(json.loads(p.stdout)['value']['nativeInputDiagnostic'],
+            {'stage':'initial-validation','readerReason':'transcript-unavailable'})
+
     def files(self):
         return {p.relative_to(self.root).as_posix(): p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
 
@@ -2226,6 +2342,9 @@ const modulePath=path.join(x.cached,'runtime','native-state-mcp.cjs');
 const manifest=path.join(x.cached,'.codex-plugin','plugin.json');
 const originalVersion=JSON.parse(fs.readFileSync(manifest,'utf8')).version;
 const m=require(modulePath), h=m.createHandler();
+const digest=fn=>require('node:crypto').createHash('sha256').update(Function.prototype.toString.call(fn)).digest('hex');
+const expectedDiagnosticFunctions={manageTaskState:digest(m.manageTaskState),
+  nativeInputDiagnostic:digest(require(path.join(x.cached,'runtime','task-checkpoint.cjs')).nativeInputDiagnostic)};
 h({jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2025-06-18',
   capabilities:{},clientInfo:{name:'identity-fixture',version:'1'}}});
 h({jsonrpc:'2.0',method:'notifications/initialized'});
@@ -2234,7 +2353,7 @@ const before=call();
 fs.writeFileSync(manifest,JSON.stringify({version:'later-disk-version'}));
 fs.renameSync(x.cached,x.retired);
 const after=call();
-process.stdout.write(JSON.stringify({originalVersion,before,after}));
+process.stdout.write(JSON.stringify({originalVersion,before,after,expectedDiagnosticFunctions}));
 '''
         before_files = {p.name: p.read_bytes() for p in self.state.glob("*") if p.is_file()}
         p = subprocess.run([self.node, '-e', script], input=json.dumps({
@@ -2248,7 +2367,10 @@ process.stdout.write(JSON.stringify({originalVersion,before,after}));
         self.assertGreater(after['processId'], 0)
         self.assertEqual(after['modulePathAtLoad'], str(cached / 'runtime/native-state-mcp.cjs'))
         self.assertEqual(set(after['functionSha256']),
-            {'handleHook', 'retireFiles', 'nativeContextReader', 'inspectNativeState'})
+            {'handleHook', 'retireFiles', 'nativeContextReader', 'inspectNativeState',
+             'manageTaskState', 'nativeInputDiagnostic'})
+        for name, digest in result['expectedDiagnosticFunctions'].items():
+            self.assertEqual(after['functionSha256'][name], digest)
         self.assertTrue(all(len(value) == 64 for value in after['functionSha256'].values()))
         self.assertEqual({p.name: p.read_bytes() for p in self.state.glob("*") if p.is_file()}, before_files)
 

@@ -7,7 +7,7 @@ const path = require('node:path');
 const fs = require('node:fs');
 const crypto = require('node:crypto');
 const {TextDecoder} = require('node:util');
-const {operate, loadedFunctionSha256} = require('./task-checkpoint.cjs');
+const {operate, loadedFunctionSha256, nativeInputDiagnostic} = require('./task-checkpoint.cjs');
 
 const PROTOCOL = '2025-06-18';
 const MAX_FRAME = 128 * 1024;
@@ -232,7 +232,8 @@ function inspectNativeState(params, serverVersion = null) {
     processId: process.pid, modulePathAtLoad: __filename,
     fingerprintFormat: 'sha256-of-function-prototype-toString',
     functionSha256: {...(loadedFunctionSha256 || {}), inspectNativeState:
-      crypto.createHash('sha256').update(Function.prototype.toString.call(inspectNativeState)).digest('hex')},
+      crypto.createHash('sha256').update(Function.prototype.toString.call(inspectNativeState)).digest('hex'),
+      manageTaskState: crypto.createHash('sha256').update(Function.prototype.toString.call(manageTaskState)).digest('hex')},
     claimLimit: 'This responder and listed loaded function bodies only; excludes closures, constants, full package, other Hook processes, behavior, authority and process-control permission.'};
   if (params.arguments.includeContext === true) {
     const unknown = reason => ({state: 'unknown', reason, sourceReleaseAllowed: false});
@@ -459,7 +460,12 @@ function manageTaskState(params) {
   for (const key of byAction[args.action]) if (own(args, key)) request[key] = args[key];
   let observation;
   try { observation = operate(request); }
-  catch (error) { return rejected(inspectionReason(error), 'unknown-check-post-state'); }
+  catch (error) {
+    const response = rejected(inspectionReason(error), 'unknown-check-post-state');
+    const diagnostic = nativeInputDiagnostic(error);
+    if (diagnostic) response.value.nativeInputDiagnostic = diagnostic;
+    return response;
+  }
   let value = {schema: 'yiyuan-accord-native-state-mutation/v1', state: 'observed-operation',
     action: args.action, source, workspace: {cwd: args.cwd, binding: 'caller-selected'},
     observation, claimLimit: MANAGE_CLAIM_LIMIT};

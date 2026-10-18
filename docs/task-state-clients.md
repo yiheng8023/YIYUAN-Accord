@@ -4,11 +4,11 @@
 
 ## 调用前：取得可用的最新观察
 
-先通过宿主已获授权的原生 MCP 路径调用 `inspect_task_state`，参数为 `{cwd: absoluteWorkspace}`。确认返回 `checkpoint.state === "observed"`，读取 `checkpoint.snapshot` 的当前 `epoch`、`revision`、完整合同、pause 与恢复标志。每次管理调用都取同一次最新观察的 epoch/revision；更新后的 revision 再 inspect 取得。旧 `checkpoint.epoch` 是上次绑定依据，不可替代 snapshot.epoch。缺失或不可用观察保持未决。[读取实现 174–207](../runtime/native-state-mcp.cjs#L174)、[snapshot 757–785](../runtime/task-checkpoint.cjs#L757)。
+先通过宿主已获授权的原生 MCP 路径调用 `inspect_task_state`，参数为 `{cwd: absoluteWorkspace}`。确认返回 `checkpoint.state === "observed"`，读取 `checkpoint.snapshot` 的当前 `epoch`、`revision`、完整合同、pause 与恢复标志。每次管理调用都取同一次最新观察的 epoch/revision；更新后的 revision 再 inspect 取得。旧 `checkpoint.epoch` 是上次绑定依据，不可替代 snapshot.epoch。缺失或不可用观察保持未决。[读取实现](../runtime/native-state-mcp.cjs)、[snapshot](../runtime/task-checkpoint.cjs)。
 
-`cwd` 是调用者选择的绝对工作区；inputs 路径与每个 outputs.path 均相对该工作区。管理共同必填字段是 cwd、action、epoch、expectedRevision。当前 root/session/turn 身份由原生调用元数据提供；调用者 arguments 不填 session_id、threadId、nativeTurnId 或伪造 metadata。后代共享 session 的身份差异会被拒绝。[参数与身份 guard 309–376](../runtime/native-state-mcp.cjs#L309)、[相对路径 1269](../runtime/task-checkpoint.cjs#L1269)。
+`cwd` 是调用者选择的绝对工作区；inputs 路径与每个 outputs.path 均相对该工作区。管理共同必填字段是 cwd、action、epoch、expectedRevision。当前 root/session/turn 身份由原生调用元数据提供；调用者 arguments 不填 session_id、threadId、nativeTurnId 或伪造 metadata。后代共享 session 的身份差异会被拒绝。[参数与身份 guard](../runtime/native-state-mcp.cjs)、[相对路径](../runtime/task-checkpoint.cjs)。
 
-若细节标为 `omitted-bounded-result`，先读 `checkpointSource.path` 的完整字节，对实际解析的同一份字节计算 SHA-256 并比对 checkpointSource.sha256，取得完整合同。保存文件只有基线/谓词；当前业务文件观察需另行检查。依赖动作前再次 inspect 并核对当前输入、epoch、revision、digest、pause 与恢复标志；变化或未知仍未决，不能把省略字段当空值。[超长返回 246–267](../runtime/native-state-mcp.cjs#L246)、[架构 110–117](architecture.md#L110)。
+若细节标为 `omitted-bounded-result`，先读 `checkpointSource.path` 的完整字节，对实际解析的同一份字节计算 SHA-256 并比对 checkpointSource.sha256，取得完整合同。保存文件只有基线/谓词；当前业务文件观察需另行检查。依赖动作前再次 inspect 并核对当前输入、epoch、revision、digest、pause 与恢复标志；变化或未知仍未决，不能把省略字段当空值。[超长返回](../runtime/native-state-mcp.cjs)、[架构 110–117](architecture.md#L110)。
 
 ## 输入隔离不等于本轮正文缺失
 
@@ -49,13 +49,13 @@ function bindParams(latest, absoluteWorkspace, reviewedContract) {
 
 保存合同的 `checkpoint.inputs` 含 `{path, observed}` 指纹对象；重绑参数 `inputs` 则只接受相对路径字符串。核对保护和变更处置后取各项 path，不直接把保存的对象列表作为参数，也不省略已有保护。首次绑定的 snapshot 可为 mode=unbound、revision=0、checkpoint=null；仍须有真实输入及可用恢复标志，再提交完整的新合同。
 
-修订输出谓词需 `revisionReason`；变更或移除旧输入需每个受影响输入的 `inputRevisions: [{path, observed, reason}]`，observed 精确匹配当前 inspection.inputs[].current 指纹；不存在文件为 `{present:false}`，存在文件为 `{present:true, sha256}`。初始绑定或新增保护不需此处分；额外/重复处分会失败。核对实际用户决定和受影响范围，再提交完整合同。[输入修订 641–670](../runtime/task-checkpoint.cjs#L641)、[合同修订 674–723](../runtime/task-checkpoint.cjs#L674)。
+修订输出谓词需 `revisionReason`；变更或移除旧输入需每个受影响输入的 `inputRevisions: [{path, observed, reason}]`，observed 精确匹配当前 inspection.inputs[].current 指纹；不存在文件为 `{present:false}`，存在文件为 `{present:true, sha256}`。初始绑定或新增保护不需此处分；额外/重复处分会失败。核对实际用户决定和受影响范围，再提交完整合同。[输入修订](../runtime/task-checkpoint.cjs)、[合同修订](../runtime/task-checkpoint.cjs)。
 
-`unresolved` 省略才继承旧未决条件；显式列表替换它们，移除/重述旧条件需 revisionReason 和事实或授权范围变更依据。任何未决条件阻止 verified-local 与成功退役。重绑保留旧 pause；仅在实际恢复授权成立且 prior.mode=paused 时附非空 `resumeReason` 解除。reason 文字不是授权证据。恢复隔离/输入丢失不是 resumeReason 能解决的条件；本管理工具不 replay 或 recover-lock。[未决与恢复规则 1274–1280](../runtime/task-checkpoint.cjs#L1274)。
+`unresolved` 省略才继承旧未决条件；显式列表替换它们，移除/重述旧条件需 revisionReason 和事实或授权范围变更依据。任何未决条件阻止 verified-local 与成功退役。重绑保留旧 pause；仅在实际恢复授权成立且 prior.mode=paused 时附非空 `resumeReason` 解除。reason 文字不是授权证据。恢复隔离/输入丢失不是 resumeReason 能解决的条件；本管理工具不 replay 或 recover-lock。[未决与恢复规则](../runtime/task-checkpoint.cjs)。
 
 ## pause：保存暂停及未完成条件
 
-pause 需要已有 checkpoint、当前 epoch/revision 及非空 reason；写 mode=paused、revision 加一并保留合同。先确认当前暂停决定和责任，不把等待观察时的 canContinue=false 自动解释成用户暂停。[pause 824–834](../runtime/task-checkpoint.cjs#L824)。
+pause 需要已有 checkpoint、当前 epoch/revision 及非空 reason；写 mode=paused、revision 加一并保留合同。先确认当前暂停决定和责任，不把等待观察时的 canContinue=false 自动解释成用户暂停。[pause](../runtime/task-checkpoint.cjs)。
 
 ```js
 function pauseParams(latest, absoluteWorkspace, verifiedPauseReason) {
@@ -72,7 +72,7 @@ function pauseParams(latest, absoluteWorkspace, verifiedPauseReason) {
 
 调用者先核对真实目标完成证据，以及当前仍适用的用户授权与宿主批准；同一目标、范围内未撤销的既有授权继续有效，无须重复确认。管理器只核当前输入、非paused状态、本地谓词及未决条件；`verified-local` 不证明目标语义或外部验收。
 
-显式用户取消另需已核实的取消决定，并提交 `disposition: "user-cancelled"` 与非空 reason；字段仍是调用者声明。无 checkpoint 时只退役 receipt：先确认 snapshot.mode=unbound、revision=0、`needsNativeReplay=false`、`needsResumeReconciliation=false`，当前输入已协调，再提供非空 reason。只移除本任务 checkpoint/receipt 状态，不写业务输出。[退役实现 815–845](../runtime/task-checkpoint.cjs#L815)、[限制 1277](../runtime/task-checkpoint.cjs#L1277)。
+显式用户取消另需已核实的取消决定，并提交 `disposition: "user-cancelled"` 与非空 reason；字段仍是调用者声明。无 checkpoint 时只退役 receipt：先确认 snapshot.mode=unbound、revision=0、`needsNativeReplay=false`、`needsResumeReconciliation=false`，当前输入已协调，再提供非空 reason。只移除本任务 checkpoint/receipt 状态，不写业务输出。[退役实现](../runtime/task-checkpoint.cjs)、[限制](../runtime/task-checkpoint.cjs)。
 
 ```js
 function retireParams(latest, absoluteWorkspace) {
@@ -86,7 +86,11 @@ function retireParams(latest, absoluteWorkspace) {
 
 ## 回查：区分未请求与效果未知
 
-bind 缺参返回 `invalid-task-state-binding`、requiredFields/missingFields 及 `effect: "not-requested"`：该 guard 在 operate 前拒绝，补齐并重新取得最新观察，不宣称业务已变更。真正进入 operate 后的异常带 `effect: "unknown-check-post-state"`，reason保留对应诊断原因；实际 mutation 后传输失败也可能丢失成功回执。两者先 inspect 后状态并核对保留证据，再决定下一安全动作；已发生或未知效果先对账，不能自动重试，不能一概声称零写入。成功但细节超长返回精简成功回执；回查完整合同。[guard/执行 309–388](../runtime/native-state-mcp.cjs#L309)、[传输边界 459–480](../runtime/native-state-mcp.cjs#L459)。
+当原生输入核验返回 `native-input-evidence-unavailable` 时，内建失败另带 `nativeInputDiagnostic`：`stage` 为 `initial-validation`（首次核验）或 `commit-recheck`（状态提交/退役前复核），`readerReason` 为有限的内建来源原因；未知值统一为 `reader-reason-unavailable`。例如来源在读取后变化可得到 `transcript-path-changed-after-read`。helper 保留原退出码和错误行，并另输出一行同名 JSON；MCP 保留原 reason/isError/effect。任意异常属性、原始文本、路径和输入不会作为这些新增字段反射。没有该字段不等于核验成功，也不能猜测失败阶段。
+
+这些信息用于定位被拒边界，不授予重试、恢复、放宽防护或新的权限；仍须核对实际输入、来源和操作后态。此修正不宣称已找出全部历史失败的触发原因，也不启用日志观察器。`inspect_task_state` 的运行时指纹包含 `manageTaskState` 和 `nativeInputDiagnostic`，可核本次改变的已加载函数；它们仍不覆盖闭包、常量、整个软件包或其它进程。
+
+bind 缺参返回 `invalid-task-state-binding`、requiredFields/missingFields 及 `effect: "not-requested"`：该 guard 在 operate 前拒绝，补齐并重新取得最新观察，不宣称业务已变更。真正进入 operate 后的异常带 `effect: "unknown-check-post-state"`，reason保留对应诊断原因；实际 mutation 后传输失败也可能丢失成功回执。两者先 inspect 后状态并核对保留证据，再决定下一安全动作；已发生或未知效果先对账，不能自动重试，不能一概声称零写入。成功但细节超长返回精简成功回执；回查完整合同。[guard/执行](../runtime/native-state-mcp.cjs)、[传输边界](../runtime/native-state-mcp.cjs)。
 
 宿主拒绝可能发生在 adapter 前；按实际 disposition 保留未完成工作，不能换策略或路线绕过拒绝。App Server 的工具错误有结果，宿主拒绝无结果；其规范化结果不重复原始 MCP isError。管理记录、原生 metadata、工具 annotations、原因文字及本地谓词均不证明 permission、当前意图、写者所有权、接管或外部验收。[架构 118–135](architecture.md#L118)。
 
