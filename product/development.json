@@ -758,7 +758,12 @@
         "subject": "npm CLI0.163.0 and installed Desktop26.1013.4894.0 bundled CLI0.163.0-alpha.10.2; source slice observed after82e7cee4, not all currently running consumers.",
         "method": "Native version/help and static default/experimental schema exports; current48 app-tool declarations; official current docs and exact rust-v0.163.0 command registry. No model/server/account/config operation. Source private:accord-package-path-impact-20261019-01/current-discovery/reconciliation.json SHA958262eadeeef62ffd5050f481e73298933334e9aafdfa7137a66722958ccb9b",
         "finding": "Both binaries export105 default/172 including-experimental methods with identical schema member hashes. Root help has26commands+generatedhelp; release-tag registry additionally declares4 hidden root commands. Execpolicy is explicitlyhidden and its dedicatedhelp works; aliases e/a/cloud-tasks are bound toexec/apply/cloud. Current docs mcp-server has no dedicated variant inthis release registry; its help probe returns roothelp, not server entry proof. Old99-method and18group snapshots retain their original dates and no longer stand in for current item coverage.",
-        "claimLimit": "Static discovery only; experimental includes internal/mock/unenabled items. Exact source version is not reproducible-build or active-consumer attestation. Deeper commands/config/slash/UI/account/modes/SDK/IDE and necessary-use links remain distinct; no full denominator, behavior, all-entry adoption or release qualification follows."
+        "claimLimit": "Static discovery only; experimental includes internal/mock/unenabled items. Exact source version is not reproducible-build or active-consumer attestation. Deeper commands/config/slash/UI/account/modes/SDK/IDE and necessary-use links remain distinct; no full denominator, behavior, all-entry adoption or release qualification follows.",
+        "sourceSliceFollowup": {
+          "source": "private:accord-package-path-impact-20261019-01/current-discovery/source-slices-outcome.json",
+          "sha256": "9f80e598fb3469928bc9df7c8be9050306c238780ac3fa4852ce2d1ca577e52b",
+          "scope": "Additional bounded declarations and source conditions, not effective user configuration or full capability admission."
+        }
       }
     ],
     "native": [
@@ -4945,7 +4950,25 @@
               "lifecycleSource": "private:accord-package-path-impact-20261019-01/lifecycle-consequence-gap.json",
               "lifecycleSourceSha256": "1aaca3e6b3853ec97250812eaae5633a5665a5d1a4d95bd9e72dccbd85c8dc06",
               "lifecycleDisposition": "Current24 Root adoption/bind and commit-recheck rejection followed by same-input recovery are already observed. B31 physical logout/cleanup is complete while original whole window remains failed. Only actually relevant old consumers/guidance/unfinished state require current disposition; entry-wide loss external recovery is conditional, not a mandatory staged failure or phone demonstration. Empty whole-host case is a separate formal registration gap.",
-              "nextConcreteWork": "Join current command/config/slash/UI source rows and actual necessary-use evidence within the existing coveragecase; preserve identified unavailable/hidden/version-specific distinctions. Judge only remaining lifecycle consequences, not duplicate proof of settled Work/IDE or new business for every interface."
+              "nextConcreteWork": "Join current command/config/slash/UI source rows and actual necessary-use evidence within the existing coveragecase; preserve identified unavailable/hidden/version-specific distinctions. Judge only remaining lifecycle consequences, not duplicate proof of settled Work/IDE or new business for every interface.",
+              "additionalSourceSlices": {
+                "source": "private:accord-package-path-impact-20261019-01/current-discovery/source-slices-outcome.json",
+                "sourceSha256": "9f80e598fb3469928bc9df7c8be9050306c238780ac3fa4852ce2d1ca577e52b",
+                "staticBoundaries": "CLI64 declared slash IDs/103 config root keys; Desktop52 registered settings/182 unique registry command IDs; IDE manifest10 commands/8 config keys. These are distinct source sets, not additive available functions or full coverage.",
+                "currentRelatedNativeConsumers": 4,
+                "currentRelatedNativeVersion": "3.3.0-dev.1+codex.20261018043044",
+                "currentRelatedLoadedFingerprintsEqual": true,
+                "otherFilenameMatchedConsumersUnattributed": 2,
+                "nativeConsumerSourceSha256": "1899b5c82ec4f7e4d72cae90f5523f1891c6f3cc1e7edcc22f936181cab1866b",
+                "ci": {
+                  "run": 39230407228,
+                  "head": "82e7cee46057c193ac47a299276f4040b5acce51",
+                  "conclusion": "success",
+                  "jobsPassed": 11,
+                  "sourceSha256": "60f37e0626b2cdc03dc0b0238c423ca2e62b29e83a8486d7d98fdf6f17e56b97"
+                },
+                "claimLimit": "Bound source interpretation and actual four-consumer native replies only. Preserve account/feature/rendered/handler/entry-specific unknowns, original failures and all full-scope duties; no UI operation, independent login, runtime update or business replay."
+              }
             }
           }
         },
