@@ -5089,7 +5089,35 @@
               "No business/model replay, new account, package installation, credential copy, watcher or UI operation.",
               "Caller and independent reviewers still establish source authenticity, completeness and semantic applicability; data shape/digests do not prove them."
             ],
-            "next": "Commit the verified mechanism and bind exact current subject; complete only the named current-source/material gaps and independent material reviews before any real derived admission. Preserve old case/source records and scope limits."
+            "next": "Three retained function cases are qualified at17b9784a/tree18b9d981. Preserve that exact subject and original failures; proceed to other affected current qualifications, necessary lifecycle/dynamic coordination and same-business full combination without replay.",
+            "currentReuseFollowup": {
+              "source": "private:accord-current-applicability-20261019-01/current-reuse/outcome.json",
+              "sourceSha256": "da6ddbc7894009f2da461909e58836722253d1800b24a4a30df8b1bcce6a47e6",
+              "evaluatedSubject": {
+                "revision": "17b9784aabad5dab8523e3ed121e0a8ed12d6a16",
+                "tree": "18b9d98182ef35148a049905823fe8cf879ad5cb"
+              },
+              "acceptedCases": [
+                "v33-goal-authority-correction-steering-01",
+                "v33-paused-work-recovery-steering-01",
+                "v33-systemic-correction-steering-01"
+              ],
+              "finalSourceVerification": true,
+              "admissionReportSha256": "a108563f53320ed3e4740866e11441d30e82a8bc2e0a84974af6a4016a8f1482",
+              "sourceRecordsUnchanged": true,
+              "sourceRecheckCounts": {
+                "direct": 33,
+                "installedMembers": 25
+              },
+              "assessmentSeconds": 6.916859099997964,
+              "stageSecondsThroughFinalSourceAndResourceCheck": 2192.9355008,
+              "originalWindowSeconds": 2400,
+              "withinOriginalWindow": true,
+              "originalFailuresPreserved": true,
+              "businessReplayed": false,
+              "functionalCompletion": false,
+              "candidateEligible": false
+            }
           }
         },
         "admissionReadCost": {
