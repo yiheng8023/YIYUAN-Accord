@@ -1,14 +1,14 @@
 # 当前接续
 
-当前CI修复：17b原CI4成功/7失败，已确认新增POSIX mode测试的实体/index执行位不一致导致共享fixture恢复失败。仅修测试并断言HEAD/clean恢复；WSL原用例先失败，修后同进程4项及Windows4项均通过，生产/包/原判据不改。先核修复提交CI终态。三原function在17b的有限适用性保留；实际接续回执于原截止前2.893493秒完成，迟写marker的失败原样留证，独判不构成原阶段未完成。
+当前CI：2ba30edc修复后的39277953960第一轮终态为10成功/1取消/0测试失败。macOS原生生命周期列出的步骤均成功且约8分半钟已执行/清理完，约14分钟后平台给出20分钟超时取消；GitHub同期公告Actions处理降级，具体单job因果仍不冒认。已仅请求同SHA取消项补跑，attempt2现已completed/success、11/11终态成功；十个原成功job的原时刻保持。保原取消，不改时限或猜修产品。17b及8e的原POSIX夹具失败保留；原17b三function有限资格和已核时序边界不回写。
 
-当前工序：R2/R3当前适用性与完整组合。f074ceff精确CI39255727057已11/11成功。本轮新逐案适用性分支已实现并集成：隔离全回归112项/951.391秒通过，冻结生产源码独审无阻断，主仓verify有效。当前输入完整、无replay/resume，实施阶段已续绑270；不改变原任务或启用Plan/Goal。
+当前工序：R2/R3当前适用性与原同业务组合。B28资源/环境两案及B29普通CLI一案已在2ba30edc/tree3f328dae经两名独评四轴、独立普通候选review及原observe/recheck正式接纳当前适用性；errors/rejections空、finalSourceVerification=true。30主来源、257原件、25现装成员及原字节切片核对通过，原SDK/CLI身份与不同episode、失败和范围不变，无新业务重演。9.203741秒core判定，本次独立4500秒段在结果保存时用1200.676986秒，600秒恢复预留不回改。只改派生材料的历史预算/原环境角色歧义，未改包、准入器或原条件。
 
 机制默认仍拒未经核查的版本/执行依赖变化。显式材料要绑定原最终case资格、最终结果及已知失败、完整包/oracle/判定代码差异和执行位、全部原条件的历史/持续责任、当前host/entry、四轴独评材料hash及最终重核；父入口/生命周期/A08/影响不借此通过。源与判据真实性仍由caller/独评承担。实增37276代码/测试字节，额度3900000保原5%预留，198文件和36000指导上限不变。原失败/原件/活动case均保持。
 
-本轮后续：已在17b9784a/tree18b9d981经两名独评四轴及原observe/recheck接纳B26三原function记录的当前适用性，finalSourceVerification=true、errors/rejections空，原记录/时间/episode不改。33直接源/25安装成员末核通过，隔离clone已清、冻结源码/patch/日志保留；原2400秒本段最终源/资源核查用2192.935501秒。当前结果见accord-current-applicability-20261019-01/current-reuse/outcome.json。下一核17b及后续记录提交CI，复用这三项及B28/B29既有贡献，推进其余受影响当前资格、必要生命周期/动态协调和同业务组合；不重复跑已闭业务。已核11原源、三原记录及96条件叶，旧180秒收尾失败不抹去，也不升级成历史零错误要求。IDE共用后端路径已由10源21span核定，当前实际选择/IDE24采用仍有界未知，旧profile无需重建。之后仍须动态协调与整体生命周期的有源登记、同业务完整组合及净影响；不能拼散案完成A08。
+已闭前段：B26三原function在17b9784a/tree18b9d981的当前适用性保留，33源/25包和原失败限界不变。本轮三案源见accord-current-applicability-20261019-01/current-reuse-resource-cli/outcome.json。下一从原五案及同一v33-live-development-20261013-01组合/影响记录继续核当前受影响职责；原正式报告已接受该组合，不能再称从未组合验收，亦不能直接搬旧包PASS或拼B26/B28/B29成A08。动态路由和whole-lifecycle仍缺活动case，先用已有来源定位真正缺少后果，必要的新项目工作才前瞻绑定，不造业务复制品。普通default场景、父层当前适用及完整A01–A08仍未闭。
 
-私有总源：accord-current-applicability-20261019-01/mechanism-outcome.json；B34源映射、Work同包surface/微展示/CLI解析、B28/B29当前源准入、B26原四段、B31最小组合和265真实恢复均按原边界复用。现装和MCP仍24，本轮只改通用准入层，无安装/登录/重启任务。17scope/15case及质量底线不变，完整R2/R3和发布资格仍未完成。此页为开发期临时接续；下文保留原时点历史，以本节确定当前工序。
+私有总源：accord-current-applicability-20261019-01/current-reuse-resource-cli/outcome.json及ci-followup/attempt-1-terminal.json；B35原机制/current-reuse、B34源映射、B28/B29原贡献、B31最小组合和真实恢复按原边界复用。现装及MCP仍24，本轮无生产代码/安装/登录/重启变化。17scope/15case及全部质量底线不变，完整R2/R3与发布资格仍未完成。此页是开发期临时接续；下文保留原时点历史，以本节确定当前工序。
 
 已闭B30及原失败：B30新8条元数据已复用B29脚本完成，两份成品与3项源未决独算吻合；worker自然退出、所属Job/reader关闭，197仓文件、4业务原件、主配置/全局AGENTS及25包成员保持，两空runtime根已移除。最小有效宿主场景未通过：实际模型上下文含173项Skill目录，16项匹配禁用规则，并实际读取采用记忆中的额外Skill；不能把目录预检当作执行隔离。两独审四轴及原observe/recheck保留12真/1假，准入为空、consequence-mismatch；不重跑已闭业务或改原判据求绿。Root派生transport误改helper哈希被事前guard拦截，修正后正式负结果有效；Root核验2054.856秒超原1800秒，原预算/失败保留。B29原effective-user-environment资格可复用；5dac7b4d/CI39120601146与19bb80c8/CI39123502390均11/11成功。最初JSONL纯上下文探针因现工具接口不匹配在启动前停住；后续已复用原执行器完成普通stdout/schema三臂诊断，见下段，未新登录。B30原定义/夹具/主体/失败按既有规则转为历史not-admitted，不再要求已闭实例重跑必过；当前17scope/15活动case仅声明，完整R2/R3/发布仍未完；24包不变，无需安装重启。
 

@@ -5147,7 +5147,46 @@
                 "temporaryPosixRepositoriesClosed": true
               },
               "productionCodeChangedByRepair": false,
-              "repairCi": "not-yet-observed",
+              "repairCi": {
+                "runId": 39277953960,
+                "subject": "2ba30edcb4ce96853d14e89ec260f46b3606558a",
+                "attempt1": {
+                  "status": "completed",
+                  "conclusion": "cancelled",
+                  "successfulJobs": 10,
+                  "failedJobs": 0,
+                  "cancelledJobs": 1,
+                  "source": "private:accord-current-applicability-20261019-01/ci-followup/attempt-1-terminal.json",
+                  "sourceSha256": "c0983d7982721d17e1ed1f4260a5d713873202fcafc1930da2f14b3d48259d87"
+                },
+                "cancelledJob": {
+                  "id": 118146819675,
+                  "name": "Native lifecycle / macos-latest",
+                  "annotation": "The job has exceeded the maximum execution time of 20m0s",
+                  "allListedStepsSuccessful": true,
+                  "summedStepSeconds": 505,
+                  "jobReportedSeconds": 1335,
+                  "lastStepCompletedAt": "2026-10-19T15:36:24Z",
+                  "jobCompletedAt": "2026-10-19T15:50:13Z"
+                },
+                "hostIncident": "https://www.githubstatus.com/incidents/8tzbpcnl75jp",
+                "causalLimit": "Official Actions processing degradation and post-step terminal delays support a hosted-service explanation; exact job causality is not established.",
+                "recovery": {
+                  "requestedAction": "Re-run cancelled job118146819675 only on the same immutable SHA; preserve prior successful jobs and original cancellation.",
+                  "attempt": 2,
+                  "jobId": 118177452214,
+                  "lastObservedStatus": "completed",
+                  "terminalSuccessVerified": true,
+                  "workflowTimeoutOrProductChanged": false,
+                  "conclusion": "success",
+                  "successfulJobs": 11,
+                  "source": "private:accord-current-applicability-20261019-01/ci-followup/attempt-2-terminal.json",
+                  "sourceSha256": "33f1dc16069e47a62d10b2a8a1e43ab231f83fd8e05decafffea8307abfe374e",
+                  "originalTenSuccessfulJobTimestampsRetained": true
+                },
+                "source": "private:accord-current-applicability-20261019-01/ci-followup/outcome.json",
+                "sourceSha256": "5a5038188297f1a2b45d14d3cbe4c92b7fef50c92acf3dae61f03ad1a31fde48"
+              },
               "postRepairSourceVerification": {
                 "valid": true,
                 "errors": [],
@@ -5161,6 +5200,49 @@
                 "source": "private:accord-current-applicability-20261019-01/ci-repair-verify.json",
                 "sourceSha256": "37cc6a7bd7bae44254ff506b39fbb7ade146199b41b4708f5c480df0d9144604"
               }
+            },
+            "resourceCliReuseFollowup": {
+              "source": "private:accord-current-applicability-20261019-01/current-reuse-resource-cli/outcome.json",
+              "sourceSha256": "79e095fd94f6772306a9a10b46c4ce936b0d888bfb3bd8985f7e86e57e652f7f",
+              "evaluatedSubject": {
+                "revision": "2ba30edcb4ce96853d14e89ec260f46b3606558a",
+                "tree": "3f328dae984d2fcb982945c22c5bc2f880d8551e"
+              },
+              "acceptedCases": [
+                "v33-cli-catalog-migration-01",
+                "v33-environment-adaptation-current-capacity-01",
+                "v33-resource-pressure-current-capacity-01"
+              ],
+              "qualificationPassed": true,
+              "qualificationScope": "Current applicability of three original single-entry function cases only. Original B28 SDK and B29 CLI actors/episodes remain distinct; no new business or original-record rewrite.",
+              "errors": [],
+              "caseRejections": {},
+              "finalSourceVerification": true,
+              "sourceChecks": {
+                "directSourceCount": 30,
+                "retainedOriginalCount": 257,
+                "installedPackageMembers": 25,
+                "originalRecordSlicesPreserved": true,
+                "originalB28AndB29ClosedRootsStillAbsent": true
+              },
+              "assessmentSeconds": 9.20374129999982,
+              "stage": {
+                "originalMaximumSeconds": 4500,
+                "reserveSeconds": 600,
+                "startedAt": "2026-10-19T16:27:46.837702+00:00",
+                "deadline": "2026-10-19T17:42:46.837702+00:00",
+                "elapsedAtOutcomeSaveSeconds": 1200.6769857000036,
+                "withinOriginalWindow": true,
+                "scope": "Preparation/review/assessment/owned helper closure/necessary record save for this source-only span; not all project/peer/billing costs or new business execution."
+              },
+              "review": "Two independent accountable reviewers, four impact axes per actual material digest; separate ordinary current-candidate four-axis bundle; disclosed inherited context/shared environment/Accord exposure.",
+              "preservedLimits": [
+                "Original B28 cleanup precheck failure and late cleanup remain separate from original function qualification.",
+                "B29 proves effective-user-environment and the specified outcome only, not default-host or autonomous entry discovery.",
+                "No current old-profile liveness/equivalence, all-entry adoption, whole lifecycle, complete A08/R2/R3, monetary/net benefit or release readiness is claimed.",
+                "At the reuse outcome save, exact-head CI recovery was pending. The later attempt2 terminal source under ciFollowup proves11 successful jobs; original attempt1 cancellation and the limited causal attribution remain preserved."
+              ],
+              "next": "Reuse these retained cases and B26 results. Reconcile the original five parent/same-episode results at their changed duties; dynamic routing, whole lifecycle, default ordinary coverage and full current qualification remain open. No new business replay or admission-mechanism expansion."
             }
           }
         },
