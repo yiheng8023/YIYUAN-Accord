@@ -1,0 +1,140 @@
+{
+  "schema": "yiyuan-accord-scoped-task-case/v1",
+  "purpose": "New six-record transparent synthetic batch for remaining ordinary CLI default-host scope; protected B29 script/mapping reused, no replay of B29/B30, no client task or deliberate failure.",
+  "inputs": {
+    "catalog.json": {
+      "schemaVersion": 2,
+      "catalogId": "synthetic-minimal-batch-20261019-01",
+      "description": "Transparent synthetic metadata only; no physical files or customer task.",
+      "records": [
+        {
+          "opaqueId": "202610190000000000000000000000000001",
+          "title": "合成星历甲",
+          "statusCode": "R",
+          "version": {
+            "major": 2,
+            "minor": 7,
+            "patch": 4
+          },
+          "declaredBytes": "9007199254741013"
+        },
+        {
+          "opaqueId": "0000000192",
+          "title": "前导零资料乙",
+          "statusCode": "D",
+          "version": {
+            "major": 0,
+            "minor": 9,
+            "patch": 1
+          },
+          "declaredBytes": "0000000019"
+        },
+        {
+          "opaqueId": "batch-193",
+          "title": "归档索引丙",
+          "statusCode": "A",
+          "version": {
+            "major": 11,
+            "minor": 0,
+            "patch": 6
+          },
+          "declaredBytes": "123456789012345678901234567891"
+        },
+        {
+          "opaqueId": "batch-194",
+          "title": "状态待释义丁",
+          "statusCode": "Q",
+          "version": {
+            "major": 3,
+            "minor": 2,
+            "patch": 8
+          },
+          "declaredBytes": "73"
+        },
+        {
+          "opaqueId": "batch-195",
+          "title": "版本资料戊",
+          "statusCode": "R",
+          "version": {
+            "major": 4,
+            "minor": 5
+          },
+          "declaredBytes": "4096"
+        },
+        {
+          "opaqueId": "batch-196",
+          "title": "申报量待补己",
+          "statusCode": "D",
+          "version": {
+            "major": 7,
+            "minor": 1,
+            "patch": 0
+          }
+        }
+      ]
+    },
+    "schema-mapping.md": "# 冻结映射规则：目录元数据 v2 → v3\n\n这是维护者功能验收用透明合成资料。所有记录只陈述元数据，不证明对应文件存在、可访问或真实大小。\n\n规则参数：\n```json\n{\n  \"statusMap\": {\n    \"D\": \"draft\",\n    \"R\": \"ready\",\n    \"A\": \"archived\"\n  },\n  \"versionParts\": [\n    \"major\",\n    \"minor\",\n    \"patch\"\n  ],\n  \"targetSchemaVersion\": 3\n}\n```\n\n输出 migrated.json 顶层恰为 schemaVersion、source、items、issues、totals、migrationComplete、sourceComplete。\nsource 恰为 file=\"catalog.json\"、schemaVersion=2、recordCount=原 records 长度、byteMeaning=\"declared-metadata-only\"。\nitems 保留原 records 顺序且不合并，逐项恰为 sourceIndex（从0开始）、opaqueId、title、rawStatusCode、status、sourceVersion、version、declaredBytes。\nopaqueId 和 title 原样保留。opaqueId 是不透明字符串，包括大十进制和前导零，不得转数字。\nrawStatusCode 保留原代码，缺失用 null。status 按 statusMap 映射；未知或缺失为 null，分别增加 unmapped-status-code 或 missing-field 问题。\nsourceVersion 保留原 version 对象，缺失为 null。version 仅在三个指定字段均为非负整数（非布尔值）时依顺序用十进制点连接，例如 {major:2,minor:0,patch:1} → \"2.0.1\"；不补零、不推测缺项。对象缺项/无效用 null，增加 incomplete-version；整个字段缺失增加 missing-field。\ndeclaredBytes 是非负十进制数字组成的字符串，必须逐字符保留，包括前导零和大于2^53的值；缺失用 null 并增加 missing-field。它是申报元数据，不是实际测量。\nissues 每项恰为 sourceIndex、field、code、rawValue。按原记录顺序，每条记录内按 statusCode、version、declaredBytes 顺序列问题。缺失字段的 rawValue=null；未知代码或不完整版本保留原值。无问题不得添加问题。\ntotals 恰为 knownDeclaredBytes（所有存在 declaredBytes 的任意精度整数求和后规范十进制字符串，不含逗号/指数/多余前导零）、unknownDeclaredBytesCount（缺失数）。不得把未知当0后声称总量完整。\nmigrationComplete 在全部记录按以上规则转换、核验后为 true；sourceComplete 仅当 issues 为空时为 true。本资料有未决项，二者不可混同。null 在本契约中表示 unknown，不是推定的默认业务值。\nmigration-note.md 用中文交代输入/输出、实际遇到的兼容反馈和处理、脚本实际调用方式、精度与未知问题、已完成迁移及源资料不完整的边界。不得声称 OS 故障、实测磁盘大小或真实客户交付。\n",
+    "migrate_catalog.py": "\"\"\"Migrate catalog v2 metadata to v3 using schema-mapping.md (stdlib only).\n\nUsage: python -B migrate_catalog.py catalog.json --output migrated.json\nOmit --output, or use --output -, to emit JSON to stdout without writing files.\nThe contract's canonical source label is always catalog.json.\n\"\"\"\n\nimport argparse\nimport json\nimport re\nimport sys\nfrom pathlib import Path\n\n\nSTATUS_MAP = {\"D\": \"draft\", \"R\": \"ready\", \"A\": \"archived\"}\nVERSION_PARTS = (\"major\", \"minor\", \"patch\")\n\n\ndef migrate(data):\n    \"\"\"Return a verified v3 document; reject values outside the source contract.\n\n    Missing mapped fields and unknown statuses are valid unresolved source data.\n    Invalid declaredBytes, IDs or titles have no specified recovery mapping, so\n    they fail explicitly instead of being guessed or silently coerced.\n    \"\"\"\n    if not isinstance(data, dict) or type(data.get(\"schemaVersion\")) is not int:\n        raise ValueError(\"schemaVersion must be integer 2\")\n    if data[\"schemaVersion\"] != 2:\n        raise ValueError(\"only source schemaVersion 2 is supported\")\n    records = data.get(\"records\")\n    if not isinstance(records, list):\n        raise ValueError(\"records must be an array\")\n\n    items, issues = [], []\n    total, unknown_bytes = 0, 0\n    for index, record in enumerate(records):\n        if not isinstance(record, dict):\n            raise ValueError(f\"records[{index}] must be an object\")\n        for field in (\"opaqueId\", \"title\"):\n            if not isinstance(record.get(field), str):\n                raise ValueError(f\"records[{index}].{field} must be a string\")\n\n        def issue(field, code, raw):\n            issues.append({\"sourceIndex\": index, \"field\": field,\n                           \"code\": code, \"rawValue\": raw})\n\n        raw_status = record.get(\"statusCode\")\n        status = STATUS_MAP.get(raw_status) if isinstance(raw_status, str) else None\n        if \"statusCode\" not in record:\n            issue(\"statusCode\", \"missing-field\", None)\n        elif status is None:\n            issue(\"statusCode\", \"unmapped-status-code\", raw_status)\n\n        source_version = record.get(\"version\")\n        version = None\n        if \"version\" not in record:\n            issue(\"version\", \"missing-field\", None)\n        elif isinstance(source_version, dict) and all(\n            type(source_version.get(part)) is int and source_version[part] >= 0\n            for part in VERSION_PARTS\n        ):\n            version = \".\".join(str(source_version[part]) for part in VERSION_PARTS)\n        else:\n            issue(\"version\", \"incomplete-version\", source_version)\n\n        declared_bytes = record.get(\"declaredBytes\")\n        if \"declaredBytes\" not in record:\n            unknown_bytes += 1\n            issue(\"declaredBytes\", \"missing-field\", None)\n        elif not isinstance(declared_bytes, str) or not re.fullmatch(\n            r\"[0-9]+\", declared_bytes\n        ):\n            raise ValueError(f\"records[{index}].declaredBytes must be ASCII decimal digits\")\n        else:\n            total += int(declared_bytes)\n\n        items.append({\n            \"sourceIndex\": index,\n            \"opaqueId\": record[\"opaqueId\"],\n            \"title\": record[\"title\"],\n            \"rawStatusCode\": raw_status,\n            \"status\": status,\n            \"sourceVersion\": source_version,\n            \"version\": version,\n            \"declaredBytes\": declared_bytes,\n        })\n\n    result = {\n        \"schemaVersion\": 3,\n        \"source\": {\"file\": \"catalog.json\", \"schemaVersion\": 2,\n                   \"recordCount\": len(records), \"byteMeaning\": \"declared-metadata-only\"},\n        \"items\": items,\n        \"issues\": issues,\n        \"totals\": {\"knownDeclaredBytes\": str(total),\n                   \"unknownDeclaredBytesCount\": unknown_bytes},\n        \"migrationComplete\": True,\n        \"sourceComplete\": not issues,\n    }\n    # Verify coverage, provenance and precision before reporting completion.\n    if len(items) != len(records):\n        raise ValueError(\"record coverage verification failed\")\n    for index, (record, item) in enumerate(zip(records, items)):\n        if item[\"sourceIndex\"] != index or any(\n            item[target] != record.get(source)\n            for target, source in ((\"opaqueId\", \"opaqueId\"), (\"title\", \"title\"),\n                                   (\"rawStatusCode\", \"statusCode\"),\n                                   (\"sourceVersion\", \"version\"),\n                                   (\"declaredBytes\", \"declaredBytes\"))\n        ):\n            raise ValueError(f\"records[{index}] provenance verification failed\")\n    return result\n\n\ndef main(argv=None):\n    # Python 3.11+ decimal conversion limits must not truncate arbitrary integers.\n    # This affects only this process, not shared interpreter or host settings.\n    if hasattr(sys, \"set_int_max_str_digits\"):\n        sys.set_int_max_str_digits(0)\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"catalog\", type=Path, help=\"v2 source JSON\")\n    parser.add_argument(\"--output\", default=\"-\", help=\"output JSON path; - means stdout\")\n    args = parser.parse_args(argv)\n    try:\n        output = None if args.output == \"-\" else Path(args.output)\n        if output is not None and output.resolve() == args.catalog.resolve():\n            raise ValueError(\"output must not overwrite the source\")\n        data = json.loads(args.catalog.read_text(encoding=\"utf-8\"))\n        result = migrate(data)\n        text = json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False) + \"\\n\"\n        # Validate the entire serialization before opening the output for writing.\n        if json.loads(text) != result:\n            raise ValueError(\"JSON round-trip verification failed\")\n        if output is None:\n            sys.stdout.reconfigure(encoding=\"utf-8\", newline=\"\\n\")\n            sys.stdout.write(text)\n        else:\n            output.write_text(text, encoding=\"utf-8\", newline=\"\\n\")\n    except (OSError, ValueError) as error:\n        print(f\"migration failed: {error}\", file=sys.stderr)\n        return 2\n    return 0\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n",
+    "README.md": "# 新一批合成目录元数据迁移\n\n这是维护者功能验证用的透明 synthetic 合成资料，不是客户业务。本批6条是新输入，不重做之前批次。\ncatalog.json 是冻结v2元数据；schema-mapping.md 与 migrate_catalog.py 是已验交付的冻结复用输入，原字节保留。可以自主选择复用现成脚本或充分的本地方法，不修改脚本或输入。\n仅生成 migrated.json 与 migration-note.md 两个平面成品；四份输入保持字节与mtime不变，不新增缓存、日志、临时业务文件或子目录。Python使用-B。遵循冻结映射的全部字段、类型、顺序、精度和问题语义。完整覆盖6条、保留来源索引与不透明ID及前导零；未知状态、版本缺段、缺失申报量保持unknown，不猜补。\n中文说明应准确交代实际方法与可核对调用、核验、三项源未决及迁移完成/源资料完整的区别。记录真实遇到的反馈，无需制造故障。申报量只是元数据，不能推断实体文件存在或真实磁盘大小。不联网、不安装、不登录、不发布、不改共享设置。\n"
+  },
+  "allowedPaths": [
+    "migrated.json",
+    "migration-note.md"
+  ],
+  "deliverables": [
+    "migrated.json",
+    "migration-note.md"
+  ],
+  "limits": {
+    "usageCaps": {
+      "totalTokens": 1000000,
+      "uncachedInputTokens": 125000,
+      "outputTokens": 16000
+    },
+    "usageScope": "One future native ordinary CLI thread, one stage; cumulative worker caps total1000000/uncached125000/output16000. Prepare inventory1 and run inventories3 each have independent work20/recovery15 seconds; run-preflight inventory precedes the internal600 clock. Internal work600/turn420; worker recovery30. Goal reader work within min(internal deadline, now+25), each RPC at most10, own recovery30. These are role-specific limits, not a whole-process hard600 or a shared recovery30. Record actual outer prepare/run elapsed separately. Root post-run1200 including180 reserve covers source/result/resource checks, two reviews, original core observe/recheck and outcome; preparation separately observed. Actual default-host qualification requires independent native evidence."
+  },
+  "stages": [
+    {
+      "id": "new-six-record-migration",
+      "prompt": "请完成本目录 README.md 委托的这一批6条透明合成目录元数据迁移，按冻结映射只生成 migrated.json 和简明中文 migration-note.md。已有验证过的脚本和映射是本次明确授权的业务输入，可以自主选择充分方法并核对实际输出。完整覆盖全部记录、保留顺序及来源索引、不透明ID、前导零和大数精度；未知或缺失按规则保留，不猜补。说明真实采用方法、可核对调用、核验及未决，区分迁移完成与源资料完整。四份输入字节和mtime不变，不新增缓存、日志、临时业务文件或目录；Python使用-B。不联网、不安装、不登录、不发布、不改共享设置，不探测实体文件，不重做以前批次，无需制造失败。本次执行内部工作窗600秒、单轮420秒，工作进程回收限额30秒；这些不是所有进程合计硬时限。累计token上限total1000000、uncached input125000、output16000。",
+      "files": {
+        "catalog.json": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "schema-mapping.md": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "migrate_catalog.py": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "README.md": {
+          "state": "preserved",
+          "from": "input"
+        },
+        "migrated.json": {
+          "state": "required",
+          "format": "json",
+          "jsonType": "object",
+          "requiredKeys": [
+            "schemaVersion",
+            "source",
+            "items",
+            "issues",
+            "totals",
+            "migrationComplete",
+            "sourceComplete"
+          ]
+        },
+        "migration-note.md": {
+          "state": "required",
+          "format": "utf8",
+          "nonempty": true
+        }
+      },
+      "semanticReview": "Independent new-source oracle for six ordered records, original string/provenance precision, exact total and three source unknowns; independently inspect actual method, truthful Chinese note, input hash/mtime, two-output allowlist, current native guidance/exposure/default mode/no Goal, usage and release. No failure requirement or inherited admission."
+    }
+  ]
+}
