@@ -4767,6 +4767,90 @@
               "toolCallId": "call_8dae1e7bc806476085119f820beceb44",
               "returnedNestedCommandWallSeconds": 3.5713948,
               "claimLimit": "Host record confirms a long call/output gap, distinct from the returned command wall time. It does not identify server/network/approval/queue/runner cause. The original whole wall-clock limit includes this gap; no retrospective time exclusion."
+            },
+            "subsequentHostObservation": {
+              "source": "private:accord-r23-boundary-reconcile-20261019-01/host-boundary-findings.json",
+              "sourceSha256": "c51ceee2e6f3a6068726b44ec710c51356cc394018946337d13cbdbe5a8e3941",
+              "sameRootTurnExecApprovalAtOutputResume": true,
+              "outerHandlerSeconds": 802.542,
+              "codeModeHostSeconds": 31.0179455,
+              "claimLimit": "Approval/control involvement narrowed; request start, exact nested association, full human-wait duration and server/network cause remain unproven. Original full-wall overrun is not reduced."
+            }
+          },
+          "sourceApplicabilityAndCloseoutReconciliation": {
+            "source": "private:accord-r23-boundary-reconcile-20261019-01/outcome.json",
+            "sourceSha256": "3d0ecab5171c14fd7e34d45edea96da8d265902057f0db712a0e6e7a826ac40f",
+            "evaluatedSubject": {
+              "revision": "c733d6453fca3a0dea3a0ee1fdcefbff46f8955c",
+              "tree": "44b9cc413379d06203913ddfe28f07ff7bb334fe"
+            },
+            "ci": [
+              {
+                "run": 39208136263,
+                "head": "7afaf397e845d0e5513d81c83e8d0dc659a09235",
+                "conclusion": "success",
+                "jobsPassed": 11,
+                "sourceSha256": "09cd6d8369f5687a6ddcafcb69d0fdb8b9feed1746cfa9e80076c5e4b262904f"
+              },
+              {
+                "run": 39211672184,
+                "head": "c733d6453fca3a0dea3a0ee1fdcefbff46f8955c",
+                "conclusion": "success",
+                "jobsPassed": 11,
+                "sourceSha256": "7c67d977442004c13caf1ef733433b6bb0b8ba95c0be7269aeb1bfff66c6c00e"
+              }
+            ],
+            "currentOriginalRecordReuse": {
+              "acceptedCases": [
+                "v33-cli-catalog-migration-01",
+                "v33-environment-adaptation-current-capacity-01",
+                "v33-resource-pressure-current-capacity-01"
+              ],
+              "reportSha256": "75b6af49e6708d4608c19ddcb48fd4c403d35fb40e94f955add4fe9da14fefeb",
+              "finalSourceVerification": true,
+              "originalFieldsPreserved": true,
+              "newBusinessOrModelInvocations": 0,
+              "differentEpisodesNotJoined": true
+            },
+            "closeoutCalculation": {
+              "scope": "private verification path only, no product runtime/package change",
+              "implementationReport": "closeout-evaluator/implementation-report-r2.json",
+              "sourceSha256": "39ad10f5b686f0fe2cd04738dc8df69f4692203e55d2e3e21dc4c4d9a3db233f",
+              "regressionGroupsPassed": 8,
+              "rootIndependentRun": "python -B -m unittest discover -s closeout-evaluator -p test_evaluator.py -v;8 passed",
+              "sourceCount": 40,
+              "originalEarlyWholeOutcome": "pending",
+              "originalFinalWholeOutcome": "held",
+              "originalFinalElapsedSeconds": 1587.267625,
+              "originalWindowSeconds": 1200,
+              "originalSourceAndReportsUnchanged": true
+            },
+            "hostTiming": {
+              "source": "host-boundary-findings.json",
+              "sourceSha256": "c51ceee2e6f3a6068726b44ec710c51356cc394018946337d13cbdbe5a8e3941",
+              "outerHandlerSeconds": 802.542,
+              "codeModeHostSeconds": 31.0179455,
+              "approvalObservedSameRootTurnAtReceiptResume": true,
+              "entireGapHumanWaitingProven": false,
+              "serverOrNetworkCauseProven": false,
+              "originalFullWallClockOverrunPreserved": true
+            },
+            "configurationBoundary": "Original before/after config preservation belongs to original episodes. Current user config hash differs; exact full profile change is unknown. New source window protects current hash; relevant installed binding, runtime binaries and both-root Hook enabled/trust states were directly verified. No rollback, future replay equivalence, default-host or independent-gain claim.",
+            "freshNativeReadersReleased": 6,
+            "sourceMapSha256": "fec0d4e55716f48baa901f870c882b6d6011115dbb90f775b199cf3d029cff47",
+            "retainedLimits": [
+              "Functional completion and candidate eligibility remain false.",
+              "Default no-observer0/17 output is not empirical erasure or project completion percentage.",
+              "This source integration does not join independent episodes or rewrite original failures/budgets."
+            ],
+            "nextWork": "Preserve currentB28/B29 reuse and originalB26/prior-five identities. Assess only material3-file/7-file package differences; do not backfill old packageFiles or bypass full-package claims. Continue dynamic routing, selected-entry breadth, parent lifecycle and current joined episode using useful unresolved work; no old business replay or new maintenance release gate.",
+            "budgetAuthorityReview": {
+              "source": "private:accord-r23-boundary-reconcile-20261019-01/root-budget-authority-review.json",
+              "sourceSha256": "e2a34c3c6f1468fb2d3659c1d2a571c41a99ea544f04b0d1fc2c0be7157ce468",
+              "originalObservationWindowFailureRetained": true,
+              "universalReleaseTimeGate": false,
+              "humanFeeOrSafetyLimitEstablished": false,
+              "claimBoundary": "The prebound observation window and ACCEPTANCE rule make the original controlled case incomplete under that condition. They do not erase source-correct function/closure facts, prove missing capability, require business replay or impose a universal20-minute product/release limit."
             }
           }
         },
