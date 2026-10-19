@@ -5243,6 +5243,85 @@
                 "At the reuse outcome save, exact-head CI recovery was pending. The later attempt2 terminal source under ciFollowup proves11 successful jobs; original attempt1 cancellation and the limited causal attribution remain preserved."
               ],
               "next": "Reuse these retained cases and B26 results. Reconcile the original five parent/same-episode results at their changed duties; dynamic routing, whole lifecycle, default ordinary coverage and full current qualification remain open. No new business replay or admission-mechanism expansion."
+            },
+            "autonomyReuseFollowup": {
+              "source": "private:accord-current-applicability-20261019-01/current-reuse-autonomy/outcome.json",
+              "sourceSha256": "0999210a9269d6a1bee1f5dc163729f19d50af7a86e00ba632626c527c4da754",
+              "evaluatedSubject": {
+                "revision": "bf646c1dc0744a5be4ace20099a9b8066205a0d5",
+                "tree": "961f027db2db4e5d3cc18d529534b743d81f9d1e"
+              },
+              "acceptedCases": [
+                "v33-autonomous-continuity-live-development-01"
+              ],
+              "qualificationPassed": true,
+              "A05CompleteForBoundSubmission": true,
+              "finalSourceVerification": true,
+              "errors": [],
+              "caseRejections": {},
+              "sourceChecks": {
+                "directSources": 47,
+                "retainedLineageSources": 47,
+                "installedPackageMembers": 25,
+                "inheritedOutputPredicates": 106,
+                "savedUnresolvedDuties": 32,
+                "originalFirstOutcomePaths": 4,
+                "originalRecordSlicePreserved": true
+              },
+              "assessmentSeconds": 4.915593600002467,
+              "stage": {
+                "startedAt": "2026-10-19T17:05:08.803679+00:00",
+                "deadline": "2026-10-19T18:20:08.803679+00:00",
+                "maximumSeconds": 4500,
+                "reserveSeconds": 600,
+                "elapsedAtOutcomeSaveSeconds": 1696.2187982999967,
+                "withinOriginalWindow": true
+              },
+              "qualificationScope": "Retained original single-entry autonomous-continuity function current applicability only. Original evaluated6c309013, observedAt, episode and all facts unchanged. Four other original parent/system/impact cases are not submitted or inherited.",
+              "preservedLimits": [
+                "Original900s/2M compliance remains unknown;98-test failure and195.511/180 control overrun remain failed.",
+                "Root178 goal/progress replacement and erroneous waiting remain historical failures;179/180 correction and actual276 state do not prove every past/future behavior correct.",
+                "Unused malformed/oversized/quarantine/capacity paths retain their particular mechanism-test or unknown scope; no manufactured migration or new autonomous execution is claimed.",
+                "Goal absence/context forecast/native24 fingerprint apply only to actual observed Root/time, not all entries or original actor adoption.",
+                "B5 access-denied/unknown-owner retained residue is preserved, not asserted absent or cleaned.",
+                "Whole R2/R3, the other four parent/system/impact records, ordinary default scope, dynamic routing/whole lifecycle and full A08/candidate/release remain unresolved."
+              ],
+              "effects": {
+                "productionOrPackageChanged": false,
+                "newBusinessCase": false,
+                "businessReplayed": false,
+                "newLoginOrInstallation": false,
+                "unrequestedGoalOrPlanEnabled": false,
+                "ownedReadOnlyHelpersReturned": true
+              },
+              "parentDependencyReview": {
+                "product-mapping.json": {
+                  "source": "private:accord-current-applicability-20261019-01/parent-dependency-review/product-mapping.json",
+                  "sha256": "9958a952ce993d5597fbe370fa8ef67baa681ffd93a31700097f875ab6e43295"
+                },
+                "implementation-mapping.json": {
+                  "source": "private:accord-current-applicability-20261019-01/parent-dependency-review/implementation-mapping.json",
+                  "sha256": "64257e4e3251f6b14949da728d4848cb42b9666d20fc43db49f2f0f1215c3ddc"
+                },
+                "root-source-check.json": {
+                  "source": "private:accord-current-applicability-20261019-01/parent-dependency-review/root-source-check.json",
+                  "sha256": "91ee55fbb452f55492ba2afe8e6fdc20790a3cd965d320c35944be279c1ede64"
+                },
+                "ide-current-source-read.json": {
+                  "source": "private:accord-current-applicability-20261019-01/parent-dependency-review/ide-current-source-read.json",
+                  "sha256": "91538013f2238bdd9b5eb62685e19c3d86ed61972af57ddf36ce5eb8300a8e43"
+                }
+              },
+              "next": "Use the two parent-dependency mappings to address only actual remaining parent-entry/control/lifecycle/impact predicates and unbound dynamic/default work. Do not reopen the original qualified results or expand the pure-function bridge as a shortcut.",
+              "ci": {
+                "runId": 39289219781,
+                "subject": "bf646c1dc0744a5be4ace20099a9b8066205a0d5",
+                "status": "completed",
+                "conclusion": "success",
+                "successfulJobs": 11,
+                "source": "private:accord-current-applicability-20261019-01/current-reuse-autonomy/ci-bf-terminal.json",
+                "sourceSha256": "d265ec01c8464cd0e97c09f83fdee80a733439ea0578671166d83eca5fa9d5fb"
+              }
             }
           }
         },
