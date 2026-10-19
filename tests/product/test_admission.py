@@ -1487,6 +1487,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
 
     def test_current_impact_git_delta_retains_modes_additions_deletions_and_adjudicator(self):
         from yiyuan_accord import admission as a
+        original_revision = self.git("rev-parse", "HEAD")
         with self.history():
             contract, case, record, _ = self.impact_fixture()
             old = self.git("rev-parse", "HEAD")
@@ -1496,6 +1497,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             (self.root / "yiyuan_accord/renamed_fixture.py").write_text("# never imported\n")
             self.git("add", ".")
             path = package + "/runtime/task-checkpoint.cjs"
+            # Keep the POSIX worktree consistent with the staged executable bit;
+            # otherwise history restoration sees a local mode change and fails.
+            (self.root / path).chmod(0o755)
             self.git("update-index", "--chmod=+x", path)
             self.git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "--quiet", "-m", "Synthetic mode and path delta")
             rows = a._impact_differences(self.root, old, self.git("rev-parse", "HEAD"),
@@ -1506,6 +1510,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             self.assertEqual(by_path["yiyuan_accord/impact_fixture.py"]["newMode"], "000000")
             self.assertIsNone(by_path["yiyuan_accord/impact_fixture.py"]["newSha256"])
             self.assertEqual(by_path["yiyuan_accord/renamed_fixture.py"]["oldMode"], "000000")
+        self.assertEqual(self.git("rev-parse", "HEAD"), original_revision)
+        self.assertEqual(self.git("status", "--porcelain=v1"), "")
 
     def test_current_impact_rejects_truncated_duplicate_and_unsupported_git_delta(self):
         from yiyuan_accord import admission as a

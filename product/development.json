@@ -5116,7 +5116,51 @@
               "originalFailuresPreserved": true,
               "businessReplayed": false,
               "functionalCompletion": false,
-              "candidateEligible": false
+              "candidateEligible": false,
+              "timingAdjudication": {
+                "source": "private:accord-current-applicability-20261019-01/current-reuse/stage-timing-adjudication.json",
+                "sourceSha256": "6bd8104e3187d534ab956725992c03edd7f19c9f7a521b7ae35dbcf02f8a1d50",
+                "nativeCheckpointCompletedAt": "2026-10-19T15:00:29.000Z",
+                "originalDeadline": "2026-10-19T15:00:31.893493+00:00",
+                "requiredWorkCompletedWithinOriginalWindow": true,
+                "lateSupplementaryMarkerAssertionFailed": true,
+                "lateMarkerElapsedSeconds": 2426.1892605,
+                "originalFailureRecordRetained": true
+              }
+            },
+            "ciFollowup": {
+              "originalRun": 39267583354,
+              "originalSubject": "17b9784aabad5dab8523e3ed121e0a8ed12d6a16",
+              "originalConclusion": "failure",
+              "jobsSucceeded": 4,
+              "jobsFailed": 7,
+              "cause": "POSIX mode fixture worktree/index mismatch prevented history restoration and contaminated subsequent tests.",
+              "source": "private:accord-current-applicability-20261019-01/ci-mode-repair-outcome.json",
+              "sourceSha256": "a51bc5bd968cc602a97a81f59c22226665f46a586992f070057a654bc95faa90",
+              "repairValidation": {
+                "posixBeforeExit": 1,
+                "posixAfterTests": 4,
+                "posixAfterExit": 0,
+                "windowsAfterTests": 4,
+                "windowsAfterExit": 0,
+                "sameProcessSharedFixtureSequence": true,
+                "temporaryPosixRepositoriesClosed": true
+              },
+              "productionCodeChangedByRepair": false,
+              "repairCi": "not-yet-observed",
+              "postRepairSourceVerification": {
+                "valid": true,
+                "errors": [],
+                "metrics": {
+                  "primaryInstructionBytes": 20216,
+                  "productCodeAndTestBytes": 3703960,
+                  "trackedFiles": 198
+                },
+                "minimumReservePercent": 5,
+                "bytesBeyondRequiredReserve": 1040,
+                "source": "private:accord-current-applicability-20261019-01/ci-repair-verify.json",
+                "sourceSha256": "37cc6a7bd7bae44254ff506b39fbb7ade146199b41b4708f5c480df0d9144604"
+              }
             }
           }
         },
