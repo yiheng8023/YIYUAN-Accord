@@ -4671,7 +4671,7 @@
               "fullPreparationTime": "not independently reconstructed"
             },
             "poststate": "All12 recorded native scopes released with Job0, App readers stopped; one earlier inventory scope remains forced failure. Root verified no matching native processes, exact package bytes, final owned config hash, empty workspace and no plaintext auth.json.",
-            "retainedPurpose": "Independent login and owned environment retained only for the authorized remaining verification. Root accepted sole writer/recovery responsibility; official logout and safe owned-root cleanup are still owed after bounded use.",
+            "retainedPurpose": "Closed after B31 bounded use: official isolated logout and Not logged in status confirmed; five owned roots removed after exact-source retention and no writer/reparse checks.28 package/config/native source files retained under B31 with exact hash/mtime mapping. Main settings and current package24 preserved. No independent authentication remains pending.",
             "qualificationPassed": false,
             "ordinaryDefaultScenarioPassed": false,
             "claimLimit": "Limited actual context feasibility, not ordinary business or complete R2/R3 composition. Different profile/controls were changed together; no attribution to one selector or general fix for main-profile memory controls.",
@@ -4716,6 +4716,58 @@
             "retained": "Original checkpoint255 and all137 captured inputs preserved byte-for-byte in private recovery copies; recent profile effects, actual authority and pending cleanup retained separately, native task plan updated. No direct native state edit, guard weakening, replay or claim of restoration.",
             "supportedNextCondition": "Current UserPromptSubmit code selects a new input basis when the actual native turn changes, retaining old inputs. A subsequent genuine native turn must be inspected and successfully bound before claiming restored native checkpoint updates; no additional replay/clear-watermark permission is inferred.",
             "remaining": "Follow this actual long-turn boundary through necessary continuity recovery. No unlimited continuity, new case, acceptance-floor change or automatic global failure is inferred."
+          },
+          "ordinaryCliMinimalBatchVerification": {
+            "source": "private:accord-cli-minimal-batch-20261019-01/outcome-r2.json",
+            "sourceSha256": "0f652831c1633d9a9fe78bf04bc362e54503ff1146f2ab194507f9f72195c7c3",
+            "evaluatedSubject": {
+              "revision": "7afaf397e845d0e5513d81c83e8d0dc659a09235",
+              "tree": "8b20b7eccdb58351a25814b5d52326c27a363dbf"
+            },
+            "businessComplete": true,
+            "actualMinimalEffectiveCombinationObserved": true,
+            "originalCoreAcceptedCases": [
+              "v33-cli-minimal-batch-20261019-01"
+            ],
+            "originalFormalSourceVerified": true,
+            "admissionReportSha256": "df1a297c2cce2f91814af5410d9b0c36e663e9f0b7e031357e22420cd5e277f1",
+            "qualificationPassed": false,
+            "acceptedCases": [],
+            "rootVerification": {
+              "prepareOuterSeconds": 6.337720900000022,
+              "workerSeconds": 210.69570639999984,
+              "runInternalSeconds": 218.41344449999997,
+              "runOuterSeconds": 221.50199950000024,
+              "rootOriginalStartedAt": "2026-10-19T06:12:16.537190+00:00",
+              "rootOriginalLimitSeconds": 1200,
+              "rootReserveSeconds": 180,
+              "rootVerificationSecondsAtEarlierRemovalPoststate": 1476.640833,
+              "rootVerificationSecondsThroughOutcome": 1587.267625,
+              "withinOriginalRootLimit": false,
+              "preparationAndPeerFullCost": "not independently reconstructed; worker time does not substitute full cost"
+            },
+            "resourceClosure": {
+              "officialLogoutConfirmed": true,
+              "officialUnauthenticatedStatusConfirmed": true,
+              "ownedIndependentProfileAbsent": true,
+              "executionTempAndStateAbsent": true,
+              "retainedSourceFiles": 28,
+              "retentionSource": "private:accord-cli-minimal-batch-20261019-01/profile-source-retention.json",
+              "retentionSha256": "755c5402562761465fc06fde491b69cf56838a5a9d0edf1fdc4371e2972f81b2"
+            },
+            "failureDisposition": "Original whole-window overrun remains, but the802.574s cleanup call/output gap versus3.571s returned command duration prevents attribution to excessive verification steps or Accord code alone. Preserve early core acceptance and final withheld qualification; investigate the actual host receipt boundary without replay or retrospective limit change.",
+            "claimLimit": "No whole R2/R3, default-scope completion, candidate eligibility or publication claim.",
+            "timingAttributionFollowup": {
+              "observedAt": "2026-10-19T06:43:27.655864+00:00",
+              "source": "root-post-verification-timeline.json",
+              "sourceSha256": "c513d048d0c4d54def966daf3b61b2725d1153c50259f6a0b7f593bb5f150731",
+              "toolCallToInitialOutputGapSeconds": 802.574,
+              "gapStartedAt": "2026-10-19T06:22:18.183Z",
+              "gapEndedAt": "2026-10-19T06:35:40.757Z",
+              "toolCallId": "call_8dae1e7bc806476085119f820beceb44",
+              "returnedNestedCommandWallSeconds": 3.5713948,
+              "claimLimit": "Host record confirms a long call/output gap, distinct from the returned command wall time. It does not identify server/network/approval/queue/runner cause. The original whole wall-clock limit includes this gap; no retrospective time exclusion."
+            }
           }
         },
         "admissionReadCost": {
@@ -5103,6 +5155,56 @@
       "reason": "The new eight-record business completed correctly, but the declared minimal effective host combination was false because an extra memory-derived Skill was actually adopted. The original observer rejected the case. An ended unreplayable instance must not remain a mandatory future pass.",
       "retained": "Original criteria, source fixture, exact execution subject, native observations, reviews, business artifacts, Root transport failure and Root budget overrun remain retained. No retrospective pass or business replay.",
       "remainingDuty": "Ordinary CLI default-host-without-extra-extensions remains unaccepted. All 17 scopes, requiredCoverage, A01-A08 mappings, scope dimensions, joint requirements, admission algorithm and B29 original subject/qualification remain unchanged."
+    },
+    {
+      "id": "ended-minimal-cli-batch-disposition-20261019",
+      "authority": "Existing PLAN historical-disposition policy and current user continuation; retain original conditions, observations and failures.",
+      "outcome": "not-admitted",
+      "declarations": [
+        {
+          "caseId": "v33-cli-minimal-batch-20261019-01",
+          "scope": "v33-codex-cli-ordinary-delivery",
+          "declarationSnapshot": "7afaf397e845d0e5513d81c83e8d0dc659a09235:product/development.json",
+          "caseObjectSha256": "b7c3ada90dc3305230578704bc4e18bf327c2b2fdf6c28f03c02d72f10617de3",
+          "definitionSha256": "dc4dcc8f1e59141665a1d7d90b8c969062efe16450cb2ffad91cd29edff00b71",
+          "caseFile": "product/cases/cli-minimal-batch-v3.3.json",
+          "caseFileSha256": "1fca18197d8ba584b4fa078a57841808a5b8ca33982f0e66628579a6ba67fb28",
+          "execution": {
+            "entryProtocol": "exec-resume",
+            "hookMode": "installed-plugin",
+            "model": "gpt-6.1-sol",
+            "reasoning": "high",
+            "windowsSandbox": "elevated",
+            "timeoutSeconds": 600,
+            "turnTimeoutSeconds": 420,
+            "recoveryTimeoutSeconds": 30,
+            "caseSha256": "1fca18197d8ba584b4fa078a57841808a5b8ca33982f0e66628579a6ba67fb28",
+            "host": "codex",
+            "entry": "cx-cli",
+            "codexVersion": "0.163.0",
+            "usageCaps": {
+              "totalTokens": 1000000,
+              "uncachedInputTokens": 125000,
+              "outputTokens": 16000
+            },
+            "usageScope": "One future native ordinary CLI thread, one stage; cumulative worker caps total1000000/uncached125000/output16000. Prepare inventory1 and run inventories3 each have independent work20/recovery15 seconds; run-preflight inventory precedes the internal600 clock. Internal work600/turn420; worker recovery30. Goal reader work within min(internal deadline, now+25), each RPC at most10, own recovery30. These are role-specific limits, not a whole-process hard600 or a shared recovery30. Record actual outer prepare/run elapsed separately. Root post-run1200 including180 reserve covers source/result/resource checks, two reviews, original core observe/recheck and outcome; preparation separately observed. Actual default-host qualification requires independent native evidence.",
+            "runner": "scripts/observe_codex_entry.py",
+            "caseFile": "product/cases/cli-minimal-batch-v3.3.json"
+          },
+          "outcome": "not-admitted",
+          "replayAllowed": false,
+          "source": "private:accord-cli-minimal-batch-20261019-01/outcome-r2.json",
+          "sourceSha256": "0f652831c1633d9a9fe78bf04bc362e54503ff1146f2ab194507f9f72195c7c3",
+          "formalAdmissionSha256": "df1a297c2cce2f91814af5410d9b0c36e663e9f0b7e031357e22420cd5e277f1",
+          "independentReviewSha256": [
+            "8315d291108e15b74ae0f3cabf0da1a3b4ea673dcb88766b7d03be5aa7a171ad",
+            "03a1666d5b7189868804153c3092b0f506176082c2d0872cd31b0f62ddcaf104"
+          ]
+        }
+      ],
+      "reason": "The6-record business and actual minimal effective context were independently supported and the earlier original core accepted13 facts. Root later exceeded the prospectively bound1200-second complete verification/closeout window; overall qualification is withheld. Preserve earlier report rather than rewriting it to a failure. This ended instance must not become a mandatory future replay.",
+      "retained": "Original fixture, criteria, role budgets, exact execution subject, source and artifacts, both actual reviews, early formal acceptance, late budget assertion failure and completed resource closure remain immutable.",
+      "remainingDuty": "Reuse B31 actual result/context/resource evidence and B29 original qualification. Reconcile the recorded host tool receipt latency and original full wall-clock window; shared causality with B30 and need for product code changes remain unknown.17 scopes and all original quality/composition/release duties remain unchanged."
     }
   ],
   "environmentControl": {
@@ -8733,119 +8835,6 @@
               "attributableProcessesReleased": true,
               "protectedSourcesAndSharedUserStatePreserved": true,
               "retainedEvidenceAndRecoveryAccountedFor": true
-            }
-          }
-        },
-        {
-          "host": "codex",
-          "entry": "cx-cli",
-          "duties": [
-            "goal-authority-correction",
-            "execution-configuration-and-code",
-            "resources-and-cleanup",
-            "verification-and-value"
-          ],
-          "qualityAxes": [
-            "compliance-and-safety",
-            "functional-coverage",
-            "normal-entry-integration",
-            "recovery-and-lifecycle",
-            "evidence-integrity"
-          ],
-          "claims": [
-            "function"
-          ],
-          "id": "v33-cli-minimal-batch-20261019-01",
-          "scope": "v33-codex-cli-ordinary-delivery",
-          "scenarios": [
-            "default-host-without-extra-extensions"
-          ],
-          "conditions": {
-            "collaborationMode": "default",
-            "goalModeActive": false,
-            "execution": {
-              "entryProtocol": "exec-resume",
-              "hookMode": "installed-plugin",
-              "model": "gpt-6.1-sol",
-              "reasoning": "high",
-              "windowsSandbox": "elevated",
-              "timeoutSeconds": 600,
-              "turnTimeoutSeconds": 420,
-              "recoveryTimeoutSeconds": 30,
-              "caseSha256": "1fca18197d8ba584b4fa078a57841808a5b8ca33982f0e66628579a6ba67fb28",
-              "host": "codex",
-              "entry": "cx-cli",
-              "codexVersion": "0.163.0",
-              "usageCaps": {
-                "totalTokens": 1000000,
-                "uncachedInputTokens": 125000,
-                "outputTokens": 16000
-              },
-              "usageScope": "One future native ordinary CLI thread, one stage; cumulative worker caps total1000000/uncached125000/output16000. Prepare inventory1 and run inventories3 each have independent work20/recovery15 seconds; run-preflight inventory precedes the internal600 clock. Internal work600/turn420; worker recovery30. Goal reader work within min(internal deadline, now+25), each RPC at most10, own recovery30. These are role-specific limits, not a whole-process hard600 or a shared recovery30. Record actual outer prepare/run elapsed separately. Root post-run1200 including180 reserve covers source/result/resource checks, two reviews, original core observe/recheck and outcome; preparation separately observed. Actual default-host qualification requires independent native evidence.",
-              "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/cli-minimal-batch-v3.3.json"
-            },
-            "caseKind": "prospective-transparent-synthetic-ordinary-cli-functional-verification",
-            "sourceAndInput": "New six-record synthetic metadata batch, reusing the frozen verified B29 migration script and mapping as explicit business inputs. Two new outputs only; B22/B29/B30 remain closed and are not replayed. Maintainer functional verification, not customer work.",
-            "effectiveEnvironment": "Fresh ordinary CLI0.163.0 and exact package24 in the already authorized independent keyring profile. Six process-local home selectors and owned state/temp paths are source-bound; five named inherited auth/provider overrides are dropped without reading their values. The owned profile excludes38 discovered extra Skills while preserving their sources. Hashes/counts only are public. Actual new-turn guidance, Skill/Hook/tool exposure and contribution must be observed; prior pure-context and directory checks prove feasibility only. No physical-clean or globally absent remote/managed claim.",
-            "qualification": "Independent source derivation, actual complete native guidance/commands/responses/catalogue, mode/Goal temporal evidence, immutable four inputs and shared configuration, two truthful outputs, budget and owned resource release; fresh exact-subject independent review and original observe/recheck. Prior model-free catalogues establish feasibility only. No expected-to-observed copying, evaluator repair, specific tool mandate or forced failure. Role-specific deadlines are not a whole-process hard600/shared30 verdict; record outer elapsed and independently reconcile both caller-profile inventory state/temp additions and execution worker/Goal state/temp plus owned exits, preserving pre-existing sources/auth.",
-            "budgetAccounting": "One future native ordinary CLI thread, one stage; cumulative worker caps total1000000/uncached125000/output16000. Prepare inventory1 and run inventories3 each have independent work20/recovery15 seconds; run-preflight inventory precedes the internal600 clock. Internal work600/turn420; worker recovery30. Goal reader work within min(internal deadline, now+25), each RPC at most10, own recovery30. These are role-specific limits, not a whole-process hard600 or a shared recovery30. Record actual outer prepare/run elapsed separately. Root post-run1200 including180 reserve covers source/result/resource checks, two reviews, original core observe/recheck and outcome; preparation separately observed. Actual default-host qualification requires independent native evidence. Original B29/B30 budgets and verdicts are unchanged; inadequacy must be resolved before dispatch.",
-            "privateOracleSha256": "061b28706d22ed45e2fe9f3e45a2a0c3a0b521438fcc7573371140431008087c",
-            "choiceAttribution": "The prior verified script and mapping are explicit source artifacts. The actor chooses a sufficient permitted local method; no specified Skill, Hook or MCP action and no artificial compatibility failure. This case does not relabel prior B29 recovery as new recovery.",
-            "privateBootstrap": {
-              "schema": "accord-cli-private-bootstrap/v3",
-              "mechanism": "Private caller applies six owned selectors and drops five inherited overrides; all four inventories retain caller profile state/temp, worker and Goal reader use new execution state/temp; public observer retains separate role deadlines and lifecycle.",
-              "callerSha256": "a3f234fcf516f82cf1723a9b03ed88679d9094eb78974ded14113b880ba65a52",
-              "controlSha256": "d687fb8ba83e7ce6856b09674c8ceab3ee91e0bd51bda46d0d0e9f4d7c2690e0",
-              "fixtureSha256": "1fca18197d8ba584b4fa078a57841808a5b8ca33982f0e66628579a6ba67fb28",
-              "sourceGuardSha256": "e61f5fc0f2c75823c7b79a5bf77c8c81f268e489cb030d8d954fd45c6b98247b",
-              "selectorsSha256": "677d97c3f7227d8058652f605e2db89b5ffaf57f73e63a563091082b53b377e8",
-              "prepareEnvironmentSha256": "2ad6704bbe28fb1c1f3e39d79d738ad8fc05c1733b4032cc2194a5910cad7892",
-              "droppedVariableNamesSha256": "b514308cc3cf309e1b85bf8a81e337304091367b163096312f3da35721a5540a",
-              "profileConfigSha256": "b77ec27ca6d018c7acbf1f4e88303ed26af9b6676c0371b09385efd17e8525f3",
-              "globalArgumentsSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-              "counts": {
-                "selectors": 6,
-                "droppedVariableNames": 5,
-                "globalArgumentPairs": 0,
-                "prepareEnvironmentPaths": 3
-              }
-            }
-          },
-          "oracle": "Independently verify this prospectively bound fresh ordinary CLI task and the declared minimal effective combination, without claiming physical clean installation. Compare exact private bootstrap source/control hashes, full actual arguments/environment selectors and preserved owned exclusion rules; observe full native instruction/Skill/Hook/tool exposure and any additional extension contribution before treating the scenario as supported. No development-dialogue or hidden prior-answer injection; the frozen previous script is an explicitly authorized business input. Independently derive all six new records, order/source indices, exact opaque IDs and decimal strings, status/version mappings, three ordered unknown issues and exact known-declaration total with one unknown amount. Confirm both new outputs and truthful method/note; preserve all four inputs including the existing script and mapping. Verify default mode, actual Goal read/time limits, cumulative worker usage, natural owned process/reader/Job exit and protected shared state/retained sources. Independent source review must precede observer judgment; formal admission is produced by the core, never a prewritten fact prerequisite. Existing B29 recovery evidence retains its original identity; no forced failure, extra scenario, comparative value, whole R2/R3 or release claim.",
-          "oracleFiles": [
-            "docs/operations/PLAN-v3.3.md",
-            "docs/operations/ACCEPTANCE-v3.3.md",
-            "yiyuan_accord/admission.py",
-            "scripts/observe_codex_entry.py",
-            "scripts/inspect_coordination.py",
-            "scripts/observe_codex_lifecycle.py",
-            "scripts/inspect_native_resources.py",
-            "scripts/codex_rpc.py",
-            "product/cases/cli-minimal-batch-v3.3.json"
-          ],
-          "maxAgeSeconds": 86400,
-          "expected": {
-            "effect": {
-              "twoSourceCorrectDeliverables": true,
-              "sufficientAuthorizedMethodAndTruthfulReuse": true,
-              "completeSourceIndexedNewBatch": true
-            },
-            "authority": {
-              "freshCliAndPrivateControlsActuallyBound": true,
-              "declaredMinimalEffectiveCombinationObserved": true,
-              "defaultModeAndNoUnrequestedGoalObserved": true,
-              "inputAndEffectAuthorityPreserved": true
-            },
-            "poststate": {
-              "exactStringsTotalsAndThreeUnknownsPreserved": true,
-              "frozenToolAndMappingUnchanged": true,
-              "allAffectedResultsAndCompletionClaimsConsistent": true
-            },
-            "cleanup": {
-              "attributableProcessesReleased": true,
-              "protectedSharedStateAndInputsPreserved": true,
-              "retainedEvidenceAndIndependentSourceReviewReady": true
             }
           }
         }
