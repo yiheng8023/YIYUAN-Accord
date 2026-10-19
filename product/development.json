@@ -4852,6 +4852,83 @@
               "humanFeeOrSafetyLimitEstablished": false,
               "claimBoundary": "The prebound observation window and ACCEPTANCE rule make the original controlled case incomplete under that condition. They do not erase source-correct function/closure facts, prove missing capability, require business replay or impose a universal20-minute product/release limit."
             }
+          },
+          "currentEntryApplicabilityAndPackagePathReview": {
+            "source": "private:accord-package-path-impact-20261019-01/outcome.json",
+            "sourceSha256": "4972d9946e434927087d4736245dc0f4596a636c7f3cf178dece928de11d29e4",
+            "evaluatedSubject": {
+              "revision": "39f9186bab371aece854ff5058c627fb1c265080",
+              "tree": "366faa2cfc0b451a142eb23c4f09f59ed3d22279"
+            },
+            "ci": {
+              "run": 39221225022,
+              "head": "39f9186bab371aece854ff5058c627fb1c265080",
+              "conclusion": "success",
+              "jobsPassed": 11,
+              "url": "https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/39221225022",
+              "sourceSha256": "bc2c4d077c7742d56c0d34ee0f7c0b9db056bb5d766da94bb8443c814abe45e4"
+            },
+            "entryApplicability": {
+              "acceptedCases": [
+                "v33-openai-entry-applicability-01"
+              ],
+              "reportSha256": "22c45ee5fb90ffc729201d08f7d8e2750b0aef624dbd95af787bdcbcf830ed0e",
+              "finalSourceVerification": true,
+              "fieldCount": 61,
+              "sourceSupportCounts": {
+                "supported": 61,
+                "unknownExpectedFields": 0,
+                "counterevidencedExpectedFields": 0
+              },
+              "selection": {
+                "entries": 9,
+                "selected": 6,
+                "deferred": 3,
+                "pendingEntries": 0,
+                "pendingModes": 0
+              },
+              "observationKind": "new-current-selection-responsibility-and-boundary-adjudication-for-prebound-existing-case",
+              "originalHistoricalIdentityPreserved": true,
+              "directHistoricalUserUtteranceLocatorRecovered": false,
+              "authorityBasis": "Current human-provided AGENTS binds current PLAN; DECISION and original 12-Oct acceptance corroborate choices. No invented old user quote.",
+              "newSubjectEntryBusinessOrModelRuns": 0,
+              "reviewAgentWorkOccurred": true,
+              "claimLimit": "Current source-bound entry/mode applicability decisions only. Does not prove complete capability coverage, all selected-entry adoption of package24, whole lifecycle or combined R2/R3 completion."
+            },
+            "packagePathReview": {
+              "originalB26Subject": "88cb6b088c67f0614fdb50d2fdafacf239d2f706",
+              "changedMembers": [
+                ".codex-plugin/plugin.json",
+                "runtime/task-checkpoint.cjs",
+                "runtime/native-state-mcp.cjs"
+              ],
+              "changedModuleStillLoadsThroughHook": true,
+              "actualStateMcpOrHelperCliCalls": 0,
+              "normalizedLocalGuidanceEqual": true,
+              "currentFormalB26AcceptanceIssued": false,
+              "claimLimit": "Direct import/render and actual source-path comparison are finite mechanism evidence. They do not waive the original full-package guard, prove behavioral equivalence or restamp the original B26 record. Earlier 14-to24 seven-member changes include guidance/Hook/context changes."
+            },
+            "supersededUnknowns": [
+              "The original entry applicability case already passed on 12-Oct; preserve that original subject and time.",
+              "Entry/mode selection is finalized; no repeated human selection is needed.",
+              "Old finite Work/IDE14 gaps have later source-backed conclusions; do not reopen the identical gaps."
+            ],
+            "residue": {
+              "source": "b5-residue-current-observation.json and b5-residue-metadata-handle.json",
+              "present": true,
+              "accessDenied": true,
+              "causeAndOwnership": "unknown",
+              "mutated": false,
+              "newReleaseGate": false
+            },
+            "retainedLimits": [
+              "Full R2/R3, functionalCompletion and candidateEligible remain unproven/false.",
+              "Complete capability denominator/necessary-use dispositions and current whole-host lifecycle remain distinct duties.",
+              "B31 original prebound-window overrun and valid narrow delivery/cleanup facts remain unchanged.",
+              "Current package24 and public admission core unchanged; no login/install/restart needed.",
+              "17 scopes/15 active cases and all original F/A floors, budgets and reserve remain unchanged."
+            ],
+            "nextWork": "Use existing capability inventory sources to identify concrete remaining coverage rows and whole-lifecycle consequences, then take only the necessary current operation or mechanism correction. Preserve source identities and original failures; do not replay closed business or require repeated mode selection."
           }
         },
         "admissionReadCost": {
