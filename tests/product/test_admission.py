@@ -1280,6 +1280,269 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertTrue(all(datetime.fromisoformat(row['observedAt']) < Later.now(timezone.utc)
                             - timedelta(days=1) for row in retained))
 
+    def impact_fixture(self):
+        """Synthetic original qualification and changed full dependency closure."""
+        from yiyuan_accord import admission as a
+        contract, case = self.historical_fixture_case("v33-goal-authority-correction-01")
+        self.commit(contract)
+        capture, records = self.capture()
+        original_report = self.assess(contract, capture)
+        self.assertIn(case["id"], original_report["acceptedCases"], original_report)
+        record = next(row for row in records() if row["case"] == case["id"])
+        original_subject = a.evidence_subject(self.root)
+        host = contract["delivery"]["hostProjections"][0]
+        package = Path(host["manifest"]).parents[1].as_posix()
+        helper = self.root / package / "runtime/task-checkpoint.cjs"
+        helper.write_bytes(helper.read_bytes() + b"\n// synthetic current impact\n")
+        (self.root / "yiyuan_accord/impact_fixture.py").write_text("# never imported\n")
+        adjudicator = self.root / "yiyuan_accord/admission.py"
+        adjudicator.write_bytes(adjudicator.read_bytes() + b"\n# synthetic adjudicator change\n")
+        version = a._normalized_cache_version(contract["delivery"]["version"]) + "+codex.20990101000000"
+        contract["delivery"]["version"] = host["packageVersion"] = version
+        manifest = self.root / host["manifest"]
+        contents = json.loads(manifest.read_text(encoding="utf-8"))
+        contents["version"] = version
+        manifest.write_text(json.dumps(contents), encoding="utf-8")
+        self.update_package_identity(contract)
+        self.commit(contract)
+        state = {}
+
+        def observer(request):
+            result = self.observer(request)
+            if request["phase"] == "recheck":
+                material = state["material"]
+                result["currentApplicability"] = {case["id"]: {
+                    "evidenceSha256": a._hash({k: v for k, v in material.items() if k != "reviewBundle"}),
+                    "current": copy.deepcopy(material["current"]),
+                    "conditionBindings": copy.deepcopy(material["conditionBindings"])}}
+                return result
+            result["records"] = [copy.deepcopy(record)]
+            material = {"schema": "yiyuan-accord-current-applicability/v1",
+                "original": {"subject": original_subject, "recordSha256": a._hash(record),
+                    **{k: record[k] for k in ("definitionSha256", "packageSha256", "episodeId")},
+                    "qualification": {"case": case["id"], "scope": case["scope"], "claim": "function",
+                        "episodeId": record["episodeId"], "recordSha256": a._hash(record),
+                        "subject": original_subject, "decision": "accepted", "stage": "final-case-qualification",
+                        "qualifiedAt": datetime.now(timezone.utc).isoformat(), "sources": ["qualification"],
+                        "finalOutcomeSources": ["final"], "knownFailuresAndLimits": [{"sources": ["final"],
+                            "disposition": "outside-case-claim", "basis": "Synthetic unrelated closeout limit retained.",
+                            "resolutionSources": []}]}},
+                "current": {"subject": request["subject"], "definitionSha256": a._definition(contract, case),
+                    "packageSha256": host["packageSha256"], "context": {key: ["actual"] for key in
+                        ("configuration", "authority", "helpers", "continuingState")}},
+                "sources": {key: {"sourceRef": "fixture://" + key, "sha256": digest, "kind": kind}
+                    for key, digest, kind in (("qualification", a._hash(original_report), "original-qualification"),
+                        ("final", a._hash({"syntheticFinalCaseAccepted": case["id"], "otherCloseoutHeld": True}), "original-final-outcome"),
+                        ("actual", a._hash({"syntheticCurrentPoststate": True}), "current-observation"),
+                        ("analysis", a._hash({"syntheticAnalysis": True}), "source-analysis"))},
+                "differences": [{**row, "role": "synthetic execution/adjudicator",
+                    "impact": "current-consequence-supported", "basis": "Synthetic current effect reviewed.",
+                    "sources": ["analysis"], "currentConsequences": ["actual"]}
+                    for row in a._impact_differences(self.root, record["evaluatedRevision"],
+                        request["subject"]["revision"], (package, package), case["oracleFiles"],
+                        {"calls": 0, "files": 0, "bytes": 0})],
+                "conditionBindings": [{"pointer": pointer, "originalValue": value,
+                    "responsibility": "continuing-applicability", "currentValue": copy.deepcopy(value),
+                    "basis": "Synthetic still-required condition independently observed.", "sources": ["actual"]}
+                    for pointer, value in a._condition_leaves(case["conditions"]).items()]}
+            for key in ("host", "entry"):
+                material["current"]["context"][key] = {"value": case[key], "sources": ["actual"]}
+            review = copy.deepcopy(result["reviewBundle"])
+            review["schema"] = "yiyuan-accord-development-impact-review-bundle/v1"
+            digest = a._hash(material)
+            review["evidenceSha256"] = digest
+            for row in review["reviews"]:
+                row["evidenceSha256"] = digest
+            material["reviewBundle"] = review
+            state["material"] = material
+            result["currentApplicability"] = {case["id"]: material}
+            return result
+        return contract, case, record, observer
+
+    def test_current_impact_default_and_explicit_scoped_success(self):
+        with self.history():
+            contract, case, record, observer = self.impact_fixture()
+            frozen = copy.deepcopy(record)
+            legacy = self.assess(contract, self.replay([record]))
+            self.assertEqual(legacy["acceptedCases"], [])
+            self.assertIn("reuse-definition-mismatch", legacy["caseRejections"][case["id"]])
+            def empty(request):
+                result = self.replay([record])(request)
+                if request["phase"] == "observe": result["currentApplicability"] = {}
+                return result
+            self.assertEqual(self.assess(contract, empty), legacy)
+            report = self.assess(contract, observer)
+            self.assertEqual(report["errors"], [])
+            self.assertEqual(report["acceptedCases"], [case["id"]])
+            self.assertEqual(record, frozen)
+            supported = report["currentApplicability"][case["id"]]
+            self.assertIn("complete-package-changed", supported["reconciledReasons"])
+            self.assertIn("not-new-execution-or-parent-coverage", supported["claimLimit"])
+            self.assertFalse(report["acceptanceRequirements"]["A08"]["complete"])
+            clock = [0]
+            def expires(request):
+                result = observer(request)
+                if request["phase"] == "recheck": clock[0] = case["maxAgeSeconds"]
+                return result
+            with patch("yiyuan_accord.admission.monotonic", side_effect=lambda: clock[0]):
+                expired = self.assess(contract, expires)
+            self.assertEqual(expired["acceptedCases"], [])
+            self.assertIn("current-applicability-expired", expired["caseRejections"][case["id"]])
+
+    def test_current_impact_rejects_missing_malformed_stale_and_unbound_evidence(self):
+        from yiyuan_accord import admission as a
+        def resign(material):
+            digest = a._hash({k: v for k, v in material.items() if k != "reviewBundle"})
+            material["reviewBundle"]["evidenceSha256"] = digest
+            for row in material["reviewBundle"]["reviews"]: row["evidenceSha256"] = digest
+        with self.history():
+            contract, case, _, base = self.impact_fixture()
+            def mutate(kind, result):
+                material = result["currentApplicability"][case["id"]]
+                if kind == "missing-delta": material["differences"].pop()
+                elif kind == "wrong-mode": material["differences"][0]["oldMode"] = "100755"
+                elif kind == "wrong-sha": material["differences"][0]["newSha256"] = "0" * 64
+                elif kind == "duplicate-delta": material["differences"].append(copy.deepcopy(material["differences"][0]))
+                elif kind == "missing-source": material["sources"].pop("actual")
+                elif kind == "ast-only": material["differences"][0]["currentConsequences"] = ["analysis"]
+                elif kind == "partial": material["original"]["qualification"]["stage"] = "early-core"
+                elif kind == "final-failed": material["original"]["qualification"]["decision"] = "held"
+                elif kind == "early-only": material["original"]["qualification"]["finalOutcomeSources"] = ["qualification"]
+                elif kind == "negative-unresolved": material["original"]["qualification"]["knownFailuresAndLimits"][0]["disposition"] = "unresolved-within-case"
+                elif kind == "negative-missing-source": material["original"]["qualification"]["knownFailuresAndLimits"][0]["sources"] = []
+                elif kind == "wrong-record": material["original"]["recordSha256"] = "0" * 64
+                elif kind == "missing-condition": material["conditionBindings"].pop()
+                elif kind == "continuing-drift": material["conditionBindings"][0]["currentValue"] = "wrong"
+                elif kind == "unknown-responsibility": material["conditionBindings"][0]["responsibility"] = "optional"
+                elif kind == "wrong-subject": material["current"]["subject"]["tree"] = "0" * 40
+                elif kind == "wrong-host": material["current"]["context"]["host"]["value"] = "other-host"
+                elif kind == "wrong-entry": material["current"]["context"]["entry"]["value"] = "other-entry"
+                elif kind == "unbound-review": material["reviewBundle"]["reviews"][0].pop("evidenceSha256")
+                elif kind == "ordinary-review": material["reviewBundle"]["schema"] = "yiyuan-accord-development-review-bundle/v1"
+                elif kind == "stale-review":
+                    for row in material["reviewBundle"]["reviews"]: row["reviewedAt"] = "2000-01-01T00:00:00Z"
+                elif kind == "same-reviewer":
+                    for row in material["reviewBundle"]["reviews"]: row["reviewerId"] = "same"
+                elif kind == "unknown-material": material["extra"] = True
+                elif kind == "current-review-failed": result["reviewBundle"]["decision"] = "fail"
+                elif kind == "original-fact-failed": result["records"][0]["facts"][next(iter(case["expected"]))]["value"] = False
+                else: material["differences"] = None
+                if kind not in {"unbound-review"}: resign(material)
+            kinds = ("missing-delta", "wrong-mode", "wrong-sha", "duplicate-delta", "missing-source",
+                "ast-only", "partial", "final-failed", "early-only", "negative-unresolved", "negative-missing-source",
+                "wrong-record", "missing-condition", "continuing-drift",
+                "unknown-responsibility", "wrong-subject", "wrong-host", "wrong-entry", "unbound-review", "ordinary-review", "stale-review",
+                "same-reviewer", "unknown-material", "current-review-failed", "original-fact-failed", "malformed")
+            for kind in kinds:
+                def observer(request):
+                    result = base(request)
+                    if request["phase"] == "observe": mutate(kind, result)
+                    return result
+                with self.subTest(kind=kind):
+                    report = self.assess(contract, observer)
+                    self.assertEqual(report["acceptedCases"], [])
+                    self.assertIn(case["id"], report["caseRejections"])
+            for kind in ("digest", "current", "condition", "missing-map"):
+                def observer(request):
+                    result = base(request)
+                    if request["phase"] == "recheck":
+                        if kind == "missing-map": result.pop("currentApplicability")
+                        elif kind == "digest": result["currentApplicability"][case["id"]]["evidenceSha256"] = "0" * 64
+                        elif kind == "current": result["currentApplicability"][case["id"]]["current"]["context"]["authority"] = []
+                        else: result["conditions"][case["id"]] = {}
+                    return result
+                with self.subTest(recheck=kind):
+                    self.assertEqual(self.assess(contract, observer)["acceptedCases"], [])
+
+    def test_current_impact_semantics_and_scope_are_not_artifact_identity(self):
+        from yiyuan_accord import admission as a
+        contract, case = self.historical_fixture_case("v33-goal-authority-correction-01")
+        self.assertTrue(a._impact_eligible(contract, case))
+        digest = a._impact_definition(contract, case)
+        for kind in ("base", "expected", "condition", "authority", "quality", "scope", "packageFiles"):
+            changed, target = copy.deepcopy(contract), copy.deepcopy(case)
+            if kind == "base": changed["delivery"]["version"] = "9.0.0"
+            elif kind == "expected": target["expected"]["effect"] = {"other": True}
+            elif kind == "condition": target["conditions"]["other"] = True
+            elif kind == "authority": changed["authority"] = {"other": True}
+            elif kind == "quality": changed["systemOptimization"]["qualityAxes"][0]["rule"] = "changed"
+            elif kind == "scope": next(row for row in changed["acceptance"]["admission"]["scopes"]
+                                        if row["id"] == case["scope"])["rule"] = "changed"
+            else: target["packageFiles"] = []
+            with self.subTest(kind=kind):
+                try: actual = a._impact_definition(changed, target)
+                except ValueError: continue
+                self.assertNotEqual(digest, actual)
+        for kind in ("claims", "nested", "a08", "parent", "lifecycle"):
+            changed, target = copy.deepcopy(contract), copy.deepcopy(case)
+            if kind == "claims": target["claims"].append("incremental-value")
+            elif kind == "nested": target["conditions"]["nested"] = {"selectedModes": []}
+            elif kind == "a08":
+                next(row for row in changed["acceptance"]["admission"]["acceptanceRequirements"]
+                     if row["id"] == "A08")["requiredCoverage"]["function"].append(target["scope"])
+            else:
+                target["scope"] = "v33-admitted-entry-delivery" if kind == "parent" else "v33-codex-lifecycle"
+            with self.subTest(excluded=kind):
+                self.assertFalse(a._impact_eligible(changed, target))
+
+    def test_current_impact_git_delta_retains_modes_additions_deletions_and_adjudicator(self):
+        from yiyuan_accord import admission as a
+        with self.history():
+            contract, case, record, _ = self.impact_fixture()
+            old = self.git("rev-parse", "HEAD")
+            package = "plugins/yiyuan-accord-codex"
+            source = self.root / "yiyuan_accord/impact_fixture.py"
+            source.unlink()
+            (self.root / "yiyuan_accord/renamed_fixture.py").write_text("# never imported\n")
+            self.git("add", ".")
+            path = package + "/runtime/task-checkpoint.cjs"
+            self.git("update-index", "--chmod=+x", path)
+            self.git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "--quiet", "-m", "Synthetic mode and path delta")
+            rows = a._impact_differences(self.root, old, self.git("rev-parse", "HEAD"),
+                (package, package), case["oracleFiles"], {"calls": 0, "files": 0, "bytes": 0})
+            by_path = {row["path"]: row for row in rows}
+            self.assertEqual(by_path[path]["oldSha256"], by_path[path]["newSha256"])
+            self.assertNotEqual(by_path[path]["oldMode"], by_path[path]["newMode"])
+            self.assertEqual(by_path["yiyuan_accord/impact_fixture.py"]["newMode"], "000000")
+            self.assertIsNone(by_path["yiyuan_accord/impact_fixture.py"]["newSha256"])
+            self.assertEqual(by_path["yiyuan_accord/renamed_fixture.py"]["oldMode"], "000000")
+
+    def test_current_impact_rejects_truncated_duplicate_and_unsupported_git_delta(self):
+        from yiyuan_accord import admission as a
+        row = b":100644 100755 " + b"a" * 40 + b" " + b"a" * 40 + b" M\0yiyuan_accord/source.py\0"
+        for raw in (row[:-1], row + b":100644\0", row + row,
+                    row.replace(b"100755", b"120000"), row.replace(b"source.py", b"../source.py"),
+                    row.replace(b"100644", b"000000"), row.replace(b" M\0", b" A\0")):
+            with self.subTest(raw=raw[:32]), patch.object(a, "_git", return_value=raw), self.assertRaises(ValueError):
+                a._impact_differences(self.root, "a" * 40, "b" * 40, (), [], {"calls": 0, "files": 0, "bytes": 0})
+        with patch.object(a, "_git", return_value=b""):
+            self.assertEqual(a._impact_differences(self.root, "a" * 40, "b" * 40, (), [],
+                                                  {"calls": 0, "files": 0, "bytes": 0}), [])
+
+    def test_current_impact_review_requires_every_review_digest_and_preserves_legacy_schema(self):
+        from yiyuan_accord.reviews import evaluate_review_bundle
+        subject = {"revision": "a" * 40, "tree": "b" * 40}
+        bundle = self.observer({"phase": "observe", "subject": subject, "cases": {}})["reviewBundle"]
+        policy = self.contract["acceptance"]["admission"]["reviewPolicy"]
+        self.assertEqual(evaluate_review_bundle(bundle, **{"subject_revision": subject["revision"],
+            "subject_tree": subject["tree"]}, policy=policy)["decision"], "pass")
+        impact = copy.deepcopy(bundle)
+        impact.update(schema="yiyuan-accord-development-impact-review-bundle/v1", evidenceSha256="c" * 64)
+        for row in impact["reviews"]: row["evidenceSha256"] = "c" * 64
+        check = lambda value, digest="c" * 64: evaluate_review_bundle(value, subject["revision"], subject["tree"],
+            policy=policy, expected_evidence_sha256=digest)["decision"]
+        self.assertEqual(check(impact), "pass")
+        self.assertEqual(check(bundle), "fail")
+        self.assertEqual(evaluate_review_bundle(impact, subject["revision"], subject["tree"], policy=policy)["decision"], "fail")
+        for digest in (True, 1, "", "wrong", "d" * 64):
+            self.assertEqual(check(impact, digest), "fail")
+        for index in range(4):
+            for kind in ("missing", "different"):
+                wrong = copy.deepcopy(impact)
+                if kind == "missing": wrong["reviews"][index].pop("evidenceSha256")
+                else: wrong["reviews"][index]["evidenceSha256"] = "d" * 64
+                self.assertEqual(check(wrong), "fail")
+
     def test_current_applicability_window_covers_observe_recheck_and_final_checks(self):
         from yiyuan_accord import admission
         limit = min(case['maxAgeSeconds'] for case in self.contract['acceptance']['admission']['cases'])

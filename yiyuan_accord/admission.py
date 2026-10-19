@@ -757,6 +757,227 @@ def _fresh(value, seconds, now):
         return None
 
 
+def _impact_definition(contract, case):
+    """Isolate only same-base artifact identities in the reuse comparison copy."""
+    current = copy.deepcopy(contract)
+    current["delivery"]["version"] = _normalized_cache_version(current["delivery"]["version"])
+    for projection in current["delivery"]["hostProjections"]:
+        if projection["id"] == case["host"]:
+            projection["packageVersion"] = _normalized_cache_version(projection["packageVersion"])
+            projection["packageSha256"] = "0" * 64
+    return _reuse_definition(current, case)
+
+
+def _impact_eligible(contract, case):
+    policy = contract["acceptance"]["admission"]
+    scope = next(row for row in policy["scopes"] if row["id"] == case["scope"])
+    a08 = next(row for row in policy["acceptanceRequirements"] if row["id"] == "A08")
+
+    def aggregate(value):
+        if isinstance(value, dict):
+            return bool({"subjectEntries", "selectedModes"} & value.keys()) or any(
+                aggregate(item) for item in value.values())
+        return isinstance(value, list) and any(aggregate(item) for item in value)
+
+    return (contract["schema"] == "yiyuan-accord-development/v5"
+            and policy["schema"] == CURRENT_SCHEMA
+            and case["claims"] == ["function"] and scope["claims"] == ["function"]
+            and case["scope"] not in {*_ENTRY_PARENT_SCOPES, _ENTRY_COVERAGE_SCOPE,
+                                      _HOST_LIFECYCLE_SCOPE, "v33-system-integration"}
+            and case["scope"] not in a08["requiredCoverage"].get("function", [])
+            and not aggregate([case, scope]))
+
+
+def _impact_differences(root, original_revision, current_revision, packages, oracle_files, budget):
+    """Compute the full declared execution and adjudicator delta, including modes.
+
+    Renames are deletion/addition pairs. No caller selects a smaller adjudicator
+    set, and no AST/call graph is treated as a proof of side-effect freedom.
+    """
+    paths = sorted({*packages, *oracle_files, "yiyuan_accord"})
+    if budget["calls"] + 1 > _PACKAGE_ASSESSMENT_CALLS:
+        raise ValueError("impact read bound exceeded")
+    budget["calls"] += 1
+    raw = _git(root, "diff", "--raw", "--no-abbrev", "-z", "--no-renames",
+               "--no-ext-diff", "--no-textconv", original_revision, current_revision, "--", *paths)
+    if raw and not raw.endswith(b"\0"):
+        raise ValueError("unterminated impact delta")
+    rows = raw.split(b"\0")[:-1] if raw else []
+    if len(rows) % 2:
+        raise ValueError("incomplete impact delta")
+    entries, requests = [], []
+    seen = set()
+    for offset in range(0, len(rows), 2):
+        fields = rows[offset].decode("ascii").split()
+        path = rows[offset + 1].decode("utf-8")
+        if (len(fields) != 5 or not fields[0].startswith(":") or not _locator(path) or path in seen
+                or fields[4] not in {"A", "D", "M", "T"}):
+            raise ValueError("invalid impact delta")
+        seen.add(path)
+        old_mode, new_mode = fields[0][1:], fields[1]
+        if {old_mode, new_mode} - {"000000", "100644", "100755"}:
+            raise ValueError("unsupported impact object type")
+        if ((fields[4] == "A" and (old_mode != "000000" or new_mode == "000000"))
+                or (fields[4] == "D" and (old_mode == "000000" or new_mode != "000000"))
+                or (fields[4] in {"M", "T"} and "000000" in {old_mode, new_mode})):
+            raise ValueError("inconsistent impact object status")
+        entry = {"path": path, "oldMode": old_mode, "newMode": new_mode}
+        for side, mode, blob in (("old", old_mode, fields[2]), ("new", new_mode, fields[3])):
+            entry[side + "Sha256"] = None
+            if mode == "000000" and blob != "0" * 40:
+                raise ValueError("invalid absent impact blob")
+            if mode != "000000":
+                if re.fullmatch(r"[0-9a-f]{40}", blob) is None:
+                    raise ValueError("invalid impact blob")
+                requests.append((entry, side, blob))
+        entries.append(entry)
+    if (budget["calls"] + bool(requests) > _PACKAGE_ASSESSMENT_CALLS
+            or budget["files"] + len(requests) > _PACKAGE_ASSESSMENT_FILES
+            or budget["bytes"] + _PACKAGE_TREE_BYTES > _PACKAGE_ASSESSMENT_BYTES):
+        raise ValueError("impact read bound exceeded")
+    if requests:
+        budget["calls"] += 1
+        budget["files"] += len(requests)
+        budget["bytes"] += _PACKAGE_TREE_BYTES
+        blobs, total = _batch_blobs(root, [request[2] for request in requests])
+        budget["bytes"] -= _PACKAGE_TREE_BYTES - total
+        for (entry, side, _), blob in zip(requests, blobs, strict=True):
+            entry[side + "Sha256"] = sha256(blob).hexdigest()
+    return entries
+
+
+def _condition_leaves(value, pointer=""):
+    if isinstance(value, (dict, list)) and value:
+        items = value.items() if isinstance(value, dict) else enumerate(value)
+        return {path: item for key, child in items for path, item in _condition_leaves(
+            child, pointer + "/" + str(key).replace("~", "~0").replace("/", "~1")).items()}
+    return {pointer: value}
+
+
+def _current_impact(root, material, record, original_contract, original, contract, case,
+                    subject, snapshots, packages, budget, now, candidate_time):
+    """Validate consistency; authenticated completeness/semantics remain caller duties.
+
+    Source hashes are observer attestations, not files opened or authenticated by
+    this function. Independent impact reviews must bind this exact material.
+    Qualification concerns the final *case claim*, not unrelated episode errors.
+    """
+    def require(condition):
+        if not condition:
+            raise _CaseRejection("current-applicability-unsupported")
+
+    require(isinstance(material, dict) and set(material) == {
+        "schema", "original", "current", "differences", "conditionBindings", "sources", "reviewBundle"})
+    require(material["schema"] == "yiyuan-accord-current-applicability/v1")
+    require(_impact_eligible(original_contract, original) and _impact_eligible(contract, case))
+    require(_json(original) == _json(case)
+            and _impact_definition(original_contract, original) == _impact_definition(contract, case))
+    revision = record["evaluatedRevision"]
+    original_subject = {"revision": revision,
+                        "tree": _git(root, "rev-parse", "--verify", revision + "^{tree}").decode("ascii").strip()}
+    sources = material["sources"]
+    require(isinstance(sources, dict) and bool(sources))
+    for key, source in sources.items():
+        require(_text(key) and isinstance(source, dict)
+                and set(source) == {"sourceRef", "sha256", "kind"}
+                and _text(source["sourceRef"]) and isinstance(source["sha256"], str)
+                and re.fullmatch(r"[0-9a-f]{64}", source["sha256"]) is not None
+                and source["kind"] in {"original-qualification", "original-final-outcome",
+                                       "source-analysis", "current-observation"})
+
+    def refs(values, kind=None):
+        return (isinstance(values, list) and bool(values)
+                and all(isinstance(value, str) and value in sources for value in values)
+                and len(values) == len(set(values))
+                and (kind is None or all(sources[value]["kind"] == kind for value in values)))
+
+    old = material["original"]
+    require(isinstance(old, dict) and set(old) == {
+        "subject", "recordSha256", "definitionSha256", "packageSha256", "episodeId", "qualification"})
+    require(old["subject"] == original_subject and old["recordSha256"] == _hash(record)
+            and all(old[key] == record[key] for key in ("definitionSha256", "packageSha256", "episodeId")))
+    qualification = old["qualification"]
+    require(isinstance(qualification, dict) and set(qualification) == {
+        "case", "scope", "claim", "episodeId", "recordSha256", "subject", "decision",
+        "stage", "qualifiedAt", "sources", "finalOutcomeSources", "knownFailuresAndLimits"})
+    require(qualification["case"] == case["id"] and qualification["scope"] == case["scope"]
+            and qualification["claim"] == "function" and qualification["subject"] == original_subject
+            and qualification["recordSha256"] == _hash(record)
+            and qualification["episodeId"] == record["episodeId"]
+            and qualification["decision"] == "accepted" and qualification["stage"] == "final-case-qualification"
+            and refs(qualification["sources"], "original-qualification")
+            and refs(qualification["finalOutcomeSources"], "original-final-outcome"))
+    # The caller must disclose all known failures/limits, including orthogonal
+    # episode closeout failures. An early PASS relabelled as final is insufficient.
+    # Completeness and claim attribution are reviewed semantic source duties.
+    negatives = qualification["knownFailuresAndLimits"]
+    require(isinstance(negatives, list))
+    for row in negatives:
+        require(isinstance(row, dict) and set(row) == {"sources", "disposition", "basis", "resolutionSources"}
+                and refs(row["sources"]) and _text(row["basis"])
+                and row["disposition"] in {"outside-case-claim", "resolved-before-final-case-qualification"}
+                and (row["resolutionSources"] == [] if row["disposition"] == "outside-case-claim"
+                     else refs(row["resolutionSources"], "original-final-outcome")))
+    qualified = _fresh(qualification["qualifiedAt"], float("inf"), now)
+    require(qualified is not None and qualified >= _fresh(record["observedAt"], float("inf"), now))
+    current = material["current"]
+    require(isinstance(current, dict) and set(current) == {"subject", "definitionSha256", "packageSha256", "context"})
+    require(current["subject"] == subject and current["definitionSha256"] == _definition(contract, case)
+            and current["packageSha256"] == snapshots[1]["sha256"])
+    context = current["context"]
+    require(isinstance(context, dict) and set(context) == {
+        "host", "entry", "configuration", "authority", "helpers", "continuingState"})
+    for key in ("host", "entry"):
+        require(isinstance(context[key], dict) and set(context[key]) == {"value", "sources"}
+                and context[key]["value"] == case[key] and refs(context[key]["sources"], "current-observation"))
+    require(all(refs(context[key], "current-observation")
+                for key in ("configuration", "authority", "helpers", "continuingState")))
+    differences = material["differences"]
+    expected = _impact_differences(root, revision, subject["revision"], packages, case["oracleFiles"], budget)
+    require(isinstance(differences, list) and len(differences) == len(expected))
+    by_path = {}
+    for row in differences:
+        require(isinstance(row, dict) and set(row) == {
+            "path", "oldMode", "newMode", "oldSha256", "newSha256", "role", "impact", "basis", "sources", "currentConsequences"})
+        require(isinstance(row["path"], str) and row["path"] not in by_path
+                and _text(row["role"]) and _text(row["basis"])
+                and row["impact"] in {"original-observation-still-applies", "current-consequence-supported"}
+                and refs(row["sources"]) and refs(row["currentConsequences"], "current-observation"))
+        # An applicable retained current observation may support multiple deltas;
+        # metadata changes do not mandate new business executions or new episodes.
+        by_path[row["path"]] = row
+    require(set(by_path) == {row["path"] for row in expected}
+            and all(all(by_path[row["path"]][key] == value for key, value in row.items()) for row in expected))
+    leaves = _condition_leaves(original["conditions"])
+    bindings = material["conditionBindings"]
+    require(isinstance(bindings, list) and len(bindings) == len(leaves))
+    seen = set()
+    for row in bindings:
+        require(isinstance(row, dict) and set(row) == {
+            "pointer", "originalValue", "responsibility", "currentValue", "basis", "sources"})
+        pointer = row["pointer"]
+        require(isinstance(pointer, str) and pointer in leaves and pointer not in seen
+                and _json(row["originalValue"]) == _json(leaves[pointer])
+                and row["responsibility"] in {"historical-execution", "continuing-applicability"}
+                and (row["responsibility"] != "continuing-applicability"
+                     or _json(row["currentValue"]) == _json(leaves[pointer]))
+                and _text(row["basis"]) and refs(row["sources"], "current-observation"))
+        seen.add(pointer)
+    digest = _hash({key: value for key, value in material.items() if key != "reviewBundle"})
+    review_policy = contract["acceptance"]["admission"]["reviewPolicy"]
+    require(set(review_policy["requiredAxes"]) == {"product", "specification", "implementation", "standards"}
+            and review_policy["minimumReviewers"] >= 2
+            and any(set(pair) == {"specification", "implementation"} for pair in review_policy["independentAxes"]))
+    review = material["reviewBundle"]
+    require(evaluate_review_bundle(review, subject["revision"], subject["tree"], policy=review_policy,
+                                  expected_evidence_sha256=digest)["decision"] == "pass")
+    require(all((at := _fresh(row["reviewedAt"], contract["acceptance"]["admission"]["reviewMaxAgeSeconds"], now))
+                is not None and at.timestamp() >= candidate_time for row in review["reviews"]))
+    return {"evidenceSha256": digest, "original": copy.deepcopy(old), "current": copy.deepcopy(current),
+            "conditionBindings": copy.deepcopy(bindings),
+            "claimLimit": "historical-single-entry-function-current-applicability-not-new-execution-or-parent-coverage"}
+
+
 def assess_development_evidence(root, contract, observer, review_bundle=None, *, subject=None):
     """Two bounded, caller-owned queries: observe checked sources, then recheck.
 
@@ -803,7 +1024,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
         # Keep this axis so each scope still requires its selected case evidence.
         "scenarios": set(),
     }
-    admitted, package_reuse = set(), {}
+    admitted, package_reuse, current_applicability = set(), {}, {}
     if observer is not None:
         try:
             if not callable(observer):
@@ -823,9 +1044,14 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             # Copy before invoking foreign code; never let it rewrite expected facts.
             observation_started = monotonic()
             data = _strict_json_object(_json(observer(copy.deepcopy(request))))
-            if set(data) != {"records", "reviewBundle"} or not isinstance(data["records"], list):
+            if (set(data) not in ({"records", "reviewBundle"}, {"records", "reviewBundle", "currentApplicability"})
+                    or not isinstance(data["records"], list)):
                 raise ValueError("invalid observation envelope")
+            materials = data.get("currentApplicability", {})
+            if not isinstance(materials, dict) or not set(materials) <= cases.keys():
+                raise ValueError("invalid current applicability mapping")
             now = datetime.now(timezone.utc)
+            candidate_time = int(_git(root, "show", "-s", "--format=%ct", subject["revision"]).strip())
             prior, package_snapshots, seen, read_blobs = {}, {}, set(), set()
             package_budget = {"calls": 0, "files": 0, "bytes": 0}
             for record in data["records"]:
@@ -880,12 +1106,18 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                         "record-actual-package": record["packageSha256"] == original_snapshot["sha256"],
                         "current-actual-package": bound["packageSha256"] == current_snapshot["sha256"],
                     }
+                    reuse_issues = []
+                    if key in materials and not checks["reuse-definition"]:
+                        reuse_issues.append("reuse-definition-mismatch")
+                        checks.pop("reuse-definition")
                     if not all(checks.values()):
                         raise _CaseRejection(*(f"{name}-mismatch" for name, valid in checks.items() if not valid))
                     package_files = _sparse_package_files(contract, case)
                     if package_files is None:
                         if record["packageSha256"] != bound["packageSha256"]:
-                            raise _CaseRejection("complete-package-changed")
+                            if key not in materials:
+                                raise _CaseRejection("complete-package-changed")
+                            reuse_issues.append("complete-package-changed")
                     else:
                         if not _selected_package_files_unchanged(
                                 original_snapshot, current_snapshot, package_files, current_host["manifest"]):
@@ -909,7 +1141,9 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     # details. Ask for bounded names so drift differs from I/O
                     # failure without exporting file names or exception text.
                     if _git(root, "diff", "--name-only", "-z", "--no-ext-diff", "--no-textconv", revision, "--", *diff_files):
-                        raise _CaseRejection("execution-dependency-changed")
+                        if key not in materials:
+                            raise _CaseRejection("execution-dependency-changed")
+                        reuse_issues.append("execution-dependency-changed")
                     for path in case["oracleFiles"]:
                         for source_revision in ([revision, subject["revision"]] if path in review_files else [revision]):
                             locator = f"{source_revision}:{path}"
@@ -941,17 +1175,24 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                         reject_case(key, *unmet)
                         case_errors.append(f"{key}: freshness, conditions or consequence not admitted")
                     else:
+                        if key in materials:
+                            current_applicability[key] = _current_impact(
+                                root, materials[key], record, prior[revision], original, contract, case,
+                                subject, (original_snapshot, current_snapshot),
+                                (original_package, current_package), package_budget, now, candidate_time)
+                            current_applicability[key]["reconciledReasons"] = reuse_issues
                         admitted.add(key)
                 except (OSError, subprocess.SubprocessError, KeyError, TypeError, ValueError, StopIteration) as error:
                     reject_case(key, *(error.codes if isinstance(error, _CaseRejection) else ("source-evidence-unavailable",)))
                     errors.append(f"{key}: source, identity, freshness, conditions or consequence not admitted")
+            if not set(materials) <= seen:
+                raise ValueError("current applicability has no original record")
             review = data["reviewBundle"]
             if review_bundle is not None and _json(review_bundle) != _json(review):
                 errors.append("review input differs from the observer-checked bundle")
             review_result = evaluate_review_bundle(review, subject["revision"], subject["tree"],
                                                    policy=policy["reviewPolicy"])
             errors.extend("independent review: " + error for error in review_result["errors"])
-            candidate_time = int(_git(root, "show", "-s", "--format=%ct", subject["revision"]).strip())
             if review_result["decision"] == "pass" and any(
                     (at := _fresh(v["reviewedAt"], contract["acceptance"]["admission"]["reviewMaxAgeSeconds"], now)) is None
                     or at.timestamp() < candidate_time
@@ -961,11 +1202,25 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             recheck = _strict_json_object(_json(observer(copy.deepcopy({
                 **request, "phase": "recheck", "observationSha256": observation_hash,
             }))))
-            if (set(recheck) != {"subject", "conditions", "observationSha256"}
+            recheck_fields = {"subject", "conditions", "observationSha256"}
+            if materials:
+                recheck_fields.add("currentApplicability")
+            if (set(recheck) != recheck_fields
                     or recheck["subject"] != subject or recheck["observationSha256"] != observation_hash
                     or not isinstance(recheck["conditions"], dict)):
                 raise ValueError("invalid observer recheck")
+            if materials and (not isinstance(recheck["currentApplicability"], dict)
+                              or set(recheck["currentApplicability"]) != set(materials)):
+                raise ValueError("invalid current applicability recheck")
             for key in list(admitted):
+                if key in current_applicability:
+                    expected = {field: current_applicability[key][field] for field in (
+                        "evidenceSha256", "current", "conditionBindings")}
+                    if _json(recheck["currentApplicability"][key]) != _json(expected):
+                        admitted.remove(key)
+                        reject_case(key, "current-applicability-changed")
+                        case_errors.append(f"{key}: current applicability changed or unavailable")
+                        continue
                 if _json(recheck["conditions"].get(key)) != _json(cases[key]["conditions"]):
                     admitted.remove(key)
                     reject_case(key, "current-conditions-changed")
@@ -993,6 +1248,18 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     _fresh(v["reviewedAt"], contract["acceptance"]["admission"]["reviewMaxAgeSeconds"], final_now) is None
                     for v in review["reviews"]):
                 errors.append("independent review expired before final qualification")
+            for key in list(admitted & current_applicability.keys()):
+                if any(_fresh(row["reviewedAt"], policy["reviewMaxAgeSeconds"], final_now) is None
+                       for row in materials[key]["reviewBundle"]["reviews"]):
+                    admitted.remove(key)
+                    reject_case(key, "current-impact-review-expired")
+                    case_errors.append(f"{key}: impact review expired before final qualification")
+            if errors:
+                # A dedicated impact review cannot replace the ordinary current
+                # candidate review or rescue another failed source/identity guard.
+                for key in list(admitted & current_applicability.keys()):
+                    admitted.remove(key)
+                    reject_case(key, "current-candidate-review-or-source-invalid")
         except Exception:
             # External exception text may contain private source data or credentials.
             errors.append("evidence observer unavailable, invalid or subject changed")
@@ -1007,6 +1274,9 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                                     "selectedModes": entry_selection["selectedModes"],
                                     "pendingModes": entry_selection["pendingModes"]}
     report["acceptedCases"] = sorted(admitted)
+    if current_applicability:
+        report["currentApplicability"] = {key: current_applicability[key]
+                                          for key in sorted(admitted & current_applicability.keys())}
     report["packageReuse"] = {key: package_reuse[key] for key in sorted(admitted & set(package_reuse))}
     bound = {claim: {key for key in ids if key in scopes and claim in scopes[key]["claims"]}
              for claim, ids in policy["requiredCoverage"].items()}

@@ -2,7 +2,8 @@
 
 The bundle is a task-time input, not a repository observation.  This module
 therefore accepts already-loaded values, performs no I/O, and has no locator or
-digest vocabulary that could turn a checked-in receipt into self-attestation.
+source discovery that could turn a checked-in receipt into self-attestation.
+Explicit impact reviews bind a caller-supplied digest, not its authenticity.
 """
 
 from datetime import datetime
@@ -17,6 +18,7 @@ REVIEW_AXES = (
 )
 REVIEW_BUNDLE_SCHEMA = "yiyuan-accord-external-review-bundle/v1"
 DEVELOPMENT_REVIEW_SCHEMA = "yiyuan-accord-development-review-bundle/v1"
+IMPACT_REVIEW_SCHEMA = "yiyuan-accord-development-impact-review-bundle/v1"
 
 _OBJECT_ID_RE = re.compile(r"^[0-9a-f]{40}$")
 _UTC_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$")
@@ -128,7 +130,8 @@ def _findings(value, label, errors):
             errors.append(f"{finding_label}.disposition must be pass")
 
 
-def evaluate_review_bundle(bundle, subject_revision, subject_tree, *, policy=None):
+def evaluate_review_bundle(bundle, subject_revision, subject_tree, *, policy=None,
+                           expected_evidence_sha256=None):
     """Return deterministic ``errors`` and a fail-closed ``decision``.
 
     ``subject_revision`` and ``subject_tree`` are the caller's exact candidate
@@ -143,11 +146,21 @@ def evaluate_review_bundle(bundle, subject_revision, subject_tree, *, policy=Non
         return {"errors": errors, "decision": "fail"}
     axes_required = REVIEW_AXES if policy is None else policy["requiredAxes"]
     schema = REVIEW_BUNDLE_SCHEMA if policy is None else DEVELOPMENT_REVIEW_SCHEMA
+    evidence_fields = set()
+    if expected_evidence_sha256 is not None:
+        if (policy is None or not isinstance(expected_evidence_sha256, str)
+                or re.fullmatch(r"[0-9a-f]{64}", expected_evidence_sha256) is None):
+            return {"errors": ["impact review requires a development policy and exact evidence digest"],
+                    "decision": "fail"}
+        schema = IMPACT_REVIEW_SCHEMA
+        evidence_fields = {"evidenceSha256"}
     _object_id(subject_revision, "subject_revision", errors)
     _object_id(subject_tree, "subject_tree", errors)
 
-    if not _exact_object(bundle, _BUNDLE_FIELDS, "bundle", errors):
+    if not _exact_object(bundle, _BUNDLE_FIELDS | evidence_fields, "bundle", errors):
         return {"errors": errors, "decision": "fail"}
+    if evidence_fields and bundle["evidenceSha256"] != expected_evidence_sha256:
+        errors.append("bundle.evidenceSha256 differs from the reviewed material")
     if bundle.get("schema") != schema:
         errors.append(f"bundle.schema must be {schema}")
     _subject(bundle.get("subject"), "bundle.subject", subject_revision, subject_tree, errors)
@@ -165,8 +178,10 @@ def evaluate_review_bundle(bundle, subject_revision, subject_tree, *, policy=Non
     assignments = {}
     for index, review in enumerate(reviews):
         label = f"reviews[{index}]"
-        if not _exact_object(review, _REVIEW_FIELDS, label, errors):
+        if not _exact_object(review, _REVIEW_FIELDS | evidence_fields, label, errors):
             continue
+        if evidence_fields and review["evidenceSha256"] != expected_evidence_sha256:
+            errors.append(f"{label}.evidenceSha256 differs from the reviewed material")
 
         axis = review.get("axis")
         if isinstance(axis, str):
