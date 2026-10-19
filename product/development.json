@@ -4941,7 +4941,7 @@
               "Current package24 and public admission core unchanged; no login/install/restart needed.",
               "17 scopes/15 active cases and all original F/A floors, budgets and reserve remain unchanged."
             ],
-            "nextWork": "Use existing capability inventory sources to identify concrete remaining coverage rows and whole-lifecycle consequences, then take only the necessary current operation or mechanism correction. Preserve source identities and original failures; do not replay closed business or require repeated mode selection.",
+            "nextWork": "Follow the currentCapabilityUseAdjudication source and corrected finite matrix; earlier broad source-discovery tasks are superseded only where the new source findings resolve them.",
             "coverageAndLifecycleFollowup": {
               "coverageSource": "private:accord-package-path-impact-20261019-01/entry-coverage-source-gap.json",
               "coverageSourceSha256": "063b5af326158615c630b014dd7d3bee8522597b0295ee2f9ef2fbd7ee783e3a",
@@ -4950,7 +4950,7 @@
               "lifecycleSource": "private:accord-package-path-impact-20261019-01/lifecycle-consequence-gap.json",
               "lifecycleSourceSha256": "1aaca3e6b3853ec97250812eaae5633a5665a5d1a4d95bd9e72dccbd85c8dc06",
               "lifecycleDisposition": "Current24 Root adoption/bind and commit-recheck rejection followed by same-input recovery are already observed. B31 physical logout/cleanup is complete while original whole window remains failed. Only actually relevant old consumers/guidance/unfinished state require current disposition; entry-wide loss external recovery is conditional, not a mandatory staged failure or phone demonstration. Empty whole-host case is a separate formal registration gap.",
-              "nextConcreteWork": "Join current command/config/slash/UI source rows and actual necessary-use evidence within the existing coveragecase; preserve identified unavailable/hidden/version-specific distinctions. Judge only remaining lifecycle consequences, not duplicate proof of settled Work/IDE or new business for every interface.",
+              "nextConcreteWork": "Follow the currentCapabilityUseAdjudication source and corrected finite matrix; earlier broad source-discovery tasks are superseded only where the new source findings resolve them.",
               "additionalSourceSlices": {
                 "source": "private:accord-package-path-impact-20261019-01/current-discovery/source-slices-outcome.json",
                 "sourceSha256": "9f80e598fb3469928bc9df7c8be9050306c238780ac3fa4852ce2d1ca577e52b",
@@ -4969,6 +4969,57 @@
                 },
                 "claimLimit": "Bound source interpretation and actual four-consumer native replies only. Preserve account/feature/rendered/handler/entry-specific unknowns, original failures and all full-scope duties; no UI operation, independent login, runtime update or business replay."
               }
+            }
+          },
+          "currentCapabilityUseAdjudication": {
+            "source": "private:accord-capability-use-map-20261019-01/outcome.json",
+            "sourceSha256": "d1ec1f9f7e3a4af1bf314e68e7425cda1599c72e7982ac1ca566b0d924ac0737",
+            "sourceSubject": "72ca35414d3ac7003547d501fdfd0136af7f6db5",
+            "ci": {
+              "runId": 39236357065,
+              "conclusion": "success",
+              "successfulJobs": 11
+            },
+            "sourceMap": {
+              "families": 7,
+              "semanticMappings": 12,
+              "selectedEntries": 6,
+              "entryPredicateRows": 48,
+              "selectedModePredicateRows": 24,
+              "sourceHashesIndependentlyChecked": 46,
+              "sourcePointersIndependentlyChecked": 176
+            },
+            "currentCorrections": {
+              "samePackageSurfaces": "The retained desktop package contains Work/ChatGPT/Codex conditional surfaces. The earlier exclusion of this package as a Work source was too broad. Exact per-surface gates, handlers and effects remain separately bounded.",
+              "microSource": "The named rbr/T$n source-binding gap is resolved: 23 fallback IDs; electron-only registry intersection is hotkeyWindow and renameThread. Webview filtering uses electron availability with absent-field true. No JS execution or UI operation.",
+              "cliNestedSources": "The four named parser-source gaps were followed at the original fixed tag; see the retained report for exact parser bounds and remaining layer limits.",
+              "oracleClarification": "Every discovered item retains evidenced disposition and applicable authority/exit or hold. Actual verified use is required for task-necessary selected capabilities. Non-selection cannot waive an established duty.",
+              "b31InterpretationCorrection": "Supersedes only the inference from B33 LC-CURRENT-1 that B31 requires a generic timing/closeout mechanism or a new release gate. Original1200 window,1587.267625 result, not-admitted qualification and completed physical cleanup stay unchanged.",
+              "dependencyRoleFinding": "admission.py participates in preflight binding and per-stage recheck, not just post-assessment. AST equality outside assess admits shared-state side-effect counterexamples. No automatic exemption or compatibility bridge was adopted.",
+              "profileNamespaceCorrection": "Supersedes the broad CLI named-configuration-map sentence in source-semantics-map mapping6. The fixed-tag SharedCliOptions --profile/-p explicitly layers CODEX_HOME/<name>.config.toml via ProfileV2Name; a captured profiles ConfigProfile property is not the same source binding. This establishes that parser meaning only, not current effective values or all config precedence."
+            },
+            "remaining": [
+              "Use the corrected per-entry/per-mode matrix to resolve only material current control/handler and package-applicability dependencies. Conditional unused controls are not compulsory demonstrations; incomplete whole-denominator claims remain unknown.",
+              "B26 original steering/pause/systemic results remain valid at their original subject; current full-package qualification is still restricted by real changed dependencies. No retroactive packageFiles, original-record rewrite or global oracle exemption.",
+              "Dynamic-routing and whole-lifecycle formal scope binding, and the still-open same-business complete combination/net-impact assessment remain unresolved. Existing cross-episode contributions cannot be unioned into A08."
+            ],
+            "qualification": {
+              "formalAdmissionGranted": false,
+              "fullR2R3Completed": false,
+              "releaseReady": false,
+              "requiredScopes": 17,
+              "activeCases": 15,
+              "qualityFloorsChanged": false
+            },
+            "effects": {
+              "productRuntimeChanged": false,
+              "packageChanged": false,
+              "installation": false,
+              "login": false,
+              "configurationChanged": false,
+              "businessReplayed": false,
+              "originalEvidenceChanged": false,
+              "watcherCreated": false
             }
           }
         },
@@ -7659,7 +7710,7 @@
               "cx-vscode"
             ]
           },
-          "oracle": "Before observation, bind the exact candidate/package, target versions, actual subject actors and selected modes, discovery sources, native IDs/aliases, config/account layers, current permissions, input/writer ownership, finite work/usage/resource limits and recovery actor. Independently reconcile official sources with actual supported UI/command/settings/Skill/MCP/plugin/App/ecosystem observations. CLI help or installed tools alone cannot supply the denominator; unobserved surfaces remain unknown. Each capability needs an evidenced disposition, necessary use and exit/hold route. Correlate genuine selection, actual use and consequential outcomes, including sufficient native handling, unavailable/disabled paths and changes. Check effects and exact owned-resource post-state; do not infer that no relevant resource exists. Parent entry or mode pending prevents final scope closure. The observer carrier is not the subject. Expected predicates are never observation data; source/model claims, synthetic positive flags or agreement between reports cannot establish adoption or all-entry coverage. Keep original failures, pauses and unrelated state; reject missing, stale, mismatched or incomplete evidence without rerun or evaluator rescue.",
+          "oracle": "Before observation, bind the exact candidate/package, target versions, actual subject actors and selected modes, discovery sources, native IDs/aliases, config/account layers, current permissions, input/writer ownership, finite work/usage/resource limits and recovery actor. Independently reconcile official sources with actual supported UI/command/settings/Skill/MCP/plugin/App/ecosystem observations. CLI help or installed tools alone cannot supply the denominator; unobserved surfaces remain unknown. Each discovered capability needs an evidenced disposition and applicable authority/exit or hold route; only capabilities selected as necessary for the bound task require actual use with independently verified effects. Non-selection cannot waive an established necessary duty. Correlate genuine selection, actual use and consequential outcomes, including sufficient native handling, unavailable/disabled paths and changes. Check effects and exact owned-resource post-state; do not infer that no relevant resource exists. Parent entry or mode pending prevents final scope closure. The observer carrier is not the subject. Expected predicates are never observation data; source/model claims, synthetic positive flags or agreement between reports cannot establish adoption or all-entry coverage. Keep original failures, pauses and unrelated state; reject missing, stale, mismatched or incomplete evidence without rerun or evaluator rescue.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
