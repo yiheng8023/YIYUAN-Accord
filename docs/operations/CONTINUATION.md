@@ -1,6 +1,6 @@
 # 当前接续
 
-当前增量（2026-10-20）：a366d419的CI39300130334已11/11终态成功。现有CLI认证已通过真实单次请求核实可复用，无需新登录、主账号退出或共享配置修改。额外扩展来源已定位到0.163远程账号插件状态与本地策略合并：未设plugins._default时，单项false不构成最终否决；固定官方源码及同构测试已核。前瞻采用仅任务局部_default=false、Accord显式true和39个用户Skill路径排除；沿尚未执行的双语README候选独立审阅核实际上下文、两输出/八原件、13判据及完整资源后态。该方法与一份夹具现登记，17scope/16活动case、199文件只表示声明，不是通过；原质量底线、24包与代码预算不变。四次主安装目录查询、worker和Goal只读者的配置/所有权差异已显式绑定，主认证借用且禁止logout/清主home。原一臂诊断的Root1200秒全窗超限仍保失败；新执行段分配与前期准备成本分别记录，不追认旧失败。私有来源：accord-existing-auth-route-20261020-01/OUTCOME.json、isolation-source-review/root-cause-and-minimal-controls.json；当前待执行绑定与材料：accord-default-readme-existing-auth-20261020-01。完整R2/R3和发布资格仍未完成。
+当前增量（2026-10-20）：执行绑定提交e62581d6的CI39368080734已11/11终态成功；本轮三个被后继绑定取代的CI已主动取消，取消不计通过。现有CLI认证复用有效，原生0.163远程插件合并的_default策略已由固定源码/同构测试解释并在三次实际上下文核到仅5项Accord Skill、无Memory指导；第一份完整原件独审另核3个Accord MCP工具和入口。README候选独审仍未完成：前两次文件工具因主.sandbox-bin的helper_sandbox_lock_failed/os5未启动；恢复正常HOME未解决。第三次仅移除Desktop服务查找hint，在保持elevated/workspace-write保护下读取挂起，原360秒turn上限强制exit124；不能记作修复或通过。12次库存查询、启动过的Goal读者及三个所属Job均已退出，9个活动runtime路径已移除或保留为必要证据，八输入及所有原始回执保留；未登出主账号、改共享ACL或配置。原外3600/postrun2400完整墙钟在最终收尾前超限，保原失败，不以嵌套命令时长推活动耗时或猜原因。用户随后提供成功外部CLI截图，原生记录核为danger-full-access/on-request；此前我们另选workspace-write/never，不能把两条路径当同条件，也不能笼统称用户CLI不可用。当前只请求这项既备审阅的非交互完整访问具体授权，尚未启用；原8输入/2输出/13判据和质量保持，不再盲做模型探针。私有总源accord-default-readme-existing-auth-20261020-01/OUTCOME.json及external-cli-read-observation.json、next-execution-proposal.json。仍17scope/16活动case/199文件仅声明，24包未改；default功能准入、完整R2/R3及发布仍未完成。
 
 以下为此前已核依赖和历史边界，旧“当前”措辞以本段增量为准：
 
