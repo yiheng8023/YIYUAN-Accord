@@ -613,7 +613,7 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertEqual(turn_conflict['value']['reason'], 'native-call-turn-conflict')
         self.assertEqual(self.files(), before)
 
-    def automatic_capacity_retry(self, turn='retry-turn'):
+    def automatic_capacity_retry(self, turn='retry-turn', trigger='capacity_retry_automatic'):
         meta = self.params['_meta']['x-codex-turn-metadata']
         original = meta['turn_id']
         records = [
@@ -624,7 +624,7 @@ class NativeStateMcpTests(unittest.TestCase):
             {'type': 'event_msg', 'payload': {'type': 'task_started',
                 'turn_id': turn, 'root_turn_id': turn, 'turn_attribution': {
                     'turn_id': turn, 'root_turn_id': turn,
-                    'turn_trigger': 'capacity_retry_automatic',
+                    'turn_trigger': trigger,
                     'parent_turn_id': None, 'initiating_agent_path': None}}},
             {'type': 'turn_context', 'payload': {'turn_id': turn,
                 'model': meta['model'], 'cwd': str(self.work)}},
@@ -1267,6 +1267,247 @@ process.stdout.write(JSON.stringify({result,changed}));
         self.assert_latest_context('retained-recovery-short-control')
         self.append_long_tail_and_repeated_context()
         self.assert_latest_context('retained-recovery-long-rollout')
+
+    def test_retained_cursor_recovers_input_origin_beyond_anonymous_tail_budget(self):
+        self.native_context()
+        self.append_native_message(text='Preserve the original source order.', id='saved-steering')
+        pending = self.native_input_preview()
+        reconciled = self.manage(action='reconcile-input', epoch=pending['epoch'],
+            expectedRevision=0, evidenceCursor=pending['nativeInputEvidence']['cursor'])
+        self.assertFalse(reconciled['isError'], reconciled)
+        receipt = next(self.state.glob('*.input.json'))
+        original = receipt.read_bytes()
+        for _ in range(9):
+            self.append_long_tail_and_repeated_context()
+        observed = self.assert_latest_context('receipt-located-origin-over-16MiB')
+        evidence = observed['checkpoint']['snapshot']['nativeInputEvidence']
+        self.assertGreater(evidence['cursor']['endOffset'] - evidence['cursor']['anchorOffset'],
+                           16 * 1024 * 1024)
+        self.assertEqual(len(evidence['records']), 2)
+        self.assertEqual(observed['context']['lastResponseTokens'], 4500)
+        record = evidence['records'][1]
+        read = self.read_input(expectedReceiptEpoch=observed['checkpoint']['snapshot']['epoch'],
+            sourcePart={'evidenceCursor': evidence['cursor'], 'recordOffset': record['recordOffset'],
+                        'recordSha256': record['recordSha256'], 'partIndex': 0})
+        self.assertFalse(read['isError'], read)
+        self.assertEqual(read['value']['input']['text'], 'Preserve the original source order.')
+        bound = self.manage(action='bind', epoch=observed['checkpoint']['snapshot']['epoch'],
+            expectedRevision=0, result='Preserve source-bound work', inputs=[],
+            outputs=[{'path': 'report.txt'}], nextAction='Continue bounded work', canContinue=True)
+        self.assertFalse(bound['isError'], bound)
+        self.assertEqual(receipt.read_bytes(), original)
+        for trigger, turn in (('capacity_retry_automatic', 'auto-long'), ('capacity_retry_manual', 'manual-long')):
+            self.automatic_capacity_retry(turn, trigger)
+            self.append_context_usage(4600)
+            current = self.assert_latest_context(trigger)
+            self.assertEqual(current['context']['conditions']['turnId'], turn)
+            self.assertFalse(self.manage(action='bind', epoch=current['checkpoint']['snapshot']['epoch'],
+                expectedRevision=1 if trigger == 'capacity_retry_automatic' else 2,
+                result='Preserve source-bound work', inputs=[], outputs=[{'path': 'report.txt'}],
+                nextAction='Continue bounded work', canContinue=True)['isError'])
+            self.assertEqual(receipt.read_bytes(), original)
+
+    def test_retained_cursor_recovery_rejects_untrusted_changed_or_out_of_budget_sources(self):
+        self.native_context()
+        self.append_native_message(id='saved-steering')
+        pending = self.native_input_preview()
+        self.assertFalse(self.manage(action='reconcile-input', epoch=pending['epoch'], expectedRevision=0,
+            evidenceCursor=pending['nativeInputEvidence']['cursor'])['isError'])
+        receipt = next(self.state.glob('*.input.json'))
+        original = receipt.read_bytes()
+        for _ in range(9):
+            transcript = self.append_long_tail_and_repeated_context()
+        valid = self.native_input_preview()
+        evidence = valid['nativeInputEvidence']; record = evidence['records'][1]
+        baseline = transcript.read_bytes()
+        for change in ('no-retained', 'sourceId', 'headSha256', 'anchorOffset', 'prefixSha256',
+                       'signalsSha256', 'prefix-bytes', 'truncated', 'range',
+                       'record', 'unterminated', 'control', 'human', 'host', 'replacement'):
+            with self.subTest(change=change):
+                receipt.write_bytes(original); transcript.write_bytes(baseline)
+                data = json.loads(original)
+                cursor = data['nativeInputReconciliation']['cursor']
+                if change == 'no-retained': del data['nativeInputReconciliation']
+                elif change in ('sourceId', 'headSha256', 'prefixSha256', 'signalsSha256'):
+                    cursor[change] = '0' * 64
+                elif change == 'anchorOffset': cursor['anchorOffset'] += 1
+                elif change == 'prefix-bytes': transcript.write_bytes(baseline.replace(b'Native steering', b'Changed steering', 1))
+                elif change == 'truncated': transcript.write_bytes(baseline[:cursor['endOffset'] - 1])
+                elif change == 'replacement':
+                    replacement = transcript.with_suffix('.replacement')
+                    replacement.write_bytes(baseline); replacement.replace(transcript)
+                elif change in ('range', 'record'):
+                    if change == 'record': transcript.write_bytes(baseline[:cursor['endOffset']])
+                    with transcript.open('ab') as stream:
+                        for _ in range(15 if change == 'range' else 1):
+                            stream.write(json.dumps({'type': 'response_item', 'payload': {'role': 'assistant',
+                                'content': 'x' * ((1024 * 1024) if change == 'range' else 16 * 1024 * 1024)}}).encode() + b'\n')
+                elif change == 'unterminated':
+                    with transcript.open('ab') as stream: stream.write(b'{"partial":')
+                elif change == 'control':
+                    with transcript.open('ab') as stream:
+                        stream.write(b'{"type":"event_msg","payload":{"type":"turn_unknown_control"}}\n')
+                elif change == 'human': self.append_native_message(text='New human input')
+                elif change == 'host': self.params['_meta']['x-codex-turn-metadata']['model'] = 'changed-model'
+                receipt.write_text(json.dumps(data), encoding='utf-8')
+                before = self.files()
+                current = self.native_input_preview()['nativeInputEvidence']
+                if change == 'human':
+                    self.assertEqual(current['state'], 'observed', current)
+                    self.assertFalse(current['latestInputReconciled'])
+                else: self.assertEqual(current['state'], 'unknown', current)
+                reasons = {'no-retained': 'native-input-origin-unavailable',
+                    'range': 'native-input-recovery-range-exceeded', 'record': 'native-input-recovery-record-too-large',
+                    'unterminated': 'unterminated-tail-record', 'control': 'native-input-control-unrecognized',
+                    'host': 'native-input-current-host-conflict'}
+                if change in reasons: self.assertEqual(current['reason'], reasons[change])
+                denied = self.manage(action='bind', epoch=valid['epoch'], expectedRevision=0,
+                    result='Keep source-bound work', inputs=[], outputs=[{'path': 'report.txt'}],
+                    nextAction='Hold changed evidence', canContinue=False)
+                self.assertTrue(denied['isError'], denied)
+                if change in ('range', 'record'):
+                    self.assertEqual(denied['value']['nativeInputDiagnostic'],
+                        {'stage': 'initial-validation', 'readerReason': reasons[change]})
+                # An expected cursor supplied by the caller cannot enable located recovery.
+                self.assertTrue(self.read_input(expectedReceiptEpoch=valid['epoch'], sourcePart={
+                    'evidenceCursor': evidence['cursor'], 'recordOffset': record['recordOffset'],
+                    'recordSha256': record['recordSha256'], 'partIndex': 0})['isError'])
+                self.assertEqual(self.files(), before)
+                self.params['_meta']['x-codex-turn-metadata']['model'] = 'observed-model'
+
+    def test_retained_cursor_exact_32mib_budget_measures_reads_and_locked_recheck(self):
+        self.native_context()
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        lines = transcript.read_bytes().splitlines(keepends=True)
+        prefix = b'{"type":"response_item","payload":{"type":"message","role":"assistant","content":"'
+        suffix = b'"}}\n'
+        with transcript.open('wb') as stream:
+            stream.write(lines[0])
+            for _ in range(3): stream.write(prefix + b'x' * (1024 * 1024) + suffix)
+            stream.write(b''.join(lines[1:]))
+        self.append_native_message(id='source-before-long-tail')
+        pending = self.native_input_preview()
+        self.assertFalse(self.manage(action='reconcile-input', epoch=pending['epoch'], expectedRevision=0,
+            evidenceCursor=pending['nativeInputEvidence']['cursor'])['isError'])
+        receipt = next(self.state.glob('*.input.json')); original = receipt.read_bytes()
+        anchor = json.loads(original)['nativeInputReconciliation']['cursor']['anchorOffset']
+        self.append_context_usage(4700)
+        remaining = anchor + 32 * 1024 * 1024 - transcript.stat().st_size
+        full, rest = divmod(remaining, 1024 * 1024)
+        if 0 < rest < len(prefix) + len(suffix): full -= 1; rest += 1024 * 1024
+        with transcript.open('ab') as stream:
+            for size in [1024 * 1024] * full + ([rest] if rest else []):
+                stream.write(prefix + b'x' * (size - len(prefix) - len(suffix)) + suffix)
+        self.assertEqual(transcript.stat().st_size - anchor, 32 * 1024 * 1024)
+        params = {**self.params, 'arguments': {'cwd': str(self.work), 'includeContext': True,
+                                             'includeNativeInputs': True}}
+        script = r"""
+const fs=require('node:fs'),{performance}=require('node:perf_hooks');
+const x=JSON.parse(fs.readFileSync(0,'utf8')),open=fs.openSync,close=fs.closeSync,read=fs.readSync;
+const sources=new Map(),locks=new Map(),scans=[],holds=[];let phase='inspect';
+fs.openSync=(file,...args)=>{const fd=open(file,...args);
+  if(file===x.transcript){const scan={phase,bytes:0,maxRead:0,priorReads:0,inputLockedBytes:0};sources.set(fd,scan);scans.push(scan);}
+  if(file===x.stateLock||file===x.receipt+'.lock')locks.set(fd,{kind:file===x.stateLock?'state':'input',at:performance.now()});
+  return fd;
+};
+fs.readSync=(fd,buffer,offset,length,position)=>{const n=read(fd,buffer,offset,length,position),scan=sources.get(fd);
+  if(scan){scan.bytes+=n;scan.maxRead=Math.max(scan.maxRead,length);
+    if(position!==0&&position<x.anchor)scan.priorReads++;
+    if([...locks.values()].some(lock=>lock.kind==='input'))scan.inputLockedBytes+=n;
+  }return n;
+};
+fs.closeSync=fd=>{if(locks.has(fd)){const lock=locks.get(fd);holds.push({kind:lock.kind,ms:performance.now()-lock.at});locks.delete(fd);}
+  sources.delete(fd);return close(fd);};
+const bridge=require(process.argv[1]),start=performance.now(),inspected=bridge.inspectNativeState(x.params);
+const inspectMs=performance.now()-start;phase='bind';
+const bound=bridge.manageTaskState({...x.params,name:'manage_task_state',arguments:{cwd:x.params.arguments.cwd,
+  action:'bind',epoch:x.epoch,expectedRevision:0,result:'Retain exact-budget source',inputs:[],outputs:[{path:'report.txt'}],
+  nextAction:'Continue bounded work',canContinue:true}});
+process.stdout.write(JSON.stringify({inspected,bound,scans,holds,inspectMs,bindMs:performance.now()-start-inspectMs,
+  memory:process.memoryUsage(),maxRssKiB:process.resourceUsage().maxRSS}));
+"""
+        run = subprocess.run([self.node, '-e', script, str(BRIDGE)], input=json.dumps({
+            'params': params, 'transcript': str(transcript), 'receipt': str(receipt), 'anchor': anchor,
+            'stateLock': str(receipt).replace('.input.json', '.lock'), 'epoch': json.loads(original)['epoch']}),
+            capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        result = json.loads(run.stdout)
+        self.assertFalse(result['inspected']['isError'], result)
+        self.assertFalse(result['bound']['isError'], result)
+        self.assertEqual(result['inspected']['value']['context']['lastResponseTokens'], 4700)
+        self.assertGreaterEqual(len(result['scans']), 4)
+        for scan in result['scans']:
+            self.assertEqual(scan['bytes'], 32 * 1024 * 1024 + 64 * 1024, scan)
+            self.assertLessEqual(scan['maxRead'], 1024 * 1024)
+            self.assertEqual(scan['priorReads'], 0)
+        self.assertTrue(any(scan['inputLockedBytes'] > 0 for scan in result['scans']))
+        self.assertEqual(receipt.read_bytes(), original)
+        print('retained-32mib-measurement=' + json.dumps({key: result[key] for key in (
+            'scans', 'holds', 'inspectMs', 'bindMs', 'memory', 'maxRssKiB')}, separators=(',', ':')))
+        with transcript.open('ab') as stream: stream.write(b'\n')
+        self.assertEqual(self.native_input_preview()['nativeInputEvidence']['reason'],
+                         'native-input-recovery-range-exceeded')
+
+    def test_retained_cursor_recovery_rechecks_read_derivation_and_commit_sources(self):
+        transcript = self.replace_anchor_png(self.png_fixture())
+        pending = self.native_input_preview()
+        self.assertFalse(self.manage(action='reconcile-input', epoch=pending['epoch'], expectedRevision=0,
+            evidenceCursor=pending['nativeInputEvidence']['cursor'])['isError'])
+        receipt = next(self.state.glob('*.input.json')); original = receipt.read_bytes()
+        for _ in range(9): self.append_long_tail_and_repeated_context()
+        current = self.assert_latest_context('complete-media-coverage-after-retained-recovery')
+        evidence = current['checkpoint']['snapshot']['nativeInputEvidence']; record = evidence['records'][0]
+        image = self.read_input(expectedReceiptEpoch=json.loads(original)['epoch'], sourcePart={
+            'evidenceCursor': evidence['cursor'], 'recordOffset': record['recordOffset'],
+            'recordSha256': record['recordSha256'], 'partIndex': 2})
+        self.assertFalse(image['isError'], image)
+        self.assertEqual(base64.b64decode(image['imageContent']['data']), self.png_fixture())
+        baseline = transcript.read_bytes()
+        for change in ('short-read', 'append-read', 'replace-read', 'append-derive', 'append-commit'):
+            with self.subTest(change=change):
+                transcript.write_bytes(baseline)
+                script = r"""
+const fs=require('node:fs');const x=JSON.parse(fs.readFileSync(0,'utf8'));
+const open=fs.openSync,close=fs.closeSync,read=fs.readSync,from=Buffer.from;
+const sources=new Set(),inputLocks=new Set();let changed=false,decodes=0;
+const inject=()=>{if(changed)return;changed=true;
+  if(x.change==='replace-read'){fs.renameSync(x.transcript,x.transcript+'.old');fs.writeFileSync(x.transcript,x.baseline);}
+  else if(x.change!=='short-read')fs.appendFileSync(x.transcript,'\n');
+};
+fs.openSync=(file,...args)=>{const fd=open(file,...args);if(file===x.transcript)sources.add(fd);
+  if(file===x.receipt+'.lock')inputLocks.add(fd);return fd;};
+fs.closeSync=fd=>{sources.delete(fd);inputLocks.delete(fd);return close(fd);};
+fs.readSync=(fd,...args)=>{const n=read(fd,...args);
+  if(sources.has(fd)&&args[3]>=x.anchor&&!changed&&
+      (['short-read','append-read','replace-read'].includes(x.change)||x.change==='append-commit'&&inputLocks.size)){
+    inject();if(x.change==='short-read')return n-1;
+  }return n;
+};
+Buffer.from=(value,encoding,...rest)=>{const bytes=from(value,encoding,...rest);
+  if(x.change==='append-derive'&&encoding==='base64'&&++decodes===1)inject();return bytes;};
+const response=require(process.argv[1]).manageTaskState(x.params);
+if(x.change==='replace-read'){fs.unlinkSync(x.transcript);fs.renameSync(x.transcript+'.old',x.transcript);}
+process.stdout.write(JSON.stringify({response,changed}));
+"""
+                params = {**self.params, 'name': 'manage_task_state', 'arguments': dict(cwd=str(self.work),
+                    action='bind', epoch=json.loads(original)['epoch'], expectedRevision=0,
+                    result='Bind only the unchanged snapshot', inputs=[], outputs=[{'path': 'report.txt'}],
+                    nextAction='Hold source drift', canContinue=False)}
+                request = dict(params=params, transcript=str(transcript), receipt=str(receipt), change=change,
+                    anchor=evidence['cursor']['anchorOffset'], baseline='replacement fixture\n')
+                run = subprocess.run([self.node, '-e', script, str(BRIDGE)], input=json.dumps(request),
+                    capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+                self.assertEqual(run.returncode, 0, run.stderr)
+                result = json.loads(run.stdout)
+                self.assertTrue(result['changed'], result)
+                self.assertTrue(result['response']['isError'], result)
+                diagnostic = result['response']['value']['nativeInputDiagnostic']
+                self.assertEqual(diagnostic['stage'], 'commit-recheck' if change == 'append-commit' else 'initial-validation')
+                self.assertEqual(diagnostic['readerReason'], 'transcript-read-failed' if change == 'short-read'
+                    else 'transcript-path-changed-after-read' if change == 'append-derive' else 'transcript-changed-during-read')
+                self.assertEqual(receipt.read_bytes(), original)
+                self.assertFalse(any(self.state.glob('*.state.json')))
+                self.assertFalse(any(self.state.glob('*.lock')))
 
     def test_session_end_preserves_uncaptured_or_unknown_native_input(self):
         for kind in ('complete', 'pending', 'ambient', 'unsupported', 'unavailable'):

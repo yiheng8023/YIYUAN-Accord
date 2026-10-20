@@ -39,6 +39,7 @@ const nativeInputReaderReasons = new Set((
   'native-input-context-conflict native-input-control-needs-reconciliation native-input-control-unrecognized ' +
   'native-input-current-host-conflict native-input-current-turn-conflict native-input-evidence-changed ' +
   'native-input-origin-unavailable native-input-reader-unavailable native-source-part-unsupported native-source-record-unavailable ' +
+  'native-input-recovery-range-exceeded native-input-recovery-record-too-large ' +
   'noncanonical-rollout-path observation-time-invalid rollout-thread-identity-mismatch session-cwd-mismatch ' +
   'session-meta-mismatch session-meta-unavailable token-count-expired token-count-from-future transcript-changed-before-read ' +
   'transcript-changed-during-read transcript-empty-or-too-large transcript-not-regular-file transcript-outside-sessions-root ' +
@@ -527,6 +528,8 @@ function turnProofBasis(input, request, evidence) {
     promptHash: basis.promptSha256,
     captured: evidence.records.map(item => item.promptSha256),
     sourceScan: {anchorHash: basis.promptSha256, expectedCursor: evidence.cursor,
+      retainedCursor: input.nativeInputReconciliation?.cursor,
+      coverage: input.nativeInputReconciliation?.recordCoverage,
       captured: evidence.records.map(({promptSha256, turnId, recordSha256, sourceRef}) =>
         ({promptSha256, turnId, recordSha256, sourceRef}))},
     acceptedExecution: {turnId: execution.turnId, model: execution.model}};

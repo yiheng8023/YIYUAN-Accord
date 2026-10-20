@@ -8,6 +8,9 @@ const path = require('node:path');
 const HEAD_BYTES = 64 * 1024;
 const TAIL_BYTES = 1024 * 1024;
 const MAX_TAIL_BYTES = 16 * TAIL_BYTES;
+// A receipt-located origin permits a separate cumulative source-verification
+// budget. It is neither an anonymous history search nor model capacity.
+const MAX_RETAINED_BYTES = 32 * TAIL_BYTES;
 const MAX_NATIVE_MEDIA_BYTES = 8 * 1024 * 1024; // Existing native-input/receipt byte budget.
 const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
 const ROLLOUT_NAME = new RegExp(
@@ -91,6 +94,7 @@ function statIdentity(stat) {
 function readSlice(fd, position, length) {
   const buffer = Buffer.alloc(length);
   const read = fs.readSync(fd, buffer, 0, length, position);
+  if (read !== length) throw new Error('transcript-short-read');
   return buffer.subarray(0, read);
 }
 
@@ -411,6 +415,7 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
     if (expected.sourceId !== cursor.sourceId || expected.headSha256 !== cursor.headSha256 ||
         expected.anchorOffset !== anchorOffset || expected.endOffset > cursor.endOffset ||
         expected.endOffset < anchorOffset || expected === scan.expectedCursor && expected.signalsSha256 !== cursor.signalsSha256 ||
+        expected === scan.retainedCursor && expected.signalsSha256 !== sha(signals.filter(([offset]) => offset < expected.endOffset)) ||
         expected.prefixSha256 !== crypto.createHash('sha256').update(prefix).digest('hex')) {
       return empty('native-input-evidence-changed');
     }
@@ -490,6 +495,7 @@ function observeNativeTranscript(binding, options = {}) {
   let head;
   let tail;
   let tailOffset;
+  let retainedOrigin = false;
   try {
     fd = fs.openSync(transcriptPath, 'r');
     before = fs.fstatSync(fd, {bigint: true});
@@ -497,25 +503,48 @@ function observeNativeTranscript(binding, options = {}) {
     const size = Number(before.size);
     if (!Number.isSafeInteger(size) || size <= 0) return empty('transcript-empty-or-too-large');
     head = readSlice(fd, 0, Math.min(size, HEAD_BYTES));
-    tailOffset = Math.max(0, size - TAIL_BYTES);
-    tail = readSlice(fd, tailOffset, size - tailOffset);
-    // A long native turn can exceed the initial chunk well before capacity
-    // pressure. Extend only until its latest turn boundary is visible, within
-    // a fixed local I/O budget and the same file snapshot.
-    let tailBytes = TAIL_BYTES;
-    const hasBoundary = () => {
-      const rows = completeLines(tail, tailOffset, tailOffset > 0);
-      // Context after reconciliation also verifies the original input prefix.
-      const requiredScan = inputScan || options.retryInputScan;
-      return requiredScan ? retryOrigin(rows, binding, requiredScan.anchorHash) >= 0
-        : retry ? retryOrigin(rows, binding, options.retryInputSha256) >= 0
-        : rows.some((row) => parseRow(row)?.type === 'turn_context');
-    };
-    while (tailOffset > 0 && tailBytes < MAX_TAIL_BYTES && !hasBoundary()) {
-      tailBytes *= 2;
-      const expandedOffset = Math.max(0, size - tailBytes);
-      tail = Buffer.concat([readSlice(fd, expandedOffset, tailOffset - expandedOffset), tail]);
-      tailOffset = expandedOffset;
+    const requiredScan = inputScan || options.retryInputScan;
+    const retained = requiredScan?.retainedCursor;
+    if (retained) {
+      const first = completeLines(head, 0, false)[0];
+      if (typeof retained !== 'object' || Array.isArray(retained) ||
+          Object.keys(retained).sort().join(',') !== 'anchorOffset,endOffset,headSha256,prefixSha256,signalsSha256,sourceId' ||
+          !integer(retained.anchorOffset) || !integer(retained.endOffset) ||
+          retained.endOffset <= retained.anchorOffset || retained.endOffset > size ||
+          retained.sourceId !== `${before.dev}:${before.ino}` || !first ||
+          !['headSha256', 'prefixSha256', 'signalsSha256'].every(key => /^[a-f0-9]{64}$/.test(retained[key])) ||
+          retained.headSha256 !== crypto.createHash('sha256').update(first.bytes).digest('hex')) {
+        return empty('native-input-evidence-changed');
+      }
+      if (size - retained.anchorOffset > MAX_RETAINED_BYTES) return empty('native-input-recovery-range-exceeded');
+      // Read each byte once on the same descriptor and fixed snapshot size.
+      // Keep bounded bytes/row views; rebuild every semantic sequence below.
+      tailOffset = retained.anchorOffset;
+      tail = Buffer.alloc(size - tailOffset);
+      for (let offset = 0; offset < tail.length; offset += TAIL_BYTES) {
+        tail.set(readSlice(fd, tailOffset + offset, Math.min(TAIL_BYTES, tail.length - offset)), offset);
+      }
+      retainedOrigin = true;
+    } else {
+      tailOffset = Math.max(0, size - TAIL_BYTES);
+      tail = readSlice(fd, tailOffset, size - tailOffset);
+      // A long native turn can exceed the initial chunk well before capacity
+      // pressure. Extend only until its latest turn boundary is visible, within
+      // a fixed local I/O budget and the same file snapshot.
+      let tailBytes = TAIL_BYTES;
+      const hasBoundary = () => {
+        const rows = completeLines(tail, tailOffset, tailOffset > 0);
+        // Context after reconciliation also verifies the original input prefix.
+        return requiredScan ? retryOrigin(rows, binding, requiredScan.anchorHash) >= 0
+          : retry ? retryOrigin(rows, binding, options.retryInputSha256) >= 0
+          : rows.some((row) => parseRow(row)?.type === 'turn_context');
+      };
+      while (tailOffset > 0 && tailBytes < MAX_TAIL_BYTES && !hasBoundary()) {
+        tailBytes *= 2;
+        const expandedOffset = Math.max(0, size - tailBytes);
+        tail = Buffer.concat([readSlice(fd, expandedOffset, tailOffset - expandedOffset), tail]);
+        tailOffset = expandedOffset;
+      }
     }
     after = fs.fstatSync(fd, {bigint: true});
   } catch (_) {
@@ -550,8 +579,11 @@ function observeNativeTranscript(binding, options = {}) {
   if (!samePath(meta.cwd, binding.cwd)) return empty('session-cwd-mismatch');
   if ((retry || inputScan) && !['cli', 'vscode', 'exec', 'appServer'].includes(meta.source)) return empty('capacity-retry-root-source-unproven');
 
-  if (hasUnterminatedRecord(tail)) return empty('unterminated-tail-record');
-  const tailRows = completeLines(tail, tailOffset, tailOffset > 0);
+  if (hasUnterminatedRecord(tail) || retainedOrigin && tail.at(-1) !== 0x0a) return empty('unterminated-tail-record');
+  const tailRows = completeLines(tail, tailOffset, tailOffset > 0 && !retainedOrigin);
+  if (retainedOrigin && tailRows.some(row => row.bytes.length > MAX_TAIL_BYTES)) {
+    return empty('native-input-recovery-record-too-large');
+  }
   if (tailRows.length === 0) return empty('bounded-tail-unavailable');
   if (inputScan) return finish(scanNativeInputs(tailRows, tail, tailOffset, binding, inputScan, identity,
     crypto.createHash('sha256').update(headRows[0].bytes).digest('hex'),
