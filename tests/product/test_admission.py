@@ -840,6 +840,34 @@ class DevelopmentEvidenceTests(unittest.TestCase):
                 self.assertNotIn(secret_marker, json.dumps(report))
                 self.assertEqual(report["evidenceAdmission"]["acceptedCases"], [])
 
+    def test_legacy_observation_envelopes_retain_one_megabyte_limit(self):
+        from yiyuan_accord.admission import assess_development_evidence, evidence_subject
+        for schema in ('v3', 'v4'):
+            with self.subTest(schema=schema), self.history():
+                contract = copy.deepcopy(self.contract) if schema == 'v3' else self.impact_contract()
+                if schema == 'v4':
+                    self.commit_contract(contract)
+                phases = []
+                sizes = {}
+                def observer(request):
+                    phases.append(request['phase'])
+                    result = self.observer(request) if schema == 'v3' else self.impact_observer(request)
+                    if request['phase'] == 'observe':
+                        finding = {'severity': 'P3', 'disposition': 'pass'}
+                        encoded = lambda value: json.dumps(value, sort_keys=True, separators=(',', ':'),
+                                                           ensure_ascii=False).encode('utf-8')
+                        count = (1_000_001 - len(encoded(result))) // (len(encoded(finding)) + 1) + 1
+                        result['reviewBundle']['reviews'][0]['findings'] = [finding] * count
+                        sizes.update(total=len(encoded(result)), review=len(encoded(result['reviewBundle'])))
+                    return result
+                report = assess_development_evidence(self.root, contract, observer,
+                                                      subject=evidence_subject(self.root))
+                self.assertGreater(sizes['total'], 1_000_000)
+                self.assertLess(sizes['review'], 1_000_000)
+                self.assertEqual(phases, ['observe'])
+                self.assertEqual(report['acceptedCases'], [])
+                self.assertTrue(report['errors'])
+
     def test_review_must_be_current_independent_and_observer_checked(self):
         for reason in ("missing", "subject", "stale", "not-independent", "recheck",
                        "one-reviewer", "dependent-axes", "legacy-schema"):
@@ -1420,6 +1448,133 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         material["reviewBundle"]["evidenceSha256"] = digest
         for row in material["reviewBundle"]["reviews"]:
             row["evidenceSha256"] = digest
+
+    @staticmethod
+    def canonical_bytes(value):
+        return json.dumps(value, sort_keys=True, separators=(',', ':'),
+                          ensure_ascii=False, allow_nan=False).encode('utf-8')
+
+    def aggregate_fixture(self):
+        # Repeated condition values and their applicability bindings compose a
+        # large envelope; every original case, record and material stays bounded.
+        contract = copy.deepcopy(self.contract)
+        case_id = 'v33-system-integration-live-development-01'
+        case = next(row for row in contract['acceptance']['admission']['cases'] if row['id'] == case_id)
+        case['conditions']['syntheticCapacity'] = {str(i): '界' * 800 for i in range(100)}
+        with patch.object(self, 'contract', contract):
+            contract, case, record, base = self.parent_fixture(case_id)
+        envelopes = {}
+
+        def observer(request):
+            result = base(request)
+            if request['phase'] == 'observe':
+                material = result['parentApplicability'][case_id]
+                for row in material['conditionBindings']:
+                    if row['pointer'].startswith('/syntheticCapacity/'):
+                        row['basis'] = '界' * 1200
+                self.sign_parent_material(material)
+            envelopes[request['phase']] = copy.deepcopy(result)
+            return result
+        return contract, case, observer, envelopes
+
+    def test_current_aggregate_observe_and_recheck_keep_individual_limits(self):
+        with self.history():
+            contract, case, observer, envelopes = self.aggregate_fixture()
+            returned = []
+            def detached(request):
+                result = observer(request)
+                if request['phase'] == 'observe':
+                    returned.append(result)
+                else:
+                    digest = hashlib.sha256(self.canonical_bytes(returned[0])).hexdigest()
+                    self.assertEqual(request['observationSha256'], digest)
+                    returned[0]['records'][0]['observerId'] = 'late-foreign-mutation'
+                    self.assertNotEqual(request['observationSha256'],
+                                        hashlib.sha256(self.canonical_bytes(returned[0])).hexdigest())
+                return result
+            report = self.assess(contract, detached)
+            self.assertEqual(report['errors'], [])
+            self.assertIn(case['id'], report['acceptedCases'])
+            self.assertEqual(set(envelopes), {'observe', 'recheck'})
+            for envelope in envelopes.values():
+                size = len(self.canonical_bytes(envelope))
+                self.assertGreater(size, 1_000_000)
+                self.assertLess(size, 2_000_000)
+            observed = envelopes['observe']
+            for item in [*observed['records'], observed['reviewBundle'],
+                         *observed['parentApplicability'].values()]:
+                self.assertLess(len(self.canonical_bytes(item)), 1_000_000)
+            rechecked = envelopes['recheck']
+            for item in [*rechecked['conditions'].values(), *rechecked['parentApplicability'].values()]:
+                self.assertLess(len(self.canonical_bytes(item)), 1_000_000)
+
+    def test_current_aggregate_caps_and_untrusted_values_fail_closed(self):
+        with self.history():
+            contract, case, observer, envelopes = self.aggregate_fixture()
+            self.assertIn(case['id'], self.assess(contract, observer)['acceptedCases'])
+            for kind in ('observe-total', 'recheck-total', 'record', 'review', 'current-material',
+                         'parent-material', 'recheck-conditions', 'recheck-material',
+                         'observe-nonfinite', 'recheck-nonfinite', 'payload-limit', 'hash', 'identity'):
+                phases = []
+                sizes = {}
+                def invalid(request):
+                    phase = request['phase']
+                    phases.append(phase)
+                    result = copy.deepcopy(envelopes[phase])
+                    if kind == 'review' and phase == 'observe':
+                        result = self.observer(request)
+                    if phase == 'recheck':
+                        result['observationSha256'] = request['observationSha256']
+                    if kind == 'observe-total' and phase == 'observe':
+                        finding = {'severity': 'P3', 'disposition': 'pass'}
+                        count = ((2_000_001 - len(self.canonical_bytes(result)))
+                                 // (len(self.canonical_bytes(finding)) + 1) + 1)
+                        result['reviewBundle']['reviews'][0]['findings'] = [finding] * count
+                        sizes.update(review=len(self.canonical_bytes(result['reviewBundle'])),
+                                     total=len(self.canonical_bytes(result)))
+                    elif kind == 'recheck-total' and phase == 'recheck':
+                        # Every condition item stays small; only their composition overflows.
+                        result['conditions']['synthetic-extra-1'] = '界' * 160_000
+                        result['conditions']['synthetic-extra-2'] = '界' * 160_000
+                        sizes['total'] = len(self.canonical_bytes(result))
+                    elif kind in ('record', 'review', 'current-material', 'parent-material') and phase == 'observe':
+                        if kind == 'record': item = result['records'][0]
+                        elif kind == 'review': item = result['reviewBundle']
+                        else:
+                            item = result['parentApplicability'][case['id']]
+                            if kind == 'current-material':
+                                result['currentApplicability'] = result.pop('parentApplicability')
+                        # The whole envelope fits 2 MB but this one item exceeds 1 MB.
+                        item['syntheticPadding'] = 'x' * (1_000_001 - len(self.canonical_bytes(item)))
+                        sizes.update(item=len(self.canonical_bytes(item)), total=len(self.canonical_bytes(result)))
+                    elif kind in ('recheck-conditions', 'recheck-material') and phase == 'recheck':
+                        mapping = result['conditions' if kind == 'recheck-conditions' else 'parentApplicability']
+                        mapping[case['id']] = '界' * 333_334
+                        sizes.update(item=len(self.canonical_bytes(mapping[case['id']])),
+                                     total=len(self.canonical_bytes(result)))
+                    elif kind == phase + '-nonfinite':
+                        result['syntheticPadding'] = float('nan')
+                    elif kind == 'payload-limit' and phase == 'observe':
+                        result['envelopeLimit'] = 10_000_000
+                    elif kind == 'hash' and phase == 'recheck':
+                        result['observationSha256'] = '0' * 64
+                    elif kind == 'identity' and phase == 'recheck':
+                        result['subject']['revision'] = '0' * 40
+                    return result
+                with self.subTest(kind=kind):
+                    report = self.assess(contract, invalid)
+                    if kind in ('observe-total', 'recheck-total'):
+                        self.assertGreater(sizes['total'], 2_000_000)
+                    if 'review' in sizes:
+                        self.assertLess(sizes['review'], 1_000_000)
+                    if 'item' in sizes:
+                        self.assertGreater(sizes['item'], 1_000_000)
+                        self.assertLess(sizes['total'], 2_000_000)
+                    self.assertEqual(report['acceptedCases'], [])
+                    self.assertTrue(report['errors'])
+                    self.assertEqual(phases, ['observe'] if kind in (
+                        'observe-total', 'record', 'review', 'current-material', 'parent-material',
+                        'observe-nonfinite', 'payload-limit') else ['observe', 'recheck'])
 
     def test_parent_applicability_complete_each_class_preserves_original_and_a08(self):
         for case_id in ("v33-admitted-entry-delivery-01", "v33-admitted-entry-lifecycle-01",

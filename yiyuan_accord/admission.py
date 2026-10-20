@@ -27,6 +27,9 @@ SCHEMA = "yiyuan-accord-evidence-admission/v3"
 IMPACT_SCHEMA = "yiyuan-accord-evidence-admission/v4"
 CURRENT_SCHEMA = "yiyuan-accord-evidence-admission/v5"
 _LIMIT = 1_000_000
+# v5 composes individually bounded records and current-applicability materials.
+# Legacy envelopes and every individual item retain the original limit.
+_CURRENT_ENVELOPE_LIMIT = 2_000_000
 _CLAIMS = {"function", "incremental-value", "package-lifecycle"}
 _CASE_FIELDS = set("id scope host entry duties qualityAxes scenarios claims oracle oracleFiles conditions maxAgeSeconds expected".split())
 _SCOPE_FIELDS = set("id host entry duties qualityAxes scenarios claims conditions rule".split())
@@ -81,15 +84,15 @@ class _CaseRejection(ValueError):
         self.codes = codes
 
 
-def _json(value):
+def _json(value, *, limit=_LIMIT):
     text = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
-    if len(text.encode("utf-8")) > _LIMIT:
+    if len(text.encode("utf-8")) > limit:
         raise ValueError("evidence size limit")
     return text
 
 
-def _hash(value):
-    return sha256(_json(value).encode("utf-8")).hexdigest()
+def _hash(value, *, limit=_LIMIT):
+    return sha256(_json(value, limit=limit).encode("utf-8")).hexdigest()
 
 
 def _text(value):
@@ -1118,6 +1121,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             return report
         report["scope"] = "current-v3.3-caller-observed-candidate"
     policy = contract["acceptance"]["admission"]
+    envelope_limit = _CURRENT_ENVELOPE_LIMIT if policy["schema"] == CURRENT_SCHEMA else _LIMIT
     cases = {v["id"]: v for v in policy["cases"]}
     scopes = {v["id"]: v for v in policy["scopes"]}
     entry_selection = (_entry_selection(policy, {row["id"]: row["host"]
@@ -1153,7 +1157,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 for key, case in cases.items()}}
             # Copy before invoking foreign code; never let it rewrite expected facts.
             observation_started = monotonic()
-            data = _strict_json_object(_json(observer(copy.deepcopy(request))))
+            data = _strict_json_object(_json(observer(copy.deepcopy(request)), limit=envelope_limit))
             if (not {"records", "reviewBundle"} <= set(data)
                     or set(data) - {"records", "reviewBundle", "currentApplicability", "parentApplicability"}
                     or not isinstance(data["records"], list)):
@@ -1164,6 +1168,10 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                    for rows in (ordinary_materials, parent_materials)) or set(ordinary_materials) & set(parent_materials):
                 raise ValueError("invalid current applicability mapping")
             materials = {**ordinary_materials, **parent_materials}
+            # Raising the composition ceiling must not enlarge a single source
+            # record, current/parent material (including its review), or review.
+            for item in [*data["records"], *materials.values(), data["reviewBundle"]]:
+                _json(item)
             now = datetime.now(timezone.utc)
             candidate_time = int(_git(root, "show", "-s", "--format=%ct", subject["revision"]).strip())
             prior, package_snapshots, seen, read_blobs = {}, {}, set(), set()
@@ -1314,10 +1322,10 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     or at.timestamp() < candidate_time
                     for v in review["reviews"]):
                 errors.append("independent review predates its subject, is future-dated or expired")
-            observation_hash = _hash(data)
+            observation_hash = _hash(data, limit=envelope_limit)
             recheck = _strict_json_object(_json(observer(copy.deepcopy({
                 **request, "phase": "recheck", "observationSha256": observation_hash,
-            }))))
+            })), limit=envelope_limit))
             recheck_fields = {"subject", "conditions", "observationSha256"}
             for name, rows in (("currentApplicability", ordinary_materials), ("parentApplicability", parent_materials)):
                 if rows:
@@ -1329,6 +1337,11 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             for name, rows in (("currentApplicability", ordinary_materials), ("parentApplicability", parent_materials)):
                 if rows and (not isinstance(recheck[name], dict) or set(recheck[name]) != set(rows)):
                     raise ValueError("invalid current applicability recheck")
+                if rows:
+                    for item in recheck[name].values():
+                        _json(item)
+            for item in recheck["conditions"].values():
+                _json(item)
             applicable = {**current_applicability, **parent_applicability}
             for key in list(admitted):
                 if key in applicable:
