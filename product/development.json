@@ -6212,6 +6212,52 @@
             ]
           }
         }
+      },
+      "entryCoverageBoundaryRevision": {
+        "recordedAtUtc": "2026-10-20T16:29:40.327793+00:00",
+        "kind": "explicit-A02-measurement-and-claim-boundary-revision",
+        "basis": "Existing authority to correct product design and engineering drift while retaining required quality. Full closed-source client certification had been extrapolated from role-bound capability discovery.",
+        "source": "private:accord-complete-candidate-assembly-20261020-01/coverage-claim-boundary-decision.json",
+        "sourceSha256": "2f279b6f796290bac44107e679726ebb3a3ab323a30bbf8077bea73af7795976",
+        "change": "Selected roles and independently justified sufficient sources, complete treatment of discovered interfaces/known relevant sources/counterevidence, zero unexplained differences or untreated necessary-interface clues; material unknowns hold. Unknown client internals stay unknown; no exhaustive hidden-UI certification claim.",
+        "preserved": {
+          "selectedEntries": 6,
+          "scopes": 17,
+          "cases": 18,
+          "otherCaseDefinitionsUnchanged": 17,
+          "expectedPredicates": "unchanged",
+          "dutiesQualityBudgetsAndReleaseAuthority": "unchanged",
+          "runtimeAndPackage": "unchanged-24"
+        },
+        "independentReview": {
+          "reviewedPatchSha256": "bdf86fab6b29e11fbdcd7cb609ffd958f58bcc2829b06a3161fa6b2efd8e29b9",
+          "productSpecification": "73f42876ef0459edd50e682ebf17ba23ae2d1477afd651bd246803d289e63d54",
+          "implementationStandards": "e66772cdfcab0035fce70e77f18024670b37dcae230b37205dfeb61d5455f627",
+          "decision": "supports-narrow-revision-no-admission"
+        },
+        "verification": {
+          "staticChecks": 2,
+          "existingTargetedRegressionsPassed": 11,
+          "rootSourceCheck": "private:accord-complete-candidate-assembly-20261020-01/root-source-assembly-check.json",
+          "sourceCheckLimits": "20 pinned sources, 18 captured sets/22 aliases, 7 archive entries/15 byte spans and 5 original Remote record spans. No complete discovery or current effect inference."
+        },
+        "retainedRecordPreparation": {
+          "records": 17,
+          "declaredCases": 18,
+          "source": "private:accord-complete-candidate-assembly-20261020-01/retained-admission-input-preflight-r2.json",
+          "sourceSha256": "b602f304c7576ffb8b1b4bd2e2eef5da1373ea231be665567ce4b638a67eab39",
+          "oldMaterialRebindingCount": 11,
+          "newReadmeFunctionMaterialNeeded": 1,
+          "isProductCompletionPercent": false
+        },
+        "priorCi": {
+          "73828ccc": "39444515898:11/11-terminal-success",
+          "43913344": "39450983390:11/11-terminal-success"
+        },
+        "remaining": "Independently assess source sufficiency, necessary effects and material differences for the existing coverage case under the revised boundary; freeze the final subject, update applicable materials and reviews, then run the existing complete observe/recheck and A01-A08 qualification. No business replay inferred.",
+        "coverageAdmitted": false,
+        "candidateEligible": false,
+        "releaseReady": false
       }
     }
   ],
@@ -7353,12 +7399,12 @@
             "subjectCoverage": "Use the applicable selected OpenAI entries and actual responsibilities established by v33-openai-entry-applicability. Preserve pending dispositions and unknown differences; this definition neither finalizes the support set nor activates another host.",
             "executionBinding": "Before effects, bind the real outcome and inputs, exact host/entry/package/candidate and observer sources, actual actor identities and permissions, protected material and writer ownership, repetition count, time/usage/resource limits and recovery conditions. Definitions do not supply executable cases or new authority.",
             "evidenceBoundary": "Use independent source observations and consequential post-state at their actual subject, time and conditions. Keep fixed-response checks, method failures, human assistance and ordinary Agent behavior distinct; valid historical or child-scope evidence contributes only at its bound scope.",
-            "inventory": "Reconcile all editable, configurable and usable surfaces of each bound target version/entry, including UI-only buttons, menus, settings and shortcuts, native commands, modes, Skills, MCP, plugins, Apps and relevant ecosystem routes. Current installed tools or CLI help are not the discovery boundary; non-business features may remain inactive but cannot silently disappear.",
-            "denominator": "Bind discovery sources, date/version, native identifiers and aliases, config/account layer, visibility/callability/execution/effect distinctions, relevant duties, side effects, authority and exit route. Compare official sources with actual supported observations; unexplained differences or unfinished discovery leave coverage unknown, not 100 percent.",
+            "inventory": "Reconcile editable, configurable and usable interfaces within each selected entry role through a justified sufficient source set, including UI-only buttons, menus, settings and shortcuts, native commands, modes, Skills, MCP, plugins, Apps and relevant ecosystem routes. Bind source date, known version and limits; current installed tools or CLI help alone are insufficient. Account for known non-business interfaces without enabling them. Remote control interfaces and connected-host execution responsibilities remain distinct; this does not certify every current or hidden interface of a closed-source client.",
+            "denominator": "Bind applicable official interface sources and supported actual observations, native identifiers or stable documented interfaces and aliases, config/account layers, visibility/callability/execution/effect distinctions, duties, authority and exit or hold routes. Independently justify source sufficiency: every necessary duty has a source, known relevant sources and counterevidence are reconciled, and no untreated specific clue points to a missing necessary interface. Require complete disposition within that set and zero unexplained source differences. Unknown client versions or inaccessible internals stay unknown; assess their effect on the bound claim. Material unknowns or unfinished justified discovery hold dependent coverage; non-material limitations remain disclosed, never observed facts. Reopen affected judgments on relevant source, version, permission, configuration, failure or necessity changes.",
             "useAndDisposition": "Give each discovered item an evidenced disposition and usable path or actual limitation. Discovery does not enable it. Necessary selected capabilities must participate in real work with verified effects; healthy native handling needs no forced extra mechanism. UI/config changes, late results and user choices require affected-state reconciliation.",
             "scopeDistinction": "Entry applicability chooses and justifies the support set; this scope covers capabilities and actual necessary use within bound entries. Admitted-entry delivery separately proves outcomes. Neither this inventory nor a shared backend closes pending entry dispositions or unobserved cross-entry behavior."
           },
-          "rule": "Project the existing A02 host-surface coverage and use requirement. Account for the full bound discovery denominator and zero unexplained omissions, without enabling every feature, inventing unsupported controls or reducing the accepted entry set to installed tools."
+          "rule": "Project the existing A02 host-surface coverage and use requirement within selected roles and independently justified sufficient sources. Account for the full bound discovery set and zero unexplained source differences or untreated necessary-interface clues, without enabling every feature, inventing unsupported controls, claiming exhaustive closed-source client certification, or reducing discovery to installed tools. Necessary results and material unknowns retain their original quality and hold requirements."
         },
         {
           "id": "v33-system-integration",
@@ -8435,8 +8481,8 @@
             "subjectCoverage": "Use the applicable selected OpenAI entries and actual responsibilities established by v33-openai-entry-applicability. Preserve pending dispositions and unknown differences; this definition neither finalizes the support set nor activates another host.",
             "executionBinding": "Before effects, bind the real outcome and inputs, exact host/entry/package/candidate and observer sources, actual actor identities and permissions, protected material and writer ownership, repetition count, time/usage/resource limits and recovery conditions. Definitions do not supply executable cases or new authority.",
             "evidenceBoundary": "Use independent source observations and consequential post-state at their actual subject, time and conditions. Keep fixed-response checks, method failures, human assistance and ordinary Agent behavior distinct; valid historical or child-scope evidence contributes only at its bound scope.",
-            "inventory": "Reconcile all editable, configurable and usable surfaces of each bound target version/entry, including UI-only buttons, menus, settings and shortcuts, native commands, modes, Skills, MCP, plugins, Apps and relevant ecosystem routes. Current installed tools or CLI help are not the discovery boundary; non-business features may remain inactive but cannot silently disappear.",
-            "denominator": "Bind discovery sources, date/version, native identifiers and aliases, config/account layer, visibility/callability/execution/effect distinctions, relevant duties, side effects, authority and exit route. Compare official sources with actual supported observations; unexplained differences or unfinished discovery leave coverage unknown, not 100 percent.",
+            "inventory": "Reconcile editable, configurable and usable interfaces within each selected entry role through a justified sufficient source set, including UI-only buttons, menus, settings and shortcuts, native commands, modes, Skills, MCP, plugins, Apps and relevant ecosystem routes. Bind source date, known version and limits; current installed tools or CLI help alone are insufficient. Account for known non-business interfaces without enabling them. Remote control interfaces and connected-host execution responsibilities remain distinct; this does not certify every current or hidden interface of a closed-source client.",
+            "denominator": "Bind applicable official interface sources and supported actual observations, native identifiers or stable documented interfaces and aliases, config/account layers, visibility/callability/execution/effect distinctions, duties, authority and exit or hold routes. Independently justify source sufficiency: every necessary duty has a source, known relevant sources and counterevidence are reconciled, and no untreated specific clue points to a missing necessary interface. Require complete disposition within that set and zero unexplained source differences. Unknown client versions or inaccessible internals stay unknown; assess their effect on the bound claim. Material unknowns or unfinished justified discovery hold dependent coverage; non-material limitations remain disclosed, never observed facts. Reopen affected judgments on relevant source, version, permission, configuration, failure or necessity changes.",
             "useAndDisposition": "Give each discovered item an evidenced disposition and usable path or actual limitation. Discovery does not enable it. Necessary selected capabilities must participate in real work with verified effects; healthy native handling needs no forced extra mechanism. UI/config changes, late results and user choices require affected-state reconciliation.",
             "scopeDistinction": "Entry applicability chooses and justifies the support set; this scope covers capabilities and actual necessary use within bound entries. Admitted-entry delivery separately proves outcomes. Neither this inventory nor a shared backend closes pending entry dispositions or unobserved cross-entry behavior.",
             "selectedSetSource": "v33-openai-entry-applicability; current selected subjects and selected modes only",
@@ -8465,7 +8511,7 @@
               "cx-vscode"
             ]
           },
-          "oracle": "Before observation, bind the exact candidate/package, target versions, actual subject actors and selected modes, discovery sources, native IDs/aliases, config/account layers, current permissions, input/writer ownership, finite work/usage/resource limits and recovery actor. Independently reconcile official sources with actual supported UI/command/settings/Skill/MCP/plugin/App/ecosystem observations. CLI help or installed tools alone cannot supply the denominator; unobserved surfaces remain unknown. Each discovered capability needs an evidenced disposition and applicable authority/exit or hold route; only capabilities selected as necessary for the bound task require actual use with independently verified effects. Non-selection cannot waive an established necessary duty. Correlate genuine selection, actual use and consequential outcomes, including sufficient native handling, unavailable/disabled paths and changes. Check effects and exact owned-resource post-state; do not infer that no relevant resource exists. Parent entry or mode pending prevents final scope closure. The observer carrier is not the subject. Expected predicates are never observation data; source/model claims, synthetic positive flags or agreement between reports cannot establish adoption or all-entry coverage. Keep original failures, pauses and unrelated state; reject missing, stale, mismatched or incomplete evidence without rerun or evaluator rescue.",
+          "oracle": "Before observation, bind the exact candidate/package, known target versions and source cutoff with explicit unknowns, actual subject actors and selected modes, a justified sufficient discovery source set, native IDs or stable documented interfaces and aliases, config/account layers, current permissions, input/writer ownership, finite work/usage/resource limits and recovery actor. Independently reconcile official sources with actual supported UI/command/settings/Skill/MCP/plugin/App/ecosystem observations. CLI help or installed tools alone cannot supply the denominator. Independently verify all necessary-duty mappings, treatment of known relevant sources and counterevidence, and the absence of untreated specific clues to missing necessary interfaces. Unobserved surfaces or client internals remain unknown; unresolved material dependencies hold affected predicates, while non-material limits are disclosed. Source-set closure is not proof that an entire closed-source client has no undiscovered UI. Each discovered capability needs an evidenced disposition and applicable authority/exit or hold route; only capabilities selected as necessary for the bound task require actual use with independently verified effects. Non-selection cannot waive an established necessary duty. Correlate genuine selection, actual use and consequential outcomes, including sufficient native handling, unavailable/disabled paths and changes. Check effects and exact owned-resource post-state; do not infer that no relevant resource exists. Parent entry or mode pending prevents final scope closure. The observer carrier is not the subject. Expected predicates are never observation data; source/model claims, synthetic positive flags or agreement between reports cannot establish adoption or all-entry coverage. Keep original failures, pauses and unrelated state; reject missing, stale, mismatched or incomplete evidence without rerun or evaluator rescue.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
