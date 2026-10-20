@@ -5865,7 +5865,7 @@
         "revision": "43a7a5052e534410635c173fa39a30f229106672",
         "tree": "f9023448e2ea3407a8b712d043193394ff46856a"
       },
-      "status": "mechanism-implemented-and-locally-verified;real-parent-admission-pending",
+      "status": "mechanism-and-four-original-parent-current-applicability-verified;whole-release-pending",
       "sourceAdjudication": {
         "entryParentLeaves": 107,
         "joinedLeaves": 35,
@@ -5913,10 +5913,53 @@
         "meaning": "Only repository admission validator/tests and current normative records changed; no new native actor or package adoption claim."
       },
       "remaining": [
-        "Integrate exact final current subject into complete real parent materials, retain old record identities and source roles, then independent material/candidate reviews and original observe/recheck.",
-        "Close two current resource poststate leaves from actual Root final receipt; no stale or earlyPASS reuse.",
-        "Dynamic capability/full selected-entry lifecycle/complete A08 and final3.3 release remain unfinished."
-      ]
+        "Current dynamic-model-routing and whole-host lifecycle scopes still have no active cases; use the retained source route and bind the next genuinely needed decision/current reassessment prospectively. No forced model switch, reinstallation or replay.",
+        "Complete A08/R2R3 and final3.3 release still depend on original remaining requirements. Earlier qualifications retain their exact subjects; this four-record submission does not revoke or automatically restamp them."
+      ],
+      "currentParentQualification": {
+        "source": "private:accord-parent-current-adjudication-20261020-01/formal-admission/OUTCOME.json",
+        "sourceSha256": "67b7767d2c40230174e5e1c44828c001d1c2e32d90583e9da2344c6c78eb38e0",
+        "subject": {
+          "revision": "70e1742c55510cca1374ed20084fcd523c3bc9fe",
+          "tree": "da891114c9522c84cbac55cb96e6b3b397bdb1d0"
+        },
+        "acceptedCases": [
+          "v33-admitted-entry-delivery-01",
+          "v33-admitted-entry-lifecycle-01",
+          "v33-system-impact-assessment-live-development-01",
+          "v33-system-integration-live-development-01"
+        ],
+        "reportSha256": "1081f166d5b8a167c49b9e1cf7da28b88cb54ecead3417f924b8401b0228ceb4",
+        "finalSourceVerification": true,
+        "expectedPredicateLeaves": 181,
+        "conditionLeaves": 182,
+        "fullDifferenceRowsPerCase": 12,
+        "sourceGuardPins": 333,
+        "currentDependencyPins": 201,
+        "installedPackageMembers": 25,
+        "originalRecordIdentityAndTimePreserved": true,
+        "sameDevelopmentEpisodeNotUnionOfIndependentBusinessPasses": true,
+        "review": "Two accountable independent reviewers; four material-digest axes per case plus ordinary exact candidate review. Original observe/recheck returned all four, errors/rejections empty.",
+        "roleAndTimeBoundary": "Original05:55 Root/CLI facts and actual route/control/alternative responsibilities remain; later SDK/IDE14 are not backdated. Qualified-by persistence endpoints are supported by original accepted report/run/writer order, not mtime alone.",
+        "CI": {
+          "runId": 39405277581,
+          "headSha": "70e1742c55510cca1374ed20084fcd523c3bc9fe",
+          "status": "completed",
+          "conclusion": "success",
+          "successfulJobs": 11
+        },
+        "timing": {
+          "formalSpanSavedOutcomeSeconds": 2039.0754581999936,
+          "allocationSeconds": 3600,
+          "formalSpanMetAtSavedOutcome": true,
+          "previousIntegrationWholeSpanMet": false,
+          "previousFinalCorrectionSeconds": 3373.4478634,
+          "previousAllocationSeconds": 3000,
+          "currentModelReviewAndPreparationOccurred": true,
+          "aggregateModelBillingAndActiveTime": "unknown"
+        },
+        "claimLimit": "Only complete original four parent case claims under current applicability at70e. Not new execution, all current GUI adoption, complete A08/R2R3, positive net gain, candidate eligibility or publication."
+      }
     }
   ],
   "environmentControl": {
