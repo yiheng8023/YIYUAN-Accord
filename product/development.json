@@ -5913,8 +5913,8 @@
         "meaning": "Only repository admission validator/tests and current normative records changed; no new native actor or package adoption claim."
       },
       "remaining": [
-        "Current dynamic-model-routing and whole-host lifecycle scopes still have no active cases; use the retained source route and bind the next genuinely needed decision/current reassessment prospectively. No forced model switch, reinstallation or replay.",
-        "Complete A08/R2R3 and final3.3 release still depend on original remaining requirements. Earlier qualifications retain their exact subjects; this four-record submission does not revoke or automatically restamp them."
+        "The original dynamic-model-routing and whole-host lifecycle scopes now have prospectively declared current-qualification cases. The actual recommendation/worklist effect, independent current-candidate observation and formal admission are still pending; a definition is not observed capability.",
+        "Complete A08/R2R3 and final3.3 release still depend on original remaining requirements. Earlier qualifications retain their exact subjects; this current decision does not revoke or automatically restamp their native execution."
       ],
       "currentParentQualification": {
         "source": "private:accord-parent-current-adjudication-20261020-01/formal-admission/OUTCOME.json",
@@ -5959,6 +5959,18 @@
           "aggregateModelBillingAndActiveTime": "unknown"
         },
         "claimLimit": "Only complete original four parent case claims under current applicability at70e. Not new execution, all current GUI adoption, complete A08/R2R3, positive net gain, candidate eligibility or publication."
+      },
+      "remainingScopeDecisionBinding": {
+        "status": "prospectively-declared-not-observed-not-admitted",
+        "caseIds": [
+          "v33-dynamic-routing-current-development-01",
+          "v33-whole-host-lifecycle-current-development-01"
+        ],
+        "behaviorSourceAdjudication": "private:accord-current-scope-decision-20261020-01/scope-consequence-adjudication.json",
+        "behaviorSourceSha256": "2124379dcab111e32b7899f13532506d6e7ddf76549ca4177b06cba6ec388d25",
+        "pathReview": "private:accord-current-scope-decision-20261020-01/scope-adjudication-path-review.json",
+        "pathReviewSha256": "db57c90dcedc6af144936fb064be09c954b1ef72259ae35ad0d9378a7d44fd1c",
+        "meaning": "Sixty source-supported contributions and three formal binding duties do not themselves constitute qualification. Future current recommendation/worklist effects are distinct from original native behavior; no new business/management action is required solely to populate a case."
       }
     }
   ],
@@ -9712,6 +9724,344 @@
             }
           },
           "maxAgeSeconds": 86400
+        },
+        {
+          "id": "v33-dynamic-routing-current-development-01",
+          "scope": "v33-dynamic-model-routing",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "goal-authority-correction",
+            "environment-and-self-exposure",
+            "research-learning-and-reuse",
+            "relations-routing-and-form",
+            "execution-configuration-and-code",
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "native-sufficient",
+            "default-host-without-extra-extensions",
+            "effective-user-environment",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "function"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review; this entry label does not attest execution or adoption by any subject entry.",
+            "entryScope": "Use applicable selected OpenAI responsibilities from v33-openai-entry-applicability. Reuse verified shared local Codex runtime, effective configuration and task evidence across CLI/app/IDE; check consequential entry differences and preserve unknowns. A contribution missing necessary duties, quality or subject evidence cannot close the whole scope; a frontend label alone does not prohibit valid common evidence reuse.",
+            "executionBinding": "Before dispatch, a case must bind its real outcome, actor and subject entry, native host/model/effort and permissions, exact candidate/package and observer sources, protected inputs, sole-writer ownership, finite time/usage/resource limits and independent result/cleanup observations. This scope supplies no executable task or permission.",
+            "ordinaryUse": "Ordinary natural-language input does not name Accord or prescribe its Skills, Hooks or internal tools. Preserve the effective user environment and distinguish actual Agent use from fixture or evaluator intervention.",
+            "evidenceBoundary": "Keep actual decisions, actions, effects, original failures and their exact conditions. Static wiring, installed components, fixed-response protocol checks and historical cases remain limited contributions, not autonomous behavior or whole-scope acceptance.",
+            "selection": "Compare current dispatch-supported capabilities against the material task gap, quality and whole-task cost. Preserve an adequate current model/effort; neither forced switching nor a fixed provider/model ladder is required or permitted as a substitute for judgment.",
+            "authority": "Keep user-pinned choices, disabled components, provider/data/trust boundaries and actual cost authority. Selection or a catalog entry proves neither authorization nor execution; new necessary permission holds only dependent work.",
+            "skills": "Separate native implicit matching, coordinator selection through a genuine supported explicit path and worker adoption. Explicit-only policy is not permission to alter a third-party Skill or impersonate a user choice. An unavailable route requires an authorized alternative or a specific unresolved condition.",
+            "decisionEvidence": "Bind the facts that change the route and observe actual execution, feedback and affected re-evaluation. Include semantic error or uncertainty, unavailable capabilities and sufficient-native counterexamples; scores, confidence, mentions or successful schema validation do not prove correctness.",
+            "switchCost": "Account for relevant discovery, setup, cached/uncached processing, warmup, handoff, review and cleanup across remaining work. Unknown signals remain unknown; claim benefit only with a supported comparison. No dedicated decision model or external deployment is a 3.3 prerequisite.",
+            "currentDecisionBinding": {
+              "episodeId": "v33-current-scope-qualification-20261020-01",
+              "business": "Make the still-unperformed current qualification recommendation and actually adopt its bounded next-work disposition for the existing3.3 release responsibility. Preserve the working24 installation unless actual evidence requires a separately authorized effect.",
+              "pendingDecision": {
+                "owner": "Root",
+                "options": [
+                  "recommend supported current scope contribution and remove only unsupported replay obligations",
+                  "hold the specific unsupported requirement and its dependent claim; preserve independently supported work"
+                ],
+                "downstreamTarget": "Private current-qualification-decision.json and Root current task/worklist. Formal acceptedCases/readiness publication occurs only after independent review and observe/recheck and is not an input fact proving itself.",
+                "notNewExecution": "Original native behavior remains its original actor/episode/time/candidate/package. Preparation, prior reader dispatch and prior Root health judgment are inputs, not registration-after behavior."
+              },
+              "observerCarrier": {
+                "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
+                "turnId": "01a15936-1fd1-78a0-9c90-86c52c7c3e22",
+                "entry": "cx-desktop",
+                "hostVersion": "0.163.0-alpha.10.2",
+                "model": "gpt-6-astra",
+                "effort": "xhigh",
+                "approvalPolicy": "on-request",
+                "sandbox": "danger-full-access",
+                "identitySource": "private:accord-current-scope-decision-20261020-01/current-turn-context.json"
+              },
+              "currentPackage": {
+                "version": "3.3.0-dev.1+codex.20261018043044",
+                "sha256": "189ae1afcd272686255e23bafaad045b10c900a30b40d6edcec88403eeb4559c"
+              },
+              "exactCandidate": "The declaration-containing Git commit/tree is resolved and frozen in a pre-decision binding before the qualification decision; the earlier45f is preparatory source only.",
+              "protectedManifest": {
+                "source": "private:accord-current-scope-decision-20261020-01/protected-decision-inputs.json",
+                "sha256": "e54be32ef940911be64c26203c8082674c1323b946dff396a5678acafa648525"
+              },
+              "protectedOriginals": "Manifest source graph plus original raw records/outcomes/native ranges and current package/configuration dependencies must be checked before observation and finalrecheck. No original timestamp, failed case, old resource limit or original identity may be rewritten.",
+              "writers": {
+                "repositoryAndTaskState": "Root only",
+                "qualificationRecommendation": "Root only, named private output",
+                "independentObservers": "Distinct accountable product/specification and implementation/standards reviewers; they may read sources and write only their named private reports, not repair the claimed behavior."
+              },
+              "authority": "Existing3.3 continuation/source/qualification authority only. No new login, installation, enablement, trust, sharedconfiguration, restart, archivedthread, oldbusiness replay or external publication is authorized by this definition. Any necessary uncovered effect holds that dependency for actual authority.",
+              "limits": {
+                "stageSource": "private:accord-current-scope-decision-20261020-01/stage.json",
+                "sameStageStartedMonotonic": 110462.936096,
+                "sameWholeStageWallSeconds": 3000,
+                "closingReserveSeconds": 600,
+                "candidateDecisionAttempts": 1,
+                "maximumSimultaneousAgents": 3,
+                "additionalIndependentReviewTurnsMaximum": 4,
+                "newNativeBusinessWorkersMaximum": 0,
+                "newManagementEffectsMaximum": 0,
+                "usage": "Original whole-stage preparation and review remain counted. Native token/billing/active-time totals not available remain unknown, not zero or reset; finite time, attempt, concurrency and review-turn limits bound this operation. No additional paid service.",
+                "onExpiry": "Hold new qualification effects, retain actual results and incomplete state; never extend this original clock or claim a full span ontime from an early result."
+              },
+              "recovery": "Reconcile source, actual writes, native input/pause and actor ownership before retry. Failed or missing acknowledgements do not authorize replay; retain all original windows/failures and source recovery."
+            }
+          },
+          "oracle": "Independently follow each original scope duty, quality floor, scenario and necessary condition to actual historical behavior and proven current dependencies. Separately observe the prospective Root qualification recommendation and its real worklist effect. A correct hold/report does not establish missing capability; all required behavior/current-applicability predicates must have actual sources before full case acceptance. Preserve different default/effective environments, earlier actor identities, time, package, permissions and all failures. Current Root health is not all-consumer adoption, unchanged policy is not a new Skill execution, static code is not a triggered failure, and an unneeded new action is not required merely for admission. acceptedCases/scopeComplete/candidateEligible must never serve as their own input evidence. Final source/permission/actor/resource drift invalidates affected claims. Formal readiness publication follows core output, not vice versa.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "originalBehaviorWitnessesAndCurrentApplicabilitySufficient": true,
+              "requiredDutiesObserved": {
+                "goal-authority-correction": true,
+                "environment-and-self-exposure": true,
+                "research-learning-and-reuse": true,
+                "relations-routing-and-form": true,
+                "execution-configuration-and-code": true,
+                "premise-and-consistency": true,
+                "correction-and-evolution": true,
+                "verification-and-value": true
+              },
+              "qualityFloorsObserved": {
+                "compliance-and-safety": true,
+                "functional-coverage": true,
+                "normal-entry-integration": true,
+                "recovery-and-lifecycle": true,
+                "change-adaptation": true,
+                "evidence-integrity": true,
+                "user-burden-and-interference": true,
+                "maintainability-and-resource-cost": true
+              },
+              "requiredScenariosObserved": {
+                "native-sufficient": true,
+                "default-host-without-extra-extensions": true,
+                "effective-user-environment": true,
+                "capability-loss": true,
+                "task-exposure-and-reuse": true
+              },
+              "qualificationRecommendationMatchesIndependentSources": true,
+              "actualNextWorkDispositionRecorded": true
+            },
+            "authority": {
+              "latestUserSelectionAndDisabledBoundariesPreserved": true,
+              "historicalAndCurrentActorRolesNotRelabelled": true,
+              "soleWriterAndActualPermissionRespected": true
+            },
+            "poststate": {
+              "necessaryCurrentDependenciesAndUnknownsReconciled": true,
+              "originalFailuresAndConditionalLimitsRetained": true,
+              "noSelfReferentialAdmissionEvidence": true,
+              "noUnjustifiedManagementOrReplayEffect": true
+            },
+            "cleanup": {
+              "ownedAdjudicationResourcesReleasedOrJustifiablyRetained": true,
+              "userStateOriginalsAndRecoveryPreserved": true
+            }
+          }
+        },
+        {
+          "id": "v33-whole-host-lifecycle-current-development-01",
+          "scope": "v33-codex-lifecycle",
+          "host": "codex",
+          "entry": "cx-desktop",
+          "duties": [
+            "goal-authority-correction",
+            "environment-and-self-exposure",
+            "premise-and-consistency",
+            "correction-and-evolution",
+            "recovery-and-rollback",
+            "context-and-task-continuity",
+            "resources-and-cleanup",
+            "package-lifecycle",
+            "native-replacement-and-retirement",
+            "verification-and-value"
+          ],
+          "qualityAxes": [
+            "compliance-and-safety",
+            "functional-coverage",
+            "normal-entry-integration",
+            "recovery-and-lifecycle",
+            "change-adaptation",
+            "evidence-integrity",
+            "user-burden-and-interference",
+            "maintainability-and-resource-cost"
+          ],
+          "scenarios": [
+            "default-host-without-extra-extensions",
+            "effective-user-environment",
+            "mid-task-user-steering",
+            "capability-loss",
+            "task-exposure-and-reuse"
+          ],
+          "claims": [
+            "package-lifecycle"
+          ],
+          "conditions": {
+            "observerCarrierRole": "Codex Desktop coordinates the source and evidence review. The entry label identifies that observer, not adoption or execution by a subject entry. Case and execution entry bindings must match the actual observer; separately establish subject actors and roles without relabelling old CLI/SDK executions.",
+            "subjectCoverage": "Use the applicable selected OpenAI entries and actual responsibilities established by v33-openai-entry-applicability. Preserve pending dispositions and unknown differences; this definition neither finalizes the support set nor activates another host. A prospective whole-host case must explicitly bind its selected subjectEntries and selectedModes to that source; pending selection prevents scope closure, and source changes invalidate its binding. This selection guard does not establish lifecycle oracle adequacy or actual observations.",
+            "executionBinding": "Before effects, bind the real outcome and inputs, exact host/entry/package/candidate and observer sources, actual actor identities and permissions, protected material and writer ownership, repetition count, time/usage/resource limits and recovery conditions. Definitions do not supply executable cases or new authority.",
+            "evidenceBoundary": "Use independent source observations and consequential post-state at their actual subject, time and conditions. Keep fixed-response checks, method failures, human assistance and ordinary Agent behavior distinct; valid historical or child-scope evidence contributes only at its bound scope.",
+            "actualAdoption": "Bind exact package bytes and real host/execution paths before and after applicable installation, enablement/trust, discovery, loading, Hook/Skill participation and dependent MCP use. Check relevant existing tasks, new entries and consumers; registry/API success, cache existence or one refreshed process cannot establish all-consumer adoption.",
+            "changeAndRecovery": "Cover applicable replacement, same-version cache, changed declarations/trust, user-disabled components, real host upgrade/restart, refresh failure, rollback and entry-wide failure. Retain an authorized recovery actor usable after the failing entry is unavailable. Reconcile partial effects and unknown outcomes before retry; process-scoped fixture conditions cannot substitute for actual user-environment behavior.",
+            "preservation": "Protect current goals, pauses, valid work, necessary state/history and recovery sources, unrelated configuration and user-managed components. Reconcile old injected guidance and stale consumers before dependent effects. Do not obtain success through trust bypass, shared reset, silently restoring old user settings or requiring a failed Hook to rescue itself.",
+            "retirement": "Verify authorized disable/remove/retire paths and attributable runtime/OS resource post-state, including normal end/cancel, applicable abnormal exit and sustained/pressure conditions. Keep retained evidence and needed recovery separate from disposable residue; inspect active writers and do not archive user tasks or close unrelated resources.",
+            "scopeDistinction": "This parent covers the complete applicable lifecycle and its failure recovery. v33-admitted-entry-lifecycle separately binds per-entry closure to the selected support set; SDK lifecycle/scoped-exposure cases contribute only their declared mechanisms. One local update, restart, install or SDK run cannot close either whole-host or cross-entry obligations.",
+            "currentDecisionBinding": {
+              "episodeId": "v33-current-scope-qualification-20261020-01",
+              "business": "Make the still-unperformed current qualification recommendation and actually adopt its bounded next-work disposition for the existing3.3 release responsibility. Preserve the working24 installation unless actual evidence requires a separately authorized effect.",
+              "pendingDecision": {
+                "owner": "Root",
+                "options": [
+                  "recommend supported current scope contribution and remove only unsupported replay obligations",
+                  "hold the specific unsupported requirement and its dependent claim; preserve independently supported work"
+                ],
+                "downstreamTarget": "Private current-qualification-decision.json and Root current task/worklist. Formal acceptedCases/readiness publication occurs only after independent review and observe/recheck and is not an input fact proving itself.",
+                "notNewExecution": "Original native behavior remains its original actor/episode/time/candidate/package. Preparation, prior reader dispatch and prior Root health judgment are inputs, not registration-after behavior."
+              },
+              "observerCarrier": {
+                "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
+                "turnId": "01a15936-1fd1-78a0-9c90-86c52c7c3e22",
+                "entry": "cx-desktop",
+                "hostVersion": "0.163.0-alpha.10.2",
+                "model": "gpt-6-astra",
+                "effort": "xhigh",
+                "approvalPolicy": "on-request",
+                "sandbox": "danger-full-access",
+                "identitySource": "private:accord-current-scope-decision-20261020-01/current-turn-context.json"
+              },
+              "currentPackage": {
+                "version": "3.3.0-dev.1+codex.20261018043044",
+                "sha256": "189ae1afcd272686255e23bafaad045b10c900a30b40d6edcec88403eeb4559c"
+              },
+              "exactCandidate": "The declaration-containing Git commit/tree is resolved and frozen in a pre-decision binding before the qualification decision; the earlier45f is preparatory source only.",
+              "protectedManifest": {
+                "source": "private:accord-current-scope-decision-20261020-01/protected-decision-inputs.json",
+                "sha256": "e54be32ef940911be64c26203c8082674c1323b946dff396a5678acafa648525"
+              },
+              "protectedOriginals": "Manifest source graph plus original raw records/outcomes/native ranges and current package/configuration dependencies must be checked before observation and finalrecheck. No original timestamp, failed case, old resource limit or original identity may be rewritten.",
+              "writers": {
+                "repositoryAndTaskState": "Root only",
+                "qualificationRecommendation": "Root only, named private output",
+                "independentObservers": "Distinct accountable product/specification and implementation/standards reviewers; they may read sources and write only their named private reports, not repair the claimed behavior."
+              },
+              "authority": "Existing3.3 continuation/source/qualification authority only. No new login, installation, enablement, trust, sharedconfiguration, restart, archivedthread, oldbusiness replay or external publication is authorized by this definition. Any necessary uncovered effect holds that dependency for actual authority.",
+              "limits": {
+                "stageSource": "private:accord-current-scope-decision-20261020-01/stage.json",
+                "sameStageStartedMonotonic": 110462.936096,
+                "sameWholeStageWallSeconds": 3000,
+                "closingReserveSeconds": 600,
+                "candidateDecisionAttempts": 1,
+                "maximumSimultaneousAgents": 3,
+                "additionalIndependentReviewTurnsMaximum": 4,
+                "newNativeBusinessWorkersMaximum": 0,
+                "newManagementEffectsMaximum": 0,
+                "usage": "Original whole-stage preparation and review remain counted. Native token/billing/active-time totals not available remain unknown, not zero or reset; finite time, attempt, concurrency and review-turn limits bound this operation. No additional paid service.",
+                "onExpiry": "Hold new qualification effects, retain actual results and incomplete state; never extend this original clock or claim a full span ontime from an early result."
+              },
+              "recovery": "Reconcile source, actual writes, native input/pause and actor ownership before retry. Failed or missing acknowledgements do not authorize replay; retain all original windows/failures and source recovery."
+            },
+            "subjectEntries": [
+              "chatgpt-desktop",
+              "chatgpt-mobile",
+              "cx-cli",
+              "cx-desktop",
+              "cx-sdk",
+              "cx-vscode"
+            ],
+            "selectedModes": {
+              "chatgpt-desktop": [
+                "work-local",
+                "remote"
+              ],
+              "chatgpt-mobile": [
+                "remote"
+              ],
+              "cx-cli": [],
+              "cx-desktop": [],
+              "cx-sdk": [],
+              "cx-vscode": []
+            }
+          },
+          "oracle": "Independently follow each original scope duty, quality floor, scenario and necessary condition to actual historical behavior and proven current dependencies. Separately observe the prospective Root qualification recommendation and its real worklist effect. A correct hold/report does not establish missing capability; all required behavior/current-applicability predicates must have actual sources before full case acceptance. Preserve different default/effective environments, earlier actor identities, time, package, permissions and all failures. Current Root health is not all-consumer adoption, unchanged policy is not a new Skill execution, static code is not a triggered failure, and an unneeded new action is not required merely for admission. acceptedCases/scopeComplete/candidateEligible must never serve as their own input evidence. Final source/permission/actor/resource drift invalidates affected claims. Formal readiness publication follows core output, not vice versa.",
+          "oracleFiles": [
+            "docs/operations/PLAN-v3.3.md",
+            "docs/operations/ACCEPTANCE-v3.3.md"
+          ],
+          "maxAgeSeconds": 86400,
+          "expected": {
+            "effect": {
+              "originalBehaviorWitnessesAndCurrentApplicabilitySufficient": true,
+              "requiredDutiesObserved": {
+                "goal-authority-correction": true,
+                "environment-and-self-exposure": true,
+                "premise-and-consistency": true,
+                "correction-and-evolution": true,
+                "recovery-and-rollback": true,
+                "context-and-task-continuity": true,
+                "resources-and-cleanup": true,
+                "package-lifecycle": true,
+                "native-replacement-and-retirement": true,
+                "verification-and-value": true
+              },
+              "qualityFloorsObserved": {
+                "compliance-and-safety": true,
+                "functional-coverage": true,
+                "normal-entry-integration": true,
+                "recovery-and-lifecycle": true,
+                "change-adaptation": true,
+                "evidence-integrity": true,
+                "user-burden-and-interference": true,
+                "maintainability-and-resource-cost": true
+              },
+              "requiredScenariosObserved": {
+                "default-host-without-extra-extensions": true,
+                "effective-user-environment": true,
+                "mid-task-user-steering": true,
+                "capability-loss": true,
+                "task-exposure-and-reuse": true
+              },
+              "qualificationRecommendationMatchesIndependentSources": true,
+              "actualNextWorkDispositionRecorded": true
+            },
+            "authority": {
+              "latestUserSelectionAndDisabledBoundariesPreserved": true,
+              "historicalAndCurrentActorRolesNotRelabelled": true,
+              "soleWriterAndActualPermissionRespected": true
+            },
+            "poststate": {
+              "necessaryCurrentDependenciesAndUnknownsReconciled": true,
+              "originalFailuresAndConditionalLimitsRetained": true,
+              "noSelfReferentialAdmissionEvidence": true,
+              "noUnjustifiedManagementOrReplayEffect": true
+            },
+            "cleanup": {
+              "ownedAdjudicationResourcesReleasedOrJustifiablyRetained": true,
+              "userStateOriginalsAndRecoveryPreserved": true
+            }
+          }
         }
       ]
     },
