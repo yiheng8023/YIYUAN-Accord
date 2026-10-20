@@ -1635,6 +1635,134 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     if kind == "recheck":
                         self.assertIn("current-applicability-changed", report["caseRejections"][case_id])
 
+    def test_whole_host_parent_reuses_complete_original_with_fresh_current_review(self):
+        case_id = "v33-whole-host-lifecycle-current-development-02"
+        class Later(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return datetime.now(tz) + timedelta(days=2)
+
+        with self.history():
+            contract, case, record, base = self.parent_fixture(case_id)
+            frozen = self.canonical_bytes(record)
+            original_case = copy.deepcopy(case)
+            def observer(request):
+                result = base(request)
+                if request["phase"] == "observe":
+                    material = result["parentApplicability"][case_id]
+                    self.assertEqual(len(material["predicateBindings"]), 35)
+                    self.assertEqual(len(material["conditionBindings"]), 60)
+                    self.assertEqual(len(material["roles"]), 9)
+                    self.assertNotEqual(record["packageSha256"], material["current"]["packageSha256"])
+                    material["relationships"] = []
+                    ended = next(row for row in material["roles"] if row["entry"] == "cx-vscode")
+                    ended.update(responsibility="historical-execution", currentActor=None, currentSources=[])
+                    root = next(row for row in material["roles"] if row["entry"] == "cx-desktop")
+                    root["responsibility"] = "actual-current-reassessment"
+                    # Retain execution identities and clocks; continuing source,
+                    # permission and recovery dependencies still need current evidence.
+                    historical = [row for row in material["conditionBindings"] if row["pointer"].startswith((
+                        "/currentDecisionBinding/episodeId", "/currentDecisionBinding/observerCarrier/",
+                        "/currentDecisionBinding/currentPackage/", "/currentDecisionBinding/limits/"))]
+                    for row in historical:
+                        row.update(role=root["id"], responsibility="historical-execution")
+                    stage = next(row for row in historical if row["pointer"].endswith("/sameWholeStageWallSeconds"))
+                    self.assertEqual(stage["originalValue"], 3600)
+                    self.assertEqual(stage["currentValue"], 3600)
+                    for bundle in (result["reviewBundle"], material["reviewBundle"]):
+                        for review in bundle["reviews"]:
+                            review["reviewedAt"] = Later.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+                    self.sign_parent_material(material)
+                return result
+            with patch("yiyuan_accord.admission.datetime", Later):
+                report = self.assess(contract, observer)
+            self.assertEqual(report["errors"], [], report["caseRejections"])
+            self.assertEqual(report["acceptedCases"], [case_id])
+            self.assertEqual(self.canonical_bytes(record), frozen)
+            self.assertEqual(case, original_case)
+            self.assertLess(datetime.fromisoformat(record["observedAt"]),
+                            Later.now(timezone.utc) - timedelta(seconds=case["maxAgeSeconds"]))
+            self.assertIn("complete-package-changed", report["currentParentApplicability"][case_id]["reconciledReasons"])
+            self.assertFalse(report["acceptanceRequirements"]["A08"]["complete"])
+            self.assertFalse(report["candidateEligible"])
+            legacy = self.assess(contract, self.replay([record]))
+            self.assertNotIn(case_id, legacy["acceptedCases"])
+            self.assertIn("reuse-definition-mismatch", legacy["caseRejections"][case_id])
+
+    def test_whole_host_parent_rejects_unbound_original_current_and_recheck(self):
+        case_id = "v33-whole-host-lifecycle-current-development-02"
+        variants = ("function-channel", "claim", "role", "fake-current-actor", "predicate", "authority", "cleanup", "condition",
+                    "observer", "time", "episode", "old-package", "old-stage", "delta", "current-package",
+                    "context", "source-kind", "digest", "review-subject", "expired-review", "current-review",
+                    "recheck-package", "recheck-context", "recheck-roles", "recheck-predicates", "recheck-conditions", "recheck-digest")
+        with self.history():
+            contract, case, record, base = self.parent_fixture(case_id)
+            frozen = self.canonical_bytes(record)
+            for kind in variants:
+                def observer(request):
+                    result = base(request)
+                    if request["phase"] == "recheck":
+                        material = result["parentApplicability"][case_id]
+                        if kind == "function-channel":
+                            result["currentApplicability"] = result.pop("parentApplicability")
+                        elif kind == "recheck-package": material["current"]["packageSha256"] = "0" * 64
+                        elif kind == "recheck-context": material["current"]["context"]["authority"] = []
+                        elif kind == "recheck-roles": material["roles"].pop()
+                        elif kind == "recheck-predicates": material["predicateBindings"].pop()
+                        elif kind == "recheck-conditions": material["conditionBindings"].pop()
+                        elif kind == "recheck-digest": material["evidenceSha256"] = "0" * 64
+                        return result
+                    material = result["parentApplicability"][case_id]
+                    if kind == "function-channel":
+                        material["schema"] = "yiyuan-accord-current-applicability/v1"
+                        material["original"]["qualification"]["claim"] = "function"
+                        for key in ("predicateBindings", "roles", "relationships"): material.pop(key)
+                        for row in material["conditionBindings"]:
+                            row.pop("role"); row.pop("originalSources")
+                        result["currentApplicability"] = result.pop("parentApplicability")
+                    elif kind == "claim": material["original"]["qualification"]["claim"] = "function"
+                    elif kind == "role": material["roles"].pop()
+                    elif kind == "fake-current-actor": material["roles"][0]["responsibility"] = "historical-execution"
+                    elif kind == "predicate": material["predicateBindings"].pop(0)
+                    elif kind in ("authority", "cleanup"):
+                        material["predicateBindings"] = [row for row in material["predicateBindings"]
+                            if not row["pointer"].startswith("/" + kind + "/")]
+                    elif kind == "condition": material["conditionBindings"].pop()
+                    elif kind == "observer": result["records"][0]["observerId"] = "relabelled-current-Root"
+                    elif kind == "time":
+                        result["records"][0]["observedAt"] = datetime.fromisoformat(record["observedAt"]).strftime("%Y-%m-%dT%H:%M:%SZ")
+                    elif kind == "episode": result["records"][0]["episodeId"] = "new-execution"
+                    elif kind == "old-package": result["records"][0]["packageSha256"] = material["current"]["packageSha256"]
+                    elif kind == "old-stage":
+                        next(row for row in material["conditionBindings"] if row["pointer"].endswith(
+                            "/sameWholeStageWallSeconds"))["originalValue"] = 7200
+                    elif kind == "delta": material["differences"].pop()
+                    elif kind == "current-package": material["current"]["packageSha256"] = record["packageSha256"]
+                    elif kind == "context": material["current"]["context"]["entry"]["value"] = "cx-cli"
+                    elif kind == "source-kind": material["sources"]["actual"]["kind"] = "source-analysis"
+                    elif kind == "digest": material["reviewBundle"]["reviews"][0]["evidenceSha256"] = "0" * 64
+                    elif kind == "review-subject": material["reviewBundle"]["subject"] = material["original"]["subject"]
+                    elif kind == "expired-review": material["reviewBundle"]["reviews"][0]["reviewedAt"] = "2000-01-01T00:00:00Z"
+                    elif kind == "current-review": result["reviewBundle"]["decision"] = "fail"
+                    if kind != "digest": self.sign_parent_material(material)
+                    return result
+                with self.subTest(kind=kind):
+                    report = self.assess(contract, observer)
+                    self.assertNotIn(case_id, report["acceptedCases"])
+                    self.assertIn(case_id, report["caseRejections"])
+                    if kind.startswith("recheck-"):
+                        self.assertIn("current-applicability-changed", report["caseRejections"][case_id])
+                    self.assertEqual(self.canonical_bytes(record), frozen)
+
+    def test_parent_scope_extension_does_not_admit_sdk_or_ordinary_function(self):
+        for case_id in ("v33-codex-sdk-lifecycle-01", "v33-codex-sdk-scoped-exposure-01",
+                        "v33-cli-readme-semantic-review-20261020-01"):
+            with self.subTest(case=case_id), self.history():
+                contract, case, record, observer = self.parent_fixture(case_id)
+                report = self.assess(contract, observer)
+                self.assertNotIn(case_id, report["acceptedCases"])
+                self.assertIn("current-applicability-unsupported", report["caseRejections"][case_id])
+
     def test_parent_applicability_integration_requires_original_connected_chain(self):
         case_id = "v33-system-integration-live-development-01"
         with self.history():

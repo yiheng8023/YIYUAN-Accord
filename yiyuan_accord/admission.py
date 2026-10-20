@@ -41,6 +41,7 @@ _ENTRY_PARENT_SCOPES = {
 }
 _PARENT_CLAIMS = {"v33-admitted-entry-delivery": "function",
                   "v33-admitted-entry-lifecycle": "package-lifecycle",
+                  "v33-codex-lifecycle": "package-lifecycle",
                   "v33-system-integration": "function",
                   "v33-system-impact-assessment": "impact-assessment"}
 _ENTRY_COVERAGE_SCOPE = "v33-codex-entry-coverage"
