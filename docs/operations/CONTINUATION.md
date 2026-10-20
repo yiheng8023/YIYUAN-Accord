@@ -1,5 +1,9 @@
 # 当前接续
 
+当前增量：2026-10-20获授权的同一README独审已完成：04d0d949/tree5756eacc，CLI0.163/24包/Sol high/default/danger-full-access/never，现有认证复用，实际5项Accord Skill、无Memory指导、完整入口与回执及verify Skill采用。429.961秒自然0/Job0，八原件保持，两成品覆盖20项判断（18 supported、2 unknown）；两fresh独审四轴通过，原observe/recheck接受v33-cli-readme-semantic-review-20261020-01、errors/rejections空、finalSourceVerification=true。候选本身仍insufficient-evidence：退出资格缺少来源、作者映射两处摘要过时；原候选不改，建议不是已实施修订。四库存及Goal读者均闭，四空所属state/temp目录已移除，必要SQLite/原生证据原位保留。Root后验含核验/收尾/结果保存1584.912秒、外层2089.239秒，在本次原2400/3600窗口内，未重置旧三次沙箱失败及超窗。主配置在消费者退出且06:56源审后由26b03变为f81b89，写者/完整差异未知；所选Accord政策及6trust一致，保原历史绑定并另核当前依赖，不称整个尾窗零漂移或当前完整配置等价。Root适配mtime字符串类型的预检错误及两审阅上下文误推断均修正保原，未重演业务。私有源accord-default-readme-full-access-20261020-01/OUTCOME.json，SHA7c08ceeab321e8e743600abb9ba89828995c45a2ecbaa5ccb30669608a18520a。单案default场景资格不代完整普通scope、所有入口或R2/R3/A08/独立影响；24包未变，不需更新或重启。edd9ff76 CI已成功；04d执行绑定CI39381774159最新8成功/3运行/0失败，终态待核。
+
+前一片段原失败与授权转换记录（保留原时点，以下“尚未运行”已由本段结果取代）：
+
 当前增量（2026-10-20）：执行绑定提交e62581d6的CI39368080734已11/11终态成功；本轮三个被后继绑定取代的CI已主动取消，取消不计通过。现有CLI认证复用有效，原生0.163远程插件合并的_default策略已由固定源码/同构测试解释并在三次实际上下文核到仅5项Accord Skill、无Memory指导；第一份完整原件独审另核3个Accord MCP工具和入口。README候选独审仍未完成：前两次文件工具因主.sandbox-bin的helper_sandbox_lock_failed/os5未启动；恢复正常HOME未解决。第三次仅移除Desktop服务查找hint，在保持elevated/workspace-write保护下读取挂起，原360秒turn上限强制exit124；不能记作修复或通过。12次库存查询、启动过的Goal读者及三个所属Job均已退出，9个活动runtime路径已移除或保留为必要证据，八输入及所有原始回执保留；未登出主账号、改共享ACL或配置。原外3600/postrun2400完整墙钟在最终收尾前超限，保原失败，不以嵌套命令时长推活动耗时或猜原因。用户随后提供成功外部CLI截图，原生记录核为danger-full-access/on-request；此前我们另选workspace-write/never，不能把两条路径当同条件，也不能笼统称用户CLI不可用。用户现已明确“同意，仅限这项审阅”，仅授权该8输入/2输出的非交互完整访问；新条件前瞻绑定，尚未运行，原8输入/2输出/13判据和质量保持，不再盲做模型探针。私有总源accord-default-readme-existing-auth-20261020-01/OUTCOME.json及external-cli-read-observation.json、next-execution-proposal.json。仍17scope/16活动case/199文件仅声明，24包未改；default功能准入、完整R2/R3及发布仍未完成。
 
 以下为此前已核依赖和历史边界，旧“当前”措辞以本段增量为准：

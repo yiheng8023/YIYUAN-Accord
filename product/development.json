@@ -5761,6 +5761,66 @@
       "reason": "The6-record business and actual minimal effective context were independently supported and the earlier original core accepted13 facts. Root later exceeded the prospectively bound1200-second complete verification/closeout window; overall qualification is withheld. Preserve earlier report rather than rewriting it to a failure. This ended instance must not become a mandatory future replay.",
       "retained": "Original fixture, criteria, role budgets, exact execution subject, source and artifacts, both actual reviews, early formal acceptance, late budget assertion failure and completed resource closure remain immutable.",
       "remainingDuty": "Reuse B31 actual result/context/resource evidence and B29 original qualification. Reconcile the recorded host tool receipt latency and original full wall-clock window; shared causality with B30 and need for product code changes remain unknown.17 scopes and all original quality/composition/release duties remain unchanged."
+    },
+    {
+      "id": "readme-semantic-review-default-20261020",
+      "authority": "User explicitly approved full-access noninteractive mode only for this unfinished eight-input/two-output review; existing project continuation authority remains.",
+      "subject": {
+        "revision": "04d0d949b7554115cb29a9323c61b56cb3a3398a",
+        "tree": "5756eaccdb00fcb4a15a29cbbd415d3e135ed88c"
+      },
+      "source": {
+        "path": "private:accord-default-readme-full-access-20261020-01/OUTCOME.json",
+        "sha256": "7c08ceeab321e8e743600abb9ba89828995c45a2ecbaa5ccb30669608a18520a"
+      },
+      "qualification": {
+        "acceptedCase": "v33-cli-readme-semantic-review-20261020-01",
+        "scenario": "default-host-without-extra-extensions",
+        "originalCoreObserveRecheck": true,
+        "finalSourceVerification": true,
+        "scope": "Single case under its exact declared execution; not whole ordinary scope, all entries, R2/R3, A08 or release."
+      },
+      "business": {
+        "outputs": [
+          "review.md",
+          "claim-decisions.json"
+        ],
+        "claimCount": 20,
+        "supported": 18,
+        "unknown": 2,
+        "candidateRecommendation": "insufficient-evidence",
+        "candidateEdits": false,
+        "sourceLimits": [
+          "Exit predicate not established by supplied excerpts.",
+          "Two source-map hashes stale; no false full-original rehash."
+        ]
+      },
+      "retainedIssues": [
+        "Native TypeError recovered within the same task, retained in original trace.",
+        "Both fresh reviewers initially inferred inherited conversation from ambient instructions; metadata corrected with original report hashes retained, semantic conclusions unchanged.",
+        "Root private adapter mtime string/integer mismatch rejected preflight; exact values normalized without altering original source evidence or public helper.",
+        "Main config changed after all native consumers and the 06:56 source review. Current full-config guard differs; selected Accord policy and six trust rows still equal; writer and full delta unknown. Original execution uses old26b03 and current dependency uses f81b89, no whole-config equivalence or zero-drift-tail claim.",
+        "Original workspace-write failures and old Root windows remain failed; current full-access success does not repair the sandbox."
+      ],
+      "resourcePoststate": {
+        "workerExit": 0,
+        "workerJobRemaining": 0,
+        "inventoryJobsClosed": 4,
+        "goalReaderStopped": true,
+        "ownedEmptyRootsRemoved": 4,
+        "retainedEvidence": "Necessary SQLite and native evidence retained in original owned paths; no main logout/config/ACL change."
+      },
+      "time": {
+        "nativeSeconds": 429.9610748000123,
+        "rootPostrunSeconds": 1584.911882100001,
+        "outerSeconds": 2089.2385290999955,
+        "withinOriginalAllocation": true,
+        "limit": "Current authorized slice only; no whole-project/peer/monetary cost or comparative-value conclusion."
+      },
+      "remaining": [
+        "Candidate paragraph not accepted as written; original frozen inputs remain unchanged.",
+        "Full R2/R3, parent delivery/lifecycle, dynamic capability coordination, complete same-business A08 and independent impact remain unfinished."
+      ]
     }
   ],
   "environmentControl": {
