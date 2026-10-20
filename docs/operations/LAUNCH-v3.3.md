@@ -1,6 +1,6 @@
 # 3.3 发布材料工作稿
 
-状态：发布准备工作稿，3.3尚未完成验收或正式发布；本文不是发布或日期通知。本文复用[共识计划](PLAN-v3.3.md)的W08/S5，不新增产品验收或发布日期。
+用途：3.3发布材料及核对依据，本文本身不构成验收、发布回执或日期通知。版本状态、未完项和实际发布记录以[共识计划](PLAN-v3.3.md)、[当前接续](CONTINUATION.md)及精确版本公开记录为准；本文复用W08/S5，不新增产品验收或发布日期。
 
 ## 文案底稿
 
@@ -26,11 +26,11 @@
 
 ## 首次使用者说明与发布字段草案
 
-以下中英介绍、结构字段和检查清单面向非技术首次使用者。当前稿依据共识计划及`20261010221152`源码候选修订，仍须在发布前按精确版本和实际验收结果更新；不构成普遍支持、效果或发布承诺。此前01397fbe的2026-09-24稿及其它旧构建观察保留在Git历史，不作为当前包身份或当前入口验收。
+以下中英介绍、结构字段和检查清单面向非技术首次使用者，按精确版本及其有效证据使用；不构成普遍支持、效果或发布承诺。构建身份、安装采用和入口验收分别以当前接续及其来源为准，不从旧构建观察继承。
 
 ## YIYUAN Accord 3.3：让 Agent 协调协作（草案）
 
-> **草案，非正式发行说明。** 3.3仍在开发，尚未完成验收或发布；目前没有可供常规安装的已接受3.3发行版。当前 Codex 源码候选与主用户现装均为 `3.3.0-dev.1+codex.20261010221152`，25份安装文件与源码一致。当前任务已看到新Skill目录、读取必要正文，并在compact入口收到221152协调正文；其它Hook场景、MCP worker及GUI采用仍未全证。旧版本的入口观察和两轮SDK消费保留原条件，不能据此认定当前完整功能或各入口已验收。
+> **版本与证据说明。** 本介绍表达3.3的定位和适用边界；精确版本身份、安装采用、入口验收与发布记录须分别核对。候选冻结不证明资格、发布就绪或发布完成；单项、旧版本或辅助执行观察不构成完整功能与各入口验收。
 
 ### 你可以怎样开始
 
@@ -40,7 +40,7 @@
 
 Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和还缺什么条件，在获准范围内选择、组合宿主已有能力与 Accord 组件，随着情况变化调整做法，并检查实际结果。若条件不足或影响先前判断，Agent 应说明、修正受影响的工作，并保留尚未完成的事项以便继续。用户不必预先掌握工具协调、配置或任务交接。
 
-3.3当前范围为已选OpenAI本地执行及其Remote控制路线，包括CLI、SDK、Codex Desktop、VS Code、Work Local/Remote和手机Remote；开发包为Codex适配。各入口及模式支持仍须实际验收，Linux/macOS CLI和通用连续性保留；其它执行位置没有当前适配承诺。普通Chat独立用途、网页Chat、JetBrains及Xcode本版延期，能力仍未知；研究或内容能否构成完整结果仍按具体任务判断，这不恢复本版已延期的适配。Claude不在3.3分发范围，供应商中立定位保持。
+3.3当前范围为已选OpenAI本地执行及其Remote控制路线，包括CLI、SDK、Codex Desktop、VS Code、Work Local/Remote和手机Remote；本包为Codex适配。各入口及模式支持仍须实际验收，Linux/macOS CLI和通用连续性保留；其它执行位置没有当前适配承诺。普通Chat独立用途、网页Chat、JetBrains及Xcode本版延期，能力仍未知；研究或内容能否构成完整结果仍按具体任务判断，这不恢复本版已延期的适配。Claude不在3.3分发范围，供应商中立定位保持。
 
 普通对话沿用宿主常规流程，Accord不会为达成闭环而自动追加对话回合；结束本轮时仍须保留未完事项。任务恢复与按需交接保留。需要长程持续执行时，由用户明确选择宿主的目标模式等控制。
 
@@ -48,17 +48,17 @@ Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和
 
 你明确选择的模型、推理强度和使用限制应持续生效，适用的现有配置应保持稳定。子任务的模型与推理强度应按实际需要及当前宿主支持选择，不固定档位数量，也不要求与主模型相同；保留足够的当前配置同样合理。这不自动授权更改主模型。对于既有授权未涵盖的变更，包括改变你固定的选择或跨越服务商、账户、数据访问、重大费用边界，Agent 应先说明影响并取得必要决定；已有明确授权无需重复确认。
 
-你决定要达成什么、是否改变方向，以及是否授权会产生实质影响的操作。Agent 应在授权范围内行动；需要你的判断、授权或本人操作时，应把具体事项交还给你。Agent 负责核验交付并纠正已发现的问题；你可以审阅和纠正结果，决定是否接受，而不必替 Agent 承担每一步检查。能力协调不会绕过宿主权限，也不意味着每一步都自动完成；自动交接仍在开发中。
+你决定要达成什么、是否改变方向，以及是否授权会产生实质影响的操作。Agent 应在授权范围内行动；需要你的判断、授权或本人操作时，应把具体事项交还给你。Agent 负责核验交付并纠正已发现的问题；你可以审阅和纠正结果，决定是否接受，而不必替 Agent 承担每一步检查。能力协调不会绕过宿主权限，也不意味着每一步都自动完成；恢复和交接依赖受支持的宿主接口、有效授权及连续性核验；包内可选交接接口不提供默认宿主控制连接或自动时机。
 
 ### 条件、成本与尚待核实
 
 3.3使用宿主已有模型、受支持工具和 Accord 组件，不要求额外部署专用第三方决策模型；宿主自身的要求和费用仍适用。协作介入可能增加上下文占用、等待时间、计算成本、指令冲突或维护负担。现有材料没有证明它一定能省时、省钱或提高可靠性，也没有证明所有入口都能完成上述工作。
 
-3.3仍在开发，尚未完成验收或发布，因此这里描述的是设计方向和当前范围，不是已验证的普遍效果。具体入口的支持情况、实际行为、安装使用方式、发布时间及效果仍待核实。本文是介绍草案，不是安装指南或发布日期通知。
+这里描述3.3的设计方向和范围，不是已验证的普遍效果。具体入口、行为、安装使用和效果主张须绑定精确版本及实际证据；发布时间与结果以对应公开记录为准。本文提供产品介绍，不代替安装指南或发布回执。
 
 ## YIYUAN Accord 3.3: letting an Agent coordinate the work (draft)
 
-> **Draft, not an official release note.** Version 3.3 is in development and has not completed acceptance or publication. There is currently no accepted 3.3 release for normal installation. The current Codex source candidate and main user installation are both `3.3.0-dev.1+codex.20261010221152`, with all 25 installed files matching the source. The current task has seen the new Skill directory, read the needed bodies and received the 221152 coordination body at the compact entry; other Hook scenarios, MCP worker and GUI adoption have not been fully verified. Earlier entry observations and the two-turn SDK result retain their original conditions and do not establish complete current functionality or acceptance across entries.
+> **Version and evidence.** This introduction describes the purpose and boundaries of 3.3. Verify the exact version, actual installation, entry acceptance and publication record separately. Candidate freezing does not establish qualification, release readiness or publication. Individual, earlier-version or assisted observations do not establish complete functionality or acceptance across entries.
 
 ### How to get started
 
@@ -68,7 +68,7 @@ You do not need to learn plugins, commands, or model settings first. Tell the Ag
 
 Accord is designed to have the Agent start by understanding the goal, assess feasibility and missing conditions, choose and combine host capabilities and Accord components within its authorization, adapt as circumstances change, and check the actual result. If conditions are missing or earlier judgments are affected, the Agent should explain and correct the affected work, while preserving unfinished items for continuation. Users need not first learn tool coordination, configuration, or task handoff.
 
-Version 3.3 covers selected local OpenAI execution paths and their Remote controls, including CLI, SDK, Codex Desktop, VS Code, Work Local/Remote and mobile Remote; the development package is the Codex adaptation. Each entry and mode still needs actual acceptance. Linux/macOS CLI and shared continuity remain; other execution locations have no current adaptation commitment. Independent ordinary Chat, web Chat, JetBrains and Xcode are deferred for this release, with capabilities still unknown. Research or content may form a complete result for a specific task; this does not reopen deferred adaptation. Claude is outside 3.3 distribution. Vendor independence is unchanged.
+Version 3.3 covers selected local OpenAI execution paths and their Remote controls, including CLI, SDK, Codex Desktop, VS Code, Work Local/Remote and mobile Remote; this package provides the Codex adaptation. Each entry and mode still needs actual acceptance. Linux/macOS CLI and shared continuity remain; other execution locations have no current adaptation commitment. Independent ordinary Chat, web Chat, JetBrains and Xcode are deferred for this release, with capabilities still unknown. Research or content may form a complete result for a specific task; this does not reopen deferred adaptation. Claude is outside 3.3 distribution. Vendor independence is unchanged.
 
 Ordinary conversations follow the host's normal flow. Accord does not add turns to force completion; unfinished duties remain when a turn ends. Task recovery and appropriate handoff are preserved. Long-running controls such as the host's Goal mode remain the user's explicit choice.
 
@@ -76,27 +76,27 @@ Ordinary conversations follow the host's normal flow. Accord does not add turns 
 
 Your explicit choices of model and reasoning effort, and your usage restrictions, remain in force; an adequate configuration should stay stable. Subtask models and efforts should fit actual needs and current host support, with no fixed tier count or requirement to match the main model. Keeping an adequate existing choice is also valid. This does not itself authorize changing the main model. If a change is not already covered by your authorization, the Agent should explain its impact and obtain the necessary decision before acting. This includes changing a pinned choice or crossing boundaries involving providers, accounts, data access or significant cost. Existing explicit authorization does not require repeated confirmation.
 
-You decide what outcome you want, whether to change direction, and whether to authorize actions with material consequences. The Agent should act within its authorization and bring specific decisions, permissions, or actions back to you when needed. The Agent is responsible for checking its deliverables and correcting identified problems. You can review and challenge the result and decide whether to accept it, without taking over every verification step. Coordinating capabilities does not bypass host permissions or mean every step happens automatically; automatic handoff remains in development.
+You decide what outcome you want, whether to change direction, and whether to authorize actions with material consequences. The Agent should act within its authorization and bring specific decisions, permissions, or actions back to you when needed. The Agent is responsible for checking its deliverables and correcting identified problems. You can review and challenge the result and decide whether to accept it, without taking over every verification step. Coordinating capabilities does not bypass host permissions or mean every step happens automatically; recovery and handoff depend on supported host interfaces, valid authority and verified continuity. The optional packaged handoff interface supplies no default host control connection or automatic timing.
 
 ### Conditions, costs, and what remains unverified
 
 Version 3.3 uses host-provided models, supported tools, and Accord components; it does not require deploying an additional dedicated third-party decision model. Normal host requirements and costs still apply. Coordination may add context use, waiting time, compute cost, instruction conflicts, or maintenance burden. The available materials do not prove that it will save time or money, improve reliability, or complete the described work across all entry points.
 
-Version 3.3 remains in development and has not completed acceptance or publication. This description therefore covers design intent and current scope, not verified universal results. Support for specific entry points, actual behavior, installation and use, publication timing, and effects remain to be verified. This is an introductory draft, not installation guidance or a date announcement.
+This description covers the design intent and scope of 3.3, not verified universal results. Claims about entry support, behavior, installation, use and effects require the exact version and applicable evidence. Publication dates and results follow the corresponding public records. This introduction does not replace installation guidance or a publication receipt.
 
 ### 结构字段 / Structured fields
 
 ```json
 {
   "audience": "People encountering YIYUAN Accord for the first time, including readers without a technical background.",
-  "stage": "Draft only; 3.3 is in development and has not completed acceptance or publication. There is no accepted 3.3 release for normal installation.",
+  "stage": "Product introduction and release-copy reference; exact-version acceptance, publication and public post-state require their own evidence. Candidate freezing is not publication proof.",
   "productName": "YIYUAN Accord",
   "declaration": "Empower every dream.",
   "mission": "Support reliable long-term human–AI collaboration.",
   "version": {
-    "release": "3.3 (development; not an accepted release)",
-    "note": "The current source and main user installation are 3.3.0-dev.1+codex.20261010221152; all 25 installed files match. New Skill exposure, needed body reads and the 221152 coordination body at the compact entry are observed; other Hook scenarios, MCP worker and GUI adoption are not fully verified. Earlier entry and SDK results retain their original conditions, not universal acceptance or an official release identity.",
-    "developmentPackageSnapshot": "3.3.0-dev.1+codex.20261010221152"
+    "release": "3.3.0",
+    "note": "The version identifies the target package, not qualification, actual host adoption or publication. Verify each against the exact candidate and its source records. Earlier observations retain their original identities and conditions.",
+    "developmentPackageSnapshot": null
   },
   "scope": {
     "purpose": "Designed to help an Agent understand a goal, assess feasibility and missing conditions, coordinate available host capabilities and Accord components within authorization, adapt to changes, check results, correct affected work, and preserve unfinished items.",
@@ -104,27 +104,27 @@ Version 3.3 remains in development and has not completed acceptance or publicati
     "normalInteraction": "Preserve task duties, recovery and appropriate handoff without automatically adding conversation turns. Host long-running controls remain the user's explicit choice.",
     "subtaskAllocation": "Select models and efforts against actual task needs and current host support; no fixed tier count or requirement to inherit. Keeping an adequate current choice is valid. Preserve user-pinned main-model choices and authority boundaries; optimality remains unverified.",
     "userDecisions": "The user retains decisions about the desired outcome, changes of direction, authorizations with material consequences, and acceptance. Explicit choices of model and reasoning effort, and usage restrictions, remain in force; keep an adequate configuration stable. Subtask delegation does not itself authorize changing the main model. A change not already covered by existing authorization, including changing a pinned choice or crossing provider, account, data access or significant cost boundaries, requires explaining its impact and obtaining the necessary user decision. Existing explicit authorization does not require repeated confirmation. The Agent owns verification and correction; users may inspect and challenge outputs without taking over each verification step.",
-    "focus": "OpenAI execution environments with practical delivery value and a feasible way to fulfill necessary collaboration duties; the current development package provides the Codex adaptation.",
+    "focus": "OpenAI execution environments with practical delivery value and a feasible way to fulfill necessary collaboration duties; this package provides the Codex adaptation.",
     "limits": [
       "These are design aims, not accepted results across all entry points.",
       "Suitability depends on the specific host and actual acceptance; plugin visibility or Hook support alone does not establish it.",
       "Independent ordinary Chat, web Chat, JetBrains and Xcode are deferred for this release; capabilities remain unknown. Task-specific research or content usefulness does not reopen deferred adaptation.",
       "Claude is outside the 3.3 distribution scope.",
-      "Agent actions remain within authorization and host permissions; automatic handoff remains in development."
+      "Agent actions remain within authorization and host permissions. Recovery and handoff require supported host interfaces, valid authority and verified continuity; the optional handoff interface supplies no default host control connection or automatic timing."
     ]
   },
   "verification": {
-    "status": "3.3 acceptance is unfinished; support claims require a suitability decision and actual acceptance.",
+    "status": "Support claims require an exact-version suitability decision and actual acceptance; consult the current continuation and acceptance sources for results and unfinished duties.",
     "unverified": [
       "Support and actual behavior for specific entry points",
       "User installation and use instructions",
       "Publication timing",
       "Effects on time, cost, reliability, and task completion"
     ],
-    "note": "Do not infer universal behavior or user instructions from the development package identifier or maintainer checks."
+    "note": "Do not infer universal behavior or user instructions from a package version, candidate freezing or maintainer checks."
   },
   "cost": "Uses host-provided models, supported tools, and Accord components; no additional dedicated third-party decision model is required. Normal host requirements and costs apply. Coordination may add context use, waiting time, compute cost, instruction conflicts, or maintenance burden. No time, cost, or reliability improvement is verified.",
-  "publication": "3.3 has not been published. Check the applicable existing human authorization and all its conditions before any publication; this draft does not establish readiness, a publication date, or installation guidance.",
+  "publication": "Verify applicable existing human authorization and every condition before publication, then verify the same exact version in public records. This text is not evidence of readiness, a publication date or completed publication.",
   "languages": [
     "zh-CN",
     "en"
@@ -134,8 +134,8 @@ Version 3.3 remains in development and has not completed acceptance or publicati
 
 ## 首次使用者发布准备清单 / First-use release checklist
 
-这些项目尚未由本草案完成。3.3仍在开发、未完整验收、未发布；文稿面向首次接触且没有技术背景的用户，不提供旧版迁移操作。
-These items remain open. Version 3.3 is in development, acceptance and publication are unfinished. The copy serves first-time, nontechnical users and includes no migration procedure.
+本清单列出首次使用说明和既定发布工作的核对职责，不以空复选框单独判定实际状态；完成情况须回查精确候选及当前来源。文稿面向首次接触且没有技术背景的用户，不提供旧版迁移操作。
+This checklist records duties for first-use copy and the existing release work; unchecked boxes alone do not establish current status. Determine completion from the exact candidate and current sources. The copy serves first-time, nontechnical users and includes no migration procedure.
 
 - [ ] 按精确候选完成必要功能、入口适用性、生命周期、系统影响、独立审查和托管检查；区分设计方向与已验事实。 / Complete the required function, entry suitability, lifecycle, system-impact, independent-review and hosted checks for the exact candidate; separate design aims from demonstrated facts.
 - [ ] 用自然语言目标示例解释开始方式；核实真实安装与使用入口后再补操作说明，不编造按钮、命令、支持范围或时间。 / Explain how to start with an ordinary goal; add setup instructions only after verifying the actual installation and use entry, without inventing controls, commands, support or dates.
@@ -167,7 +167,7 @@ This checklist serves first-use copy and the existing release work; it grants no
 
 | 内容 | 当前情况 | 完成条件 |
 |---|---|---|
-| 精确发行与更新日志 | 3.3开发中 | 验收、候选审查、正式发布授权及同版本公开后态成立 |
+| 精确发行与更新日志 | 以当前接续和精确版本公开记录核对 | 验收、候选审查、已有适用发布授权及其条件、同版本公开后态成立 |
 | README整体修订 | 用户已授权按最新共识按需更新，发布前仍需整体校准 | 发布前按实际成品整体复核中英文定位、能力及限制、安装使用、示例、徽章与链接，不能仅沿用开发期文案 |
 | 安装与使用入口 | 待正式版本绑定 | 新用户能取得精确包，按真实支持条件完成安装和使用；市场收录不冒充必需前提 |
 | 演示及效果说明 | 已有局部试验，不是完整演示 | 同版本真实完整任务、可复验成品、参与边界及限制 |

@@ -1060,7 +1060,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
             elif kind == 'published': altered['cycle']['versionState'] = 'published'
             elif kind == 'state': altered['cycle']['versionState'] = 'development-target-not-published'
             elif kind == 'status': altered['status'] = 'in-development'
-            elif kind == 'dev-version': altered['delivery']['version'] = self.contract['delivery']['version']
+            elif kind == 'dev-version': altered['delivery']['version'] = '3.3.0-dev.1'
             elif kind == 'final-build': altered['delivery']['version'] = '3.3.0+codex.20261021000000'
             else: altered['delivery']['hostProjections'][0]['packageVersion'] = '3.3.0-dev.1'
             with self.subTest(kind=kind):
@@ -1123,7 +1123,8 @@ class SuccessorDevelopmentTests(unittest.TestCase):
                 ("cycle", "futureAdaptationVersion", "3.3"),
                 ("cycle", "futureAdaptationCandidates", []),
                 ("cycle", "existingHosts", ["codex", "claude-code", "new-host"]),
-                ("cycle", "versionState", "final-candidate-not-publication-proof"),
+                ("cycle", "versionState", ("development-target-not-published"
+                    if self.contract["status"] == "candidate-frozen" else "final-candidate-not-publication-proof")),
                 ("claimCeiling", "functionalCompletion", True),
                 ("claimCeiling", "releaseIntent", "conditional-v3.2-release-after-acceptance"),
                 ("acceptance", "currentQualification", "qualified"),

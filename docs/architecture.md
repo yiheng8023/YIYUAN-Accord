@@ -110,7 +110,7 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current candidate and scoped connections
 
-The current Codex package targets `3.3.0-dev.1`; versioning is not publication
+The current Codex package is a frozen `3.3.0` candidate; versioning is not publication
 evidence. It exposes one brief coordinator and four independently discoverable specialist
 Skills for capabilities, continuity, verification and plugin lifecycle. Native
 SessionStart and SubagentStart supply the original meta-guidance and the same
