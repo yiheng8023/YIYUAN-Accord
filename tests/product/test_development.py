@@ -1240,7 +1240,26 @@ class DeclarationCaseBindingTests(unittest.TestCase):
                 "coverageUnbound": len(required - declared), "coverageWithoutCases": len(without_cases),
                 "casesDefined": len(policy["cases"])})
         gaps = summary["caseBindingGaps"]
-        self.assertGreater(summary["coverageWithCaseBindingGaps"], 0)
+        joint_scopes = set(next(row for row in policy["acceptanceRequirements"] if row["id"] == "A08")
+                           ["requiredCoverage"].get("function", []))
+        expected_gap_pairs = set()
+        for scope in policy["scopes"]:
+            for claim in scope["claims"]:
+                if (scope["id"], claim) not in required:
+                    continue
+                cases = [case for case in policy["cases"]
+                         if case["scope"] == scope["id"] and claim in case["claims"]]
+                dimensions = ("duties", "qualityAxes", "scenarios")
+                missing = any(set(scope[key]) - {value for case in cases for value in case[key]}
+                              for key in dimensions)
+                joint_missing = claim == "function" and scope["id"] in joint_scopes and not any(
+                    all(set(scope[key]) <= set(case[key]) for key in dimensions) for case in cases)
+                if not cases or missing or joint_missing:
+                    expected_gap_pairs.add((scope["id"], claim))
+        # Zero declaration gaps still leave evidence and qualification unverified.
+        self.assertEqual(summary["coverageWithCaseBindingGaps"], len(expected_gap_pairs))
+        self.assertEqual({(scope_id, claim) for scope_id, claims in gaps.items() for claim in claims},
+                         expected_gap_pairs)
         self.assertEqual({scope_id for scope_id, claims in gaps.items()
                           if any(not gap["caseIds"] for gap in claims.values())}, without_cases)
         # Ended one-use instances retain evidence, not a future PASS obligation.
