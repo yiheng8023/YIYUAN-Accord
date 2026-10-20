@@ -9426,8 +9426,8 @@
               "entryProtocol": "exec-resume",
               "hookMode": "installed-plugin",
               "codexVersion": "0.163.0",
-              "timeoutSeconds": 450,
-              "turnTimeoutSeconds": 360,
+              "timeoutSeconds": 900,
+              "turnTimeoutSeconds": 600,
               "recoveryTimeoutSeconds": 30,
               "caseSha256": "d59bcb76f7d7564324bc346b78adb9350c005b62ca4de258ebd621bf4ab56343",
               "model": "gpt-6.1-sol",
@@ -9442,47 +9442,40 @@
               "windowsSandbox": "elevated",
               "host": "codex",
               "entry": "cx-cli",
-              "usageScope": "Prospective single CLI review worker cumulative only. Same proposed existing finite run/Root/exit allocation; all final authority/source/case bindings remain pending."
+              "usageScope": "Prospective single CLI review worker cumulative only. Same proposed existing finite run/Root/exit allocation; all final authority/source/case bindings remain pending.",
+              "sandboxMode": "danger-full-access"
             },
             "scopeLimit": "New independent semantic review of existing candidates; source-correct reject/unknown can complete the review. Do not regenerate/modify copies. Remaining ordinary scenario default only; effective prerequisite already satisfied by B29.",
             "privateBootstrap": {
               "schema": "accord-cli-existing-auth-bootstrap/v1",
               "mechanism": "Borrow existing main CODEX_HOME authentication/cache without credential access or logout; borrow normal Windows HOME selectors and isolate only task sqlite/temp/state. Insert bound workerArguments only after exec. Four original fixed-market inventories and native Goal reader retain their different main-config read-only roles and owned poststates; no helper/worker config parity claim.",
               "callerSha256": "fbe70f7c68793e740e1c3cae35a468f417978746c8ce17656a194184950f4810",
-              "controlSha256": "2099c65c95e47243dad43de98e7d59b82c947675d7e125beae12f410a3fde1e1",
+              "controlSha256": "be11227bf54d40f19ca2c603794045b0fda8eb1b834b2e81bdf8da1b390c729c",
               "fixtureSha256": "d59bcb76f7d7564324bc346b78adb9350c005b62ca4de258ebd621bf4ab56343",
-              "sourceGuardSha256": "a80ba4f8cefb9758f66781c3d4f56a5163f04ab82e6cb3d63477a391058e9c58",
-              "selectorsSha256": "6e63a2ec05add00ba4a45dcda0d884af9f3b6edf0945869471593d624cbd0462",
-              "prepareEnvironmentSha256": "c8fea61f9d6a580f64871bea0ce7d0e4cf6d16e8aadd14168d8de2b0c317dc50",
-              "droppedVariableNamesSha256": "5d215807d1fd5894ae85113a31cc3b9bbbf63be576d7a752eedcedae86e190ac",
-              "profileConfigSha256": "f81b89d702bafaa38039878d057de4186ddf314c197a0c476bcbd9d3933da758",
+              "sourceGuardSha256": "eed48a57392e39a4878821d22448c072c079afa23492478df42e6e1f3d3e0bd9",
+              "selectorsSha256": "d0fd6f008e6363dc7ee4a2f901d8dc3d6e3cbbbbdd82116edc35b8b3145fd409",
+              "prepareEnvironmentSha256": "b855985f436825e7b1be9ad6bf7cc3fec1be3e7334b193845dd44c1a5d25eeba",
+              "droppedVariableNamesSha256": "b514308cc3cf309e1b85bf8a81e337304091367b163096312f3da35721a5540a",
+              "profileConfigSha256": "26b03b3157a855525cffeeb42ab9add88e46c8241ab087a06df61b3356318674",
               "globalArgumentsSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
               "workerArgumentsSha256": "21767e1e4b56fd5e94b44df94da34ecf764e5c541369454519eb1b4fdecf6860",
-              "auxiliaryPolicySha256": "084848820425ba06d7c3388612ab74bd5d60d04915a9a70c6e5a529b27a85de6",
+              "auxiliaryPolicySha256": "d1576071e7690c09d4a1a563443bbee4ed281a3aa1f49f16e4293187bde643a0",
               "counts": {
                 "selectors": 6,
-                "droppedVariableNames": 6,
+                "droppedVariableNames": 5,
                 "globalArgumentPairs": 0,
                 "prepareEnvironmentPaths": 3
               }
             },
-            "rootBudget": "Prospective execution allocation only: outer3600 starting immediately before prepare, post-run2400 including600 reserve; deadline=min(outer start+3600, post-run start+2400). All execution, necessary review, closeout and result-saving tails count. Earlier preparation/diagnostics and their original failures are separately retained, not claimed as included whole-project cost.",
+            "rootBudget": "New post-authorization execution slice: outer3600 starting before prepare; post-run2400 including600 reserve, use earlier absolute deadline. Include execution, necessary independent verification, owned resource closure and result saving. All prior attempts/preparation/costs and their failed windows remain separately retained and are not reset; no whole-project cost/value claim.",
             "preparedSource": {
               "revision": "a366d419f4ac51cc48761822573c90b2006dc47c",
               "tree": "f06a70d7a2e94ef025f7c372a0530d60faac0422",
               "meaning": "Business evidence snapshot only; future worker evaluatedRevision recorded by actual runtime after registration"
             },
             "authenticationOwnership": "Borrow current native main CODEX_HOME authentication; no new login, credential copying/linking/export, main logout or main-home cleanup. New runtime/sqlite/temp/state and business workspace only are owned.",
-            "recovery": {
-              "priorAttemptRevision": "8bf9b442ed3df4ca7dd53431936354df49d8fb1f",
-              "priorNativeReceiptSha256": "e957b4fee43a0a16b748ac5ffb3d979dd2b0c996ce71707bc9c5b8ce5b3b5660",
-              "priorOutcome": "native completed; tool startup denied; eight business inputs not read by worker and both outputs absent; no completed business replay",
-              "method": "One final native standalone-CLI service lookup variant: remove inherited Desktop CODEX_WINDOWS_SANDBOX_PACKAGE_FAMILY only inside this caller. Actual native --version child has no OS package identity and registered_core is false. Normal SCM/pipe/OS/registered-client verification and elevated workspace-write sandbox remain; no forced fallback/ACL/account/shared config change. Prior failures and original absolute deadlines retained.",
-              "originalWindowPreserved": true,
-              "secondAttemptRevision": "afd2033758958e5e4eb5bba631ea7d0023acf5ca",
-              "normalHomeHypothesisResult": "same tool-startup denial; no input read/output",
-              "noFurtherModelProbeAfterThisVariant": true
-            }
+            "explicitPermissionScope": "The user explicitly authorized noninteractive full-access only for this existing eight-input/two-output review on2026-10-20. Native never is not the interactive TUI on-request policy; no claim of workspace-write OS containment. Original input/effect authority and every expected quality predicate remain.",
+            "priorAttemptDisposition": "Original8bf9/afd/e625 attempts, sandbox failures, forced timeout and original wall-window failure remain source-bound negative evidence. This is a newly authorized execution slice of the unfinished same business, not retrospective success or replay of completed business."
           },
           "oracle": "Independently verify review.md and claim-decisions.json against all original/candidate/source bytes and each factual/bilingual claim. Judge actual source-correct decisions, precise proposed corrections/unknowns, original failures/scopes and no forced PASS. Candidates and author map are input objects, not expected answers. Verify exact two outputs, all inputs preserved and full actual native default/minimal context/Goal/authority/method/owned poststates; retain all13 prospective facets and unchanged scope duties/quality. Overall acceptance waits for required source/resource/review/window tails under original new absolute deadline.",
           "oracleFiles": [

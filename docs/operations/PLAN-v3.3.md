@@ -910,3 +910,6 @@ W02持续承担完整入口处置，W04随受影响历史依赖纠偏，W06/W07�
 
 
 2026-10-20 当前真实结果与入口差异纠偏：三次任务上下文均证仅5个Accord Skill及Memory未注入，扩展隔离控制已有实际效果；前两次Windows受限沙箱文件工具拒绝，正常HOME恢复未解决，最后服务查找hint变体挂起并按原360秒结束。保留各原执行/配置/失败及全窗超限，不以native exit0或目录隔离成功宣称业务完整。用户外部CLI成功读取同一README的原生源另证danger-full-access/on-request；验收原选workspace-write/never，因此成功与失败并非同条件。非交互完整访问是否用于该未完两输出审阅须取得针对该边界的具体决定，不能静默把终端的交互审批复制为headless权限；不修改用户全局设置，不把此操作决定升为产品发布标准。e62581d6精确CI11/11通过；三个本轮已被取代的CI主动取消保原，不算通过。所有已知所属运行作用域已释放，必要状态/诊断及原件保留；当前缺的是审阅实际完成及剩余R2/R3完整组合，不再新登录、重复旧业务或把未知宿主根因当已修。来源private:accord-default-readme-existing-auth-20261020-01/OUTCOME.json（SHA c37c0c351357f7f31ee1357e1f6cf2a420241880970afdb498b4750365d8f4a0）；新外部观察与待授权方案另存，原结果不回改。
+
+
+2026-10-20 用户已对同一既备README审阅明确授权一次非交互完整访问。原default-host-without-extra-extensions场景不固定workspace-write；本次只改所选执行权限并真实披露danger-full-access/never，不能称与TUI交互审批等同，也不再声称OS工作区写入限制。原8输入/2输出/13谓词、五职责五质量轴、现装24与扩展控制保持。当前主配置摘要发生外部变化；所需Accord政策/6项trust仍相同，authStore/provider仍未显式设置，按当前源重新绑定，不推整体配置等价或猜改变者。新授权执行片段原生900/turn600/退出30及既有token上限；外3600/postrun2400含600另按新起点前瞻约束，旧三次失败与旧全窗超限不重置、不回签。必要native状态保留为证据，避免无意义迁移；活动进程/临时暴露及可清理尾项仍需验证关闭。来源private:accord-default-readme-full-access-20261020-01/authorization-and-preparation.json。
