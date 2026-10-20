@@ -228,10 +228,10 @@ The workflow retains source-package, raw diagnostics and its separate readback
 for 14 days, then removes the job-owned installation and working files. Preserve
 any evidence needed for a release decision before the CI artifacts expire;
 CI success alone does not grant formal admission. These jobs provide native
-macOS/Linux mechanism evidence; they do not run the Xcode interface. Xcode's
-dedicated configuration, permissions, loading and interaction remain distinct
-integration checks. Lack of a local Mac is not a reason to stop implementation
-or omit feasible hosted verification.
+macOS/Linux mechanism evidence; they do not run the Xcode interface. JetBrains
+and Xcode integrations are deferred for 3.3. Their configuration, permissions,
+loading and interaction need separate evidence if a later authorized scope
+selects them. Reuse feasible hosted checks for the current selected scope.
 
 The [native lifecycle observer](scripts/observe_codex_lifecycle.py) reuses Codex's
 plugin and App Server controls for a bounded, credential-free protocol fixture.

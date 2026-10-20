@@ -6,13 +6,17 @@ policies, and generated machinery are licensed under the Apache License,
 Version 2.0, except where a file states otherwise.
 
 Repository-owned documentation and public governance text follow the layered
-policy in docs/license-policy.md.
+policy in the source repository:
+https://github.com/yiheng8023/YIYUAN-Accord/blob/v3.3.0/docs/license-policy.md.
 
 The historical payload and evidence corpus includes third-party material from
 the predecessor project. It is retained in Git history as provenance only: it
 is not the current product release, plan, acceptance authority, installation
 authority, or runtime source. Those materials are not relicensed beyond their
-original licenses. See THIRD_PARTY_NOTICES.md.
+original licenses. The source repository records those notices at
+https://github.com/yiheng8023/YIYUAN-Accord/blob/v3.3.0/THIRD_PARTY_NOTICES.md.
+These repository references are informational; the installed LICENSE supplies
+the applicable Apache License text, and the historical corpus is not bundled.
 
 Current third-party candidates remain exact upstream by default. Review or
 metadata does not vendor, relicense, admit, install, enable, or approve an

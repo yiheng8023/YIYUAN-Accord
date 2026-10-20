@@ -100,7 +100,7 @@ Accord 不训练模型、不扩大原生上下文，也不越过宿主的权限�
 
 介入可能增加上下文占用、时间、计算成本、指令冲突或维护负担。按实际结果评估净影响；同等效果下优先低负担路线，必要时缩小、替换或退役介入。必要自动化不承诺零 Token、零 CPU 时间或零耗时。错误组件造成的既有影响仍须追溯和修正。
 
-当前未完项见[共识节点](docs/operations/PLAN-v3.3.md)，判据见[验收视图](docs/operations/ACCEPTANCE-v3.3.md)，带条件的观察见[历史试验记录](docs/operations/PROCEDURE-v3.3.md)。历史事实见[更新日志](CHANGELOG.md)与各版本发布记录，历史通过结果不能作为当前版本的验收依据。
+当前未完项见[共识节点](docs/operations/PLAN-v3.3.md)，判据见[验收视图](docs/operations/ACCEPTANCE-v3.3.md)，带条件的观察见[历史试验记录](docs/operations/PROCEDURE-v3.3.md)。历史事实见[更新日志](CHANGELOG.md)与各版本发布记录，历史通过结果不能直接证明当前版本通过；只有核对实际适用性、必要差异和当前依赖后，才能在原证据范围内复用。
 
 ## 安装与维护
 

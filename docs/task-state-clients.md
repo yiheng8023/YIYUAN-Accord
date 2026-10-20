@@ -8,7 +8,7 @@
 
 `cwd` 是调用者选择的绝对工作区；inputs 路径与每个 outputs.path 均相对该工作区。管理共同必填字段是 cwd、action、epoch、expectedRevision。当前 root/session/turn 身份由原生调用元数据提供；调用者 arguments 不填 session_id、threadId、nativeTurnId 或伪造 metadata。后代共享 session 的身份差异会被拒绝。[参数与身份 guard](../runtime/native-state-mcp.cjs)、[相对路径](../runtime/task-checkpoint.cjs)。
 
-若细节标为 `omitted-bounded-result`，先读 `checkpointSource.path` 的完整字节，对实际解析的同一份字节计算 SHA-256 并比对 checkpointSource.sha256，取得完整合同。保存文件只有基线/谓词；当前业务文件观察需另行检查。依赖动作前再次 inspect 并核对当前输入、epoch、revision、digest、pause 与恢复标志；变化或未知仍未决，不能把省略字段当空值。[超长返回](../runtime/native-state-mcp.cjs)、[架构 110–117](architecture.md#L110)。
+若细节标为 `omitted-bounded-result`，先读 `checkpointSource.path` 的完整字节，对实际解析的同一份字节计算 SHA-256 并比对 checkpointSource.sha256，取得完整合同。保存文件只有基线/谓词；当前业务文件观察需另行检查。依赖动作前再次 inspect 并核对当前输入、epoch、revision、digest、pause 与恢复标志；变化或未知仍未决，不能把省略字段当空值。[超长返回](../runtime/native-state-mcp.cjs)、[架构：完整状态与有界返回](architecture.md#current-candidate-and-scoped-connections)。
 
 ## 输入隔离不等于本轮正文缺失
 
@@ -92,6 +92,6 @@ function retireParams(latest, absoluteWorkspace) {
 
 bind 缺参返回 `invalid-task-state-binding`、requiredFields/missingFields 及 `effect: "not-requested"`：该 guard 在 operate 前拒绝，补齐并重新取得最新观察，不宣称业务已变更。真正进入 operate 后的异常带 `effect: "unknown-check-post-state"`，reason保留对应诊断原因；实际 mutation 后传输失败也可能丢失成功回执。两者先 inspect 后状态并核对保留证据，再决定下一安全动作；已发生或未知效果先对账，不能自动重试，不能一概声称零写入。成功但细节超长返回精简成功回执；回查完整合同。[guard/执行](../runtime/native-state-mcp.cjs)、[传输边界](../runtime/native-state-mcp.cjs)。
 
-宿主拒绝可能发生在 adapter 前；按实际 disposition 保留未完成工作，不能换策略或路线绕过拒绝。App Server 的工具错误有结果，宿主拒绝无结果；其规范化结果不重复原始 MCP isError。管理记录、原生 metadata、工具 annotations、原因文字及本地谓词均不证明 permission、当前意图、写者所有权、接管或外部验收。[架构 118–135](architecture.md#L118)。
+宿主拒绝可能发生在 adapter 前；按实际 disposition 保留未完成工作，不能换策略或路线绕过拒绝。App Server 的工具错误有结果，宿主拒绝无结果；其规范化结果不重复原始 MCP isError。管理记录、原生 metadata、工具 annotations、原因文字及本地谓词均不证明 permission、当前意图、写者所有权、接管或外部验收。[架构：调用身份与效果边界](architecture.md#current-candidate-and-scoped-connections)。
 
 验证边界：本指南按源码静态核对，模板仅做隔离参数构造核对；未调用真实 MCP 状态、模型业务、CLI 或 SDK，未建立新信任。普通模型行为与真实宿主接入仍未验证。本次是已有仓库交付补充，不是新 case 或 F-A 通过证据。

@@ -1,10 +1,13 @@
 # Security policy
 
-YIYUAN Accord is an Agent-neutral human-Agent collaboration system: a portable
-reliability kernel plus adaptive outcome-delivery semantics, a verifier,
-representative evaluation suite and two thin reference Skills. It is not a
-sandbox, identity or authorization system, secret store, dependency scanner or
-production runtime.
+YIYUAN Accord is an Agent-neutral human-Agent collaboration system. The current
+3.3 adaptation supplies one coordination Skill, four specialist Skills, native
+Hooks and a host-managed local state MCP process. Its enabled input Hook can
+retain native input and task-recovery state locally; that material may contain
+sensitive text. See the [current architecture](docs/architecture.md#current-candidate-and-scoped-connections)
+for storage, retention, identity and failure boundaries. Actual loading and
+behavior need their own evidence. Accord is not a sandbox, identity or
+authorization system, secret store, dependency scanner or production runtime.
 
 The public v3.0.1 projections add no Hook, MCP, App, background process,
 private capture state or fixed host-version dependency. The public v3.1.0
@@ -38,10 +41,12 @@ Do not publish credentials, exploit payloads or restricted source.
 A green verifier proves the current repository contract only. Static
 host-admission does not prove model behavior. Controlled Golden Tasks do not
 prove broad field effectiveness, all-host equivalence, professional domain
-correctness or production deployment safety. Release requires separate
-security/privacy review and full exact-local verification on one clean
-candidate before push, task-time hosted verification of that unchanged SHA,
-and then named-human authorization of the same revision and claim ceiling.
-Those task-time observations are outside verifier authority;
-only a later exact tagged release, direct public-source verification and
-goal-carrier cleanup can complete the release.
+correctness or production deployment safety. Current release work follows the
+[consensus plan](docs/operations/PLAN-v3.3.md#本版有限收官清单), its linked
+acceptance requirements and the applicable bound human authorization. Complete
+necessary security/privacy, exact-candidate, independent and hosted checks;
+existing conditional authorization does not establish readiness or need to be
+requested again. Publication, matching public-source verification and owned
+resource closure remain distinct required effects. These observations are
+outside verifier authority; historical release procedures retain their original
+subjects and do not add a new current authorization step.

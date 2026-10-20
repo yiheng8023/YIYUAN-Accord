@@ -19,8 +19,11 @@ replace them by evidenced equivalents when adapting another host.
 
 The 3.3 default foundation is the byte-preserved [original meta-guidance](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md).
 The package has one original reference and one task coordination body. The existing
-entry reader supplies both at supported root lifecycle/input events, and a
-guidance-only SubagentStart handler leaves parent state untouched. Exact source
+entry reader supplies both at supported SessionStart and SubagentStart events;
+the guidance-only SubagentStart handler leaves parent state untouched.
+UserPromptSubmit captures the current input and supplies a bounded reconciliation
+notice with an authorized guidance locator; it does not repeat the full bodies
+or establish their adoption. Exact source
 identity and primary exposure are included in package validation. Positive
 per-handler limits and bounded output are transport conditions, not evidence of
 complete model-visible delivery or behavior. User instructions stay independently
@@ -418,8 +421,9 @@ an implementation of dependency-scoped adaptation in an ordinary host session.
 ### Optional representations and host cooperation
 
 The current capability map, duty references, work sequence and scenarios serve
-development review and plan generation from one source. Their callers earn
-their present place. The duty `dependsOn` view checks implementation order;
+review of the consensus plan and its machine validation projection. Version 3.3
+uses human-maintained dynamic documents, not the historical plan generator.
+Their callers earn their present place. The duty `dependsOn` view checks implementation order;
 it is neither a live execution graph nor a ban on runtime feedback loops.
 
 An index or graph may improve repeated lookup and affected-change analysis.
@@ -938,23 +942,6 @@ headroom; they are revisable cost controls, not product functionality. Measure
 necessary implementation and regression cost before revising a budget. Do not
 remove required historical isolation or weaken evidence checks to fit a number.
 
-## Frozen predecessor architecture and evidence
-
-The predecessor architecture is preserved
-[at exact revision 4f9a21d](https://github.com/yiheng8023/YIYUAN-Accord/blob/4f9a21d79729867bed3bc89917b64c8386ce9ac6/docs/architecture.md#frozen-predecessor-architecture-and-evidence).
-Its design and procedures are historical, not an implicit successor constraint.
-Detailed earlier development explanations and observation summaries are
-[available at exact revision 1e5ef96](https://github.com/yiheng8023/YIYUAN-Accord/blob/1e5ef9635b41c576edd622001fd477f391944b59/docs/architecture.md).
-The retained verifier continues to read immutable predecessor objects.
-
-## Maintenance baseline
-
-This anchor remains for published release-document references. The v3.1
-maintenance baseline is
-[historical, at exact revision 4f9a21d](https://github.com/yiheng8023/YIYUAN-Accord/blob/4f9a21d79729867bed3bc89917b64c8386ce9ac6/docs/architecture.md#maintenance-baseline).
-Use the active development source above for current work.
-
-
 ### Native root and subagent identity
 
 Codex 0.154.0 uses one `session_id` for a root task and its descendants. Native
@@ -972,3 +959,19 @@ native routes; do not infer root-event coverage from subagent availability.
 This actor separation is not caller authentication or a complete permission
 barrier. Actual delegation, receiver reconciliation and safe source release
 still require their own execution evidence.
+
+## Frozen predecessor architecture and evidence
+
+The predecessor architecture is preserved
+[at exact revision 4f9a21d](https://github.com/yiheng8023/YIYUAN-Accord/blob/4f9a21d79729867bed3bc89917b64c8386ce9ac6/docs/architecture.md#frozen-predecessor-architecture-and-evidence).
+Its design and procedures are historical, not an implicit successor constraint.
+Detailed earlier development explanations and observation summaries are
+[available at exact revision 1e5ef96](https://github.com/yiheng8023/YIYUAN-Accord/blob/1e5ef9635b41c576edd622001fd477f391944b59/docs/architecture.md).
+The retained verifier continues to read immutable predecessor objects.
+
+## Maintenance baseline
+
+This anchor remains for published release-document references. The v3.1
+maintenance baseline is
+[historical, at exact revision 4f9a21d](https://github.com/yiheng8023/YIYUAN-Accord/blob/4f9a21d79729867bed3bc89917b64c8386ce9ac6/docs/architecture.md#maintenance-baseline).
+Use the active development source above for current work.

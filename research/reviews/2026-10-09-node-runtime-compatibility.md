@@ -4,7 +4,7 @@
 
 ## 结论与建议
 
-**建议将当前受测的 Node 24 维护版本作为本版推荐运行基线，明确其它主版本尚未验证；不宣称“最低兼容 Node 16.9”或“Node 22.5 起支持”。** API 年代可以排除一部分旧版本，不能证明完整运行路径、文件系统行为、SQLite 锁语义和宿主加载均兼容。CI 当前只选择 Node 24，README 明示最低支持版本尚未确定（[CI L53–57](../../.github/workflows/validate.yml#L53-L57)、[README 中文 L115](../../README.zh-CN.md#L115)）。
+**建议将当前受测的 Node 24 维护版本作为本版推荐运行基线，明确其它主版本尚未验证；不宣称“最低兼容 Node 16.9”或“Node 22.5 起支持”。** API 年代可以排除一部分旧版本，不能证明完整运行路径、文件系统行为、SQLite 锁语义和宿主加载均兼容。CI 当前只选择 Node 24，README 明示最低支持版本尚未确定（[CI L53–57](https://github.com/yiheng8023/YIYUAN-Accord/blob/7dd1b6b097ee746a6273ded69eb73ec778230d26/.github/workflows/validate.yml#L53-L57)、[README 中文 L115](https://github.com/yiheng8023/YIYUAN-Accord/blob/7dd1b6b097ee746a6273ded69eb73ec778230d26/README.zh-CN.md#L115)）。
 
 可用于安装条件的建议措辞（待 Root 按实际证据采纳）：
 
