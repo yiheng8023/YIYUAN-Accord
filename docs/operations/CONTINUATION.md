@@ -1,5 +1,9 @@
 # 当前接续
 
+当前增量（2026-10-20）：a366d419的CI39300130334已11/11终态成功。现有CLI认证已通过真实单次请求核实可复用，无需新登录、主账号退出或共享配置修改。额外扩展来源已定位到0.163远程账号插件状态与本地策略合并：未设plugins._default时，单项false不构成最终否决；固定官方源码及同构测试已核。前瞻采用仅任务局部_default=false、Accord显式true和39个用户Skill路径排除；沿尚未执行的双语README候选独立审阅核实际上下文、两输出/八原件、13判据及完整资源后态。该方法与一份夹具现登记，17scope/16活动case、199文件只表示声明，不是通过；原质量底线、24包与代码预算不变。四次主安装目录查询、worker和Goal只读者的配置/所有权差异已显式绑定，主认证借用且禁止logout/清主home。原一臂诊断的Root1200秒全窗超限仍保失败；新执行段分配与前期准备成本分别记录，不追认旧失败。私有来源：accord-existing-auth-route-20261020-01/OUTCOME.json、isolation-source-review/root-cause-and-minimal-controls.json；当前待执行绑定与材料：accord-default-readme-existing-auth-20261020-01。完整R2/R3和发布资格仍未完成。
+
+以下为此前已核依赖和历史边界，旧“当前”措辞以本段增量为准：
+
 当前CI：2ba30edc修复后的39277953960第一轮终态为10成功/1取消/0测试失败。macOS原生生命周期列出的步骤均成功且约8分半钟已执行/清理完，约14分钟后平台给出20分钟超时取消；GitHub同期公告Actions处理降级，具体单job因果仍不冒认。已仅请求同SHA取消项补跑，attempt2现已completed/success、11/11终态成功；十个原成功job的原时刻保持。保原取消，不改时限或猜修产品。17b及8e的原POSIX夹具失败保留；原17b三function有限资格和已核时序边界不回写。 后继bf646c1d的39289219781也已11/11终态成功；该精确主体正是本轮A05被评对象。
 
 当前工序：R2/R3原组合的当前依赖。本轮后段已在bf646c1d/tree961f027d通过原A05自主连续性单案的现有窄桥observe/recheck，A05CompleteForBoundSubmission=true、errors/rejections空、finalSourceVerification=true；不推另四父层/完整A08。52条件叶/12完整差分、47主源/47lineage/25包、Root276的106输出关联和32未完记录均核；两原CI输入及两原成品另按原摘要/hash/mtime核定，未重算业务。core4.915594秒；独立4500含600reserve段在结果保存时1696.218798秒。原900s/2M未知、195.511/180失败及178目标/进度失误保留；当前正确状态不追认全历史。
