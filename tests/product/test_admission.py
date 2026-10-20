@@ -1280,10 +1280,14 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertTrue(all(datetime.fromisoformat(row['observedAt']) < Later.now(timezone.utc)
                             - timedelta(days=1) for row in retained))
 
-    def impact_fixture(self):
+    def impact_fixture(self, parent_case=None):
         """Synthetic original qualification and changed full dependency closure."""
         from yiyuan_accord import admission as a
-        contract, case = self.historical_fixture_case("v33-goal-authority-correction-01")
+        if parent_case is None:
+            contract, case = self.historical_fixture_case("v33-goal-authority-correction-01")
+        else:
+            contract = copy.deepcopy(self.contract)
+            case = next(row for row in contract["acceptance"]["admission"]["cases"] if row["id"] == parent_case)
         self.commit(contract)
         capture, records = self.capture()
         original_report = self.assess(contract, capture)
@@ -1358,6 +1362,289 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             result["currentApplicability"] = {case["id"]: material}
             return result
         return contract, case, record, observer
+
+    def parent_fixture(self, case_id):
+        from yiyuan_accord import admission as a
+        contract, case, record, base = self.impact_fixture(case_id)
+        state = {}
+        def observer(request):
+            result = base(request)
+            if request["phase"] == "recheck":
+                result.pop("currentApplicability")
+                material = state["material"]
+                result["parentApplicability"] = {case_id: {
+                    "evidenceSha256": a._hash({k: v for k, v in material.items() if k != "reviewBundle"}),
+                    **{k: copy.deepcopy(material[k]) for k in
+                       ("current", "conditionBindings", "predicateBindings", "roles", "relationships")}}}
+                return result
+            material = result.pop("currentApplicability")[case_id]
+            material["schema"] = "yiyuan-accord-parent-applicability/v1"
+            material["original"]["qualification"]["claim"] = case["claims"][0]
+            entries = case.get("subjectEntries", case["conditions"].get("subjectEntries", [case["entry"]]))
+            modes = case["conditions"].get("selectedModes", {key: [name for name, value in
+                row.get("modes", {}).items() if value["status"] == "selected"] for key, row in
+                case["conditions"].get("entryDispositions", {}).items()})
+            identities = [(entry, mode) for entry in entries for mode in [None, *modes.get(entry, [])]]
+            material["roles"] = [{"id": str(index), "entry": entry, "mode": mode,
+                "originalActor": "synthetic-old-" + entry, "currentActor": "synthetic-current-" + entry,
+                "responsibility": "continuing-applicability", "originalSources": ["final"],
+                "currentSources": ["actual"], "basis": "Synthetic observed actor relationship."}
+                for index, (entry, mode) in enumerate(identities)]
+            bindings = []
+            for pointer, value in a._condition_leaves(case["expected"]).items():
+                parts = pointer.split("/")
+                entry = next((entry for entry in entries if entry in parts), entries[0])
+                mode = parts[parts.index("modes") + 1] if "modes" in parts else None
+                bindings.append({"pointer": pointer, "role": str(identities.index((entry, mode))),
+                    "responsibility": "continuing-applicability", "originalValue": value, "currentValue": copy.deepcopy(value),
+                    "originalSources": ["final"], "currentSources": ["actual"],
+                    "basis": "Synthetic full original predicate applies."})
+            material["predicateBindings"] = bindings
+            for row in material["conditionBindings"]:
+                row.update(role="0", originalSources=["final"])
+            material["relationships"] = [{"kind": kind, "episodeId": record["episodeId"],
+                "fromRole": "0", "toRole": "0", "fromEvent": "event/" + str(index),
+                "toEvent": "event/" + str(index + 1), "sources": ["final"],
+                "basis": "Synthetic actual parent event relation, not a union of child PASSes."}
+                for index, kind in enumerate(("authority", "single-writer", "action", "feedback", "adoption", "poststate"))]
+            self.sign_parent_material(material)
+            state["material"] = material
+            result["parentApplicability"] = {case_id: material}
+            return result
+        return contract, case, record, observer
+
+    @staticmethod
+    def sign_parent_material(material):
+        from yiyuan_accord.admission import _hash
+        digest = _hash({k: v for k, v in material.items() if k != "reviewBundle"})
+        material["reviewBundle"]["evidenceSha256"] = digest
+        for row in material["reviewBundle"]["reviews"]:
+            row["evidenceSha256"] = digest
+
+    def test_parent_applicability_complete_each_class_preserves_original_and_a08(self):
+        for case_id in ("v33-admitted-entry-delivery-01", "v33-admitted-entry-lifecycle-01",
+                        "v33-system-integration-live-development-01",
+                        "v33-system-impact-assessment-live-development-01"):
+            with self.subTest(case=case_id), self.history():
+                contract, case, record, base = self.parent_fixture(case_id)
+                frozen = copy.deepcopy(record)
+                def observer(request):
+                    result = base(request)
+                    if request["phase"] == "observe" and case["scope"] != "v33-system-integration":
+                        material = result["parentApplicability"][case_id]
+                        material["relationships"] = []
+                        self.sign_parent_material(material)
+                    return result
+                report = self.assess(contract, observer)
+                self.assertEqual(report["errors"], [], report)
+                self.assertEqual(report["acceptedCases"], [case_id])
+                self.assertEqual(record, frozen)
+                self.assertIn(case_id, report["currentParentApplicability"])
+                self.assertFalse(report["acceptanceRequirements"]["A08"]["complete"])
+                self.assertFalse(report["candidateEligible"])
+                self.assertNotIn(case_id, self.assess(contract, self.replay([record]))["acceptedCases"])
+
+    def test_parent_applicability_rejects_incomplete_predicates_roles_chain_and_recheck(self):
+        case_id = "v33-system-impact-assessment-live-development-01"
+        with self.history():
+            contract, case, record, base = self.parent_fixture(case_id)
+            for kind in ("comparison", "non-effect", "scenario", "condition", "source", "final",
+                         "identity", "delta", "delta-mode", "child-episode", "relationship-source", "digest",
+                         "recheck", "current-review", "unknown"):
+                def observer(request):
+                    result = base(request)
+                    if request["phase"] == "recheck":
+                        if kind == "recheck": result["parentApplicability"][case_id]["roles"][0]["currentSources"] = []
+                        return result
+                    material = result["parentApplicability"][case_id]
+                    if kind in {"comparison", "non-effect", "scenario"}:
+                        text = {"comparison": "/comparison/", "non-effect": "/authority/",
+                                "scenario": "/native-sufficient"}[kind]
+                        material["predicateBindings"] = [row for row in material["predicateBindings"] if text not in row["pointer"]]
+                    elif kind == "condition": material["conditionBindings"].pop()
+                    elif kind == "source": material["roles"][0]["currentSources"] = []
+                    elif kind == "final": material["original"]["qualification"]["decision"] = "failed"
+                    elif kind == "identity": result["records"][0]["observerId"] = "relabelled"
+                    elif kind == "delta": material["differences"].pop()
+                    elif kind == "delta-mode": material["differences"][0]["newMode"] = "100755"
+                    elif kind == "child-episode": material["relationships"][0]["episodeId"] = "separate-child"
+                    elif kind == "relationship-source": material["relationships"][0]["sources"] = ["analysis"]
+                    elif kind == "digest": material["reviewBundle"]["reviews"][0]["evidenceSha256"] = "0" * 64
+                    elif kind == "current-review": result["reviewBundle"]["decision"] = "fail"
+                    elif kind == "unknown": material["predicateBindings"][0]["currentValue"] = "unknown"
+                    if kind != "digest": self.sign_parent_material(material)
+                    return result
+                with self.subTest(kind=kind):
+                    report = self.assess(contract, observer)
+                    self.assertNotIn(case_id, report["acceptedCases"])
+                    if kind == "recheck":
+                        self.assertIn("current-applicability-changed", report["caseRejections"][case_id])
+
+    def test_parent_applicability_integration_requires_original_connected_chain(self):
+        case_id = "v33-system-integration-live-development-01"
+        with self.history():
+            contract, case, record, base = self.parent_fixture(case_id)
+            for kind in ("empty", "missing-kind", "disjoint-events", "disjoint-roles", "child-episode"):
+                def observer(request):
+                    result = base(request)
+                    if request["phase"] == "observe":
+                        material = result["parentApplicability"][case_id]
+                        edges = material["relationships"]
+                        if kind == "empty": material["relationships"] = []
+                        elif kind == "missing-kind": edges.pop()
+                        elif kind == "disjoint-events": edges[1]["fromEvent"] = "independent-child-event"
+                        elif kind == "disjoint-roles": edges[1]["fromRole"] = "1"
+                        else: edges[1]["episodeId"] = "independent-child-episode"
+                        self.sign_parent_material(material)
+                    return result
+                with self.subTest(kind=kind):
+                    report = self.assess(contract, observer)
+                    self.assertNotIn(case_id, report["acceptedCases"])
+                    self.assertIn("current-applicability-unsupported", report["caseRejections"][case_id])
+
+    def test_parent_applicability_changed_definition_and_conditions_still_reject(self):
+        case_id = "v33-system-integration-live-development-01"
+        with self.history():
+            contract, case, record, base = self.parent_fixture(case_id)
+            for kind in ("authority", "quality", "scope", "condition", "expected", "scenario"):
+                with self.subTest(kind=kind), self.history():
+                    before = copy.deepcopy(contract)
+                    if kind == "authority": contract["authority"]["basis"] += " Changed authority."
+                    elif kind == "quality": contract["systemOptimization"]["qualityAxes"][0]["floor"] += " Changed floor."
+                    elif kind == "scope":
+                        next(row for row in contract["acceptance"]["admission"]["scopes"]
+                             if row["id"] == case["scope"])["rule"] += " Changed rule."
+                    elif kind == "condition": case["conditions"]["newCondition"] = True
+                    elif kind == "expected": case["expected"]["effect"]["newPredicate"] = True
+                    else: case["scenarios"] = case["scenarios"][:-1]
+                    self.commit(contract)
+                    self.assertNotIn(case_id, self.assess(contract, base)["acceptedCases"])
+                    contract.clear(); contract.update(before)
+                    case = next(row for row in contract["acceptance"]["admission"]["cases"] if row["id"] == case_id)
+
+    def test_parent_applicability_mixed_binding_responsibilities_preserve_actor_identity(self):
+        case_id = "v33-system-integration-live-development-01"
+        with self.history():
+            contract, case, record, base = self.parent_fixture(case_id)
+            def mixed_root(request):
+                result = base(request)
+                if request["phase"] == "observe":
+                    material = result["parentApplicability"][case_id]
+                    role = next(row for row in material["roles"] if row["entry"] == "cx-desktop" and row["mode"] is None)
+                    historical = {"/liveDevelopmentBinding/actor/model": "gpt-6.1-sol",
+                                  "/liveDevelopmentBinding/firstSpanLimits/wallSeconds": 900}
+                    for row in material["conditionBindings"]:
+                        row["role"] = role["id"]
+                        if row["pointer"] in historical:
+                            self.assertEqual(row["originalValue"], historical[row["pointer"]])
+                            row["responsibility"] = "historical-execution"
+                    composition = next(row for row in material["conditionBindings"] if row["pointer"] == "/composition")
+                    self.assertEqual(composition["responsibility"], "continuing-applicability")
+                    historical_fact = material["predicateBindings"][0]
+                    historical_fact.update(role=role["id"], responsibility="historical-execution", currentSources=[])
+                    self.sign_parent_material(material)
+                return result
+            report = self.assess(contract, mixed_root)
+            self.assertEqual(report["errors"], [], report)
+            self.assertEqual(report["acceptedCases"], [case_id])
+
+        case_id = "v33-admitted-entry-delivery-01"
+        with self.history():
+            contract, case, record, base = self.parent_fixture(case_id)
+            for kind in ("valid", "current-no-source", "reassessment-no-source", "historical-continuing",
+                         "fake-current-actor", "pretended-live-actor", "historical-source-kind",
+                         "condition-reassessment-no-source", "condition-continuing-historical", "unknown-responsibility"):
+                def ended_ide(request):
+                    result = base(request)
+                    if request["phase"] == "observe":
+                        material = result["parentApplicability"][case_id]
+                        material["relationships"] = []
+                        role = next(row for row in material["roles"] if row["entry"] == "cx-vscode" and row["mode"] is None)
+                        role.update(responsibility="historical-execution", currentActor=None, currentSources=[])
+                        ide = [row for row in material["predicateBindings"] if "/entryDelivery/cx-vscode/" in row["pointer"]]
+                        for row in ide:
+                            row.update(responsibility="historical-execution", currentSources=[])
+                        reassessment = next(row for row in ide if row["pointer"].endswith("/reusedEvidenceApplicable"))
+                        reassessment.update(responsibility="actual-current-reassessment", currentSources=["actual"])
+                        historical_recheck = next(row for row in ide if row["pointer"].endswith("/unfinishedResponsibilitiesAccounted"))
+                        historical_recheck["currentSources"] = ["actual"]
+                        condition = next(row for row in material["conditionBindings"] if row["pointer"] == "/sourceBasis")
+                        condition.update(role=role["id"], responsibility="actual-current-reassessment")
+                        if kind == "current-no-source":
+                            next(row for row in material["predicateBindings"] if row not in ide)["currentSources"] = []
+                        elif kind == "reassessment-no-source": reassessment["currentSources"] = []
+                        elif kind == "historical-continuing": reassessment["responsibility"] = "continuing-applicability"
+                        elif kind == "fake-current-actor": role["currentActor"] = {"observer": "Root"}
+                        elif kind == "pretended-live-actor": role["currentActor"] = "pretended-live-IDE"
+                        elif kind == "historical-source-kind": historical_recheck["currentSources"] = ["analysis"]
+                        elif kind == "condition-reassessment-no-source": condition["sources"] = []
+                        elif kind == "condition-continuing-historical": condition["responsibility"] = "continuing-applicability"
+                        elif kind == "unknown-responsibility": reassessment["responsibility"] = "unknown"
+                        self.sign_parent_material(material)
+                    return result
+                with self.subTest(kind=kind):
+                    report = self.assess(contract, ended_ide)
+                    if kind == "valid":
+                        self.assertEqual(report["errors"], [], report)
+                        self.assertEqual(report["acceptedCases"], [case_id])
+                        self.assertEqual(report["currentParentApplicability"][case_id]["current"]["context"]["entry"]["value"], "cx-desktop")
+                    else:
+                        self.assertNotIn(case_id, report["acceptedCases"])
+                        self.assertIn("current-applicability-unsupported", report["caseRejections"][case_id])
+
+    def test_parent_applicability_entry_aggregate_and_mode_roles_are_exact(self):
+        for case_id, facet in (("v33-admitted-entry-delivery-01", "entryDelivery"),
+                               ("v33-admitted-entry-lifecycle-01", "entryLifecycle")):
+            with self.subTest(case=case_id), self.history():
+                contract, case, record, base = self.parent_fixture(case_id)
+                for kind in ("valid", "aggregate-as-remote", "work-local-as-remote"):
+                    def observer(request):
+                        result = base(request)
+                        if request["phase"] == "observe":
+                            material = result["parentApplicability"][case_id]
+                            material["relationships"] = []
+                            if kind != "valid":
+                                prefix = "/effect/" + facet + "/chatgpt-desktop/"
+                                binding = next(row for row in material["predicateBindings"]
+                                    if row["pointer"].startswith(prefix) and
+                                    (("/modes/" not in row["pointer"]) if kind == "aggregate-as-remote"
+                                     else "/modes/work-local/" in row["pointer"]))
+                                binding["role"] = next(row["id"] for row in material["roles"]
+                                    if row["entry"] == "chatgpt-desktop" and row["mode"] == "remote")
+                            self.sign_parent_material(material)
+                        return result
+                    with self.subTest(binding=kind):
+                        report = self.assess(contract, observer)
+                        if kind == "valid":
+                            self.assertEqual(report["errors"], [], report)
+                            self.assertEqual(report["acceptedCases"], [case_id])
+                        else:
+                            self.assertNotIn(case_id, report["acceptedCases"])
+                            self.assertIn("current-applicability-unsupported", report["caseRejections"][case_id])
+
+    def test_parent_applicability_mode_mapping_and_v1_exclusion(self):
+        case_id = "v33-admitted-entry-delivery-01"
+        with self.history():
+            contract, case, record, base = self.parent_fixture(case_id)
+            for kind in ("mode", "wrong-mode", "v1", "overlap"):
+                def observer(request):
+                    result = base(request)
+                    if request["phase"] == "observe":
+                        material = result["parentApplicability"][case_id]
+                        if kind == "mode": material["roles"].pop()
+                        elif kind == "wrong-mode":
+                            next(row for row in material["roles"] if row["mode"] == "remote")["mode"] = "chat"
+                        elif kind == "v1":
+                            material["schema"] = "yiyuan-accord-current-applicability/v1"
+                            for key in ("roles", "relationships", "predicateBindings"): material.pop(key)
+                            for row in material["conditionBindings"]:
+                                row.pop("role"); row.pop("originalSources")
+                            result["currentApplicability"] = result.pop("parentApplicability")
+                        else: result["currentApplicability"] = copy.deepcopy(result["parentApplicability"])
+                        self.sign_parent_material(material)
+                    return result
+                with self.subTest(kind=kind):
+                    self.assertNotIn(case_id, self.assess(contract, observer)["acceptedCases"])
 
     def test_current_impact_default_and_explicit_scoped_success(self):
         with self.history():

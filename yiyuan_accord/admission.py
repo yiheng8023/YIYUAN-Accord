@@ -36,6 +36,10 @@ _ENTRY_PARENT_SCOPES = {
     "v33-admitted-entry-delivery": "entryDelivery",
     "v33-admitted-entry-lifecycle": "entryLifecycle",
 }
+_PARENT_CLAIMS = {"v33-admitted-entry-delivery": "function",
+                  "v33-admitted-entry-lifecycle": "package-lifecycle",
+                  "v33-system-integration": "function",
+                  "v33-system-impact-assessment": "impact-assessment"}
 _ENTRY_COVERAGE_SCOPE = "v33-codex-entry-coverage"
 _HOST_LIFECYCLE_SCOPE = "v33-codex-lifecycle"
 _SELECTED_SUBJECT_SCOPES = {_HOST_LIFECYCLE_SCOPE, "v33-system-integration"}
@@ -855,7 +859,7 @@ def _condition_leaves(value, pointer=""):
 
 
 def _current_impact(root, material, record, original_contract, original, contract, case,
-                    subject, snapshots, packages, budget, now, candidate_time):
+                    subject, snapshots, packages, budget, now, candidate_time, *, parent=False):
     """Validate consistency; authenticated completeness/semantics remain caller duties.
 
     Source hashes are observer attestations, not files opened or authenticated by
@@ -867,9 +871,18 @@ def _current_impact(root, material, record, original_contract, original, contrac
             raise _CaseRejection("current-applicability-unsupported")
 
     require(isinstance(material, dict) and set(material) == {
-        "schema", "original", "current", "differences", "conditionBindings", "sources", "reviewBundle"})
-    require(material["schema"] == "yiyuan-accord-current-applicability/v1")
-    require(_impact_eligible(original_contract, original) and _impact_eligible(contract, case))
+        "schema", "original", "current", "differences", "conditionBindings", "sources", "reviewBundle"}
+        | ({"predicateBindings", "roles", "relationships"} if parent else set()))
+    require(material["schema"] == ("yiyuan-accord-parent-applicability/v1" if parent
+                                   else "yiyuan-accord-current-applicability/v1"))
+    if parent:
+        claim = _PARENT_CLAIMS.get(case["scope"])
+        require(claim is not None and original_contract["schema"] == contract["schema"]
+                == "yiyuan-accord-development/v5" and all(
+                c["acceptance"]["admission"]["schema"] == CURRENT_SCHEMA
+                and v["claims"] == [claim] for c, v in ((original_contract, original), (contract, case))))
+    else:
+        require(_impact_eligible(original_contract, original) and _impact_eligible(contract, case))
     require(_json(original) == _json(case)
             and _impact_definition(original_contract, original) == _impact_definition(contract, case))
     revision = record["evaluatedRevision"]
@@ -901,7 +914,8 @@ def _current_impact(root, material, record, original_contract, original, contrac
         "case", "scope", "claim", "episodeId", "recordSha256", "subject", "decision",
         "stage", "qualifiedAt", "sources", "finalOutcomeSources", "knownFailuresAndLimits"})
     require(qualification["case"] == case["id"] and qualification["scope"] == case["scope"]
-            and qualification["claim"] == "function" and qualification["subject"] == original_subject
+            and qualification["claim"] == (_PARENT_CLAIMS[case["scope"]] if parent else "function")
+            and qualification["subject"] == original_subject
             and qualification["recordSha256"] == _hash(record)
             and qualification["episodeId"] == record["episodeId"]
             and qualification["decision"] == "accepted" and qualification["stage"] == "final-case-qualification"
@@ -954,15 +968,19 @@ def _current_impact(root, material, record, original_contract, original, contrac
     seen = set()
     for row in bindings:
         require(isinstance(row, dict) and set(row) == {
-            "pointer", "originalValue", "responsibility", "currentValue", "basis", "sources"})
+            "pointer", "originalValue", "responsibility", "currentValue", "basis", "sources"}
+            | ({"role", "originalSources"} if parent else set()))
         pointer = row["pointer"]
         require(isinstance(pointer, str) and pointer in leaves and pointer not in seen
                 and _json(row["originalValue"]) == _json(leaves[pointer])
-                and row["responsibility"] in {"historical-execution", "continuing-applicability"}
+                and row["responsibility"] in ({"historical-execution", "continuing-applicability"}
+                    | ({"actual-current-reassessment"} if parent else set()))
                 and (row["responsibility"] != "continuing-applicability"
                      or _json(row["currentValue"]) == _json(leaves[pointer]))
                 and _text(row["basis"]) and refs(row["sources"], "current-observation"))
         seen.add(pointer)
+    if parent:
+        _parent_bindings(material, record, case, refs, require)
     digest = _hash({key: value for key, value in material.items() if key != "reviewBundle"})
     review_policy = contract["acceptance"]["admission"]["reviewPolicy"]
     require(set(review_policy["requiredAxes"]) == {"product", "specification", "implementation", "standards"}
@@ -975,7 +993,99 @@ def _current_impact(root, material, record, original_contract, original, contrac
                 is not None and at.timestamp() >= candidate_time for row in review["reviews"]))
     return {"evidenceSha256": digest, "original": copy.deepcopy(old), "current": copy.deepcopy(current),
             "conditionBindings": copy.deepcopy(bindings),
-            "claimLimit": "historical-single-entry-function-current-applicability-not-new-execution-or-parent-coverage"}
+            **({"predicateBindings": copy.deepcopy(material["predicateBindings"]),
+                "roles": copy.deepcopy(material["roles"]), "relationships": copy.deepcopy(material["relationships"])}
+               if parent else {}),
+            "claimLimit": ("complete-original-parent-case-current-applicability-not-new-execution" if parent else
+                "historical-single-entry-function-current-applicability-not-new-execution-or-parent-coverage")}
+
+
+
+def _parent_bindings(material, record, case, refs, require):
+    """Complete-case only. Source meaning and actual causality need source review."""
+    modes = case["conditions"].get("selectedModes")
+    if modes is None:
+        modes = {key: [name for name, row in value.get("modes", {}).items()
+                       if row["status"] == "selected"]
+                 for key, value in case["conditions"].get("entryDispositions", {}).items()}
+    entries = case.get("subjectEntries", case["conditions"].get("subjectEntries", [case["entry"]]))
+    selected = {(entry, None) for entry in entries} | {
+        (entry, mode) for entry in entries for mode in modes.get(entry, [])}
+    roles = material["roles"]
+    require(isinstance(roles, list) and len(roles) == len(selected))
+    by_id, identities = {}, set()
+    for row in roles:
+        require(isinstance(row, dict) and set(row) == {
+            "id", "entry", "mode", "originalActor", "currentActor", "responsibility",
+            "originalSources", "currentSources", "basis"})
+        require(_text(row["id"]) and row["id"] not in by_id and _text(row["originalActor"])
+                and _text(row["basis"]) and row["responsibility"] in {
+                    "historical-execution", "continuing-applicability", "actual-current-reassessment"}
+                and refs(row["originalSources"], "original-final-outcome"))
+        identity = (row["entry"], row["mode"])
+        require(identity in selected and identity not in identities)
+        if row["responsibility"] == "historical-execution":
+            require(row["currentActor"] is None and row["currentSources"] == [])
+        else:
+            require(_text(row["currentActor"]) and refs(row["currentSources"], "current-observation"))
+        by_id[row["id"]] = row
+        identities.add(identity)
+    def binding_responsibility(row, role, sources):
+        responsibility = row["responsibility"]
+        require(responsibility in {"historical-execution", "continuing-applicability", "actual-current-reassessment"})
+        require((sources == [] and responsibility == "historical-execution")
+                or refs(sources, "current-observation"))
+        if responsibility == "continuing-applicability":
+            require(role["responsibility"] != "historical-execution" and _text(role["currentActor"]))
+
+    expected = _condition_leaves(case["expected"])
+    actual = _condition_leaves({key: value["value"] for key, value in record["facts"].items()})
+    bindings = material["predicateBindings"]
+    require(isinstance(bindings, list) and len(bindings) == len(expected))
+    seen = set()
+    for row in bindings:
+        require(isinstance(row, dict) and set(row) == {
+            "pointer", "role", "responsibility", "originalValue", "currentValue", "originalSources", "currentSources", "basis"})
+        pointer, role_id = row["pointer"], row["role"]
+        require(isinstance(pointer, str) and pointer in expected and pointer not in seen
+                and role_id in by_id and _text(row["basis"])
+                and _json(row["originalValue"]) == _json(actual[pointer]) == _json(expected[pointer])
+                and _json(row["currentValue"]) == _json(expected[pointer])
+                and refs(row["originalSources"], "original-final-outcome"))
+        role = by_id[role_id]
+        parts = pointer.split("/")
+        for entry in entries:
+            if entry in parts:
+                require(role["entry"] == entry)
+        if "modes" in parts:
+            require(role["mode"] == parts[parts.index("modes") + 1])
+        elif len(parts) > 3 and parts[1] == "effect" and parts[2] in {"entryDelivery", "entryLifecycle"}:
+            require(role["mode"] is None)
+        binding_responsibility(row, role, row["currentSources"])
+        seen.add(pointer)
+    # Conditions stay complete even when a historical actor has ended. Current
+    # dependency declarations cannot erase a missing original duty.
+    for row in material["conditionBindings"]:
+        require(row["role"] in by_id and refs(row["originalSources"], "original-final-outcome")
+                and _json(row["currentValue"]) == _json(row["originalValue"]))
+        binding_responsibility(row, by_id[row["role"]], row["sources"])
+    edges = material["relationships"]
+    kinds = {"authority", "single-writer", "action", "feedback", "adoption", "poststate"}
+    joined = case["scope"] == "v33-system-integration"
+    require(isinstance(edges, list) and (not joined or len(edges) == len(kinds)))
+    previous = None
+    for edge in edges:
+        require(isinstance(edge, dict) and set(edge) == {
+            "kind", "episodeId", "fromRole", "toRole", "fromEvent", "toEvent", "sources", "basis"})
+        require(edge["kind"] in kinds and edge["episodeId"] == record["episodeId"]
+                and edge["fromRole"] in by_id and edge["toRole"] in by_id
+                and _text(edge["fromEvent"]) and _text(edge["toEvent"])
+                and edge["fromEvent"] != edge["toEvent"] and _text(edge["basis"])
+                and refs(edge["sources"], "original-final-outcome"))
+        require(not joined or previous is None or (previous["toEvent"], previous["toRole"])
+                == (edge["fromEvent"], edge["fromRole"]))
+        previous = edge
+        kinds.remove(edge["kind"])
 
 
 def assess_development_evidence(root, contract, observer, review_bundle=None, *, subject=None):
@@ -1024,7 +1134,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
         # Keep this axis so each scope still requires its selected case evidence.
         "scenarios": set(),
     }
-    admitted, package_reuse, current_applicability = set(), {}, {}
+    admitted, package_reuse, current_applicability, parent_applicability = set(), {}, {}, {}
     if observer is not None:
         try:
             if not callable(observer):
@@ -1044,12 +1154,16 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             # Copy before invoking foreign code; never let it rewrite expected facts.
             observation_started = monotonic()
             data = _strict_json_object(_json(observer(copy.deepcopy(request))))
-            if (set(data) not in ({"records", "reviewBundle"}, {"records", "reviewBundle", "currentApplicability"})
+            if (not {"records", "reviewBundle"} <= set(data)
+                    or set(data) - {"records", "reviewBundle", "currentApplicability", "parentApplicability"}
                     or not isinstance(data["records"], list)):
                 raise ValueError("invalid observation envelope")
-            materials = data.get("currentApplicability", {})
-            if not isinstance(materials, dict) or not set(materials) <= cases.keys():
+            ordinary_materials = data.get("currentApplicability", {})
+            parent_materials = data.get("parentApplicability", {})
+            if any(not isinstance(rows, dict) or not set(rows) <= cases.keys()
+                   for rows in (ordinary_materials, parent_materials)) or set(ordinary_materials) & set(parent_materials):
                 raise ValueError("invalid current applicability mapping")
+            materials = {**ordinary_materials, **parent_materials}
             now = datetime.now(timezone.utc)
             candidate_time = int(_git(root, "show", "-s", "--format=%ct", subject["revision"]).strip())
             prior, package_snapshots, seen, read_blobs = {}, {}, set(), set()
@@ -1176,11 +1290,13 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                         case_errors.append(f"{key}: freshness, conditions or consequence not admitted")
                     else:
                         if key in materials:
-                            current_applicability[key] = _current_impact(
+                            destination = parent_applicability if key in parent_materials else current_applicability
+                            destination[key] = _current_impact(
                                 root, materials[key], record, prior[revision], original, contract, case,
                                 subject, (original_snapshot, current_snapshot),
-                                (original_package, current_package), package_budget, now, candidate_time)
-                            current_applicability[key]["reconciledReasons"] = reuse_issues
+                                (original_package, current_package), package_budget, now, candidate_time,
+                                parent=key in parent_materials)
+                            destination[key]["reconciledReasons"] = reuse_issues
                         admitted.add(key)
                 except (OSError, subprocess.SubprocessError, KeyError, TypeError, ValueError, StopIteration) as error:
                     reject_case(key, *(error.codes if isinstance(error, _CaseRejection) else ("source-evidence-unavailable",)))
@@ -1203,20 +1319,24 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 **request, "phase": "recheck", "observationSha256": observation_hash,
             }))))
             recheck_fields = {"subject", "conditions", "observationSha256"}
-            if materials:
-                recheck_fields.add("currentApplicability")
+            for name, rows in (("currentApplicability", ordinary_materials), ("parentApplicability", parent_materials)):
+                if rows:
+                    recheck_fields.add(name)
             if (set(recheck) != recheck_fields
                     or recheck["subject"] != subject or recheck["observationSha256"] != observation_hash
                     or not isinstance(recheck["conditions"], dict)):
                 raise ValueError("invalid observer recheck")
-            if materials and (not isinstance(recheck["currentApplicability"], dict)
-                              or set(recheck["currentApplicability"]) != set(materials)):
-                raise ValueError("invalid current applicability recheck")
+            for name, rows in (("currentApplicability", ordinary_materials), ("parentApplicability", parent_materials)):
+                if rows and (not isinstance(recheck[name], dict) or set(recheck[name]) != set(rows)):
+                    raise ValueError("invalid current applicability recheck")
+            applicable = {**current_applicability, **parent_applicability}
             for key in list(admitted):
-                if key in current_applicability:
-                    expected = {field: current_applicability[key][field] for field in (
-                        "evidenceSha256", "current", "conditionBindings")}
-                    if _json(recheck["currentApplicability"][key]) != _json(expected):
+                if key in applicable:
+                    fields = ("evidenceSha256", "current", "conditionBindings") + ((
+                        "predicateBindings", "roles", "relationships") if key in parent_applicability else ())
+                    expected = {field: applicable[key][field] for field in fields}
+                    name = "parentApplicability" if key in parent_applicability else "currentApplicability"
+                    if _json(recheck[name][key]) != _json(expected):
                         admitted.remove(key)
                         reject_case(key, "current-applicability-changed")
                         case_errors.append(f"{key}: current applicability changed or unavailable")
@@ -1248,7 +1368,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     _fresh(v["reviewedAt"], contract["acceptance"]["admission"]["reviewMaxAgeSeconds"], final_now) is None
                     for v in review["reviews"]):
                 errors.append("independent review expired before final qualification")
-            for key in list(admitted & current_applicability.keys()):
+            for key in list(admitted & applicable.keys()):
                 if any(_fresh(row["reviewedAt"], policy["reviewMaxAgeSeconds"], final_now) is None
                        for row in materials[key]["reviewBundle"]["reviews"]):
                     admitted.remove(key)
@@ -1257,7 +1377,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             if errors:
                 # A dedicated impact review cannot replace the ordinary current
                 # candidate review or rescue another failed source/identity guard.
-                for key in list(admitted & current_applicability.keys()):
+                for key in list(admitted & applicable.keys()):
                     admitted.remove(key)
                     reject_case(key, "current-candidate-review-or-source-invalid")
         except Exception:
@@ -1277,6 +1397,9 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     if current_applicability:
         report["currentApplicability"] = {key: current_applicability[key]
                                           for key in sorted(admitted & current_applicability.keys())}
+    if parent_applicability:
+        report["currentParentApplicability"] = {key: parent_applicability[key]
+            for key in sorted(admitted & parent_applicability.keys())}
     report["packageReuse"] = {key: package_reuse[key] for key in sorted(admitted & set(package_reuse))}
     bound = {claim: {key for key in ids if key in scopes and claim in scopes[key]["claims"]}
              for claim, ids in policy["requiredCoverage"].items()}
