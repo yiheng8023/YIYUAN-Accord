@@ -6098,7 +6098,7 @@
           }
         },
         "successorBinding": {
-          "status": "prospectively-declared-not-observed-not-admitted",
+          "status": "qualified-at-bound-subject",
           "caseIds": [
             "v33-dynamic-routing-current-development-02",
             "v33-whole-host-lifecycle-current-development-02"
@@ -6112,7 +6112,47 @@
           "sourceManifest": "private:accord-scope-qualification-finalize-20261020-02/prepared-source-guard-manifest.json",
           "sourceManifestSha256": "62ffae820f40af0dd71a775898645fd429f4600267da121522702a3e7f313168",
           "priorCaseDispositionUnchanged": true,
-          "allPriorPreparationAndFailuresRetained": true
+          "allPriorPreparationAndFailuresRetained": true,
+          "qualification": {
+            "subject": {
+              "revision": "1935d16cdf367538fe6ba98fc028ea72ceaf4768",
+              "tree": "9f87b87fabd8615dfa8fd355cfb61510bf51e22b"
+            },
+            "source": "private:accord-scope-qualification-finalize-20261020-02/OUTCOME.json",
+            "sourceSha256": "3ec46cc496c36541b89d96700eacad5cf8bf26abf5949dc9cc217a49d9725053",
+            "reportSource": "private:accord-scope-qualification-finalize-20261020-02/admission-result.json",
+            "reportSha256": "f006054e599d8d898bfca9651373f21063dfbf0b4cd28189eab75ccdb9a5129e",
+            "acceptedCases": [
+              "v33-dynamic-routing-current-development-02",
+              "v33-whole-host-lifecycle-current-development-02"
+            ],
+            "finalSourceVerification": true,
+            "errors": [],
+            "caseRejections": {},
+            "originalGuardRows": 618,
+            "currentDependencyRows": 202,
+            "packageMembers": 25,
+            "scopeMissingDimensions": {
+              "v33-dynamic-model-routing": {
+                "function": {
+                  "duties": [],
+                  "qualityAxes": [],
+                  "scenarios": []
+                }
+              },
+              "v33-codex-lifecycle": {
+                "package-lifecycle": {
+                  "duties": [],
+                  "qualityAxes": [],
+                  "scenarios": []
+                }
+              }
+            },
+            "elapsedAtOutcomeSeconds": 1161.5440634999977,
+            "originalWholeStageSeconds": 3600,
+            "recordCloseout": "pending; not replaced by earlier outcome time",
+            "fullR2R3Complete": false
+          }
         }
       }
     }
