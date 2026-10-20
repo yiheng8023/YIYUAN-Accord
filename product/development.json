@@ -5820,7 +5820,42 @@
       "remaining": [
         "Candidate paragraph not accepted as written; original frozen inputs remain unchanged.",
         "Full R2/R3, parent delivery/lifecycle, dynamic capability coordination, complete same-business A08 and independent impact remain unfinished."
-      ]
+      ],
+      "ordinaryScopeFollowup": {
+        "subject": {
+          "revision": "d2a905e472fd7af2e5de07fc2ca2ae9fcf594d8d",
+          "tree": "9e60cb0c819a3a777b712df423781a283e4b55d6"
+        },
+        "source": "private:accord-current-ordinary-combination-20261020-01/OUTCOME.json",
+        "sourceSha256": "d1d05a1ddd4f85accb43d3413afdea858fc71ac6b5af82dbb92743c9ecf6e848",
+        "acceptedCases": [
+          "v33-cli-catalog-migration-01",
+          "v33-cli-readme-semantic-review-20261020-01"
+        ],
+        "scope": "v33-codex-cli-ordinary-delivery",
+        "scopeFunctionCompleteForBoundSubject": true,
+        "originalRecordsPreserved": true,
+        "distinctEpisodes": 2,
+        "sameBusinessA08Claim": false,
+        "finalSourceVerification": true,
+        "preservedCorrections": [
+          "Later workspace-write helper/os5 and forced-timeout failures remain unknown-cause; no repaired sandbox or original-profile-equivalence claim.",
+          "Original configuration drift preserved; current selected configuration and package sources checked separately.",
+          "First private observer omitted currentApplicability recheck fields; original core correctly rejected and original result remains. r2 added existing defined recheck fields only, same records/reviews/material/deadline; no business repeated.",
+          "Initial product hold preserved; clarified and withdrawn because it expanded limited source applicability into current sandbox reproducibility."
+        ],
+        "remaining": [
+          "Four original parent records cannot be relabelled to current evaluatedRevision or sent through function-only narrow bridge.",
+          "Next concrete obligations: parent delivery/lifecycle current predicate adjudication, actual affected same-business combination edges, and complete independent added-burden/impact assessment.",
+          "IDE24 actual GUI participation remains unknown in mapped sources; shared backend compatibility is not actual use. Do not manufacture a demonstration or new business solely to fill it.",
+          "Full A01-A08/R2/R3, all17scope, whole-entry lifecycle, independent impact and release remain unfinished."
+        ],
+        "ci": {
+          "04d": "11/11 completed success",
+          "d2a": "11/11 completed success"
+        },
+        "currentReadme": "Both evidence paragraphs updated from qualified sources; original frozen candidates/map preserved, generic exit claim omitted, no whole-system/release assertion."
+      }
     }
   ],
   "environmentControl": {
