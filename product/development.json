@@ -3854,7 +3854,45 @@
             ],
             "ownedProcessRecords": 25,
             "scope": "Current package refresh of the same two historically admitted controlled SDK cases. Exact native input/state, SessionEnd order, exposure and resource sources checked; no new case or whole-host/ordinary-agent/R2R3 completion.",
-            "laterCandidateApplicability": "Retains its original22/f755/c170 qualification. Changed full-package candidate23 is not automatically admitted; refresh only at a necessary final candidate boundary, not after every progress record."
+            "laterCandidateApplicability": "Retains its original22/f755/c170 qualification. Changed full-package candidate23 is not automatically admitted; refresh only at a necessary final candidate boundary, not after every progress record.",
+            "package24Followup": {
+              "source": "private:accord-sdk-current-package24-20261020-01/OUTCOME.json",
+              "sourceSha256": "68ea28d197f676e1d2e6bed87570c085e19d5efe20ec5297f509ea238838b3e3",
+              "subject": {
+                "revision": "73828ccc45b739c669e7b213d3e98bf4b96555b7",
+                "tree": "9978897734ce1c571753373e01271ee5a3cda857"
+              },
+              "evaluatedRevision": "73828ccc45b739c669e7b213d3e98bf4b96555b7",
+              "episodeId": "github-actions:39446448668/windows-base",
+              "originalRunObservedAt": "2026-10-20T15:14:20.443742+00:00",
+              "qualificationPassed": true,
+              "acceptedCases": [
+                "v33-codex-sdk-lifecycle-01",
+                "v33-codex-sdk-scoped-exposure-01"
+              ],
+              "admissionReport": "private:accord-sdk-current-package24-20261020-01/ADMISSION.json",
+              "admissionReportSha256": "f1fb4f92a94d8034b610f6153334894a298b38a767f673307fe1ee73e479cddc",
+              "artifactSha256": "bc299236f9ab5a0916723c1b34f773008d379172841121ead9436fc585ded63d",
+              "runId": 39446448668,
+              "runConclusion": "success",
+              "controlledMethod": {
+                "host": "Codex officialCLI0.154.0 AppServer on hostedWindows",
+                "package": "3.3.0-dev.1+codex.20261018043044",
+                "model": "fixture-no-model",
+                "realNativeSdk": true,
+                "fixedLocalProviderRequests": 4,
+                "packageMembers": 25,
+                "resourceRecords": 25,
+                "naturalExitExceptExpectedInvalidCandidate1": true,
+                "sessionEndInputContrastAndOrderVerified": true,
+                "scopedExposureAndRemovalVerified": true,
+                "unfinishedFilesPreserved": 2
+              },
+              "qaElapsedAtOutcomeSeconds": 895.2262980999949,
+              "qaOriginalAllocationSeconds": 2400,
+              "recordCloseoutSource": "private:accord-sdk-current-package24-20261020-01/record-closeout.json",
+              "claimLimit": "Current24 controlledWindows/base SDK methods only. Prior17Oct actors/time/qualification remain historical; this does not stand in for ordinaryAgent behavior,wholehost/entry/fullR2R3 or release."
+            }
           },
           "boundedNativeEvidenceCorrection": {
             "source": "private:accord-native-evidence-bound-20261017-01/correction.json",
@@ -6152,6 +6190,26 @@
             "originalWholeStageSeconds": 3600,
             "recordCloseout": "pending; not replaced by earlier outcome time",
             "fullR2R3Complete": false
+          },
+          "completeCandidateNext": {
+            "source": "private:accord-complete-candidate-assembly-20261020-01/coverage-required-gaps.json",
+            "sha256": "b2aaf4134e12405b904cc3aec76dcccb4a70b78043cbafcf12326100a53d1281",
+            "role": "Read-only finite remaining-condition map for the existing entry-capability case; not new case/admission/floor.",
+            "remaining": [
+              "Finite existingID-to-disposition/necessary-effect assembly",
+              "Desktop native-menu registration source",
+              "SelectedRemote control-client source boundary",
+              "Necessary historical-to-current applicability and formal binding, accounting for newlyqualifiedSDK/parent/two-scope contributions"
+            ],
+            "newPhysicalActionRequiredByCurrentEvidence": false,
+            "wholeEntryCapabilityQualification": false,
+            "doNotRepeat": [
+              "Resolved fourCLI parser leaves",
+              "rbr/T$n micro filtering",
+              "Work/Codex same-package identity",
+              "profile namespace correction",
+              "closed ordinarybusiness or unneededIDE/mobile demonstrations"
+            ]
           }
         }
       }
