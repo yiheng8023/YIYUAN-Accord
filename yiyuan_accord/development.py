@@ -346,10 +346,11 @@ def development_contract_errors(contract, golden_task_ids):
                                               "final-candidate-not-publication-proof"),
             "a declared version is not publication evidence")
     if successor:
-        require(contract.get("status") == "in-development"
-                and cycle.get("targetVersion") == "3.3.0"
-                and cycle.get("versionState") == "development-target-not-published",
-                "3.3 development is not a frozen or completed release")
+        require(cycle.get("targetVersion") == "3.3.0"
+                and (contract.get("status") != "candidate-frozen"
+                     or isinstance(release, dict)
+                     and release.get("decision") == "user-authorized-after-acceptance"),
+                "3.3 candidate freezing requires the bound conditional release authority")
         require(contract.get("previousDevelopmentSnapshot") == PREVIOUS_DEVELOPMENT,
                 "3.2.1 development evidence must retain its immutable identity")
         from .identity import external_product_references_errors

@@ -879,8 +879,18 @@ at A; declared dependencies are then compared with B, normalizing only the defau
 Codex cache timestamp within an unchanged manifest base version. Other manifest
 fields stay significant. The dependency set is part of the definition and cannot
 be narrowed retrospectively; independent review must establish its completeness.
-Unselected Skill discovery metadata can still affect routing. Reuse reports keep
-original and current package identities separate. Cases without this opt-in,
+Unselected Skill discovery metadata can still affect routing. This unchanged-dependency
+path remains strict without applicability material. For an eligible pure-function
+case, changed selected content or a valid executable mode can instead enter the
+existing complete current-applicability review: all package/oracle/adjudicator
+deltas, original final qualification, condition responsibilities, independent
+reviews and final recheck remain required. Material presence alone grants nothing;
+missing or structurally invalid dependencies still reject. Reports distinguish
+reconciled changes from unchanged dependencies and keep original and current
+package identities separate. The same complete material mechanism permits only
+the authorized 3.3.0 development-to-frozen-final-candidate transition, for eligible
+function and mapped parent cases; substantive case semantics remain unchanged.
+Freezing does not assert qualification, release readiness or publication. Cases without this opt-in,
 lifecycle, multi-entry, impact and A08 integration cases retain full-package checks.
 Current whole-package integration and release review remain mandatory; valid older
 function evidence is not relabeled as a new execution. Reviews bind exact B/tree,

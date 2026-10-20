@@ -638,7 +638,7 @@ def _revision_package_snapshot(root, revision, package, budget):
         raise ValueError("package assessment call bound exceeded")
     budget["calls"] += 1
     listing = _git(root, "ls-tree", "-r", "-z", revision, "--", package)
-    locators = []
+    locators, modes = [], {}
     for row in (item for item in listing.split(b"\0") if item):
         metadata, separator, raw_locator = row.partition(b"\t")
         fields = metadata.split()
@@ -647,6 +647,7 @@ def _revision_package_snapshot(root, revision, package, budget):
                 or fields[1] != b"blob" or not locator.startswith(package + "/")):
             raise ValueError("revision package tree is invalid")
         locators.append(locator)
+        modes[locator] = fields[0].decode("ascii")
     if (not locators or len(locators) != len(set(locators))
             or len(locators) > _PACKAGE_TREE_FILES
             or budget["files"] + len(locators) > _PACKAGE_ASSESSMENT_FILES):
@@ -668,7 +669,7 @@ def _revision_package_snapshot(root, revision, package, budget):
         digest.update(b"\0")
         digest.update(sha256(content).digest())
         files[locator] = content
-    return {"sha256": digest.hexdigest(), "files": files}
+    return {"sha256": digest.hexdigest(), "files": files, "modes": modes}
 
 
 def _normalized_cache_version(value):
@@ -685,17 +686,23 @@ def _normalized_manifest(raw):
 
 
 def _selected_package_files_unchanged(original, current, files, manifest):
+    unchanged = True
     for locator in files:
         if locator not in original["files"] or locator not in current["files"]:
             raise ValueError("selected package dependency is unavailable")
+        old_mode, new_mode = original["modes"][locator], current["modes"][locator]
+        if old_mode not in {"100644", "100755"} or new_mode not in {"100644", "100755"}:
+            raise ValueError("selected package dependency mode is invalid")
         original_bytes = original["files"][locator]
         current_bytes = current["files"][locator]
+        if old_mode != new_mode:
+            unchanged = False
         if locator == manifest:
             if _normalized_manifest(original_bytes) != _normalized_manifest(current_bytes):
-                return False
+                unchanged = False
         elif original_bytes != current_bytes:
-            return False
-    return True
+            unchanged = False
+    return unchanged
 
 
 def evidence_subject(root):
@@ -774,6 +781,60 @@ def _impact_definition(contract, case):
             projection["packageVersion"] = _normalized_cache_version(projection["packageVersion"])
             projection["packageSha256"] = "0" * 64
     return _reuse_definition(current, case)
+
+
+def _impact_comparison(original_contract, original, contract, case):
+    """Classify one semantic comparison without rewriting either source identity."""
+    if _json(original) != _json(case):
+        return None
+    if _impact_definition(original_contract, original) == _impact_definition(contract, case):
+        return "same-base-artifact-identity"
+    pairs = ((original_contract, "in-development", "development-target-not-published"),
+             (contract, "candidate-frozen", "final-candidate-not-publication-proof"))
+    for source, status, state in pairs:
+        cycle = source.get("cycle", {})
+        authority = source.get("authority", {})
+        ceiling = source.get("claimCeiling", {})
+        if not all(isinstance(value, dict) for value in (cycle, authority, ceiling)):
+            return None
+        release = authority.get("conditionalRelease", {})
+        if not isinstance(release, dict):
+            return None
+        if (source.get("schema") != "yiyuan-accord-development/v5"
+                or source.get("productId") != "yiyuan-accord"
+                or source["acceptance"]["admission"]["schema"] != CURRENT_SCHEMA
+                or source.get("status") != status
+                or cycle.get("id") != "v3.3-ordinary-entry-functional-development"
+                or cycle.get("targetVersion") != "3.3.0" or cycle.get("versionState") != state
+                or release.get("target") != "3.3.0"
+                or release.get("decision") != "user-authorized-after-acceptance"
+                or release.get("ready") is not False
+                or ceiling.get("localContractOnly") is not True
+                or any(ceiling.get(key) is not False for key in ("functionalCompletion", "candidateEligible"))
+                or any(ceiling.get(key) != "unverified" for key in ("currentHostBehavior", "incrementalValue"))
+                or ceiling.get("releaseIntent") != "conditional-v3.3-release-after-acceptance"):
+            return None
+    old_version = original_contract["delivery"]["version"]
+    if (not isinstance(old_version, str)
+            or re.fullmatch(r"3\.3\.0-dev\.[1-9][0-9]*(?:\+codex\.[0-9]{14})?", old_version) is None
+            or contract["delivery"]["version"] != "3.3.0"
+            or original_contract["authority"] != contract["authority"]
+            or original_contract["claimCeiling"] != contract["claimCeiling"]):
+        return None
+    projections = []
+    for source, version in ((original_contract, old_version), (contract, "3.3.0")):
+        rows = source["delivery"]["hostProjections"]
+        if (len(rows) != 1 or rows[0]["id"] != case["host"] or case["host"] != "codex"
+                or rows[0]["packageVersion"] != version):
+            return None
+        projections.append(rows[0])
+    comparison = copy.deepcopy(contract)
+    comparison["cycle"]["versionState"] = original_contract["cycle"]["versionState"]
+    comparison["delivery"]["version"] = old_version
+    comparison["delivery"]["hostProjections"][0]["packageVersion"] = projections[0]["packageVersion"]
+    if _impact_definition(original_contract, original) == _impact_definition(comparison, case):
+        return "authorized-v33-final-candidate"
+    return None
 
 
 def _impact_eligible(contract, case):
@@ -887,8 +948,8 @@ def _current_impact(root, material, record, original_contract, original, contrac
                 and v["claims"] == [claim] for c, v in ((original_contract, original), (contract, case))))
     else:
         require(_impact_eligible(original_contract, original) and _impact_eligible(contract, case))
-    require(_json(original) == _json(case)
-            and _impact_definition(original_contract, original) == _impact_definition(contract, case))
+    comparison = _impact_comparison(original_contract, original, contract, case)
+    require(comparison is not None)
     revision = record["evaluatedRevision"]
     original_subject = {"revision": revision,
                         "tree": _git(root, "rev-parse", "--verify", revision + "^{tree}").decode("ascii").strip()}
@@ -996,6 +1057,9 @@ def _current_impact(root, material, record, original_contract, original, contrac
     require(all((at := _fresh(row["reviewedAt"], contract["acceptance"]["admission"]["reviewMaxAgeSeconds"], now))
                 is not None and at.timestamp() >= candidate_time for row in review["reviews"]))
     return {"evidenceSha256": digest, "original": copy.deepcopy(old), "current": copy.deepcopy(current),
+            "definitionComparison": {"kind": comparison,
+                "originalVersion": original_contract["delivery"]["version"],
+                "currentVersion": contract["delivery"]["version"]},
             "conditionBindings": copy.deepcopy(bindings),
             **({"predicateBindings": copy.deepcopy(material["predicateBindings"]),
                 "roles": copy.deepcopy(material["roles"]), "relationships": copy.deepcopy(material["relationships"])}
@@ -1242,10 +1306,13 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                                 raise _CaseRejection("complete-package-changed")
                             reuse_issues.append("complete-package-changed")
                     else:
-                        if not _selected_package_files_unchanged(
-                                original_snapshot, current_snapshot, package_files, current_host["manifest"]):
-                            raise _CaseRejection("selected-package-dependency-changed")
-                        if record["packageSha256"] != bound["packageSha256"]:
+                        selected_unchanged = _selected_package_files_unchanged(
+                            original_snapshot, current_snapshot, package_files, current_host["manifest"])
+                        if not selected_unchanged:
+                            if key not in materials:
+                                raise _CaseRejection("selected-package-dependency-changed")
+                            reuse_issues.append("selected-package-dependency-changed")
+                        if selected_unchanged and record["packageSha256"] != bound["packageSha256"]:
                             package_reuse[key] = {
                                 "evaluatedRevision": revision,
                                 "evaluatedPackageSha256": record["packageSha256"],

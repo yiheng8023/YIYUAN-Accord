@@ -1308,7 +1308,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertTrue(all(datetime.fromisoformat(row['observedAt']) < Later.now(timezone.utc)
                             - timedelta(days=1) for row in retained))
 
-    def impact_fixture(self, parent_case=None):
+    def impact_fixture(self, parent_case=None, *, final=False):
         """Synthetic original qualification and changed full dependency closure."""
         from yiyuan_accord import admission as a
         if parent_case is None:
@@ -1329,13 +1329,27 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         (self.root / "yiyuan_accord/impact_fixture.py").write_text("# never imported\n")
         adjudicator = self.root / "yiyuan_accord/admission.py"
         adjudicator.write_bytes(adjudicator.read_bytes() + b"\n# synthetic adjudicator change\n")
-        version = a._normalized_cache_version(contract["delivery"]["version"]) + "+codex.20990101000000"
+        old_version = contract['delivery']['version']
+        version = "3.3.0" if final else a._normalized_cache_version(old_version) + "+codex.20990101000000"
         contract["delivery"]["version"] = host["packageVersion"] = version
         manifest = self.root / host["manifest"]
-        contents = json.loads(manifest.read_text(encoding="utf-8"))
-        contents["version"] = version
-        manifest.write_text(json.dumps(contents), encoding="utf-8")
+        if final:
+            contract['status'] = 'candidate-frozen'
+            contract['cycle']['versionState'] = 'final-candidate-not-publication-proof'
+            manifest.write_bytes(manifest.read_bytes().replace(json.dumps(old_version).encode(),
+                                                               json.dumps(version).encode(), 1))
+        else:
+            contents = json.loads(manifest.read_text(encoding="utf-8"))
+            contents["version"] = version
+            manifest.write_text(json.dumps(contents), encoding="utf-8")
+        if 'packageFiles' in case:
+            contents = json.loads(manifest.read_text(encoding='utf-8'))
+            contents['description'] += ' Synthetic current applicability UI.'
+            manifest.write_text(json.dumps(contents), encoding='utf-8')
+            helper.chmod(helper.stat().st_mode | 0o111)
         self.update_package_identity(contract)
+        if 'packageFiles' in case:
+            self.git('update-index', '--chmod=+x', '--', helper.relative_to(self.root).as_posix())
         self.commit(contract)
         state = {}
 
@@ -1391,9 +1405,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             return result
         return contract, case, record, observer
 
-    def parent_fixture(self, case_id):
+    def parent_fixture(self, case_id, *, final=False):
         from yiyuan_accord import admission as a
-        contract, case, record, base = self.impact_fixture(case_id)
+        contract, case, record, base = self.impact_fixture(case_id, final=final)
         state = {}
         def observer(request):
             result = base(request)
@@ -1453,6 +1467,199 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def canonical_bytes(value):
         return json.dumps(value, sort_keys=True, separators=(',', ':'),
                           ensure_ascii=False, allow_nan=False).encode('utf-8')
+
+    def test_final_promotion_comparison_is_directional_and_preserves_all_case_meaning(self):
+        from yiyuan_accord import admission as a
+        original = copy.deepcopy(self.contract)
+        final = copy.deepcopy(original)
+        final['status'] = 'candidate-frozen'
+        final['cycle']['versionState'] = 'final-candidate-not-publication-proof'
+        final['delivery']['version'] = '3.3.0'
+        final['delivery']['hostProjections'][0]['packageVersion'] = '3.3.0'
+        before = self.canonical_bytes(original)
+        cases = original['acceptance']['admission']['cases']
+        for case in cases:
+            with self.subTest(case=case['id']):
+                self.assertEqual(a._impact_comparison(original, case, final, case),
+                                 'authorized-v33-final-candidate')
+                self.assertNotEqual(a._impact_definition(original, case), a._impact_definition(final, case))
+                self.assertIsNone(a._impact_comparison(final, case, original, case))
+        # This committed 3930000-byte source allocation predates the current
+        # 3973000 allocation. Source maintenance must not rewrite case clocks
+        # or add an equality gate absent from the stored definition.
+        retained = copy.deepcopy(original)
+        retained['changeBoundary']['complexityBudget'] = json.loads(self.git('show',
+            'e3d67d20238a105341a763a4f30ef443c80269dd:product/development.json'))['changeBoundary']['complexityBudget']
+        self.assertEqual(retained['changeBoundary']['complexityBudget']['maxProductCodeAndTestBytes'], 3930000)
+        self.assertNotEqual(retained['changeBoundary']['complexityBudget'], final['changeBoundary']['complexityBudget'])
+        for case in cases:
+            with self.subTest(source_budget_evolution=case['id']):
+                self.assertEqual(a._definition(retained, case), a._definition(original, case))
+                self.assertEqual(a._impact_comparison(retained, case, final, case),
+                                 'authorized-v33-final-candidate')
+        bounded = next(case for case in cases if case['id'] == 'v33-resource-pressure-current-capacity-01')
+        changed_case = copy.deepcopy(bounded)
+        changed_case['conditions']['execution']['limits']['wholeWorkSeconds'] += 1
+        self.assertIsNone(a._impact_comparison(retained, bounded, final, changed_case))
+        case = cases[0]
+        for version in ('3.3.0-dev.1', '3.3.0-dev.17+codex.20261021000000'):
+            changed = copy.deepcopy(original)
+            changed['delivery']['version'] = changed['delivery']['hostProjections'][0]['packageVersion'] = version
+            with self.subTest(legal_development=version):
+                self.assertEqual(a._impact_comparison(changed, case, final, case),
+                                 'authorized-v33-final-candidate')
+        for field in ('authority', 'claimCeiling'):
+            changed = copy.deepcopy(original)
+            candidate = copy.deepcopy(final)
+            changed[field] = candidate[field] = None
+            with self.subTest(malformed=field):
+                self.assertIsNone(a._impact_comparison(changed, case, candidate, case))
+        for field, value in (('productId', 'other-product'), ('claimCeiling', {
+                **original['claimCeiling'], 'currentHostBehavior': 'verified'})):
+            changed = copy.deepcopy(original)
+            candidate = copy.deepcopy(final)
+            changed[field] = candidate[field] = value
+            with self.subTest(invalid_both=field):
+                self.assertIsNone(a._impact_comparison(changed, case, candidate, case))
+        for kind in ('target', 'cycle', 'cycle-field', 'authority', 'ready', 'state', 'status',
+                     'final-build', 'projection', 'claims', 'ceiling', 'quality', 'source',
+                     'condition', 'expected', 'oracle', 'entry', 'scope'):
+            changed, target = copy.deepcopy(final), copy.deepcopy(case)
+            if kind == 'target': changed['cycle']['targetVersion'] = '3.4.0'
+            elif kind == 'cycle': changed['cycle']['id'] = 'other-cycle'
+            elif kind == 'cycle-field': changed['cycle']['sourceDecision'] += ' Changed.'
+            elif kind == 'authority': changed['authority']['conditionalRelease']['decision'] = 'not-authorized'
+            elif kind == 'ready': changed['authority']['conditionalRelease']['ready'] = True
+            elif kind == 'state': changed['cycle']['versionState'] = 'development-target-not-published'
+            elif kind == 'status': changed['status'] = 'in-development'
+            elif kind == 'final-build': changed['delivery']['version'] = '3.3.0+codex.20261021000000'
+            elif kind == 'projection': changed['delivery']['hostProjections'][0]['packageVersion'] = '3.4.0'
+            elif kind == 'claims': target['claims'].append('incremental-value')
+            elif kind == 'ceiling': changed['claimCeiling']['candidateEligible'] = True
+            elif kind == 'quality': changed['systemOptimization']['qualityAxes'][0]['rule'] = 'Changed quality rule.'
+            elif kind == 'source': changed['source']['rule'] = 'Changed source.'
+            elif kind == 'condition': target['conditions']['other'] = True
+            elif kind == 'expected': target['expected']['other'] = True
+            elif kind == 'oracle': target['oracleFiles'].append('other.py')
+            elif kind == 'entry': target['entry'] = 'other-entry'
+            else: target['scope'] = 'other-scope'
+            with self.subTest(kind=kind):
+                self.assertIsNone(a._impact_comparison(original, case, changed, target))
+        for version in ('3.3.0-rc.1', '3.3.0-beta.1', '3.3.0-dev.0', '3.3.0-dev.1+other.1',
+                        '3.3.0-dev.1+codex.123', '3.4.0-dev.1'):
+            changed = copy.deepcopy(original)
+            changed['delivery']['version'] = version
+            changed['delivery']['hostProjections'][0]['packageVersion'] = version
+            with self.subTest(original_version=version):
+                self.assertIsNone(a._impact_comparison(changed, case, final, case))
+        self.assertEqual(self.canonical_bytes(original), before)
+
+    def test_final_promotion_current_and_whole_host_parent_require_complete_material(self):
+        for parent in (False, True):
+            with self.subTest(parent=parent), self.history():
+                if parent:
+                    contract, case, record, base = self.parent_fixture(
+                        'v33-whole-host-lifecycle-current-development-02', final=True)
+                else:
+                    contract, case, record, base = self.impact_fixture(final=True)
+                frozen = self.canonical_bytes(record)
+                report = self.assess(contract, base)
+                self.assertEqual(report['errors'], [], report['caseRejections'])
+                self.assertEqual(report['acceptedCases'], [case['id']])
+                mapping = 'currentParentApplicability' if parent else 'currentApplicability'
+                material_map = 'parentApplicability' if parent else 'currentApplicability'
+                comparison = report[mapping][case['id']]['definitionComparison']
+                self.assertEqual(comparison['kind'], 'authorized-v33-final-candidate')
+                self.assertEqual(comparison['currentVersion'], '3.3.0')
+                self.assertEqual(self.canonical_bytes(record), frozen)
+                self.assertNotIn(case['id'], self.assess(contract, self.replay([record]))['acceptedCases'])
+                for kind in ('original-record', 'provenance', 'material-hash', 'old-package', 'stale-review',
+                             'missing-condition', 'missing-delta', 'recheck'):
+                    def observer(request):
+                        result = base(request)
+                        if request['phase'] == 'observe':
+                            material = result[material_map][case['id']]
+                            if kind == 'original-record': result['records'][0]['definitionSha256'] = '0' * 64
+                            elif kind == 'provenance': result['records'][0]['sourceRef'] = ''
+                            elif kind == 'material-hash': material['reviewBundle']['evidenceSha256'] = '0' * 64
+                            elif kind == 'old-package': material['original']['packageSha256'] = '0' * 64
+                            elif kind == 'stale-review':
+                                for row in material['reviewBundle']['reviews']:
+                                    row['reviewedAt'] = '2000-01-01T00:00:00Z'
+                            elif kind == 'missing-condition': material['conditionBindings'].pop()
+                            elif kind == 'missing-delta': material['differences'].pop()
+                            if kind != 'material-hash': self.sign_parent_material(material)
+                        elif kind == 'recheck':
+                            result[material_map][case['id']]['current']['packageSha256'] = '0' * 64
+                        return result
+                    with self.subTest(rejection=kind):
+                        rejected = self.assess(contract, observer)
+                        self.assertEqual(rejected['acceptedCases'], [])
+                        self.assertIn(case['id'], rejected['caseRejections'])
+                self.assertEqual(self.canonical_bytes(record), frozen)
+
+    def test_sparse_material_reassesses_selected_runtime_metadata_and_modes(self):
+        from yiyuan_accord import admission as a
+        for case_id in ('v33-resource-pressure-current-capacity-01',
+                        'v33-environment-adaptation-current-capacity-01'):
+            for final in (False, True):
+                with self.subTest(case=case_id, final=final), self.history():
+                    contract, case, record, base = self.impact_fixture(case_id, final=final)
+                    frozen = self.canonical_bytes(record)
+                    selected = 'plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs'
+                    observed = {}
+                    def observer(request):
+                        result = base(request)
+                        if request['phase'] == 'observe': observed.update(copy.deepcopy(result))
+                        return result
+                    report = self.assess(contract, observer)
+                    self.assertEqual(report['errors'], [], report['caseRejections'])
+                    self.assertEqual(report['acceptedCases'], [case_id])
+                    self.assertNotIn(case_id, report['packageReuse'])
+                    supported = report['currentApplicability'][case_id]
+                    self.assertIn('selected-package-dependency-changed', supported['reconciledReasons'])
+                    rows = observed['currentApplicability'][case_id]['differences']
+                    runtime = next(row for row in rows if row['path'] == selected)
+                    self.assertNotEqual(runtime['oldSha256'], runtime['newSha256'])
+                    self.assertNotEqual(runtime['oldMode'], runtime['newMode'])
+                    self.assertTrue(any(row['path'].endswith('/plugin.json') for row in rows))
+                    self.assertEqual(self.canonical_bytes(record), frozen)
+                    self.assertNotIn(case_id, self.assess(contract, self.replay([record]))['acceptedCases'])
+                    if not final:
+                        continue
+                    for kind in ('selected-delta', 'selected-sha', 'condition', 'review-digest', 'candidate-review', 'recheck'):
+                        def invalid(request):
+                            result = base(request)
+                            if request['phase'] == 'observe':
+                                material = result['currentApplicability'][case_id]
+                                if kind == 'selected-delta':
+                                    material['differences'] = [row for row in material['differences'] if row['path'] != selected]
+                                elif kind == 'selected-sha':
+                                    next(row for row in material['differences'] if row['path'] == selected)['newSha256'] = '0' * 64
+                                elif kind == 'condition': material['conditionBindings'][0]['currentValue'] = 'drift'
+                                elif kind == 'review-digest': material['reviewBundle']['evidenceSha256'] = '0' * 64
+                                elif kind == 'candidate-review': result['reviewBundle']['decision'] = 'fail'
+                                if kind != 'review-digest': self.sign_parent_material(material)
+                            elif kind == 'recheck':
+                                result['currentApplicability'][case_id]['current']['packageSha256'] = '0' * 64
+                            return result
+                        with self.subTest(rejection=kind):
+                            self.assertEqual(self.assess(contract, invalid)['acceptedCases'], [])
+                    read_snapshot = a._revision_package_snapshot
+                    current_revision = supported['current']['subject']['revision']
+                    for kind in ('missing-file', 'invalid-mode', 'malformed-manifest'):
+                        def broken_snapshot(*args):
+                            snapshot = read_snapshot(*args)
+                            if args[1] == current_revision:
+                                if kind == 'missing-file': snapshot['files'].pop(selected)
+                                elif kind == 'invalid-mode': snapshot['modes'][selected] = '120000'
+                                else: snapshot['files'][contract['delivery']['hostProjections'][0]['manifest']] = b'{bad'
+                            return snapshot
+                        with self.subTest(structure=kind), patch.object(a, '_revision_package_snapshot', side_effect=broken_snapshot):
+                            with patch.object(a, '_current_impact', wraps=a._current_impact) as impact:
+                                self.assertEqual(self.assess(contract, base)['acceptedCases'], [])
+                                impact.assert_not_called()
+                    self.assertEqual(self.canonical_bytes(record), frozen)
 
     def aggregate_fixture(self):
         # Repeated condition values and their applicability bindings compose a

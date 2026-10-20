@@ -1036,6 +1036,36 @@ class SuccessorDevelopmentTests(unittest.TestCase):
     def errors(self, contract):
         return development_contract_errors(contract, self.tasks)
 
+    def test_authorized_v33_final_freeze_preserves_unqualified_claims(self):
+        candidate = copy.deepcopy(self.contract)
+        candidate['status'] = 'candidate-frozen'
+        candidate['cycle']['versionState'] = 'final-candidate-not-publication-proof'
+        candidate['delivery']['version'] = '3.3.0'
+        candidate['delivery']['hostProjections'][0]['packageVersion'] = '3.3.0'
+        self.assertEqual(self.errors(candidate), [])
+        self.assertFalse(candidate['authority']['conditionalRelease']['ready'])
+        self.assertFalse(candidate['claimCeiling']['functionalCompletion'])
+        self.assertFalse(candidate['claimCeiling']['candidateEligible'])
+        for kind in ('missing-authority', 'unauthorized', 'wrong-authority', 'ready', 'complete', 'eligible',
+                     'target', 'published', 'state', 'status', 'dev-version', 'final-build', 'projection'):
+            altered = copy.deepcopy(candidate)
+            release = altered['authority']['conditionalRelease']
+            if kind == 'missing-authority': altered['authority'].pop('conditionalRelease')
+            elif kind == 'unauthorized': release['decision'] = 'not-authorized'
+            elif kind == 'wrong-authority': release['target'] = '3.2.1'
+            elif kind == 'ready': release['ready'] = True
+            elif kind == 'complete': altered['claimCeiling']['functionalCompletion'] = True
+            elif kind == 'eligible': altered['claimCeiling']['candidateEligible'] = True
+            elif kind == 'target': altered['cycle']['targetVersion'] = release['target'] = '3.4.0'
+            elif kind == 'published': altered['cycle']['versionState'] = 'published'
+            elif kind == 'state': altered['cycle']['versionState'] = 'development-target-not-published'
+            elif kind == 'status': altered['status'] = 'in-development'
+            elif kind == 'dev-version': altered['delivery']['version'] = self.contract['delivery']['version']
+            elif kind == 'final-build': altered['delivery']['version'] = '3.3.0+codex.20261021000000'
+            else: altered['delivery']['hostProjections'][0]['packageVersion'] = '3.3.0-dev.1'
+            with self.subTest(kind=kind):
+                self.assertTrue(self.errors(altered))
+
     def test_native_codex_source_accepts_help_center_without_promoting_effect(self):
         altered = copy.deepcopy(self.contract)
         native = next(row for row in altered["capabilityMap"]["native"]

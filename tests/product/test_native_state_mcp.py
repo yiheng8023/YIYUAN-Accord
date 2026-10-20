@@ -49,7 +49,88 @@ def native_manage_disposition(call, *, preapproved):
     return 'expected-host-denial-no-adapter-call'
 
 
+def _start_native_mcp_turn(app, thread_id, prompt):
+    # thread/start may return while plugin MCP startup is still asynchronous.
+    # Consume the existing native event stream within the original owner bounds.
+    deadline = min(app.work_deadline, time.monotonic() + app.request_timeout)
+    index, status = 0, None
+    while True:
+        while index < len(app.events):
+            event = app.events[index]
+            index += 1
+            params = event.get('params', {})
+            if (event.get('method') != 'mcpServer/startupStatus/updated'
+                    or params.get('threadId') != thread_id or params.get('name') != 'accord-state'):
+                continue
+            status = params.get('status')
+            if status not in {'starting', 'ready'}:
+                raise RuntimeError('installed MCP startup failed or was cancelled before the turn')
+        if time.monotonic() >= deadline:
+            raise TimeoutError('installed MCP startup readiness deadline exceeded')
+        if status == 'ready':
+            return app.rpc('turn/start', {'threadId': thread_id,
+                'input': [{'type': 'text', 'text': prompt}]})['turn']['id']
+        try:
+            app.events.append(app._receive(deadline))
+        except TimeoutError as error:
+            raise TimeoutError('installed MCP startup readiness deadline exceeded') from error
+
+
 class NativeMcpEventTests(unittest.TestCase):
+    @staticmethod
+    def startup(status, *, thread='owned-thread', server='accord-state'):
+        return {'method': 'mcpServer/startupStatus/updated', 'params': {
+            'threadId': thread, 'name': server, 'status': status, 'error': None}}
+
+    def app(self, events=()):
+        app = mock.Mock(events=list(events), work_deadline=150, request_timeout=30)
+        app.rpc.return_value = {'turn': {'id': 'owned-turn'}}
+        return app
+
+    def test_native_mcp_turn_waits_for_delayed_owned_ready(self):
+        app = self.app([self.startup('starting')])
+        pending = [self.startup('ready', thread='another-thread'),
+                   self.startup('ready', server='another-server'), self.startup('ready')]
+        def receive(deadline):
+            app.rpc.assert_not_called()
+            self.assertEqual(deadline, 130)
+            return pending.pop(0)
+        app._receive.side_effect = receive
+        with mock.patch(__name__ + '.time.monotonic', return_value=100):
+            self.assertEqual(_start_native_mcp_turn(app, 'owned-thread', 'inspect'), 'owned-turn')
+        self.assertEqual(pending, [])
+        app.rpc.assert_called_once_with('turn/start', {'threadId': 'owned-thread',
+            'input': [{'type': 'text', 'text': 'inspect'}]})
+
+    def test_native_mcp_turn_uses_already_received_ready(self):
+        app = self.app([self.startup('starting'), self.startup('ready')])
+        with mock.patch(__name__ + '.time.monotonic', return_value=100):
+            self.assertEqual(_start_native_mcp_turn(app, 'owned-thread', 'inspect'), 'owned-turn')
+        app._receive.assert_not_called()
+        app.rpc.assert_called_once()
+
+    def test_native_mcp_startup_failure_or_timeout_never_dispatches_turn(self):
+        for status in ('failed', 'cancelled', 'unknown'):
+            with self.subTest(status=status):
+                app = self.app([self.startup('ready'), self.startup(status)])
+                with mock.patch(__name__ + '.time.monotonic', return_value=100):
+                    with self.assertRaisesRegex(RuntimeError, 'MCP startup failed'):
+                        _start_native_mcp_turn(app, 'owned-thread', 'inspect')
+                app.rpc.assert_not_called()
+        app = self.app([self.startup('starting')])
+        app._receive.side_effect = TimeoutError('native receive deadline')
+        with mock.patch(__name__ + '.time.monotonic', return_value=100):
+            with self.assertRaisesRegex(TimeoutError, 'startup readiness deadline exceeded'):
+                _start_native_mcp_turn(app, 'owned-thread', 'inspect')
+        app.rpc.assert_not_called()
+        expired = self.app([self.startup('ready')])
+        expired.work_deadline = 90
+        with mock.patch(__name__ + '.time.monotonic', return_value=100):
+            with self.assertRaisesRegex(TimeoutError, 'startup readiness deadline exceeded'):
+                _start_native_mcp_turn(expired, 'owned-thread', 'inspect')
+        expired.rpc.assert_not_called()
+        expired._receive.assert_not_called()
+
     def test_host_denial_and_normalized_tool_rejection_are_distinct(self):
         denied = {'status': 'failed', 'result': None, 'error': {
             'message': 'MCP tool call requires approval, but approval policy is never'}}
@@ -3282,8 +3363,7 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, s
         if started.get('sandbox', {}).get('type') != 'readOnly': raise RuntimeError('source is not read-only')
         prompt = ('Inspect this workspace state and read this current captured input. Preserve files and do not bind task state.'
             if scoped_hook else 'Inspect this workspace state and check that a state-management request with an unobserved receipt is rejected. Preserve files and do not create task state.')
-        turn = app.rpc('turn/start', {'threadId':thread,
-            'input':[{'type':'text','text':prompt}]})['turn']['id']
+        turn = _start_native_mcp_turn(app, thread, prompt)
         terminal = app.wait_turn(thread, turn)
         calls = [e['params']['item'] for e in app.events if e.get('method') == 'item/completed'
             and e.get('params', {}).get('threadId') == thread
