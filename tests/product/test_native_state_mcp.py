@@ -4053,6 +4053,146 @@ else {process.argv=[process.execPath,__filename,NATIVE_LOG,'normal'];require(HOS
             self.assertEqual(fresh('inspect', operationId=operation_id)['structuredContent']['controllerState'], 'not-owned-current-process')
             fresh('cancel', operationId=following['structuredContent']['operationId'], reason='capacity check complete')
 
+    def test_transport_backpressure_bounds_synchronous_and_invalid_responses(self):
+        script = """
+const {Readable,Writable}=require('node:stream');
+const bridge=require(process.argv[1]);
+(async()=>{
+  const results=[];
+  for(const invalid of [false,true]){
+    let pulls=0,writes=0,release;
+    const input=Readable.from((async function*(){
+      for(let id=0;id<200;id++){
+        pulls++;yield Buffer.from(invalid?'null!\\n':JSON.stringify({jsonrpc:'2.0',id,method:'ping'})+'\\n');
+      }
+    })());
+    const output=new Writable({highWaterMark:1,write(chunk,encoding,done){
+      writes++;if(writes===1)release=done;else done();
+    }});
+    const running=bridge.serve(input,output,'fixed-backpressure');
+    await new Promise(resolve=>setTimeout(resolve,30));
+    const blocked=pulls;release();await running;
+    results.push({blocked,writes});
+  }
+  console.log(JSON.stringify(results));
+})().catch(error=>{console.error(error);process.exitCode=1;});
+"""
+        run = subprocess.run([self.node, '-e', script, str(BRIDGE)], capture_output=True,
+                             env=self.env, cwd=self.work, timeout=10)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        for result in json.loads(run.stdout):
+            self.assertLessEqual(result['blocked'], 2)
+            self.assertEqual(result['writes'], 200)
+
+    def test_transport_limit_keeps_cancel_ping_and_invalid_input_responsive(self):
+        script = """
+const {Readable,Writable}=require('node:stream');
+const execution=require(process.argv[2]);
+let cancelled=0,closed=0,pending=[];
+execution.createNativeTaskExecution=()=>({observe(){},
+  call(){return new Promise(resolve=>pending.push(resolve));},
+  async cancelRequest(){cancelled++;},
+  async close(){closed++;pending.forEach(resolve=>resolve({isError:false,value:{fixture:true}}));}
+});
+const bridge=require(process.argv[1]);
+const frames=[{jsonrpc:'2.0',id:0,method:'initialize',params:{protocolVersion:'2025-06-18',capabilities:{},clientInfo:{name:'fixture',version:'1'}}},
+  {jsonrpc:'2.0',method:'notifications/initialized'}];
+for(let id=1;id<=64;id++)frames.push({jsonrpc:'2.0',id,method:'tools/call',params:{name:'coordinate_task_execution'}});
+frames.push({jsonrpc:'2.0',method:'notifications/cancelled',params:{requestId:1}},
+  {jsonrpc:'2.0',id:100,method:'ping'},null,
+  {jsonrpc:'2.0',id:101,method:'tools/call',params:{name:'coordinate_task_execution'}});
+const rows=[];
+const output=new Writable({write(chunk,encoding,done){rows.push(JSON.parse(chunk));done();}});
+bridge.serve(Readable.from([Buffer.from(frames.map(x=>JSON.stringify(x)).join('\\n')+'\\n')]),output,'fixed-overload')
+  .then(()=>console.log(JSON.stringify({cancelled,closed,rows})))
+  .catch(error=>{console.error(error);process.exitCode=1;});
+"""
+        run = subprocess.run([self.node, '-e', script, str(BRIDGE),
+                              str(BRIDGE.with_name('native-task-execution.cjs'))],
+                             capture_output=True, env=self.env, cwd=self.work, timeout=10)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        result = json.loads(run.stdout)
+        self.assertEqual((result['cancelled'], result['closed']), (1, 1))
+        rows = {row['id']: row for row in result['rows']}
+        self.assertEqual(len(rows), 68)
+        self.assertEqual(rows[100]['result'], {})
+        self.assertEqual(rows[101]['error']['code'], -32001)
+        self.assertEqual(rows[None]['error']['code'], -32600)
+        self.assertTrue(all(rows[i]['result']['structuredContent']['fixture'] for i in range(1, 65)))
+
+    def test_closed_transport_releases_owned_work_during_backpressure_or_idle_read(self):
+        script = """
+const {PassThrough,Writable}=require('node:stream');
+const execution=require(process.argv[2]);
+let closed=0,resolve;
+execution.createNativeTaskExecution=()=>({observe(){},
+  call(){return new Promise(done=>{resolve=done;});},async cancelRequest(){},
+  async close(){closed++;resolve?.({isError:false,value:{fixture:true}});}
+});
+const bridge=require(process.argv[1]);
+(async()=>{
+  const reports=[];
+  for(const mode of ['blocked-output','idle-output','blocked-input']){
+    const input=new PassThrough();let writes=0;
+    const output=new Writable({highWaterMark:mode==='idle-output'?16384:1,
+      write(chunk,encoding,done){writes++;if(writes===1||mode==='idle-output')done();}
+    });
+    const done=bridge.serve(input,output,'fixed-close').then(()=>false,()=>true);
+    const frames=[{jsonrpc:'2.0',id:0,method:'initialize',params:{protocolVersion:'2025-06-18',capabilities:{},clientInfo:{name:'fixture',version:'1'}}},
+      {jsonrpc:'2.0',method:'notifications/initialized'},
+      {jsonrpc:'2.0',id:1,method:'tools/call',params:{name:'coordinate_task_execution'}},
+      {jsonrpc:'2.0',id:2,method:'ping'}];
+    input.write(frames.map(x=>JSON.stringify(x)).join('\\n')+'\\n');
+    await new Promise(done=>setTimeout(done,30));
+    if(mode==='blocked-input')input.destroy();else output.destroy();
+    reports.push({failed:await done,closed,writes});
+    input.destroy();output.destroy();
+  }
+  console.log(JSON.stringify(reports));
+})().catch(error=>{console.error(error);process.exitCode=1;});
+"""
+        run = subprocess.run([self.node, '-e', script, str(BRIDGE),
+                              str(BRIDGE.with_name('native-task-execution.cjs'))],
+                             capture_output=True, env=self.env, cwd=self.work, timeout=10)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        result = json.loads(run.stdout)
+        self.assertEqual([row['closed'] for row in result], [1, 2, 3])
+        self.assertTrue(all(row['failed'] for row in result))
+        self.assertTrue(all(row['writes'] <= 2 for row in result))
+
+    def test_failed_response_is_handled_while_owned_cleanup_is_pending(self):
+        script = """
+const {PassThrough,Writable}=require('node:stream');
+const execution=require(process.argv[2]);
+let closeStarted=0,finishClose,writes=0;
+execution.createNativeTaskExecution=()=>({observe(){},
+  async call(){return {isError:false,value:{fixture:true}};},async cancelRequest(){},
+  async close(){closeStarted++;await new Promise(done=>{finishClose=done;});}
+});
+const bridge=require(process.argv[1]),input=new PassThrough(),unhandled=[];
+const onRejection=error=>unhandled.push(error.message);
+process.on('unhandledRejection',onRejection);
+const output=new Writable({write(chunk,encoding,done){writes++;done(writes===2?new Error('fixed-output-failure'):undefined);}});
+const running=bridge.serve(input,output,'fixed-slow-cleanup').then(()=>false,()=>true);
+const frames=[{jsonrpc:'2.0',id:0,method:'initialize',params:{protocolVersion:'2025-06-18',capabilities:{},clientInfo:{name:'fixture',version:'1'}}},
+  {jsonrpc:'2.0',method:'notifications/initialized'},
+  {jsonrpc:'2.0',id:1,method:'tools/call',params:{name:'coordinate_task_execution'}}];
+(async()=>{
+  input.write(frames.map(x=>JSON.stringify(x)).join('\\n')+'\\n');
+  await new Promise(done=>setTimeout(done,40));
+  if(!finishClose)throw new Error('cleanup did not start');
+  finishClose();const failed=await running;
+  await new Promise(done=>setImmediate(done));
+  process.removeListener('unhandledRejection',onRejection);
+  console.log(JSON.stringify({closeStarted,failed,unhandled}));
+})().catch(error=>{console.error(error);process.exitCode=1;});
+"""
+        run = subprocess.run([self.node, '-e', script, str(BRIDGE),
+                              str(BRIDGE.with_name('native-task-execution.cjs'))],
+                             capture_output=True, env=self.env, cwd=self.work, timeout=10)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        self.assertEqual(json.loads(run.stdout), {'closeStarted': 1, 'failed': True, 'unhandled': []})
+
     def test_real_stdio_negotiation_zero_id_unknown_method_and_eof(self):
         messages = [
             {'jsonrpc': '2.0', 'id': 0, 'method': 'tools/list'},

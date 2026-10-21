@@ -3,7 +3,6 @@
 // Bounded state and explicit task-execution tools on one existing stdio MCP.
 // State inspection stays separate from caller-authorized child execution.
 // Codex supplies call metadata separately from model-chosen tool arguments.
-const {once} = require('node:events');
 const path = require('node:path');
 const fs = require('node:fs');
 const crypto = require('node:crypto');
@@ -552,40 +551,76 @@ async function serve(input = process.stdin, output = process.stdout, version = r
   const decoder = new TextDecoder('utf-8', {fatal: true});
   let pending = Buffer.alloc(0), writes = Promise.resolve();
   const inFlight = new Set();
+  let outputClosed = false;
+  const stopOutput = () => { outputClosed = true; input.destroy(); };
+  for (const event of ['close', 'finish', 'error']) output.on(event, stopOutput);
+  const waitForDrain = () => new Promise((resolve, reject) => {
+    const finish = error => {
+      output.removeListener('drain', drained);
+      output.removeListener('error', failed);
+      output.removeListener('close', closed);
+      output.removeListener('finish', closed);
+      input.removeListener('close', inputClosed);
+      error ? reject(error) : resolve();
+    };
+    const drained = () => finish();
+    const failed = () => finish(new Error('mcp-output-failed'));
+    const closed = () => finish(new Error('mcp-output-closed'));
+    const inputClosed = () => { if (!input.readableEnded) closed(); };
+    output.once('drain', drained); output.once('error', failed);
+    output.once('close', closed); output.once('finish', closed);
+    input.once('close', inputClosed);
+    if (outputClosed || output.destroyed || output.writableEnded
+        || input.destroyed && !input.readableEnded) closed();
+  });
   const emit = response => {
     if (response === null) return;
-    writes = writes.then(async () => { if (!output.write(JSON.stringify(response) + '\n')) await once(output, 'drain'); });
+    writes = writes.then(async () => {
+      if (outputClosed || output.destroyed || output.writableEnded) throw new Error('mcp-output-closed');
+      if (!output.write(JSON.stringify(response) + '\n')) await waitForDrain();
+    });
     writes.catch(() => {});
+    return writes;
   };
   const dispatch = frame => {
     let request, response;
     try { request = JSON.parse(decoder.decode(frame)); }
-    catch (_) { emit({jsonrpc: '2.0', id: null, error: {code: -32700, message: 'Invalid JSON'}}); return; }
-    if (inFlight.size >= 64) { emit({jsonrpc: '2.0', id: request.id ?? null, error: {code: -32001, message: 'Too many pending requests'}}); return; }
+    catch (_) { return emit({jsonrpc: '2.0', id: null, error: {code: -32700, message: 'Invalid JSON'}}); }
+    if (inFlight.size >= 64 && record(request) && own(request, 'id')
+        && request.method === 'tools/call' && request.params?.name === EXECUTION_TOOL.name) {
+      return emit({jsonrpc: '2.0', id: request.id ?? null, error: {code: -32001, message: 'Too many pending requests'}});
+    }
     try { response = handle(request); }
-    catch (_) { emit({jsonrpc: '2.0', id: request.id ?? null, error: {code: -32603, message: 'Request failed'}}); return; }
-    if (!response || typeof response.then !== 'function') { emit(response); return; }
+    catch (_) { return emit({jsonrpc: '2.0', id: request?.id ?? null, error: {code: -32603, message: 'Request failed'}}); }
+    if (!response || typeof response.then !== 'function') return emit(response);
     const task = Promise.resolve(response).then(emit, () => emit({jsonrpc: '2.0', id: request.id ?? null,
       error: {code: -32603, message: 'Request failed; inspect prior effects'}})).finally(() => inFlight.delete(task));
+    task.catch(() => {});
     inFlight.add(task);
   };
   try {
     for await (const chunk of input) {
       let offset = 0;
       while (offset < chunk.length) {
+        if (outputClosed) throw new Error('mcp-output-closed');
         const newline = chunk.indexOf(10, offset), end = newline < 0 ? chunk.length : newline;
         if (pending.length + end - offset > MAX_FRAME) throw new Error('oversize-mcp-input');
         const frame = pending.length ? Buffer.concat([pending, chunk.subarray(offset, end)]) : chunk.subarray(offset, end);
         pending = newline < 0 ? Buffer.from(frame) : Buffer.alloc(0);
         if (newline < 0) break;
-        dispatch(frame); offset = newline + 1;
+        await dispatch(frame); offset = newline + 1;
       }
     }
     if (pending.length) throw new Error('incomplete-mcp-input');
   } finally {
-    await handle.close();
-    await Promise.allSettled([...inFlight]);
-    await writes;
+    try {
+      await handle.close();
+      await Promise.allSettled([...inFlight]);
+      await writes;
+      if (outputClosed) throw new Error('mcp-output-closed');
+    } finally {
+      for (const event of ['close', 'finish', 'error']) output.removeListener(event, stopOutput);
+    }
   }
 }
 
