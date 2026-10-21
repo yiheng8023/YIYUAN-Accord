@@ -136,6 +136,7 @@ rl.on('line',line=>{const m=JSON.parse(line);fs.appendFileSync(log,JSON.stringif
   if(mode==='hang'||mode==='tree')return;
   if(mode==='rpc-error'){process.stdout.write(JSON.stringify({id:m.id,error:{code:-32001,message:'secret-rpc-error'}})+'\\n');return;}
   if(mode==='invalid'){process.stdout.write('{invalid}\\n');return;}
+  rows.data[0].cwd=m.params.cwds[0];
   process.stdout.write(JSON.stringify({id:m.id,result:rows})+'\\n');
  }
 });
@@ -160,7 +161,7 @@ rl.on('line',line=>{const m=JSON.parse(line);fs.appendFileSync(log,JSON.stringif
     def test_inventory_is_native_cwd_scoped_projected_and_closed(self):
         code, result = self.call('inventory')
         self.assertEqual(code, 0)
-        self.assertEqual(result['cwd'], str(self.root.resolve()))
+        self.assertTrue(os.path.samefile(result['cwd'], self.root))
         self.assertEqual(result['skills'], [{'name': 'sample', 'path': str(self.skill), 'enabled': True, 'scope': 'user'}])
         self.assertEqual(result['errors'][0]['path'], str(self.root / 'broken' / 'SKILL.md'))
         self.assertNotIn('sensitive-unused-description', json.dumps(result))
@@ -170,6 +171,39 @@ rl.on('line',line=>{const m=JSON.parse(line);fs.appendFileSync(log,JSON.stringif
         self.assertTrue(result['process']['exitObserved'])
         self.assertFalse(result['process']['forced'])
         self.assertEqual(result['process']['exitCode'], 0)
+
+    def test_native_cwd_alias_uses_the_requested_canonical_inventory(self):
+        alias = self.root / 'cwd-alias'
+        if os.name == 'nt':
+            executable = os.path.join(os.environ['SystemRoot'], 'System32', 'cmd.exe')
+            command = ('"' + executable + '" /d /v:off /c mklink /J '
+                       '"%ACCORD_JUNCTION_ALIAS%" "%ACCORD_JUNCTION_TARGET%"')
+            subprocess.run(command, executable=executable,
+                env={**os.environ, 'ACCORD_JUNCTION_ALIAS': str(alias),
+                     'ACCORD_JUNCTION_TARGET': str(self.root.resolve())},
+                check=True, timeout=30, capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+        else:
+            alias.symlink_to(self.root, target_is_directory=True)
+        self.addCleanup(alias.rmdir if os.name == 'nt' else alias.unlink)
+        self.root = alias
+        code, result = self.call('inventory')
+        self.assertEqual(code, 0, result)
+        self.assertTrue(os.path.samefile(result['cwd'], alias))
+        self.assertNotEqual(result['cwd'], str(alias))
+        self.assertEqual(result['process']['queryPhase'], 'complete')
+
+    def test_native_inventory_rejects_a_foreign_cwd(self):
+        foreign = self.root / 'foreign'
+        foreign.mkdir()
+        peer = self.fixture()
+        script = peer.read_text(encoding='utf-8')
+        needle = '  process.stdout.write(JSON.stringify({id:m.id,result:rows})'
+        self.assertEqual(script.count(needle), 1)
+        peer.write_text(script.replace(needle,
+            '  rows.data[0].cwd=' + json.dumps(str(foreign)) + ';\n' + needle), encoding='utf-8')
+        code, result = self.call('inventory', fixture=peer)
+        self.assertEqual((code, result['error']['code']), (1, 'NATIVE_QUERY_FAILED'))
+        self.assertTrue(result['process']['exitObserved'])
 
     def test_prepare_retains_delegated_origin_and_exact_source_without_executing(self):
         request = self.request()

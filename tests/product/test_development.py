@@ -457,13 +457,13 @@ if (args.join(' ') === 'plugin marketplace list --json') {
             request = root / "request.json"
             request.write_text(json.dumps({"cli": [node, str(cli)], "plugin": "target@fixture", "scope": "user", **request_overrides}))
             result = subprocess.run([node, str(inspector),
-                                     str(request)], cwd=root, capture_output=True, text=True, timeout=40)
+                                     str(request)], cwd=root, capture_output=True, text=True, encoding="utf-8", timeout=40)
             self.assertEqual(result.returncode, 0, result.stderr)
             report = json.loads(result.stdout)
             calls_path = root / "calls.jsonl"
             self.assertTrue(calls_path.is_file(),
                             f"native fixture produced no calls log; inspection report: {json.dumps(report)}")
-            calls = [json.loads(line) for line in calls_path.read_text().splitlines()]
+            calls = [json.loads(line) for line in calls_path.read_text(encoding="utf-8").splitlines()]
             self.assertEqual(sum(call == ["plugin", "validate", str(source), "--json"] for call in calls), expected_validations)
             self.assertFalse(any("update" in call or "install" in call for call in calls))
             self.assertEqual((installed / "retained.txt").read_bytes(), b"prior payload\n")
@@ -1105,7 +1105,7 @@ class DevelopmentContractTests(unittest.TestCase):
     def test_cli_exposes_the_narrow_claim_boundary(self):
         result = subprocess.run(
             [sys.executable, "-B", "-m", "yiyuan_accord", "verify-development", "--json"],
-            cwd=ROOT, text=True, capture_output=True, timeout=30, check=False,
+            cwd=ROOT, text=True, encoding="utf-8", capture_output=True, timeout=30, check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         report = json.loads(result.stdout)

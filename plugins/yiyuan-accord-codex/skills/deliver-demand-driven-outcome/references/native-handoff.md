@@ -86,6 +86,16 @@ and respecting one writer per scope. Independent source work may continue.
    `prepare`, `target-created`, optional `write-prepare`, `commit`, `release`,
    `result` and `closed`; use each actual request rather than inventing a receipt.
 
+For an identified transcript-read race, the source guard may make one complete
+new observation within the original deadline, after checking the other source
+gates. Every final input, pause, authority, protected-source and revision check
+still applies. Repeated changes or actual new input/control hold dependent work;
+no receipt is advanced and no business turn is replayed. A failed source check
+retains only bounded gate diagnostics. Use `sourceFailureEvidence` with
+`read-evidence`; `sourceFailureDiagnosticError` reports a failed diagnostic write
+without replacing the original failure. These observations do not establish a
+historical incident's cause or prove arbitrary host recovery.
+
 Current input/control changes stop dependent dispatch. Read retained evidence and
 actual effects before recovery; `cancel` preserves responsibility and requests
 closure, rather than proving it. Unknown effects or unverified process closure stay

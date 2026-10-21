@@ -45,10 +45,24 @@ class GitFixtureIsolationTests(unittest.TestCase):
                     ).test_historical_mode_catalog_keeps_its_original_reading()
             self.assertEqual(self.protected_bytes(protected), before)
 
-    def repository(self, root):
+    def test_owned_git_maintenance_does_not_detach(self):
+        with tempfile.TemporaryDirectory(prefix='accord-git-maintenance-') as temporary:
+            root = Path(temporary) / 'owned'
+            trace = Path(temporary) / 'trace.jsonl'
+            environment = owned_git_environment()
+            environment['GIT_TRACE2_EVENT'] = str(trace)
+            self.repository(root, environment=environment)
+            events = [json.loads(line) for line in trace.read_text(encoding='utf-8').splitlines()]
+            automatic = [row['argv'] for row in events if row.get('event') == 'child_start'
+                         and any(name in row.get('argv', []) for name in ('maintenance', 'gc'))]
+            self.assertTrue(automatic, events)
+            for command in automatic:
+                self.assertNotIn('--detach', command)
+
+    def repository(self, root, *, environment=None):
         root.mkdir()
         (root / 'keep.txt').write_text(root.name, encoding='utf-8')
-        environment = owned_git_environment()
+        environment = owned_git_environment() if environment is None else environment
         for args in (['init', '--quiet'], ['add', '.'],
                      ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
                       'commit', '--quiet', '-m', 'Initial fixture']):

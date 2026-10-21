@@ -152,19 +152,44 @@ function createNativeTaskExecution(options) {
     if (!text(source.model) || !text(source.hostVersion)) fail('native-host-metadata-unavailable');
     return source;
   }
-  function currentState(source, cwd, expected) {
-    const snapshot = readState({op: 'status', session_id: source.sessionTreeId, cwd,
+  function currentState(source, cwd, expected, stage = 'source-check') {
+    const request = {op: 'status', session_id: source.sessionTreeId, cwd,
       nativeInputEvidence: true, currentHost: {threadId: source.threadId, turnId: source.turnId,
-        model: source.model, hostVersion: source.hostVersion, sourceRef: 'codex-mcp-call:' + source.callId}});
-    const evidence = snapshot.nativeInputEvidence;
-    if (snapshot.mode !== 'active' || !snapshot.checkpoint || snapshot.checkpoint.canContinue !== true ||
-        snapshot.needsNativeReplay || snapshot.needsResumeReconciliation || snapshot.hostObservationCurrent !== true ||
-        snapshot.currentInputReconciled !== true || !snapshot.inputReceipt?.present ||
-        evidence?.state !== 'observed' || evidence.latestInputReconciled !== true || evidence.latestNativeInputsComplete !== true ||
-        !Array.isArray(evidence.pendingInputs) || evidence.pendingInputs.length) fail('current-source-not-executable');
-    if (expected && (snapshot.epoch !== expected.epoch || snapshot.revision !== expected.expectedRevision)) fail('source-basis-changed');
-    if (!snapshot.checkpointSource || !/^[a-f0-9]{64}$/.test(snapshot.checkpointSource.sha256) ||
-        !Array.isArray(snapshot.inspection?.inputs) || snapshot.inspection.inputs.some(row => row.unchanged !== true || row.stable !== true)) fail('protected-source-unavailable');
+        model: source.model, hostVersion: source.hostVersion, sourceRef: 'codex-mcp-call:' + source.callId}};
+    const checks = snapshot => ({
+      active: snapshot.mode === 'active', checkpoint: Boolean(snapshot.checkpoint),
+      canContinue: snapshot.checkpoint?.canContinue === true,
+      noReplay: !snapshot.needsNativeReplay, noResumeReconciliation: !snapshot.needsResumeReconciliation,
+      hostCurrent: snapshot.hostObservationCurrent === true,
+      inputReconciled: snapshot.currentInputReconciled === true, receiptPresent: Boolean(snapshot.inputReceipt?.present),
+      evidenceObserved: snapshot.nativeInputEvidence?.state === 'observed',
+      latestInputReconciled: snapshot.nativeInputEvidence?.latestInputReconciled === true,
+      latestInputsComplete: snapshot.nativeInputEvidence?.latestNativeInputsComplete === true,
+      noPendingInputs: Array.isArray(snapshot.nativeInputEvidence?.pendingInputs) && snapshot.nativeInputEvidence.pendingInputs.length === 0,
+    });
+    const sameBasis = snapshot => !expected || snapshot.epoch === expected.epoch && snapshot.revision === expected.expectedRevision;
+    const protectedSource = snapshot => Boolean(snapshot.checkpointSource && /^[a-f0-9]{64}$/.test(snapshot.checkpointSource.sha256) &&
+      Array.isArray(snapshot.inspection?.inputs) && snapshot.inspection.inputs.every(row => row.unchanged === true && row.stable === true));
+    const observations = [];
+    let snapshot;
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      snapshot = readState(request);
+      const gates = checks(snapshot), evidence = snapshot.nativeInputEvidence;
+      observations.push({attempt, gates, sameBasis: sameBasis(snapshot), protectedSource: protectedSource(snapshot),
+        nativeInputs: {state: ['observed', 'unknown', 'unavailable'].includes(evidence?.state) ? evidence.state : 'unavailable',
+          reason: safeCode({code: evidence?.reason}), pendingCount: Array.isArray(evidence?.pendingInputs) ? evidence.pendingInputs.length : null}});
+      const transient = evidence?.state === 'unknown' && ['transcript-changed-before-read',
+        'transcript-changed-during-read', 'transcript-path-changed-after-read'].includes(evidence.reason);
+      const independent = Object.entries(gates).filter(([key]) => !['evidenceObserved', 'latestInputReconciled',
+        'latestInputsComplete', 'noPendingInputs'].includes(key)).every(([, value]) => value);
+      if (attempt === 2 || !transient || !independent || !sameBasis(snapshot) || !protectedSource(snapshot) ||
+          !Number.isSafeInteger(expected?.deadlineMs) || Date.now() >= expected.deadlineMs) break;
+    }
+    const reject = code => { throw Object.assign(new Error(code), {code,
+      sourceObservation: {stage, observations}}); };
+    if (Object.values(checks(snapshot)).some(value => !value)) reject('current-source-not-executable');
+    if (!sameBasis(snapshot)) reject('source-basis-changed');
+    if (!protectedSource(snapshot)) reject('protected-source-unavailable');
     const protectedInputsDigest = hash(JSON.stringify(snapshot.inspection.inputs.map(row => ({path: row.path, current: row.current}))));
     return {snapshot, facts: {sourceThreadId: source.threadId, sourceTurnId: source.turnId,
       epoch: snapshot.epoch, revision: snapshot.revision,
@@ -187,6 +212,11 @@ function createNativeTaskExecution(options) {
     }
     else if (hash(readFile(file)) !== evidenceId) fail('execution-evidence-changed');
     return {evidenceId, sha256: evidenceId, bytes: bytes.length, complete: true};
+  }
+  function retainSourceFailure(slot, error) {
+    if (!error.sourceObservation) return;
+    try { slot.sourceFailureEvidence = putEvidence(slot, {kind: 'source-gate-failure', ...error.sourceObservation}); }
+    catch (diagnosticError) { slot.sourceFailureDiagnosticError = safeCode(diagnosticError); }
   }
   function outputFiles(cwd, outputs) {
     let total = 0;
@@ -250,6 +280,8 @@ function createNativeTaskExecution(options) {
       targetSettlementAttempt: slot.targetSettlementAttempt || null,
       scopeBinding: view?.reconciliation?.scopeBinding || null,
       startupFailureEvidence: slot.startupFailureEvidence || null,
+      sourceFailureEvidence: slot.sourceFailureEvidence || null,
+      sourceFailureDiagnosticError: slot.sourceFailureDiagnosticError || null,
       prestartRejection: slot.prestartRejection || null,
       claimLimit: 'Root must verify scope, authorization, quiescence, semantic intake/results and resource effects from the bound sources. Cooperative duty release is not host shutdown survival.'};
     atomic(path.join(slot.dir, 'status.json'), summary);
@@ -308,6 +340,7 @@ function createNativeTaskExecution(options) {
       recovery.timer = setTimeout(() => stop(fresh, 'Target reconciliation expired').catch(() => {}), args.deadlineMs - Date.now());
       recovery.reading = true;
       fresh.running = prepareTargetReview(fresh).catch(async error => {
+        retainSourceFailure(fresh, error);
         fresh.failure ||= safeCode(error); recovery.view = original.record.state;
         if (!recovery.reader) fresh.targetRecoveryResource = {state: 'unverified', process: error.processState || null};
         try { await closeTargetReader(fresh); } finally { fresh.recorder.close(); fresh.recorderClosed = true; }
@@ -511,6 +544,7 @@ function createNativeTaskExecution(options) {
     try { promise = action(); } catch (error) { promise = Promise.reject(error); }
     slot.running = promise.catch(async error => {
       slot.failure ||= safeCode(error);
+      retainSourceFailure(slot, error);
       const view = slot.engine.inspect();
       if (['INVALID_PLAN', 'DEADLINE_EXCEEDED'].includes(error.code) && view.phase === 'new' &&
           view.busy === false && view.revision === null && view.turnStarts === 0 &&
@@ -602,6 +636,7 @@ function createNativeTaskExecution(options) {
       try { slot.current(); }
       catch (error) {
         slot.failure ||= safeCode(error);
+        retainSourceFailure(slot, error);
         slot.cancellation ||= stop(slot, 'Source authority or input changed').catch(() => { slot.failure ||= 'source-cancellation-unverified'; });
       }
     }
@@ -634,7 +669,7 @@ function createNativeTaskExecution(options) {
         if (!['epoch', 'scopeRef', 'model', 'intake', 'continuation', 'postRelease', 'authoritySourceRef', 'quiescenceSourceRef'].every(k => text(args[k], k === 'intake' || k === 'continuation' || k === 'postRelease' ? 32768 : 4096)) ||
             args.effort !== undefined && !text(args.effort) ||
             !Number.isSafeInteger(args.expectedRevision) || !Number.isSafeInteger(args.deadlineMs) || args.deadlineMs <= Date.now() || args.deadlineMs > Date.now() + 3600000) fail('invalid-execution-plan');
-        const observed = currentState(source, args.cwd, args);
+        const observed = currentState(source, args.cwd, args, 'prepare-entry');
         const baseline = writeBaseline(args, observed);
         const quiescence = observed.snapshot.inspection.inputs.find(row => row.path === args.quiescenceSourceRef && row.current.present === true);
         if (!quiescence) fail('quiescence-protected-source-required');
@@ -654,11 +689,11 @@ function createNativeTaskExecution(options) {
           if (error.code !== 'SCOPE_NOT_FOUND') throw error;
         }
         const slot = {id, dir, cwd: args.cwd, source, caller: source, bytes: 0, recorder,
-          expected: {epoch: args.epoch, expectedRevision: args.expectedRevision},
+          expected: {epoch: args.epoch, expectedRevision: args.expectedRevision, deadlineMs: args.deadlineMs},
           requestedDeadlineMs: args.deadlineMs, failure: null, review: null};
         const current = stage => {
           if (slot.caller.turnId !== source.turnId || slot.caller.model !== source.model || slot.caller.hostVersion !== source.hostVersion) fail('source-host-or-turn-changed');
-          const now = currentState(slot.caller, args.cwd, slot.expected);
+          const now = currentState(slot.caller, args.cwd, slot.expected, stage);
           const row = now.snapshot.inspection.inputs.find(x => x.path === args.quiescenceSourceRef && x.current.present === true);
           if (!row || row.current.sha256 !== quiescence.current.sha256) fail('quiescence-source-changed');
           if (slot.skillSource) {
@@ -776,6 +811,7 @@ function createNativeTaskExecution(options) {
       fail('invalid-task-execution-request');
     } catch (error) { return {isError: true, value: {schema: 'yiyuan-accord-task-execution/v1', state: 'unavailable', reason: safeCode(error),
       ...(preparation ? {preparationCleanup: closePreparation(preparation)} : {}),
+      ...(error.sourceObservation ? {sourceObservation: error.sourceObservation} : {}),
       ...(error.recorderCleanup?.state === 'close-unverified' ? {recorderCleanup:
         {state: 'close-unverified', code: safeCode({code: error.recorderCleanup.code})}} : {}),
       ...(error.processState ? {process: Object.fromEntries(['pid', 'started', 'exitObserved', 'closeObserved', 'exitCode', 'signal', 'forced', 'terminationAttempt', 'queryPhase', 'terminationExitCode', 'terminationSignal', 'terminationError', 'terminationElapsedMs', 'descendantVerification'].filter(key => Object.hasOwn(error.processState, key)).map(key => [key, error.processState[key]]))} : {}),

@@ -4434,6 +4434,187 @@ const frames=[{jsonrpc:'2.0',id:0,method:'initialize',params:{protocolVersion:'2
         self.assertEqual(self.files(), before)
 
 
+    def execution_snapshot_race(self, mode):
+        contract = self.execution_contract()
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        script = r"""
+// execution-snapshot-race: real checkpoint reader, synthetic sources, no model.
+const fs=require('node:fs'),path=require('node:path');
+const x=JSON.parse(fs.readFileSync(0,'utf8'));
+const modulePath=path.join(x.runtime,'native-task-execution.cjs');
+const {createNativeTaskExecution}=require(modulePath),{operate,hook}=require(path.join(x.runtime,'task-checkpoint.cjs'));
+const original={open:fs.openSync,close:fs.closeSync,read:fs.readSync,write:fs.writeFileSync,now:Date.now};
+const fds=new Set(),observations=[];let reads=0,injections=0,armed=false,injected=false,nativeStarts=0,expired=false;
+const secret='PRIVATE-SYNTHETIC-INPUT-MUST-NOT-LEAK';
+const source={kind:'codex-mcp-request-metadata',threadId:x.meta.thread_id,sessionTreeId:x.meta.session_id,
+ turnId:x.meta.turn_id,model:x.meta.model,hostVersion:x.meta.codex_version,callId:'fixture-race'};
+const message=role=>({type:'response_item',payload:{type:'message',role,
+ content:[{type:role==='assistant'?'output_text':'input_text',text:secret}]}});
+function append(){if(!armed||injected)return;injected=true;injections++;
+ const row=x.mode==='control'?{type:'event_msg',payload:{type:'turn_aborted',turn_id:source.turnId}}:
+ message(['user','diagnostic-write-failure'].includes(x.mode)?'user':'assistant');
+ fs.appendFileSync(x.transcript,JSON.stringify(row)+'\n');}
+fs.openSync=(file,...args)=>{const transcript=path.resolve(String(file))===x.transcript;
+ if(transcript&&x.mode==='assistant-before')append();
+ const fd=original.open(file,...args);if(transcript)fds.add(fd);return fd;};
+fs.closeSync=fd=>{if(fds.has(fd)&&x.mode==='assistant-after')append();fds.delete(fd);return original.close(fd);};
+fs.readSync=(fd,...args)=>{const n=original.read(fd,...args);if(fds.has(fd)&&x.mode!=='assistant-after')append();return n;};
+fs.writeFileSync=(file,data,...args)=>{
+ if(x.mode==='diagnostic-write-failure'&&String(data).startsWith('{')){
+  let value;try{value=JSON.parse(String(data));}catch(_){}
+  if(value?.kind==='source-gate-failure')throw Object.assign(new Error('fixture diagnostic write denied'),{code:'EACCES'});
+ }return original.write(file,data,...args);};
+Date.now=()=>expired?x.contract.deadlineMs:original.now();
+const readState=request=>{
+ reads++;
+ if(reads===2){
+  if(x.mode==='pause')operate({op:'pause',session_id:source.sessionTreeId,cwd:x.cwd,
+   epoch:x.contract.epoch,expectedRevision:x.contract.expectedRevision,reason:'Fixture pause'});
+  if(x.mode==='epoch'){
+   fs.appendFileSync(x.transcript,JSON.stringify({type:'response_item',payload:{type:'message',role:'user',
+    content:[{type:'input_text',text:'Continue this work.'}]}})+'\n');
+   hook({hook_event_name:'UserPromptSubmit',prompt:'Continue this work.',session_id:source.sessionTreeId,
+    cwd:x.cwd,turn_id:source.turnId,model:source.model,transcript_path:x.transcript});
+   const latest=operate(request);
+   operate({op:'bind',session_id:source.sessionTreeId,cwd:x.cwd,epoch:latest.epoch,expectedRevision:latest.revision,
+    result:'Review the authorized fixed candidate',inputs:['drain.json'],outputs:[{path:'review.json'}],
+    nextAction:'Perform the bounded review',canContinue:true});
+  }
+  if(x.mode==='protected')fs.appendFileSync(path.join(x.cwd,'drain.json'),' ');
+ }
+ armed=reads===2&&!['pause','observe'].includes(x.mode)||x.mode==='continuous'&&reads===3;
+ injected=false;const snapshot=operate(request);armed=false;
+ if(x.mode==='deadline'&&reads===2)expired=true;
+ observations.push({read:reads,reason:snapshot.nativeInputEvidence?.reason,mode:snapshot.mode,
+  epochMatches:snapshot.epoch===x.contract.epoch,revision:snapshot.revision,
+  inputReconciled:snapshot.nativeInputEvidence?.latestInputReconciled,
+  inputsComplete:snapshot.nativeInputEvidence?.latestNativeInputsComplete,
+  pending:snapshot.nativeInputEvidence?.pendingInputs?.length,
+  protectedUnchanged:snapshot.inspection?.inputs?.every(row=>row.unchanged&&row.stable)});
+ return snapshot;
+};
+const execution=createNativeTaskExecution({sourceOf:()=>source,readState,storageRoot:x.storage,
+ nativeFactory:async()=>{nativeStarts++;throw Error('fixture must not create native target');}});
+const params=(action,args={})=>({arguments:{action,cwd:x.cwd,...args}});
+const call=(action,args={})=>execution.call(params(action,args));
+const tick=()=>new Promise(resolve=>setImmediate(resolve));
+(async()=>{
+ let output;
+ try{
+  const initial=await call('prepare',x.contract);
+  if(initial.isError)throw Error(JSON.stringify(initial));
+  const id=initial.value.operationId;
+  // A bounded microtask/event-loop drain, not a race against a fixed sleep.
+  let observed;
+  for(let i=0;i<40;i++){await tick();observed=(await call('inspect',{operationId:id})).value;
+   if(observed.failure||observed.reviewRequest)break;}
+  if(x.mode==='observe'){
+   if(!observed.reviewRequest)throw Error('fixture did not reach review');
+   fs.appendFileSync(x.transcript,JSON.stringify(message('user'))+'\n');
+   execution.observe(params('inspect',{operationId:id}));
+   for(let i=0;i<40;i++){await tick();observed=(await call('inspect',{operationId:id})).value;
+    if(observed.failure&&!observed.busy)break;}
+  }
+  const readEvidence=async locator=>locator?JSON.parse((await call('read-evidence',{
+   operationId:id,evidenceId:locator.evidenceId})).value.text):null;
+  const state=await readEvidence(observed.stateEvidence),diagnostic=await readEvidence(observed.sourceFailureEvidence);
+  output={observed,state,diagnostic,observations,nativeStarts,injections};
+ }finally{await execution.close();Date.now=original.now;}
+ process.stdout.write(JSON.stringify(output));
+})().catch(error=>{process.stderr.write(error.stack);process.exitCode=1;});
+"""
+        result = subprocess.run([self.node, '-e', script], input=json.dumps({
+            'runtime': str(BRIDGE.parent), 'storage': str(self.state), 'cwd': str(self.work),
+            'transcript': str(transcript), 'meta': self.params['_meta']['x-codex-turn-metadata'],
+            'contract': contract, 'mode': mode}), capture_output=True, text=True,
+            encoding='utf-8', env=self.env, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        value = json.loads(result.stdout)
+        self.assertEqual(value['nativeStarts'], 0)
+        self.assertEqual(value['state']['turnStarts'], 0)
+        self.assertIsNone(value['state'].get('target'))
+        self.assertIsNone(value['state']['pendingEffect'])
+        self.assertIsNone(value['state']['revision'])
+        return value
+
+    def test_execution_snapshot_reobservation_preserves_input_control_and_independent_gates(self):
+        for mode in ('assistant', 'assistant-before', 'assistant-after', 'user', 'control', 'pause',
+                     'continuous', 'deadline', 'epoch', 'protected'):
+            with self.subTest(mode=mode):
+                case = NativeStateMcpTests()
+                case.setUp()
+                try:
+                    value = case.execution_snapshot_race(mode)
+                finally:
+                    case.doCleanups()
+                observed, rows = value['observed'], value['observations']
+                if mode.startswith('assistant'):
+                    self.assertIsNone(observed['failure'], value)
+                    self.assertEqual(observed['reviewRequest']['stage'], 'prepare')
+                    self.assertIn(rows[1]['reason'], ('transcript-changed-before-read', 'transcript-changed-during-read',
+                                                     'transcript-path-changed-after-read'))
+                    self.assertEqual(rows[2]['reason'], 'bound-native-input-prefix')
+                    continue
+                self.assertEqual(observed['failure'], 'current-source-not-executable', value)
+                self.assertEqual(observed['phase'], 'held')
+                diagnostic = value['diagnostic']
+                self.assertIsNotNone(diagnostic, 'failed source gate must retain safe diagnostic evidence')
+                self.assertEqual(set(diagnostic), {'kind', 'stage', 'observations'})
+                self.assertEqual(diagnostic['kind'], 'source-gate-failure')
+                self.assertEqual(diagnostic['stage'], 'prepare')
+                attempts = diagnostic['observations']
+                self.assertEqual(len(attempts), 1 if mode in ('pause', 'deadline', 'epoch', 'protected') else 2)
+                for attempt in attempts:
+                    self.assertEqual(set(attempt), {'attempt', 'gates', 'sameBasis', 'protectedSource', 'nativeInputs'})
+                    self.assertEqual(set(attempt['gates']), {'active', 'checkpoint', 'canContinue', 'noReplay',
+                        'noResumeReconciliation', 'hostCurrent', 'inputReconciled', 'receiptPresent',
+                        'evidenceObserved', 'latestInputReconciled', 'latestInputsComplete', 'noPendingInputs'})
+                    self.assertTrue(all(type(flag) is bool for flag in attempt['gates'].values()))
+                    self.assertEqual(set(attempt['nativeInputs']), {'state', 'reason', 'pendingCount'})
+                text = json.dumps(diagnostic)
+                self.assertNotIn('PRIVATE-SYNTHETIC-INPUT-MUST-NOT-LEAK', text)
+                self.assertNotIn(str(case.work), text)
+                if mode == 'user':
+                    self.assertEqual(rows[-1]['pending'], 1)
+                    self.assertFalse(rows[-1]['inputsComplete'])
+                elif mode == 'control':
+                    self.assertEqual(rows[-1]['reason'], 'native-input-control-needs-reconciliation')
+                elif mode == 'pause':
+                    self.assertEqual(rows[-1]['mode'], 'paused')
+                elif mode == 'epoch':
+                    self.assertFalse(attempts[-1]['sameBasis'])
+                    self.assertEqual(rows[-1]['reason'], 'transcript-changed-during-read')
+                    self.assertTrue(attempts[-1]['gates']['inputReconciled'])
+                elif mode == 'protected':
+                    self.assertFalse(attempts[-1]['protectedSource'])
+                elif mode == 'continuous':
+                    self.assertEqual(value['injections'], 2)
+                    self.assertEqual(rows[-1]['reason'], 'transcript-changed-during-read')
+
+    def test_execution_snapshot_diagnostic_failure_and_observe_cancel_preserve_primary_failure(self):
+        for mode in ('diagnostic-write-failure', 'observe'):
+            with self.subTest(mode=mode):
+                case = NativeStateMcpTests()
+                case.setUp()
+                try:
+                    value = case.execution_snapshot_race(mode)
+                finally:
+                    case.doCleanups()
+                observed = value['observed']
+                self.assertEqual(observed['failure'], 'current-source-not-executable', value)
+                self.assertIn(observed['phase'], ('held', 'cancelled-held'))
+                self.assertFalse(observed['busy'])
+                self.assertIsNone(observed['reviewRequest'])
+                if mode == 'diagnostic-write-failure':
+                    self.assertEqual(observed.get('sourceFailureDiagnosticError'), 'EACCES')
+                    self.assertIsNone(observed['sourceFailureEvidence'])
+                else:
+                    self.assertIsNone(observed.get('sourceFailureDiagnosticError'))
+                    self.assertIsNotNone(value['diagnostic'], 'observe cancellation must retain source gate diagnosis')
+                    self.assertEqual(value['diagnostic']['stage'], 'source-check')
+                    self.assertFalse(value['diagnostic']['observations'][-1]['gates']['noPendingInputs'])
+
+
 def _finalize_native_integration(result, app, fixture, root, host, *, body_failed):
     """Retain the body outcome and every available native release receipt."""
     cleanup_failures = []
