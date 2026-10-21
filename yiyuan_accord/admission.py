@@ -1066,12 +1066,13 @@ def _normative_differences(original, current, pointer=""):
     return [] if old == new else [{"pointer": pointer, "oldSha256": old, "newSha256": new}]
 
 
-def _contemporary_review(section, original_contract, original, contract, case, differences, refs, require):
+def _contemporary_review(section, original_contract, original, contract, case, differences, refs, require, *, derived=False):
     """Exact old effects under an explicit current source/impact judgment.
 
     Structural checks do not authenticate observations or meaning. Each complete
     file/normative change and old consequence still needs actual source review.
-    There is deliberately no new-outcome value or aggregate-admission channel.
+    V2 has no new-outcome channel. V3 adds separately reviewed source derivations;
+    neither version replaces complete original-case admission.
     """
     authority, cycle = contract.get("authority"), contract.get("cycle")
     require(isinstance(authority, dict) and isinstance(cycle, dict))
@@ -1083,7 +1084,7 @@ def _contemporary_review(section, original_contract, original, contract, case, d
             and release.get("target") == cycle.get("targetVersion")
             and release.get("decision") == "user-authorized-after-acceptance" and release.get("ready") is False)
     require(isinstance(section, dict) and set(section) == {
-        "normativeDifferences", "sourceDelta", "contributions"})
+        "normativeDifferences", "sourceDelta", "contributions"} | ({"derivedOutcomes"} if derived else set()))
     leaves = _condition_leaves(original["expected"])
     expected = {row["pointer"]: row for row in _normative_differences(original_contract, contract)}
     rows = section["normativeDifferences"]
@@ -1145,7 +1146,9 @@ def _current_impact(root, material, record, original_contract, original, contrac
         if not condition:
             raise _CaseRejection("current-applicability-unsupported")
 
-    contemporary = isinstance(material, dict) and material.get("schema") == (
+    derived = isinstance(material, dict) and material.get("schema") == (
+        "yiyuan-accord-parent-applicability/v3" if parent else "yiyuan-accord-current-applicability/v3")
+    contemporary = derived or isinstance(material, dict) and material.get("schema") == (
         "yiyuan-accord-parent-applicability/v2" if parent else "yiyuan-accord-current-applicability/v2")
     require(isinstance(material, dict) and set(material) == {
         "schema", "original", "current", "differences", "conditionBindings", "sources", "reviewBundle"}
@@ -1232,7 +1235,7 @@ def _current_impact(root, material, record, original_contract, original, contrac
         expected = _impact_differences(root, revision, subject["revision"], packages,
                                        case["oracleFiles"], budget, complete=True)
         complete_contribution = _contemporary_review(material["contemporary"], original_contract,
-            original, contract, case, expected, refs, require)
+            original, contract, case, expected, refs, require, derived=derived)
         shared = material["contemporary"]["sourceDelta"]
         require(sources[shared["source"]]["sha256"] == shared["sha256"])
     else:
@@ -1284,11 +1287,46 @@ def _current_impact(root, material, record, original_contract, original, contrac
         # Preserve the caller's reviewed partial material without promoting it
         # to a whole original case or introducing partial-case coverage.
         raise _CaseRejection("current-contribution-incomplete")
+    derived_outcomes = []
+    if derived:
+        # The trusted observer supplies source facts; hashes check identity,
+        # not origin or semantic sufficiency. The exact material review above
+        # covers each derivation, and complete original case admission remains.
+        obligations = {row["id"]: row for requirement in contract["acceptance"]["admission"]["acceptanceRequirements"]
+                       for row in requirement.get("outcomeObligations", [])}
+        rows = material["contemporary"]["derivedOutcomes"]
+        require(isinstance(rows, list))
+        for row in rows:
+            require(isinstance(row, dict) and set(row) == {
+                "obligation", "case", "recordSha256", "packageSha256", "episodeId",
+                "criterion", "chain", "currentSources", "basis"})
+            key = row["obligation"]
+            require(isinstance(key, str) and key in obligations and key not in derived_outcomes)
+            obligation = obligations[key]
+            require(obligation["scope"] == case["scope"] and obligation["claim"] in case["claims"]
+                    and obligation["source"]["path"] in case["oracleFiles"]
+                    and row["criterion"] == obligation["source"] and row["case"] == case["id"]
+                    and row["recordSha256"] == _hash(record) and row["packageSha256"] == record["packageSha256"]
+                    and row["episodeId"] == record["episodeId"] and _text(row["basis"])
+                    and refs(row["currentSources"], "current-observation"))
+            chain = row["chain"]
+            require(isinstance(chain, list) and bool(chain))
+            previous = -1
+            for node in chain:
+                require(isinstance(node, dict) and set(node) == {
+                    "source", "episodeId", "sequence", "facts"})
+                require(node["episodeId"] == record["episodeId"] and type(node["sequence"]) is int
+                        and node["sequence"] > previous and refs([node["source"]], "original-final-outcome")
+                        and isinstance(node["facts"], dict) and bool(node["facts"])
+                        and sources[node["source"]]["sha256"] == _hash(node["facts"]))
+                previous = node["sequence"]
+            derived_outcomes.append(key)
     return {"evidenceSha256": digest, "original": copy.deepcopy(old), "current": copy.deepcopy(current),
             "definitionComparison": {"kind": comparison,
                 "originalVersion": original_contract["delivery"]["version"],
                 "currentVersion": contract["delivery"]["version"]},
             "conditionBindings": copy.deepcopy(bindings),
+            **({"derivedOutcomes": sorted(derived_outcomes)} if derived else {}),
             **({"contemporary": copy.deepcopy(material["contemporary"])} if contemporary else {}),
             **({"predicateBindings": copy.deepcopy(material["predicateBindings"]),
                 "roles": copy.deepcopy(material["roles"]), "relationships": copy.deepcopy(material["relationships"])}
@@ -1763,6 +1801,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
         # discharge an obligation. A generic healthy/no-action contribution
         # remains admitted without standing in for an unobserved capability.
         criterion_sources = {}
+        derived_cases = {**current_applicability, **parent_applicability}
         for requirement in policy["acceptanceRequirements"]:
             if "outcomeObligations" not in requirement:
                 continue
@@ -1774,7 +1813,8 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 coverage.setdefault("outcomeObligations", [])
                 candidates = [case for key, case in cases.items() if key in admitted
                     and case["scope"] == scope_id and claim in case["claims"]
-                    and _outcome_value(case["expected"], obligation["pointer"]) is True]
+                    and (_outcome_value(case["expected"], obligation["pointer"]) is True
+                         or obligation["id"] in derived_cases.get(key, {}).get("derivedOutcomes", []))]
                 source_cases = [case for case in candidates
                     if obligation["source"]["path"] in case["oracleFiles"]]
                 source_key = (obligation["source"]["path"], obligation["source"]["anchor"])

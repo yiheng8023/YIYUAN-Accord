@@ -159,6 +159,188 @@ class ContemporaryContributionTests(unittest.TestCase):
             return result
         return wrapper
 
+    def derived_fixture(self, parent=None):
+        current, case, record, _, observe = self.contemporary_fixture(parent,
+            function_case='v33-goal-authority-correction-steering-01' if parent is None else None)
+        obligation = next(row for requirement in current['acceptance']['admission']['acceptanceRequirements']
+            for row in requirement['outcomeObligations'] if (row['id'] == 'a01-side-inputs-preserve-goal' if parent is None else
+                row['scope'] == case['scope'] and row['claim'] in case['claims']))
+        group = 'parentApplicability' if parent else 'currentApplicability'
+        state = {}
+        def observer(request):
+            result = observe(request)
+            if request['phase'] == 'recheck':
+                material = state['material']
+                result[group][case['id']]['evidenceSha256'] = digest({
+                    key: value for key, value in material.items() if key != 'reviewBundle'})
+                result[group][case['id']]['contemporary'] = copy.deepcopy(material['contemporary'])
+                return result
+            material = result[group][case['id']]
+            material['schema'] = material['schema'].replace('/v2', '/v3')
+            facts = [
+                {'goal': 'Deliver authorized A/B', 'question': 'Why is C pending?', 'C': 'not authorized'},
+                {'answer': 'Complete source facts do not authorize C', 'goal': 'Deliver authorized A/B'},
+                {'selected': ['A', 'B'], 'used': 5, 'pending': ['C'], 'files': ['selection', 'note']}]
+            if parent:
+                facts = [{'business': 'one original combined delivery', 'scope': 'one episode'},
+                         {'result': 'original required relationships and complete delivery retained'}]
+            chain = []
+            for sequence, fact in enumerate(facts):
+                source = 'ordered-original-' + str(sequence)
+                material['sources'][source] = {'sourceRef': 'fixture://original-episode/' + str(sequence),
+                    'sha256': digest(fact), 'kind': 'original-final-outcome'}
+                chain.append({'source': source, 'episodeId': record['episodeId'],
+                              'sequence': sequence, 'facts': fact})
+            material['contemporary']['derivedOutcomes'] = [{
+                'obligation': obligation['id'], 'case': case['id'], 'recordSha256': digest(record),
+                'packageSha256': record['packageSha256'], 'episodeId': record['episodeId'],
+                'criterion': copy.deepcopy(obligation['source']), 'chain': chain,
+                'currentSources': ['actual'],
+                'basis': 'Synthetic independent source adjudication: question answered and authorized work delivered; C remains pending.'}]
+            self.fixture.sign_parent_material(material)
+            state['material'] = material
+            return result
+        return current, case, record, observer
+
+    def test_reviewed_derived_outcome_preserves_original_case_and_other_missing_results(self):
+        with self.fixture.history():
+            current, case, record, observe = self.derived_fixture()
+            frozen = copy.deepcopy((case, record))
+            report = self.fixture.assess(current, observe)
+            self.assertEqual(report['acceptedCases'], [case['id']], report['caseRejections'])
+            self.assertEqual(report['errors'], [])
+            self.assertEqual((case, record), frozen)
+            a01 = report['acceptanceRequirements']['A01']
+            self.assertNotIn('a01-side-inputs-preserve-goal', a01['missingObligations'])
+            self.assertIn('a01-ambiguous-goal-to-requirements', a01['missingObligations'])
+            self.assertFalse(report['functionalCompletion'])
+            self.assertFalse(report['candidateEligible'])
+
+    def test_derived_outcomes_reject_naked_values_wrong_identity_and_unbound_source_facts(self):
+        with self.fixture.history():
+            current, case, _, observe = self.derived_fixture()
+            def damage(material, kind):
+                section = material['contemporary']
+                row = section['derivedOutcomes'][0]
+                if kind == 'bare-true':
+                    section['derivedOutcomes'] = [True]
+                elif kind == 'direct-value':
+                    row['value'] = True
+                elif kind in ('case', 'recordSha256', 'packageSha256', 'episodeId', 'obligation'):
+                    row[kind] = 'unrelated-original'
+                elif kind == 'criterion':
+                    row['criterion']['anchor'] = 'A08'
+                elif kind == 'duplicate':
+                    section['derivedOutcomes'].append(copy.deepcopy(row))
+                elif kind == 'empty-chain':
+                    row['chain'] = []
+                elif kind == 'cross-episode':
+                    row['chain'][-1]['episodeId'] = 'another-business'
+                elif kind == 'order':
+                    row['chain'].reverse()
+                elif kind == 'boolean-sequence':
+                    row['chain'][0]['sequence'] = False
+                elif kind == 'boolean-fact':
+                    row['chain'][0]['facts'] = True
+                elif kind == 'source-bytes':
+                    row['chain'][-1]['facts']['used'] = 4
+                elif kind == 'source-digest':
+                    material['sources'][row['chain'][0]['source']]['sha256'] = '0' * 64
+                elif kind == 'source-kind':
+                    material['sources'][row['chain'][0]['source']]['kind'] = 'current-observation'
+                elif kind == 'no-current':
+                    row['currentSources'] = []
+            kinds = ('bare-true', 'direct-value', 'case', 'recordSha256', 'packageSha256',
+                     'episodeId', 'obligation', 'criterion', 'duplicate', 'empty-chain',
+                     'cross-episode', 'order', 'boolean-sequence', 'boolean-fact',
+                     'source-bytes', 'source-digest', 'source-kind', 'no-current')
+            for kind in kinds:
+                with self.subTest(kind=kind):
+                    report = self.fixture.assess(current, self.mutate(
+                        observe, lambda material: damage(material, kind)))
+                    self.assertEqual(report['acceptedCases'], [])
+                    self.assertFalse(report['candidateEligible'])
+
+    def test_derived_outcomes_do_not_replace_original_case_conditions_or_independent_review(self):
+        with self.fixture.history():
+            current, case, _, observe = self.derived_fixture()
+            def damage(material, kind):
+                if kind == 'original-leaf':
+                    material['contemporary']['contributions'].pop()
+                elif kind == 'unresolved-leaf':
+                    material['contemporary']['contributions'][0].update(
+                        disposition='unresolved', currentSources=[])
+                elif kind == 'condition':
+                    material['conditionBindings'].pop()
+                elif kind == 'reviewer':
+                    for review in material['reviewBundle']['reviews']:
+                        review['reviewerId'] = 'one-self-reviewer'
+                elif kind == 'review-axis':
+                    material['reviewBundle']['reviews'].pop()
+                elif kind == 'review-subject':
+                    material['reviewBundle']['subject']['revision'] = '0' * 40
+                elif kind == 'missing-effect-reviewed':
+                    material['contemporary']['derivedOutcomes'][0]['chain'].pop()
+                    # Supplied independent review rejects this known answer-only
+                    # source. The validator does not invent a semantic NLP gate.
+                    review = material['reviewBundle']['reviews'][0]
+                    review['decision'] = 'fail'
+                    review['findings'] = [{'severity': 'P1', 'disposition': 'fail'}]
+            for kind in ('original-leaf', 'unresolved-leaf', 'condition', 'reviewer',
+                         'review-axis', 'review-subject', 'missing-effect-reviewed'):
+                with self.subTest(kind=kind):
+                    report = self.fixture.assess(current, self.mutate(
+                        observe, lambda material: damage(material, kind)))
+                    self.assertEqual(report['acceptedCases'], [])
+                    self.assertIn('a01-side-inputs-preserve-goal',
+                        report['acceptanceRequirements']['A01']['missingObligations'])
+
+    def test_derived_outcomes_require_exact_recheck_and_explicit_new_material_version(self):
+        with self.fixture.history():
+            current, case, _, observe = self.derived_fixture()
+            for version in ('v1', 'v2'):
+                with self.subTest(version=version):
+                    report = self.fixture.assess(current, self.mutate(observe,
+                        lambda material: material.update(schema=material['schema'].replace('v3', version))))
+                    self.assertEqual(report['acceptedCases'], [])
+            for kind in ('chain', 'digest', 'current-condition'):
+                def drift(rows):
+                    item = rows[case['id']]
+                    if kind == 'chain':
+                        item['contemporary']['derivedOutcomes'][0]['chain'][0]['facts']['goal'] = 'a changed goal'
+                    elif kind == 'digest':
+                        item['evidenceSha256'] = '0' * 64
+                    else:
+                        item['current']['context']['authority'] = []
+                with self.subTest(recheck=kind):
+                    report = self.fixture.assess(current, self.mutate(observe, lambda material: None, recheck=drift))
+                    self.assertIn('current-applicability-changed', report['caseRejections'][case['id']])
+                    self.assertEqual(report['acceptedCases'], [])
+
+    def test_v3_parent_derived_outcome_keeps_same_episode_joint_gate_and_a08_prerequisites(self):
+        with self.fixture.history():
+            current, case, record, observe = self.derived_fixture('v33-system-integration-live-development-01')
+            frozen = copy.deepcopy(record)
+            report = self.fixture.assess(current, observe)
+            self.assertEqual(report['acceptedCases'], [case['id']], report['caseRejections'])
+            self.assertEqual(record, frozen)
+            a08 = report['acceptanceRequirements']['A08']
+            self.assertNotIn('a08-same-business-complete-composition', a08['missingObligations'])
+            self.assertFalse(a08['complete'])
+            self.assertTrue(a08['blockedBy'])
+            for kind in ('role', 'relationship', 'episode'):
+                def missing(material):
+                    if kind == 'role':
+                        material['roles'].pop()
+                    elif kind == 'relationship':
+                        material['relationships'].pop()
+                    else:
+                        material['relationships'][0]['episodeId'] = 'unrelated-business'
+                with self.subTest(kind=kind):
+                    rejected = self.fixture.assess(current, self.mutate(observe, missing, parent=True))
+                    self.assertEqual(rejected['acceptedCases'], [])
+                    self.assertFalse(rejected['acceptanceRequirements']['A08']['complete'])
+
     def test_explicit_current_review_retains_original_effect_without_new_outcome(self):
         with self.fixture.history():
             current, case, record, legacy, observe = self.contemporary_fixture()
