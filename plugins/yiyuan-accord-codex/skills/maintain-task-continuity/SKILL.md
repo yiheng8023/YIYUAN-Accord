@@ -114,16 +114,15 @@ controller. Check the actual thread, effective settings, pauses, pending effects
 and writer before continuing; shared history alone grants no control or write right.
 Reuse proven common behavior and check only consequential entry differences.
 
-For a fresh-task transfer or its unresolved effects through an owned App Server controller, read the
+For necessary fresh targets or recovery, read the
 [native handoff interface](../deliver-demand-driven-outcome/references/native-handoff.md)
-before integration. The adapter coordinates caller-supplied transport, durable
-writer ownership and independent verification; the caller owns timing and recovery.
-For other host surfaces, discover an applicable supported control path within
-current authority. Installation alone supplies no Desktop/IDE control connection.
-Use the reference's version-bound connection distinctions before attachment;
-connection and source-tool registration are separate prerequisites.
-Discovery is read-only: queueing messages or starting shared infrastructure
-requires its own bound task authority. Preserve unrelated clients and requests.
+before dependent effects. It distinguishes ordinary root MCP execution, requiring
+current input, scoped quiescence and independent review, from an owned App Server
+controller. The owner supplies transport, writer ownership, verification, timing
+and recovery. Verify supported control within current authority; installation gives
+no control of existing Desktop/IDE tasks. Connection and source-tool registration
+are separate. Discovery is read-only; queueing messages or starting shared
+infrastructure needs bound authority. Preserve unrelated clients and requests.
 
 Keep the bound checkout unless transfer is authorized. Quiesce transferred writes,
 rebind the exact destination's authority, paths and state, and keep recovery until

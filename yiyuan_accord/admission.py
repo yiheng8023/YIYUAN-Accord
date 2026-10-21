@@ -18,7 +18,7 @@ import re
 import subprocess
 from time import monotonic
 
-from .identity import _bounded_git_bytes, _strict_json_object
+from .identity import RELEASE_RE, _bounded_git_bytes, _strict_json_object
 from .guardrails import clean_git_checkout
 from .reviews import evaluate_review_bundle, review_policy_errors
 
@@ -75,6 +75,7 @@ _PACKAGE_ASSESSMENT_BYTES = 67_108_864
 _PROJECTION_FILE_FIELDS = {
     "legalFiles", "metadataFiles", "mechanismFiles", "referenceFiles", "supportingSkills",
 }
+_MISSING_OUTCOME = object()
 
 
 class _CaseRejection(ValueError):
@@ -126,6 +127,71 @@ def _locator(value):
     return (_text(value) and not any(c in value for c in "\\:\0\n\r")
             and not value.startswith("/") and PurePosixPath(value).as_posix() == value
             and not {".", ".."} & set(PurePosixPath(value).parts))
+
+
+def _outcome_pointer(pointer):
+    """Parse a bounded RFC 6901 pointer into a case's expected facets."""
+    if (not _text(pointer) or not pointer.startswith("/")
+            or re.search(r"~(?:[^01]|$)", pointer)):
+        raise ValueError("invalid outcome obligation pointer")
+    parts = [part.replace("~1", "/").replace("~0", "~") for part in pointer[1:].split("/")]
+    if len(parts) < 2:
+        raise ValueError("outcome obligations must select a consequence leaf")
+    return parts
+
+
+def _outcome_value(expected, pointer):
+    value = expected
+    for part in _outcome_pointer(pointer):
+        if isinstance(value, dict) and part in value:
+            value = value[part]
+        elif isinstance(value, list) and re.fullmatch(r"0|[1-9][0-9]*", part) and int(part) < len(value):
+            value = value[int(part)]
+        else:
+            return _MISSING_OUTCOME
+    return value
+
+
+def _outcome_mapping_required(contract):
+    # Earlier immutable declarations retain their exact schema and digest. The
+    # corrected release line cannot return to label-only coverage by omitting
+    # the entire new mapping. This does not re-sign any historical report.
+    version = contract.get("cycle", {}).get("targetVersion", "")
+    match = RELEASE_RE.fullmatch("v" + version) if isinstance(version, str) else None
+    return bool(match and tuple(map(int, match.groups()[:3])) >= (3, 3, 2))
+
+
+def _outcome_obligation_errors(contract, policy):
+    requirements = policy["acceptanceRequirements"]
+    enabled = _outcome_mapping_required(contract) or any("outcomeObligations" in row for row in requirements)
+    if not enabled:
+        return []
+    ids = set()
+    scopes = {row["id"]: row for row in policy["scopes"]}
+    for requirement in requirements:
+        obligations = requirement.get("outcomeObligations")
+        if not isinstance(obligations, list) or not 1 <= len(obligations) <= 128:
+            return ["current acceptance must bind nonempty source outcome obligations for every requirement"]
+        for row in obligations:
+            if (not isinstance(row, dict) or set(row) != {"id", "source", "scope", "claim", "pointer", "expected"}
+                    or not _text(row["id"]) or row["id"] in ids
+                    or not isinstance(row["claim"], str)
+                    or not isinstance(row["scope"], str)
+                    or row["scope"] not in requirement["requiredCoverage"].get(row["claim"], [])
+                    or row["scope"] not in scopes or row["claim"] not in scopes[row["scope"]]["claims"]
+                    or row["expected"] is not True
+                    or not isinstance(row["source"], dict) or set(row["source"]) != {"path", "anchor"}
+                    or not _locator(row["source"]["path"])
+                    or row["source"]["anchor"] != requirement["id"]):
+                return ["outcome obligations must bind unique IDs, source criteria, declared scope claims and true consequence leaves"]
+            ids.add(row["id"])
+            _outcome_pointer(row["pointer"])
+            for case in policy["cases"]:
+                if case["scope"] == row["scope"] and row["claim"] in case["claims"]:
+                    value = _outcome_value(case["expected"], row["pointer"])
+                    if value is not _MISSING_OUTCOME and value is not True:
+                        return ["outcome obligation pointers must select true consequence leaves when present"]
+    return []
 
 
 def _projection_package_files(projection):
@@ -350,7 +416,8 @@ def admission_contract_errors(contract):
                 return ["current admission must bind the successor and its required delivery hosts"]
             requirements = policy["acceptanceRequirements"]
             if (not isinstance(requirements, list) or len(requirements) != 8
-                    or any(not isinstance(r, dict) or set(r) != {"id", "requiredCoverage"} for r in requirements)
+                    or any(not isinstance(r, dict) or not {"id", "requiredCoverage"} <= set(r)
+                           or set(r) - {"id", "requiredCoverage", "outcomeObligations"} for r in requirements)
                     or {r["id"] for r in requirements} != {f"A{i:02}" for i in range(1, 9)}):
                 return ["current admission must map A01 through A08 exactly once"]
             mapped = {claim: set() for claim in claims}
@@ -430,6 +497,8 @@ def admission_contract_errors(contract):
                 return ["evidence case differs from its declared claim scope"]
             if "packageFiles" in case:
                 _sparse_package_files(contract, case)
+        if current and (errors := _outcome_obligation_errors(contract, policy)):
+            return errors
         try:
             _entry_selection(policy, entries, contract["capabilityMap"]["entrySurfaces"].get("modeCatalog")) if current else None
         except ValueError as error:
@@ -560,6 +629,8 @@ def _reuse_definition(contract, case):
         for requirement in policy["acceptanceRequirements"]:
             for claim, scopes in requirement["requiredCoverage"].items():
                 requirement["requiredCoverage"][claim] = sorted(scopes)
+            if "outcomeObligations" in requirement:
+                requirement["outcomeObligations"].sort(key=lambda row: row["id"])
     # These declaration fields are validated as sets of references. Do not
     # recursively sort arbitrary condition/effect arrays: their order may matter.
     for scope in policy["scopes"]:
@@ -857,13 +928,18 @@ def _impact_eligible(contract, case):
             and not aggregate([case, scope]))
 
 
-def _impact_differences(root, original_revision, current_revision, packages, oracle_files, budget):
+def _impact_differences(root, original_revision, current_revision, packages, oracle_files, budget, *, complete=False):
     """Compute the full declared execution and adjudicator delta, including modes.
 
     Renames are deletion/addition pairs. No caller selects a smaller adjudicator
     set, and no AST/call graph is treated as a proof of side-effect freedom.
     """
-    paths = sorted({*packages, *oracle_files, "yiyuan_accord"})
+    pair = (original_revision, current_revision)
+    if complete:
+        cache = budget.setdefault("contemporary", {"pairs": {}, "blobs": {}})
+        if pair in cache["pairs"]:
+            return copy.deepcopy(cache["pairs"][pair])
+    paths = ["."] if complete else sorted({*packages, *oracle_files, "yiyuan_accord"})
     if budget["calls"] + 1 > _PACKAGE_ASSESSMENT_CALLS:
         raise ValueError("impact read bound exceeded")
     budget["calls"] += 1
@@ -900,6 +976,10 @@ def _impact_differences(root, original_revision, current_revision, packages, ora
                     raise ValueError("invalid impact blob")
                 requests.append((entry, side, blob))
         entries.append(entry)
+    if complete:
+        _contemporary_blob_hashes(root, requests, budget)
+        cache["pairs"][pair] = copy.deepcopy(entries)
+        return entries
     if (budget["calls"] + bool(requests) > _PACKAGE_ASSESSMENT_CALLS
             or budget["files"] + len(requests) > _PACKAGE_ASSESSMENT_FILES
             or budget["bytes"] + _PACKAGE_TREE_BYTES > _PACKAGE_ASSESSMENT_BYTES):
@@ -913,6 +993,136 @@ def _impact_differences(root, original_revision, current_revision, packages, ora
         for (entry, side, _), blob in zip(requests, blobs, strict=True):
             entry[side + "Sha256"] = sha256(blob).hexdigest()
     return entries
+
+
+def _contemporary_blob_hashes(root, requests, budget):
+    """Assessment-local successful immutable blob hashes; never WIP/path caches.
+
+    Reserve every actual attempt before I/O, including failures. Full candidate
+    changes may exceed one batch; all existing per-blob/batch/shared limits stay.
+    """
+    hashes = budget["contemporary"]["blobs"]
+    missing = list(dict.fromkeys(blob for _, _, blob in requests if blob not in hashes))
+    if missing:
+        if (budget["calls"] + 1 > _PACKAGE_ASSESSMENT_CALLS
+                or budget["files"] + len(missing) > _PACKAGE_ASSESSMENT_FILES):
+            raise ValueError("contemporary source read bound exceeded")
+        budget["calls"] += 1
+        raw = _bounded_git_bytes(
+            root, ("--no-replace-objects", "cat-file", "--batch-check"), _LIMIT,
+            b"".join(blob.encode("ascii") + b"\n" for blob in missing))
+        rows = raw.splitlines()
+        if len(rows) != len(missing):
+            raise ValueError("incomplete contemporary blob sizes")
+        sizes = []
+        for blob, row in zip(missing, rows, strict=True):
+            fields = row.split()
+            if (len(fields) != 3 or fields[0] != blob.encode("ascii") or fields[1] != b"blob"
+                    or not fields[2].isdigit()):
+                raise ValueError("invalid contemporary blob size")
+            size = int(fields[2])
+            if size > _PACKAGE_BLOB_BYTES:
+                raise ValueError("contemporary blob exceeds per-file bound")
+            sizes.append((blob, size))
+        while sizes:
+            batch, total = [], 0
+            while sizes and len(batch) < _PACKAGE_TREE_FILES and total + sizes[0][1] <= _PACKAGE_TREE_BYTES:
+                blob, size = sizes.pop(0)
+                batch.append(blob)
+                total += size
+            if (budget["calls"] + 1 > _PACKAGE_ASSESSMENT_CALLS
+                    or budget["files"] + len(batch) > _PACKAGE_ASSESSMENT_FILES
+                    or budget["bytes"] + total > _PACKAGE_ASSESSMENT_BYTES):
+                raise ValueError("contemporary source read bound exceeded")
+            budget["calls"] += 1
+            budget["files"] += len(batch)
+            budget["bytes"] += total
+            blobs, actual = _batch_blobs(root, batch)
+            if actual != total:
+                raise ValueError("contemporary blob size changed")
+            hashes.update((blob, sha256(value).hexdigest()) for blob, value in zip(batch, blobs, strict=True))
+    for entry, side, blob in requests:
+        entry[side + "Sha256"] = hashes[blob]
+
+
+def _normative_differences(original, current, pointer=""):
+    """Complete canonical contracts, including added/removed/retyped fields.
+
+    Arrays remain ordered atomic values, never arbitrarily sorted/flattened.
+    Original stored definitions and the original reuse comparison are untouched.
+    """
+    if isinstance(original, dict) and isinstance(current, dict):
+        rows = []
+        for key in sorted(original.keys() | current.keys()):
+            path = pointer + "/" + key.replace("~", "~0").replace("/", "~1")
+            if key not in original or key not in current:
+                rows.append({"pointer": path,
+                    "oldSha256": _hash(original[key]) if key in original else None,
+                    "newSha256": _hash(current[key]) if key in current else None})
+            else:
+                rows.extend(_normative_differences(original[key], current[key], path))
+        return rows
+    old, new = _hash(original), _hash(current)
+    return [] if old == new else [{"pointer": pointer, "oldSha256": old, "newSha256": new}]
+
+
+def _contemporary_review(section, original_contract, original, contract, case, differences, refs, require):
+    """Exact old effects under an explicit current source/impact judgment.
+
+    Structural checks do not authenticate observations or meaning. Each complete
+    file/normative change and old consequence still needs actual source review.
+    There is deliberately no new-outcome value or aggregate-admission channel.
+    """
+    authority, cycle = contract.get("authority"), contract.get("cycle")
+    require(isinstance(authority, dict) and isinstance(cycle, dict))
+    release = authority.get("conditionalRelease")
+    require(isinstance(release, dict))
+    require(_json(original) == _json(case) and original_contract["schema"] == contract["schema"]
+            == "yiyuan-accord-development/v5" and original_contract["productId"] == contract["productId"]
+            == "yiyuan-accord" and _outcome_mapping_required(contract)
+            and release.get("target") == cycle.get("targetVersion")
+            and release.get("decision") == "user-authorized-after-acceptance" and release.get("ready") is False)
+    require(isinstance(section, dict) and set(section) == {
+        "normativeDifferences", "sourceDelta", "contributions"})
+    leaves = _condition_leaves(original["expected"])
+    expected = {row["pointer"]: row for row in _normative_differences(original_contract, contract)}
+    rows = section["normativeDifferences"]
+    require(isinstance(rows, list) and len(rows) == len(expected))
+    seen = set()
+    for row in rows:
+        require(isinstance(row, dict) and set(row) == {"pointer", "oldSha256", "newSha256",
+            "affectedPointers", "impact", "basis", "sources", "currentConsequences"})
+        pointer = row["pointer"]
+        require(isinstance(pointer, str) and pointer in expected and pointer not in seen
+                and all(row[key] == value for key, value in expected[pointer].items())
+                and isinstance(row["affectedPointers"], list)
+                and all(isinstance(value, str) and value in leaves for value in row["affectedPointers"])
+                and len(row["affectedPointers"]) == len(set(row["affectedPointers"]))
+                and isinstance(row["impact"], str) and row["impact"] in {
+                    "original-observation-still-applies", "current-consequence-supported"}
+                and _text(row["basis"]) and refs(row["sources"], "source-analysis")
+                and refs(row["currentConsequences"], "current-observation"))
+        seen.add(pointer)
+    source = section["sourceDelta"]
+    require(isinstance(source, dict) and set(source) == {"sha256", "source"}
+            and source["sha256"] == _hash(differences) and refs([source["source"]], "source-analysis"))
+    rows = section["contributions"]
+    require(isinstance(rows, list) and bool(rows))
+    seen, supported = set(), set()
+    for row in rows:
+        require(isinstance(row, dict) and set(row) == {
+            "pointer", "disposition", "originalSources", "currentSources", "basis"})
+        pointer = row["pointer"]
+        require(isinstance(pointer, str) and pointer in leaves and pointer not in seen
+                and isinstance(row["disposition"], str) and row["disposition"] in {
+                    "current-applicable", "unresolved", "contradicted"}
+                and _text(row["basis"]) and refs(row["originalSources"], "original-final-outcome")
+                and (refs(row["currentSources"], "current-observation") if row["disposition"] == "current-applicable"
+                     else row["currentSources"] == [] or refs(row["currentSources"], "current-observation")))
+        seen.add(pointer)
+        if row["disposition"] == "current-applicable":
+            supported.add(pointer)
+    return supported == set(leaves)
 
 
 def _condition_leaves(value, pointer=""):
@@ -935,11 +1145,14 @@ def _current_impact(root, material, record, original_contract, original, contrac
         if not condition:
             raise _CaseRejection("current-applicability-unsupported")
 
+    contemporary = isinstance(material, dict) and material.get("schema") == (
+        "yiyuan-accord-parent-applicability/v2" if parent else "yiyuan-accord-current-applicability/v2")
     require(isinstance(material, dict) and set(material) == {
         "schema", "original", "current", "differences", "conditionBindings", "sources", "reviewBundle"}
-        | ({"predicateBindings", "roles", "relationships"} if parent else set()))
-    require(material["schema"] == ("yiyuan-accord-parent-applicability/v1" if parent
-                                   else "yiyuan-accord-current-applicability/v1"))
+        | ({"predicateBindings", "roles", "relationships"} if parent else set())
+        | ({"contemporary"} if contemporary else set()))
+    require(contemporary or material["schema"] == ("yiyuan-accord-parent-applicability/v1" if parent
+                                                 else "yiyuan-accord-current-applicability/v1"))
     if parent:
         claim = _PARENT_CLAIMS.get(case["scope"])
         require(claim is not None and original_contract["schema"] == contract["schema"]
@@ -948,7 +1161,10 @@ def _current_impact(root, material, record, original_contract, original, contrac
                 and v["claims"] == [claim] for c, v in ((original_contract, original), (contract, case))))
     else:
         require(_impact_eligible(original_contract, original) and _impact_eligible(contract, case))
-    comparison = _impact_comparison(original_contract, original, contract, case)
+    if contemporary:
+        require(_json(original) == _json(case))
+    comparison = ("contemporary-original-contribution" if contemporary else
+                  _impact_comparison(original_contract, original, contract, case))
     require(comparison is not None)
     revision = record["evaluatedRevision"]
     original_subject = {"revision": revision,
@@ -1012,7 +1228,15 @@ def _current_impact(root, material, record, original_contract, original, contrac
     require(all(refs(context[key], "current-observation")
                 for key in ("configuration", "authority", "helpers", "continuingState")))
     differences = material["differences"]
-    expected = _impact_differences(root, revision, subject["revision"], packages, case["oracleFiles"], budget)
+    if contemporary:
+        expected = _impact_differences(root, revision, subject["revision"], packages,
+                                       case["oracleFiles"], budget, complete=True)
+        complete_contribution = _contemporary_review(material["contemporary"], original_contract,
+            original, contract, case, expected, refs, require)
+        shared = material["contemporary"]["sourceDelta"]
+        require(sources[shared["source"]]["sha256"] == shared["sha256"])
+    else:
+        expected = _impact_differences(root, revision, subject["revision"], packages, case["oracleFiles"], budget)
     require(isinstance(differences, list) and len(differences) == len(expected))
     by_path = {}
     for row in differences:
@@ -1056,11 +1280,16 @@ def _current_impact(root, material, record, original_contract, original, contrac
                                   expected_evidence_sha256=digest)["decision"] == "pass")
     require(all((at := _fresh(row["reviewedAt"], contract["acceptance"]["admission"]["reviewMaxAgeSeconds"], now))
                 is not None and at.timestamp() >= candidate_time for row in review["reviews"]))
+    if contemporary and not complete_contribution:
+        # Preserve the caller's reviewed partial material without promoting it
+        # to a whole original case or introducing partial-case coverage.
+        raise _CaseRejection("current-contribution-incomplete")
     return {"evidenceSha256": digest, "original": copy.deepcopy(old), "current": copy.deepcopy(current),
             "definitionComparison": {"kind": comparison,
                 "originalVersion": original_contract["delivery"]["version"],
                 "currentVersion": contract["delivery"]["version"]},
             "conditionBindings": copy.deepcopy(bindings),
+            **({"contemporary": copy.deepcopy(material["contemporary"])} if contemporary else {}),
             **({"predicateBindings": copy.deepcopy(material["predicateBindings"]),
                 "roles": copy.deepcopy(material["roles"]), "relationships": copy.deepcopy(material["relationships"])}
                if parent else {}),
@@ -1415,6 +1644,8 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 if key in applicable:
                     fields = ("evidenceSha256", "current", "conditionBindings") + ((
                         "predicateBindings", "roles", "relationships") if key in parent_applicability else ())
+                    if "contemporary" in applicable[key]:
+                        fields += ("contemporary",)
                     expected = {field: applicable[key][field] for field in fields}
                     name = "parentApplicability" if key in parent_applicability else "currentApplicability"
                     if _json(recheck[name][key]) != _json(expected):
@@ -1524,7 +1755,55 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                            for key in admitted & relevant):
                     report["unjoinedCoverage"][claim].append(scope_id)
                     completed[claim] = False
+    missing_obligations, obligation_reasons = {}, {}
+    if policy["schema"] == CURRENT_SCHEMA:
+        # Accepted records have already passed independent observe/recheck,
+        # exact expected-fact matching, condition and source identity guards.
+        # Only a source-bound true consequence in that same scope/claim can
+        # discharge an obligation. A generic healthy/no-action contribution
+        # remains admitted without standing in for an unobserved capability.
+        criterion_sources = {}
+        for requirement in policy["acceptanceRequirements"]:
+            if "outcomeObligations" not in requirement:
+                continue
+            missing_obligations[requirement["id"]] = []
+            obligation_reasons[requirement["id"]] = {}
+            for obligation in requirement["outcomeObligations"]:
+                scope_id, claim = obligation["scope"], obligation["claim"]
+                coverage = report["openCoverage"][scope_id]["claims"][claim]
+                coverage.setdefault("outcomeObligations", [])
+                candidates = [case for key, case in cases.items() if key in admitted
+                    and case["scope"] == scope_id and claim in case["claims"]
+                    and _outcome_value(case["expected"], obligation["pointer"]) is True]
+                source_cases = [case for case in candidates
+                    if obligation["source"]["path"] in case["oracleFiles"]]
+                source_key = (obligation["source"]["path"], obligation["source"]["anchor"])
+                if source_cases and source_key not in criterion_sources:
+                    try:
+                        source = _git(root, "show", f"{subject['revision']}:{source_key[0]}").decode("utf-8")
+                        # Bind an exact criterion identifier in the committed
+                        # oracle source. Interpretation and complete source-to-
+                        # outcome mapping remain independent review duties; no
+                        # particular document format or A05 wording is assumed.
+                        criterion_sources[source_key] = re.search(
+                            r"(?<![A-Za-z0-9_-])" + re.escape(source_key[1]) + r"(?![A-Za-z0-9_-])", source) is not None
+                    except (OSError, subprocess.SubprocessError, ValueError, UnicodeError):
+                        criterion_sources[source_key] = False
+                supported = bool(source_cases) and criterion_sources.get(source_key, False)
+                if not supported:
+                    missing_obligations[requirement["id"]].append(obligation["id"])
+                    reason = ("consequence-unobserved" if not candidates else
+                              "criterion-not-in-case-oracle" if not source_cases else "criterion-anchor-unavailable")
+                    obligation_reasons[requirement["id"]][obligation["id"]] = reason
+                    coverage["outcomeObligations"].append(obligation["id"])
+                    completed[claim] = False
+        for row in report["openCoverage"].values():
+            for coverage in row["claims"].values():
+                if "outcomeObligations" in coverage:
+                    coverage["outcomeObligations"].sort()
     report["functionalCompletion"] = completed["function"]
+    if any(missing_obligations.values()):
+        report["functionalCompletion"] = False
     report["incrementalValue"] = "supported-for-bound-cases" if completed["incremental-value"] else "unverified"
     report["impactAssessment"] = "complete-for-bound-scopes" if completed.get("impact-assessment") else "unverified"
     global_errors = bool(errors)
@@ -1536,15 +1815,25 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
         report["acceptanceRequirements"] = {}
         for requirement in policy["acceptanceRequirements"]:
             missing = {}
+            obligation_gaps = {(row["claim"], row["scope"])
+                for row in requirement.get("outcomeObligations", [])
+                if row["id"] in missing_obligations.get(requirement["id"], [])}
             for claim, ids in requirement["requiredCoverage"].items():
                 missing[claim] = [scope_id for scope_id in ids if scope_id not in bound[claim]
                     or not (relevant := {key for key, case in cases.items()
                                          if case["scope"] == scope_id and claim in case["claims"]})
                     or not relevant <= admitted
                     or scope_id in report["unjoinedCoverage"].get(claim, [])
-                    or any(report["openCoverage"][scope_id]["claims"][claim].values())]
+                    or any(values for dimension, values in report["openCoverage"][scope_id]["claims"][claim].items()
+                           if dimension != "outcomeObligations")
+                    or (claim, scope_id) in obligation_gaps]
             report["acceptanceRequirements"][requirement["id"]] = {
                 "complete": not global_errors and not any(missing.values()), "missingScopes": missing}
+            if requirement["id"] in missing_obligations:
+                row = report["acceptanceRequirements"][requirement["id"]]
+                row["missingObligations"] = sorted(missing_obligations[requirement["id"]])
+                row["missingObligationReasons"] = obligation_reasons[requirement["id"]]
+                row["complete"] &= not row["missingObligations"]
         requirements = report["acceptanceRequirements"]
         requirements["A08"]["blockedBy"] = sorted(key for key, row in requirements.items()
                                                    if key != "A08" and not row["complete"])

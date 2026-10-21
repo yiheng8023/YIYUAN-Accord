@@ -1004,6 +1004,8 @@ def _wait_job(job, deadline, *, exact_deadline=False):
 
 
 def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_override="file", codex_role="source", close_deadline=None):
+    _remaining(work_deadline)
+    query_deadline = min(work_deadline, time.monotonic() + manifest["limits"]["requestSeconds"])
     # Opt-in owner already stops business/initiates EOF at work_deadline. Its
     # remaining shutdown must fit the existing recovery allowance, never renew it.
     if close_deadline is not None:
@@ -1027,14 +1029,12 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
     _record_host_launch(manifest, "commands", label, codex_role, full_arguments)
     launch_fields = ({"executable": identity["path"], "hostVersion": identity["version"]}
                      if _replacement_binding(manifest) is not None else {})
-    if close_deadline is not None and time.monotonic() >= work_deadline:
-        raise TimeoutError("owner work deadline exhausted before native resource creation")
+    _remaining(query_deadline)
     job, process, forced, failure, recovery_deadline = _new_controller(), None, False, None, None
     release, after_grace = None, None
     try:
         with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
-            if close_deadline is not None and time.monotonic() >= work_deadline:
-                raise TimeoutError("owner work deadline exhausted before Popen")
+            _remaining(query_deadline)
             process = subprocess.Popen(full_arguments, cwd=manifest["ownedRoots"]["workspace"],
                 env=env, stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
                 **_spawn_options())
@@ -1050,7 +1050,6 @@ def _run_cli(manifest, label, arguments, env, work_deadline, *, auth_store_overr
                         process.kill()
                 raise
             try:
-                query_deadline = min(work_deadline, time.monotonic() + manifest["limits"]["requestSeconds"])
                 if close_deadline is not None and query_deadline == work_deadline:
                     query_deadline = owner_graceful_deadline
                 while process.poll() is None:
@@ -1195,26 +1194,30 @@ class _Fixture:
 
 class _App:
     def __init__(self, manifest, label, argv, env, work_deadline, codex_role="source"):
+        _remaining(work_deadline)
         evidence = Path(manifest["evidence"])
         self.root = evidence / "native" / label
         self.workspace = manifest["ownedRoots"]["workspace"]
         self.request_timeout = manifest["limits"]["requestSeconds"]
         self.root.mkdir()
+        _remaining(work_deadline)
         self.job, self.events, self.queue = _new_controller(), [], queue.Queue()
         self.manifest, self.work_deadline = manifest, work_deadline
         self.arguments, self.codex_role = list(argv), codex_role
         self.hot_arguments = list(argv) if label == "resumed" and manifest.get("case") == HOT_CASE else None
         self._closed, self._close_record = False, None
-        self.stderr = (self.root / "stderr.txt").open("xb")
-        self.stdout = (self.root / "stdout.jsonl").open("xb")
+        self.stderr = self.stdout = None
         self.process = None
         try:
+            self.stderr = (self.root / "stderr.txt").open("xb")
+            self.stdout = (self.root / "stdout.jsonl").open("xb")
             _record_host_launch(manifest, "native", label, codex_role, argv)
+            _remaining(work_deadline)
             self.process = subprocess.Popen(argv, cwd=manifest["ownedRoots"]["workspace"], env=env,
                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.stderr,
                 **_spawn_options())
             self.job.attach_and_resume(self.process)
-        except BaseException:
+        except BaseException as error:
             if self.process is not None and self.process.poll() is None:
                 try:
                     self.job.terminate()
@@ -1226,12 +1229,18 @@ class _App:
                 except subprocess.TimeoutExpired:
                     pass
             after = self.job.sample()
-            save(self.root / "resources.json", _resource_record(manifest, self.process, True, after, "job-attach"))
+            failure = ("work-deadline-before-dispatch" if self.process is None and isinstance(error, TimeoutError)
+                       else "job-attach")
+            save(self.root / "resources.json", _resource_record(manifest, self.process, True, after, failure))
             for name in ("stdin", "stdout"):
                 pipe = getattr(self.process, name, None)
                 if pipe is not None:
                     pipe.close()
-            self.job.close(); self.stderr.close(); self.stdout.close()
+            self.job.close()
+            if self.stderr is not None:
+                self.stderr.close()
+            if self.stdout is not None:
+                self.stdout.close()
             raise
 
         def reader():
@@ -1279,9 +1288,11 @@ class _App:
     def initialize(self):
         self.rpc("initialize", {"clientInfo": {"name": "accord_lifecycle_observer", "version": "1"},
                                 "capabilities": {"experimentalApi": True}})
+        _remaining(self.work_deadline)
         self._send({"method": "initialized", "params": {}})
 
     def wait_turn(self, thread_id, turn_id):
+        _remaining(self.work_deadline)
         for event in self.events:
             if (event.get("method") == "turn/completed" and event.get("params", {}).get("threadId") == thread_id
                     and event["params"].get("turn", {}).get("id") == turn_id):
@@ -1290,6 +1301,7 @@ class _App:
         while True:
             event = self._receive(deadline)
             self.events.append(event)
+            _remaining(deadline)
             if (event.get("method") == "turn/completed" and event.get("params", {}).get("threadId") == thread_id
                     and event["params"].get("turn", {}).get("id") == turn_id):
                 return event["params"]["turn"].get("status")
@@ -1396,6 +1408,8 @@ def _argv(manifest, fixture, extra=(), codex_role="source"):
 
 
 def _helper(manifest, installed, env, work_deadline, thread, op, **fields):
+    _remaining(work_deadline)
+    query_deadline = min(work_deadline, time.monotonic() + manifest["limits"]["requestSeconds"])
     request = {"op": op, "session_id": thread, "cwd": manifest["ownedRoots"]["workspace"], **fields}
     receipt = Path(manifest["evidence"]) / "retained/helper.jsonl"
     helper_root = Path(manifest["evidence"]) / "helpers"
@@ -1408,18 +1422,19 @@ def _helper(manifest, installed, env, work_deadline, thread, op, **fields):
     stdin_path.write_bytes(json.dumps(request).encode())
     with receipt.open("a", encoding="utf-8") as stream:
         stream.write(json.dumps({"phase": "request", "invocation": invocation, "request": request}, ensure_ascii=False) + "\n")
+    _remaining(query_deadline)
     job, process, forced, failure, original_error = _new_controller(), None, False, None, None
     terminal = {"phase": "response", "invocation": invocation, "op": op}
     script_hash, attached = None, False
     recovery_deadline, release, after_grace = None, None, None
     try:
-        query_deadline = min(work_deadline, time.monotonic() + manifest["limits"]["requestSeconds"])
         _remaining(query_deadline)
         script_hash = digest(arguments[1])
         if (script_hash != manifest["packageHashes"]["runtime/task-checkpoint.cjs"]
                 or digest(manifest["node"]) != manifest["binaryHashes"]["node"]):
             raise ValueError("checkpoint helper executable bytes differ")
         with stdin_path.open("rb") as stdin, stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
+            _remaining(query_deadline)
             process = subprocess.Popen(arguments, stdin=stdin, stdout=stdout, stderr=stderr,
                 env=env, cwd=manifest["ownedRoots"]["workspace"], **_spawn_options())
             job.attach_and_resume(process)

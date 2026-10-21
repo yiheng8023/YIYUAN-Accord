@@ -6992,6 +6992,7 @@ def verify_product(root, review_bundle=None, *, evidence=None):
         or isinstance(cycle, dict)
         and cycle.get("candidateEligible") is True
     )
+    increment = program.get("increment")
     repository_ready = (
         criteria_verified
         and program.get("status") == "ready"

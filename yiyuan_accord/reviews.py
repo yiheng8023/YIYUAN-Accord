@@ -122,7 +122,7 @@ def _findings(value, label, errors):
         if not _exact_object(finding, _FINDING_FIELDS, finding_label, errors):
             continue
         severity = finding.get("severity")
-        if severity not in _SEVERITIES:
+        if not isinstance(severity, str) or severity not in _SEVERITIES:
             errors.append(f"{finding_label}.severity must be one of {sorted(_SEVERITIES)}")
         elif severity in {"P0", "P1"}:
             errors.append(f"{finding_label} contains blocking {severity} finding")

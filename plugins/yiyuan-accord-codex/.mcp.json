@@ -2,11 +2,17 @@
   "mcpServers": {
     "accord-state": {
       "command": "node",
-      "args": ["runtime/native-state-mcp.cjs"],
+      "args": [
+        "runtime/native-state-mcp.cjs"
+      ],
       "cwd": ".",
-      "env_vars": ["YIYUAN_ACCORD_TASK_STATE_DIR", "CODEX_HOME"],
+      "env_vars": [
+        "YIYUAN_ACCORD_TASK_STATE_DIR",
+        "CODEX_HOME",
+        "CODEX_CLI_PATH"
+      ],
       "startup_timeout_sec": 10,
-      "tool_timeout_sec": 10
+      "tool_timeout_sec": 30
     }
   }
 }

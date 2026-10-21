@@ -1,8 +1,10 @@
 # Native carrier handoff interface
 
-Read when integrating a fresh-task transfer through an authorized App Server
-controller that survives the source and target. Resolve paths from this installed
-plugin: [adapter contract](../../../adapter.json) and
+Read for a necessary fresh target and its recovery. For an ordinary root task,
+start with the [MCP route](#ordinary-root-task-through-the-mcp-execution-interface).
+The SDK sections apply to an authorized owned App Server controller that survives
+its source and target. Resolve paths from this installed plugin:
+[adapter contract](../../../adapter.json) and
 [Node module](../../../runtime/carrier-handoff.cjs). Ordinary context assessment,
 compaction and causal forks do not require this interface.
 
@@ -21,6 +23,117 @@ installation does not give ordinary Desktop/IDE Hooks control of those tasks.
 The caller decides when a transfer is needed from current evidence and owns the
 semantic checks, native configuration, authentication, budgets and recovery route.
 This module performs the bounded transfer after those conditions are established.
+
+## Ordinary root task through the MCP execution interface
+
+Use `coordinate_task_execution` only when its loaded runtime actually exposes the
+tool and a fresh target serves the current authorized work. Healthy compaction or
+same-task continuation needs no transfer. This route owns a bounded execution
+under the root's current task; it cannot control an existing GUI thread,
+change its permissions, survive arbitrary host shutdown or archive a chat.
+The source cooperatively releases the transferred duty while retaining recovery
+and respecting one writer per scope. Independent source work may continue.
+
+1. Inspect current state with the actual receipt `cwd` and complete native-input
+   evidence. Reconcile changes, pauses, effects and authority. The bound checkpoint
+   must be active, current and executable, with stable protected inputs. Inspect
+   the transferred scope's actual writers and effects; bind a protected source
+   containing the quiescence evidence. A file saying `true` is insufficient.
+2. Call `prepare` with the inspected `epoch`/`expectedRevision`, bounded `scopeRef`,
+   actual `authoritySourceRef` and protected `quiescenceSourceRef`, selected supported
+   `model`/optional `effort`, absolute UTC-millisecond `deadlineMs`, and three inputs:
+   `intake`, `continuation` and `postRelease`. Intake carries goal, authority, pauses,
+   checkout/paths, results with original sources, unknown effects and unfinished work;
+   the latter inputs assign useful work under the same scope. The installed
+   [execution module](../../../runtime/native-task-execution.cjs) defines the schema.
+   This route uses the existing CLI account and defaults to read-only target settings,
+   with no automatic permission escalation or credential copying. Transfer also requires
+   the runtime's available built-in `node:sqlite` recorder; its absence holds that
+   route while sufficient native continuation or other permitted work can proceed.
+3. Retain `operationId`. `prepare`, `commit` and `release` proceed asynchronously;
+   use `inspect` for a changed phase or `read-evidence` for the exact hash-bound
+   observation and its pagination. For each `reviewRequest`, independently inspect
+   original sources and native effects, then call `review` with that `reviewId`,
+   `observationSha256`, `decision` and the actual review `sourceRef`. These are the
+   coordinator's judgments, not additional user approvals or target self-approval.
+4. The optional `sandbox: "workspace-write"` branch requires `writeScope` with a
+   protected `authoritySourceRef` and 1–64 `outputs`. Each output names an existing
+   checkpoint output `path`, its exact `expectedSha256` (or `null` for absent), and
+   `expectedEffect`. Read the authority and original files; reference strings and
+   hashes do not establish permission. Paths cannot escape the workspace, follow
+   symlinks or overlap protected inputs. Selected original/result bytes total at
+   most 1 MiB. These snapshots are not an OS file allowlist or proof that effects
+   outside the selected files are absent; independent review covers the actual scope.
+   All targets start with read-only intake. After the `write-prepare` review, the
+   owned read-only peer must naturally exit and close. A new owned peer cold-resumes
+   the same target; reported cwd, model, approval and effective workspace policy
+   must match the restricted plan before commit review or business writes. Network,
+   extra writable roots and temporary-directory access remain disabled. An unsupported
+   policy holds the attempt; this route does not set up a sandbox, expand trust or
+   fall back to full access.
+5. An optional `skillRequest` uses the same exact source, enabled native selection
+   and delegation contract as [prepare-skill](../../coordinate-capabilities/references/native-capabilities.md).
+   Read the selected body and restrictions first. The runtime re-queries native
+   inventory and binds the prepared typed Skill input into the first continuation;
+   changed source, policy or enabled state holds dependent work. Prepared input
+   does not prove the target read or applied the Skill.
+6. After verified target intake and any write preparation, `commit` conditionally transfers the durable
+   writer lease and requests first useful continuation. Only after that work is
+   verified, `release` records the source duty release and starts the specified
+   post-release work. Inspect and review the actual result and process closure
+   before settlement. Queued requests, intake acknowledgments and source release
+   alone are insufficient takeover evidence. Normal independent review stages are
+   `prepare`, `target-created`, optional `write-prepare`, `commit`, `release`,
+   `result` and `closed`; use each actual request rather than inventing a receipt.
+
+Current input/control changes stop dependent dispatch. Read retained evidence and
+actual effects before recovery; `cancel` preserves responsibility and requests
+closure, rather than proving it. Unknown effects or unverified process closure stay
+held. A new scope identifier cannot evade an unresolved lease. Completion applies
+only to the independently verified scope; it does not close the root's whole goal.
+MCP restart retains inspectable records but does not recreate a lost controller or
+authorize replay. For a verified stopped attempt that never dispatched a target
+turn and still retains the source writer, `inspect` may expose
+`reconciliationBasis: {recordRevision, recordSha256, leaseSha256}`. This branch also
+requires recorded natural target closure, no pending effect and a consistent lease.
+Use `reconcile` with those exact fields, `operationId`, the current checkpoint
+`epoch`/`expectedRevision` and a separate future `deadlineMs` of at most five minutes.
+Read its `external-known-stopped` review observation; independently verify old actor
+quiescence, initialization effects, original pause disposition and current authority
+before the exact `review` decision. This settles only the stopped attempt and
+retains its original failure and deadline. After readback confirms source ownership
+and no active transfer, a newly justified `prepare` can use the same scope and
+current basis. Transferred writers, unknown turn dispatch, forced/unverified closure
+and stale review or lease remain held; no prior request is replayed.
+
+After target work and writer transfer, use the separate `reconcile-target` branch,
+not the zero-turn API. `inspect` may expose `targetReconciliationBasis` with the
+exact record revision and record/lease hashes. Supply those fields, `operationId`,
+current `epoch`/`expectedRevision`, a future `deadlineMs` of at most five minutes,
+`writerDisposition: "source-current" | "target-retained"` and a protected
+`effectSourceRef`. That JSON must be `kind: "external-target-effects/v1"`, bind the
+operation and `recordSha256`, and contain `actorSourceRef`, `authoritySourceRef`,
+`effects: [{disposition: "no-effect-verified" | "applied-verified" |
+"partial-effects-reviewed", sourceRef}]` and `unresolved: []`. These are review
+inputs, not proof that effects or other actors are absent.
+
+The current source must be active with complete input. Independently review the
+`external-known-stopped-target` request: actual target facts, old actor quiescence,
+original protected inputs, declared outputs, current authority and all consequential
+local or external effects. The owned reader only reads persistent target facts;
+it does not resume the target. `notLoaded` alone does not exclude other controllers.
+Target facts and effect/input/output bindings are checked again, and the reader
+must naturally close before exact settlement and readback. The transaction ends
+the old transfer and rotates its fence; `source-current` explicitly returns the
+writer to this actual root. Use the returned `scopeBinding.requestedScope` for
+later work under that same scope; an internal scope hash is not its public name.
+Handle only the actual remaining work from the verified post-state. This branch
+neither dispatches a business turn nor claims that the old business completed or
+that source release happened. Original failures, deadline, missing acknowledgment
+and effects remain in history. Pauses, active actors, stale evidence, dependent
+unknown effects and unknown settlement remain held; never retry an uncertain CAS.
+
+Retain the version-bound App Server support limit below.
 
 ## Find a usable host connection
 

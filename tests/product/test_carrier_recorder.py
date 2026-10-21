@@ -660,5 +660,76 @@ process.stdout.write(JSON.stringify({guidancePresent: Boolean(guidance), entrySq
         self.assertEqual(RECORDER.read_bytes(), PLUGIN_RECORDER.read_bytes())
 
 
+class ExternalTargetSettlementTests(unittest.TestCase):
+    def test_typed_target_settlement_is_atomic_fenced_and_preserves_history(self):
+        script = r'''
+const {openCarrierRecorder}=require(process.argv[1]);
+const {DatabaseSync}=require('node:sqlite');
+const crypto=require('node:crypto'),mode=process.argv[3];
+const hash=x=>crypto.createHash('sha256').update(JSON.stringify(x)).digest('hex');
+const source={kind:'codex-mcp-request-metadata',threadId:'source',sessionTreeId:'source',turnId:'old-turn',callId:'old-call'};
+const scopeBinding={requestedScope:'bounded-work',cwd:process.cwd(),sourceThreadId:'source'};
+scopeBinding.scopeRef=hash({threadId:'source',cwd:scopeBinding.cwd,scope:scopeBinding.requestedScope});
+const plan={scopeRef:scopeBinding.scopeRef,cwd:process.cwd(),deadlineMs:100},basis={epoch:'old'};
+const closed={closed:true,primaryProcessClosed:true,exitObserved:true,closeObserved:true,exitCode:0,
+ forced:false,signal:null,pid:12345,recoveryRequired:false,terminationAttempt:null}; // Fixture facts, not a live process claim.
+const r=openCarrierRecorder({path:process.argv[2],create:true});r.bindScope(scopeBinding.scopeRef,'source');
+const initial={kind:'external-source-handoff/v1',transferId:'transfer',scopeRef:scopeBinding.scopeRef,plan,source,basis,
+ planDigest:hash({plan,source,basis}),writer:'source',writerThreadId:'source',phase:'prepared'};
+const begun=r.begin('transfer',initial.planDigest,initial);
+const pending={kind:'native-request',method:'turn/start',params:{threadId:'target'},
+ requestRef:{connectionId:'owned-connection',method:'turn/start',requestId:'missing-ack'}};
+const state={...initial,phase:'held',writer:'target',writerThreadId:'target',target:{threadId:'target'},
+ connection:{connectionId:'owned-connection',hostVersion:'fixture'},turnStarts:2,sourceRecovery:'retained',
+ failure:{code:'ACK_LOST',priorPhase:'writer-transferred'},pendingEffect:pending,nativeClosed:{...closed}};
+if(mode==='forced')state.nativeClosed.forced=true;
+if(mode==='unknown-resource')state.nativeClosed.closeObserved=false;
+const moved=r.compareAndSet('transfer',begun.revision,state,begun.lease);
+let exact=r.read('transfer',scopeBinding.scopeRef);
+const receipt={kind:'external-known-stopped-target',recordRevision:exact.revision,recordSha256:hash(exact.state),leaseSha256:hash(exact.lease),
+ originalDeadlineMs:100,originalFailure:state.failure,currentSource:{...source,turnId:'new-turn',callId:'new-call'},
+ currentBasis:{epoch:'new',revision:2,authorityRef:'current-authority',snapshotRef:'a'.repeat(64),protectedInputsDigest:'b'.repeat(64),inputComplete:true,paused:false,recoveryRequired:false},
+ decision:'allow',sourceRef:'independent-effect-actor-authority-judgment',writerDisposition:mode==='retain'?'target-retained':'source-current',
+ scopeBinding,readerClosed:closed,observationSha256:'c'.repeat(64),decisionEvidence:'d'.repeat(64),materialSha256:'e'.repeat(64),nativeFactsSha256:'f'.repeat(64),
+ originalStateEvidence:hash(exact.state),recoveryDeadlineMs:Date.now()+10000};
+if(mode==='wrong-source')receipt.currentSource.threadId='other';
+if(mode==='expired')receipt.recoveryDeadlineMs=Date.now()-1;
+if(mode==='stale')r.compareAndSet('transfer',exact.revision,exact.state,exact.lease);
+let fault;
+if(mode==='atomic-fault'){fault=new DatabaseSync(process.argv[2]);fault.exec("CREATE TRIGGER fail_target_scope BEFORE UPDATE ON scopes BEGIN SELECT RAISE(ABORT,'fixed failure'); END");}
+let result=null,error=null;
+try{result=r.settleExternalStoppedTarget('transfer',exact.revision,exact.lease,receipt);}catch(e){error={code:e.code||null,message:e.message};}
+if(fault){fault.exec('DROP TRIGGER fail_target_scope');fault.close();}
+const after=r.read('transfer',scopeBinding.scopeRef);let staleWrite=null;
+try{r.compareAndSet('transfer',exact.revision,exact.state,exact.lease);}catch(e){staleWrite=e.code;}
+console.log(JSON.stringify({mode,result,error,before:exact,after,staleWrite}));r.close();
+'''
+        with tempfile.TemporaryDirectory(prefix='accord-target-settlement-') as directory:
+            for mode in ('source', 'retain', 'stale', 'wrong-source', 'expired', 'forced', 'unknown-resource', 'atomic-fault'):
+                with self.subTest(mode=mode):
+                    run = subprocess.run(['node', '-e', script, str(PLUGIN_RECORDER),
+                        str(Path(directory)/(mode+'.sqlite')), mode], cwd=ROOT, text=True,
+                        encoding='utf-8', capture_output=True, timeout=10)
+                    self.assertEqual(run.returncode, 0, run.stderr)
+                    result = json.loads(run.stdout)
+                    if mode in ('source', 'retain'):
+                        self.assertIsNone(result['error'])
+                        self.assertEqual(result['after']['state']['phase'], 'external-target-reconciled')
+                        self.assertEqual(result['after']['lease']['writerThreadId'], 'source' if mode=='source' else 'target')
+                        self.assertIsNone(result['after']['lease']['transferId'])
+                        self.assertNotEqual(result['after']['lease']['token'], result['before']['lease']['token'])
+                        self.assertEqual(result['after']['state']['failure'], result['before']['state']['failure'])
+                        self.assertEqual(result['after']['state']['plan']['deadlineMs'], 100)
+                        self.assertEqual(result['after']['state']['reconciliation']['originalPendingEffect'], result['before']['state']['pendingEffect'])
+                        self.assertEqual(result['staleWrite'], 'CAS_CONFLICT')
+                    else:
+                        self.assertIsNotNone(result['error'])
+                        self.assertEqual(result['after']['state'], result['before']['state'])
+                        self.assertEqual(result['after']['lease']['writerThreadId'], 'target')
+                        self.assertEqual(result['after']['lease']['transferId'], 'transfer')
+                        if mode != 'stale':
+                            self.assertEqual(result['after']['revision'], result['before']['revision'])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,7 @@
 'use strict';
 
-// A bounded stdio MCP adapter, not another state engine or a control connection.
+// Bounded state and explicit task-execution tools on one existing stdio MCP.
+// State inspection stays separate from caller-authorized child execution.
 // Codex supplies call metadata separately from model-chosen tool arguments.
 const {once} = require('node:events');
 const path = require('node:path');
@@ -8,6 +9,7 @@ const fs = require('node:fs');
 const crypto = require('node:crypto');
 const {TextDecoder} = require('node:util');
 const {operate, loadedFunctionSha256, nativeInputDiagnostic} = require('./task-checkpoint.cjs');
+const {TOOL: EXECUTION_TOOL, createNativeTaskExecution} = require('./native-task-execution.cjs');
 
 const PROTOCOL = '2025-06-18';
 const MAX_FRAME = 128 * 1024;
@@ -489,16 +491,18 @@ function runtimeVersion(root = path.resolve(__dirname, '..')) {
   return version;
 }
 
-function createHandler(version = runtimeVersion()) {
+function createHandler(version = runtimeVersion(), executionOptions = {}) {
   let initialized = false, ready = false;
+  const execution = createNativeTaskExecution({...executionOptions, sourceOf: nativeCallSource});
   const error = (id, code, message) => ({jsonrpc: '2.0', id, error: {code, message}});
   const result = (id, value) => ({jsonrpc: '2.0', id, result: value});
-  return request => {
+  const handle = request => {
     if (!record(request) || request.jsonrpc !== '2.0' || !text(request.method, 100)) {
       return error(null, -32600, 'Invalid request');
     }
     if (!own(request, 'id')) {
       if (request.method === 'notifications/initialized' && initialized) ready = true;
+      if (request.method === 'notifications/cancelled' && ready) execution.cancelRequest(request.params?.requestId).catch(() => {});
       return null;
     }
     const id = request.id;
@@ -520,41 +524,69 @@ function createHandler(version = runtimeVersion()) {
       if (request.params != null && (!record(request.params) || request.params.cursor != null)) {
         return error(id, -32602, 'Invalid tool-list parameters');
       }
-      return result(id, {tools: [TOOL, INPUT_TOOL, MANAGE_TOOL]});
+      return result(id, {tools: [TOOL, INPUT_TOOL, MANAGE_TOOL, EXECUTION_TOOL]});
     }
     if (request.method === 'tools/call') {
-      if (!record(request.params) || ![TOOL.name, INPUT_TOOL.name, MANAGE_TOOL.name].includes(request.params.name)) {
+      if (!record(request.params) || ![TOOL.name, INPUT_TOOL.name, MANAGE_TOOL.name, EXECUTION_TOOL.name].includes(request.params.name)) {
         return error(id, -32602, 'Unknown tool');
       }
+      execution.observe(request.params);
+      if (request.params.name === EXECUTION_TOOL.name) return execution.call(request.params, id).then(inspected =>
+        result(id, {isError: inspected.isError, structuredContent: inspected.value,
+          content: [{type: 'text', text: JSON.stringify(inspected.value)}]}));
       const inspected = request.params.name === TOOL.name ? inspectNativeState(request.params, version)
         : request.params.name === INPUT_TOOL.name ? readTaskInput(request.params) : manageTaskState(request.params);
+      execution.observe(request.params);
       return result(id, {isError: inspected.isError, structuredContent: inspected.value,
         content: [{type: 'text', text: JSON.stringify(inspected.value)},
           ...(inspected.imageContent ? [inspected.imageContent] : [])]});
     }
     return error(id, -32601, 'Method not found');
   };
+  handle.close = () => execution.close();
+  return handle;
 }
 
-async function serve(input = process.stdin, output = process.stdout, version = runtimeVersion()) {
-  const handle = createHandler(version);
+async function serve(input = process.stdin, output = process.stdout, version = runtimeVersion(), executionOptions = {}) {
+  const handle = createHandler(version, executionOptions);
   const decoder = new TextDecoder('utf-8', {fatal: true});
-  let pending = Buffer.alloc(0);
-  for await (const chunk of input) {
-    pending = Buffer.concat([pending, chunk]);
-    let newline;
-    while ((newline = pending.indexOf(10)) !== -1) {
-      if (newline > MAX_FRAME) throw new Error('oversize-mcp-input');
-      const frame = pending.subarray(0, newline);
-      pending = pending.subarray(newline + 1);
-      let response;
-      try { response = handle(JSON.parse(decoder.decode(frame))); }
-      catch (_) { response = {jsonrpc: '2.0', id: null, error: {code: -32700, message: 'Invalid JSON'}}; }
-      if (response !== null && !output.write(JSON.stringify(response) + '\n')) await once(output, 'drain');
+  let pending = Buffer.alloc(0), writes = Promise.resolve();
+  const inFlight = new Set();
+  const emit = response => {
+    if (response === null) return;
+    writes = writes.then(async () => { if (!output.write(JSON.stringify(response) + '\n')) await once(output, 'drain'); });
+    writes.catch(() => {});
+  };
+  const dispatch = frame => {
+    let request, response;
+    try { request = JSON.parse(decoder.decode(frame)); }
+    catch (_) { emit({jsonrpc: '2.0', id: null, error: {code: -32700, message: 'Invalid JSON'}}); return; }
+    if (inFlight.size >= 64) { emit({jsonrpc: '2.0', id: request.id ?? null, error: {code: -32001, message: 'Too many pending requests'}}); return; }
+    try { response = handle(request); }
+    catch (_) { emit({jsonrpc: '2.0', id: request.id ?? null, error: {code: -32603, message: 'Request failed'}}); return; }
+    if (!response || typeof response.then !== 'function') { emit(response); return; }
+    const task = Promise.resolve(response).then(emit, () => emit({jsonrpc: '2.0', id: request.id ?? null,
+      error: {code: -32603, message: 'Request failed; inspect prior effects'}})).finally(() => inFlight.delete(task));
+    inFlight.add(task);
+  };
+  try {
+    for await (const chunk of input) {
+      let offset = 0;
+      while (offset < chunk.length) {
+        const newline = chunk.indexOf(10, offset), end = newline < 0 ? chunk.length : newline;
+        if (pending.length + end - offset > MAX_FRAME) throw new Error('oversize-mcp-input');
+        const frame = pending.length ? Buffer.concat([pending, chunk.subarray(offset, end)]) : chunk.subarray(offset, end);
+        pending = newline < 0 ? Buffer.from(frame) : Buffer.alloc(0);
+        if (newline < 0) break;
+        dispatch(frame); offset = newline + 1;
+      }
     }
-    if (pending.length > MAX_FRAME) throw new Error('oversize-mcp-input');
+    if (pending.length) throw new Error('incomplete-mcp-input');
+  } finally {
+    await handle.close();
+    await Promise.allSettled([...inFlight]);
+    await writes;
   }
-  if (pending.length) throw new Error('incomplete-mcp-input');
 }
 
 function main(versionReader = runtimeVersion) {
@@ -563,7 +595,7 @@ function main(versionReader = runtimeVersion) {
     // Windows cannot replace a cache directory held as a live process cwd.
     // Modules are loaded; every task workspace is supplied as an absolute path.
     // Preserve the original base of configured state, session, home and temp paths.
-    for (const key of ['YIYUAN_ACCORD_TASK_STATE_DIR', 'CODEX_HOME', 'HOME', 'USERPROFILE', 'TMPDIR', 'TMP', 'TEMP']) {
+    for (const key of ['YIYUAN_ACCORD_TASK_STATE_DIR', 'CODEX_HOME', 'CODEX_CLI_PATH', 'HOME', 'USERPROFILE', 'TMPDIR', 'TMP', 'TEMP']) {
       if (process.env[key]) process.env[key] = path.resolve(process.env[key]);
     }
     process.chdir(require('node:os').homedir());

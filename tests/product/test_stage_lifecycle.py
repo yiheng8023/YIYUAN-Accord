@@ -297,6 +297,20 @@ def _presentation_documents():
 
 
 class StageLifecycleTests(unittest.TestCase):
+    def test_structured_transition_kinds_return_invalid_decisions(self):
+        for kind in ([], {}):
+            with self.subTest(kind=kind):
+                current, predecessor = _migration_documents()
+                current[1]['maintenanceCycle']['closeoutSnapshot'][
+                    'acceptanceTransition']['kind'] = kind
+                errors = stage_lifecycle.closed_maintenance_snapshot_errors(
+                    current[1], current[2], current[4])
+                self.assertTrue(errors)
+                decision = stage_lifecycle.evaluate_stage_transition(
+                    current, predecessor, stage_lifecycle.MIGRATION_CHANGED_PATHS)
+                self.assertFalse(decision.valid)
+                self.assertFalse(decision.candidate_eligible)
+
     def test_transition_contract_migration_is_candidate_ineligible(self):
         current, predecessor = _migration_documents()
         decision = stage_lifecycle.evaluate_stage_transition(

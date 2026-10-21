@@ -3,6 +3,7 @@ from collections import Counter
 import copy, hashlib, inspect, json, os, re, shutil, subprocess, tempfile, unittest
 from pathlib import Path
 from unittest.mock import patch
+from tests.product.git_fixture import owned_git_environment
 from yiyuan_accord.closure import reconcile_closure
 import yiyuan_accord.control as product_control
 from yiyuan_accord.control import (
@@ -76,9 +77,9 @@ def setUpModule():
     unittest.addModuleCleanup(lambda: globals().__setitem__('ROOT', original))
     target = Path(temporary.name) / 'repository'
     subprocess.run(['git', 'clone', '--quiet', '--no-hardlinks', str(ROOT), str(target)],
-                   check=True, timeout=60)
+                   env=owned_git_environment(), check=True, timeout=60)
     subprocess.run(['git', '-C', str(target), 'checkout', '--quiet', '--detach', revision],
-                   check=True, timeout=30)
+                   env=owned_git_environment(), check=True, timeout=30)
     ROOT = target
 
 
@@ -219,7 +220,8 @@ def _git(root, *arguments, **options):
     if options.get('text') and 'encoding' not in options:
         options['encoding'] = 'utf-8'
     return subprocess.check_output(
-        ['git', '-C', str(root), *arguments], stderr=subprocess.DEVNULL, **options
+        ['git', '-C', str(root), *arguments], stderr=subprocess.DEVNULL,
+        env=owned_git_environment(), **options
     )
 
 def _head_subject(root):
@@ -243,7 +245,7 @@ def _make_indexed(revision=None):
     temporary = tempfile.TemporaryDirectory(prefix='ya-index-')
     target = Path(temporary.name) / 'repository'
     subprocess.run(['git', 'clone', '--quiet', '--no-hardlinks', str(ROOT),
-                    str(target)], check=True)
+                    str(target)], env=owned_git_environment(), check=True)
     # Ignore drvfs/ext4 mode drift; fixture identity is content-bound.
     _git(target, 'config', 'core.filemode', 'false')
     if revision is not None:
@@ -257,7 +259,7 @@ def _make_indexed(revision=None):
     _git(target, 'add', '-A')
     staged = subprocess.run(
         ['git', '-C', str(target), 'diff', '--cached', '--quiet'],
-        check=False,
+        env=owned_git_environment(), check=False,
     )
     if staged.returncode not in (0, 1):
         raise RuntimeError('unable to inspect indexed fixture changes')
@@ -277,7 +279,7 @@ def _provisional():
         target = Path(temporary) / 'repository'
         subprocess.run(
             ['git', 'clone', '--quiet', '--no-hardlinks', str(ROOT), str(target)],
-            check=True,
+            env=owned_git_environment(), check=True,
         )
         for locator in (
             'yiyuan_accord/control.py',
@@ -1147,6 +1149,15 @@ class ProductControlTests(unittest.TestCase):
                  if step['state'] in {'active', 'blocked'}],
             )
 
+    def test_legacy_ready_public_verifier_returns_a_bound_candidate_report(self):
+        with _indexed('299ae4011b0e48df586a137a2fbdcaff715e55c7') as root:
+            review = _external_review_bundle(*_head_subject(root))
+            report = verify_product(root, review)
+            self.assertTrue(report['valid'], report['errors'])
+            self.assertEqual(report['programStatus'], 'ready')
+            self.assertTrue(report['repositoryCandidateReady'])
+            self.assertEqual(report['completionState'], 'external-gates-required')
+
     def test_v3_unchanged_node_carry_rejects_repository_drift(self):
         with _indexed() as root:
             path = root / 'docs/architecture.md'
@@ -1966,6 +1977,20 @@ class ProductControlTests(unittest.TestCase):
         }])
         self.at(retirement['lifecycle']['completionAllowed'])
 
+        for missing_evidence in (_DELETE, None):
+            request = _clone(dynamic_retirement)
+            event = request['events'][-1]
+            event.update(state='unknown', independent='unknown')
+            _replace(event, ('evidence',), missing_evidence)
+            decision = reconcile(request)
+            with self.subTest(unknown_retirement_evidence=missing_evidence is None):
+                self.assertTrue(decision['valid'], decision['errors'])
+                retirement_result = decision['lifecycle']['retirementResults'][0]
+                self.assertFalse(retirement_result['accepted'])
+                self.assertEqual(retirement_result['disposition'], 'hold-unknown')
+                self.assertIsNone(retirement_result['evidenceBinding'])
+                self.assertFalse(decision['lifecycle']['completionAllowed'])
+
         retirement_failure = 'completion:retirement:current-plugin:sense-environment'
         for name, mutate, has_result, failures in (
             ('stale', lambda value: _replace(value, ('events', -1, 'preconditions',
@@ -2178,6 +2203,19 @@ class ProductControlTests(unittest.TestCase):
             (None, (('routes', 0, 'forms'), None)),
             (None, (('policy', 'comparisonDimensions'), None)),
             (None, (('events', 0, 'routeId'), [])),
+            (None, (('routes', 0, 'id'), [])),
+            (None, (('routes', 0, 'facts', 'available'), {})),
+            (None, (('routes', 0, 'responsibilityModes', sense), [])),
+            (None, (('environment', 'observation', 'stateBindings', 0, 'targetKind'), {})),
+            (None, (('environment', 'observation', 'stateBindings', 0, 'value'), [])),
+            (None, (('environment', 'observation', 'stateBindings', 0, 'sourceKind'), {})),
+            (None, (('events', 0, 'state'), [])),
+            (None, (('events', 0, 'independent'), {})),
+            (None, (('events', -1, 'releasedResources'), [{}])),
+            ('r', (('events', -1, 'routeId'), [])),
+            ('r', (('events', -1, 'replacementRouteId'), {})),
+            ('r', (('outcome', 'responsibilities'), None)),
+            ('r', (('routes', 0, 'supplies'), None)),
             (None, (('events', 2, 'candidateRouteId'), minimal)),
             (None, (('events', -1, 'residualTaskResources'),
                     ['task-scoped-handoff']),
@@ -2203,7 +2241,7 @@ class ProductControlTests(unittest.TestCase):
                     else fixture(native_ok=base == 'n'))
             for path, replacement in changes:
                 _replace(case, path, replacement)
-            with self.subTest(case=case):
+            with self.subTest(base=base, paths=[change[0] for change in changes]):
                 reject(case)
 
     def test_authority_and_static_suite_mutations_fail_closed(self):
@@ -4072,7 +4110,7 @@ try {
         subject_dirty = subprocess.run(
             ['git', '-C', str(ROOT), 'diff', '--quiet', 'HEAD', '--',
              'yiyuan_accord/closure.py'],
-            stderr=subprocess.DEVNULL,
+            env=owned_git_environment(), stderr=subprocess.DEVNULL,
         ).returncode == 1
         if subject_dirty:
             self.has(current_errors, 'behavior subject differs')
@@ -5512,6 +5550,12 @@ try {
             ('contains blocking P1 finding',
              lambda value: value['reviews'][0].update(
                  findings=[{'severity': 'P1', 'disposition': 'pass'}])),
+            ('severity must be one of',
+             lambda value: value['reviews'][0].update(
+                 findings=[{'severity': [], 'disposition': 'pass'}])),
+            ('severity must be one of',
+             lambda value: value['reviews'][0].update(
+                 findings=[{'severity': {}, 'disposition': 'pass'}])),
             ('subject does not match exact subject',
              lambda value: value['reviews'][0]['subject'].update(tree='f' * 40)),
         )

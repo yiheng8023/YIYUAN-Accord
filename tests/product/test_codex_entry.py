@@ -1764,12 +1764,12 @@ class EntryTests(unittest.TestCase):
                 command_calls = 0
                 verification_calls = 0
 
-                def verify(prepared, stage, thread_id):
+                def verify(prepared, stage, thread_id, **deadline):
                     nonlocal verification_calls
                     verification_calls += 1
                     if mutation == "prompt" and verification_calls == 2:
                         prepared["prompts"][stage] = "drift after outer preflight"
-                    return original_verify(prepared, stage, thread_id)
+                    return original_verify(prepared, stage, thread_id, **deadline)
 
                 def command(*args, **kwargs):
                     nonlocal command_calls
@@ -1808,13 +1808,13 @@ class EntryTests(unittest.TestCase):
                     return {"valid": True, "threadId": "observed-source"}
                 return original_stage(prepared, index, *args)
 
-            def verify(prepared, index, thread_id):
+            def verify(prepared, index, thread_id, **deadline):
                 nonlocal second_checks
                 if index == 1:
                     second_checks += 1
                     if second_checks == 2:
                         prepared["prompts"][1] = "drift inside second stage"
-                return original_verify(prepared, index, thread_id)
+                return original_verify(prepared, index, thread_id, **deadline)
 
             with patch.object(entry, "coordination_observer", return_value=observer), \
                     patch.object(entry, "_run_persistent_stage", side_effect=stage), \
@@ -1853,12 +1853,12 @@ class EntryTests(unittest.TestCase):
             original = entry._verify_native_stage
             checks = 0
 
-            def verify(*args):
+            def verify(*args, **deadline):
                 nonlocal checks
                 checks += 1
                 if checks == 2:
                     raise KeyboardInterrupt()
-                return original(*args)
+                return original(*args, **deadline)
 
             with patch.object(entry, "_verify_native_stage", side_effect=verify), \
                     patch.object(entry.subprocess, "Popen") as agent:
@@ -2007,8 +2007,8 @@ class EntryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             manifest = self.prepared_persistent(Path(tmp).resolve(), native_hooks=True)
             original = entry._verify_native_stage
-            def changed_after_verification(*args):
-                bound = original(*args)
+            def changed_after_verification(*args, **deadline):
+                bound = original(*args, **deadline)
                 (Path(manifest["evidence"]) / "prompt-1.txt").write_text("changed before stdin open", encoding="utf-8")
                 return bound
             with patch.object(entry, "_verify_native_stage", side_effect=changed_after_verification), \
@@ -2336,9 +2336,10 @@ class EntryTests(unittest.TestCase):
     def test_native_entry_gate_rejects_absent_stale_echoed_truncated_and_late_guidance(self):
         guide = 'Accord task entry: complete current source duties. '
         thread, turn, workspace = 'thread', 'turn', str(Path.cwd())
+        epoch = '11111111-1111-4111-8111-111111111111'
         core = {'type': 'response_item', 'payload': {'type': 'message', 'role': 'developer',
             'internal_chat_message_metadata_passthrough': {'turn_id': turn, 'content_item_kinds': ['hooks.additional_context']},
-            'content': [{'type': 'input_text', 'text': guide + 'Native input receipt: session=thread; epoch=one.'}]}}
+            'content': [{'type': 'input_text', 'text': guide + f'Native input receipt: session=thread; epoch={epoch}.'}]}}
         start = [{'type': 'session_meta', 'payload': {'id': thread, 'cwd': workspace}},
                  {'type': 'event_msg', 'payload': {'type': 'task_started', 'turn_id': turn}}]
         action = {'type': 'response_item', 'payload': {'type': 'custom_tool_call'}}
@@ -2348,7 +2349,7 @@ class EntryTests(unittest.TestCase):
         self.assertTrue(check([*start, core, action])['valid'])
         full, notice = (json.loads(json.dumps(core)) for _ in range(2))
         full['payload']['content'][0]['text'] = guide
-        notice['payload']['content'][0]['text'] = 'Accord input/state notice. Native input receipt: session=thread; epoch=one.'
+        notice['payload']['content'][0]['text'] = f'Accord input/state notice. Native input receipt: session=thread; epoch={epoch}.'
         for pair in ([full, notice], [notice, full]):
             self.assertTrue(check([*start, *pair, action])['valid'])
         for rows in ([full], [notice], [full, action, notice], [notice, action, full]):
@@ -2383,8 +2384,39 @@ class EntryTests(unittest.TestCase):
             elif mutation == 'stale':
                 altered['payload']['internal_chat_message_metadata_passthrough']['turn_id'] = 'earlier-turn'
             else:
-                altered['payload']['content'][0]['text'] = 'Accord task entry: Native input receipt: session=thread; epoch=one.'
+                altered['payload']['content'][0]['text'] = f'Accord task entry: Native input receipt: session=thread; epoch={epoch}.'
             self.assertFalse(check([*start, altered, action])['valid'], mutation)
+
+    def test_native_entry_receipt_requires_complete_native_epoch_and_bound_source(self):
+        guide, thread, turn = 'Accord task entry: complete source duties. ', 'thread', 'turn'
+        workspace = str(Path.cwd())
+        uuid_epoch = '11111111-1111-4111-8111-111111111111'
+        sha_epoch = 'a' * 64
+        def check(epoch, *, session=thread, source_turn=turn, terminator='.', prefix=guide, selected_guide=guide):
+            rows = [
+                {'type': 'session_meta', 'payload': {'id': thread, 'cwd': workspace}},
+                {'type': 'event_msg', 'payload': {'type': 'task_started', 'turn_id': turn}},
+                {'type': 'response_item', 'payload': {'type': 'message', 'role': 'developer',
+                    'internal_chat_message_metadata_passthrough': {'turn_id': source_turn,
+                        'content_item_kinds': ['hooks.additional_context']},
+                    'content': [{'type': 'input_text', 'text': prefix
+                        + f'Native input receipt: session={session}; epoch={epoch}{terminator}'}]}},
+            ]
+            return entry.native_entry_observation('\n'.join(map(json.dumps, rows)),
+                thread_id=thread, turn_id=turn, workspace=workspace, guide=selected_guide)
+        for epoch in (uuid_epoch, sha_epoch):
+            with self.subTest(valid_epoch=epoch):
+                self.assertTrue(check(epoch)['valid'])
+        for epoch in ('', ' ', 'one', uuid_epoch[:-1], uuid_epoch + 'suffix', 'a' * 63,
+                      'a' * 65, 'x' * 64, '11111111-1111-4111-z111-111111111111'):
+            with self.subTest(invalid_epoch=epoch):
+                self.assertFalse(check(epoch)['valid'])
+        self.assertFalse(check(uuid_epoch, terminator='')['valid'])
+        self.assertFalse(check(uuid_epoch, session='foreign')['valid'])
+        self.assertFalse(check(uuid_epoch, source_turn='foreign')['valid'])
+        # A complete sample inside the guide is not this turn's actual receipt.
+        example = guide + f'Example Native input receipt: session={thread}; epoch={uuid_epoch}. '
+        self.assertFalse(check('', prefix=example, selected_guide=example)['valid'])
 
     if os.name == "nt":
         def test_windows_native_cmd_runs_bound_renamed_node_despite_cwd_shadow(self):
@@ -2866,11 +2898,18 @@ class EntryTests(unittest.TestCase):
             job = Mock()
             job.sample.side_effect = [
                 {"activeProcesses": 1}, {"activeProcesses": 1}, {"activeProcesses": 0}]
+            clock = [100.0]
+            def spawn(*args, **kwargs):
+                # Exercise expiry during owned work. An already-expired input
+                # is now separately required to remain undispatched.
+                clock[0] = 102.0
+                return process
             with patch.object(entry, "WindowsJob", return_value=job), \
                     patch.object(entry.subprocess, "CREATE_NO_WINDOW", 0, create=True), \
-                    patch.object(entry.subprocess, "Popen", return_value=process), \
+                    patch.object(entry.subprocess, "Popen", side_effect=spawn), \
+                    patch.object(entry.time, "monotonic", side_effect=lambda: clock[0]), \
                     patch.object(entry.time, "sleep"):
-                receipt = entry._run_persistent_stage(manifest, 0, None, {}, time.monotonic() - 1)
+                receipt = entry._run_persistent_stage(manifest, 0, None, {}, 101.0)
             self.assertFalse(receipt["valid"])
             self.assertTrue(receipt["forced"])
             self.assertEqual(receipt["failure"], "turn-time-or-output-limit")

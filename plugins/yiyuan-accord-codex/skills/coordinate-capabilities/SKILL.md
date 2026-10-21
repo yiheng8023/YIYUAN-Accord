@@ -17,21 +17,19 @@ match needs no installation; unknown inventory is not evidence of absence. Refre
 affected facts when the host, user or another component changes them, rather than
 rescanning the whole system for every request.
 
-Own suitable Skill selection within the user's delegated scope; users need not
-learn Skill names or invocation timing. Reuse the selected manager and host
-inventory, distinguishing installation, enablement, discovery, implicit matching,
-deliberate selection and actual execution. A default explicit-only policy limits
-native implicit matching; it does not by itself forbid authorized coordination.
-When delegation covers selection and the host supports a genuine explicit path,
-choose the installed, enabled Skill through that path without changing its source.
-Retain the original request, delegation boundary and coordinator-selected identity;
-do not represent that choice as a manual user selection. A formatted Skill input
-does not establish authority or control of the target task. Preserve disabled
-components and user restrictions. If the route is unavailable, use a suitable
-permitted alternative or surface the specific missing condition. Existing scoped
-delegation needs no repeated per-use approval. Read or wrap content only through
-an authorized route, preserving policy and management ownership. Check whether the
-Skill's workflow fits the task and verify its effects; selection is not delivery.
+Own Skill selection within the user's delegation; users need not name Skills or
+time invocation. Reuse the manager and host inventory; distinguish installed,
+enabled, discovered, implicitly matched, selected and executed states. An explicit-only
+default limits implicit matching; it alone does not forbid authorized coordination.
+Select an enabled installed Skill through a supported explicit path without source
+changes. Retain the original request, delegation and coordinator provenance; do not
+claim manual user selection or infer authority or target control from formatted input.
+Respect source policy, management ownership, disabled components and user restrictions.
+Existing scoped delegation needs no repeated approval. Read or wrap content only
+through an authorized route. If unavailable, choose a suitable permitted alternative
+or surface the missing condition. Check workflow fit and verify effects; selection
+is not delivery. Use the [native interface](references/native-capabilities.md) for
+inventory and deliberate input preparation; reuse still-current source observations.
 
 Bind a selected capability to its current managed source and applicable scope,
 not its display name alone. Compare responsibilities and effects: identical

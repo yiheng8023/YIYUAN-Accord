@@ -379,6 +379,55 @@ function leaseView(scope) {
   });
 }
 
+function externalStopped(state, lease) {
+  const closed = state.nativeClosed, source = state.source, target = state.target;
+  return state.kind === 'external-source-handoff/v1' && ['held', 'cancelled-held'].includes(state.phase) &&
+    state.pendingEffect === null && state.turnStarts === 0 && state.writer === 'source' &&
+    source?.kind === 'codex-mcp-request-metadata' && source.threadId === source.sessionTreeId &&
+    ['threadId', 'sessionTreeId', 'turnId', 'callId'].every(key => typeof source[key] === 'string' && source[key].trim()) &&
+    Number.isSafeInteger(state.plan?.deadlineMs) && state.plan.deadlineMs > 0 &&
+    state.planDigest === stateDigest({plan: state.plan, source, basis: state.basis}) &&
+    state.writerThreadId === source.threadId && lease.writerThreadId === source.threadId &&
+    lease.transferId === state.transferId && state.sourceRecovery === 'retained' &&
+    !state.intake && !state.firstContinuation && !state.postReleaseTurn && !state.release &&
+    ['prepared', 'target-created'].includes(state.failure?.priorPhase) &&
+    closed?.closed === true && closed.primaryProcessClosed === true && closed.exitObserved === true &&
+    closed.closeObserved === true && closed.exitCode === 0 && closed.forced === false && closed.signal === null &&
+    Number.isSafeInteger(closed.pid) && closed.pid > 0 &&
+    closed.recoveryRequired === false && closed.terminationAttempt === null &&
+    (target === null && state.lastNativeReceipt == null || target?.threadId &&
+      state.lastNativeReceipt?.method === 'thread/start' &&
+      state.lastNativeReceipt.request?.method === 'thread/start' &&
+      state.lastNativeReceipt.request.requestRef?.method === 'thread/start' &&
+      state.lastNativeReceipt.response?.thread?.id === target.threadId &&
+      state.lastNativeReceipt.response.thread.ephemeral === false &&
+      state.lastNativeReceipt.request?.requestRef?.connectionId === state.connection?.connectionId);
+}
+const stateDigest = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+
+function externalStoppedTarget(state, lease) {
+  const source = state.source, target = state.target, closed = state.nativeClosed, pending = state.pendingEffect;
+  return state.kind === 'external-source-handoff/v1' && ['held', 'cancelled-held'].includes(state.phase) &&
+    source?.kind === 'codex-mcp-request-metadata' && source.threadId === source.sessionTreeId &&
+    ['threadId', 'turnId', 'callId'].every(k => typeof source[k] === 'string' && source[k].trim()) &&
+    typeof target?.threadId === 'string' && target.threadId !== source.threadId &&
+    state.writer === 'target' && state.writerThreadId === target.threadId && lease.writerThreadId === target.threadId &&
+    ['retained', 'controller-owned'].includes(state.sourceRecovery) &&
+    typeof state.failure?.code === 'string' && state.failure.code.trim() &&
+    ['connectionId', 'hostVersion'].every(k => typeof state.connection?.[k] === 'string' && state.connection[k].trim()) &&
+    lease.transferId === state.transferId && state.scopeRef === lease.scopeRef &&
+    Number.isSafeInteger(state.turnStarts) && state.turnStarts > 0 &&
+    Number.isSafeInteger(state.plan?.deadlineMs) && state.plan.deadlineMs > 0 &&
+    state.planDigest === stateDigest({plan: state.plan, source, basis: state.basis}) &&
+    closed?.closed === true && closed.primaryProcessClosed === true && closed.exitObserved === true &&
+    closed.closeObserved === true && closed.exitCode === 0 && closed.forced === false && closed.signal === null &&
+    Number.isSafeInteger(closed.pid) && closed.pid > 0 && closed.recoveryRequired === false && closed.terminationAttempt === null &&
+    (pending === null || pending?.kind === 'native-turn' && pending.threadId === target.threadId && typeof pending.turnId === 'string' ||
+      pending?.kind === 'native-request' && pending.method === 'turn/start' && pending.params?.threadId === target.threadId &&
+      pending.requestRef?.connectionId === state.connection?.connectionId && pending.requestRef?.method === 'turn/start' &&
+      typeof pending.requestRef?.requestId === 'string');
+}
+
 function openCarrierRecorder(options) {
   if (!plainObject(options)) throw new TypeError('options must be an object');
   for (const key of Object.keys(options)) {
@@ -679,13 +728,152 @@ function openCarrierRecorder(options) {
     });
   }
 
+  // External MCP sources have no subscription on the target's owned transport.
+  // Keep this terminal shape distinct from native unsubscribe and old records.
+  // Semantic acceptance and actual effect/resource verification belong to the
+  // caller; this transaction only settles its exact observed cooperative lease.
+  function settleExternal(transferId, revision, expectedLease) {
+    ensureOpen();
+    text(transferId, 'transferId'); safeInteger(revision, 'revision');
+    const lease = exactLease(expectedLease);
+    if (lease.transferId !== transferId) throw new TypeError('lease transfer differs');
+    return transaction(database, 'IMMEDIATE', () => {
+      const transfer = getTransfer.get(transferId), scope = getScope.get(lease.scopeRef);
+      if (!transfer || transfer.settled !== 0 || transfer.revision !== revision ||
+          transfer.scope_ref !== lease.scopeRef || !scope || scope.active_transfer_id !== transferId ||
+          scope.writer_thread_id !== lease.writerThreadId || scope.fence_token !== lease.token) {
+        reject('CAS_CONFLICT', 'external transfer lease or revision changed');
+      }
+      const state = parseState(transfer.state_json), targetId = state.target?.threadId;
+      const complete = state.kind === 'external-source-handoff/v1' && state.phase === 'external-completed' &&
+        state.pendingEffect === null && state.writer === 'target' && state.writerThreadId === targetId &&
+        targetId === lease.writerThreadId && state.sourceRecovery === 'controller-owned' &&
+        state.source?.kind === 'codex-mcp-request-metadata' &&
+        state.source.threadId === state.source.sessionTreeId && state.source.threadId !== targetId &&
+        state.release?.kind === 'cooperative-duty-release' &&
+        state.release.sourceThreadId === state.source.threadId && state.release.callId === state.source.callId &&
+        state.release.epoch === state.basis?.epoch &&
+        state.firstContinuation?.threadId === targetId && state.firstContinuation.terminal === 'completed' &&
+        state.postReleaseTurn?.threadId === targetId && state.postReleaseTurn.terminal === 'completed' &&
+        state.postReleaseTurn.observedAfterRelease === true &&
+        state.postReleaseTurn.turnId !== state.firstContinuation.turnId &&
+        Array.isArray(state.postReleaseTurn.events) && state.postReleaseTurn.events.length > 0 &&
+        state.nativeClosed?.closed === true && state.nativeClosed.exitCode === 0 && state.nativeClosed.forced === false;
+      if (!complete) reject('EXTERNAL_TRANSFER_NOT_SETTLEABLE', 'external source release, continuation or resources are unverified');
+      for (const key of ['prepare', 'targetCreated', 'commit', 'release', 'result', 'closed']) text(state.verification?.[key], `verification.${key}`);
+      for (const value of [state.source.callId, state.source.turnId, state.firstContinuation.turnId, state.postReleaseTurn.turnId]) text(value, 'external identity');
+      if (revision === Number.MAX_SAFE_INTEGER) reject('REVISION_EXHAUSTED', 'transfer revision is exhausted');
+      const nextRevision = revision + 1, nextToken = rotatedToken(lease.token);
+      database.prepare('UPDATE transfers SET revision = ?, settled = 1 WHERE transfer_id = ?').run(nextRevision, transferId);
+      database.prepare('UPDATE scopes SET active_transfer_id = NULL, fence_token = ? WHERE scope_ref = ?').run(nextToken, lease.scopeRef);
+      return immutable({revision: nextRevision, scope: {scopeRef: lease.scopeRef,
+        writerThreadId: lease.writerThreadId, activeTransferId: null, token: nextToken}});
+    });
+  }
+
+  function inspectExternalStopped(transferId, scopeRef) {
+    const snapshot = read(transferId, scopeRef);
+    if (!externalStopped(snapshot.state, snapshot.lease)) reject('EXTERNAL_STOPPED_NOT_APPLICABLE', 'external effects or actor closure are not known stopped');
+    return snapshot;
+  }
+  function settleExternalStopped(transferId, revision, expectedLease, reconciliation) {
+    ensureOpen(); text(transferId, 'transferId'); safeInteger(revision, 'revision');
+    const lease = exactLease(expectedLease), receipt = immutable(reconciliation);
+    if (lease.transferId !== transferId) throw new TypeError('lease transfer differs');
+    return transaction(database, 'IMMEDIATE', () => {
+      const transfer = getTransfer.get(transferId), scope = getScope.get(lease.scopeRef);
+      if (!transfer || transfer.settled !== 0 || transfer.revision !== revision ||
+          transfer.scope_ref !== lease.scopeRef || !scope || scope.active_transfer_id !== transferId ||
+          scope.writer_thread_id !== lease.writerThreadId || scope.fence_token !== lease.token) reject('CAS_CONFLICT', 'external stopped lease changed');
+      const state = parseState(transfer.state_json);
+      if (!externalStopped(state, lease) || receipt.kind !== 'external-known-stopped' ||
+          receipt.recordRevision !== revision || receipt.recordSha256 !== stateDigest(state) ||
+          receipt.leaseSha256 !== stateDigest(lease) || receipt.originalPhase !== state.phase ||
+          !isDeepStrictEqual(receipt.originalFailure, state.failure) ||
+          receipt.originalDeadlineMs !== state.plan?.deadlineMs ||
+          receipt.currentSource?.kind !== 'codex-mcp-request-metadata' ||
+          receipt.currentSource?.threadId !== state.source.threadId ||
+          receipt.currentSource.sessionTreeId !== state.source.threadId ||
+          receipt.decision !== 'allow') reject('EXTERNAL_STOPPED_NOT_APPLICABLE', 'stopped reconciliation differs from exact original evidence');
+      for (const key of ['turnId', 'callId']) text(receipt.currentSource[key], 'currentSource.' + key);
+      for (const key of ['epoch', 'authorityRef', 'snapshotRef', 'protectedInputsDigest']) text(receipt.currentBasis?.[key], 'currentBasis.' + key);
+      safeInteger(receipt.currentBasis.revision, 'currentBasis.revision');
+      for (const key of ['sourceRef', 'observationSha256', 'decisionEvidence']) text(receipt[key], 'reconciliation.' + key);
+      if (![receipt.observationSha256, receipt.decisionEvidence, receipt.currentBasis.snapshotRef,
+        receipt.currentBasis.protectedInputsDigest].every(value => /^[a-f0-9]{64}$/.test(value))) {
+        reject('EXTERNAL_STOPPED_NOT_APPLICABLE', 'reconciliation evidence hashes are invalid');
+      }
+      if (revision === Number.MAX_SAFE_INTEGER) reject('REVISION_EXHAUSTED', 'transfer revision is exhausted');
+      const next = stateText({...state, phase: 'external-source-retained', reconciliation: receipt});
+      const nextRevision = revision + 1, nextToken = rotatedToken(lease.token);
+      database.prepare('UPDATE transfers SET revision = ?, state_json = ?, settled = 1 WHERE transfer_id = ?')
+        .run(nextRevision, next.encoded, transferId);
+      database.prepare('UPDATE scopes SET active_transfer_id = NULL, fence_token = ? WHERE scope_ref = ?').run(nextToken, lease.scopeRef);
+      return immutable({revision: nextRevision, scope: {scopeRef: lease.scopeRef,
+        writerThreadId: lease.writerThreadId, activeTransferId: null, token: nextToken}});
+    });
+  }
+
   function close() {
     if (closed) return;
     closed = true;
     database.close();
   }
 
-  return Object.freeze({bindScope, readScope, claimScope, begin, compareAndSet, read, settle, settleFailedTransfer, close});
+  function inspectExternalStoppedTarget(transferId, scopeRef) {
+    const snapshot = read(transferId, scopeRef);
+    if (!externalStoppedTarget(snapshot.state, snapshot.lease)) reject('EXTERNAL_TARGET_NOT_SETTLEABLE', 'target identity, original actor closure or dispatch evidence is unavailable');
+    return snapshot;
+  }
+  function settleExternalStoppedTarget(transferId, revision, expectedLease, reconciliation) {
+    ensureOpen(); text(transferId, 'transferId'); safeInteger(revision, 'revision');
+    const lease = exactLease(expectedLease), receipt = immutable(reconciliation);
+    return transaction(database, 'IMMEDIATE', () => {
+      const transfer = getTransfer.get(transferId), scope = getScope.get(lease.scopeRef);
+      if (!transfer || transfer.settled !== 0 || transfer.revision !== revision || transfer.scope_ref !== lease.scopeRef ||
+          lease.transferId !== transferId || !scope || scope.active_transfer_id !== transferId ||
+          scope.writer_thread_id !== lease.writerThreadId || scope.fence_token !== lease.token) reject('CAS_CONFLICT', 'target recovery lease changed');
+      const state = parseState(transfer.state_json), current = receipt.currentSource;
+      if (!externalStoppedTarget(state, lease) || receipt.kind !== 'external-known-stopped-target' ||
+          receipt.recordRevision !== revision || receipt.recordSha256 !== stateDigest(state) || receipt.leaseSha256 !== stateDigest(lease) ||
+          receipt.originalStateEvidence !== receipt.recordSha256 || !Number.isSafeInteger(receipt.recoveryDeadlineMs) ||
+          receipt.recoveryDeadlineMs <= Date.now() || receipt.recoveryDeadlineMs > Date.now() + 300000 ||
+          receipt.originalDeadlineMs !== state.plan.deadlineMs || !isDeepStrictEqual(receipt.originalFailure, state.failure) ||
+          current?.kind !== 'codex-mcp-request-metadata' || current.threadId !== state.source.threadId || current.sessionTreeId !== current.threadId ||
+          receipt.decision !== 'allow' || !['source-current', 'target-retained'].includes(receipt.writerDisposition) ||
+          receipt.currentBasis?.inputComplete !== true || receipt.currentBasis.paused !== false || receipt.currentBasis.recoveryRequired !== false ||
+          receipt.scopeBinding?.scopeRef !== state.scopeRef || receipt.scopeBinding.sourceThreadId !== current.threadId ||
+          receipt.scopeBinding.scopeRef !== stateDigest({threadId: current.threadId, cwd: receipt.scopeBinding.cwd, scope: receipt.scopeBinding.requestedScope}) ||
+          receipt.readerClosed?.closed !== true || receipt.readerClosed.primaryProcessClosed !== true ||
+          receipt.readerClosed.exitObserved !== true || receipt.readerClosed.closeObserved !== true ||
+          receipt.readerClosed.forced !== false || receipt.readerClosed.exitCode !== 0 || receipt.readerClosed.signal !== null ||
+          receipt.readerClosed.recoveryRequired !== false || receipt.readerClosed.terminationAttempt !== null) reject('EXTERNAL_TARGET_NOT_SETTLEABLE', 'target recovery receipt does not bind the observed state');
+      for (const key of ['turnId', 'callId']) text(current[key], 'currentSource.' + key);
+      text(receipt.scopeBinding.requestedScope, 'scopeBinding.requestedScope');
+      if (!pathModule.isAbsolute(text(receipt.scopeBinding.cwd, 'scopeBinding.cwd'))) reject('EXTERNAL_TARGET_NOT_SETTLEABLE', 'scope cwd must be absolute');
+      for (const key of ['epoch', 'authorityRef', 'snapshotRef', 'protectedInputsDigest']) text(receipt.currentBasis[key], 'currentBasis.' + key);
+      safeInteger(receipt.currentBasis.revision, 'currentBasis.revision'); text(receipt.sourceRef, 'sourceRef');
+      for (const key of ['observationSha256', 'decisionEvidence', 'materialSha256', 'nativeFactsSha256', 'originalStateEvidence']) {
+        if (!/^[a-f0-9]{64}$/.test(receipt[key] || '')) reject('EXTERNAL_TARGET_NOT_SETTLEABLE', 'target recovery evidence digest is invalid');
+      }
+      if (revision === Number.MAX_SAFE_INTEGER) reject('REVISION_EXHAUSTED', 'transfer revision is exhausted');
+      const writerThreadId = receipt.writerDisposition === 'source-current' ? current.threadId : state.target.threadId;
+      const next = stateText({...state, phase: 'external-target-reconciled',
+        writer: receipt.writerDisposition === 'source-current' ? 'source' : 'target', writerThreadId,
+        sourceRecovery: receipt.writerDisposition === 'source-current' ? 'current-source' : state.sourceRecovery,
+        pendingEffect: null, reconciliation: {...receipt, originalPendingEffect: state.pendingEffect,
+          originalSourceRecovery: state.sourceRecovery, originalPhase: state.phase}});
+      const nextRevision = revision + 1, nextToken = rotatedToken(lease.token);
+      database.prepare('UPDATE transfers SET revision = ?, state_json = ?, settled = 1 WHERE transfer_id = ?')
+        .run(nextRevision, next.encoded, transferId);
+      database.prepare('UPDATE scopes SET writer_thread_id = ?, active_transfer_id = NULL, fence_token = ? WHERE scope_ref = ?')
+        .run(writerThreadId, nextToken, lease.scopeRef);
+      return immutable({revision: nextRevision, scope: {scopeRef: lease.scopeRef, writerThreadId, activeTransferId: null, token: nextToken}});
+    });
+  }
+
+  return Object.freeze({bindScope, readScope, claimScope, begin, compareAndSet, read, settle, settleFailedTransfer, settleExternal,
+    inspectExternalStopped, settleExternalStopped, inspectExternalStoppedTarget, settleExternalStoppedTarget, close});
 }
 
 module.exports = {openCarrierRecorder, CarrierRecorderError};

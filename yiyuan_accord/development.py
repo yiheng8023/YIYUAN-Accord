@@ -8,6 +8,7 @@ this check. These versioned checks bind their phase, not every future form.
 from pathlib import Path
 from datetime import datetime
 from hashlib import sha256
+import json
 import re
 import subprocess
 from urllib.parse import urlsplit
@@ -68,6 +69,49 @@ def development_is_declared(root):
             or state is None and DEVELOPMENT_FILE.encode() in instructions)
 
 
+def development_observations(root, contract):
+    """Read explicitly retained history, never current authority or acceptance.
+
+    Inline declarations keep their original form. A reference resolves exactly
+    one immutable Git source under the existing source bound, without recursive
+    loading or a runtime dependency on history.
+    """
+    if not isinstance(contract, dict):
+        raise ValueError("historical observation declaration is invalid")
+    if "historicalDevelopmentObservations" not in contract:
+        rows = contract.get("developmentObservations")
+        if not isinstance(rows, list):
+            raise ValueError("historical observations are not declared")
+        return rows
+    reference = contract["historicalDevelopmentObservations"]
+    if ("developmentObservations" in contract or not isinstance(reference, dict)
+            or set(reference) != {"snapshot", "observationsSha256", "observationCount", "claimLimit"}
+            or not isinstance(reference.get("snapshot"), str)
+            or not isinstance(reference.get("observationsSha256"), str)
+            or re.fullmatch(r"[0-9a-f]{64}", reference["observationsSha256"]) is None
+            or type(reference.get("observationCount")) is not int or reference["observationCount"] <= 0
+            or not _text(reference.get("claimLimit"))):
+        raise ValueError("historical observation reference is invalid or ambiguous")
+    match = re.fullmatch(r"([0-9a-f]{40}):product/development\.json#/developmentObservations",
+                         reference["snapshot"])
+    if match is None:
+        raise ValueError("historical observation reference must name its exact immutable source")
+    try:
+        _bounded_git_bytes(root, ("merge-base", "--is-ancestor", match[1], "HEAD"))
+        original = _strict_json_object(_bounded_git_bytes(
+            root, ("show", f"{match[1]}:{DEVELOPMENT_FILE}"), limit=1_000_000).decode("utf-8"))
+    except (OSError, subprocess.SubprocessError, ValueError, UnicodeError) as error:
+        raise ValueError("historical observation source is unavailable") from error
+    rows = original.get("developmentObservations")
+    if not isinstance(rows, list) or len(rows) != reference["observationCount"]:
+        raise ValueError("historical observation source or count differs")
+    canonical = json.dumps(rows, sort_keys=True, separators=(",", ":"),
+                           ensure_ascii=False, allow_nan=False).encode("utf-8")
+    if sha256(canonical).hexdigest() != reference["observationsSha256"]:
+        raise ValueError("historical observation source digest differs")
+    return rows
+
+
 def _text(value):
     return isinstance(value, str) and bool(value.strip())
 
@@ -80,6 +124,8 @@ def _strings(value, *, empty=False):
 
 def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False, meta_guidance=False, input_state_notice=False, native_onboarding=False, package_version=None):
     """Describe this development package, not a mandatory product mechanism."""
+    package_baseline = (package_version.split("+")[0].split("-")[0]
+                        if isinstance(package_version, str) else None)
     contract = {
         "schema": 2, "productId": "yiyuan-accord", "packageId": package_id,
         "adapterId": adapter_id, "entry": "host-skill",
@@ -121,6 +167,31 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "lifecycle": "host-start-reload-and-close; releases-plugin-cache-cwd-before-serving; pins-available-context-reader-code-at-runtime-load; process-exits-on-stdin-end; no-listener-or-daemon",
                 "limits": "no-identity-storage-or-arbitrary-operation-override; no-input-replay-or-lock-recovery-tool; no-authority-or-whole-completion-claim; no-app-server-control-or-handoff-dispatch",
             }
+            if package_baseline == "3.3.2":
+                contract["nativeTaskStateMcp"].update({
+                    "executionTool": "coordinate_task_execution",
+                    "transportConfiguration": {
+                        "envVars": ["YIYUAN_ACCORD_TASK_STATE_DIR", "CODEX_HOME", "CODEX_CLI_PATH"],
+                        "startupTimeoutSeconds": 10, "toolTimeoutSeconds": 30,
+                    },
+                    "effect": "read-or-manage-existing-task-checkpoint; optional-context-assessment-is-read-only; explicit-bounded-task-execution-and-independent-review",
+                    "storage": "existing-task-checkpoint-plus-task-owned-operation-evidence-and-sqlite",
+                    "execution": {
+                        "entry": "runtime/native-task-execution.cjs",
+                        "capabilityEntry": "runtime/codex-capabilities.cjs",
+                        "handoffEntry": "runtime/external-handoff.cjs",
+                        "prerequisites": "root-native-metadata; current-active-checkpoint-and-complete-input-for-transfer; authorized-local-cli-and-task-owned-storage; available-node-built-in-sqlite-for-transfer; protected-quiescence-source; root-reviewed-exact-observations",
+                        "capabilities": "bounded-native-skill-inventory-and-provenance-preserving-input-preparation; optional-exact-typed-skill-in-first-continuation-with-fresh-enabled-source-policy-check; no-configuration-change-or-model-turn-from-inventory",
+                        "metadataQueryWindow": "10-second-query-plus-at-most-three-5-second-cleanup-windows; 30-second-host-tool-budget-preserves-natural-exit-and-recovery-margin",
+                        "transfer": "explicit-prepare-commit-release-inspect-read-evidence-review-cancel; default-read-only; optional-declared-checkpoint-output-workspace-write-with-independent-authority-baseline-and-write-prepare-review; natural-readonly-peer-close-and-verified-restricted-cold-resume-before-commit-or-writing; selected-file-snapshots-are-not-OS-allowlist-or-outside-effect-proof; source-state-rechecked-before-effects; uncertain-effects-are-not-replayed",
+                        "stoppedRecovery": "reconcile-exact-record-revision-and-state-lease-hashes; current-input-and-authority-plus-independent-known-stopped-review; zero-target-turn-dispatch-source-writer-and-natural-close-only; preserve-original-failure-deadline; no-effect-replay",
+                        "targetStoppedRecovery": "separate-reconcile-target; active-current-source-and-protected-effect-material; exact-record-lease-and-public-scope; read-only-target-facts-rechecked-and-reader-naturally-closed; independent-hash-bound-effects-and-owner-review; atomic-settlement-fence-rotation-and-explicit-source-current-or-target-retained-writer; preserve-original-failure-deadline-ACK-and-effects; unknown-settlement-not-retried; no-target-resume-or-old-turn-replay",
+                        "review": "root-independent-judgment-binds-review-id-and-observation-sha256; source-references-are-not-authorization-or-writer-exclusion-proof",
+                        "lifecycle": "existing-MCP-process; task-owned-operation-evidence-and-SQLite-writer-fencing; exact-known-closed-terminal-or-proven-no-start-slots-reclaimable; pending-unknown-or-unsettled-targets-held; close-cancels-owned-work; retained-evidence-is-not-auto-deleted",
+                        "limits": "no-default-GUI-connection-or-timing; no-permission-escalation; no-automatic-authority-inference; no-archive-or-parent-checkpoint-transfer; no-shutdown-survival-or-whole-A05-acceptance-claim",
+                    },
+                    "limits": "no-identity-storage-or-arbitrary-operation-override; no-input-replay-or-lock-recovery-tool; no-authority-or-whole-completion-claim; no-source-GUI-control-or-automatic-transfer",
+                })
         if carrier_handoff:
             contract["optionalCarrierHandoff"] = {
                 "entry": "runtime/carrier-handoff.cjs",
@@ -206,7 +277,7 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "additionalContextLimit": 4000,
                 "limits": "host-priority-and-user-authority-preserved; enabled-trusted-host-support-required; injection-is-not-behavior-or-all-surface-coverage",
             }
-            if isinstance(package_version, str) and package_version.split("+")[0].split("-")[0] == "3.3.1":
+            if package_baseline in ("3.3.1", "3.3.2"):
                 contract["ordinaryInputParticipation"]["metaGuidance"].update({
                     "sourceSha256": "14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026",
                     "sourceBytes": 4656,
@@ -341,7 +412,7 @@ def development_contract_errors(contract, golden_task_ids):
                                    "conditional-existing-accord-upgrade-after-v3.2-release"})
         granted.update({"chatgpt-codex-functional-development", "conditional-v3.3-release"})
     release = authority.get("conditionalRelease")
-    require(isinstance(release, dict) and release.get("target") in (("3.3.0", "3.3.1") if successor else ("3.2.0", "3.2.1"))
+    require(isinstance(release, dict) and release.get("target") in (("3.3.0", "3.3.1", "3.3.2") if successor else ("3.2.0", "3.2.1"))
             and release.get("decision") in (("not-authorized", "user-authorized-after-acceptance")
                                             if successor else ("user-authorized-after-acceptance",))
             and release.get("ready") is False
@@ -357,7 +428,7 @@ def development_contract_errors(contract, golden_task_ids):
                                               "final-candidate-not-publication-proof"),
             "a declared version is not publication evidence")
     if successor:
-        require(cycle.get("targetVersion") in ("3.3.0", "3.3.1")
+        require(cycle.get("targetVersion") in ("3.3.0", "3.3.1", "3.3.2")
                 and (contract.get("status") != "candidate-frozen"
                      or isinstance(release, dict)
                      and release.get("decision") == "user-authorized-after-acceptance"),
@@ -710,6 +781,8 @@ def _inspect_development(root):
         if retirement.hexdigest() != _RETIRED_PROMPT_DIGEST:
             errors.append("historical reference retirement changed")
         errors.extend(development_contract_errors(contract, golden_ids))
+        if not errors and "historicalDevelopmentObservations" in contract:
+            development_observations(root, contract)
         if not errors and contract.get("schema") == V5_SCHEMA:
             historical = _strict_json_object(_bounded_git_bytes(
                 root, ("show", PREVIOUS_DEVELOPMENT), limit=1_000_000).decode("utf-8"))

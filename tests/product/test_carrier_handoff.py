@@ -504,6 +504,107 @@ class CarrierHandoffTests(unittest.TestCase):
         self.assertEqual(methods,['thread/read','thread/read'])
         self.assertEqual(rr['second']['result']['status'],'already-finalized')
 
+    def test_release_recovery_accepts_native_request_ids_and_preserves_exact_identity(self):
+        script = r'''
+const assert = require('node:assert/strict');
+const {handoff, finalizeReconciledHandoff} = require('./runtime/carrier-handoff.cjs');
+const clone = value => JSON.parse(JSON.stringify(value));
+async function observe(requestId, corruption) {
+  const plan = {transferId:'transfer',scopeRef:'scope',authorityRef:'authority',stateRef:'state',
+    source:{threadId:'source'},target:{cwd:'/fixture',model:'fixture-model'},
+    handoffText:'Retain the authorized task.',
+    continuation:{input:'Perform the bounded continuation.',sandboxPolicy:{type:'readOnly'}},
+    deadlineMs:Date.now()+5000,recoveryDeadlineMs:Date.now()+6000};
+  let revision = -1, state, lease, turn = 0;
+  const recorder = {
+    async begin(id, digest, initial) {
+      state=clone(initial); revision=0;
+      lease={scopeRef:'scope',transferId:id,writerThreadId:'source',token:'lease'};
+      return {created:true,revision,lease:clone(lease)};
+    },
+    async compareAndSet(id, expected, next, expectedLease) {
+      assert.equal(expected,revision); assert.deepEqual(expectedLease,lease);
+      state=clone(next); revision++;
+      lease={...lease,writerThreadId:next.writerThreadId};
+      return {revision,lease:clone(lease)};
+    },
+    async read() {return {revision,state:clone(state),lease:clone(lease)};},
+  };
+  const transport = {connectionId:'controller',hostVersion:'fixture-host',
+    async request(method,params) {
+      if(method==='thread/read')return {thread:{id:params.threadId,ephemeral:false,status:{type:'idle'}}};
+      if(method==='thread/start')return {thread:{id:'target'}};
+      if(method==='turn/start')return {turn:{id:'turn-'+(++turn)}};
+      if(method==='thread/unsubscribe') {
+        const error=Error('original unsubscribe acknowledgement lost');
+        error.rpcRequest={connectionId:'controller',hostVersion:'fixture-host',requestId,method};
+        throw error;
+      }
+      throw Error('unexpected native method: '+method);
+    },
+    async waitTerminal(threadId,turnId) {
+      return {method:'turn/completed',params:{threadId,turn:{id:turnId,status:'completed'}}};
+    },
+  };
+  const verify = async stage => ({decision:'allow',scopeRef:'scope',authorityRef:'authority',stateRef:'state',
+    sourceRef:'fixture:'+stage,sourceRecoveryReady:true,targetInitializationSafe:true,
+    quiesced:true,noOtherWriters:true,targetSettingsMatch:true,initializationEffectsVerified:true,
+    accepted:true,sourceIdle:true,intakeEffectsVerified:true,singleWriter:true,effectsVerified:true,
+    pauseStateVerified:true,receiptVerified:true,reconciliationAuthorized:true,releaseAuthorized:true,
+    priorAttemptQuiesced:true,subscriptionReleaseVerified:true,sameConnectionSubscriptionReleased:true,
+    subscriptionReleaseEvidenceRef:'fixture:original-connection-release',nativeStatus:'unsubscribed'});
+  let originalError;
+  try {await handoff(plan,{transport,recorder,verify});}
+  catch(error) {originalError=error.code;}
+  assert.equal(originalError,'NATIVE_EFFECT_UNKNOWN');
+  assert.equal(state.releaseObservation.requestRef.requestId,requestId);
+  if(corruption==='type-mismatch')state.releaseObservation.requestRef.requestId=String(requestId);
+  else if(corruption==='identity-mismatch')state.releaseObservation.requestRef.requestId=18;
+  else if(corruption) {
+    for(const ref of [state.releaseObservation.requestRef,state.pendingEffect.requestRef,
+      state.failure.originalError.details.requestRef])ref.requestId=corruption.value;
+  }
+  const before=await recorder.read(), reads=[];
+  const recoveryTransport = {...transport,async request(method,params) {
+    reads.push(method); assert.equal(method,'thread/read');
+    return {thread:{id:params.threadId,ephemeral:false,status:{type:'idle'},
+      ...(params.threadId==='target'?{turns:[{id:'turn-1',status:'completed'},{id:'turn-2',status:'completed'}]}:{})}};
+  }};
+  let result, error;
+  try {result=await finalizeReconciledHandoff({transferId:'transfer',scopeRef:'scope',authorityRef:'authority',
+    stateRef:'state',expectedRevision:revision,expectedLease:clone(lease),deadlineMs:Date.now()+2000,
+    receiptDigest:null,releaseKind:'native-unsubscribe'},{transport:recoveryTransport,recorder,verify});}
+  catch(cause) {error=cause.code;}
+  if(corruption) {
+    assert.equal(error,'FINALIZATION_EVIDENCE_CONFLICT'); assert.deepEqual(reads,[]);
+    assert.deepEqual(await recorder.read(),before);
+  } else {
+    assert.equal(error,undefined); assert.equal(result.status,'finalized');
+    assert.equal(result.sourceSubscriptionReleased,true);
+    assert.deepEqual(reads,['thread/read','thread/read']);
+    assert.deepEqual(state.failure,before.state.failure);
+    assert.deepEqual(state.releaseObservation,before.state.releaseObservation);
+    assert.deepEqual(state.normalReleaseAttempt,before.state.normalReleaseAttempt);
+  }
+  return {requestId,case:corruption || 'valid',status:result?.status || error};
+}
+(async()=>{
+  const rows=[];
+  for(const id of ['original-release','17',17,0,-17,Number.MAX_SAFE_INTEGER])rows.push(await observe(id));
+  for(const corruption of ['type-mismatch','identity-mismatch'])rows.push(await observe(17,corruption));
+  for(const value of [null,true,1.5,Number.MAX_SAFE_INTEGER+1,'','   ','x'.repeat(4097)])
+    rows.push(await observe(17,{value}));
+  process.stdout.write(JSON.stringify(rows));
+})().catch(error=>{console.error(error);process.exitCode=1;});
+'''
+        result = subprocess.run(['node', '-e', script], cwd=ROOT, text=True,
+                                capture_output=True, timeout=20)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        rows = json.loads(result.stdout)
+        self.assertEqual([row['status'] for row in rows[:6]], ['finalized'] * 6)
+        self.assertEqual([row['status'] for row in rows[6:]],
+                         ['FINALIZATION_EVIDENCE_CONFLICT'] * 9)
+
     def test_root_recovery_preserves_original_materials_and_refuses_corruption(self):
         for mode in ('missing-attempt','missing-terminal','wrong-request',
                      'missing-original-error','empty-original-error','wrong-request-ref'):

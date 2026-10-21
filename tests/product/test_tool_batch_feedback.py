@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+from tests.product.git_fixture import owned_git_environment
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -83,7 +84,7 @@ class HookEventScopeTests(unittest.TestCase):
         def historical(path):
             return subprocess.run(
                 ['git', '-C', str(ROOT), 'show', f'{revision}:{path}'],
-                check=True, capture_output=True, timeout=10,
+                env=owned_git_environment(), check=True, capture_output=True, timeout=10,
             ).stdout
 
         legacy = 'plugins/yiyuan-accord-claude/'

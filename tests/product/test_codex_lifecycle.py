@@ -14,6 +14,7 @@ import time
 import textwrap
 
 from scripts import observe_codex_lifecycle as lifecycle
+from tests.product.git_fixture import owned_git_environment
 
 
 def legacy_close_helper_sources(root, *, env=None):
@@ -26,7 +27,8 @@ def legacy_close_helper_sources(root, *, env=None):
             relative = 'scripts/' + name + '.py'
             sources[relative] = subprocess.check_output(
                 ['git', 'show', revision + ':' + relative], cwd=root,
-                env=env, stderr=subprocess.PIPE, timeout=30)
+                env=owned_git_environment() if env is None else env,
+                stderr=subprocess.PIPE, timeout=30)
     except subprocess.CalledProcessError as error:
         raise RuntimeError(
             'Historical fixture sources are unavailable. Product validation needs '
@@ -1043,7 +1045,7 @@ class CodexLifecycleTests(unittest.TestCase):
             Path(args.replacement_codex).write_bytes(b'changed before launch')
             with patch.object(lifecycle, '_new_controller') as controller:
                 with self.assertRaisesRegex(ValueError, 'prepared Codex executable changed'):
-                    lifecycle._run_cli(manifest, 'rejected-before-job', [], {}, 1,
+                    lifecycle._run_cli(manifest, 'rejected-before-job', [], {}, time.monotonic() + 10,
                                        codex_role='replacement')
                 controller.assert_not_called()
 

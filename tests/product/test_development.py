@@ -1,6 +1,7 @@
 """Fast source-contract regressions; none of these tests runs an Agent host."""
 
 import copy
+import hashlib
 from contextlib import contextmanager
 import json
 import os
@@ -11,6 +12,8 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+
+from tests.product.git_fixture import owned_git_environment
 
 from yiyuan_accord.development import (
     DEVELOPMENT_FILE, development_contract_errors, development_is_declared,
@@ -24,14 +27,8 @@ V4_REVISION = "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88"
 
 def historical_development():
     return json.loads(subprocess.check_output(
-        ["git", "show", f"{V4_REVISION}:{DEVELOPMENT_FILE}"], cwd=ROOT))
-
-
-def owned_git_environment():
-    """Route only task-owned fixture commands, never the user's Git process."""
-    env = {key: value for key, value in os.environ.items() if not key.startswith('GIT_')}
-    env.update(GIT_CONFIG_NOSYSTEM='1', GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_SYSTEM=os.devnull)
-    return env
+        ["git", "show", f"{V4_REVISION}:{DEVELOPMENT_FILE}"], cwd=ROOT,
+        env=owned_git_environment(), timeout=30))
 
 
 def overlay_current_tree(destination):
@@ -228,6 +225,24 @@ class SkillReferencePackageTests(unittest.TestCase):
             target.write_bytes(b"")
             self.assertTrue(check(references=references)[1])
 
+    def test_declared_specialist_reference_is_hashed_without_accepting_other_directories(self):
+        with self.package() as (root, projection, check):
+            specialist = projection['supportingSkills'][0]
+            locator = (Path(specialist).parent / 'references/native-capabilities.md').as_posix()
+            self.assertIn(locator, projection['referenceFiles'])
+            original, errors = check()
+            self.assertEqual(errors, [])
+            reference = root / locator
+            reference.write_bytes(reference.read_bytes() + b'\nChanged native detail.\n')
+            changed, errors = check()
+            self.assertEqual(errors, [])
+            self.assertNotEqual(changed, original)
+            self.assertTrue(check(references=[r for r in projection['referenceFiles'] if r != locator])[1])
+            self.assertTrue(check(supporting=[s for s in projection['supportingSkills'] if s != specialist])[1])
+            outside = Path(projection['manifest']).parent.parent / 'assets/outside.md'
+            (root / outside).write_text('Not a Skill reference.\n', encoding='utf-8')
+            self.assertTrue(check(references=[*projection['referenceFiles'], outside.as_posix()])[1])
+
     def test_startup_guidance_is_an_explicit_variant_not_a_relabelled_predecessor(self):
         from yiyuan_accord.development import V5_SCHEMA, delivery_adapter_contract
         previous = delivery_adapter_contract("codex", "yiyuan-accord-codex", development_schema=V5_SCHEMA)
@@ -249,6 +264,77 @@ class SkillReferencePackageTests(unittest.TestCase):
         self.assertEqual(old_input["metaGuidance"], new_input["metaGuidance"])
         self.assertEqual(previous["optionalTaskCheckpoint"], current["optionalTaskCheckpoint"])
         self.assertEqual(old_input["existingCheckpoint"], new_input["existingCheckpoint"])
+
+    def test_v332_translation_contract_preserves_both_released_predecessors(self):
+        from yiyuan_accord.development import V5_SCHEMA, delivery_adapter_contract
+        options = dict(development_schema=V5_SCHEMA, startup_entry=True, meta_guidance=True)
+        foundation = lambda version: delivery_adapter_contract(
+            'codex', 'yiyuan-accord-codex', package_version=version, **options
+        )['ordinaryInputParticipation']['metaGuidance']
+        original = foundation('3.3.0')
+        translated = foundation('3.3.1')
+        self.assertEqual(original['sourceSha256'],
+                         '511861ec00a15e051c97221d9d62e9586856a5d659724eff2d2953f002f457bc')
+        self.assertNotIn('originalSource', original)
+        self.assertEqual(translated['sourceSha256'],
+                         '14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026')
+        self.assertEqual(translated['originalSourceSha256'],
+                         '9f9019523491d9e41f7d3e41ee5bd3c783b0a1049fb280242959198fb88a439a')
+        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952'):
+            with self.subTest(version=version):
+                self.assertEqual(foundation(version), translated)
+
+    def test_v332_execution_tool_description_is_version_bound(self):
+        from yiyuan_accord.development import V5_SCHEMA, delivery_adapter_contract
+        options = dict(development_schema=V5_SCHEMA, native_state_mcp=True,
+                       carrier_handoff=True, carrier_session=True)
+        for version in ('3.3.0', '3.3.1'):
+            before = delivery_adapter_contract('codex', 'yiyuan-accord-codex',
+                                              package_version=version, **options)
+            self.assertNotIn('executionTool', before['nativeTaskStateMcp'])
+            self.assertNotIn('execution', before['nativeTaskStateMcp'])
+        current = delivery_adapter_contract('codex', 'yiyuan-accord-codex',
+            package_version='3.3.2-dev.1+codex.20261021091952', **options)
+        execution = current['nativeTaskStateMcp']
+        self.assertEqual(execution['executionTool'], 'coordinate_task_execution')
+        self.assertEqual(execution['execution']['entry'], 'runtime/native-task-execution.cjs')
+        self.assertEqual(execution['execution']['capabilityEntry'], 'runtime/codex-capabilities.cjs')
+        self.assertEqual(execution['execution']['handoffEntry'], 'runtime/external-handoff.cjs')
+        self.assertEqual(execution['transportConfiguration'], {
+            'envVars': ['YIYUAN_ACCORD_TASK_STATE_DIR', 'CODEX_HOME', 'CODEX_CLI_PATH'],
+            'startupTimeoutSeconds': 10, 'toolTimeoutSeconds': 30,
+        })
+        self.assertEqual(current['behaviorEvidenceState'], 'unverified')
+
+    def test_v332_mcp_query_window_and_existing_cli_selection_are_declared(self):
+        configuration = json.loads((ROOT / 'plugins/yiyuan-accord-codex/.mcp.json').read_text(
+            encoding='utf-8'))['mcpServers']['accord-state']
+        self.assertEqual(configuration['tool_timeout_sec'], 30)
+        self.assertEqual(configuration['startup_timeout_sec'], 10)
+        self.assertEqual(configuration['env_vars'],
+                         ['YIYUAN_ACCORD_TASK_STATE_DIR', 'CODEX_HOME', 'CODEX_CLI_PATH'])
+        self.assertNotIn('env', configuration)
+
+    def test_v332_execution_modules_are_exact_declared_package_members(self):
+        with self.package() as (root, projection, check):
+            original, errors = check()
+            self.assertEqual(errors, [])
+            self.assertEqual(original, projection['packageSha256'])
+            for name in ('codex-capabilities', 'external-handoff', 'native-task-execution'):
+                locator = 'plugins/yiyuan-accord-codex/runtime/' + name + '.cjs'
+                self.assertIn(locator, projection['mechanismFiles'])
+                target = root / locator
+                raw = target.read_bytes()
+                with self.subTest(module=name):
+                    target.write_bytes(raw + b'\n// changed executable dependency\n')
+                    changed, errors = check()
+                    self.assertEqual(errors, [])
+                    self.assertNotEqual(changed, original)
+                    target.unlink()
+                    missing, errors = check()
+                    self.assertIsNone(missing)
+                    self.assertTrue(any('package declared file is unsafe' in x for x in errors))
+                target.write_bytes(raw)
 
 
 class NativeOnboardingContractTests(unittest.TestCase):
@@ -324,7 +410,7 @@ class ClaudeUpdateInspectionTests(unittest.TestCase):
             inspector = root / "historical-inspect-plugin-update.cjs"
             inspector.write_bytes(subprocess.check_output([
                 "git", "show", f"{V4_REVISION}:plugins/yiyuan-accord-claude/runtime/inspect-plugin-update.cjs"
-            ], cwd=ROOT))
+            ], cwd=ROOT, env=owned_git_environment(), timeout=30))
             market, source, installed = root / "market", root / "market/plugins/target", root / "installed"
             for directory in (market / ".claude-plugin", source / ".claude-plugin", installed / ".claude-plugin"):
                 directory.mkdir(parents=True, exist_ok=True)
@@ -977,7 +1063,8 @@ class DevelopmentContractTests(unittest.TestCase):
         from yiyuan_accord import development
         original = development._bounded_regular_bytes
         revision = self.contract["predecessorSnapshot"].split(":", 1)[0]
-        prior = subprocess.check_output(["git", "show", f"{revision}:product/acceptance.json"], cwd=ROOT)
+        prior = subprocess.check_output(["git", "show", f"{revision}:product/acceptance.json"], cwd=ROOT,
+                                        env=owned_git_environment(), timeout=30)
 
         def changed(path):
             data, state = original(path)
@@ -1105,7 +1192,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertEqual(self.contract["authority"]["conditionalRelease"]["decision"],
                          "user-authorized-after-acceptance")
         self.assertFalse(self.contract["authority"]["conditionalRelease"]["ready"])
-        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.1")
+        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.2")
         self.assertEqual(self.contract["predecessorSnapshot"], old["predecessorSnapshot"])
         self.assertEqual({p["id"] for p in self.contract["delivery"]["hostProjections"]}, {"codex"})
         self.assertEqual({p["id"] for p in old["delivery"]["hostProjections"]}, {"codex", "claude-code"})
@@ -1471,6 +1558,71 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         from yiyuan_accord.control import verify_product
         return verify_product(self.root)
 
+    def test_historical_observations_reference_is_source_checked_without_promotion(self):
+        source = copy.deepcopy(self.contract)
+        source.pop('developmentObservations', None)
+        source['historicalDevelopmentObservations'] = {
+            'snapshot': '519d1a9ea378afa8b56532ef91d3cd2ffaa5ef58:product/development.json#/developmentObservations',
+            'observationCount': 13,
+            'observationsSha256': 'dd9fe5fe36442dcbffbd5eb0c23c8d7aeca63bf4e2632872cc751a45d331abe9',
+            'claimLimit': 'Original ordered historical observations and failures only; no current authority or acceptance.'}
+        with self.changed(DEVELOPMENT_FILE, json.dumps(source, ensure_ascii=False).encode()):
+            report = verify_development(self.root)
+            self.assertTrue(report['valid'], report['errors'])
+            self.assertFalse(report['functionalCompletion'])
+            self.assertFalse(report['candidateEligible'])
+        source['historicalDevelopmentObservations']['observationsSha256'] = '0' * 64
+        with self.changed(DEVELOPMENT_FILE, json.dumps(source, ensure_ascii=False).encode()):
+            report = verify_development(self.root)
+            self.assertFalse(report['valid'])
+            self.assertTrue(any('historical observation' in error for error in report['errors']))
+
+    def test_historical_reference_rejects_unavailable_reordered_and_ambiguous_history(self):
+        from yiyuan_accord.development import development_observations
+        source = copy.deepcopy(self.contract)
+        rows = development_observations(self.root, source)
+        source.pop('developmentObservations', None)
+        source['historicalDevelopmentObservations'] = {
+            'snapshot': '519d1a9ea378afa8b56532ef91d3cd2ffaa5ef58:product/development.json#/developmentObservations',
+            'observationCount': len(rows),
+            'observationsSha256': hashlib.sha256(json.dumps(rows, sort_keys=True, separators=(',', ':'),
+                ensure_ascii=False).encode()).hexdigest(), 'claimLimit': 'Historical only; original failures retained.'}
+        for kind in ('missing', 'mutable', 'wrong-path', 'count', 'bool-count', 'reordered', 'ambiguous'):
+            changed = copy.deepcopy(source)
+            target = changed['historicalDevelopmentObservations']
+            if kind == 'missing':
+                target['snapshot'] = '0' * 40 + ':product/development.json#/developmentObservations'
+            elif kind == 'mutable':
+                target['snapshot'] = 'main:product/development.json#/developmentObservations'
+            elif kind == 'wrong-path':
+                target['snapshot'] = target['snapshot'].replace('#/developmentObservations', '#/acceptance')
+            elif kind == 'count':
+                target['observationCount'] += 1
+            elif kind == 'bool-count':
+                target['observationCount'] = True
+            elif kind == 'reordered':
+                target['observationsSha256'] = hashlib.sha256(json.dumps(rows[::-1], sort_keys=True,
+                    separators=(',', ':'), ensure_ascii=False).encode()).hexdigest()
+            else:
+                changed['developmentObservations'] = []
+            with self.subTest(kind=kind), self.changed(DEVELOPMENT_FILE, json.dumps(changed).encode()):
+                report = verify_development(self.root)
+                self.assertFalse(report['valid'])
+                self.assertTrue(any('historical observation' in error for error in report['errors']))
+                if kind == 'count':
+                    product = self.report()
+                    self.assertFalse(product['valid'])
+                    self.assertFalse(product['repositoryCandidateReady'])
+
+    def test_original_inline_history_is_readable_without_git_or_authority_changes(self):
+        from yiyuan_accord.development import development_observations
+        legacy = {'developmentObservations': [{'id': 'original', 'remaining': 'unknown',
+                    'qualificationPassed': False, 'failure': 'retained'}]}
+        frozen = copy.deepcopy(legacy)
+        with tempfile.TemporaryDirectory(prefix='accord-inline-history-') as temporary:
+            self.assertEqual(development_observations(Path(temporary), legacy), legacy['developmentObservations'])
+        self.assertEqual(legacy, frozen)
+
     def test_json_cannot_authenticate_its_own_development_evidence(self):
         from yiyuan_accord.control import verify_product
         report = verify_product(self.root, evidence={"verified": True})
@@ -1671,7 +1823,8 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         revision = next(item["revision"] for item in program["inputEvidence"]
                         if item["kind"] == "historical-release-and-counterevidence-boundary")
         historical_readme = subprocess.check_output(
-            ["git", "show", f"{revision}:README.md"], cwd=self.root, encoding="utf-8")
+            ["git", "show", f"{revision}:README.md"], cwd=self.root,
+            env=owned_git_environment(), encoding="utf-8", timeout=30)
         title = next(line[2:] for line in historical_readme.splitlines() if line.startswith("# "))
         repository = json.loads((self.root / "product/constitution.json").read_text(
             encoding="utf-8"))["identity"]["repository"]
@@ -1798,6 +1951,15 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         altered['mcpServers']['accord-state']['args'] = ['foreign-script.cjs']
         with self.changed(configuration, json.dumps(altered).encode()):
             self.assertTrue(any('native-state MCP configuration' in error for error in self.report()['errors']))
+        original = json.loads((self.root / configuration).read_text(encoding='utf-8'))
+        for field, value in (('tool_timeout_sec', 10),
+                             ('env_vars', ['YIYUAN_ACCORD_TASK_STATE_DIR', 'CODEX_HOME'])):
+            with self.subTest(transport_field=field):
+                altered = copy.deepcopy(original)
+                altered['mcpServers']['accord-state'][field] = value
+                with self.changed(configuration, json.dumps(altered).encode()):
+                    self.assertTrue(any('native-state MCP configuration' in error
+                                        for error in self.report()['errors']))
         locator = 'plugins/yiyuan-accord-codex/adapter.json'
         adapter = json.loads((self.root / locator).read_text(encoding='utf-8'))
         adapter['persistentProcessAdded'] = False

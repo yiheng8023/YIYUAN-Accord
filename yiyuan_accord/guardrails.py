@@ -462,7 +462,7 @@ def activation_mechanism_errors(
     task_checkpoint=False, tool_batch_feedback=False, retained_checkpoint_revision=None,
     resume_reconciliation=False, context_reentry=False, native_context=False,
     startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False,
-    meta_guidance=False, checkpoint_native_events=None,
+    meta_guidance=False, checkpoint_native_events=None, native_task_execution=False,
 ):
     prefix = f"adapter {adapter_id}"
     if (
@@ -552,6 +552,9 @@ def activation_mechanism_errors(
                 "args": ["runtime/native-state-mcp.cjs"], "cwd": ".",
                 "env_vars": ["YIYUAN_ACCORD_TASK_STATE_DIR", "CODEX_HOME"],
                 "startup_timeout_sec": 10, "tool_timeout_sec": 10}}}
+            if native_task_execution:
+                expected_mcp["mcpServers"]["accord-state"]["env_vars"].append("CODEX_CLI_PATH")
+                expected_mcp["mcpServers"]["accord-state"]["tool_timeout_sec"] = 30
             if (adapter_id != "codex" or delivered is None or canonical_mcp is None
                     or delivered.is_symlink() or canonical_mcp.is_symlink()
                     # Historical copies retain their exact-byte check. The current
@@ -566,6 +569,19 @@ def activation_mechanism_errors(
                 errors.append(f"{prefix} native-state MCP configuration differs")
         except (OSError, UnicodeError, ValueError):
             errors.append(f"{prefix} native-state MCP package is unreadable")
+    if native_task_execution:
+        if adapter_id != "codex" or not native_state_mcp:
+            errors.append(f"{prefix} task execution needs its declared native-state MCP entry")
+        for name in ("codex-capabilities", "external-handoff", "native-task-execution"):
+            locator = f"plugins/yiyuan-accord-{package}/runtime/{name}.cjs"
+            additional_mechanisms = [*additional_mechanisms, locator]
+            try:
+                delivered = repository_relative_path(root, locator)
+                if delivered is None or delivered.is_symlink() or not delivered.is_file():
+                    raise OSError("unsafe packaged execution module")
+                _owned_bytes(delivered)
+            except OSError:
+                errors.append(f"{prefix} task execution module is unavailable: {locator}")
     if mechanism_locators != expected_locators + list(additional_mechanisms):
         return errors + [f"{prefix} activation mechanism locator is invalid"]
     path = repository_relative_path(root, mechanism_locators[0])
@@ -717,11 +733,14 @@ def validate_projection_package(
                     errors.append(f"{prefix} supporting Skill identity is invalid: {locator}")
             except (OSError, UnicodeError) as exc:
                 errors.append(f"{prefix} supporting Skill is unreadable: {exc}")
-        reference_parent = Path(skill_locator).parent / "references"
+        reference_parents = {
+            Path(locator).parent / "references"
+            for locator in [skill_locator, *(supporting_skill_locators or [])]
+        }
         for locator in reference_locators or []:
             relative = Path(locator)
             path = repository_relative_path(root, locator)
-            if (relative.parent != reference_parent or relative.suffix != ".md"
+            if (relative.parent not in reference_parents or relative.suffix != ".md"
                     or path is None or not path.is_file()):
                 errors.append(f"{prefix} Skill reference file is invalid: {locator}")
             else:
@@ -980,6 +999,7 @@ def validate_host_projection(
         carrier_session=bool(expected_contract and expected_contract.get("optionalCarrierHandoff", {}).get("sourceSession")),
         native_state_mcp=bool(expected_contract and expected_contract.get("nativeTaskStateMcp")),
         meta_guidance=bool(expected_contract and expected_contract.get("ordinaryInputParticipation", {}).get("metaGuidance")),
+        native_task_execution=bool(expected_contract and expected_contract.get("nativeTaskStateMcp", {}).get("execution")),
     ))
     expected_contract = expected_contract if expected_contract is not None else {
         "schema": 1, "productId": product_id, "packageId": expected_package,

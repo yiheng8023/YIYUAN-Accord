@@ -483,6 +483,7 @@ def _node_errors(program: Mapping, acceptance: Mapping, golden: Mapping) -> list
         return ["snapshot shape is invalid"]
     transition = node.get("acceptanceTransition")
     kind = transition.get("kind") if isinstance(transition, dict) else None
+    kind = kind if isinstance(kind, str) else None
     progress = _PROGRESS_BY_KIND.get(kind)
     stage = progress[2] if progress is not None else None
     next_gate = progress[3] if progress is not None else None
@@ -713,6 +714,7 @@ def evaluate_stage_transition(
     transition = node.get("acceptanceTransition")
     transition = transition if isinstance(transition, dict) else {}
     kind = transition.get("kind")
+    kind = kind if isinstance(kind, str) else None
     affected = transition.get("affectedCriterionIds")
     affected = tuple(affected) if isinstance(affected, list) and all(
         isinstance(item, str) for item in affected

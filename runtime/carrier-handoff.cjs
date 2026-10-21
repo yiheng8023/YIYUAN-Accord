@@ -2024,11 +2024,8 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
       if (originalRefs.some(value => canonical(value) !== canonical(requestRef))) {
         reject('FINALIZATION_EVIDENCE_CONFLICT', 'original release request identity changed');
       }
-      if (requestRef !== null && (!plainObject(requestRef) ||
-          requestRef.connectionId !== originalConnection.connectionId ||
-          requestRef.hostVersion !== originalConnection.hostVersion ||
-          requestRef.method !== 'thread/unsubscribe' || typeof requestRef.requestId !== 'string' ||
-          !requestRef.requestId.trim())) {
+      if (requestRef !== null && !nativeRequestReference({rpcRequest: requestRef},
+          'thread/unsubscribe', originalConnection)) {
         reject('FINALIZATION_EVIDENCE_CONFLICT', 'original release request reference differs');
       }
     };

@@ -1,5 +1,7 @@
 # MCP 任务状态调用指南
 
+本文的三个状态工具与3.3.2开发包另加的 `coordinate_task_execution` 分工不同。后者用于原生Skill库存、受托输入准备及有限新目标执行；其真实采用与普通任务验收尚未完成。按需读取包内[能力接口](../plugins/yiyuan-accord-codex/skills/coordinate-capabilities/references/native-capabilities.md)或[接管接口](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md#ordinary-root-task-through-the-mcp-execution-interface)，不能把下文状态参数模板用于派发执行。
+
 适用对象：维护者、原生 MCP 接入者及消费此指南的 Agent。原调用模板依据源码 `315e2476e4818545d0dbb6a2c241be72b01ceae4`；输入隔离补充依据 `73120669` 与2026-10-06原生回执对账。
 
 ## 调用前：取得可用的最新观察

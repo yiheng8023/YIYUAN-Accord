@@ -88,6 +88,10 @@ def _identifier(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip()) and len(value) <= 256
 
 
+def _choice(value: Any, choices: frozenset[str]) -> bool:
+    return isinstance(value, str) and value in choices
+
+
 def _string_list(value: Any, *, allow_empty: bool = True) -> bool:
     return (
         isinstance(value, list)
@@ -100,7 +104,7 @@ def _string_list(value: Any, *, allow_empty: bool = True) -> bool:
 def _fact_map(value: Any) -> bool:
     return (
         isinstance(value, Mapping)
-        and all(_identifier(key) and fact in FACT_VALUES
+        and all(_identifier(key) and _choice(fact, FACT_VALUES)
                 for key, fact in value.items())
     )
 
@@ -110,7 +114,7 @@ def _responsibility_modes(value: Any, supplies: Any) -> bool:
         isinstance(value, Mapping)
         and _string_list(supplies)
         and set(value) == set(supplies)
-        and all(mode in RESPONSIBILITY_MODES for mode in value.values())
+        and all(_choice(mode, RESPONSIBILITY_MODES) for mode in value.values())
     )
 
 
@@ -146,13 +150,13 @@ def _observation(value: Any) -> bool:
                 "conversation.raw", "credential.", "secret.",
             ))
             and item["field"].casefold() not in {"credential", "secret"}
-            and item.get("targetKind") in STATE_TARGET_KINDS
+            and _choice(item.get("targetKind"), STATE_TARGET_KINDS)
             and _identifier(item.get("subjectRef"))
             and _identifier(item.get("factId"))
-            and item.get("value") in FACT_VALUES
+            and _choice(item.get("value"), FACT_VALUES)
             and _identifier(item.get("writer"))
             and _string_list(item.get("readers"), allow_empty=False)
-            and item.get("sourceKind") in STATE_SOURCE_KINDS
+            and _choice(item.get("sourceKind"), STATE_SOURCE_KINDS)
             and _identifier(item.get("sourceRef"))
             and item.get("unavailableSources") == list(
                 STATE_SOURCE_ORDER[:STATE_SOURCE_ORDER.index(
@@ -348,7 +352,7 @@ def _last_safe_allocation(
         _string_list(responsibilities, allow_empty=False)
         and isinstance(modes, Mapping)
         and set(modes) == set(responsibilities)
-        and all(mode in RESPONSIBILITY_MODES for mode in modes.values())
+        and all(_choice(mode, RESPONSIBILITY_MODES) for mode in modes.values())
         and all(
             isinstance(route.get("supplies"), list)
             and responsibility in route["supplies"]
@@ -487,10 +491,12 @@ def _validate_request(request: Any) -> list[str]:
         if isinstance(policy, Mapping) else []
     route_by_id = {
         route.get("id"): route for route in routes
-        if isinstance(route, Mapping)
+        if isinstance(route, Mapping) and _identifier(route.get("id"))
     }
     outcome_responsibilities = outcome.get("responsibilities", []) \
         if isinstance(outcome, Mapping) else []
+    outcome_responsibilities = (outcome_responsibilities
+                                if _string_list(outcome_responsibilities) else [])
     if _retirement_specs(required_retirements):
         for allocation in required_retirements:
             route = route_by_id.get(allocation["routeId"])
@@ -544,9 +550,9 @@ def _validate_request(request: Any) -> list[str]:
                 errors.append(
                     f"{label}.cleanup-poststate requires resource-poststate"
                 )
-            if event.get("state") not in FACT_VALUES:
+            if not _choice(event.get("state"), FACT_VALUES):
                 errors.append(f"{label}.state is invalid")
-            if event.get("independent") not in FACT_VALUES:
+            if not _choice(event.get("independent"), FACT_VALUES):
                 errors.append(f"{label}.independent is invalid")
             elif event.get("independent") == "observed" \
                     and not _evidence_binding_for(
@@ -563,11 +569,11 @@ def _validate_request(request: Any) -> list[str]:
                 errors.append(f"{label}.releasedResources is invalid")
             if not _string_list(event.get("residualTaskResources")):
                 errors.append(f"{label}.residualTaskResources is invalid")
-            elif isinstance(event.get("releasedResources"), list) and set(
+            elif _string_list(event.get("releasedResources")) and set(
                 event["releasedResources"]
             ).intersection(event["residualTaskResources"]):
                 errors.append(f"{label}.resource poststate is contradictory")
-            if event.get("independent") not in FACT_VALUES:
+            if not _choice(event.get("independent"), FACT_VALUES):
                 errors.append(f"{label}.independent is invalid")
             elif event.get("independent") == "observed" \
                     and not _evidence_binding_for(
@@ -594,7 +600,7 @@ def _validate_request(request: Any) -> list[str]:
             comparison = event.get("comparison")
             if not isinstance(comparison, Mapping) or any(
                 dimension not in comparison
-                or comparison[dimension] not in COMPARISON_VALUES
+                or not _choice(comparison[dimension], COMPARISON_VALUES)
                 for dimension in required_experiment_dimensions
             ):
                 errors.append(f"{label}.comparison is invalid")
@@ -603,11 +609,11 @@ def _validate_request(request: Any) -> list[str]:
                 if not _identifier(event.get(field)) \
                         or event.get(field) not in valid_route_ids:
                     errors.append(f"{label}.{field} is unknown")
-            if event.get("disposition") not in EXPERIMENT_POSTSTATE_VALUES:
+            if not _choice(event.get("disposition"), EXPERIMENT_POSTSTATE_VALUES):
                 errors.append(f"{label}.disposition is invalid")
-            if event.get("state") not in FACT_VALUES:
+            if not _choice(event.get("state"), FACT_VALUES):
                 errors.append(f"{label}.state is invalid")
-            if event.get("independent") not in FACT_VALUES:
+            if not _choice(event.get("independent"), FACT_VALUES):
                 errors.append(f"{label}.independent is invalid")
             elif event.get("independent") == "observed" \
                     and not _evidence_binding_for(
@@ -638,16 +644,17 @@ def _validate_request(request: Any) -> list[str]:
             if not _string_list(responsibilities, allow_empty=False):
                 errors.append(f"{label}.responsibilities is invalid")
             else:
-                outcome_responsibilities = outcome.get("responsibilities", []) \
-                    if isinstance(outcome, Mapping) else []
-                retired_route = route_by_id.get(event.get("routeId"), {})
-                replacement_route = route_by_id.get(
-                    event.get("replacementRouteId"), {}
-                )
+                retired_route = (route_by_id.get(event["routeId"], {})
+                                 if _identifier(event.get("routeId")) else {})
+                replacement_route = (route_by_id.get(event["replacementRouteId"], {})
+                                     if _identifier(event.get("replacementRouteId")) else {})
                 retired_supplies = retired_route.get("supplies", []) \
                     if isinstance(retired_route, Mapping) else []
                 replacement_supplies = replacement_route.get("supplies", []) \
                     if isinstance(replacement_route, Mapping) else []
+                retired_supplies = retired_supplies if _string_list(retired_supplies) else []
+                replacement_supplies = (replacement_supplies
+                                        if _string_list(replacement_supplies) else [])
                 if any(item not in outcome_responsibilities
                        for item in responsibilities):
                     errors.append(
@@ -667,9 +674,9 @@ def _validate_request(request: Any) -> list[str]:
                 errors.append(f"{label}.preconditions is invalid")
             if not _string_list(event.get("recheckTriggers"), allow_empty=False):
                 errors.append(f"{label}.recheckTriggers is invalid")
-            if event.get("state") not in FACT_VALUES:
+            if not _choice(event.get("state"), FACT_VALUES):
                 errors.append(f"{label}.state is invalid")
-            if event.get("independent") not in FACT_VALUES:
+            if not _choice(event.get("independent"), FACT_VALUES):
                 errors.append(f"{label}.independent is invalid")
             elif event.get("independent") == "observed" \
                     and not _evidence_binding_for(
@@ -1014,7 +1021,9 @@ def reconcile_closure(request: Mapping[str, Any]) -> dict[str, Any]:
                 ),
                 "reasons": reasons,
                 "recheckTriggers": list(event["recheckTriggers"]),
-                "evidenceBinding": dict(event["evidence"]),
+                "evidenceBinding": (dict(event["evidence"])
+                                    if _evidence_binding_for(event.get("evidence"), route_id)
+                                    else None),
                 "replacementEvidenceBinding": dict(
                     event["replacementEvidence"]
                 ),

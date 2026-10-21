@@ -460,7 +460,7 @@ def _package_hashes(package):
     return dict(sorted(files.items()))
 
 
-def _native_inventory(codex, market, workspace, evidence, label):
+def _native_inventory(codex, market, workspace, evidence, label, *, work_deadline=None):
     # Reuse lifecycle command containment and receipts. This lazy import avoids
     # loading its fixture machinery for the established source-projection modes.
     repo = str(Path(__file__).resolve().parents[1])
@@ -478,8 +478,11 @@ def _native_inventory(codex, market, workspace, evidence, label):
     config = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "config.toml"
     before = shared_config_snapshot(config, workspace)
     try:
+        inventory_deadline = time.monotonic() + 20
+        if work_deadline is not None:
+            inventory_deadline = min(inventory_deadline, work_deadline)
         record, data = _run_cli(manifest, label, ["plugin", "list", "--marketplace", market, "--json"],
-                               dict(os.environ), time.monotonic() + 20, auth_store_override=None)
+                               dict(os.environ), inventory_deadline, auth_store_override=None)
     finally:
         after = shared_config_snapshot(config, workspace)
         unchanged = before["state"] == after["state"] == "observed" and before["sha256"] == after["sha256"]
@@ -507,9 +510,9 @@ def _installed_package_identity(package, plugin_id):
     return package, codex_home, name, market, version
 
 
-def _installed_plugin_binding(package, codex, plugin_id, workspace, evidence, label):
+def _installed_plugin_binding(package, codex, plugin_id, workspace, evidence, label, *, work_deadline=None):
     package, codex_home, name, market, version = _installed_package_identity(package, plugin_id)
-    data = _native_inventory(codex, market, workspace, evidence, label)
+    data = _native_inventory(codex, market, workspace, evidence, label, work_deadline=work_deadline)
     if not isinstance(data, dict) or not isinstance(data.get("installed"), list):
         raise ValueError("native installed plugin inventory unavailable")
     rows = [row for row in data["installed"] if isinstance(row, dict) and row.get("pluginId") == plugin_id]
@@ -569,7 +572,7 @@ def _native_hook_projection(package, node):
             "claimLimit": "source configuration projection of native hooks only; no marketplace installation, implicit Skill registration or complete plugin acceptance"}
 
 
-def _verify_prepared_sources(manifest, *, inventory_label="run-preflight"):
+def _verify_prepared_sources(manifest, *, inventory_label="run-preflight", work_deadline=None):
     mode = _hook_mode(manifest)
     _control_configuration(manifest, verify_sources=True)
     installed_observation = None
@@ -580,7 +583,8 @@ def _verify_prepared_sources(manifest, *, inventory_label="run-preflight"):
         raise ValueError("prepared package or native hook projection changed; prepare a fresh observation")
     if mode == "installed-plugin":
         binding = manifest["installedPlugin"]
-        installed_observation = _installed_plugin_binding(manifest["package"], manifest["codex"], binding["pluginId"], manifest["workspace"], manifest["evidence"], inventory_label)
+        installed_observation = _installed_plugin_binding(manifest["package"], manifest["codex"], binding["pluginId"], manifest["workspace"], manifest["evidence"], inventory_label,
+                                                        work_deadline=work_deadline)
         if installed_observation != binding:
             raise ValueError("prepared installed plugin changed; prepare a fresh observation")
     if _direct_package_hooks(manifest):
@@ -656,8 +660,9 @@ def _composition_binding(manifest, request):
     return _bind_execution(manifest, request["case"], execution)
 
 
-def _verify_native_stage(manifest, stage, thread_id):
-    installed_observation = _verify_prepared_sources(manifest, inventory_label=f"stage-{stage + 1}-before")
+def _verify_native_stage(manifest, stage, thread_id, *, work_deadline=None):
+    installed_observation = _verify_prepared_sources(manifest, inventory_label=f"stage-{stage + 1}-before",
+                                                    work_deadline=work_deadline)
     case = json.loads(read_regular(manifest["case"]))
     if type(stage) is not int or not 0 <= stage < len(case["stages"]):
         raise ValueError("invalid native persistent stage")
@@ -1711,7 +1716,8 @@ def _inspect_retained(evidence, manifest):
                            if key not in {"valid", "fileObservation", "nativeGoalObservation"}}
             if (not isinstance(native, dict) or type(native.get("valid")) is not bool
                     or not same({key: value for key, value in native.items() if key != "valid"}, native_part)
-                    or stage.get("valid") is not (native.get("valid") and observation.get("decision") == "pass")
+                    or stage.get("valid") is not (native.get("valid") and observation.get("decision") == "pass"
+                        and observation.get("executionBudget", {}).get("withinWorkDeadline", True))
                     or native.get("threadId") not in (None, recorded.get("threadId"))
                     or "stage" in native and native["stage"] != index):
                 errors.append("native-receipt-mismatch")
@@ -2239,6 +2245,13 @@ def native_entry_observation(stream, *, thread_id, turn_id, workspace, guide):
                   and row["payload"].get("turn_id") == turn_id]
         if len(starts) != 1:
             raise ValueError("native turn boundary unavailable")
+        # task-checkpoint.cjs emits crypto.randomUUID() epochs, or a lowercase
+        # SHA-256 when input-failure watermarks derive a new recovery token.
+        # Check the complete emitted token and sentence, not a matching prefix.
+        # This remains a delivery-shape check, never source authentication.
+        epoch = r"(?:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|[0-9a-f]{64})"
+        receipt = re.compile(r"Native input receipt: session=" + re.escape(thread_id)
+                             + r"; epoch=" + epoch + r"\.(?=\s|$)")
         guide_line = receipt_line = None
         for i in range(starts[0] + 1, len(rows)):
             row, payload = rows[i], rows[i].get("payload", {})
@@ -2255,8 +2268,10 @@ def native_entry_observation(stream, *, thread_id, turn_id, workspace, guide):
             text = "".join(item.get("text", "") for item in payload.get("content", []) if isinstance(item, dict))
             if text.startswith(guide):
                 guide_line = i + 1
-            if ((text.startswith(guide) or text.startswith("Accord input/state notice."))
-                    and f"Native input receipt: session={thread_id}; epoch=" in text):
+            receipt_text = (text[len(guide):] if text.startswith(guide) else
+                            text[len("Accord input/state notice."):] if text.startswith("Accord input/state notice.")
+                            else "")
+            if receipt.search(receipt_text):
                 receipt_line = i + 1
         if guide_line is not None and receipt_line is not None:
             result.update(valid=True, decision="observed", line=max(guide_line, receipt_line),
@@ -2423,16 +2438,23 @@ def _native_goal_readback(manifest, native, *, stage, env, deadline):
 
 def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage=None,
                           preflight_failure=None):
+    started = time.monotonic()
+    stage_deadline = min(deadline, started + manifest["turnTimeoutSeconds"])
     native_hooks = _direct_package_hooks(manifest)
     try:
+        if time.monotonic() >= stage_deadline:
+            raise TimeoutError("persistent stage work deadline exhausted before preflight")
         controller = _resource_controller(manifest, verify_host=True)
         _verify_control_stage(manifest, stage, thread_id)
-        bound_prompt, bound_command, installed_before = (_verify_native_stage(manifest, stage, thread_id)
+        bound_prompt, bound_command, installed_before = (_verify_native_stage(manifest, stage, thread_id,
+                                                                             work_deadline=stage_deadline)
                                                          if native_hooks else (None, None, None))
         evidence = Path(manifest["evidence"])
         command = build_command(manifest, stage=stage, thread_id=thread_id)
         if native_hooks and command != bound_command:
             raise ValueError("prepared stage command changed before dispatch")
+        if time.monotonic() >= stage_deadline:
+            raise TimeoutError("persistent stage work deadline exhausted before resource creation")
     except (Exception, KeyboardInterrupt):
         # Only this region proves this stage's Agent has not been dispatched.
         # Installed-plugin inventory may already have run, as may earlier stages.
@@ -2448,8 +2470,7 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
     configured, started_thread = None, None
     live_usage = None
     forced, failure, after = False, None, {"activeProcesses": None}
-    started = time.monotonic()
-    stage_deadline = min(deadline, started + manifest["turnTimeoutSeconds"])
+    deadline_before_dispatch = None
     try:
         with prompt_path.open("rb") as stdin, stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
             if native_hooks:
@@ -2461,6 +2482,11 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
                 raise ValueError("prepared resource controller changed before dispatch")
             if command != build_command(manifest, stage=stage, thread_id=thread_id):
                 raise ValueError("prepared control command changed before dispatch")
+            if time.monotonic() >= stage_deadline:
+                deadline_before_dispatch = TimeoutError("persistent stage work deadline exhausted before Popen")
+                if preflight_failure is not None:
+                    preflight_failure.append(True)
+                raise deadline_before_dispatch
             process = subprocess.Popen(command, cwd=manifest["workspace"], env=env, stdin=stdin,
                                        stdout=stdout, stderr=stderr,
                                        **_spawn_options())
@@ -2507,6 +2533,10 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
             job, process, controller, manifest["recoveryTimeoutSeconds"],
             natural=process is not None and process.poll() is not None and failure is None)
         forced, failure = forced or cleanup_forced, failure or cleanup_failure
+    if deadline_before_dispatch is not None:
+        # The only late preflight exception re-raised here proves Popen was not
+        # reached. Preserve earlier effects and the owned resource close record.
+        raise deadline_before_dispatch
     try:
         stream = read_regular(stdout_path, 32 * 1024 * 1024).decode("utf-8")
         final = read_regular(evidence / f"last-message-{stage + 1}.txt").decode("utf-8")
@@ -2539,7 +2569,12 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
     if _hook_mode(manifest) == "installed-plugin":
         receipt["installedBefore"] = installed_before
         try:
-            receipt["installedAfter"] = _verify_prepared_sources(manifest, inventory_label=f"stage-{stage + 1}-after")
+            if time.monotonic() >= deadline:
+                raise TimeoutError("persistent work deadline exhausted before installed-plugin poststate")
+            receipt["installedAfter"] = _verify_prepared_sources(manifest, inventory_label=f"stage-{stage + 1}-after",
+                                                                work_deadline=deadline)
+            if time.monotonic() >= deadline:
+                raise TimeoutError("installed-plugin poststate exceeded persistent work deadline")
             receipt["installedPackageStable"] = True
         except (OSError, ValueError, RuntimeError, subprocess.TimeoutExpired) as error:
             receipt["installedPackageStable"] = False
@@ -2587,7 +2622,8 @@ def run_persistent(args):
         raise ValueError("persistent runner requires an exec-resume case")
     _resource_controller(manifest, verify_host=True)
     evidence = Path(args.evidence)
-    _verify_prepared_sources(manifest)
+    started, deadline = time.monotonic(), time.monotonic() + manifest["timeoutSeconds"]
+    _verify_prepared_sources(manifest, work_deadline=deadline)
     for index, expected in enumerate(manifest["promptSha256s"]):
         if digest(evidence / f"prompt-{index + 1}.txt") != expected:
             raise ValueError("prepared prompt changed")
@@ -2596,7 +2632,6 @@ def run_persistent(args):
     for name, expected in manifest["inputs"].items():
         if digest(Path(manifest["workspace"]) / name) != expected:
             raise ValueError("prepared input changed")
-    started, deadline = time.monotonic(), time.monotonic() + manifest["timeoutSeconds"]
     with (evidence / "run-started.json").open("x", encoding="utf-8") as receipt:
         json.dump({"time": time.time(), "deadlineSeconds": manifest["timeoutSeconds"],
                    "turnTimeoutSeconds": manifest["turnTimeoutSeconds"],
@@ -2604,7 +2639,7 @@ def run_persistent(args):
                    "nativeCliInvocationsAllowed": len(manifest["prompts"]),
                    "additionalModelFreeInventoryCalls": (1 + 2 * len(manifest["prompts"])
                        if _hook_mode(manifest) == "installed-plugin" else 0),
-                   "inventoryScope": "each model-free query uses the existing lifecycle controller, 20-second work plus 15-second recovery bounds, and retained command/resource receipts"}, receipt)
+                    "inventoryScope": "each model-free query shares remaining whole/stage work time, at most 20 seconds; its existing 15-second recovery allowance and command/resource receipts remain separate"}, receipt)
     env = dict(os.environ, YIYUAN_ACCORD_TASK_STATE_DIR=str(evidence / "state"),
                TEMP=str(evidence / "temp"), TMP=str(evidence / "temp"), RUST_LOG="error,codex_exec=info")
     if _hook_mode(manifest) == "native-package-hooks":
@@ -2631,7 +2666,7 @@ def run_persistent(args):
             if time.monotonic() >= deadline:
                 break
             if _hook_mode(manifest) == "native-package-hooks":
-                _verify_native_stage(manifest, stage, thread_id)
+                _verify_native_stage(manifest, stage, thread_id, work_deadline=deadline)
             phase = "native-execution"
             native = _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usage,
                                            stage_preflight_failure)
@@ -2654,6 +2689,7 @@ def run_persistent(args):
             phase = "file-inspection"
             files = observer.inspect_stage(manifest["workspace"], stage_id, originals=originals,
                                            history=history, fixture_path=manifest["case"])
+            within_work_deadline = time.monotonic() < deadline
             phase = "file-retention"
             retained = evidence / f"stage-{stage + 1}"
             retained.mkdir()
@@ -2679,7 +2715,14 @@ def run_persistent(args):
             history[stage_id] = files["files"]
             save(evidence / "history.json", history)
             observed["fileObservation"] = files
-            observed["valid"] = native["valid"] and files["decision"] == "pass"
+            within_work_deadline &= time.monotonic() < deadline
+            if not within_work_deadline:
+                # Keep the file oracle's actual verdict separate from the
+                # execution budget. Retention is evidence, not renewed work.
+                files["executionBudget"] = {"withinWorkDeadline": False,
+                                             "reason": "post-stage-observation-time-limit"}
+                save(retained / "inspection.json", files)
+            observed["valid"] = native["valid"] and files["decision"] == "pass" and within_work_deadline
             if not observed["valid"]:
                 break
     except (Exception, KeyboardInterrupt) as error:
@@ -2707,13 +2750,16 @@ def run_persistent(args):
                 poststate_retention_failed = True
                 if failure is None:
                     failure, phase = error, "shared-config-retention"
+    finished = time.monotonic()
+    within_work_deadline = finished < deadline
     result = {"schema": "accord-codex-persistent-exec/v1", "episode": manifest["episode"],
               "threadId": thread_id, "stages": stages,
               "completedStages": sum(bool(stage["valid"]) for stage in stages),
-              "caseComplete": failure is None and len(stages) == len(manifest["prompts"]) and all(stage["valid"] for stage in stages),
+              "caseComplete": failure is None and within_work_deadline and len(stages) == len(manifest["prompts"]) and all(stage["valid"] for stage in stages),
+              "workAndObservationWithinDeadline": within_work_deadline,
               "sourceThreadIdKnown": bool(thread_id),
               "nativeResumeSucceeded": any(stage["valid"] for stage in stages[1:]),
-              "elapsedSeconds": time.monotonic() - started,
+              "elapsedSeconds": finished - started,
               "sharedConfigObservation": {"before": config_before, "after": config_after,
                   "unchanged": (config_before["sha256"] == config_after["sha256"]
                                 if config_before["state"] == config_after["state"] == "observed" else None)},

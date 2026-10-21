@@ -116,8 +116,8 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current candidate and scoped connections
 
-The current Codex package is the `3.3.1` maintenance candidate; versioning is not
-publication evidence. The released `3.3.0` retains its immutable historical identity.
+The current Codex package is an unreleased `3.3.2` development candidate; versioning
+is not publication evidence. Released `3.3.0` and `3.3.1` retain their immutable identities.
 The package exposes one brief coordinator and four independently discoverable specialist
 Skills for capabilities, continuity, verification and plugin lifecycle. Native
 SessionStart and SubagentStart supply the English meta-guidance translation and the same
@@ -138,8 +138,10 @@ current cwd. It neither changes saved task state nor opens a control connection 
 a task. Missing input/state remains unavailable. In the inspected host, Hook
 session identity is shared by descendants: when native session and thread IDs
 differ, the reader holds checkpoint lookup instead of adopting ancestor state.
-This adds a host-owned process lifetime, not a separate storage engine or remote
-service. Installation, actual tool use and resource release remain separate checks.
+State inspection adds a host-owned process lifetime and reuses the existing store.
+The separate execution route below opens its scoped recorder only for a transfer;
+it adds no remote service. Installation, actual tool use and resource release remain
+separate checks.
 If the full state observation exceeds the MCP response bound, the tool preserves
 input, pause and recovery gates and explicitly marks omitted contract/inspection
 details. `checkpointSource` identifies the saved file and the digest captured in
@@ -506,6 +508,31 @@ Transcript data is still read only on demand. A missing optional module leaves
 ordinary status usable and is reported when context is requested; code loading
 does not establish permissions or adopt a newer on-disk runtime generation.
 
+The 3.3.2 development package's separate `coordinate_task_execution` MCP tool
+connects a current root task to native Skill discovery, prepared typed Skill input
+and a bounded task-owned fresh target. Its [ordinary-root interface](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md#ordinary-root-task-through-the-mcp-execution-interface)
+owns the exact request, review and recovery schema. `native-task-execution.cjs`
+binds actual root metadata, checkpoint revision and stable protected inputs;
+`external-handoff.cjs` owns the new native peer and staged execution. The default
+is read-only. A declared workspace-write branch must independently review write
+authority and original output hashes, naturally close the read-only peer, and
+cold-resume that target with verified effective restrictions before transferring
+the writer or requesting writes. Declared output snapshots are not an OS file
+allowlist or proof of effects outside those files. No permission fallback applies.
+Actual source quiescence, target understanding, useful continuation, source duty
+release, post-release work, result and resource closure need independent review.
+Persistent records support inspection. Source-retained zero-turn reconciliation
+and post-business target reconciliation are separate typed paths. The latter
+requires current active source authority, protected effect material, independently
+reviewed quiescence/effects, rechecked native target facts and natural reader closure.
+Exact record/lease settlement rotates the fence and explicitly retains the target
+writer or returns the same public scope to the current root. It preserves the old
+failure and acknowledgment loss; it does not resume the target or replay an old turn.
+Unknown effects, pause, active actors and uncertain settlement remain held.
+This scoped route supplies no existing GUI control, parent checkpoint transfer,
+shutdown survival or automatic timing. Protocol tests do not qualify autonomous need
+detection or complete ordinary-use continuity.
+
 The optional `runtime/carrier-handoff.cjs` is a callable integration seam supplied
 in the Codex package. The continuity Skill routes applicable callers to its
 [packaged interface](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md),
@@ -645,8 +672,9 @@ database identity/schema and reads related rows in one snapshot; transactions
 compare scope, writer, revision and fencing token together. Settlement is explicit
 and preserves the target writer and history. This storage coordinates cooperating
 writers; it is neither an OS writer lock nor permission to replay native effects.
-SQLite is loaded only when the optional recorder is opened, so existing Hooks
-and MCP do not acquire this dependency. Node must provide `node:sqlite`
+SQLite is loaded only when the recorder is opened. Entry loading, the three state
+tools and native Skill inventory do not open it; the new MCP transfer route and
+an SDK controller using this recorder do require it. Node must provide `node:sqlite`
 `DatabaseSync`; the owner retains connection, database and process shutdown.
 
 These shipped components close source registration, event pumping and storage

@@ -3019,6 +3019,1040 @@ process.stdout.write(JSON.stringify({originalVersion,before,after,expectedDiagno
         return subprocess.run([self.node, str(BRIDGE)], input=data, capture_output=True,
             env=self.env, cwd=self.work, timeout=10)
 
+    def start_execution_wire(self, capability_cli=None, direct=False, peer_mode=None, state_delay_ms=None):
+        host = ROOT / 'tests/product/native_execution_mcp_host.cjs'
+        command = [self.node, str(BRIDGE)] if direct else [self.node, str(host), str(self.root / 'native-wire.jsonl')]
+        if capability_cli is not None and not direct:
+            command.append(str(capability_cli))
+        elif peer_mode is not None:
+            command.extend(['', peer_mode])
+        if state_delay_ms is not None:
+            # Real checkpoint reader, with a one-shot delayed storage response.
+            # No fake current-state fields and no model/native target factory.
+            delayed = self.work/'delayed-state-host.cjs'
+            delayed.write_text("const fs=require('node:fs');const bridge=require("+json.dumps(str(BRIDGE))+
+                ");const {operate}=require("+json.dumps(str(CHECKPOINT))+
+                ");let delayed=true;bridge.serve(process.stdin,process.stdout,'fixed-delayed-state',{readState(request){const result=operate(request);if(delayed){delayed=false;Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,"+
+                str(state_delay_ms)+");}return result;}}).catch(()=>{process.exitCode=1;});", encoding='utf-8')
+            command = [self.node, str(delayed)]
+        process = subprocess.Popen(command,
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            text=True, encoding='utf-8', env=self.env, cwd=self.work)
+        responses = queue.Queue()
+        def receive():
+            for line in process.stdout:
+                responses.put(json.loads(line))
+        reader = threading.Thread(target=receive, daemon=True)
+        reader.start()
+        def cleanup():
+            if process.stdin and not process.stdin.closed:
+                process.stdin.close()
+            try:
+                process.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                process.kill(); process.wait(timeout=5)
+            reader.join(timeout=2)
+            process.stdout.close(); process.stderr.close()
+        self.addCleanup(cleanup)
+        sequence = 0
+        def send(method, params=None, notification=False):
+            nonlocal sequence
+            sequence += 1
+            message = {'jsonrpc': '2.0', 'method': method}
+            if not notification:
+                message['id'] = sequence
+            if params is not None:
+                message['params'] = params
+            process.stdin.write(json.dumps(message) + '\n'); process.stdin.flush()
+            return sequence
+        send('initialize', {'protocolVersion': '2025-06-18', 'capabilities': {},
+                           'clientInfo': {'name': 'fixture', 'version': '1'}})
+        self.assertEqual(responses.get(timeout=5)['id'], 1)
+        send('notifications/initialized', notification=True)
+        def call(action, **arguments):
+            params = {**self.params, 'name': 'coordinate_task_execution',
+                      'arguments': {'cwd': str(self.work), 'action': action, **arguments}}
+            ident = send('tools/call', params)
+            response = responses.get(timeout=8)
+            self.assertEqual(response['id'], ident, response)
+            return response['result']
+        return process, responses, send, call
+
+    def execution_contract(self):
+        self.native_context()
+        (self.work / 'drain.json').write_text(json.dumps({'fixture': True,
+            'meaning': 'independently checked fixture has no concurrent business writer'}), encoding='utf-8')
+        preview = self.native_input_preview()
+        bound = self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0,
+            result='Review the authorized fixed candidate', inputs=['drain.json'],
+            outputs=[{'path': 'review.json'}], nextAction='Perform the bounded review', canContinue=True)
+        self.assertFalse(bound['isError'], bound)
+        status = self.native_input_preview()
+        return dict(epoch=status['epoch'], expectedRevision=status['revision'], scopeRef='fixed-review',
+            model='fixture', intake='Inspect this fixed candidate.', continuation='Review one portion.',
+            postRelease='Complete the remaining review.', deadlineMs=int(time.time()*1000)+20000,
+            authoritySourceRef='native-user-input:fixture', quiescenceSourceRef='drain.json')
+
+    def execution_until(self, call, operation_id, predicate):
+        deadline = time.monotonic()+8
+        while time.monotonic() < deadline:
+            reply = call('inspect', operationId=operation_id)
+            self.assertFalse(reply['isError'], reply)
+            value = reply['structuredContent']
+            if predicate(value):
+                return value
+            time.sleep(0.02)
+        self.fail('fixed execution did not reach expected bounded phase')
+
+    def test_execution_wire_responds_while_inventory_waits(self):
+        _, responses, send, _ = self.start_execution_wire()
+        inventory_id = send('tools/call', {**self.params, 'name': 'coordinate_task_execution',
+            'arguments': {'cwd': str(self.work), 'action': 'inventory'}})
+        ping_id = send('ping')
+        self.assertEqual(responses.get(timeout=5)['id'], ping_id)
+        inventory = responses.get(timeout=5)
+        self.assertEqual(inventory['id'], inventory_id)
+        self.assertTrue(inventory['result']['structuredContent']['fixture'])
+
+    def delayed_capability_fixture(self):
+        fixture = self.work / 'selected-cli.cjs'
+        fixture.write_text("""
+const fs=require('node:fs'),path=require('node:path');
+if(process.argv.includes('--version')){console.log('codex-cli fixed-fixture');process.exit(0);}
+const log=path.join(__dirname,'capability-close.jsonl');
+const rl=require('node:readline').createInterface({input:process.stdin});
+rl.on('line',line=>{const r=JSON.parse(line);
+ if(r.method==='initialize')console.log(JSON.stringify({id:r.id,result:{userAgent:'fixed-fixture'}}));
+ if(r.method==='skills/list')console.log(JSON.stringify({id:r.id,result:{data:[{cwd:r.params.cwds[0],skills:[],errors:[]}]}}));
+});
+rl.on('close',()=>{fs.appendFileSync(log,JSON.stringify({event:'eof',pid:process.pid})+'\\n');
+ setTimeout(()=>{fs.appendFileSync(log,JSON.stringify({event:'natural-exit',pid:process.pid})+'\\n');},1300);});
+""", encoding='utf-8')
+        return fixture
+
+    def test_mcp_capability_query_preserves_healthy_delayed_natural_close(self):
+        fixture = self.delayed_capability_fixture()
+        _, _, _, call = self.start_execution_wire(capability_cli=fixture)
+        result = call('inventory')
+        self.assertFalse(result['isError'], result)
+        self.assertFalse(result['structuredContent']['process']['forced'])
+        events = [json.loads(row)['event'] for row in (self.work/'capability-close.jsonl').read_text().splitlines()]
+        self.assertEqual(events, ['eof', 'natural-exit'])
+
+    def test_mcp_preserves_existing_relative_cli_selection_before_chdir(self):
+        self.delayed_capability_fixture()
+        self.env['CODEX_CLI_PATH'] = 'selected-cli.cjs'
+        _, _, _, call = self.start_execution_wire(direct=True)
+        result = call('inventory')
+        self.assertFalse(result['isError'], result)
+        self.assertEqual(result['structuredContent']['skills'], [])
+        self.assertFalse(result['structuredContent']['process']['forced'])
+        self.assertTrue((self.work/'capability-close.jsonl').exists())
+
+    def test_execution_uses_selected_launcher_and_observed_target_cli_version(self):
+        contract = self.execution_contract()
+        launcher = self.work/'selected-execution.cjs'
+        invocations = self.root/'launcher-invocations.jsonl'
+        native_log = self.root/'selected-native.jsonl'
+        launcher.write_text("""
+const fs=require('node:fs');
+const version=process.argv.includes('--version');
+fs.appendFileSync(LOG,JSON.stringify(version?'version':'app-server')+'\\n');
+if(version)console.log('codex-cli fixed-selected-version');
+else {process.argv=[process.execPath,__filename,NATIVE_LOG,'normal'];require(HOST);}
+""".replace('NATIVE_LOG', json.dumps(str(native_log)))
+            .replace('LOG', json.dumps(str(invocations)))
+            .replace('HOST', json.dumps(str(ROOT/'tests/product/external_handoff_host.cjs'))), encoding='utf-8')
+        self.env['CODEX_CLI_PATH'] = launcher.name
+        _, _, _, call = self.start_execution_wire(direct=True)
+        operation_id = call('prepare', **contract)['structuredContent']['operationId']
+        value = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        review = value['reviewRequest']
+        self.assertFalse(call('review', operationId=operation_id, reviewId=review['reviewId'],
+            observationSha256=review['observationSha256'], decision='allow', sourceRef='fixed-launch-plan')['isError'])
+        value = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None
+            and x['reviewRequest']['stage'] == 'target-created')
+        evidence = call('read-evidence', operationId=operation_id,
+            evidenceId=value['reviewRequest']['observationSha256'], maxChars=16000)['structuredContent']
+        self.assertTrue(evidence['complete'])
+        observed = json.loads(evidence['text'])
+        self.assertEqual(observed['state']['connection']['hostVersion'], 'codex-cli fixed-selected-version')
+        self.assertEqual([json.loads(row) for row in invocations.read_text().splitlines()], ['version', 'app-server'])
+        cancelled = call('cancel', operationId=operation_id, reason='Fixed no-model probe complete')
+        self.assertFalse(cancelled['isError'])
+        self.assertTrue(cancelled['structuredContent']['nativeClosed']['closed'])
+
+    def test_execution_wire_requires_current_source_before_any_native_start(self):
+        _, _, _, call = self.start_execution_wire()
+        result = call('prepare', epoch='missing', expectedRevision=0, scopeRef='scope', model='fixture',
+            intake='read', continuation='first', postRelease='last', deadlineMs=int(time.time()*1000)+1000,
+            authoritySourceRef='not-proof', quiescenceSourceRef='not-proof')
+        self.assertTrue(result['isError'])
+        self.assertFalse((self.root/'native-wire.jsonl').exists())
+
+    def test_execution_wire_hash_bound_reviews_and_post_release_result(self):
+        contract = self.execution_contract()
+        process, _, _, call = self.start_execution_wire()
+        prepared = call('prepare', **contract)
+        self.assertFalse(prepared['isError'], prepared)
+        operation_id = prepared['structuredContent']['operationId']
+        stages = []
+        while True:
+            value = self.execution_until(call, operation_id, lambda x:
+                x['reviewRequest'] is not None or x['phase'] in ('awaiting-intake-review', 'awaiting-release-review', 'completed', 'held', 'cancelled-held'))
+            self.assertNotIn(value['phase'], ('held', 'cancelled-held'), value)
+            if value['phase'] == 'completed':
+                self.assertTrue(value['nativeClosed']['closed'])
+                break
+            request = value['reviewRequest']
+            if request:
+                stages.append(request['stage'])
+                evidence = call('read-evidence', operationId=operation_id,
+                    evidenceId=request['observationSha256'], maxChars=16000)
+                self.assertFalse(evidence['isError'], evidence)
+                self.assertEqual(evidence['structuredContent']['sha256'], request['observationSha256'])
+                wrong = call('review', operationId=operation_id, reviewId=request['reviewId'],
+                    observationSha256='0'*64, decision='allow', sourceRef='fixture-independent-review')
+                self.assertTrue(wrong['isError'])
+                accepted = call('review', operationId=operation_id, reviewId=request['reviewId'],
+                    observationSha256=request['observationSha256'], decision='allow', sourceRef='fixture-independent-review')
+                self.assertFalse(accepted['isError'], accepted)
+            else:
+                action = 'commit' if value['phase'] == 'awaiting-intake-review' else 'release'
+                self.assertFalse(call(action, operationId=operation_id)['isError'])
+        self.assertEqual(stages, ['prepare', 'target-created', 'commit', 'release', 'result', 'closed'])
+        wire = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
+        self.assertEqual(sum(row['method']=='turn/start' for row in wire), 3)
+        process.stdin.close(); process.wait(timeout=5)
+        self.assertEqual(process.returncode, 0)
+
+    def execution_accept(self, call, operation_id, stage):
+        waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        review = waiting['reviewRequest']
+        self.assertEqual(review['stage'], stage)
+        result = call('review', operationId=operation_id, reviewId=review['reviewId'],
+            observationSha256=review['observationSha256'], decision='allow', sourceRef='fixed-independent-review')
+        self.assertFalse(result['isError'], result)
+        return waiting
+
+    def test_execution_workspace_writes_only_after_reviewed_native_policy(self):
+        contract = self.execution_write_contract()
+        _, _, _, call = self.start_execution_wire(peer_mode='workspace-write')
+        reply = call('prepare', **contract)
+        self.assertFalse(reply['isError'], reply)
+        operation_id = reply['structuredContent']['operationId']
+        for stage in ('prepare', 'target-created'):
+            self.execution_accept(call, operation_id, stage)
+        self.execution_until(call, operation_id, lambda x: x['phase']=='awaiting-intake-review')
+        self.assertFalse((self.work/'review.json').exists())
+        call('commit', operationId=operation_id)
+        self.execution_accept(call, operation_id, 'write-prepare')
+        waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        self.assertEqual(waiting['reviewRequest']['stage'], 'commit')
+        self.assertFalse((self.work/'review.json').exists())
+        self.execution_accept(call, operation_id, 'commit')
+        self.execution_until(call, operation_id, lambda x: x['phase']=='awaiting-release-review')
+        self.assertEqual(json.loads((self.work/'review.json').read_text())['turn'], 2)
+        call('release', operationId=operation_id)
+        for stage in ('release', 'result', 'closed'):
+            self.execution_accept(call, operation_id, stage)
+        final = self.execution_until(call, operation_id, lambda x: x['phase']=='completed')
+        self.assertTrue(final['nativeClosed']['closed'])
+        self.assertEqual(json.loads((self.work/'review.json').read_text())['turn'], 3)
+        wire = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
+        turns = [row['params'] for row in wire if row['method']=='turn/start']
+        self.assertEqual([p['sandboxPolicy']['type'] for p in turns], ['readOnly', 'workspaceWrite', 'workspaceWrite'])
+        self.assertTrue(all('review.json' in turn['input'][0]['text'] and
+            'grants no additional authority' in turn['input'][0]['text'] for turn in turns))
+        self.assertFalse(any(row['method']=='thread/inject_items' for row in wire))
+        resume = next(row['params'] for row in wire if row['method']=='thread/resume')
+        self.assertNotIn('cwd', resume)
+
+    def execution_write_contract(self):
+        contract = self.execution_contract()
+        contract.update(sandbox='workspace-write', writeScope={'authoritySourceRef': 'drain.json',
+            'outputs': [{'path': 'review.json', 'expectedSha256': None, 'expectedEffect': 'Two fixed fixture writes'}]})
+        return contract
+
+    def execution_intake(self, call, contract):
+        reply = call('prepare', **contract)
+        self.assertFalse(reply['isError'], reply)
+        operation_id = reply['structuredContent']['operationId']
+        for stage in ('prepare', 'target-created'):
+            self.execution_accept(call, operation_id, stage)
+        self.execution_until(call, operation_id, lambda x: x['phase']=='awaiting-intake-review')
+        return operation_id
+
+    def test_execution_workspace_actual_policy_denials_hold_without_writes(self):
+        contract = self.execution_write_contract()
+        contract['deadlineMs'] = int(time.time()*1000)+60000
+        for mode in ('policy-readonly', 'policy-extra-root', 'policy-network', 'requirements-deny'):
+            with self.subTest(mode=mode):
+                _, _, _, call = self.start_execution_wire(peer_mode=mode)
+                operation_id = self.execution_intake(call, {**contract, 'scopeRef': mode})
+                call('commit', operationId=operation_id)
+                self.execution_accept(call, operation_id, 'write-prepare')
+                held = self.execution_until(call, operation_id, lambda x: x['phase']=='held')
+                self.assertEqual(held['writer'], 'source')
+                self.assertIn(held['failure'], ('NATIVE_WRITE_POLICY_UNVERIFIED', 'NATIVE_REQUIREMENTS_DENIED'))
+                self.assertIsNone(held['reconciliationBasis'])
+                self.assertFalse((self.work/'review.json').exists())
+
+    def test_execution_workspace_review_drift_holds_before_policy_transition(self):
+        contract = self.execution_write_contract()
+        _, _, _, call = self.start_execution_wire(peer_mode='workspace-write')
+        operation_id = self.execution_intake(call, contract)
+        call('commit', operationId=operation_id)
+        waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        self.assertEqual(waiting['reviewRequest']['stage'], 'write-prepare')
+        (self.work/'review.json').write_text('another writer changed the reviewed baseline', encoding='utf-8')
+        held = self.execution_until(call, operation_id, lambda x: x['phase'] in ('held', 'cancelled-held'))
+        self.assertEqual(held['writer'], 'source')
+        wire = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
+        self.assertFalse(any(row['method']=='thread/resume' for row in wire))
+
+    def test_execution_workspace_unknown_dispatch_never_replays_or_settles_zero_turn(self):
+        contract = self.execution_write_contract()
+        _, _, _, call = self.start_execution_wire(peer_mode='write-ack-loss')
+        operation_id = self.execution_intake(call, contract)
+        call('commit', operationId=operation_id)
+        for stage in ('write-prepare', 'commit'):
+            self.execution_accept(call, operation_id, stage)
+        self.execution_until(call, operation_id, lambda x: x['writer']=='target' and x['pendingEffect']
+            and x['pendingEffect']['method']=='turn/start' and x['pendingEffect']['requestRef'])
+        held = call('cancel', operationId=operation_id, reason='unknown write dispatch')['structuredContent']
+        self.assertEqual(held['phase'], 'cancelled-held')
+        self.assertEqual(held['writer'], 'target')
+        self.assertIsNone(held['reconciliationBasis'])
+        self.assertEqual(json.loads((self.work/'review.json').read_text())['turn'], 2)
+        call('commit', operationId=operation_id)
+        wire = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
+        self.assertEqual(sum(row['method']=='turn/start' for row in wire), 2)
+
+    def test_execution_workspace_interrupted_write_keeps_effects_and_writer(self):
+        contract = self.execution_write_contract()
+        _, _, _, call = self.start_execution_wire(peer_mode='write-interrupted')
+        operation_id = self.execution_intake(call, contract)
+        call('commit', operationId=operation_id)
+        for stage in ('write-prepare', 'commit'):
+            self.execution_accept(call, operation_id, stage)
+        held = self.execution_until(call, operation_id, lambda x: x['phase']=='held')
+        self.assertEqual(held['writer'], 'target')
+        self.assertIsNone(held['reconciliationBasis'])
+        self.assertEqual(json.loads((self.work/'review.json').read_text())['turn'], 2)
+        evidence = call('read-evidence', operationId=operation_id,
+            evidenceId=held['stateEvidence']['sha256'], maxChars=16000)['structuredContent']
+        self.assertTrue(evidence['complete'])
+        state = json.loads(evidence['text'])
+        self.assertEqual(state['stoppedTurn']['terminal'], 'interrupted')
+        self.assertTrue(state['pendingEffect']['effectsUnreviewed'])
+
+    def test_execution_workspace_rejects_unbound_baseline_and_permission_expansion(self):
+        contract = self.execution_write_contract()
+        _, _, _, call = self.start_execution_wire()
+        for changed in ({'sandbox': 'danger-full-access'}, {'sandbox': 'externalSandbox'},
+                {'writeScope': {**contract['writeScope'], 'writableRoots': [str(self.root)]}},
+                {'writeScope': {**contract['writeScope'], 'outputs': [{'path': '../escape', 'expectedSha256': None, 'expectedEffect': 'not admitted'}]}},
+                {'writeScope': {**contract['writeScope'], 'outputs': [{'path': 'undeclared.json', 'expectedSha256': None, 'expectedEffect': 'not bound'}]}}):
+            self.assertTrue(call('prepare', **{**contract, **changed})['isError'])
+        (self.work/'review.json').write_text('original', encoding='utf-8')
+        rejected = call('prepare', **contract)
+        self.assertEqual(rejected['structuredContent']['reason'], 'write-baseline-mismatch')
+        self.assertFalse((self.root/'native-wire.jsonl').exists())
+
+    def test_execution_workspace_original_bytes_are_retained_for_independent_diff(self):
+        contract = self.execution_write_contract()
+        original = b'original uncommitted artifact\r\n'
+        (self.work/'review.json').write_bytes(original)
+        contract['writeScope']['outputs'][0]['expectedSha256'] = hashlib.sha256(original).hexdigest()
+        _, _, _, call = self.start_execution_wire(peer_mode='workspace-write')
+        reply = call('prepare', **contract)
+        operation_id = reply['structuredContent']['operationId']
+        waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        packet = json.loads(call('read-evidence', operationId=operation_id,
+            evidenceId=waiting['reviewRequest']['observationSha256'], maxChars=16000)['structuredContent']['text'])
+        baseline = packet['writes']['baseline']
+        source = json.loads(call('read-evidence', operationId=operation_id,
+            evidenceId=baseline['evidence']['sha256'])['structuredContent']['text'])
+        self.assertEqual(base64.b64decode(source['files'][0]['contentsBase64']), original)
+        self.assertEqual(source['files'][0]['sha256'], hashlib.sha256(original).hexdigest())
+        call('cancel', operationId=operation_id, reason='baseline verification complete')
+        self.assertEqual((self.work/'review.json').read_bytes(), original)
+
+    def test_execution_workspace_forced_old_peer_close_prevents_new_peer(self):
+        contract = self.execution_write_contract()
+        _, _, _, call = self.start_execution_wire(peer_mode='hang-on-eof')
+        operation_id = self.execution_intake(call, contract)
+        call('commit', operationId=operation_id)
+        self.execution_accept(call, operation_id, 'write-prepare')
+        held = self.execution_until(call, operation_id, lambda x: x['phase']=='held')
+        self.assertEqual(held['writer'], 'source')
+        self.assertFalse(held['nativeClosed']['closed'])
+        self.assertTrue(held['nativeClosed']['forced'])
+        wire = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
+        self.assertEqual(sum(row['method']=='initialize' for row in wire), 1)
+        self.assertFalse(any(row['method']=='thread/resume' for row in wire))
+        self.assertFalse((self.work/'review.json').exists())
+
+    def execution_skill(self, enabled=True):
+        from types import SimpleNamespace
+        from tests.product.test_codex_capabilities import CodexCapabilitiesTests
+        skill = self.work/'managed'/'sample'/'SKILL.md'
+        skill.parent.mkdir(parents=True)
+        skill.write_text('---\nname: sample\ndisable-model-invocation: true\n---\nReview the candidate only.\n', encoding='utf-8')
+        policy = skill.parent/'agents'/'openai.yaml'
+        policy.parent.mkdir()
+        policy.write_text('policy:\n  allow_implicit_invocation: false\n', encoding='utf-8')
+        fixture = CodexCapabilitiesTests.fixture(SimpleNamespace(root=self.work, skill=skill,
+            log=self.work/'skill-query.jsonl'), enabled=enabled, duplicate=True)
+        request = {'originalRequest': 'Review the candidate',
+            'delegation': {'sourceRef': 'current-bound-goal', 'scope': 'Review only'},
+            'selection': {'name': 'sample', 'path': str(skill),
+                'expectedSha256': hashlib.sha256(skill.read_bytes()).hexdigest(),
+                'expectedPolicySha256': hashlib.sha256(policy.read_bytes()).hexdigest()}}
+        return fixture, request
+
+    def test_execution_skill_uses_exact_typed_path_after_intake(self):
+        contract = self.execution_contract()
+        fixture, request = self.execution_skill()
+        _, _, _, call = self.start_execution_wire(capability_cli=fixture)
+        prepared = call('prepare-skill', skillRequest=request)
+        self.assertFalse(prepared['isError'], prepared)
+        self.assertFalse(prepared['structuredContent']['cli']['available'])
+        reply = call('prepare', **contract, skillRequest=request)
+        self.assertFalse(reply['isError'], reply)
+        operation_id = reply['structuredContent']['operationId']
+        for stage in ('prepare', 'target-created'):
+            self.execution_accept(call, operation_id, stage)
+        self.execution_until(call, operation_id, lambda x: x['phase']=='awaiting-intake-review')
+        call('commit', operationId=operation_id)
+        self.execution_accept(call, operation_id, 'commit')
+        self.execution_until(call, operation_id, lambda x: x['phase']=='awaiting-release-review')
+        wire = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
+        turns = [row['params'] for row in wire if row['method']=='turn/start']
+        self.assertEqual([item['type'] for item in turns[0]['input']], ['text'])
+        self.assertIn({'type': 'skill', 'name': 'sample', 'path': request['selection']['path']}, turns[1]['input'])
+        self.assertIn('coordinator-selected', turns[1]['input'][0]['text'])
+        self.assertEqual(turns[1]['input'][-1]['text'], contract['continuation'])
+        stopped = call('cancel', operationId=operation_id, reason='fixed test complete')['structuredContent']
+        self.assertEqual(stopped['phase'], 'cancelled-held')
+        self.assertIsNone(stopped['reconciliationBasis'])
+
+    def test_execution_skill_disabled_does_not_start_target(self):
+        contract = self.execution_contract()
+        fixture, request = self.execution_skill(enabled=False)
+        _, _, _, call = self.start_execution_wire(capability_cli=fixture)
+        reply = call('prepare', **contract, skillRequest=request)
+        self.assertFalse(reply['isError'], reply)
+        held = self.execution_until(call, reply['structuredContent']['operationId'], lambda x: x['phase']=='held')
+        self.assertEqual(held['failure'], 'SKILL_DISABLED')
+        self.assertFalse((self.root/'native-wire.jsonl').exists())
+
+    def test_execution_skill_policy_is_observed_not_self_authorized(self):
+        contract = self.execution_contract()
+        fixture, request = self.execution_skill()
+        _, _, _, call = self.start_execution_wire(capability_cli=fixture)
+        reply = call('prepare', **contract, skillRequest=request)
+        operation_id = reply['structuredContent']['operationId']
+        waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        review = waiting['reviewRequest']
+        evidence = call('read-evidence', operationId=operation_id, evidenceId=review['observationSha256'], maxChars=16000)
+        packet = json.loads(evidence['structuredContent']['text'])
+        skill = packet['state']['preparedSkill']
+        self.assertTrue(skill['source']['policy']['disableModelInvocation'])
+        self.assertFalse(skill['source']['policy']['allowImplicitInvocation'])
+        self.assertEqual(skill['origin']['selection'], 'coordinator-selected')
+        call('review', operationId=operation_id, reviewId=review['reviewId'],
+            observationSha256=review['observationSha256'], decision='deny', sourceRef='source-body-restriction-reviewed')
+        self.execution_until(call, operation_id, lambda x: x['phase']=='held')
+        self.assertFalse((self.root/'native-wire.jsonl').exists())
+
+    def test_execution_skill_changed_after_review_holds_before_intake(self):
+        contract = self.execution_contract()
+        fixture, request = self.execution_skill()
+        _, _, _, call = self.start_execution_wire(capability_cli=fixture)
+        reply = call('prepare', **contract, skillRequest=request)
+        operation_id = reply['structuredContent']['operationId']
+        self.execution_accept(call, operation_id, 'prepare')
+        self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        Path(request['selection']['path']).write_text('Changed source is not the reviewed Skill.', encoding='utf-8')
+        held = self.execution_until(call, operation_id, lambda x: x['phase'] in ('held', 'cancelled-held'))
+        self.assertEqual(held['writer'], 'source')
+        wire = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
+        self.assertFalse(any(row['method']=='turn/start' for row in wire))
+
+    def test_execution_skill_preparation_eof_waits_for_owned_metadata_peer(self):
+        contract = self.execution_contract()
+        fixture, request = self.execution_skill()
+        ended = self.work/'skill-peer-ended.json'
+        with fixture.open('a', encoding='utf-8') as stream:
+            stream.write("\nrl.on('close',()=>setTimeout(()=>fs.writeFileSync("+json.dumps(str(ended))+",JSON.stringify({fixture:true,pid:process.pid})),1300));\n")
+        process, _, _, call = self.start_execution_wire(capability_cli=fixture)
+        reply = call('prepare', **contract, skillRequest=request)
+        self.assertFalse(reply['isError'], reply)
+        deadline = time.monotonic()+5
+        while time.monotonic() < deadline:
+            log = self.work/'skill-query.jsonl'
+            if log.exists() and 'skills/list' in log.read_text():
+                break
+            time.sleep(0.02)
+        self.assertTrue(log.exists())
+        process.stdin.close(); process.wait(timeout=8)
+        self.assertEqual(process.returncode, 0)
+        self.assertTrue(ended.exists(), 'MCP exited while its metadata peer was still closing')
+        self.assertFalse((self.root/'native-wire.jsonl').exists())
+
+    def test_execution_wire_source_change_invalidates_waiting_review(self):
+        contract = self.execution_contract()
+        _, _, _, call = self.start_execution_wire()
+        operation_id = call('prepare', **contract)['structuredContent']['operationId']
+        value = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        old = value['reviewRequest']
+        self.append_native_message(text='Stop the previous scope and inspect the change.')
+        rejected = call('review', operationId=operation_id, reviewId=old['reviewId'],
+            observationSha256=old['observationSha256'], decision='allow', sourceRef='stale-review')
+        self.assertTrue(rejected['isError'])
+        held = self.execution_until(call, operation_id, lambda x: x['phase'] in ('held', 'cancelled-held'))
+        self.assertIsNone(held['reviewRequest'])
+        self.assertFalse((self.root/'native-wire.jsonl').exists())
+
+    def test_execution_reclaims_only_durable_no_effect_denials_after_sixteen(self):
+        self.check_prestart_slot_reclamation('deny')
+
+    def test_execution_reclaims_durable_prestart_cancellations_after_sixteen(self):
+        # OE-P2-01: formerly the 17th zero-effect cancellation hit the cap.
+        self.check_prestart_slot_reclamation('cancel')
+
+    def check_prestart_slot_reclamation(self, disposition):
+        contract = self.execution_contract()
+        contract['deadlineMs'] = int(time.time()*1000)+60000
+        _, _, _, call = self.start_execution_wire()
+        first = None
+        for number in range(18):
+            reply = call('prepare', **contract)
+            self.assertFalse(reply['isError'], (number, reply))
+            operation_id = reply['structuredContent']['operationId']
+            first = first or operation_id
+            waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+            review = waiting['reviewRequest']
+            self.assertEqual(review['stage'], 'prepare')
+            if disposition == 'deny':
+                call('review', operationId=operation_id, reviewId=review['reviewId'],
+                    observationSha256=review['observationSha256'], decision='deny', sourceRef='fixture-denial')
+            else:
+                call('cancel', operationId=operation_id, reason='Fixture cancelled before any dispatch')
+            phase = 'held' if disposition == 'deny' else 'cancelled-held'
+            self.execution_until(call, operation_id, lambda x: x['phase']==phase and not x['busy'])
+        retained = call('inspect', operationId=first)
+        self.assertFalse(retained['isError'], retained)
+        self.assertEqual(retained['structuredContent']['phase'], phase)
+        self.assertEqual(retained['structuredContent']['controllerState'], 'not-owned-current-process')
+        locator = retained['structuredContent']['stateEvidence']
+        evidence = call('read-evidence', operationId=first, evidenceId=locator['sha256'])
+        self.assertFalse(evidence['isError'], evidence)
+        self.assertFalse((self.root/'native-wire.jsonl').exists())
+
+    def test_execution_invalid_effort_is_rejected_before_allocation_without_consuming_capacity(self):
+        # OE-P2-02: whitespace previously allocated an INVALID_PLAN/new slot.
+        contract = self.execution_contract()
+        contract['deadlineMs'] = int(time.time()*1000)+60000
+        _, _, _, call = self.start_execution_wire()
+        for effort in [' ', '\t\r\n', '', None, 0, False, [], {}]*3:
+            reply = call('prepare', **contract, effort=effort)
+            self.assertTrue(reply['isError'], reply)
+            self.assertEqual(reply['structuredContent']['reason'], 'invalid-execution-plan')
+            self.assertFalse((self.state/'native-executions').exists(), 'invalid effort allocated execution resources')
+        for number in range(16):
+            reply = call('prepare', **{**contract, 'scopeRef': 'active-'+str(number)}, effort='low')
+            self.assertFalse(reply['isError'], (number, reply))
+            self.execution_until(call, reply['structuredContent']['operationId'], lambda x: x['reviewRequest'] is not None)
+        capped = call('prepare', **{**contract, 'scopeRef': 'active-seventeenth'})
+        self.assertEqual(capped['structuredContent']['reason'], 'execution-operation-limit')
+        self.assertFalse((self.root/'native-wire.jsonl').exists())
+
+    def test_execution_deadline_expiry_after_validation_retains_prestart_failure_without_slot(self):
+        contract = self.execution_contract()
+        _, _, _, call = self.start_execution_wire(state_delay_ms=1000)
+        contract['deadlineMs'] = int(time.time()*1000)+500
+        reply = call('prepare', **contract)
+        self.assertFalse(reply['isError'], reply)
+        operation_id = reply['structuredContent']['operationId']
+        stopped = self.execution_until(call, operation_id, lambda x: x['failure'] is not None)
+        self.assertEqual(stopped['phase'], 'cancelled-held')
+        self.assertEqual(stopped['controllerState'], 'not-owned-current-process')
+        self.assertEqual(stopped['failure'], 'INVALID_PLAN')
+        rejection = stopped['prestartRejection']
+        original = json.loads(call('read-evidence', operationId=operation_id,
+            evidenceId=rejection['evidence']['sha256'])['structuredContent']['text'])
+        self.assertEqual(original['code'], 'INVALID_PLAN')
+        self.assertEqual(original['deadlineMs'], contract['deadlineMs'])
+        self.assertEqual(original['observation']['phase'], 'new')
+        self.assertEqual(original['observation']['turnStarts'], 0)
+        self.assertIsNone(original['observation']['revision'])
+        contract['deadlineMs'] = int(time.time()*1000)+60000
+        for number in range(16):
+            valid = call('prepare', **{**contract, 'scopeRef': 'valid-'+str(number)})
+            self.assertFalse(valid['isError'], valid)
+            self.execution_until(call, valid['structuredContent']['operationId'], lambda x: x['reviewRequest'] is not None)
+        self.assertEqual(call('prepare', **contract)['structuredContent']['reason'], 'execution-operation-limit')
+        self.assertFalse((self.root/'native-wire.jsonl').exists())
+
+    def test_execution_does_not_evict_sixteen_unsettled_closed_peers(self):
+        contract = self.execution_contract()
+        contract['deadlineMs'] = int(time.time()*1000)+60000
+        _, _, _, call = self.start_execution_wire()
+        first = None
+        for number in range(16):
+            reply = call('prepare', **{**contract, 'scopeRef': 'unsettled-'+str(number)})
+            self.assertFalse(reply['isError'], reply)
+            operation_id = reply['structuredContent']['operationId']
+            first = first or operation_id
+            self.execution_accept(call, operation_id, 'prepare')
+            self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+            stopped = call('cancel', operationId=operation_id, reason='stop before intake')['structuredContent']
+            self.assertTrue(stopped['nativeClosed']['closed'])
+        denied = call('prepare', **{**contract, 'scopeRef': 'new-unrelated'})
+        self.assertEqual(denied['structuredContent']['reason'], 'execution-operation-limit')
+        retained = call('inspect', operationId=first)['structuredContent']
+        self.assertEqual(retained['controllerState'], 'owned-current-process')
+        self.assertIsNotNone(retained['reconciliationBasis'])
+
+    def test_execution_completed_slot_reclaims_memory_but_keeps_persistent_evidence(self):
+        contract = self.execution_contract()
+        contract['deadlineMs'] = int(time.time()*1000)+60000
+        _, _, _, call = self.start_execution_wire()
+        completed_id = self.execution_intake(call, contract)
+        call('commit', operationId=completed_id)
+        self.execution_accept(call, completed_id, 'commit')
+        self.execution_until(call, completed_id, lambda x: x['phase']=='awaiting-release-review')
+        call('release', operationId=completed_id)
+        for stage in ('release', 'result', 'closed'):
+            self.execution_accept(call, completed_id, stage)
+        self.execution_until(call, completed_id, lambda x: x['phase']=='completed')
+        for number in range(15):
+            reply = call('prepare', **{**contract, 'scopeRef': 'denied-'+str(number)})
+            operation_id = reply['structuredContent']['operationId']
+            waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+            review = waiting['reviewRequest']
+            call('review', operationId=operation_id, reviewId=review['reviewId'],
+                observationSha256=review['observationSha256'], decision='deny', sourceRef='fixed-denial')
+            self.execution_until(call, operation_id, lambda x: x['phase']=='held' and not x['busy'])
+        following = call('prepare', **{**contract, 'scopeRef': 'following-task'})
+        self.assertFalse(following['isError'], following)
+        retained = call('inspect', operationId=completed_id)['structuredContent']
+        self.assertEqual(retained['phase'], 'completed')
+        self.assertEqual(retained['controllerState'], 'not-owned-current-process')
+        self.assertFalse(call('read-evidence', operationId=completed_id,
+            evidenceId=retained['stateEvidence']['sha256'])['isError'])
+        call('cancel', operationId=following['structuredContent']['operationId'], reason='fixed test complete')
+
+    def test_existing_pause_tool_remains_responsive_and_invalidates_execution(self):
+        contract = self.execution_contract()
+        _, responses, send, call = self.start_execution_wire()
+        operation_id = call('prepare', **contract)['structuredContent']['operationId']
+        self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        identifier = send('tools/call', {**self.params, 'name': 'manage_task_state',
+            'arguments': {'cwd': str(self.work), 'action': 'pause', 'epoch': contract['epoch'],
+                'expectedRevision': contract['expectedRevision'], 'reason': 'Fixture user paused the task.'}})
+        paused = responses.get(timeout=5)
+        self.assertEqual(paused['id'], identifier)
+        self.assertFalse(paused['result']['isError'], paused)
+        held = self.execution_until(call, operation_id, lambda x: x['phase'] in ('held', 'cancelled-held'))
+        self.assertEqual(held['failure'], 'current-source-not-executable')
+        self.assertIsNone(held['reviewRequest'])
+        self.assertFalse((self.root/'native-wire.jsonl').exists())
+
+    def test_execution_wire_notification_cancel_and_eof_retain_held_record(self):
+        contract = self.execution_contract()
+        process, responses, send, call = self.start_execution_wire()
+        params = {**self.params, 'name': 'coordinate_task_execution',
+                  'arguments': {'cwd': str(self.work), 'action': 'prepare', **contract}}
+        request_id = send('tools/call', params)
+        result = responses.get(timeout=5)['result']
+        operation_id = result['structuredContent']['operationId']
+        self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        send('notifications/cancelled', {'requestId': request_id}, notification=True)
+        held = self.execution_until(call, operation_id, lambda x: x['phase'] in ('held', 'cancelled-held'))
+        self.assertIsNone(held['reviewRequest'])
+        process.stdin.close(); process.wait(timeout=5)
+        saved = list(self.state.rglob('status.json'))
+        self.assertEqual(len(saved), 1)
+        state = json.loads(saved[0].read_text(encoding='utf-8'))
+        self.assertIn(state['phase'], ('held', 'cancelled-held'))
+
+    def test_execution_wire_eof_closes_started_target_without_approving_intake(self):
+        contract = self.execution_contract()
+        process, _, _, call = self.start_execution_wire()
+        operation_id = call('prepare', **contract)['structuredContent']['operationId']
+        value = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        review = value['reviewRequest']
+        self.assertEqual(review['stage'], 'prepare')
+        self.assertFalse(call('review', operationId=operation_id, reviewId=review['reviewId'],
+            observationSha256=review['observationSha256'], decision='allow', sourceRef='fixed-plan-review')['isError'])
+        self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None
+                             and x['reviewRequest']['stage'] == 'target-created')
+        process.stdin.close(); process.wait(timeout=5)
+        self.assertEqual(process.returncode, 0)
+        saved = json.loads(next(self.state.rglob('status.json')).read_text(encoding='utf-8'))
+        self.assertIn(saved['phase'], ('held', 'cancelled-held'))
+        self.assertTrue(saved['nativeClosed']['closed'])
+        self.assertFalse(saved['nativeClosed']['forced'])
+        wire = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
+        self.assertEqual(sum(row['method']=='thread/start' for row in wire), 1)
+        self.assertFalse(any(row['method']=='turn/start' for row in wire))
+        # A new MCP process can inspect retained evidence, but cannot take over
+        # the old process or replay a still-bound scope by allocating another id.
+        _, _, _, new_call = self.start_execution_wire()
+        restored = new_call('inspect', operationId=operation_id)
+        self.assertFalse(restored['isError'])
+        self.assertEqual(restored['structuredContent']['controllerState'], 'not-owned-current-process')
+        replay = new_call('prepare', **contract)
+        self.assertTrue(replay['isError'])
+        self.assertEqual(replay['structuredContent']['reason'], 'SCOPE_BUSY')
+        wire_after = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
+        self.assertEqual(wire_after, wire)
+
+    def test_known_stopped_transfer_can_be_reviewed_and_settled_without_native_replay(self):
+        self.check_stopped_reconciliation('success')
+
+    def test_stopped_reconciliation_refuses_unknown_turn_dispatch(self):
+        self.check_unsettleable_execution('lost-turn-receipt')
+
+    def test_stopped_reconciliation_refuses_transferred_writer(self):
+        self.check_unsettleable_execution('normal')
+
+    def test_stopped_reconciliation_refuses_forced_peer_closure(self):
+        self.check_unsettleable_execution('hang-on-eof')
+
+    def check_unsettleable_execution(self, mode):
+        contract = self.execution_contract()
+        _, _, _, call = self.start_execution_wire(peer_mode=mode)
+        operation_id = call('prepare', **contract)['structuredContent']['operationId']
+        for stage in (['prepare'] if mode == 'hang-on-eof' else ['prepare', 'target-created']):
+            waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+            review = waiting['reviewRequest']; self.assertEqual(review['stage'], stage)
+            self.assertFalse(call('review', operationId=operation_id, reviewId=review['reviewId'],
+                observationSha256=review['observationSha256'], decision='allow', sourceRef='fixed-independent-review')['isError'])
+        if mode == 'hang-on-eof':
+            self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None
+                and x['reviewRequest']['stage']=='target-created')
+        elif mode == 'normal':
+            self.execution_until(call, operation_id, lambda x: x['phase']=='awaiting-intake-review')
+            self.assertFalse(call('commit', operationId=operation_id)['isError'])
+            waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+            review = waiting['reviewRequest']
+            self.assertFalse(call('review', operationId=operation_id, reviewId=review['reviewId'],
+                observationSha256=review['observationSha256'], decision='allow', sourceRef='fixed-writer-review')['isError'])
+            self.execution_until(call, operation_id, lambda x: x['phase']=='awaiting-release-review')
+        else:
+            self.execution_until(call, operation_id, lambda x: x['pendingEffect'] is not None
+                and x['pendingEffect']['method']=='turn/start' and x['pendingEffect']['requestRef'] is not None)
+        stopped = call('cancel', operationId=operation_id, reason='Stop fixed peer and inspect uncertain effects')['structuredContent']
+        self.assertIsNone(stopped['reconciliationBasis'])
+        wire = (self.root/'native-wire.jsonl').read_bytes()
+        result = call('reconcile', operationId=operation_id, epoch=contract['epoch'],
+            expectedRevision=contract['expectedRevision'], recordRevision=0,
+            recordSha256='a'*64, leaseSha256='b'*64, deadlineMs=int(time.time()*1000)+10000)
+        self.assertTrue(result['isError'])
+        self.assertEqual(result['structuredContent']['reason'], 'EXTERNAL_STOPPED_NOT_APPLICABLE')
+        self.assertEqual((self.root/'native-wire.jsonl').read_bytes(), wire)
+
+    def test_stopped_settlement_rechecks_record_and_lease_after_review_preparation(self):
+        self.check_stopped_reconciliation('record-change')
+
+    def test_stopped_settlement_rechecks_current_pause_after_review_preparation(self):
+        self.check_stopped_reconciliation('source-paused')
+
+    def test_known_stopped_expired_preparation_keeps_its_original_deadline(self):
+        self.check_stopped_reconciliation('expired')
+
+    def check_stopped_reconciliation(self, mode):
+        contract = self.execution_contract()
+        if mode == 'expired':
+            contract['deadlineMs'] = int(time.time()*1000)+2000
+        process, _, _, call = self.start_execution_wire()
+        operation_id = call('prepare', **contract)['structuredContent']['operationId']
+        waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+        review = waiting['reviewRequest']
+        self.assertFalse(call('review', operationId=operation_id, reviewId=review['reviewId'],
+            observationSha256=review['observationSha256'], decision='allow', sourceRef='fixed-plan-review')['isError'])
+        self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None
+                             and x['reviewRequest']['stage'] == 'target-created')
+        if mode == 'expired':
+            self.execution_until(call, operation_id, lambda x: x['phase']=='held')
+        process.stdin.close(); process.wait(timeout=5)
+        wire_before = (self.root/'native-wire.jsonl').read_bytes()
+        # A genuinely new native input/turn is appended; the old source is not
+        # resurrected and its plan/deadline are not rewritten for recovery.
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        meta['turn_id'] = 'current-recovery-turn'
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'type': 'turn_context', 'payload': {
+                'turn_id': meta['turn_id'], 'model': meta['model'], 'cwd': str(self.work)}})+'\n')
+        self.append_native_message(text='Reconcile the stopped review and continue the same authorized scope.')
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Reconcile the stopped review and continue the same authorized scope.',
+            'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
+            session=meta['session_id'], hook='UserPromptSubmit')
+        current = self.native_input_preview()
+        self.assertFalse(self.manage(action='bind', epoch=current['epoch'], expectedRevision=current['revision'],
+            result='Review the authorized fixed candidate', inputs=['drain.json'], outputs=[{'path': 'review.json'}],
+            nextAction='Reconcile the stopped preparation', canContinue=True)['isError'])
+        current = self.native_input_preview()
+        original_deadline = contract['deadlineMs']
+        contract.update(epoch=current['epoch'], expectedRevision=current['revision'])
+        _, _, _, fresh = self.start_execution_wire()
+        old = fresh('inspect', operationId=operation_id)['structuredContent']
+        basis = old.get('reconciliationBasis')
+        self.assertIsNotNone(basis, 'known-stopped external lease has no public reconciliation basis')
+        self.assertFalse(fresh('reconcile', operationId=operation_id, epoch=contract['epoch'],
+            expectedRevision=contract['expectedRevision'], deadlineMs=int(time.time()*1000)+10000, **basis)['isError'])
+        waiting = self.execution_until(fresh, operation_id, lambda x: x['reviewRequest'] is not None)
+        review = waiting['reviewRequest']
+        self.assertEqual(review['stage'], 'external-known-stopped')
+        if mode == 'record-change':
+            body = fresh('read-evidence', operationId=operation_id,
+                evidenceId=review['observationSha256'], maxChars=16000)['structuredContent']
+            scope = json.loads(body['text'])['original']['state']['scopeRef']
+            script = "const r=require(process.argv[1]).openCarrierRecorder({path:process.argv[2]});const s=r.read(process.argv[3],process.argv[4]);r.compareAndSet(process.argv[3],s.revision,s.state,s.lease);r.close();"
+            changed = subprocess.run([self.node, '-e', script, str(BRIDGE.with_name('carrier-recorder.cjs')),
+                str(next(self.state.rglob('carrier.sqlite'))), operation_id, scope], capture_output=True, timeout=5)
+            self.assertEqual(changed.returncode, 0, changed.stderr)
+        if mode == 'source-paused':
+            self.assertFalse(self.manage(action='pause', epoch=contract['epoch'],
+                expectedRevision=contract['expectedRevision'], reason='User paused before settlement.')['isError'])
+        decision = fresh('review', operationId=operation_id, reviewId=review['reviewId'],
+            observationSha256=review['observationSha256'], decision='allow',
+            sourceRef='independent-old-actor-and-resource-effect-review')
+        if mode in ('record-change', 'source-paused'):
+            self.assertTrue(decision['isError'], decision)
+            self.assertEqual(decision['structuredContent']['reason'],
+                'stopped-record-basis-changed' if mode == 'record-change' else 'current-source-not-executable')
+            self.assertEqual((self.root/'native-wire.jsonl').read_bytes(), wire_before)
+            self.assertIsNotNone(fresh('inspect', operationId=operation_id)['structuredContent']['reconciliationBasis'])
+            return
+        self.assertFalse(decision['isError'], decision)
+        stopped = fresh('inspect', operationId=operation_id)['structuredContent']
+        self.assertEqual(stopped['phase'], 'external-source-retained')
+        evidence = fresh('read-evidence', operationId=operation_id,
+            evidenceId=stopped['stateEvidence']['evidenceId'], maxChars=16000)['structuredContent']
+        record = json.loads(evidence['text'])
+        self.assertEqual(record['plan']['deadlineMs'], original_deadline)
+        self.assertEqual(record['failure'], record['reconciliation']['originalFailure'])
+        self.assertEqual(record['reconciliation']['originalDeadlineMs'], original_deadline)
+        self.assertEqual(record['reconciliation']['currentSource']['turnId'], 'current-recovery-turn')
+        if mode == 'expired':
+            self.assertLess(original_deadline, int(time.time()*1000))
+            self.assertEqual(record['failure']['code'], 'DEADLINE_EXCEEDED')
+            contract['deadlineMs'] = int(time.time()*1000)+20000
+        self.assertEqual((self.root/'native-wire.jsonl').read_bytes(), wire_before)
+        retried = fresh('prepare', **contract)
+        self.assertFalse(retried['isError'], retried)
+        retry_id = retried['structuredContent']['operationId']
+        self.execution_until(fresh, retry_id, lambda x: x['reviewRequest'] is not None)
+        self.assertEqual((self.root/'native-wire.jsonl').read_bytes(), wire_before)
+        self.assertFalse(fresh('cancel', operationId=retry_id, reason='fixture completed without replay')['isError'])
+
+    def test_target_effect_reconciliation_returns_same_scope_to_current_source(self):
+        self.check_target_effect_reconciliation('source-current')
+
+    def test_target_effect_reconciliation_retains_ack_loss_without_replaying(self):
+        self.check_target_effect_reconciliation('ack-loss')
+
+    def test_target_effect_reconciliation_retains_target_unless_source_explicitly_selected(self):
+        self.check_target_effect_reconciliation('target-retained')
+
+    def test_target_effect_reconciliation_rejects_stale_basis(self):
+        self.check_target_effect_reconciliation('stale')
+
+    def test_target_effect_reconciliation_rejects_unknown_material_effects(self):
+        self.check_target_effect_reconciliation('unknown')
+
+    def test_target_effect_reconciliation_holds_paused_source(self):
+        self.check_target_effect_reconciliation('paused')
+
+    def test_target_effect_reconciliation_holds_native_target_activity(self):
+        self.check_target_effect_reconciliation('active-target')
+
+    def test_target_effect_reconciliation_rechecks_outputs_before_settlement(self):
+        self.check_target_effect_reconciliation('effect-drift')
+
+    def test_target_effect_reconciliation_rechecks_lease_before_settlement(self):
+        self.check_target_effect_reconciliation('lease-drift')
+
+    def test_target_effect_reconciliation_cancel_closes_only_reader(self):
+        self.check_target_effect_reconciliation('cancel')
+
+    def test_target_effect_reconciliation_does_not_retry_uncertain_settlement(self):
+        self.check_target_effect_reconciliation('settlement-unknown')
+
+    def test_target_effect_reconciliation_keeps_original_input_invariants(self):
+        self.check_target_effect_reconciliation('input-change')
+
+    def test_target_effect_reconciliation_rechecks_native_facts(self):
+        self.check_target_effect_reconciliation('native-drift')
+
+    def test_target_effect_reconciled_slot_is_durably_reclaimable(self):
+        self.check_target_effect_reconciliation('reclaim')
+
+    def check_target_effect_reconciliation(self, mode):
+        contract = self.execution_write_contract()
+        process, _, _, call = self.start_execution_wire(peer_mode='write-ack-loss' if mode=='ack-loss' else 'write-interrupted')
+        operation_id = self.execution_intake(call, contract)
+        call('commit', operationId=operation_id)
+        for stage in ('write-prepare', 'commit'):
+            self.execution_accept(call, operation_id, stage)
+        if mode == 'ack-loss':
+            self.execution_until(call, operation_id, lambda x: x['writer']=='target' and x['pendingEffect']
+                and x['pendingEffect']['method']=='turn/start' and x['pendingEffect']['requestRef'])
+            old = call('cancel', operationId=operation_id, reason='Inspect uncertain ACK and actual partial effects')['structuredContent']
+        else:
+            old = self.execution_until(call, operation_id, lambda x: x['phase']=='held')
+        process.stdin.close(); process.wait(timeout=5)
+        self.assertEqual(old['writer'], 'target')
+        old_bytes = (self.work/'review.json').read_bytes()
+        _, _, _, fresh = self.start_execution_wire(peer_mode='target-still-active' if mode=='active-target' else None)
+        old = fresh('inspect', operationId=operation_id)['structuredContent']
+        basis = old.get('targetReconciliationBasis')
+        self.assertIsNotNone(basis, 'known-stopped target has no typed effect reconciliation basis')
+        effect = self.work/'effects.json'
+        effect.write_text(json.dumps({'kind': 'external-target-effects/v1', 'operationId': operation_id,
+            'recordSha256': basis['recordSha256'], 'actorSourceRef': 'fixed-old-peer-natural-close-and-exclusive-owner',
+            'authoritySourceRef': 'new-current-fixture-input',
+            'effects': [{'disposition': 'partial-effects-reviewed', 'sourceRef': 'independent-fixed-review.json-bytes'}],
+            'unresolved': ['external-service-effect-still-unknown'] if mode=='unknown' else []}), encoding='utf-8')
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        meta['turn_id'] = 'target-recovery-turn'
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'type': 'turn_context', 'payload': {
+                'turn_id': meta['turn_id'], 'model': meta['model'], 'cwd': str(self.work)}})+'\n')
+        prompt = 'Review the stopped partial effects and take back the remaining current task.'
+        self.append_native_message(text=prompt)
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt, 'turn_id': meta['turn_id'],
+            'model': meta['model'], 'transcript_path': str(transcript)}, session=meta['session_id'], hook='UserPromptSubmit')
+        current = self.native_input_preview()
+        revised_inputs = {}
+        if mode == 'input-change':
+            (self.work/'drain.json').write_text('A different current source does not erase the original invariant.', encoding='utf-8')
+            revised_inputs = {'revisionReason': 'Explicit fixture input change', 'inputRevisions': [{
+                'path': 'drain.json', 'observed': {'present': True, 'sha256': hashlib.sha256((self.work/'drain.json').read_bytes()).hexdigest()},
+                'reason': 'Explicit fixture source revision; original recovery still must reject this unsupported change.'}]}
+        self.assertFalse(self.manage(action='bind', epoch=current['epoch'], expectedRevision=current['revision'],
+            result='Review the authorized fixed candidate', inputs=['drain.json', 'effects.json'],
+            outputs=[{'path': 'review.json'}], nextAction='Reconcile actual effects without replay', canContinue=True, **revised_inputs)['isError'])
+        current = self.native_input_preview()
+        args = dict(operationId=operation_id, epoch=current['epoch'], expectedRevision=current['revision'],
+            deadlineMs=int(time.time()*1000)+20000, writerDisposition='target-retained' if mode=='target-retained' else 'source-current', effectSourceRef='effects.json', **basis)
+        if mode == 'stale':
+            args['recordRevision'] += 1
+        if mode == 'paused':
+            self.assertFalse(self.manage(action='pause', epoch=current['epoch'], expectedRevision=current['revision'],
+                reason='Fixture user has not authorized resumption.')['isError'])
+        before_turns = sum(json.loads(line)['method']=='turn/start' for line in (self.root/'native-wire.jsonl').read_text().splitlines())
+        reply = fresh('reconcile-target', **args)
+        if mode in ('stale', 'unknown', 'paused', 'input-change'):
+            self.assertTrue(reply['isError'], reply)
+            self.assertEqual(reply['structuredContent']['reason'], {'stale': 'stopped-record-basis-changed',
+                'unknown': 'target-effects-unresolved', 'paused': 'current-source-not-executable',
+                'input-change': 'original-input-invariants-changed'}[mode])
+            self.assertEqual(fresh('inspect', operationId=operation_id)['structuredContent']['writer'], 'target')
+            return
+        self.assertFalse(reply['isError'], reply)
+        waiting = self.execution_until(fresh, operation_id, lambda x: x['reviewRequest'] is not None or
+            x['phase'] in ('held', 'cancelled-held') and not x['busy'])
+        if mode == 'active-target':
+            self.assertEqual(waiting['failure'], 'target-activity-unresolved')
+            self.assertEqual(waiting['writer'], 'target')
+            self.assertEqual(waiting['targetRecoveryResource']['state'], 'closed')
+            return
+        self.assertEqual(waiting['reviewRequest']['stage'], 'external-known-stopped-target')
+        if mode == 'cancel':
+            stopped = fresh('cancel', operationId=operation_id, reason='Stop administrative recovery')['structuredContent']
+            self.assertEqual(stopped['writer'], 'target')
+            self.assertEqual(stopped['targetRecoveryResource']['state'], 'closed')
+            return
+        if mode == 'settlement-unknown':
+            import sqlite3
+            from contextlib import closing
+            database = next(self.state.rglob('carrier.sqlite'))
+            with closing(sqlite3.connect(database)) as connection:
+                connection.execute("CREATE TRIGGER fail_recovery_scope BEFORE UPDATE ON scopes BEGIN SELECT RAISE(ABORT,'fixture settlement uncertainty'); END")
+            try:
+                review = waiting['reviewRequest']
+                failed = fresh('review', operationId=operation_id, reviewId=review['reviewId'],
+                    observationSha256=review['observationSha256'], decision='allow', sourceRef='fixed-independent-effect-review')
+                self.assertTrue(failed['isError'], failed)
+            finally:
+                with closing(sqlite3.connect(database)) as connection:
+                    connection.execute('DROP TRIGGER fail_recovery_scope')
+            held = fresh('inspect', operationId=operation_id)['structuredContent']
+            self.assertEqual(held['writer'], 'target')
+            self.assertEqual(held['targetSettlementAttempt']['state'], 'outcome-unknown')
+            self.assertEqual(held['targetRecoveryResource']['state'], 'closed')
+            wire = (self.root/'native-wire.jsonl').read_bytes()
+            retried = fresh('reconcile-target', **args)
+            self.assertEqual(retried['structuredContent']['reason'], 'target-settlement-unknown')
+            self.assertEqual((self.root/'native-wire.jsonl').read_bytes(), wire)
+            return
+        if mode == 'effect-drift':
+            (self.work/'review.json').write_text('another effect after review snapshot', encoding='utf-8')
+        if mode == 'native-drift':
+            history = self.root/'native-wire.jsonl.turns.json'
+            history.write_text(json.dumps(json.loads(history.read_text())+[{'id': 'unowned-extra-turn', 'status': 'completed'}]), encoding='utf-8')
+        if mode == 'lease-drift':
+            state_page = fresh('read-evidence', operationId=operation_id,
+                evidenceId=waiting['stateEvidence']['sha256'], maxChars=16000)['structuredContent']
+            scope = json.loads(state_page['text'])['scopeRef']
+            script = "const r=require(process.argv[1]).openCarrierRecorder({path:process.argv[2]});const x=r.read(process.argv[3],process.argv[4]);r.compareAndSet(process.argv[3],x.revision,x.state,x.lease);r.close();"
+            mutation = subprocess.run([self.node, '-e', script, str(BRIDGE.with_name('carrier-recorder.cjs')),
+                str(next(self.state.rglob('carrier.sqlite'))), operation_id, scope], capture_output=True, timeout=5)
+            self.assertEqual(mutation.returncode, 0, mutation.stderr)
+        if mode in ('effect-drift', 'lease-drift', 'native-drift'):
+            review = waiting['reviewRequest']
+            rejected = fresh('review', operationId=operation_id, reviewId=review['reviewId'],
+                observationSha256=review['observationSha256'], decision='allow', sourceRef='stale-independent-judgment')
+            self.assertTrue(rejected['isError'], rejected)
+            held = self.execution_until(fresh, operation_id, lambda x: x['phase'] in ('held', 'cancelled-held'))
+            self.assertEqual(held['writer'], 'target')
+            self.assertEqual(held['targetRecoveryResource']['state'], 'closed')
+            return
+        self.execution_accept(fresh, operation_id, 'external-known-stopped-target')
+        done = self.execution_until(fresh, operation_id, lambda x: x['phase']=='external-target-reconciled')
+        self.assertEqual(done['writer'], 'target' if mode=='target-retained' else 'source')
+        self.assertEqual(done['scopeBinding']['requestedScope'], contract['scopeRef'])
+        self.assertEqual((self.work/'review.json').read_bytes(), old_bytes)
+        self.assertEqual(sum(json.loads(line)['method']=='turn/start' for line in (self.root/'native-wire.jsonl').read_text().splitlines()), before_turns)
+        state = json.loads(fresh('read-evidence', operationId=operation_id,
+            evidenceId=done['stateEvidence']['sha256'], maxChars=16000)['structuredContent']['text'])
+        self.assertEqual(state['failure'], state['reconciliation']['originalFailure'])
+        self.assertEqual(state['plan']['deadlineMs'], contract['deadlineMs'])
+        self.assertEqual(state['reconciliation']['originalDeadlineMs'], contract['deadlineMs'])
+        self.assertNotIn('release', state)
+        self.assertEqual(state['reconciliation']['currentSource']['turnId'], 'target-recovery-turn')
+        if mode == 'ack-loss':
+            self.assertEqual(state['reconciliation']['originalPendingEffect']['requestRef']['method'], 'turn/start')
+        contract.update(epoch=current['epoch'], expectedRevision=current['revision'], deadlineMs=int(time.time()*1000)+20000)
+        contract['writeScope']['outputs'][0]['expectedSha256'] = hashlib.sha256(old_bytes).hexdigest()
+        again = fresh('prepare', **contract)
+        if mode == 'target-retained':
+            self.assertEqual(again['structuredContent']['reason'], 'WRITER_CONFLICT')
+            return
+        self.assertFalse(again['isError'], again)
+        fresh('cancel', operationId=again['structuredContent']['operationId'], reason='No business replay in fixture')
+        if mode == 'reclaim':
+            contract['deadlineMs'] = int(time.time()*1000)+60000
+            for number in range(14):
+                transient = fresh('prepare', **{**contract, 'scopeRef': 'denied-after-recovery-'+str(number)})['structuredContent']['operationId']
+                request = self.execution_until(fresh, transient, lambda x: x['reviewRequest'] is not None)['reviewRequest']
+                fresh('review', operationId=transient, reviewId=request['reviewId'],
+                    observationSha256=request['observationSha256'], decision='deny', sourceRef='fixed-denial')
+                self.execution_until(fresh, transient, lambda x: x['phase']=='held' and not x['busy'])
+            following = fresh('prepare', **contract)
+            self.assertFalse(following['isError'], following)
+            self.assertEqual(fresh('inspect', operationId=operation_id)['structuredContent']['controllerState'], 'not-owned-current-process')
+            fresh('cancel', operationId=following['structuredContent']['operationId'], reason='capacity check complete')
+
     def test_real_stdio_negotiation_zero_id_unknown_method_and_eof(self):
         messages = [
             {'jsonrpc': '2.0', 'id': 0, 'method': 'tools/list'},
@@ -3045,8 +4079,9 @@ process.stdout.write(JSON.stringify({originalVersion,before,after,expectedDiagno
         self.assertEqual(rows[1]['result']['serverInfo']['version'], package_version)
         self.assertTrue(rows[2]['result']['tools'][0]['annotations']['readOnlyHint'])
         self.assertIn('contextAssessment', rows[2]['result']['tools'][0]['inputSchema']['properties'])
-        self.assertEqual([tool['name'] for tool in rows[2]['result']['tools']],
+        self.assertEqual([tool['name'] for tool in rows[2]['result']['tools'][:3]],
                          ['inspect_task_state', 'read_task_input', 'manage_task_state'])
+        self.assertEqual(rows[2]['result']['tools'][3]['name'], 'coordinate_task_execution')
         self.assertTrue(rows[2]['result']['tools'][1]['annotations']['readOnlyHint'])
         self.assertFalse(rows[2]['result']['tools'][2]['annotations']['readOnlyHint'])
         self.assertTrue(rows[2]['result']['tools'][2]['annotations']['destructiveHint'])
@@ -3121,11 +4156,12 @@ process.stdout.write(JSON.stringify({originalVersion,before,after,expectedDiagno
         config = json.loads((package / '.mcp.json').read_text(encoding='utf-8'))
         self.assertEqual(config, {'mcpServers': {'accord-state': {'command': 'node',
             'args': ['runtime/native-state-mcp.cjs'], 'cwd': '.',
-            'env_vars': ['YIYUAN_ACCORD_TASK_STATE_DIR', 'CODEX_HOME'],
-            'startup_timeout_sec': 10, 'tool_timeout_sec': 10}}})
+            'env_vars': ['YIYUAN_ACCORD_TASK_STATE_DIR', 'CODEX_HOME', 'CODEX_CLI_PATH'],
+            'startup_timeout_sec': 10, 'tool_timeout_sec': 30}}})
         adapter = json.loads((package / 'adapter.json').read_text(encoding='utf-8'))
         self.assertTrue(adapter['persistentProcessAdded'])
-        self.assertEqual(adapter['nativeTaskStateMcp']['storage'], 'existing-task-checkpoint-only')
+        self.assertEqual(adapter['nativeTaskStateMcp']['storage'],
+                         'existing-task-checkpoint-plus-task-owned-operation-evidence-and-sqlite')
         script = "const a=require(process.argv[1]),b=require(process.argv[2]);process.stdout.write(JSON.stringify(['inspectNativeState','readTaskInput','manageTaskState','main','runtimeVersion'].every(k=>a[k]===b[k])));"
         process = subprocess.run([self.node, '-e', script, str(ROOT / 'runtime/native-state-mcp.cjs'),
             str(BRIDGE)], capture_output=True, text=True, timeout=10)

@@ -14,7 +14,9 @@ from unittest.mock import patch
 
 import tests.product.test_development as development_fixtures
 from yiyuan_accord.control import verify_product
-from yiyuan_accord.development import DEVELOPMENT_FILE, PLAN_FILE, render_development_plan
+from yiyuan_accord.development import (
+    DEVELOPMENT_FILE, PLAN_FILE, development_observations, render_development_plan,
+)
 from yiyuan_accord.reviews import REVIEW_AXES
 
 
@@ -39,12 +41,14 @@ class OwnedGitFixtureRoutingTests(unittest.TestCase):
                 paths.extend(path for path in (protected / '.git/refs').rglob('*') if path.is_file())
                 return {path.relative_to(protected).as_posix(): path.read_bytes() for path in paths}
             before = snapshot()
+            historical = development_fixtures.historical_development()
             class OwnedFixture(DevelopmentEvidenceTests):
                 pass
             OwnedFixture.root = target
             (target / 'payload.txt').write_text('first')
             with patch.dict(os.environ, {**clean, 'GIT_DIR': str(protected / '.git'), 'GIT_WORK_TREE': str(protected),
                                         'GIT_INDEX_FILE': str(protected / '.git/index')}, clear=True):
+                self.assertEqual(development_fixtures.historical_development(), historical)
                 OwnedFixture.git('add', '.')
                 OwnedFixture.git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
                                  'commit', '--quiet', '-m', 'Own first revision')
@@ -60,6 +64,13 @@ class OwnedGitFixtureRoutingTests(unittest.TestCase):
                     self.assertEqual((target / 'payload.txt').read_text(), 'first')
                 self.assertEqual(OwnedFixture.git('rev-parse', 'HEAD'), second)
                 self.assertEqual((target / 'payload.txt').read_text(), 'second')
+                manifest = target / 'package/.codex-plugin/plugin.json'
+                manifest.parent.mkdir(parents=True)
+                manifest.write_bytes(b'{}\n')
+                contract = {'delivery': {'hostProjections': [{'manifest': 'package/.codex-plugin/plugin.json'}]}}
+                CurrentDevelopmentEvidenceTests.update_package_identity(OwnedFixture(), contract)
+                self.assertEqual(contract['delivery']['hostProjections'][0]['packageSha256'],
+                                 'ea6b7a8fe16ae7fdae84480c37180ebd111fb9a62e07f3090003efbf4c1904bd')
             self.assertEqual(snapshot(), before)
 
 
@@ -908,7 +919,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     @classmethod
     def historical_contract(cls):
         return json.loads(subprocess.check_output(['git', '-C', str(cls.root), 'show',
-            '062157711d6aa2cdab274757d54f0a73423d9201:product/development.json'], timeout=30))
+            '062157711d6aa2cdab274757d54f0a73423d9201:product/development.json'],
+            env=development_fixtures.owned_git_environment(), timeout=30))
 
     def historical_fixture_case(self, case_id):
         # Only the isolated synthetic subject uses an ended sample. It never
@@ -932,10 +944,27 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             case['conditions'] = {**case['conditions'], **copy.deepcopy(scope['conditions'])}
         return contract
 
+    def assert_preserved_requirements_with_current_outcomes(self, prior):
+        from yiyuan_accord.admission import admission_contract_errors
+        policy = self.contract['acceptance']['admission']
+        self.assertEqual(policy['requiredCoverage'], prior['requiredCoverage'])
+        self.assertEqual([{key: row[key] for key in ('id', 'requiredCoverage')}
+                          for row in policy['acceptanceRequirements']], prior['acceptanceRequirements'])
+        self.assertEqual([(row['id'], len(row['outcomeObligations']))
+                          for row in policy['acceptanceRequirements']],
+                         [('A01', 6), ('A02', 17), ('A03', 4), ('A04', 4),
+                          ('A05', 6), ('A06', 5), ('A07', 6), ('A08', 4)])
+        self.assertEqual(admission_contract_errors(self.contract), [])
+        for index in range(8):
+            missing = copy.deepcopy(self.contract)
+            del missing['acceptance']['admission']['acceptanceRequirements'][index]['outcomeObligations']
+            self.assertIn('current acceptance must bind nonempty source outcome obligations for every requirement',
+                          admission_contract_errors(missing))
+
     def test_ended_current_instances_leave_gates_with_exact_history_and_scope_floors(self):
         from yiyuan_accord.admission import _definition
         old = self.historical_contract()
-        record = self.contract['developmentObservations'][0]
+        record = development_observations(self.root, self.contract)[0]
         policy = self.contract['acceptance']['admission']
         self.assertEqual(record['historicalSource']['observationCount'], len(old['developmentObservations']))
         self.assertEqual(record['historicalSource']['observationsSha256'], hashlib.sha256(json.dumps(
@@ -946,8 +975,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             self.assertEqual(declaration['caseObjectSha256'], hashlib.sha256(json.dumps(
                 case, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest())
             self.assertEqual(declaration['definitionSha256'], _definition(old, case))
-        for key in ('requiredCoverage', 'acceptanceRequirements'):
-            self.assertEqual(policy[key], old['acceptance']['admission'][key])
+        self.assert_preserved_requirements_with_current_outcomes(old['acceptance']['admission'])
         for scope, prior in zip(policy['scopes'], old['acceptance']['admission']['scopes']):
             for key in ('id', 'host', 'entry', 'duties', 'qualityAxes', 'scenarios', 'claims'):
                 self.assertEqual(scope[key], prior[key])
@@ -984,7 +1012,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         from yiyuan_accord.admission import _entry_modes
         historical = json.loads(subprocess.check_output(
             ["git", "show", "dce00cc9dc7a1224c027a85f7f2b88c824139e35:product/development.json"],
-            cwd=Path(__file__).resolve().parents[2]))
+            cwd=Path(__file__).resolve().parents[2],
+            env=development_fixtures.owned_git_environment(), timeout=30))
         dispositions = next(row for row in historical["acceptance"]["admission"]["scopes"]
                             if row["id"] == "v33-openai-entry-applicability")["conditions"]["entryDispositions"]
         modes = _entry_modes(dispositions)
@@ -1142,7 +1171,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                          turnTimeoutSeconds=180, recoveryTimeoutSeconds=20,
                          usageCaps={"outputTokens": 14000}, usageScope="synthetic test only")
         fixture = subprocess.check_output(["git", "-C", str(self.root), "show",
-                                            "HEAD:" + execution["caseFile"]], timeout=30)
+                                            "HEAD:" + execution["caseFile"]],
+                                            env=development_fixtures.owned_git_environment(), timeout=30)
         execution["caseSha256"] = hashlib.sha256(fixture).hexdigest()
         case["conditions"]["execution"] = copy.deepcopy(execution)
         from yiyuan_accord.admission import _revision_package_snapshot
@@ -1273,7 +1303,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         package = Path(projection["manifest"]).parents[1].as_posix()
         self.git("add", package)
         listing = subprocess.check_output(
-            ["git", "-C", str(self.root), "ls-files", "-s", "-z", "--", package], timeout=30)
+            ["git", "-C", str(self.root), "ls-files", "-s", "-z", "--", package],
+            env=development_fixtures.owned_git_environment(), timeout=30)
         digest = hashlib.sha256()
         for row in (item for item in listing.split(b"\0") if item):
             metadata, locator = row.split(b"\t", 1)
@@ -1281,7 +1312,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             digest.update(locator)
             digest.update(b"\0")
             digest.update(hashlib.sha256(subprocess.check_output(
-                ["git", "-C", str(self.root), "cat-file", "blob", blob], timeout=30)).digest())
+                ["git", "-C", str(self.root), "cat-file", "blob", blob],
+                env=development_fixtures.owned_git_environment(), timeout=30)).digest())
         projection["packageSha256"] = digest.hexdigest()
 
     def capture(self):
@@ -2585,7 +2617,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def test_ended_resource_cases_keep_their_exact_history_and_scope_floors(self):
         historical = json.loads(subprocess.check_output([
             'git', '-C', str(self.root), 'show',
-            '916ff322680ea5f0df6ee45b1fe326ec286a1603:product/development.json'], timeout=30))
+            '916ff322680ea5f0df6ee45b1fe326ec286a1603:product/development.json'],
+            env=development_fixtures.owned_git_environment(), timeout=30))
         record = next(r for r in self.historical_contract()['developmentObservations']
                       if r['id'] == 'resource-environment-ended-instance-disposition-20260930')
         policy = self.contract['acceptance']['admission']
@@ -2755,11 +2788,11 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         record = next(row for row in self.historical_contract()['developmentObservations']
                       if row['id'] == 'ended-fixed-sdk-case-disposition-20261005')
         historical = json.loads(subprocess.check_output([
-            'git', '-C', str(self.root), 'show', record['declarations'][0]['declarationSnapshot']], timeout=30))
+            'git', '-C', str(self.root), 'show', record['declarations'][0]['declarationSnapshot']],
+            env=development_fixtures.owned_git_environment(), timeout=30))
         policy = self.contract['acceptance']['admission']
         self.assertEqual(record['outcome'], 'not-admitted')
-        self.assertEqual(policy['requiredCoverage'], historical['acceptance']['admission']['requiredCoverage'])
-        self.assertEqual(policy['acceptanceRequirements'], historical['acceptance']['admission']['acceptanceRequirements'])
+        self.assert_preserved_requirements_with_current_outcomes(historical['acceptance']['admission'])
         for declaration in record['declarations']:
             with self.subTest(case=declaration['caseId']):
                 old = next(row for row in historical['acceptance']['admission']['cases']
@@ -2786,7 +2819,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 self.assertEqual(scope, prior)
                 prior_fixture = subprocess.check_output(['git', '-C', str(self.root), 'show',
                                                         record['declarations'][0]['declarationSnapshot'].split(':')[0]
-                                                        + ':' + declaration['caseFile']], timeout=30)
+                                                        + ':' + declaration['caseFile']],
+                                                        env=development_fixtures.owned_git_environment(), timeout=30)
                 self.assertEqual((self.root / declaration['caseFile']).read_bytes(), prior_fixture)
         report = self.assess()
         self.assertFalse(report['functionalCompletion'])
@@ -2813,7 +2847,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 with self.subTest(case=case['id'], fixture=value['caseFile']):
                     self.assertIn(value['caseFile'], case['oracleFiles'])
                     raw = subprocess.check_output(
-                        ['git', '-C', str(self.root), 'show', 'HEAD:' + value['caseFile']], timeout=30)
+                        ['git', '-C', str(self.root), 'show', 'HEAD:' + value['caseFile']],
+                        env=development_fixtures.owned_git_environment(), timeout=30)
                     self.assertEqual(value['caseSha256'], hashlib.sha256(raw).hexdigest())
                 checked.add(case['id'])
         self.assertTrue({'v33-codex-sdk-lifecycle-01', 'v33-codex-sdk-scoped-exposure-01'} <= checked)
@@ -2824,7 +2859,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                       if row['id'] == 'ended-release-ack-case-disposition-20261006')
         declaration = record['declarations'][0]
         historical = json.loads(subprocess.check_output([
-            'git', '-C', str(self.root), 'show', declaration['declarationSnapshot']], timeout=30))
+            'git', '-C', str(self.root), 'show', declaration['declarationSnapshot']],
+            env=development_fixtures.owned_git_environment(), timeout=30))
         policy = self.contract['acceptance']['admission']
         old = next(row for row in historical['acceptance']['admission']['cases']
                    if row['id'] == declaration['caseId'])
@@ -2840,11 +2876,11 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         for key, value in declaration['limits'].items():
             self.assertEqual(value, old['conditions']['execution'][key])
         original_file = subprocess.check_output(['git', '-C', str(self.root), 'show',
-            declaration['declarationSnapshot'].split(':')[0] + ':' + declaration['caseFile']], timeout=30)
+            declaration['declarationSnapshot'].split(':')[0] + ':' + declaration['caseFile']],
+            env=development_fixtures.owned_git_environment(), timeout=30)
         self.assertEqual((self.root / declaration['caseFile']).read_bytes(), original_file)
         self.assertEqual(hashlib.sha256(original_file).hexdigest(), declaration['caseFileSha256'])
-        for key in ('requiredCoverage', 'acceptanceRequirements'):
-            self.assertEqual(policy[key], historical['acceptance']['admission'][key])
+        self.assert_preserved_requirements_with_current_outcomes(historical['acceptance']['admission'])
         prior_scopes = {row['id']: row for row in historical['acceptance']['admission']['scopes']}
         self.assertEqual({row['id'] for row in policy['scopes']}, set(prior_scopes))
         for scope in policy['scopes']:
@@ -2868,11 +2904,12 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
 
     def test_ended_ordinary_instances_keep_history_without_erasing_live_scope(self):
         from yiyuan_accord.admission import _definition
-        record = next(row for row in self.contract['developmentObservations']
+        record = next(row for row in development_observations(self.root, self.contract)
                       if row['id'] == 'ended-ordinary-cli-case-disposition-20261017')
         policy = self.contract['acceptance']['admission']
         historical = json.loads(subprocess.check_output(['git', '-C', str(self.root), 'show',
-            record['declarations'][0]['declarationSnapshot']], timeout=30))
+            record['declarations'][0]['declarationSnapshot']],
+            env=development_fixtures.owned_git_environment(), timeout=30))
         prior = historical['acceptance']['admission']
         ended = {row['caseId'] for row in record['declarations']}
         self.assertEqual(ended, {'v33-cli-action-diagnostics-01', 'v33-cli-tool-recovery-01'})
@@ -2887,12 +2924,12 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 old, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest())
             if 'caseFile' in row:
                 original = subprocess.check_output(['git', '-C', str(self.root), 'show',
-                    row['declarationSnapshot'].split(':')[0] + ':' + row['caseFile']], timeout=30)
+                    row['declarationSnapshot'].split(':')[0] + ':' + row['caseFile']],
+                    env=development_fixtures.owned_git_environment(), timeout=30)
                 self.assertEqual((self.root / row['caseFile']).read_bytes(), original)
                 self.assertEqual(hashlib.sha256(original).hexdigest(), row['caseFileSha256'])
                 self.assertEqual(row['execution'], old['conditions']['execution'])
-        for key in ('requiredCoverage', 'acceptanceRequirements'):
-            self.assertEqual(policy[key], prior[key])
+        self.assert_preserved_requirements_with_current_outcomes(prior)
         # Freeze ended evidence, not future cases, host methods or routing prose.
         sid = 'v33-codex-cli-ordinary-delivery'
         scope = next(s for s in policy['scopes'] if s['id'] == sid)
@@ -3905,6 +3942,32 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 policy["scopes"].append({**{k: copy.deepcopy(case[k]) for k in
                     ("host", "entry", "duties", "qualityAxes", "scenarios", "claims", "conditions")},
                     "id": scope_id, "rule": "Synthetic scope for algorithm exercise, not actual coverage."})
+        # Generic successes remain insufficient under the current precise contract.
+        # This observer is explicitly synthetic; no real outcome is authored here.
+        with self.history():
+            self.commit(contract)
+            generic = self.assess(contract, self.observer)
+            self.assertEqual(generic['errors'], [])
+            self.assertEqual(len(generic['acceptedCases']), len(policy['cases']))
+            self.assertFalse(generic['candidateEligible'])
+            self.assertFalse(generic['functionalCompletion'])
+            self.assertTrue(any(r['missingObligations'] for r in generic['acceptanceRequirements'].values()))
+        # Supply complete, scope/claim-bound mock consequences for the positive
+        # algorithm path. Preserve the original coverage and all negative checks.
+        for requirement in policy['acceptanceRequirements']:
+            for obligation in requirement['outcomeObligations']:
+                for case in policy['cases']:
+                    if case['scope'] != obligation['scope'] or obligation['claim'] not in case['claims']:
+                        continue
+                    source = obligation['source']['path']
+                    if source not in case['oracleFiles']:
+                        case['oracleFiles'].append(source)
+                    parts = [p.replace('~1', '/').replace('~0', '~')
+                             for p in obligation['pointer'].split('/')[1:]]
+                    node = case['expected']
+                    for part in parts[:-1]:
+                        node = node.setdefault(part, {})
+                    node[parts[-1]] = True
         split = copy.deepcopy(contract)
         split_cases = split['acceptance']['admission']['cases']
         first = next(c for c in split_cases if c['scope'] == 'v33-system-integration')
