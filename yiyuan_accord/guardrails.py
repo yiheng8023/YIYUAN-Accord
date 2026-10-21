@@ -881,15 +881,22 @@ def validate_host_projection(
         foundation = skill_locator.rsplit("/", 1)[0] + "/references/meta-guidance.md" if isinstance(skill_locator, str) else ""
         if not isinstance(references, list) or foundation not in references:
             errors.append(f"{prefix} meta guidance reference is undeclared")
-        source = repository_relative_path(root, foundation)
         expected = (expected_contract or {}).get("ordinaryInputParticipation", {}).get("metaGuidance", {})
-        try:
-            if (source is None or source.is_symlink() or not source.is_file()
-                    or source.stat().st_size != expected.get("sourceBytes")
-                    or sha256(_owned_bytes(source)).hexdigest() != expected.get("sourceSha256")):
-                errors.append(f"{prefix} original meta guidance bytes differ")
-        except OSError:
-            errors.append(f"{prefix} original meta guidance is unreadable")
+        guidance_sources = [(foundation, "source", "English")]
+        if expected.get("originalSource"):
+            chinese = foundation.removesuffix(".md") + ".zh-CN.md"
+            if not isinstance(references, list) or chinese not in references:
+                errors.append(f"{prefix} Chinese meta guidance reference is undeclared")
+            guidance_sources.append((chinese, "originalSource", "Chinese source"))
+        for locator, field, language in guidance_sources:
+            source = repository_relative_path(root, locator)
+            try:
+                if (source is None or source.is_symlink() or not source.is_file()
+                        or source.stat().st_size != expected.get(field + "Bytes")
+                        or sha256(_owned_bytes(source)).hexdigest() != expected.get(field + "Sha256")):
+                    errors.append(f"{prefix} {language} meta guidance bytes differ")
+            except OSError:
+                errors.append(f"{prefix} {language} meta guidance is unreadable")
     valid_references = (isinstance(references, list)
                         and all(_nonempty_string(item) for item in references)
                         and len(references) == len(set(references)))

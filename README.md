@@ -16,11 +16,15 @@
 
 **Our declaration: Empower every dream.**
 
-Version 3.3 includes the [original meta-guidance](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)
+Version 3.3 includes the [English translation of the meta-guidance](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)
 as its value and judgment foundation. Supported, enabled and trusted entry hooks
 deliver it with task coordination without editing your AGENTS.md. Installation
 and actual loading still need verification; this does not override host priority
 or establish coverage of every host, execution mode or subagent path.
+
+The [Chinese source](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.zh-CN.md)
+is the semantic basis for the translation. Entry hooks load the English version;
+the Chinese version is available for reading as needed.
 
 **Plugin participation requires** the target host entry to permit plugin use,
 Accord to be installed and enabled in that scope, and the used Hooks/MCP to meet

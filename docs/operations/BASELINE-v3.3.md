@@ -41,7 +41,9 @@ F02/F06/F08的配置协调默认保留用户主动选择的模型和推理强度
 
 
 
-同日用户明确授权将[元指导原文](../../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)纳入3.3默认内置：原文4444字节/SHA511861ec…f457bc连同CRLF完整保留，作为价值与判断依据，不是事实、状态、领域替代或新增权限。现有入口加载全文及具体协调职责，归并同义理念而保留新鲜度、暂停、写者、原件、未知效果与退出保护。受支持的SubagentStart只传指导，不写父任务状态；实际启用、信任、入口/恢复/子代理采用及上下文负担分别核验。默认内置不提高宿主指令层级、不要求或自动修改用户AGENTS.md，不扩大Cloud/其他宿主支持。安装尚未发生时不能声称现装已采用。
+同日用户明确授权将[3.3.0当时内置的英文元指导](https://github.com/yiheng8023/YIYUAN-Accord/blob/d855cd0936733960cd107168a3369963a65d874a/plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)纳入3.3默认内置：当时英文文本4444字节/SHA511861ec…f457bc连同CRLF完整保留，作为价值与判断依据，不是事实、状态、领域替代或新增权限。现有入口加载全文及具体协调职责，归并同义理念而保留新鲜度、暂停、写者、原件、未知效果与退出保护。受支持的SubagentStart只传指导，不写父任务状态；实际启用、信任、入口/恢复/子代理采用及上下文负担分别核验。默认内置不提高宿主指令层级、不要求或自动修改用户AGENTS.md，不扩大Cloud/其他宿主支持。安装尚未发生时不能声称现装已采用。
+
+2026-10-21用户提供[中文来源](../../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.zh-CN.md)，并批准以中文为语义基准校准[英文译文](../../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)，形成3.3.1限定维护补丁。中文3418字节/SHA9f901952…88a439a，英文4656字节/SHA14f33a09…b89f026，均按各自身份核验。入口继续完整传入英文和协调职责；中文按需读取，不重复加载两份全文。原F/A职责、停用和权限边界保持，3.3.0历史发行不改写。
 
 F05信号连接的历史增量：所属App Server客户端可通过原生动态工具把通知交给现有助手，窗口观测与未知占用/效率/完整性分开。该路径已观察两次显式查询及正确使用；换轮、reroute、压缩、断连及过期的失效规则有离线反例，该查询路径的真实压缩/模型变化及自主择时仍待验。其它原生压缩续作观察按[接续](CONTINUATION.md)中的实际包、路径与条件保留，不能相互代验；该适配也不等于现装Desktop或ChatGPT入口已自动接通。
 

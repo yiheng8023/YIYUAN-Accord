@@ -1117,6 +1117,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 value = json.loads(manifest.read_text(encoding='utf-8'))
                 value['version'] = projection['packageVersion'] = version
                 manifest.write_text(json.dumps(value), encoding='utf-8')
+                # Include newly declared package files before hashing this synthetic subject.
+                cls.git('add', '--', manifest.parent.parent.relative_to(cls.root).as_posix())
                 projection['packageSha256'] = package_sha256(cls.root, cls.git(
                     'ls-files', '--', manifest.parent.parent.relative_to(cls.root).as_posix()).splitlines())
             (cls.root / DEVELOPMENT_FILE).write_text(json.dumps(cls.contract), encoding='utf-8')
@@ -1332,6 +1334,15 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         else:
             contract = copy.deepcopy(self.contract)
             case = next(row for row in contract["acceptance"]["admission"]["cases"] if row["id"] == parent_case)
+        if final:
+            # Exercise the retained 3.3.0 transition, not a new patch promotion.
+            contract['cycle']['targetVersion'] = contract['authority']['conditionalRelease']['target'] = '3.3.0'
+            contract['delivery']['version'] = contract['delivery']['hostProjections'][0]['packageVersion'] = '3.3.0-dev.1'
+            manifest = self.root / contract['delivery']['hostProjections'][0]['manifest']
+            contents = json.loads(manifest.read_text(encoding='utf-8'))
+            contents['version'] = contract['delivery']['version']
+            manifest.write_text(json.dumps(contents), encoding='utf-8')
+            self.update_package_identity(contract)
         self.commit(contract)
         capture, records = self.capture()
         original_report = self.assess(contract, capture)
@@ -1487,6 +1498,9 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def test_final_promotion_comparison_is_directional_and_preserves_all_case_meaning(self):
         from yiyuan_accord import admission as a
         original = copy.deepcopy(self.contract)
+        # This historical branch remains specifically 3.3.0 development -> final.
+        original['cycle']['targetVersion'] = original['authority']['conditionalRelease']['target'] = '3.3.0'
+        original['delivery']['version'] = original['delivery']['hostProjections'][0]['packageVersion'] = '3.3.0-dev.1'
         final = copy.deepcopy(original)
         final['status'] = 'candidate-frozen'
         final['cycle']['versionState'] = 'final-candidate-not-publication-proof'
@@ -3690,7 +3704,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     projection = contract["delivery"]["hostProjections"][0]
                     manifest_path = self.root / projection["manifest"]
                     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-                    version = "3.3.0-dev.1+codex.20260921123456"
+                    version = manifest['version'].split('+', 1)[0] + "+codex.20260921123456"
                     manifest["version"] = version
                     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
                     contract["delivery"]["version"] = version
@@ -3731,7 +3745,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     else:
                         value["version"] = ("4.0.0-dev.1+codex.20260921123456"
                                             if change == "manifest-base-version"
-                                            else "3.3.0-dev.1+codex.fixture")
+                                            else value['version'].split('+', 1)[0] + "+codex.fixture")
                         contract["delivery"]["version"] = value["version"]
                         contract["delivery"]["hostProjections"][0]["packageVersion"] = value["version"]
                     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

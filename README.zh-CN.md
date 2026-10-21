@@ -16,7 +16,7 @@
 
 **宣言：助力每一个梦想。**
 
-3.3内置[元指导原文](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)，作为价值与判断依据。受支持、已启用且可信的入口Hook会连同任务协调指导传入，保持用户AGENTS.md独立。安装和实际加载仍需核验；它不提高宿主指令优先级，也不证明所有宿主、其它未选环境模式或子代理路径都已覆盖。
+3.3内置[中文元指导原文](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.zh-CN.md)及其[英文译文](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)，以中文为语义基准。受支持、已启用且可信的入口Hook加载英文版，连同任务协调指导传入；中文版按需阅读，保持用户AGENTS.md独立。安装和实际加载仍需核验；它不提高宿主指令优先级，也不证明所有宿主、其它未选环境模式或子代理路径都已覆盖。
 
 **插件参与前提：** 对应宿主入口允许使用插件，Accord已安装并在该作用域启用，所用Hook/MCP满足必要信任与权限且实际加载。ChatGPT桌面“设置 → 常规 → 插件（允许ChatGPT使用已安装的插件）”是其中的总使用开关，不能只看安装状态。开关由用户掌控；关闭时不宣称Accord在该入口参与，也不自行开启。
 

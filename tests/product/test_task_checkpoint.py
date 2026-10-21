@@ -667,14 +667,14 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
                 self.assertEqual(result.stdout, b'', 'never emit a truncated foundation or entry')
                 self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
 
-    def test_default_entry_includes_exact_original_and_rejects_changed_foundation(self):
+    def test_default_entry_includes_exact_translation_and_rejects_changed_foundation(self):
         package = self.root / 'meta-package'
         shutil.copytree(RUNTIME.parent.parent / 'plugins/yiyuan-accord-codex', package)
         foundation = package / 'skills/deliver-demand-driven-outcome/references/meta-guidance.md'
         original = foundation.read_bytes()
-        self.assertEqual(len(original), 4444)
+        self.assertEqual(len(original), 4656)
         self.assertEqual(hashlib.sha256(original).hexdigest(),
-                         '511861ec00a15e051c97221d9d62e9586856a5d659724eff2d2953f002f457bc')
+                         '14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026')
         module = package / 'runtime/task-checkpoint.cjs'
         def read():
             return subprocess.run([self.node, '-e',
@@ -683,6 +683,8 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
         result = read()
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout.count(original), 1)
+        chinese = foundation.with_name('meta-guidance.zh-CN.md').read_bytes()
+        self.assertNotIn(chinese, result.stdout, 'Chinese source remains demand-driven')
         self.assertIn(b'Coordinate the current task', result.stdout)
         self.assertIn(b'host instruction priority', result.stdout)
         for changed in (original.replace(b'not a fact source', b'a fact source', 1),
@@ -749,7 +751,7 @@ process.stdout.write(JSON.stringify({hint:helper.hook(event),injected}));
         marker = self.state / (hashlib.sha256(workspace_key.encode()).hexdigest() + '.workspace-input-failure.json')
         marker.write_text(json.dumps({'schema': 1, 'generation': 'prior-loss'}), encoding='utf-8')
         notice = self.event('UserPromptSubmit', prompt='Inspect only; do not resume.')['hookSpecificOutput']['additionalContext']
-        self.assertNotIn('# Idea-Driven AI Collaboration', notice)
+        self.assertNotIn('# Idea-Driven Long-Term Evolution Meta-Guidance Framework', notice)
         self.assertNotIn('# Coordinate the current task', notice)
         self.assertIn('does not establish', notice)
         self.assertIn('recovery token', notice)

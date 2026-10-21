@@ -17,8 +17,11 @@ Their repository location does not make those interfaces universal requirements.
 Keep host formats, observations and controls within the applicable adaptation;
 replace them by evidenced equivalents when adapting another host.
 
-The 3.3 default foundation is the byte-preserved [original meta-guidance](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md).
-The package has one original reference and one task coordination body. The existing
+The 3.3.1 foundation is the [English translation](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)
+of the [Chinese source](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.zh-CN.md).
+The Chinese text is the semantic basis; its translation and source are pinned
+separately. Entry hooks load English, while Chinese remains available on demand.
+The package loads one English foundation and one task coordination body. The existing
 entry reader supplies both at supported SessionStart and SubagentStart events;
 the guidance-only SubagentStart handler leaves parent state untouched.
 UserPromptSubmit captures the current input and supplies a bounded reconciliation
@@ -113,10 +116,11 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current candidate and scoped connections
 
-The current Codex package is a frozen `3.3.0` candidate; versioning is not publication
-evidence. It exposes one brief coordinator and four independently discoverable specialist
+The current Codex package is the `3.3.1` maintenance candidate; versioning is not
+publication evidence. The released `3.3.0` retains its immutable historical identity.
+The package exposes one brief coordinator and four independently discoverable specialist
 Skills for capabilities, continuity, verification and plugin lifecycle. Native
-SessionStart and SubagentStart supply the original meta-guidance and the same
+SessionStart and SubagentStart supply the English meta-guidance translation and the same
 brief Skill body with package-local pointers. UserPromptSubmit captures input
 and provides a bounded state reconciliation notice, without repeating that body
 or depending on its readability. The notice reuses applicable guidance and

@@ -1153,9 +1153,9 @@ function entryGuidance() {
     return value;
   };
   const original = readGuidance(foundation, 8000);
-  // The approved original is immutable for this build, including its CRLFs.
-  if (sha(Buffer.from(original, 'utf8')) !== '511861ec00a15e051c97221d9d62e9586856a5d659724eff2d2953f002f457bc') fail('entry-guidance-unavailable');
-  if (!/^# Idea-Driven AI Collaboration And Systems Engineering Prompt\r?\n/.test(original) ||
+  // Pin the approved English translation for this build, including its CRLFs.
+  if (sha(Buffer.from(original, 'utf8')) !== '14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026') fail('entry-guidance-unavailable');
+  if (!/^# Idea-Driven Long-Term Evolution Meta-Guidance Framework\r?\n/.test(original) ||
       !original.includes('Authority: Execution guidance only; not a fact source, release authority, or') ||
       !original.trimEnd().endsWith('refinement.')) fail('entry-guidance-unavailable');
   const text = readGuidance(skill, 10000).replace(/\r\n/g, '\n');
@@ -1164,7 +1164,7 @@ function entryGuidance() {
   const body = matched[1].trim().replace(/\]\((\.\.?\/[^)]+)\)/g,
     (_, target) => '](' + path.resolve(path.dirname(skill), target) + ')');
   const guidance = 'Accord task entry: current coordination Skill body supplied by the native Hook. ' +
-    'The bundled original meta-guidance is the value and judgment foundation; it does not change host instruction priority or grant authority. ' +
+    'The bundled English translation of the Chinese meta-guidance is the value and judgment foundation; it does not change host instruction priority or grant authority. ' +
     'Reuse these duties without a separate Skill selection.\n\n' + original + '\n' + body +
     `\n\nEntry source: "${skill}". Runtime helper: node "${__filename}" --help. ` +
     'State operations require the actual current native input receipt and compatible runtime; ' +

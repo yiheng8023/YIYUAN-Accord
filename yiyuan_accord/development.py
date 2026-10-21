@@ -78,7 +78,7 @@ def _strings(value, *, empty=False):
             and len(value) == len(set(value)))
 
 
-def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False, meta_guidance=False, input_state_notice=False, native_onboarding=False):
+def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None, startup_entry=False, carrier_handoff=False, native_state_mcp=False, carrier_session=False, meta_guidance=False, input_state_notice=False, native_onboarding=False, package_version=None):
     """Describe this development package, not a mandatory product mechanism."""
     contract = {
         "schema": 2, "productId": "yiyuan-accord", "packageId": package_id,
@@ -206,6 +206,17 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "additionalContextLimit": 4000,
                 "limits": "host-priority-and-user-authority-preserved; enabled-trusted-host-support-required; injection-is-not-behavior-or-all-surface-coverage",
             }
+            if isinstance(package_version, str) and package_version.split("+")[0].split("-")[0] == "3.3.1":
+                contract["ordinaryInputParticipation"]["metaGuidance"].update({
+                    "sourceSha256": "14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026",
+                    "sourceBytes": 4656,
+                    "sourceLanguage": "en",
+                    "originalSource": "skills/deliver-demand-driven-outcome/references/meta-guidance.zh-CN.md",
+                    "originalSourceSha256": "9f9019523491d9e41f7d3e41ee5bd3c783b0a1049fb280242959198fb88a439a",
+                    "originalSourceBytes": 3418,
+                    "originalSourceLanguage": "zh-CN",
+                    "effect": "full-english-translation-plus-task-coordination-at-supported-entry-events; Chinese-source-on-demand",
+                })
     if adapter_id == "codex" and native_onboarding:
         contract["nativeOnboarding"] = {
             "manifestField": "extensions.com.openai.onboardingSkill",
@@ -330,7 +341,7 @@ def development_contract_errors(contract, golden_task_ids):
                                    "conditional-existing-accord-upgrade-after-v3.2-release"})
         granted.update({"chatgpt-codex-functional-development", "conditional-v3.3-release"})
     release = authority.get("conditionalRelease")
-    require(isinstance(release, dict) and release.get("target") in (("3.3.0",) if successor else ("3.2.0", "3.2.1"))
+    require(isinstance(release, dict) and release.get("target") in (("3.3.0", "3.3.1") if successor else ("3.2.0", "3.2.1"))
             and release.get("decision") in (("not-authorized", "user-authorized-after-acceptance")
                                             if successor else ("user-authorized-after-acceptance",))
             and release.get("ready") is False
@@ -346,7 +357,7 @@ def development_contract_errors(contract, golden_task_ids):
                                               "final-candidate-not-publication-proof"),
             "a declared version is not publication evidence")
     if successor:
-        require(cycle.get("targetVersion") == "3.3.0"
+        require(cycle.get("targetVersion") in ("3.3.0", "3.3.1")
                 and (contract.get("status") != "candidate-frozen"
                      or isinstance(release, dict)
                      and release.get("decision") == "user-authorized-after-acceptance"),

@@ -5,12 +5,13 @@ description: Coordinate an authorized outcome across changed goals, capability g
 
 # Coordinate the current task
 
-Apply the bundled [original meta-guidance](references/meta-guidance.md) as the
-value and judgment foundation. The native entry supplies its full text with these
+Apply the bundled [English translation](references/meta-guidance.md) of the
+[Chinese meta-guidance source](references/meta-guidance.zh-CN.md) as the value and
+judgment foundation. The native entry supplies the English text with these
 coordination duties. When using this Skill without that entry, read the original
 if it is not already available. It creates no facts, task state or authority;
 respect the host's instruction hierarchy and the user's applicable choices.
-Repeated delivery of the same original is one foundation, not extra authority.
+Repeated delivery of the same guidance is one foundation, not extra authority.
 
 Interpret each input against the current goal, authority, pauses and unfinished
 work. Incorporate corrections and answer side questions without losing that work.

@@ -1040,8 +1040,8 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         candidate = copy.deepcopy(self.contract)
         candidate['status'] = 'candidate-frozen'
         candidate['cycle']['versionState'] = 'final-candidate-not-publication-proof'
-        candidate['delivery']['version'] = '3.3.0'
-        candidate['delivery']['hostProjections'][0]['packageVersion'] = '3.3.0'
+        candidate['delivery']['version'] = candidate['cycle']['targetVersion']
+        candidate['delivery']['hostProjections'][0]['packageVersion'] = candidate['cycle']['targetVersion']
         self.assertEqual(self.errors(candidate), [])
         self.assertFalse(candidate['authority']['conditionalRelease']['ready'])
         self.assertFalse(candidate['claimCeiling']['functionalCompletion'])
@@ -1105,7 +1105,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertEqual(self.contract["authority"]["conditionalRelease"]["decision"],
                          "user-authorized-after-acceptance")
         self.assertFalse(self.contract["authority"]["conditionalRelease"]["ready"])
-        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.0")
+        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.1")
         self.assertEqual(self.contract["predecessorSnapshot"], old["predecessorSnapshot"])
         self.assertEqual({p["id"] for p in self.contract["delivery"]["hostProjections"]}, {"codex"})
         self.assertEqual({p["id"] for p in old["delivery"]["hostProjections"]}, {"codex", "claude-code"})
@@ -1631,7 +1631,14 @@ class DevelopmentDeliveryTests(unittest.TestCase):
         with self.changed(locator, b'Changed value guidance is not the approved original.'):
             invalid = self.report()
         self.assertFalse(invalid['valid'])
-        self.assertTrue(any('original meta guidance bytes differ' in x for x in invalid['errors']))
+        self.assertTrue(any('English meta guidance bytes differ' in x for x in invalid['errors']))
+        chinese = locator.removesuffix('.md') + '.zh-CN.md'
+        self.assertIn(chinese, projection['referenceFiles'])
+        source = (self.root / chinese).read_bytes()
+        with self.changed(chinese, source.replace('尊重规律'.encode(), '尊重现实'.encode(), 1)):
+            altered_source = self.report()
+        self.assertFalse(altered_source['valid'])
+        self.assertTrue(any('Chinese source meta guidance bytes differ' in x for x in altered_source['errors']))
         altered = copy.deepcopy(self.contract)
         altered['delivery']['hostProjections'][0]['referenceFiles'].remove(locator)
         for case in altered['acceptance']['admission']['cases']:
@@ -1641,12 +1648,12 @@ class DevelopmentDeliveryTests(unittest.TestCase):
             undeclared = self.report()
         self.assertFalse(undeclared['valid'])
         self.assertTrue(any('meta guidance reference is undeclared' in x for x in undeclared['errors']))
-        # The approved4444 bytes contribute to the normal primary instruction cost.
+        # Only the loaded English translation contributes to primary exposure.
         without = copy.deepcopy(self.contract)
         without['delivery']['hostProjections'][0]['metaGuidance'] = False
         with self.changed(DEVELOPMENT_FILE, json.dumps(without).encode()):
             baseline_cost = self.report()['complexity']['primaryInstructionBytes']
-        self.assertEqual(report['complexity']['primaryInstructionBytes']-baseline_cost,4444)
+        self.assertEqual(report['complexity']['primaryInstructionBytes']-baseline_cost,4656)
 
     def test_current_cost_includes_runtime_copies_and_node_test_fixtures(self):
         report = self.report()
