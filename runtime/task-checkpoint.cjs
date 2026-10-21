@@ -226,11 +226,13 @@ function readNativeInputSnapshot(request, where) {
   const read = () => {
     idle();
     const input = readInput(where);
+    const state = request.sourcePart && !input?.nativeInputReconciliation?.cursor && fs.existsSync(where.state)
+      ? readJson(where.state) : null;
     idle();
     if (!input) fail('native-user-input-receipt-missing');
-    return input;
+    return {input, state};
   };
-  const input = read();
+  const snapshot = read(), {input, state} = snapshot;
   let result;
   if (Object.hasOwn(request, 'sourcePart')) {
     const selected = request.sourcePart, cursor = selected?.evidenceCursor;
@@ -247,7 +249,7 @@ function readNativeInputSnapshot(request, where) {
       fail('invalid-native-source-selection');
     }
     if (Object.hasOwn(request, 'index') || request.expectedReceiptEpoch !== input.epoch) fail('native-source-read-basis-required');
-    const evidence = inputEvidence(input, request, request.sourcePart.evidenceCursor, request.sourcePart);
+    const evidence = inputEvidence(input, request, request.sourcePart.evidenceCursor, request.sourcePart, state);
     if (evidence.state !== 'observed') fail(evidence.reason || 'native-source-read-unavailable');
     const {text: content, image, record, ...part} = evidence.selectedPart;
     result = {available: true, coverage: 'bound-native-source-part', receiptEpoch: input.epoch,
@@ -263,7 +265,7 @@ function readNativeInputSnapshot(request, where) {
         maxChars: limit, expectedReceiptEpoch: input.epoch};
     }
   } else result = readNativeInput(request, input);
-  if (canonical(input) !== canonical(read())) fail('input-changed-during-read');
+  if (canonical(snapshot) !== canonical(read())) fail('input-changed-during-read');
   return result;
 }
 
@@ -274,7 +276,7 @@ function nativeContextSource(event) {
     turnId: event.turn_id, cwd: event.cwd, model: event.model};
 }
 
-function observeStoredContext(input, request, now = Date.now()) {
+function observeStoredContext(input, request, now = Date.now(), state = null) {
   if (!input || needsInput(input) || input.interrupted || !input.nativeContextSource) {
     return {state: 'unknown', reason: 'current-native-context-source-unavailable',
       scope: 'native-last-response-context-basis', sourceReleaseAllowed: false};
@@ -282,8 +284,8 @@ function observeStoredContext(input, request, now = Date.now()) {
   if (nativeContextLoadError) throw nativeContextLoadError;
   if (typeof nativeContextReader !== 'function') fail('native-context-reader-unavailable');
   if (request.currentHost && (input.inputSource === 'retained-native-replay' || input.nativeInputReconciliation ||
-      request.currentHost.turnId !== input.nativeContextSource.turnId)) {
-    const evidence = inputEvidence(input, request), proof = turnProofBasis(input, request, evidence);
+      request.currentHost.turnId !== input.nativeContextSource.turnId || checkpointOriginProof(input, request, state))) {
+    const evidence = inputEvidence(input, request, null, null, state), proof = turnProofBasis(input, request, evidence, state);
     if (!proof || evidence.state !== 'observed' || !evidence.latestInputReconciled || !evidence.latestNativeInputsComplete) {
       const execution = retryBinding(input, request);
       return {state: 'unknown', reason: execution && request.currentHost.turnId !== execution.turnId
@@ -303,12 +305,14 @@ function readNativeContextSnapshot(request, where) {
     if (fs.existsSync(where.lock) || fs.existsSync(where.input + '.lock')) fail('input-read-busy');
     const input = readInput(where);
     if (!input) fail('native-user-input-receipt-missing');
+    const state = request.currentHost && !input.nativeInputReconciliation?.cursor && fs.existsSync(where.state)
+      ? readJson(where.state) : null;
     if (fs.existsSync(where.lock) || fs.existsSync(where.input + '.lock')) fail('input-read-busy');
-    return input;
+    return {input, state};
   };
-  const input = read();
-  const observation = observeStoredContext(input, request);
-  if (canonical(input) !== canonical(read())) fail('input-changed-during-read');
+  const snapshot = read(), {input, state} = snapshot;
+  const observation = observeStoredContext(input, request, Date.now(), state);
+  if (canonical(snapshot) !== canonical(read())) fail('input-changed-during-read');
   return {...observation, epoch: input.epoch, sourceReleaseAllowed: false};
 }
 
@@ -478,7 +482,50 @@ function inputBasis(input) {
     model: original.turnId === input.nativeContextSource.turnId ? input.nativeContextSource.model : null},
     anchorEpoch: original.epoch, promptSha256: original.promptSha256};
 }
-function inputEvidence(input, request, expectedCursor = null, readPart = null) {
+// Private checkpoint evidence is only a locator for the existing bounded
+// verifier. It never adopts input, renews authority, or moves the origin anchor.
+function checkpointOriginProof(input, request, state) {
+  const proof = state?.nativeInputOriginProof;
+  if (proof === undefined) return null;
+  const cursor = proof?.cursor, basis = proof?.inputBasis, source = basis?.source;
+  const keys = value => value && typeof value === 'object' && !Array.isArray(value) ? Object.keys(value).sort().join(',') : '';
+  if (state.schema !== 1 || !Number.isSafeInteger(state.revision) || state.revision < 1 ||
+      keys(proof) !== 'cursor,cwd,epoch,inputBasis,inputSha256,schema,sessionId' ||
+      proof.schema !== 'yiyuan-accord-native-input-origin-proof/v1' ||
+      proof.epoch !== state.epoch || proof.sessionId !== state.session || state.session !== request.session_id ||
+      !text(proof.cwd) || !text(state.cwd) || !samePath(proof.cwd, state.cwd) || !samePath(state.cwd, fs.realpathSync(request.cwd)) ||
+      !/^[a-f0-9]{64}$/.test(proof.inputSha256) || keys(basis) !== 'anchorEpoch,promptSha256,source' ||
+      !text(basis.anchorEpoch) || !/^[a-f0-9]{64}$/.test(basis.promptSha256) ||
+      keys(source) !== 'cwd,model,sessionId,transcriptPath,turnId' || source.sessionId !== state.session ||
+      !text(source.cwd) || !path.isAbsolute(source.cwd) || !samePath(fs.realpathSync(source.cwd), state.cwd) || !text(source.turnId) ||
+      !text(source.transcriptPath) || !path.isAbsolute(source.transcriptPath) || !(source.model === null || text(source.model)) ||
+      keys(cursor) !== 'anchorOffset,endOffset,headSha256,prefixSha256,signalsSha256,sourceId' ||
+      !text(cursor.sourceId) || cursor.sourceId.length > 200 ||
+      !Number.isSafeInteger(cursor.anchorOffset) || cursor.anchorOffset < 0 ||
+      !Number.isSafeInteger(cursor.endOffset) || cursor.endOffset <= cursor.anchorOffset ||
+      !['headSha256', 'prefixSha256', 'signalsSha256'].every(key => /^[a-f0-9]{64}$/.test(cursor[key]))) {
+    fail('invalid-native-input-origin-proof');
+  }
+  if (needsInput(input) || input?.interrupted || proof.epoch !== input?.epoch ||
+      proof.inputSha256 !== sha(canonical(input)) || canonical(basis) !== canonical(inputBasis(input))) return null;
+  return proof;
+}
+function retainedOriginCursor(input, request, state) {
+  return input.nativeInputReconciliation?.cursor ?? checkpointOriginProof(input, request, state)?.cursor;
+}
+function originProofForCommit(input, request, cursor, prior, cwd) {
+  if (!cursor) {
+    const proof = checkpointOriginProof(input, request, prior);
+    return proof ? {nativeInputOriginProof: proof} : {};
+  }
+  const proof = {schema: 'yiyuan-accord-native-input-origin-proof/v1',
+    epoch: input.epoch, sessionId: request.session_id, cwd,
+    inputBasis: inputBasis(input), inputSha256: sha(canonical(input)), cursor};
+  checkpointOriginProof(input, request, {schema: 1, revision: (prior?.revision || 0) + 1,
+    epoch: input.epoch, session: request.session_id, cwd, nativeInputOriginProof: proof});
+  return {nativeInputOriginProof: proof};
+}
+function inputEvidence(input, request, expectedCursor = null, readPart = null, state = null) {
   const basis = inputBasis(input);
   if (!basis) return {state: 'unknown', reason: input?.nativeContextSource || input?.nativeInputBasis
     ? 'native-input-basis-unavailable' : 'native-input-source-unbound', pendingInputs: []};
@@ -493,7 +540,7 @@ function inputEvidence(input, request, expectedCursor = null, readPart = null) {
       .map(item => ({promptSha256: item.promptSha256, turnId: item.turnId,
         recordSha256: item.nativeEvidence?.recordSha256, sourceRef: item.nativeEvidence?.sourceRef})),
     host: request.currentHost, expectedTurnId: request.nativeTurnId, expectedCursor,
-    retainedCursor: input.nativeInputReconciliation?.cursor,
+    retainedCursor: retainedOriginCursor(input, request, state),
     coverage: input.nativeInputReconciliation?.recordCoverage, readPart});
 }
 function projectInputEvidence(evidence) {
@@ -519,7 +566,7 @@ function retryBinding(input, request) {
   if (!text(turnId) || turnId.length > 200 || !text(model) || model.length > 200) return null;
   return {...source, turnId, model};
 }
-function turnProofBasis(input, request, evidence) {
+function turnProofBasis(input, request, evidence, state = null) {
   const execution = retryBinding(input, request), basis = inputBasis(input);
   if (!execution || !basis || evidence.state !== 'observed') return null;
   const entries = retainedInputs(input), start = entries.findIndex(item => item.epoch === basis.anchorEpoch);
@@ -528,40 +575,40 @@ function turnProofBasis(input, request, evidence) {
     promptHash: basis.promptSha256,
     captured: evidence.records.map(item => item.promptSha256),
     sourceScan: {anchorHash: basis.promptSha256, expectedCursor: evidence.cursor,
-      retainedCursor: input.nativeInputReconciliation?.cursor,
+      retainedCursor: retainedOriginCursor(input, request, state),
       coverage: input.nativeInputReconciliation?.recordCoverage,
       captured: evidence.records.map(({promptSha256, turnId, recordSha256, sourceRef}) =>
         ({promptSha256, turnId, recordSha256, sourceRef}))},
     acceptedExecution: {turnId: execution.turnId, model: execution.model}};
 }
-function associateCurrentTurn(input, request) {
-  const evidence = inputEvidence(input, request);
-  const proof = turnProofBasis(input, request, evidence);
+function associateCurrentTurn(input, request, state = null) {
+  const evidence = inputEvidence(input, request, null, null, state);
+  const proof = turnProofBasis(input, request, evidence, state);
   if (!proof || !evidence.latestInputReconciled) return null;
   const association = nativeTurnAssociation(proof.binding, request.currentHost, proof.promptHash,
     proof.captured, proof.acceptedExecution, proof.sourceScan);
   return association.state === 'observed' ? association : null;
 }
-function requireNativeTurn(request, input, expectedCursor = null, stage = 'initial-validation') {
+function requireNativeTurn(request, input, expectedCursor = null, stage = 'initial-validation', state = null) {
   if (!request || !Object.hasOwn(request, 'nativeTurnId')) return;
   const expected = request.nativeTurnId;
   const observed = input?.nativeInputReconciliation?.turnId ?? input?.hostObservation?.turnId ??
     (input?.inputSource === 'host-continuation' ? null : input?.turnId);
   if (!text(expected) || expected.length > 200) fail('native-call-turn-conflict');
-  if (expected !== observed && (request.currentHost?.turnId !== expected || !associateCurrentTurn(input, request))) {
+  if (expected !== observed && (request.currentHost?.turnId !== expected || !associateCurrentTurn(input, request, state))) {
     fail('native-call-turn-conflict');
   }
-  const evidence = inputEvidence(input, request, expectedCursor);
+  const evidence = inputEvidence(input, request, expectedCursor, null, state);
   if (evidence.state === 'observed' && !evidence.latestInputReconciled) fail('native-input-reconciliation-required');
   if (evidence.state === 'observed' && !evidence.latestNativeInputsComplete) fail('native-input-content-coverage-unknown');
   if (evidence.state !== 'observed' && evidence.reason !== 'native-input-source-unbound') failNativeInput(stage, evidence.reason);
   return evidence.cursor;
 }
 
-function currentEpoch(where, epoch, request = null, expectedInput = null, expectedCursor = null) {
+function currentEpoch(where, epoch, request = null, expectedInput = null, expectedCursor = null, state = null) {
   const input = readInput(where);
   if (input?.epoch !== epoch) fail('latest-user-input-not-reconciled');
-  requireNativeTurn(request, input, expectedCursor, 'commit-recheck');
+  requireNativeTurn(request, input, expectedCursor, 'commit-recheck', state);
   // Failure watermarks deliberately publish outside the input lock. Re-read
   // after bounded transcript proof, immediately before state publication.
   if (expectedInput && canonical(input) !== canonical(expectedInput) ||
@@ -573,7 +620,7 @@ function currentEpoch(where, epoch, request = null, expectedInput = null, expect
 
 function retireFiles(where, epoch, prior = null, request = null, expectedInput = null, expectedCursor = null, sourceGuard = null) {
   return inputLocked(where, () => {
-    const input = currentEpoch(where, epoch, request, expectedInput, expectedCursor);
+    const input = currentEpoch(where, epoch, request, expectedInput, expectedCursor, prior);
     if (sourceGuard && !sourceGuard(input)) return;
     const receipt = fs.existsSync(where.input) ? readJson(where.input, INPUT_RECEIPT_LIMIT) : null;
     const files = [[where.state, prior], [where.input, receipt]].filter(([, value]) => value !== null);
@@ -922,6 +969,7 @@ function binding(request, where, prior, currentInput) {
 }
 
 function operate(request) {
+  if (Object.hasOwn(request, 'nativeInputOriginProof')) fail('caller-native-origin-proof-not-accepted');
   const where = location(request.session_id, request.cwd);
   if (where && request.op === 'recover-lock') {
     if (!['state', 'input'].includes(request.lock || 'state')) fail('unknown-lock-kind');
@@ -974,7 +1022,7 @@ function operate(request) {
       mode: prior?.mode || 'unbound', currentInputReconciled: !needsInput(currentInput) && prior?.epoch === currentInput.epoch,
       currentInputReconciledScope: 'stored-input-epoch-only; latest native completeness is nativeInputEvidence',
       storedInputEpochReconciled: !needsInput(currentInput) && prior?.epoch === currentInput.epoch,
-      ...(request.nativeInputEvidence === true ? {nativeInputEvidence: projectInputEvidence(inputEvidence(currentInput, request))} : {}),
+      ...(request.nativeInputEvidence === true ? {nativeInputEvidence: projectInputEvidence(inputEvidence(currentInput, request, null, null, prior))} : {}),
       // The locator and digest come from the same checked read as the projection.
       // Consumers may read the full contract without treating a later file as it.
       checkpointSource: prior ? {path: where.state, sha256: stateHash} : null,
@@ -991,21 +1039,21 @@ function operate(request) {
     const currentInput = inputLocked(where, () => readInput(where));
     if (!currentInput) fail('native-user-input-receipt-missing');
     const prior = fs.existsSync(where.state) ? readJson(where.state) : null;
-    const nativeCursor = ['bind', 'pause', 'retire'].includes(request.op) ? requireNativeTurn(request, currentInput) : null;
+    const nativeCursor = ['bind', 'pause', 'retire'].includes(request.op) ? requireNativeTurn(request, currentInput, null, 'initial-validation', prior) : null;
     if (request.op === 'reconcile-native-input') {
       if (needsInput(currentInput) || currentInput.interrupted) fail('native-input-recovery-required');
       if (request.epoch !== currentInput.epoch || request.expectedRevision !== (prior?.revision || 0) ||
           !request.currentHost || request.nativeTurnId !== request.currentHost.turnId || !request.evidenceCursor) {
         fail('native-input-reconciliation-basis-required');
       }
-      const evidence = inputEvidence(currentInput, request, request.evidenceCursor);
+      const evidence = inputEvidence(currentInput, request, request.evidenceCursor, null, prior);
       if (evidence.state !== 'observed') fail('native-input-evidence-changed');
       if (!evidence.pendingInputs.length && !evidence.enrichments?.length) fail('native-input-no-pending-input');
       if (evidence.records.some(item => !item.supported)) fail('native-input-content-unsupported');
       const observedTurn = currentInput.nativeInputReconciliation?.turnId ??
         currentInput.hostObservation?.turnId ?? currentInput.turnId;
       if (request.nativeTurnId !== observedTurn) {
-        const proof = turnProofBasis(currentInput, request, evidence);
+        const proof = turnProofBasis(currentInput, request, evidence, prior);
         if (!proof) fail('native-call-turn-conflict');
         const association = nativeTurnAssociation(proof.binding, request.currentHost, proof.promptHash,
           proof.captured, proof.acceptedExecution, proof.sourceScan);
@@ -1014,7 +1062,7 @@ function operate(request) {
       return inputLocked(where, () => {
         const after = readInput(where), raw = readJson(where.input, INPUT_RECEIPT_LIMIT);
         if (canonical(after) !== canonical(currentInput)) fail('latest-user-input-not-reconciled');
-        const checked = inputEvidence(after, request, request.evidenceCursor);
+        const checked = inputEvidence(after, request, request.evidenceCursor, null, prior);
         if (checked.state !== 'observed') fail('native-input-evidence-changed');
         if (canonical(readInput(where)) !== canonical(after)) fail('latest-user-input-not-reconciled');
         // Receipt append order is not source chronology: a gap before a later
@@ -1042,7 +1090,7 @@ function operate(request) {
       }, true);
     }
     if (request.op === 'assess-context') {
-      const observation = request.nativeContext === true ? observeStoredContext(currentInput, request) : null;
+      const observation = request.nativeContext === true ? observeStoredContext(currentInput, request, Date.now(), prior) : null;
       const result = assessContext(request, prior, currentInput, Date.now(), observation);
       const after = inputLocked(where, () => readInput(where));
       return canonical(after) === canonical(currentInput) ? result
@@ -1057,8 +1105,8 @@ function operate(request) {
         if (canonical(fingerprint(where.root, item.path)) !== canonical(item.observed)) fail('input-revision-unstable');
       }
       return inputLocked(where, () => {
-        currentEpoch(where, currentInput.epoch, request, currentInput, nativeCursor);
-        atomic(where.state, state);
+        currentEpoch(where, currentInput.epoch, request, currentInput, nativeCursor, prior);
+        atomic(where.state, {...state, ...originProofForCommit(currentInput, request, nativeCursor, prior, where.root)});
         return {revision: state.revision, mode: state.mode, inspection};
       });
     }
@@ -1078,8 +1126,13 @@ function operate(request) {
       if (!text(request.reason)) fail('pause-reason-required');
       const pending = inspectDiagnostic(where, prior);
       return inputLocked(where, () => {
-        currentEpoch(where, currentInput.epoch, request, currentInput, nativeCursor);
-        atomic(where.state, {...prior, revision: prior.revision + 1, mode: 'paused', reason: request.reason});
+        currentEpoch(where, currentInput.epoch, request, currentInput, nativeCursor, prior);
+        // A pause may still refer to an old output contract. Do not attach a
+        // current-epoch proof to that older checkpoint or silently reconcile it.
+        const {nativeInputOriginProof: oldProof, ...paused} = prior;
+        const proof = prior.epoch === currentInput.epoch ? originProofForCommit(currentInput, request, nativeCursor, prior, where.root)
+          : oldProof ? {nativeInputOriginProof: oldProof} : {};
+        atomic(where.state, {...paused, ...proof, revision: prior.revision + 1, mode: 'paused', reason: request.reason});
         return {mode: 'paused', revision: prior.revision + 1, pending};
       });
     }
@@ -1279,6 +1332,7 @@ function validateRecoveryIdentity(request, where, input, state) {
           !['available', 'unavailable', 'changed'].includes(change.kind))) fail('invalid-recovery-host-observation');
   }
   if (state) {
+    checkpointOriginProof(input, request, state);
     savedUnresolved(state);
     const names = new Set();
     const reference = (name) => {

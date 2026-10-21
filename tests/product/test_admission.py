@@ -1117,6 +1117,17 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             for scope in ids if claim in b["requiredCoverage"] and scope not in b["requiredCoverage"][claim])
         source["requiredCoverage"][claim].remove(scope)
         target["requiredCoverage"][claim].append(scope)
+        self.assertIn('outcome obligations must bind unique IDs, source criteria, declared scope claims and true consequence leaves',
+                      admission_contract_errors(changed))
+        # A consistent synthetic criterion relocation moves its exact obligations
+        # too. It changes meaning, without granting any real case admission.
+        moved = [row for row in source['outcomeObligations']
+                 if row['scope'] == scope and row['claim'] == claim]
+        self.assertTrue(moved)
+        source['outcomeObligations'] = [row for row in source['outcomeObligations'] if row not in moved]
+        for row in moved:
+            row['source']['anchor'] = target['id']
+        target['outcomeObligations'].extend(moved)
         self.assertEqual(admission_contract_errors(changed), [])
         for case in self.contract["acceptance"]["admission"]["cases"]:
             self.assertNotEqual(_reuse_definition(self.contract, case), _reuse_definition(changed, case))
@@ -2431,7 +2442,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     self.assertEqual(set(report['acceptedCases']), all_ids - rejected)
                     self.assertEqual(set(report['caseRejections']), rejected)
 
-    def test_current_case_can_be_admitted_without_closing_missing_requirements(self):
+    def test_historical_generic_cases_can_be_admitted_without_closing_current_requirements(self):
         # This counterexample deliberately has no resource/environment cases;
         # future declarations must not change what its observer can discharge.
         contract = self.without_resource_and_environment_cases()
@@ -2459,30 +2470,50 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(set(report["acceptanceRequirements"]), {f"A{i:02}" for i in range(1, 9)})
-        # The consumed recovery case is historical. Even a synthetic observer
-        # accepting every active case cannot fill its now-unbound dimensions.
+        # Scope membership can be complete while precise source outcome leaves
+        # remain absent. The observer cannot manufacture those new obligations.
         self.assertEqual({key for key, row in report["acceptanceRequirements"].items() if row["complete"]},
-                         {"A01", "A03"})
+                         set())
+        missing = {
+            'A01': {'a01-ambiguous-goal-to-requirements', 'a01-side-inputs-preserve-goal',
+                    'a01-authority-and-resume', 'a01-affected-results-correct',
+                    'a01-usable-delivery', 'a01-input-content-not-user-authorization'},
+            'A03': {'a03-ordinary-unprompted-progress', 'a03-actual-feedback-and-recovery',
+                    'a03-genuine-pause-and-resume', 'a03-current-goal-resumed'},
+        }
+        for requirement, obligations in missing.items():
+            self.assertEqual(set(report['acceptanceRequirements'][requirement]['missingObligations']), obligations)
+        for scope in ('v33-codex-cli-ordinary-delivery', 'v33-goal-authority-correction'):
+            coverage = report['openCoverage'][scope]['claims']['function']
+            self.assertEqual({key: value for key, value in coverage.items() if key != 'outcomeObligations'},
+                             {'duties': [], 'qualityAxes': [], 'scenarios': []})
         self.assertEqual(report["acceptanceRequirements"]["A05"]["missingScopes"],
                          {"function": ["v33-autonomous-continuity"]})
-        self.assertEqual(report["openCoverage"]["v33-autonomous-continuity"]["claims"]["function"],
+        continuity = report["openCoverage"]["v33-autonomous-continuity"]["claims"]["function"]
+        self.assertEqual({key: value for key, value in continuity.items() if key != 'outcomeObligations'},
                          {"duties": ["recovery-and-rollback"], "qualityAxes": [],
                           "scenarios": ["capability-loss"]})
+        requirement = next(row for row in contract['acceptance']['admission']['acceptanceRequirements']
+                           if row['id'] == 'A05')
+        self.assertEqual(set(continuity['outcomeObligations']),
+                         {row['id'] for row in requirement['outcomeObligations']})
         # Historical executions do not supply replacement correction or
         # installed-environment evidence, even when a component worked.
         self.assertNotIn("v33-systemic-correction-02", report["acceptedCases"])
         self.assertNotIn("v33-codex-cli-review-delivery-01", report["acceptedCases"])
         self.assertNotIn("v33-codex-cli-ordinary-retro-01", report["acceptedCases"])
         self.assertEqual(set(report["acceptanceRequirements"]["A04"]["missingScopes"]["function"]),
-                         {"v33-system-integration"})
+                         {"v33-systemic-correction", "v33-system-integration"})
         self.assertEqual(report["openCoverage"]["v33-codex-cli-ordinary-delivery"]
                          ["claims"]["function"]["scenarios"], [])
         self.assertNotIn("v33-openai-entry-applicability", report["unboundCoverage"]["function"])
         self.assertEqual(report["acceptanceRequirements"]["A02"]["missingScopes"]["function"],
                          ["v33-dynamic-model-routing"])
         self.assertNotIn("claude-code", report["productCoverage"])
-        self.assertEqual(report["progress"]["coverageVerified"], 10)
-        self.assertEqual(report["progress"]["requirementsComplete"], 2)
+        # Four unchanged entry/lifecycle pairs and the source-bound capability
+        # role coverage remain verified; none completes a whole current A item.
+        self.assertEqual(report["progress"]["coverageVerified"], 5)
+        self.assertEqual(report["progress"]["requirementsComplete"], 0)
         # The explicit absent resource/adaptation cases and lifecycle parents
         # cannot be discharged by SDK sub-scopes.
         missing = report["acceptanceRequirements"]["A06"]["missingScopes"]
@@ -2490,7 +2521,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertIn("v33-environment-adaptation", missing["function"])
         self.assertNotIn("v33-codex-sdk-lifecycle", missing["package-lifecycle"])
 
-        self.assertNotIn("v33-codex-sdk-scoped-exposure", missing["function"])
+        # Its exact component case can remain admitted while the finer current
+        # installation/reuse obligations still lack a source-bound consequence.
+        self.assertIn("v33-codex-sdk-scoped-exposure-01", report["acceptedCases"])
+        self.assertIn("v33-codex-sdk-scoped-exposure", missing["function"])
 
     def source_case_binding_gaps(self, contract):
         """Independent declaration oracle; never read verifier output as truth."""
@@ -2830,9 +2864,26 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
         self.assertIn('v33-dynamic-model-routing',
                       report['acceptanceRequirements']['A02']['missingScopes']['function'])
 
-    def test_declared_current_execution_fixtures_match_committed_sources(self):
+    def test_execution_fixtures_match_their_bound_source_revisions(self):
+        from yiyuan_accord.admission import _definition
+        # These two immutable executions were observed at this exact subject.
+        # New deadline/resource handling in HEAD does not re-execute old work.
+        revision = 'd855cd0936733960cd107168a3369963a65d874a'
+        definitions = {
+            'v33-codex-sdk-lifecycle-01': 'd82650fd8449a9501e9eb0c8c4bb5f766233cd220390418bcd9cdd4da1708793',
+            'v33-codex-sdk-scoped-exposure-01': '4523db05acee328aa1510214744c84df90913673c3952f5572025d66952b466d',
+        }
+        original = json.loads(subprocess.check_output(
+            ['git', '-C', str(self.root), 'show', revision + ':' + DEVELOPMENT_FILE],
+            env=development_fixtures.owned_git_environment(), timeout=30))
         checked = set()
         for case in self.contract['acceptance']['admission']['cases']:
+            source_revision = 'HEAD'
+            if case['id'] in definitions:
+                source_revision = revision
+                bound = next(row for row in original['acceptance']['admission']['cases'] if row['id'] == case['id'])
+                self.assertEqual(case, bound)
+                self.assertEqual(_definition(original, bound), definitions[case['id']])
             pending = [case['conditions'].get('execution')]
             while pending:
                 value = pending.pop()
@@ -2847,9 +2898,14 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 with self.subTest(case=case['id'], fixture=value['caseFile']):
                     self.assertIn(value['caseFile'], case['oracleFiles'])
                     raw = subprocess.check_output(
-                        ['git', '-C', str(self.root), 'show', 'HEAD:' + value['caseFile']],
+                        ['git', '-C', str(self.root), 'show', source_revision + ':' + value['caseFile']],
                         env=development_fixtures.owned_git_environment(), timeout=30)
                     self.assertEqual(value['caseSha256'], hashlib.sha256(raw).hexdigest())
+                    if source_revision != 'HEAD':
+                        current = subprocess.check_output(
+                            ['git', '-C', str(self.root), 'show', 'HEAD:' + value['caseFile']],
+                            env=development_fixtures.owned_git_environment(), timeout=30)
+                        self.assertNotEqual(hashlib.sha256(current).hexdigest(), value['caseSha256'])
                 checked.add(case['id'])
         self.assertTrue({'v33-codex-sdk-lifecycle-01', 'v33-codex-sdk-scoped-exposure-01'} <= checked)
 

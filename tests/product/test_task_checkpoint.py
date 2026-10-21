@@ -1915,6 +1915,234 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
             last_token_usage=dict(total_tokens=last), total_token_usage=dict(total_tokens=1000000),
             model_context_window=window)))
 
+    def origin_bound_task(self):
+        self.native_transcript()
+        lines = self.transcript.read_bytes().splitlines(keepends=True)
+        meta = json.loads(lines[0]); meta['payload']['source'] = 'cli'
+        self.transcript.write_bytes(json.dumps(meta).encode('utf-8')+b'\n'+b''.join(lines[1:]))
+        self.append_native('response_item', {'type': 'message', 'role': 'user', 'content': [
+            {'type': 'input_text', 'text': 'Continue the authorized delivery.'}]})
+        self.bind(nativeTurnId='native-turn', currentHost=self.native_host)
+        current = self.status()
+        checkpoint = Path(current['checkpointSource']['path'])
+        receipt = next(path for path in self.state.glob('*.input.json')
+            if json.loads(path.read_text(encoding='utf-8'))['epoch'] == current['epoch'])
+        return checkpoint, receipt
+
+    def append_origin_padding(self, size):
+        prefix = b'{"type":"response_item","payload":{"type":"message","role":"assistant","content":"'
+        suffix = b'"}}\n'
+        with self.transcript.open('ab') as stream:
+            while size:
+                amount = min(size, 1024*1024)
+                if 0 < size-amount < len(prefix)+len(suffix):
+                    amount -= len(prefix)+len(suffix)
+                self.assertGreaterEqual(amount, len(prefix)+len(suffix))
+                stream.write(prefix + b'x'*(amount-len(prefix)-len(suffix)) + suffix)
+                size -= amount
+
+    def origin_evidence(self):
+        return self.invoke({'op': 'status', 'nativeInputEvidence': True, 'currentHost': self.native_host})
+
+    def test_healthy_bind_retains_native_origin_across_ordinary_window_without_receipt_write(self):
+        checkpoint, receipt = self.origin_bound_task()
+        original_receipt = receipt.read_bytes()
+        self.assertEqual(self.origin_evidence()['nativeInputEvidence']['state'], 'observed')
+        self.append_origin_padding(17*1024*1024)
+        current = self.origin_evidence()
+        self.assertEqual(current['nativeInputEvidence']['state'], 'observed', current['nativeInputEvidence'])
+        self.assertTrue(current['nativeInputEvidence']['latestInputReconciled'])
+        self.assertTrue(current['nativeInputEvidence']['latestNativeInputsComplete'])
+        self.assertEqual(receipt.read_bytes(), original_receipt)
+        proof = json.loads(checkpoint.read_text(encoding='utf-8'))['nativeInputOriginProof']
+        self.assertEqual(proof['epoch'], current['epoch'])
+        self.assertEqual(proof['cursor']['anchorOffset'], current['nativeInputEvidence']['cursor']['anchorOffset'])
+
+    def test_native_origin_repeat_bind_pause_and_read_only_consumers(self):
+        checkpoint, receipt = self.origin_bound_task()
+        before_receipt = receipt.read_bytes()
+        first = json.loads(checkpoint.read_text(encoding='utf-8'))['nativeInputOriginProof']
+        self.append_origin_padding(17*1024*1024)
+        self.append_usage(4200)
+        self.bind(nativeTurnId='native-turn', currentHost=self.native_host)
+        proof = json.loads(checkpoint.read_text(encoding='utf-8'))['nativeInputOriginProof']
+        self.assertEqual(proof['cursor']['anchorOffset'], first['cursor']['anchorOffset'])
+        self.assertGreater(proof['cursor']['endOffset'], first['cursor']['endOffset'])
+        current = self.origin_evidence()
+        self.invoke({'op': 'pause', 'epoch': current['epoch'], 'expectedRevision': current['revision'],
+            'nativeTurnId': 'native-turn', 'currentHost': self.native_host, 'reason': 'Preserve the real user pause.'})
+        self.bind(nativeTurnId='native-turn', currentHost=self.native_host)
+        self.assertEqual(self.status()['mode'], 'paused')
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        self.preload = self.root/'deny-observation-writes.cjs'
+        self.preload.write_bytes(b"const fs=require('node:fs');for(const k of ['mkdirSync','writeFileSync','writeSync','fsyncSync','renameSync','unlinkSync'])fs[k]=()=>{throw Error('unexpected observation write')};")
+        observed = self.origin_evidence()
+        self.assertEqual(observed['nativeInputEvidence']['state'], 'observed')
+        record = observed['nativeInputEvidence']['records'][0]
+        part = self.invoke({'op': 'read-native-input', 'expectedReceiptEpoch': current['epoch'],
+            'sourcePart': {'evidenceCursor': observed['nativeInputEvidence']['cursor'],
+                'recordOffset': record['recordOffset'], 'recordSha256': record['recordSha256'], 'partIndex': 0}})
+        self.assertEqual(part['text'], 'Continue the authorized delivery.')
+        context = self.invoke({'op': 'observe-context', 'currentHost': self.native_host})
+        self.assertEqual(context['state'], 'observed', context)
+        self.assertEqual(context['lastResponseTokens'], 4200)
+        self.assertFalse(context['sourceReleaseAllowed'])
+        self.assertEqual({p.name: p.read_bytes() for p in self.state.iterdir()}, before)
+        self.assertEqual(receipt.read_bytes(), before_receipt)
+
+    def test_native_origin_proof_rejects_forgery_stale_basis_and_cross_task(self):
+        checkpoint, receipt = self.origin_bound_task()
+        original = checkpoint.read_bytes()
+        self.append_origin_padding(17*1024*1024)
+        observed = self.origin_evidence()
+        for field in ('epoch', 'sessionId', 'inputSha256', 'basis', 'sourceId', 'prefixSha256', 'signalsSha256', 'absent'):
+            with self.subTest(field=field):
+                state = json.loads(original); proof = state['nativeInputOriginProof']
+                if field in ('epoch', 'sessionId'): proof[field] = 'wrong-task-or-epoch'
+                elif field == 'inputSha256': proof[field] = '0'*64
+                elif field == 'basis': proof['inputBasis']['promptSha256'] = '0'*64
+                elif field == 'absent': del state['nativeInputOriginProof']
+                else: proof['cursor'][field] = '0'*64
+                checkpoint.write_bytes(json.dumps(state).encode('utf-8'))
+                if field in ('epoch', 'sessionId'):
+                    self.assertIn('invalid-native-input-origin-proof', self.invoke({'op': 'status',
+                        'nativeInputEvidence': True, 'currentHost': self.native_host}, success=False))
+                else:
+                    self.assertEqual(self.origin_evidence()['nativeInputEvidence']['state'], 'unknown')
+                if field == 'absent':
+                    record = observed['nativeInputEvidence']['records'][0]
+                    self.assertIn('native-input-origin-unavailable', self.invoke({'op': 'read-native-input',
+                        'expectedReceiptEpoch': observed['epoch'], 'sourcePart': {
+                            'evidenceCursor': observed['nativeInputEvidence']['cursor'], 'recordOffset': record['recordOffset'],
+                            'recordSha256': record['recordSha256'], 'partIndex': 0}}, success=False))
+                before = checkpoint.read_bytes(), receipt.read_bytes()
+                self.assertIn('caller-native-origin-proof-not-accepted', self.invoke({'op': 'bind',
+                    'nativeInputOriginProof': json.loads(original)['nativeInputOriginProof']}, success=False))
+                self.assertEqual((checkpoint.read_bytes(), receipt.read_bytes()), before)
+        checkpoint.write_bytes(original)
+        self.assertEqual(self.origin_evidence()['nativeInputEvidence']['state'], 'observed')
+
+    def test_native_origin_prefix_controls_input_and_replacement_still_hold(self):
+        checkpoint, receipt = self.origin_bound_task()
+        self.append_origin_padding(17*1024*1024)
+        baseline = self.transcript.read_bytes()
+        for change in ('prefix', 'unknown-control', 'pause-control', 'human', 'replacement'):
+            with self.subTest(change=change):
+                self.transcript.write_bytes(baseline)
+                if change == 'prefix':
+                    self.transcript.write_bytes(baseline.replace(b'authorized delivery', b'changed___ delivery', 1))
+                elif change == 'unknown-control': self.append_native('event_msg', {'type': 'turn_unknown_control'})
+                elif change == 'pause-control': self.append_native('event_msg', {'type': 'task_interrupted'})
+                elif change == 'human': self.append_native('response_item', {'type': 'message', 'role': 'user',
+                    'content': [{'type': 'input_text', 'text': 'Stop and change the task.'}]})
+                else:
+                    replacement = self.transcript.with_suffix('.replacement')
+                    replacement.write_bytes(baseline); replacement.replace(self.transcript)
+                evidence = self.origin_evidence()['nativeInputEvidence']
+                if change == 'human':
+                    self.assertEqual(evidence['state'], 'observed')
+                    self.assertFalse(evidence['latestInputReconciled'])
+                else: self.assertEqual(evidence['state'], 'unknown', evidence)
+                before = checkpoint.read_bytes(), receipt.read_bytes()
+                current = self.status()
+                self.invoke({'op': 'pause', 'epoch': current['epoch'], 'expectedRevision': current['revision'],
+                    'nativeTurnId': 'native-turn', 'currentHost': self.native_host, 'reason': 'Unproved source'}, success=False)
+                self.assertEqual((checkpoint.read_bytes(), receipt.read_bytes()), before)
+
+    def test_native_origin_atomic_failure_keeps_state_and_proof_together(self):
+        self.check_origin_atomic_failure(False)
+
+    def test_native_origin_receipt_drift_and_failure_watermarks_do_not_reuse_proof(self):
+        checkpoint, receipt = self.origin_bound_task()
+        original = receipt.read_bytes()
+        saved_state = checkpoint.read_bytes()
+        self.append_origin_padding(17*1024*1024)
+        for kind in ('epoch', 'source', 'watermark'):
+            with self.subTest(kind=kind):
+                receipt.write_bytes(original)
+                value = json.loads(original)
+                marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+                if marker.exists(): marker.unlink()
+                if kind == 'epoch':
+                    value['epoch'] = 'new-unbound-fixture-epoch'
+                elif kind == 'source':
+                    value['nativeInputBasis']['source']['turnId'] = 'different-origin'
+                else:
+                    marker.write_bytes(b'{"schema":1,"generation":"fixture-input-loss"}')
+                receipt.write_bytes(json.dumps(value).encode('utf-8'))
+                current = self.origin_evidence()
+                self.assertEqual(current['nativeInputEvidence']['state'], 'unknown')
+                if kind == 'watermark': self.assertTrue(current['needsNativeReplay'])
+                self.assertEqual(checkpoint.read_bytes(), saved_state)
+
+    def test_native_origin_proof_keeps_canonical_checkpoint_identity_for_workspace_alias(self):
+        canonical_work = self.work
+        alias = self.root/'workspace-alias'
+        linked = subprocess.run([self.node, '-e',
+            "require('node:fs').symlinkSync(process.argv[1],process.argv[2],process.platform==='win32'?'junction':'dir')",
+            str(canonical_work), str(alias)], capture_output=True, timeout=5)
+        self.assertEqual(linked.returncode, 0, linked.stderr)
+        self.work = alias
+        checkpoint, _ = self.origin_bound_task()
+        stored = json.loads(checkpoint.read_text(encoding='utf-8'))
+        self.assertEqual(Path(stored['nativeInputOriginProof']['cwd']), canonical_work)
+        self.append_origin_padding(17*1024*1024)
+        self.assertEqual(self.origin_evidence()['nativeInputEvidence']['state'], 'observed')
+
+    def test_native_origin_lost_publication_ack_requires_readback_without_receipt_change(self):
+        self.check_origin_atomic_failure(True)
+
+    def check_origin_atomic_failure(self, after_rename):
+        checkpoint, receipt = self.origin_bound_task()
+        before_state, before_receipt = checkpoint.read_bytes(), receipt.read_bytes()
+        self.append_origin_padding(17*1024*1024)
+        self.preload = self.root/'origin-state-fault.cjs'
+        self.preload.write_bytes(("const fs=require('node:fs'),rename=fs.renameSync;fs.renameSync=(a,b)=>{if(String(b).endsWith('.state.json')){"+
+            ("rename(a,b);" if after_rename else "")+"throw Error('origin-state-publication-failed');}return rename(a,b)};").encode('utf-8'))
+        current = self.status()
+        self.assertIn('origin-state-publication-failed', self.invoke({'op': 'bind', 'epoch': current['epoch'],
+            'expectedRevision': current['revision'], 'nativeTurnId': 'native-turn', 'currentHost': self.native_host,
+            'result': 'Preserve both source and checkpoint proof', 'inputs': ['source.json', 'keep.txt'],
+            'outputs': current['checkpoint']['outputs'], 'nextAction': 'Continue only after readback', 'canContinue': True}, success=False))
+        del self.preload
+        self.assertEqual(receipt.read_bytes(), before_receipt)
+        if after_rename:
+            saved = json.loads(checkpoint.read_text(encoding='utf-8'))
+            self.assertEqual(saved['revision'], current['revision']+1)
+            self.assertGreater(saved['nativeInputOriginProof']['cursor']['endOffset'],
+                json.loads(before_state)['nativeInputOriginProof']['cursor']['endOffset'])
+        else: self.assertEqual(checkpoint.read_bytes(), before_state)
+        self.assertEqual(self.origin_evidence()['nativeInputEvidence']['state'], 'observed')
+        self.assertFalse(list(self.state.glob('*.tmp')))
+
+    def test_native_origin_fixed_32mib_window_does_not_slide_or_overread(self):
+        checkpoint, receipt = self.origin_bound_task()
+        before_receipt = receipt.read_bytes()
+        anchor = json.loads(checkpoint.read_text(encoding='utf-8'))['nativeInputOriginProof']['cursor']['anchorOffset']
+        self.append_origin_padding(anchor + 31*1024*1024 - self.transcript.stat().st_size)
+        self.bind(nativeTurnId='native-turn', currentHost=self.native_host)
+        self.assertEqual(json.loads(checkpoint.read_text(encoding='utf-8'))['nativeInputOriginProof']['cursor']['anchorOffset'], anchor)
+        self.append_origin_padding(1024*1024)
+        self.preload = self.root/'measure-origin-read.cjs'
+        metrics = self.root/'origin-read-metrics.json'
+        self.preload.write_bytes(("const fs=require('node:fs'),open=fs.openSync,read=fs.readSync,close=fs.closeSync,tracked=new Set();let bytes=0,maxRead=0;"+
+            "fs.openSync=(p,...a)=>{const fd=open(p,...a);if(String(p)==="+json.dumps(str(self.transcript))+
+            ")tracked.add(fd);return fd};fs.readSync=(fd,b,o,l,p)=>{const n=read(fd,b,o,l,p);if(tracked.has(fd)){bytes+=n;maxRead=Math.max(maxRead,l)}return n};"+
+            "fs.closeSync=fd=>{tracked.delete(fd);return close(fd)};process.on('exit',()=>fs.writeFileSync("+
+            json.dumps(str(metrics))+",JSON.stringify({bytes,maxRead}))); ").encode('utf-8'))
+        exact = self.origin_evidence()['nativeInputEvidence']
+        self.assertEqual(exact['state'], 'observed', exact)
+        measured = json.loads(metrics.read_text())
+        self.assertGreaterEqual(measured['bytes'], 32*1024*1024)
+        self.assertLessEqual(measured['bytes'], 32*1024*1024+65536)
+        self.assertLessEqual(measured['maxRead'], 1024*1024)
+        self.append_native('response_item', {'type': 'message', 'role': 'assistant', 'content': 'Beyond the fixed origin window.'})
+        denied = self.origin_evidence()['nativeInputEvidence']
+        self.assertEqual(denied['state'], 'unknown')
+        self.assertEqual(denied['reason'], 'native-input-recovery-range-exceeded')
+        self.assertLessEqual(json.loads(metrics.read_text())['bytes'], 65536)
+        self.assertEqual(receipt.read_bytes(), before_receipt)
+
     def transcript_request(self, observation):
         request = self.context_request()
         request.update(nativeContext=True, currentHost=self.native_host, conditions=observation['conditions'])

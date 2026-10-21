@@ -160,6 +160,14 @@ own identity responsibility. No business output, host mode, replay or lock recov
 is changed through the tool. Pauses and unresolved conditions retain their existing
 rules; reasons are caller claims, not proof of authorization. Mutating/destructive
 annotations are accurate hints, not a guarantee of approval or server authorization.
+Guarded healthy binds retain `nativeInputOriginProof` in the same atomic
+checkpoint write. It binds the verified cursor to the exact receipt, input basis,
+epoch, session and workspace; inspection never writes this proof or accepts it
+from caller parameters. It only locates source evidence for revalidation. The
+ordinary origin search remains 16 MiB and the retained origin-to-EOF validation
+window remains 32 MiB. An older or changed basis, pause or unverifiable prefix
+still holds dependent actions; saving a cursor neither rolls its origin forward
+nor establishes unlimited continuity or takeover.
 For client integration, bind/pause/retire parameters, contract changes or error
 reconciliation, use the [task-state client guide (Chinese)](task-state-clients.md).
 Every bind explicitly supplies `result`, `inputs`, `outputs`, `nextAction` and

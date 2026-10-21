@@ -14,6 +14,8 @@
 
 ## 输入隔离不等于本轮正文缺失
 
+3.3.2开发实现会在有原生轮次校验的健康bind中，将`nativeInputOriginProof`随检查点一次原子保存；它绑定当时的精确回执、输入基准、epoch、session和工作区，仅供再次核验时定位原生来源。客户端不传此字段，只读inspect不保存它，也不修改输入回执。普通查找窗仍为16 MiB，保留证明后的原锚点至当前末尾验证窗仍为32 MiB；旧basis、漂移、暂停或超过验证窗都不会因已有proof而自动放行。该机制不滚动原锚点，也不独自证明无限连续性或接管完成。
+
 `includeNativeInputs:true` 的证据摘要过大时，`nativeInputEvidence.details` 为 `omitted-bounded-result`，保留真实来源、完整性和恢复标志，并给出各列表的 `counts`；列表和对账 cursor 被省略，不表示空输入或已读完。按其 `detailRead` 使用可用、兼容的现有 helper 执行只读 `status` 请求，保持相同的宿主环境和状态存储选择。核对返回的 storage、epoch、revision 及原生来源/宿主，再读取完整证据与需要的源部件；任何变化或不可用仍待核。只有取得并审查完整来源后，才使用其新鲜 cursor 对账。回退不安装组件、不改共享配置、不写状态，也不授予新的权限；helper 路径不可用时保留未决并寻找已获授权的兼容入口。
 
 `needsNativeReplay=true` 表示助手的输入基准尚不能用于绑定或续轮，不单独证明本轮正文漏收。先区分 `inputReceipt.present`、`failureWatermarkScopes` 和 `inputSource`，再将捕获文本与实际当前任务的原生输入、身份及轮次核对。完整捕获可以与 `quarantined-native-input` 同时存在；这既不是恢复成功，也不是输入必然缺失。
@@ -47,7 +49,7 @@ function bindParams(latest, absoluteWorkspace, reviewedContract) {
 }
 ```
 
-`reviewedContract` 必须含已审查的全部五字段：inputs 是完整相对路径列表（确认无保护输入才填 []），outputs 是完整非空谓词列表。模板逐项选取字段；既有变更所需的可选修订字段按下文实际审核后添加到 arguments。既有绑定重新提交仍需五字段。`canContinue: false` 适用于等待必要用户观察、决定、授权或外部条件；未完成项目或 mode=active 不足以支持 true。false 不表示完成、取消或用户 pause，也不阻止后续用户输入。[可行性记录语义](../runtime/native-state-mcp.cjs#L100)。
+`reviewedContract` 必须含已审查的全部五字段：inputs 是完整相对路径列表（确认无保护输入才填 []），outputs 是完整非空谓词列表。模板逐项选取字段；既有变更所需的可选修订字段按下文实际审核后添加到 arguments。既有绑定重新提交仍需五字段。`canContinue: false` 适用于等待必要用户观察、决定、授权或外部条件；未完成项目或 mode=active 不足以支持 true。false 不表示完成、取消或用户 pause，也不阻止后续用户输入。[可行性记录语义](../plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs)。
 
 保存合同的 `checkpoint.inputs` 含 `{path, observed}` 指纹对象；重绑参数 `inputs` 则只接受相对路径字符串。核对保护和变更处置后取各项 path，不直接把保存的对象列表作为参数，也不省略已有保护。首次绑定的 snapshot 可为 mode=unbound、revision=0、checkpoint=null；仍须有真实输入及可用恢复标志，再提交完整的新合同。
 
