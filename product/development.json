@@ -6497,6 +6497,48 @@
       "remaining": "Install/adopt the reviewed build under existing authority, reobserve the actual source without replay or watermark changes, reconcile the current contract, then resume the retained18-case full combination.",
       "wholeR2R3Complete": false,
       "releaseReady": false
+    },
+    {
+      "id": "v33-publication-and-configured-local-deployment-20261021",
+      "status": "published-public-source-verified-and-configured-local-installation-verified",
+      "recordedAtUtc": "2026-10-21T01:05:10.575514+00:00",
+      "subject": {
+        "revision": "d855cd0936733960cd107168a3369963a65d874a",
+        "tree": "69e89a0981fc63c1dc6228195dc209eb644abf71"
+      },
+      "release": {
+        "tag": "v3.3.0",
+        "url": "https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.0",
+        "publishedAtUtc": "2026-10-21T00:34:37Z",
+        "latest": true,
+        "anonymousPublicSourceFilesMatched": 199,
+        "packageMembers": 25,
+        "packageSha256": "4f08aedc65548c2439678cd32fa4544dde1980a5fc66416c4b10ba46fbbde292"
+      },
+      "qualification": {
+        "cases": 18,
+        "scopes": 17,
+        "A01-A08": "complete-for-bound-submission",
+        "finalSourceVerification": true,
+        "source": "private:accord-global-document-release-quality-20261021-01/qualification-refresh/ADMISSION.json",
+        "sourceSha256": "cc05ee347a446d885f07878d14f65b450759313e00a6c410d3c83084b22f93e9",
+        "hostedRun": 39515967499,
+        "hostedSuccessfulJobs": 11,
+        "impactAssessment": "complete-for-bound-scopes",
+        "incrementalValue": "unverified"
+      },
+      "localDeployment": {
+        "status": "verified-configured-shared-local-installation",
+        "persistentSourceTag": "v3.3.0",
+        "nativeCurrentMcpVersion": "3.3.0",
+        "sourceCacheAndRelease25MembersMatched": true,
+        "existingUserChoicesPreserved": true,
+        "source": "private:accord-published-local-deployment-20261021-01/VERIFIED.json",
+        "sourceSha256": "bcc8df27a261b40622dd721eb24bf93db74a5b7e9b2a417ebbb579b6951057d1",
+        "boundary": "Shared configured Windows CLI/Desktop/Work/VSCode and applicable default SDK/local Remote host paths; no fresh GUI/phone business or all-consumer closure/constants claim. Original source-ref rejection and temporary security-metadata repair retained."
+      },
+      "history": "Original failures, actors, episodes, limits, H metadata rejection, private preparation negatives and unknown causes retained. No old business replay, original-clock renewal, new case or lowered criterion.",
+      "sourceRecordRole": "Post-publication factual tracking only; does not change immutable release bytes, static claim ceiling, authority, cases, scope or implementation."
     }
   ],
   "environmentControl": {
@@ -10864,8 +10906,8 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "The bound18-case/17-scope/A01-A08 full qualification on4ca708063ba1de8413de90a9c7d552c4ce9d4448 and its11/11 hosted CI39505901254 are complete. Retain their exact original records, failures, actors, times and limits. Reconcile only affected current sources after the pre-publication document-role, security-description, Hook-description, bilingual reuse and informational NOTICE-link corrections; runtime and Skill bodies are unchanged. Freeze and verify that exact final subject, refresh package-bound SDK method evidence if required, obtain affected independent review and hosted verification, then publish3.3.0 under existing conditional authority and verify public post-state. Historical developmentObservations are dated provenance, not active instructions or a recurring maintenance queue. Do not replay settled business, add cases, force unnecessary migration or create a permanent manual continuation workflow.",
-    "requires": "Use the current consensus, acceptance and bound native task state. Static claim ceilings are not external qualification or publication proof. Reuse sufficient common local-host evidence while verifying consequential differences, current authority, source applicability and ownership. Existing conditional3.3 publication authorization is unchanged. This user task additionally authorizes installing the published release on all applicable existing local entries after publication, with recovery and actual-adoption verification; this task-specific grant is not general product authority. Preserve unrelated settings, disabled components, credentials, original evidence and unknown causes. New accounts, trust, material cost, unrelated external/shared effects, future hosts and archive still require their actual authority."
+    "work": "The3.3 R1-R4 release scope is complete for the bound d855 source: retained18cases/17scopes/A01-A08, exact11/11 hosted verification, conditional publication and anonymous public source match. The published25-member package has also been deployed through the native named manager to configured shared local entry paths, with actual currentMCP3.3 response and persistentv3.3.0 source. Keep original failures and scoped unknowns; do not re-run ended business, re-open retired observers or create recurring document maintenance. Later user goals and material new evidence determine any next work.",
+    "requires": "The immutablev3.3.0 tag selects d855cd0936733960cd107168a3369963a65d874a and published package4f08aedc65548c2439678cd32fa4544dde1980a5fc66416c4b10ba46fbbde292. This later status record is not another release candidate or external self-attestation. Preserve user settings, active native task authority, necessary recovery evidence, deferred-host unknowns and original identities. Future release versions, expanded hosts, social publication, new accounts/trust/material cost or archive require their actual authority; this completed deployment grant is task-specific. No new project work is implied by historical observations."
   },
   "claimCeiling": {
     "localContractOnly": true,
