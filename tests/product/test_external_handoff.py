@@ -13,6 +13,11 @@ MODULE = ROOT / "plugins/yiyuan-accord-codex/runtime/external-handoff.cjs"
 RECORDER = ROOT / "plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs"
 HOST = ROOT / "tests/product/external_handoff_host.cjs"
 
+try:
+    from .test_codex_capabilities import owned_process, owned_run
+except ImportError:  # unittest discovery loads this directory as top-level modules
+    from test_codex_capabilities import owned_process, owned_run
+
 SCENARIO = r'''
 const {createExternalHandoff}=require(process.argv[1]);
 const {openCarrierRecorder}=require(process.argv[2]);
@@ -86,12 +91,12 @@ const op=createExternalHandoff({source,recorder,current:async()=>({sourceThreadI
  verify:async()=>({decision:'allow',evidenceRef:'fixture-independent-verification'}),
  nativeFactory:async options=>{
   const runner=await createOwnedNativeRunner({...options,executable:process.execPath,
-   args:[process.argv[4],process.argv[5],process.argv[6]],hostVersion:'fixed-wire-fixture',cleanupTimeoutMs:1000});
+   args:[process.argv[4],process.argv[5],process.argv[6]],hostVersion:'fixed-wire-fixture',cleanupTimeoutMs:5000});
   return {...runner,close:async()=>{rawClosed=await runner.close();return rawClosed;}};
  }});
 (async()=>{let error=null;
  try{await op.prepare({transferId:'wire-transfer',scopeRef:'wire-scope',cwd:process.cwd(),model:'fixture',
- intake:'read the packet',continuation:'first useful chunk',postRelease:'remaining review',deadlineMs:Date.now()+7000});
+ intake:'read the packet',continuation:'first useful chunk',postRelease:'remaining review',deadlineMs:Date.now()+25000});
  await op.commit({evidenceRef:'reviewed-intake'});await op.release({evidenceRef:'reviewed-first'});
  }catch(e){error={code:e.code,message:e.message};}
  console.log(JSON.stringify({error,state:op.inspect(),rawClosed}));recorder.close();
@@ -213,10 +218,10 @@ class ExternalHandoffTests(unittest.TestCase):
     def test_native_owner_uses_real_stdio_frames_preserves_utf8_and_closes(self):
         with tempfile.TemporaryDirectory() as directory:
             log = Path(directory) / "wire.jsonl"
-            completed = subprocess.run(
+            completed = owned_run(
                 ["node", "-e", WIRE_SCENARIO, str(MODULE), str(RECORDER),
                  str(Path(directory) / "recorder.sqlite"), str(HOST), str(log), "normal"],
-                cwd=ROOT, text=True, encoding="utf-8", capture_output=True, timeout=15,
+                cwd=ROOT, text=True, encoding="utf-8", timeout=30,
             )
             self.assertEqual(completed.returncode, 0, completed.stderr)
             result = json.loads(completed.stdout)
@@ -230,25 +235,49 @@ class ExternalHandoffTests(unittest.TestCase):
 
     def test_forced_exit_is_retained_and_not_reported_as_success(self):
         with tempfile.TemporaryDirectory() as directory:
-            completed = subprocess.run(
+            completed = owned_run(
                 ["node", "-e", WIRE_SCENARIO, str(MODULE), str(RECORDER),
                  str(Path(directory) / "recorder.sqlite"), str(HOST),
                  str(Path(directory) / "wire.jsonl"), "hang-on-eof"],
-                cwd=ROOT, text=True, encoding="utf-8", capture_output=True, timeout=15,
+                cwd=ROOT, text=True, encoding="utf-8", timeout=30,
             )
             self.assertEqual(completed.returncode, 0, completed.stderr)
             result = json.loads(completed.stdout)
             self.assertEqual(result["error"]["code"], "NATIVE_CLOSE_UNVERIFIED")
             self.assertEqual(result["state"]["phase"], "held")
             self.assertFalse(result["rawClosed"]["closed"])
-            self.assertTrue(result["rawClosed"]["primaryProcessClosed"])
-            self.assertTrue(result["rawClosed"]["forced"])
+            self.assertTrue(result["rawClosed"]["primaryProcessClosed"], result)
+            self.assertTrue(result["rawClosed"]["forced"], result)
+            if os.name == "nt":
+                self.assertEqual(completed.fixture_resources["activeProcesses"], 0,
+                                 (result, completed.fixture_resources))
 
-    @unittest.skipUnless(os.name == 'nt', 'Windows exact owned child handle')
+    def test_incomplete_forced_stop_stays_held_before_fixture_cleanup(self):
+        script = r"""
+const cp=require('node:child_process');
+cp.spawnSync=()=>({status:null,error:{code:'ETIMEDOUT'}});
+const originalKill=process.kill;
+process.kill=(pid,signal)=>{if(pid<0)throw Object.assign(Error('fixture'),{code:'ESRCH'});
+ return originalKill(pid,signal);};
+""" + WIRE_SCENARIO.replace('cleanupTimeoutMs:5000', 'cleanupTimeoutMs:100')
+        with tempfile.TemporaryDirectory() as directory:
+            completed = owned_run(['node', '-e', script, str(MODULE), str(RECORDER),
+                str(Path(directory)/'recorder.sqlite'), str(HOST),
+                str(Path(directory)/'wire.jsonl'), 'hang-on-eof'],
+                cwd=ROOT, text=True, encoding='utf-8', timeout=30)
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            result = json.loads(completed.stdout)
+            self.assertEqual(result['error']['code'], 'NATIVE_CLOSE_UNVERIFIED', result)
+            self.assertEqual(result['state']['phase'], 'held', result)
+            self.assertFalse(result['rawClosed']['primaryProcessClosed'], result)
+            self.assertFalse(result['rawClosed']['closed'], result)
+            self.assertTrue(result['rawClosed']['recoveryRequired'], result)
+            self.assertEqual(result['rawClosed']['terminationError'],
+                             'ETIMEDOUT' if os.name == 'nt' else 'ESRCH', result)
+
     def test_forced_cleanup_reclaims_exact_owned_descendant(self):
         self.check_owned_descendant('owned-tree')
 
-    @unittest.skipUnless(os.name == 'nt', 'Windows exact owned child handle')
     def test_exited_launcher_is_never_signalled_by_stale_pid(self):
         self.check_owned_descendant('exited-parent')
 
@@ -264,47 +293,53 @@ class ExternalHandoffTests(unittest.TestCase):
         kernel.CloseHandle.argtypes = [wintypes.HANDLE]
         with tempfile.TemporaryDirectory() as directory:
             log = Path(directory) / 'wire.jsonl'
-            process = subprocess.Popen(["node", "-e", WIRE_SCENARIO, str(MODULE), str(RECORDER),
+            owner = owned_process(["node", "-e", WIRE_SCENARIO, str(MODULE), str(RECORDER),
                 str(Path(directory)/'recorder.sqlite'), str(HOST), str(log), mode],
                 cwd=ROOT, text=True, encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            handle = None
-            try:
-                end = time.monotonic()+5
-                child_file = Path(str(log)+'.child')
-                while not child_file.exists() and time.monotonic() < end:
-                    time.sleep(0.01)
-                self.assertTrue(child_file.exists())
-                # Retain the handle while the known child is live. Cleanup never
-                # uses a PID that could have been recycled after the observation.
-                handle = kernel.OpenProcess(0x00100001, False, int(child_file.read_text()))
-                self.assertTrue(handle)
-                output, error = process.communicate(timeout=12)
-                self.assertEqual(process.returncode, 0, error)
-                result = json.loads(output)
-                observed = kernel.WaitForSingleObject(handle, 1000)
-                self.assertEqual(result['error']['code'], 'NATIVE_CLOSE_UNVERIFIED')
-                self.assertFalse(result['rawClosed']['closed'])
-                self.assertTrue(result['rawClosed']['exitObserved'])
-                if mode == 'owned-tree':
-                    self.assertEqual(observed, 0, 'owned descendant survived forced cleanup')
-                    self.assertEqual(result['rawClosed']['terminationAttempt'], 'owned-pid-tree')
-                else:
-                    self.assertEqual(observed, 258, 'fixture descendant should remain held for exact-handle cleanup')
-                    self.assertIsNone(result['rawClosed']['terminationAttempt'])
-                    self.assertFalse(result['rawClosed']['closeObserved'])
-                    self.assertEqual(result['rawClosed']['descendantVerification'], 'unknown-launcher-exited-with-open-pipes')
-            finally:
-                if handle:
-                    try:
-                        if kernel.WaitForSingleObject(handle, 0) != 0:
-                            self.assertTrue(kernel.TerminateProcess(handle, 1), 'fixture exact-handle cleanup failed')
-                            self.assertEqual(kernel.WaitForSingleObject(handle, 1000), 0,
-                                             'fixture descendant exit remained unverified')
-                    finally:
-                        kernel.CloseHandle(handle)
-                if process.poll() is None:
-                    process.kill(); process.communicate(timeout=5)
+            with owner as process:
+                handle = None
+                try:
+                    end = time.monotonic()+5
+                    child_file = Path(str(log)+'.child')
+                    while not child_file.exists() and time.monotonic() < end:
+                        time.sleep(0.01)
+                    self.assertTrue(child_file.exists())
+                    # Retain the handle while the known child is live. Cleanup never
+                    # uses a PID that could have been recycled after the observation.
+                    handle = kernel.OpenProcess(0x00100001, False, int(child_file.read_text()))
+                    self.assertTrue(handle)
+                    output, error = process.communicate(timeout=25)
+                    self.assertEqual(process.returncode, 0, error)
+                    result = json.loads(output)
+                    observed = kernel.WaitForSingleObject(handle, 1000)
+                    self.assertEqual(result['error']['code'], 'NATIVE_CLOSE_UNVERIFIED')
+                    self.assertFalse(result['rawClosed']['closed'])
+                    self.assertTrue(result['rawClosed']['exitObserved'])
+                    if mode == 'owned-tree':
+                        self.assertEqual(observed, 0, 'owned descendant survived forced cleanup')
+                        self.assertEqual(result['rawClosed']['terminationAttempt'], 'owned-pid-tree')
+                    else:
+                        self.assertEqual(observed, 258, 'fixture descendant should remain held for exact-handle cleanup')
+                        self.assertIsNone(result['rawClosed']['terminationAttempt'])
+                        self.assertFalse(result['rawClosed']['closeObserved'])
+                        self.assertEqual(result['rawClosed']['descendantVerification'], 'unknown-launcher-exited-with-open-pipes')
+                finally:
+                    if handle:
+                        try:
+                            if kernel.WaitForSingleObject(handle, 0) != 0:
+                                self.assertTrue(kernel.TerminateProcess(handle, 1), 'fixture exact-handle cleanup failed')
+                                self.assertEqual(kernel.WaitForSingleObject(handle, 1000), 0,
+                                                 'fixture descendant exit remained unverified')
+                        finally:
+                            kernel.CloseHandle(handle)
 
+
+
+# These two cases specifically inspect Windows process handles/tree termination.
+if os.name != 'nt':
+    for name in ('test_forced_cleanup_reclaims_exact_owned_descendant',
+                 'test_exited_launcher_is_never_signalled_by_stale_pid'):
+        delattr(ExternalHandoffTests, name)
 
 if __name__ == "__main__":
     unittest.main()

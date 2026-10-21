@@ -1,4 +1,6 @@
+from contextlib import contextmanager
 import hashlib
+import sys
 import json
 import os
 from pathlib import Path
@@ -11,6 +13,86 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 MODULE = ROOT / 'plugins/yiyuan-accord-codex/runtime/codex-capabilities.cjs'
+
+
+@contextmanager
+def owned_process(command, **options):
+    """Contain fixed test peers before dispatch; never repair the tested result."""
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    from scripts.observe_codex_entry import WindowsJob, PosixProcessGroup
+    controller = WindowsJob() if os.name == 'nt' else PosixProcessGroup()
+    process = None
+    with tempfile.TemporaryDirectory() as directory:
+        # Native launchers create their own POSIX group. Retain their actual
+        # ChildProcess in the harness, since the outer group cannot contain it.
+        preload = Path(directory) / 'owned-fixture-cleanup.cjs'
+        preload.write_text(r"""
+const cp=require('node:child_process'),spawn=cp.spawn,kill=process.kill.bind(process),owned=[];
+cp.spawn=(file,args,options)=>{const child=spawn(file,args,options);
+ const row={child,group:options?.detached===true,closed:false};owned.push(row);
+ child.once('close',()=>{row.closed=true;});return child;};
+let disposing;
+function dispose(){return disposing||=(async()=>{
+ for(const row of owned){const child=row.child;
+  if(child.exitCode===null&&child.signalCode===null&&child._handle){
+   if(row.group){try{kill(-child.pid,'SIGKILL');}catch(e){if(e.code!=='ESRCH')throw e;}}
+   else child.kill('SIGKILL');
+  }
+ }
+ const end=Date.now()+5000;
+ while(owned.some(r=>!r.closed)&&Date.now()<end)await new Promise(r=>setTimeout(r,10));
+ if(owned.some(r=>!r.closed))throw Error('fixture native closure unverified');
+})();}
+if(process.platform!=='win32'){
+ process.once('beforeExit',()=>dispose().catch(e=>{console.error(e.message);process.exitCode=125;}));
+ process.once('SIGTERM',()=>dispose().then(()=>process.exit(124),e=>{console.error(e.message);process.exit(125);}));
+}
+""", encoding='utf-8')
+        command = [command[0], '--require', str(preload), *command[1:]]
+        try:
+            launch = {'creationflags': subprocess.CREATE_NO_WINDOW | 4} if os.name == 'nt' else {'start_new_session': True}
+            process = subprocess.Popen(command, **options, **launch)
+            controller.attach_and_resume(process)
+            process.fixture_controller = controller
+            yield process
+        finally:
+            try:
+                if process is not None and process.poll() is None:
+                    if os.name == 'nt':
+                        controller.terminate()
+                        if process.poll() is None:
+                            process.kill()  # exact Popen handle, including attachment failure
+                    else:
+                        process.terminate()  # original Popen; native cleanup runs in the retained harness
+                    process.communicate(timeout=7)
+                if process is not None:
+                    sample = controller.sample()
+                    if os.name == 'nt' and sample['activeProcesses']:
+                        controller.terminate()
+                        end = time.monotonic() + 5
+                        while controller.sample()['activeProcesses'] and time.monotonic() < end:
+                            time.sleep(0.01)
+                    sample = controller.sample()
+                    assert (sample['activeProcesses'] == 0 if os.name == 'nt' else
+                            sample['processGroupState'] == 'absent'), sample
+            finally:
+                controller.close()
+
+
+def owned_run(command, *, input=None, timeout=25, **options):
+    with owned_process(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                       stderr=subprocess.PIPE, **options) as process:
+        output, error = process.communicate(input, timeout=timeout)
+        result = subprocess.CompletedProcess(command, process.returncode, output, error)
+        result.fixture_resources = process.fixture_controller.sample()
+        # An exited OS helper may still have a Job member completing shutdown.
+        # Observe for the original descendant-test bound, without signalling it.
+        end = time.monotonic() + 1
+        while os.name == 'nt' and result.fixture_resources['activeProcesses'] and time.monotonic() < end:
+            time.sleep(0.01)
+            result.fixture_resources = process.fixture_controller.sample()
+        return result
 
 
 @unittest.skipUnless(shutil.which('node'), 'Node required')
@@ -40,7 +122,7 @@ class CodexCapabilitiesTests(unittest.TestCase):
 const fs=require('node:fs');
 const rl=require('node:readline').createInterface({input:process.stdin});
 const rows=RESULT; const mode=MODE; const log=LOG;
-if(mode==='hang'||mode==='tree')setInterval(()=>{},1000);
+if(mode==='hang'||mode==='tree'||mode==='quiet-hang')setInterval(()=>{},1000);
 if(mode==='tree'||mode==='owner-exited'){
  const child=require('node:child_process').spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{
   stdio:mode==='owner-exited'?['ignore',process.stdout,process.stderr]:'ignore',windowsHide:true,detached:mode==='owner-exited'});
@@ -48,6 +130,7 @@ if(mode==='tree'||mode==='owner-exited'){
 }
 rl.on('close',()=>{if(mode==='owner-exited')process.exit(0);});
 rl.on('line',line=>{const m=JSON.parse(line);fs.appendFileSync(log,JSON.stringify(m.method)+'\\n');
+ if(mode==='quiet-hang')return; // Resident cleanup-negative peer, never writes a response.
  if(m.method==='initialize')process.stdout.write(JSON.stringify({id:m.id,result:{userAgent:'fixture'}})+'\\n');
  if(m.method==='skills/list'){
   if(mode==='hang'||mode==='tree')return;
@@ -61,11 +144,12 @@ rl.on('line',line=>{const m=JSON.parse(line);fs.appendFileSync(log,JSON.stringif
 
     def call(self, op, request=None, *, fixture=None, timeout_ms=1800):
         command = [shutil.which('node'), str(MODULE), op, '--cwd', str(self.root),
-                   '--codex', str(fixture or self.fixture()), '--deadline-ms', str(timeout_ms), '--cleanup-ms', '600']
-        result = subprocess.run(command, input='' if request is None else json.dumps(request),
-                                capture_output=True, text=True, encoding='utf-8', timeout=12)
+                   '--codex', str(fixture or self.fixture()), '--deadline-ms', str(timeout_ms), '--cleanup-ms', '5000']
+        result = owned_run(command, input='' if request is None else json.dumps(request),
+                                text=True, encoding='utf-8', timeout=25)
         self.assertNotIn('secret-', result.stdout)
         self.assertEqual(result.stderr, '')
+        self.last_fixture_resources = result.fixture_resources
         return result.returncode, json.loads(result.stdout)
 
     def request(self):
@@ -140,7 +224,7 @@ rl.on('line',line=>{const m=JSON.parse(line);fs.appendFileSync(log,JSON.stringif
         try:
             alias.symlink_to(self.skill.parent, target_is_directory=True)
         except OSError:
-            self.skipTest('directory symlink unavailable')
+            self.fail('directory symlink unavailable: native alias coverage prerequisite')
         fixture = self.fixture(duplicate=True)
         text = fixture.read_text(encoding='utf-8').replace(json.dumps(str(self.root / 'other' / 'SKILL.md')),
                                                         json.dumps(str(alias / 'SKILL.md')))
@@ -149,7 +233,6 @@ rl.on('line',line=>{const m=JSON.parse(line);fs.appendFileSync(log,JSON.stringif
         self.assertEqual(code, 0)
         self.assertTrue(result['cli']['available'])
 
-    @unittest.skipUnless(os.name == 'nt', 'Windows path semantics')
     def test_windows_selected_path_case_does_not_change_native_identity(self):
         request = self.request()
         request['selection']['path'] = str(self.skill).upper()
@@ -198,12 +281,18 @@ rl.on('line',line=>{const m=JSON.parse(line);fs.appendFileSync(log,JSON.stringif
     def test_deadline_escalates_only_owned_process_and_reports_exit(self):
         code, result = self.call('inventory', fixture=self.fixture(mode='hang'), timeout_ms=250)
         self.assertEqual(code, 1)
-        self.assertEqual(result['error']['code'], 'NATIVE_QUERY_FAILED')
-        self.assertTrue(result['process']['stdinClosed'])
-        self.assertTrue(result['process']['forced'])
-        self.assertTrue(result['process']['exitObserved'])
+        self.assertEqual(result['error']['code'], 'NATIVE_QUERY_FAILED', result)
+        self.assertTrue(result['process']['stdinClosed'], result)
+        self.assertTrue(result['process']['forced'], result)
+        self.assertTrue(result['process']['exitObserved'], result)
+        self.assertTrue(result['process']['closeObserved'], result)
+        # Attempted query stage is not a receipt; the fixed peer records intake.
+        self.assertTrue(self.log.is_file(), result)
+        self.assertIn('initialize', [json.loads(line) for line in self.log.read_text().splitlines()])
+        self.assertIn(result['process']['queryPhase'], ['initialize', 'initialized', 'skills-list'])
+        self.assertGreaterEqual(result['process']['terminationElapsedMs'], 0)
+        self.assertIsNone(result['process']['terminationError'])
 
-    @unittest.skipUnless(os.name == 'nt', 'Windows Node process-handle lifetime')
     def test_tree_stop_keeps_exact_original_handle_until_helper_returns(self):
         script = r'''
 const cp=require('node:child_process'), originalSpawn=cp.spawn, originalSync=cp.spawnSync;
@@ -216,112 +305,138 @@ cp.spawnSync=(file,args,options)=>{const handle=owner._handle;
  const result=originalSync(file,args,options);
  observation={before,after:owner._handle===handle&&owner.exitCode===null&&owner.signalCode===null,
   pidMatched:args[args.indexOf('/PID')+1]===String(owner.pid)};return result;};
-require(process.argv[1]).inventory({cwd:process.argv[2],codexPath:process.argv[3],deadlineMs:250,cleanupMs:600})
+require(process.argv[1]).inventory({cwd:process.argv[2],codexPath:process.argv[3],deadlineMs:250,cleanupMs:5000})
  .then(()=>{throw Error('fixture should time out')},error=>console.log(JSON.stringify({code:error.code,
   process:error.processState,observation,asynchronousStop})));
 '''
-        completed = subprocess.run([shutil.which('node'), '-e', script, str(MODULE),
+        completed = owned_run([shutil.which('node'), '-e', script, str(MODULE),
             str(self.root), str(self.fixture(mode='hang'))], text=True, encoding='utf-8',
-            capture_output=True, timeout=10)
+            timeout=25)
         self.assertEqual(completed.returncode, 0, completed.stderr)
         value = json.loads(completed.stdout)
-        self.assertEqual(value['code'], 'NATIVE_QUERY_FAILED')
+        self.assertEqual(value['code'], 'NATIVE_QUERY_FAILED', value)
         self.assertFalse(value['asynchronousStop'])
         self.assertEqual(value['observation'], {'before': True, 'after': True, 'pidMatched': True})
         self.assertTrue(value['process']['exitObserved'])
 
+    def test_uncompleted_stop_retains_unknown_and_safe_helper_diagnostics(self):
+        # Deterministic failed OS-stop seam, never a timing-tolerance assertion.
+        # The outer owned harness releases the actual fixed peer after capture.
+        script = r"""
+const cp=require('node:child_process');
+cp.spawnSync=()=>({status:null,signal:'SIGTERM',error:{code:'ETIMEDOUT',message:'secret-helper-detail'}});
+const originalKill=process.kill;
+process.kill=(pid,signal)=>{if(pid<0)throw Object.assign(Error('secret-group-detail'),{code:'ESRCH'});
+ return originalKill(pid,signal);};
+require(process.argv[1]).inventory({cwd:process.argv[2],codexPath:process.argv[3],deadlineMs:250,cleanupMs:50})
+ .then(()=>{throw Error('expected unknown cleanup');},e=>{console.log(JSON.stringify({code:e.code,process:e.processState}));
+  setInterval(()=>{},1000);});
+setTimeout(()=>process.exit(2),5000).unref();
+"""
+        with owned_process([shutil.which('node'), '-e', script, str(MODULE),
+                            str(self.root), str(self.fixture(mode='quiet-hang'))],
+                           text=True, encoding='utf-8', stdout=subprocess.PIPE,
+                           stderr=subprocess.PIPE) as process:
+            # Keep the owner alive until the raw result and peer state have been
+            # checked. Parent exit itself may otherwise change child lifetime.
+            output = process.stdout.readline()
+            self.assertTrue(output)
+            self.assertNotIn('secret-', output)
+            value = json.loads(output)
+            self.assertTrue(self.log.is_file(), value)
+            self.assertIn('initialize', [json.loads(line) for line in self.log.read_text().splitlines()])
+            self.assertEqual(value['code'], 'CLEANUP_UNVERIFIED', value)
+            self.assertFalse(value['process']['exitObserved'], value)
+            self.assertFalse(value['process']['closeObserved'], value)
+            self.assertTrue(value['process']['forced'], value)
+            self.assertGreaterEqual(value['process']['terminationElapsedMs'], 0)
+            self.assertIsNone(value['process']['terminationExitCode'])
+            self.assertEqual(value['process']['terminationError'], 'ETIMEDOUT' if os.name == 'nt' else 'ESRCH')
+            self.assertEqual(value['process']['terminationSignal'], 'SIGTERM' if os.name == 'nt' else None)
+            if os.name == 'nt':
+                self.assertGreater(process.fixture_controller.sample()['activeProcesses'], 1,
+                                   ('raw unknown captured before Job finally released the fixture', value))
+
     def test_exited_owner_with_open_descendant_pipe_is_held_without_stale_pid_stop(self):
-        if os.name != 'nt' and not hasattr(os, 'pidfd_open'):
-            self.skipTest('Exact Windows handle or Linux pidfd required for fixture cleanup')
         fixture = self.fixture(mode='owner-exited')
         child_file = Path(str(self.log)+'.child')
-        process = subprocess.Popen([shutil.which('node'), str(MODULE), 'inventory', '--cwd',
+        owner = owned_process([shutil.which('node'), str(MODULE), 'inventory', '--cwd',
             str(self.root), '--codex', str(fixture), '--deadline-ms', '1800', '--cleanup-ms', '300'],
             text=True, encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        handle = None
-        try:
-            end = time.monotonic()+5
-            while not child_file.exists() and time.monotonic() < end:
-                time.sleep(0.01)
-            self.assertTrue(child_file.exists())
-            pid = int(child_file.read_text())
-            if os.name == 'nt':
-                import ctypes
-                from ctypes import wintypes
-                kernel = ctypes.WinDLL('kernel32', use_last_error=True)
-                kernel.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
-                kernel.OpenProcess.restype = wintypes.HANDLE
-                kernel.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
-                kernel.TerminateProcess.argtypes = [wintypes.HANDLE, wintypes.UINT]
-                kernel.CloseHandle.argtypes = [wintypes.HANDLE]
-                handle = kernel.OpenProcess(0x00100001, False, pid)
-                self.assertTrue(handle)
-            else:
-                import select
-                import signal
-                handle = os.pidfd_open(pid)
-                poller = select.poll(); poller.register(handle, select.POLLIN)
-            output, error = process.communicate(timeout=10)
-            self.assertEqual(process.returncode, 1, error)
-            value = json.loads(output)
-            self.assertEqual(value['error']['code'], 'CLEANUP_UNVERIFIED')
-            self.assertTrue(value['process']['exitObserved'])
-            self.assertFalse(value['process']['closeObserved'])
-            self.assertIsNone(value['process']['terminationAttempt'])
-            self.assertFalse(value['process']['forced'])
-            self.assertEqual(value['process']['descendantVerification'], 'unknown-launcher-exited-with-open-pipes')
-            if os.name == 'nt':
-                self.assertEqual(kernel.WaitForSingleObject(handle, 0), 258)
-            else:
-                self.assertFalse(poller.poll(0))
-        finally:
-            if handle is not None:
+        with owner as process:
+            handle = None
+            try:
+                end = time.monotonic()+5
+                while not child_file.exists() and time.monotonic() < end:
+                    time.sleep(0.01)
+                self.assertTrue(child_file.exists())
+                pid = int(child_file.read_text())
                 if os.name == 'nt':
-                    try:
-                        if kernel.WaitForSingleObject(handle, 0) != 0:
-                            self.assertTrue(kernel.TerminateProcess(handle, 1))
-                            self.assertEqual(kernel.WaitForSingleObject(handle, 1000), 0)
-                    finally:
-                        kernel.CloseHandle(handle)
+                    import ctypes
+                    from ctypes import wintypes
+                    kernel = ctypes.WinDLL('kernel32', use_last_error=True)
+                    kernel.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+                    kernel.OpenProcess.restype = wintypes.HANDLE
+                    kernel.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
+                    kernel.TerminateProcess.argtypes = [wintypes.HANDLE, wintypes.UINT]
+                    kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+                    handle = kernel.OpenProcess(0x00100001, False, pid)
+                    self.assertTrue(handle)
                 else:
-                    try:
-                        if not poller.poll(0):
-                            signal.pidfd_send_signal(handle, signal.SIGTERM)
-                            self.assertTrue(poller.poll(1000))
-                    finally:
-                        os.close(handle)
-            if process.poll() is None:
-                process.kill(); process.communicate(timeout=5)
+                    import select
+                    import signal
+                    handle = os.pidfd_open(pid)
+                    poller = select.poll(); poller.register(handle, select.POLLIN)
+                output, error = process.communicate(timeout=10)
+                self.assertEqual(process.returncode, 1, error)
+                value = json.loads(output)
+                self.assertEqual(value['error']['code'], 'CLEANUP_UNVERIFIED')
+                self.assertTrue(value['process']['exitObserved'])
+                self.assertFalse(value['process']['closeObserved'])
+                self.assertIsNone(value['process']['terminationAttempt'])
+                self.assertFalse(value['process']['forced'])
+                self.assertEqual(value['process']['descendantVerification'], 'unknown-launcher-exited-with-open-pipes')
+                if os.name == 'nt':
+                    self.assertEqual(kernel.WaitForSingleObject(handle, 0), 258)
+                else:
+                    self.assertFalse(poller.poll(0))
+            finally:
+                if handle is not None:
+                    if os.name == 'nt':
+                        try:
+                            if kernel.WaitForSingleObject(handle, 0) != 0:
+                                self.assertTrue(kernel.TerminateProcess(handle, 1))
+                                self.assertEqual(kernel.WaitForSingleObject(handle, 1000), 0)
+                        finally:
+                            kernel.CloseHandle(handle)
+                    else:
+                        try:
+                            if not poller.poll(0):
+                                signal.pidfd_send_signal(handle, signal.SIGTERM)
+                                self.assertTrue(poller.poll(1000))
+                        finally:
+                            os.close(handle)
 
-    @unittest.skipUnless(os.name == 'nt', 'Windows owned-tree regression')
     def test_timeout_reclaims_an_actual_owned_descendant(self):
-        import ctypes
-        from ctypes import wintypes
-
         code, result = self.call('inventory', fixture=self.fixture(mode='tree'), timeout_ms=250)
         self.assertEqual(code, 1)
-        self.assertTrue(result['process']['exitObserved'])
-        pid = int(Path(str(self.log) + '.child').read_text())
-        kernel = ctypes.WinDLL('kernel32', use_last_error=True)
-        kernel.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
-        kernel.OpenProcess.restype = wintypes.HANDLE
-        kernel.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
-        kernel.WaitForSingleObject.restype = wintypes.DWORD
-        kernel.CloseHandle.argtypes = [wintypes.HANDLE]
-        kernel.TerminateProcess.argtypes = [wintypes.HANDLE, wintypes.UINT]
-        handle = kernel.OpenProcess(0x00100001, False, pid)
-        if handle:
-            try:
-                observed = kernel.WaitForSingleObject(handle, 1000)
-                if observed != 0:  # Preserve the failed observation while releasing the fixture.
-                    kernel.TerminateProcess(handle, 1)
-                    kernel.WaitForSingleObject(handle, 1000)
-                self.assertEqual(observed, 0, 'owned descendant still running')
-            finally:
-                kernel.CloseHandle(handle)
-        else:
-            self.assertEqual(ctypes.get_last_error(), 87, 'descendant exit could not be observed')
+        self.assertTrue(Path(str(self.log) + '.child').is_file(), result)
+        self.assertTrue(result['process']['exitObserved'], result)
+        self.assertTrue(result['process']['closeObserved'], result)
+        self.assertEqual(self.last_fixture_resources['activeProcesses'], 0,
+                         (result, self.last_fixture_resources))
 
+
+
+# Applicability, not skips: these cases exercise Windows handles/path identity,
+# or a retained native process identity only available on Windows/Linux pidfd.
+if os.name != 'nt':
+    for name in ('test_windows_selected_path_case_does_not_change_native_identity',
+                 'test_tree_stop_keeps_exact_original_handle_until_helper_returns',
+                 'test_timeout_reclaims_an_actual_owned_descendant'):
+        delattr(CodexCapabilitiesTests, name)
+if os.name != 'nt' and not hasattr(os, 'pidfd_open'):
+    delattr(CodexCapabilitiesTests, 'test_exited_owner_with_open_descendant_pipe_is_held_without_stale_pid_stop')
 
 if __name__ == '__main__':
     unittest.main()

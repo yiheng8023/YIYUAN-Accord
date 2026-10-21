@@ -32,6 +32,14 @@ An explicit `--codex` selects an absolute executable or installed JavaScript lau
 it neither installs a CLI nor changes shared configuration. Retain the returned
 owned-process state. Failed or unverified closure holds that route for recovery.
 
+The returned `process.queryPhase` is the last attempted query stage, not proof
+that the peer received it. Termination diagnostics retain only the helper exit
+code, signal, error code and elapsed milliseconds in `terminationExitCode`,
+`terminationSignal`, `terminationError` and `terminationElapsedMs`; absent
+observations remain `null`. These fields do not prove native exit or descendant
+closure. Evaluate the actual exit and close observations separately, preserving
+an unverified result even if later fixture or operator cleanup succeeds.
+
 ## Execute through the actual target
 
 Preparation returns `nativeInput` with a typed Skill item bound to the selected

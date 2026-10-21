@@ -755,7 +755,7 @@ function createNativeTaskExecution(options) {
       }
       fail('invalid-task-execution-request');
     } catch (error) { return {isError: true, value: {schema: 'yiyuan-accord-task-execution/v1', state: 'unavailable', reason: safeCode(error),
-      ...(error.processState ? {process: Object.fromEntries(['pid', 'started', 'exitObserved', 'closeObserved', 'exitCode', 'signal', 'forced', 'terminationAttempt', 'descendantVerification'].filter(key => Object.hasOwn(error.processState, key)).map(key => [key, error.processState[key]]))} : {}),
+      ...(error.processState ? {process: Object.fromEntries(['pid', 'started', 'exitObserved', 'closeObserved', 'exitCode', 'signal', 'forced', 'terminationAttempt', 'queryPhase', 'terminationExitCode', 'terminationSignal', 'terminationError', 'terminationElapsedMs', 'descendantVerification'].filter(key => Object.hasOwn(error.processState, key)).map(key => [key, error.processState[key]]))} : {}),
       claimLimit: 'No new authority or success is implied. Inspect the exact existing operation before retrying an uncertain effect.'}}; }
   }
   async function close() {

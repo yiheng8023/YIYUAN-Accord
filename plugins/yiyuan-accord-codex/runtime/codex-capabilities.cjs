@@ -90,7 +90,8 @@ async function inventory(options) {
   child.stdout.on('error', () => {});
   child.stderr.on('error', () => {});
   let exited = false, closeObserved = false, exitCode = null, signal = null, spawnError = false, stderrBytes = 0;
-  let connection, pendingFailure;
+  // Last attempted stage, not evidence that the peer received the request.
+  let connection, pendingFailure, queryPhase = 'initialize';
   const closed = new Promise(resolve => {
     child.once('error', () => { spawnError = true; });
     child.once('exit', (code, reason) => { exited = true; exitCode = code; signal = reason; });
@@ -109,9 +110,12 @@ async function inventory(options) {
       maxMessageBytes: 1048576, maxJournalBytes: 2097152});
     const deadline = started + deadlineMs;
     await connection.transport.request('initialize', {clientInfo: {name: 'accord_capability_inventory', version: '1.0.0'}}, deadline);
+    queryPhase = 'initialized';
     await connection.transport.notify('initialized', {}, deadline);
+    queryPhase = 'skills-list';
     const result = await connection.transport.request('skills/list', {cwds: [cwd], forceReload: true}, deadline);
     projection = safeProjection(result, cwd);
+    queryPhase = 'complete';
   } catch (_) {
     pendingFailure = {code: 'NATIVE_QUERY_FAILED', message: 'native metadata query failed; no model turn was requested'};
   } finally {
@@ -121,26 +125,36 @@ async function inventory(options) {
     child.stdout.resume();
     child.stdin.end();
   }
-  let forced = false, terminationAttempt = null;
+  let forced = false, terminationAttempt = null, terminationExitCode = null, terminationSignal = null,
+    terminationError = null, terminationElapsedMs = null;
   if (!await waitExit(cleanupMs)) {
     if (!exited && ownedPid !== null && child.pid === ownedPid && child.exitCode === null && child.signalCode === null) {
       forced = true;
+      const terminationStarted = performance.now();
       if (process.platform === 'win32') {
         terminationAttempt = 'owned-pid-tree';
         // On the supported Windows Node runtime, keep the original process
         // handle alive across the bounded helper. An asynchronous launch could
         // process onexit/handle.close before taskkill resolves the numeric PID.
-        spawnSync(path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'taskkill.exe'),
+        const stopped = spawnSync(path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'taskkill.exe'),
           ['/PID', String(ownedPid), '/T', '/F'], {stdio: 'ignore', windowsHide: true, shell: false, timeout: cleanupMs});
+        terminationExitCode = Number.isInteger(stopped.status) ? stopped.status : null;
+        terminationSignal = /^SIG[A-Z0-9]{1,20}$/.test(stopped.signal || '') ? stopped.signal : null;
+        terminationError = /^E[A-Z0-9_]{1,40}$/.test(stopped.error?.code || '') ? stopped.error.code : null;
       } else {
         terminationAttempt = 'owned-process-group';
-        try { process.kill(-ownedPid, 'SIGKILL'); } catch (_) { /* Exit remains independently observed below. */ }
+        try { process.kill(-ownedPid, 'SIGKILL'); } catch (error) {
+          terminationError = /^E[A-Z0-9_]{1,40}$/.test(error.code || '') ? error.code : null;
+        }
       }
+      // Helper/signal diagnostics only: none proves native exit or tree closure.
+      terminationElapsedMs = Math.max(0, Math.round(performance.now() - terminationStarted));
     }
     await waitExit(cleanupMs);
   }
   const processState = {pid: ownedPid, started: ownedPid !== null, stdinClosed: child.stdin.writableEnded,
     exitObserved: exited, closeObserved, exitCode, signal, forced, terminationAttempt, stderrBytes,
+    queryPhase, terminationExitCode, terminationSignal, terminationError, terminationElapsedMs,
     descendantVerification: exited && !closeObserved ? 'unknown-launcher-exited-with-open-pipes' : 'not-independently-observed'};
   if (ownedPid !== null && !exited || !closeObserved) {
     // Do not keep this CLI alive for an unobserved child. Preserve its exact PID
