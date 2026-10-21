@@ -6541,6 +6541,53 @@
       },
       "history": "Original failures, actors, episodes, limits, H metadata rejection, private preparation negatives and unknown causes retained. No old business replay, original-clock renewal, new case or lowered criterion.",
       "sourceRecordRole": "Post-publication factual tracking only; does not change immutable release bytes, static claim ceiling, authority, cases, scope or implementation."
+    },
+    {
+      "id": "v331-language-maintenance-publication-20261021",
+      "status": "verified-bounded-maintenance-publication-and-local-install",
+      "recordedAtUtc": "2026-10-21T06:24:34.206481+00:00",
+      "subject": {
+        "version": "3.3.1",
+        "commit": "28d78e2b0ebadaefdac8e1f1382148dab72e207f",
+        "tree": "a3ed7287799f111cc475a9825741f8b4c92861ef",
+        "packageMembers": 26,
+        "packageSha256": "5e0eab75e6c241889c35062f5f989f3676b1080edf236392ebe67eac25188799"
+      },
+      "release": {
+        "tag": "v3.3.1",
+        "url": "https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.1",
+        "publishedAt": "2026-10-21T03:19:17Z",
+        "ciRun": 39533022186,
+        "successfulJobs": 11,
+        "anonymousArchiveFilesMatched": 200,
+        "tagCiRun": 39537896592,
+        "tagSuccessfulJobs": 11
+      },
+      "maintenanceVerification": {
+        "scope": "language source, translation, entry content integrity, package and affected regressions",
+        "independentSemanticAndImplementationReviews": true,
+        "relatedRegressions": 397,
+        "versionAndDigestTests": 5,
+        "finalTargetedChecks": 3,
+        "priorFunctionalEvidence": "3.3.0 retained with its original subject and limits; no closed business replay or new support scope"
+      },
+      "localDeployment": {
+        "persistentMarketplaceRef": "v3.3.1",
+        "nativeInstalledVersion": "3.3.1",
+        "actualCurrentMcpVersion": "3.3.1",
+        "actualCurrentMcpPid": 36528,
+        "cacheAndDefaultSourceMatchRelease": true,
+        "configEffect": "one owned marketplace reference byte; model/modes/enabled/trust/other values unchanged; final original file/security verified",
+        "transport": "30-second network-clone failures retained; native refresh reused the publicly matched local Git subject through process-only transport; persisted GitHub origin retained; mirror and anchor removed"
+      },
+      "relatedSourceUpdate": {
+        "repository": "YIYUAN-CALIBRATION",
+        "commit": "2982c939537f0ef6900f3436653c76d6646e569b",
+        "files": 7,
+        "historicalOriginalsAndUnrelatedGovernance": "preserved"
+      },
+      "history": "3.3.0 tag/bytes/acceptance and prior failures remain at their original identities; this maintenance observation does not promote incremental value or clear input-loss watermarks",
+      "sourceRecordRole": "post-publication-fact-view-not-a-new-release-or-self-issued-functional-qualification"
     }
   ],
   "environmentControl": {

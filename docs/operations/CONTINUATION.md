@@ -4,7 +4,14 @@
 
 ## 当前事实
 
-- **3.3.1语言校准补丁进行中**：用户已提供中文元指导并批准对应英文、中文阅读入口、受影响校验和文档的修正及补丁发布。当前以中文为语义基准，Hook继续只加载英文；原3.3.0的发行与验收记录保留。待完成此次受影响验证、精确候选CI、公开后态及本机共享安装更新，不重复已闭业务。当前写者为Root。
+- **3.3.1已发布并完成本机共享安装核验**：[GitHub Release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.1)，发布时间2026-10-21T03:19:17Z。发行提交为`28d78e2b0ebadaefdac8e1f1382148dab72e207f`，tree为`a3ed7287799f111cc475a9825741f8b4c92861ef`。本轮只校准中英文来源、对应入口和受影响校验，不新增功能或宿主范围。
+- 精确提交的[主分支CI39533022186](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/39533022186)及同提交的[标签CI39537896592](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/39537896592)均已completed/success，各11/11作业通过。中英语义与实现独立复核完成；397项相关回归、5项版本/摘要测试及3项定点检查通过。匿名下载的200个源码文件逐Git blob匹配，Release/latest/tag/提交一致。26成员包SHA为`5e0eab75e6c241889c35062f5f989f3676b1080edf236392ebe67eac25188799`。
+- 用户确认的中文为语义基准；英文4656字节/SHA14f33a09…b89f026，中文3418字节/SHA9f901952…88a439a，分别固定。Hook完整加载英文和协调职责，中文按需读取；保持元指导的价值、判断和动态适配层次，不向其加入量化标准或操作手册。
+- 本机默认原生库存已为3.3.1且启用；持久GitHub来源仅将版本引用更新为`v3.3.1`，缓存与发行26成员一致。冷启动完整英文和MCP验证通过；本聊天实际MCP也已响应3.3.1/PID36528，无需重启。沿已核定的CLI、客户端/Work、VS Code共享安装复用，不重跑GUI或已闭业务，也不把共享路径等同于所有活跃消费者已逐一实测。
+- 配置最终只改所属市场引用一个字节，原文件身份及所有者/组/访问权限核对一致，其余设置保持。两次网络克隆30秒超时后，原生刷新复用已与公开源码匹配的本地Git发行对象；取数路由只用于该进程，持久来源仍为原GitHub仓库。临时镜像和配置锚点已移除，移除后默认库存再核成功；受保护的原配置、旧包及失败记录保留。
+- CALIBRATION的AI/通用版中英文及索引已按用户授权推送`2982c939537f0ef6900f3436653c76d6646e569b`，共7文件；两份历史原稿和预存GOVERNANCE修改保持。详见其[当前元指导目录](https://github.com/yiheng8023/YIYUAN-CALIBRATION/tree/2982c939537f0ef6900f3436653c76d6646e569b/common/meta-guidance)。
+
+### 3.3.0 已完成的历史基线
 
 - **3.3.0已发布并核验**：[GitHub Release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.0)，发布时间2026-10-21T00:34:37Z。不可变发行提交为`d855cd0936733960cd107168a3369963a65d874a`，tree为`69e89a0981fc63c1dc6228195dc209eb644abf71`。本页是发布后事实视图，不把随后记录提交冒充新的发行或资格主体。
 - 该精确主体按原判据完成18案、17scope及A01–A08真实observe/recheck，`functionalCompletion=true`、`candidateEligible=true`、`finalSourceVerification=true`，errors/rejections为空。14条历史行为记录保原字节、actor、episode、时刻和限额；四条当前记录来自两项新SDK方法源与两项当前来源裁定。完整影响评价只在绑定范围内成立，`incrementalValue=unverified`。
@@ -16,7 +23,7 @@
 
 ## 当前目标与写者
 
-原3.3.0设计/文档一致性、失效历史负担处置、精确资格、发布与已配置适用本机入口安装均已有实际结果。当前只推进上述获准3.3.1补丁；未转交共享写权，未归档聊天。不要从旧下一步、已结束案例或临时恢复材料重新发起业务、登录、观察器或实验。
+本轮获准3.3.1补丁、公开核验、本机共享安装及当前MCP采用，以及CALIBRATION源文更新均已有实际结果。Root负责本次事实记录收尾；未转交共享写权，未归档聊天。原3.3.0设计/文档、精确资格与发行保持原身份。不要从旧下一步、已结束案例或临时恢复材料重新发起业务、登录、观察器或实验。
 
 ## 未知与边界
 
@@ -32,6 +39,7 @@
 
 | 原件 | SHA-256 | 证明范围 |
 |---|---|---|
+| `private:accord-meta-guidance-patch-20261021-01/DELIVERY-VERIFIED.json` | `69400103e154008c91a300950cfb5b77a546d3ca539eef8401ab6f5f6393b9d5` | 3.3.1精确发行、公开源码、共享安装、实际MCP及CALIBRATION源文更新的有界核对；源观测另列 |
 | `private:accord-global-document-release-quality-20261021-01/qualification-refresh/ADMISSION.json` | `cc05ee347a446d885f07878d14f65b450759313e00a6c410d3c83084b22f93e9` | d855原18案资格与最终来源核对 |
 | `private:accord-global-document-release-quality-20261021-01/public-poststate/VERIFIED.json` | `cce7a9738c70f011074887335ab70bc8b247cbbfa4e0bc098dbe9d89a1f5f84a` | 匿名公开Release、tag、源码与25包匹配 |
 | `private:accord-published-local-deployment-20261021-01/VERIFIED.json` | `bcc8df27a261b40622dd721eb24bf93db74a5b7e9b2a417ebbb579b6951057d1` | 原生本机安装、持久来源、实际MCP及配置后态 |
