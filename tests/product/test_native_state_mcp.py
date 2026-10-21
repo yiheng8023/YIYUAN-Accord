@@ -3182,6 +3182,71 @@ else {process.argv=[process.execPath,__filename,NATIVE_LOG,'normal'];require(HOS
         self.assertFalse(cancelled['isError'])
         self.assertTrue(cancelled['structuredContent']['nativeClosed']['closed'])
 
+    def test_prepare_failure_releases_only_unregistered_owned_resources(self):
+        # Real wrapper module; injected memory-only storage and dependency faults.
+        script = r"""
+
+const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path'),{createRequire}=require('node:module');
+const file=process.argv[1],realRequire=createRequire(file),source=fs.readFileSync(file,'utf8');
+(async()=>{const results=[];
+for(const mode of ['open','scope','engine','close','scope-close','nonempty','remove','changed','invalid','collision']){
+ let created=mode==='collision',opened=0,closed=0,removed=0,mkdir=0,changed=false,nonempty=false;
+ const id='11111111-1111-4111-8111-111111111111',isOwned=p=>path.basename(p)===id;
+ const boom=code=>Object.assign(Error(code),{code});
+ const fakefs={existsSync:p=>isOwned(p)?created:true,realpathSync:p=>p,
+  lstatSync:p=>({isDirectory:()=>true,isSymbolicLink:()=>false,dev:1n,ino:isOwned(p)&&changed?2n:1n}),
+  mkdirSync:p=>{mkdir++;if(created)throw boom('EEXIST');created=true;},
+  rmdirSync:(p,options)=>{if(!isOwned(p)||options!==undefined)throw boom('UNSAFE_REMOVAL');if(nonempty)throw boom('ENOTEMPTY');if(mode==='remove')throw boom('EACCES');removed++;created=false;}};
+ const recorder={readScope(){throw boom(mode.startsWith('scope')?'SCOPE_BUSY':'SCOPE_NOT_FOUND');},close(){closed++;if(mode==='close'||mode==='scope-close')throw boom('CLOSE_FAILED');}};
+ const sandbox={module:{exports:{}},process,Buffer,console,setTimeout,clearTimeout,
+ require:name=>name==='node:fs'?fakefs:name==='node:crypto'?{...require(name),randomUUID:()=>id}:
+ name==='./carrier-recorder.cjs'?{openCarrierRecorder(){opened++;if(mode==='open')throw boom('DB_OPEN_FAILED');return recorder;}}:
+ name==='./external-handoff.cjs'?{createExternalHandoff(){nonempty=mode==='nonempty';changed=mode==='changed';throw boom('ENGINE_FAILED');}}:realRequire(name)};
+ vm.runInNewContext(source,sandbox,{filename:file});
+ const digest='a'.repeat(64),state={mode:mode==='invalid'?'paused':'active',epoch:'e',revision:1,checkpoint:{canContinue:true},
+ hostObservationCurrent:true,currentInputReconciled:true,inputReceipt:{present:true},checkpointSource:{sha256:digest},
+ nativeInputEvidence:{state:'observed',latestInputReconciled:true,latestNativeInputsComplete:true,pendingInputs:[]},
+ inspection:{inputs:[{path:'drain.json',current:{present:true,sha256:digest},unchanged:true,stable:true}]}};
+ const engine=sandbox.module.exports.createNativeTaskExecution({sourceOf:()=>({threadId:'fixture',sessionTreeId:'fixture',turnId:'t',callId:'c',model:'fixture',hostVersion:'fixture'}),readState:()=>state,storageRoot:path.resolve('fixture-only')});
+ const result=await engine.call({arguments:{action:'prepare',cwd:process.cwd(),epoch:'e',expectedRevision:1,scopeRef:'s',model:'fixture',intake:'i',continuation:'c',postRelease:'p',authoritySourceRef:'a',quiescenceSourceRef:'drain.json',deadlineMs:Date.now()+10000}});
+ results.push({mode,result,mkdir,opened,closed,removed,created,closeResults:await engine.close()});
+}console.log(JSON.stringify(results));})();
+"""
+        run = subprocess.run([self.node, '-e', script, str(BRIDGE.with_name('native-task-execution.cjs'))],
+                             capture_output=True, text=True, encoding='utf-8', timeout=10)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        rows = json.loads(run.stdout)
+        expected = {
+            'open': ('DB_OPEN_FAILED', 0, 1, 'not-returned'),
+            'scope': ('SCOPE_BUSY', 1, 1, 'closed'),
+            'engine': ('ENGINE_FAILED', 1, 1, 'closed'),
+            'close': ('ENGINE_FAILED', 1, 0, 'close-unverified'),
+            'scope-close': ('SCOPE_BUSY', 1, 0, 'close-unverified'),
+            'nonempty': ('ENGINE_FAILED', 1, 0, 'closed'),
+            'remove': ('ENGINE_FAILED', 1, 0, 'closed'),
+            'changed': ('ENGINE_FAILED', 1, 0, 'closed'),
+        }
+        for row in rows:
+            with self.subTest(mode=row['mode']):
+                value = row['result']['value']
+                self.assertTrue(row['result']['isError'], row)
+                self.assertEqual(row['closeResults'], [], row)
+                self.assertNotIn('operationId', value)
+                if row['mode'] in expected:
+                    reason, closed, removed, recorder = expected[row['mode']]
+                    self.assertEqual((value['reason'], row['closed'], row['removed']),
+                                     (reason, closed, removed), row)
+                    self.assertEqual(value['preparationCleanup']['recorder'], recorder)
+                    self.assertEqual(value['preparationCleanup']['directoryState'],
+                                     'removed-empty' if removed else 'retained-unverified')
+                    self.assertEqual(row['created'], not bool(removed))
+                else:
+                    self.assertEqual(row['opened'], 0, row)
+                    self.assertEqual(row['removed'], 0, row)
+                    self.assertNotIn('preparationCleanup', value)
+                    self.assertEqual(value['reason'], 'EEXIST' if row['mode']=='collision' else 'current-source-not-executable')
+                    if row['mode']=='invalid': self.assertEqual(row['mkdir'], 0)
+
     def test_execution_wire_requires_current_source_before_any_native_start(self):
         _, _, _, call = self.start_execution_wire()
         result = call('prepare', epoch='missing', expectedRevision=0, scopeRef='scope', model='fixture',

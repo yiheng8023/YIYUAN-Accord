@@ -428,6 +428,12 @@ function externalStoppedTarget(state, lease) {
       typeof pending.requestRef?.requestId === 'string');
 }
 
+function noteUnverifiedClose(cause, closeError) {
+  const code = /^[A-Z][A-Z0-9_]{0,63}$/.test(closeError?.code || '') ? closeError.code : 'RECORDER_CLOSE_FAILED';
+  try { Object.defineProperty(cause, 'recorderCleanup', {value: {state: 'close-unverified', code}, configurable: true}); }
+  catch (_) { /* Preserve even a non-extensible original exception. */ }
+}
+
 function openCarrierRecorder(options) {
   if (!plainObject(options)) throw new TypeError('options must be an object');
   for (const key of Object.keys(options)) {
@@ -445,7 +451,7 @@ function openCarrierRecorder(options) {
   }
   const databasePath = validatePath(options.path, create);
   const DatabaseSync = loadDatabaseSync();
-  let database;
+  let database, getScope, getTransfer;
   try {
     if (create) {
       const descriptor = fs.openSync(databasePath, 'wx', 0o600);
@@ -455,14 +461,20 @@ function openCarrierRecorder(options) {
       createSchema(database);
       validateDatabase(database);
     } else {
-      let inspection;
+      let inspection, inspectionFailure;
       try {
         inspection = new DatabaseSync(databasePath, {
           readOnly: true, allowExtension: false, timeout: busyTimeoutMs,
         });
         validateDatabase(inspection);
-      } finally {
-        if (inspection) inspection.close();
+      } catch (cause) { inspectionFailure = cause; throw cause; }
+      finally {
+        if (inspection) {
+          try { inspection.close(); } catch (closeError) {
+            noteUnverifiedClose(inspectionFailure || closeError, closeError);
+            if (!inspectionFailure) throw closeError;
+          }
+        }
       }
       statOrdinary(databasePath, false);
       database = new DatabaseSync(databasePath, {allowExtension: false, timeout: busyTimeoutMs});
@@ -470,9 +482,15 @@ function openCarrierRecorder(options) {
       database.exec('PRAGMA synchronous=FULL');
       database.exec(`PRAGMA busy_timeout=${busyTimeoutMs}`);
     }
+    getScope = database.prepare(
+      'SELECT scope_ref, writer_thread_id, active_transfer_id, fence_token FROM scopes WHERE scope_ref = ?',
+    );
+    getTransfer = database.prepare(
+      'SELECT transfer_id, scope_ref, plan_digest, revision, state_json, settled FROM transfers WHERE transfer_id = ?',
+    );
   } catch (cause) {
     if (database) {
-      try { database.close(); } catch (_) {}
+      try { database.close(); } catch (closeError) { noteUnverifiedClose(cause, closeError); }
     }
     throw cause;
   }
@@ -481,12 +499,6 @@ function openCarrierRecorder(options) {
   const ensureOpen = () => {
     if (closed) reject('RECORDER_CLOSED', 'carrier recorder is closed');
   };
-  const getScope = database.prepare(
-    'SELECT scope_ref, writer_thread_id, active_transfer_id, fence_token FROM scopes WHERE scope_ref = ?',
-  );
-  const getTransfer = database.prepare(
-    'SELECT transfer_id, scope_ref, plan_digest, revision, state_json, settled FROM transfers WHERE transfer_id = ?',
-  );
 
   function bindScope(scopeRef, writerThreadId) {
     ensureOpen();
@@ -816,8 +828,8 @@ function openCarrierRecorder(options) {
 
   function close() {
     if (closed) return;
-    closed = true;
     database.close();
+    closed = true;
   }
 
   function inspectExternalStoppedTarget(transferId, scopeRef) {

@@ -91,6 +91,13 @@ actual effects before recovery; `cancel` preserves responsibility and requests
 closure, rather than proving it. Unknown effects or unverified process closure stay
 held. A new scope identifier cannot evade an unresolved lease. Completion applies
 only to the independently verified scope; it does not close the root's whole goal.
+If preparation fails before registration, no `operationId` exists. Inspect any
+`preparationCleanup` alongside the original failure: `removed-empty` applies only
+to the identified new operation directory, while `not-returned` does not prove an
+underlying database closed. Nonempty, changed or unverified resources remain for
+owner review. `recorderCleanup: {state: "close-unverified", code}` preserves a
+secondary initialization-close failure without replacing its primary error.
+The shared recorder database and retained evidence are not disposable residue.
 MCP restart retains inspectable records but does not recreate a lost controller or
 authorize replay. For a verified stopped attempt that never dispatched a target
 turn and still retains the source writer, `inspect` may expose

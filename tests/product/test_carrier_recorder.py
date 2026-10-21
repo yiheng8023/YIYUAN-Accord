@@ -156,6 +156,65 @@ class CarrierRecorderTests(unittest.TestCase):
     def tearDown(self):
         self.temp.cleanup()
 
+    def test_initialization_owns_statements_and_failed_close_is_not_idempotent_success(self):
+        script = r"""
+const assert=require('node:assert/strict'),path=require('node:path'),sqlite=require('node:sqlite');
+const Real=sqlite.DatabaseSync,api=require(process.argv[1]),rows=[];
+for(const mode of ['scope','transfer','scope-close','validation-close','retry-close','normal']){
+ const file=path.join(process.argv[2],mode+'.sqlite');
+ const seed=api.openCarrierRecorder({path:file,create:true});seed.close();
+ const handles=[],errors=[];
+ class Controlled extends Real{
+  constructor(file,options){super(file,options);this.readonly=options.readOnly===true;this.calls=0;this.closed=false;handles.push(this);}
+  prepare(sql){
+   if(mode==='validation-close'&&this.readonly)throw Object.assign(Error('validation fixture'),{code:'INJECTED_VALIDATION'});
+   if(!this.readonly&&((mode.startsWith('scope')&&sql.endsWith('FROM scopes WHERE scope_ref = ?'))||
+      (mode==='transfer'&&sql.endsWith('FROM transfers WHERE transfer_id = ?'))))
+    throw Object.assign(Error('statement fixture'),{code:'STATEMENT_FAILED'});
+   return super.prepare(sql);
+  }
+  close(){this.calls++;
+   if((mode==='scope-close'&&!this.readonly)||(mode==='validation-close'&&this.readonly)||
+      (mode==='retry-close'&&!this.readonly&&this.calls===1))
+    throw Object.assign(Error('secret close detail'),{code:'CLOSE_FAILED'});
+   super.close();this.closed=true;
+  }
+ }
+ sqlite.DatabaseSync=Controlled;
+ try{
+  let recorder;
+  try{recorder=api.openCarrierRecorder({path:file});}catch(e){errors.push({code:e.code,cleanup:e.recorderCleanup});}
+  if(recorder)for(let i=0;i<3;i++){try{recorder.close();}catch(e){errors.push({code:e.code});}}
+  const states=handles.map(x=>({readonly:x.readonly,calls:x.calls,closed:x.closed}));
+  rows.push({mode,errors,states});
+ }finally{
+  sqlite.DatabaseSync=Real;
+  for(const db of handles)if(!db.closed){Real.prototype.close.call(db);db.closed=true;}
+  assert(handles.every(db=>db.closed));
+ }
+}
+console.log(JSON.stringify(rows));
+"""
+        for index, module in enumerate((RECORDER, PLUGIN_RECORDER)):
+            with self.subTest(module=module):
+                directory = self.root / str(index); directory.mkdir()
+                run = subprocess.run(['node', '-e', script, str(module), str(directory)],
+                                     capture_output=True, text=True, encoding='utf-8', timeout=15)
+                self.assertEqual(run.returncode, 0, run.stderr)
+                for row in json.loads(run.stdout):
+                    with self.subTest(mode=row['mode']):
+                        states, errors = row['states'], row['errors']
+                        self.assertEqual(states[-1]['calls'], 2 if row['mode']=='retry-close' else 1, row)
+                        if row['mode'] in ('scope-close', 'validation-close'):
+                            self.assertFalse(states[-1]['closed'], row)
+                            self.assertEqual(errors[0]['cleanup'], {'state':'close-unverified','code':'CLOSE_FAILED'})
+                        else:
+                            self.assertTrue(states[-1]['closed'], row)
+                        expected = {'scope':'STATEMENT_FAILED','transfer':'STATEMENT_FAILED',
+                                    'scope-close':'STATEMENT_FAILED','validation-close':'DATABASE_INVALID',
+                                    'retry-close':'CLOSE_FAILED'}
+                        self.assertEqual([e['code'] for e in errors], [] if row['mode']=='normal' else [expected[row['mode']]], row)
+
     def request(self, action, *, check=True, module=RECORDER, **values):
         request = {"action": action, "module": str(module), **values}
         encoded = base64.b64encode(json.dumps(request).encode()).decode()

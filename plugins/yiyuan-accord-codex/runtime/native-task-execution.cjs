@@ -29,6 +29,21 @@ function safeDirectory(directory, create = false) {
   if (!fs.lstatSync(directory).isDirectory() || fs.lstatSync(directory).isSymbolicLink() || !samePath(fs.realpathSync(directory), directory)) fail('unsafe-execution-directory');
   return directory;
 }
+function closePreparation(owner) {
+  const result = {directory: owner.dir, recorder: 'not-returned', directoryState: 'retained-unverified'};
+  try {
+    if (owner.recorder) {
+      result.recorder = 'close-unverified'; owner.recorder.close(); result.recorder = 'closed';
+    }
+    safeDirectory(owner.dir);
+    const current = fs.lstatSync(owner.dir, {bigint: true}), original = owner.identity;
+    if (!original || typeof original.ino !== 'bigint' || original.ino <= 0n ||
+        current.dev !== original.dev || current.ino !== original.ino) fail('preparation-directory-changed');
+    fs.rmdirSync(owner.dir); // Empty only; never remove evidence or shared storage.
+    result.directoryState = 'removed-empty';
+  } catch (error) { result.reason = safeCode(error); }
+  return result;
+}
 function readFile(file, limit = MAX_EVIDENCE) {
   const stat = fs.lstatSync(file);
   if (!stat.isFile() || stat.isSymbolicLink() || stat.nlink !== 1 || stat.size > limit || !samePath(fs.realpathSync(file), file)) fail('unsafe-execution-evidence');
@@ -596,6 +611,7 @@ function createNativeTaskExecution(options) {
     if (slot) await stop(slot, 'Native MCP request cancelled');
   }
   async function call(params, requestId = null) {
+    let preparation = null;
     try {
       if (closing) fail('execution-transport-closing');
       const args = params.arguments; validate(args);
@@ -623,16 +639,19 @@ function createNativeTaskExecution(options) {
         const quiescence = observed.snapshot.inspection.inputs.find(row => row.path === args.quiescenceSourceRef && row.current.present === true);
         if (!quiescence) fail('quiescence-protected-source-required');
         const base = directory(source, args.cwd, true), id = crypto.randomUUID(), dir = path.join(base, id);
-        safeDirectory(dir, true);
+        fs.mkdirSync(dir, {mode: 0o700});
+        preparation = {dir, recorder: null};
+        preparation.identity = fs.lstatSync(dir, {bigint: true});
+        safeDirectory(dir);
         const dbPath = path.join(base, 'carrier.sqlite');
-        const recorder = openCarrierRecorder({path: dbPath, create: !fs.existsSync(dbPath)});
+        const recorder = preparation.recorder = openCarrierRecorder({path: dbPath, create: !fs.existsSync(dbPath)});
         const scopeRef = hash(JSON.stringify({threadId: source.threadId, cwd: fs.realpathSync(args.cwd), scope: args.scopeRef}));
         try {
           const prior = recorder.readScope(scopeRef);
           if (prior.activeTransferId !== null) fail('SCOPE_BUSY');
           if (prior.writerThreadId !== source.threadId) fail('WRITER_CONFLICT');
         } catch (error) {
-          if (error.code !== 'SCOPE_NOT_FOUND') { recorder.close(); fs.rmdirSync(dir); throw error; }
+          if (error.code !== 'SCOPE_NOT_FOUND') throw error;
         }
         const slot = {id, dir, cwd: args.cwd, source, caller: source, bytes: 0, recorder,
           expected: {epoch: args.epoch, expectedRevision: args.expectedRevision},
@@ -700,6 +719,7 @@ function createNativeTaskExecution(options) {
             });
           }});
         slots.set(id, slot);
+        preparation = null; // The registered slot now owns its recorder and evidence.
         if (requestId !== null) requestOperations.set(String(requestId), slot);
         const plan = Object.fromEntries(['model', 'effort', 'intake', 'continuation', 'postRelease', 'deadlineMs', 'skillRequest', 'sandbox', 'writeScope'].filter(k => args[k] !== undefined).map(k => [k, args[k]]));
         return {isError: false, value: launch(slot, () => slot.engine.prepare({...plan, cwd: args.cwd, transferId: id, scopeRef}))};
@@ -755,6 +775,9 @@ function createNativeTaskExecution(options) {
       }
       fail('invalid-task-execution-request');
     } catch (error) { return {isError: true, value: {schema: 'yiyuan-accord-task-execution/v1', state: 'unavailable', reason: safeCode(error),
+      ...(preparation ? {preparationCleanup: closePreparation(preparation)} : {}),
+      ...(error.recorderCleanup?.state === 'close-unverified' ? {recorderCleanup:
+        {state: 'close-unverified', code: safeCode({code: error.recorderCleanup.code})}} : {}),
       ...(error.processState ? {process: Object.fromEntries(['pid', 'started', 'exitObserved', 'closeObserved', 'exitCode', 'signal', 'forced', 'terminationAttempt', 'queryPhase', 'terminationExitCode', 'terminationSignal', 'terminationError', 'terminationElapsedMs', 'descendantVerification'].filter(key => Object.hasOwn(error.processState, key)).map(key => [key, error.processState[key]]))} : {}),
       claimLimit: 'No new authority or success is implied. Inspect the exact existing operation before retrying an uncertain effect.'}}; }
   }
