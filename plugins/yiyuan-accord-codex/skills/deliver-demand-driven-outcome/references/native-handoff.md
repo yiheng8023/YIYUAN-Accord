@@ -137,8 +137,11 @@ review grants no business write, and recovery still needs the effect review belo
 `inspect` may expose `targetReconciliationBasis` with the
 exact record revision and record/lease hashes. Supply those fields, `operationId`,
 current `epoch`/`expectedRevision`, a future `deadlineMs` of at most five minutes,
-`writerDisposition: "source-current" | "target-retained"` and a protected
-`effectSourceRef`. That JSON must be `kind: "external-target-effects/v1"`, bind the
+`writerDisposition: "source-current" | "target-retained"` and a workspace-relative
+`effectSourceRef`. Its exact bytes are hash-bound in the recovery operation evidence
+store and re-read before settlement; no business checkpoint input slot is needed.
+Existing protected-input sources remain supported. That JSON must be
+`kind: "external-target-effects/v1"`, bind the
 operation and `recordSha256`, and contain `actorSourceRef`, `authoritySourceRef`,
 `effects: [{disposition: "no-effect-verified" | "applied-verified" |
 "partial-effects-reviewed", sourceRef}]` and `unresolved: []`. These are review

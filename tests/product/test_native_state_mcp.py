@@ -4000,8 +4000,45 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
     def test_policy_prepared_commit_denial_keeps_source_recovery(self):
         self.check_target_effect_reconciliation('source-policy-commit-denied')
 
+    def test_completed_intake_reconciliation_at_full_reference_capacity(self):
+        self.check_target_effect_reconciliation('source-intake-capacity')
+
+    def test_full_capacity_reconciliation_rechecks_effect_source_bytes(self):
+        self.check_target_effect_reconciliation('source-intake-capacity-effect-source-drift')
+
+    def test_full_capacity_reconciliation_preserves_original_input_invariants(self):
+        self.check_target_effect_reconciliation('source-intake-capacity-input-change')
+
+    def test_full_capacity_reconciliation_preserves_original_output_contract(self):
+        self.check_target_effect_reconciliation('source-intake-capacity-output-change')
+
+    def test_full_capacity_reconciliation_rejects_effect_source_escape(self):
+        self.check_target_effect_reconciliation('source-intake-capacity-effect-escape')
+
+    def test_full_capacity_reconciliation_rejects_effect_source_symlink(self):
+        self.check_target_effect_reconciliation('source-intake-capacity-effect-symlink')
+
+    def test_full_capacity_reconciliation_rejects_effect_source_hardlink(self):
+        self.check_target_effect_reconciliation('source-intake-capacity-effect-hardlink')
+
     def check_target_effect_reconciliation(self, mode):
         contract = self.execution_write_contract()
+        capacity = mode.startswith('source-intake-capacity')
+        protected_inputs = ['drain.json']
+        if capacity:
+            for index in range(98):
+                name = 'protected-%02d.txt' % index
+                (self.work/name).write_text('Immutable fixture input %d' % index, encoding='utf-8')
+                protected_inputs.append(name)
+            current = self.native_input_preview()
+            self.assertFalse(self.manage(action='bind', epoch=current['epoch'], expectedRevision=current['revision'],
+                result='Review the authorized fixed candidate', inputs=protected_inputs,
+                outputs=[{'path': 'review.json'}], nextAction='Read-only intake at full capacity', canContinue=True)['isError'])
+            current = self.native_input_preview()
+            self.assertEqual(len(current['checkpoint']['inputs']), 99)
+            self.assertEqual(len(current['checkpoint']['outputs']), 1)
+            contract.update(epoch=current['epoch'], expectedRevision=current['revision'],
+                            deadlineMs=int(time.time()*1000)+20000)
         policy_mode = {'source-policy': 'policy-readonly', 'source-policy-missing': 'policy-missing', 'source-requirements': 'requirements-deny',
                        'source-policy-commit-denied': 'workspace-write'}.get(mode)
         source_intake = mode.startswith('source-intake') or policy_mode is not None
@@ -4040,11 +4077,25 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
         basis = old.get('targetReconciliationBasis')
         self.assertIsNotNone(basis, 'known-stopped target has no typed effect reconciliation basis')
         effect = self.work/'effects.json'
+        effect_ref = 'effects.json'
         effect.write_text(json.dumps({'kind': 'external-target-effects/v1', 'operationId': operation_id,
             'recordSha256': basis['recordSha256'], 'actorSourceRef': 'fixed-old-peer-natural-close-and-exclusive-owner',
             'authoritySourceRef': 'new-current-fixture-input',
             'effects': [{'disposition': 'partial-effects-reviewed', 'sourceRef': 'independent-fixed-review.json-bytes'}],
             'unresolved': ['external-service-effect-still-unknown'] if mode=='unknown' else []}), encoding='utf-8')
+        if mode == 'source-intake-capacity-effect-escape':
+            (self.root/'effects.json').write_bytes(effect.read_bytes())
+            effect_ref = '../effects.json'
+        if mode in ('source-intake-capacity-effect-symlink', 'source-intake-capacity-effect-hardlink'):
+            link = self.work/'effects-link.json'
+            try:
+                if mode.endswith('symlink'):
+                    link.symlink_to(effect)
+                else:
+                    os.link(effect, link)
+            except (OSError, NotImplementedError) as error:
+                self.skipTest('Fixture link creation unavailable: '+str(error))
+            effect_ref = link.name
         meta = self.params['_meta']['x-codex-turn-metadata']
         meta['turn_id'] = 'target-recovery-turn'
         transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
@@ -4057,17 +4108,20 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             'model': meta['model'], 'transcript_path': str(transcript)}, session=meta['session_id'], hook='UserPromptSubmit')
         current = self.native_input_preview()
         revised_inputs = {}
-        if mode == 'input-change':
+        if mode in ('input-change', 'source-intake-capacity-input-change'):
             (self.work/'drain.json').write_text('A different current source does not erase the original invariant.', encoding='utf-8')
             revised_inputs = {'revisionReason': 'Explicit fixture input change', 'inputRevisions': [{
                 'path': 'drain.json', 'observed': {'present': True, 'sha256': hashlib.sha256((self.work/'drain.json').read_bytes()).hexdigest()},
                 'reason': 'Explicit fixture source revision; original recovery still must reject this unsupported change.'}]}
+        if mode == 'source-intake-capacity-output-change':
+            revised_inputs['revisionReason'] = 'Explicit fixture output revision; recovery must still preserve the original output contract.'
         self.assertFalse(self.manage(action='bind', epoch=current['epoch'], expectedRevision=current['revision'],
-            result='Review the authorized fixed candidate', inputs=['drain.json', 'effects.json'],
-            outputs=[{'path': 'review.json'}], nextAction='Reconcile actual effects without replay', canContinue=True, **revised_inputs)['isError'])
+            result='Review the authorized fixed candidate', inputs=protected_inputs if capacity else ['drain.json', 'effects.json'],
+            outputs=[{'path': 'changed-review.json' if mode=='source-intake-capacity-output-change' else 'review.json'}],
+            nextAction='Reconcile actual effects without replay', canContinue=True, **revised_inputs)['isError'])
         current = self.native_input_preview()
         args = dict(operationId=operation_id, epoch=current['epoch'], expectedRevision=current['revision'],
-            deadlineMs=int(time.time()*1000)+20000, writerDisposition='target-retained' if mode in ('target-retained', 'source-intake-grant-target') else 'source-current', effectSourceRef='effects.json', **basis)
+            deadlineMs=int(time.time()*1000)+20000, writerDisposition='target-retained' if mode in ('target-retained', 'source-intake-grant-target') else 'source-current', effectSourceRef=effect_ref, **basis)
         if mode == 'stale':
             args['recordRevision'] += 1
         if mode == 'paused':
@@ -4075,12 +4129,20 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
                 reason='Fixture user has not authorized resumption.')['isError'])
         before_turns = sum(json.loads(line)['method']=='turn/start' for line in (self.root/'native-wire.jsonl').read_text().splitlines())
         reply = fresh('reconcile-target', **args)
-        if mode in ('stale', 'unknown', 'paused', 'input-change', 'source-intake-grant-target'):
+        if mode in ('stale', 'unknown', 'paused', 'input-change', 'source-intake-grant-target',
+                    'source-intake-capacity-input-change', 'source-intake-capacity-output-change',
+                    'source-intake-capacity-effect-escape', 'source-intake-capacity-effect-symlink',
+                    'source-intake-capacity-effect-hardlink'):
             self.assertTrue(reply['isError'], reply)
             self.assertEqual(reply['structuredContent']['reason'], {'stale': 'stopped-record-basis-changed',
                 'unknown': 'target-effects-unresolved', 'paused': 'current-source-not-executable',
                 'input-change': 'original-input-invariants-changed',
-                'source-intake-grant-target': 'source-writer-must-remain-current'}[mode])
+                'source-intake-grant-target': 'source-writer-must-remain-current',
+                'source-intake-capacity-input-change': 'original-input-invariants-changed',
+                'source-intake-capacity-output-change': 'original-output-contract-changed',
+                'source-intake-capacity-effect-escape': 'unsafe-effect-source',
+                'source-intake-capacity-effect-symlink': 'unsafe-execution-evidence',
+                'source-intake-capacity-effect-hardlink': 'unsafe-execution-evidence'}[mode])
             self.assertEqual(fresh('inspect', operationId=operation_id)['structuredContent']['writer'], original_writer)
             return
         self.assertFalse(reply['isError'], reply)
@@ -4120,6 +4182,16 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             self.assertEqual(retried['structuredContent']['reason'], 'target-settlement-unknown')
             self.assertEqual((self.root/'native-wire.jsonl').read_bytes(), wire)
             return
+        if capacity:
+            packet = json.loads(fresh('read-evidence', operationId=operation_id,
+                evidenceId=waiting['reviewRequest']['observationSha256'], maxChars=16000)['structuredContent']['text'])
+            evidence = packet['material']['effectSource']['evidence']
+            source = json.loads(fresh('read-evidence', operationId=operation_id,
+                evidenceId=evidence['evidenceId'], maxChars=16000)['structuredContent']['text'])
+            self.assertEqual(base64.b64decode(source['contentsBase64']), effect.read_bytes())
+            self.assertEqual(source['sha256'], hashlib.sha256(effect.read_bytes()).hexdigest())
+        if mode == 'source-intake-capacity-effect-source-drift':
+            effect.write_bytes(effect.read_bytes()+b'\n')  # Same parsed value, different exact source bytes.
         if mode == 'effect-drift':
             (self.work/'review.json').write_text('another effect after review snapshot', encoding='utf-8')
         if mode in ('native-drift', 'source-intake-native-drift'):
@@ -4133,7 +4205,8 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             mutation = subprocess.run([self.node, '-e', script, str(BRIDGE.with_name('carrier-recorder.cjs')),
                 str(next(self.state.rglob('carrier.sqlite'))), operation_id, scope], capture_output=True, timeout=5)
             self.assertEqual(mutation.returncode, 0, mutation.stderr)
-        if mode in ('effect-drift', 'lease-drift', 'native-drift', 'source-intake-native-drift'):
+        if mode in ('effect-drift', 'lease-drift', 'native-drift', 'source-intake-native-drift',
+                    'source-intake-capacity-effect-source-drift'):
             review = waiting['reviewRequest']
             rejected = fresh('review', operationId=operation_id, reviewId=review['reviewId'],
                 observationSha256=review['observationSha256'], decision='allow', sourceRef='stale-independent-judgment')
@@ -4150,6 +4223,10 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             self.assertFalse((self.work/'review.json').exists())
         else:
             self.assertEqual((self.work/'review.json').read_bytes(), old_bytes)
+        if capacity:
+            after = self.native_input_preview()
+            self.assertEqual([row['path'] for row in after['checkpoint']['inputs']], protected_inputs)
+            self.assertEqual(after['checkpoint']['outputs'], [{'path': 'review.json'}])
         self.assertEqual(sum(json.loads(line)['method']=='turn/start' for line in (self.root/'native-wire.jsonl').read_text().splitlines()), before_turns)
         state = json.loads(fresh('read-evidence', operationId=operation_id,
             evidenceId=done['stateEvidence']['sha256'], maxChars=16000)['structuredContent']['text'])

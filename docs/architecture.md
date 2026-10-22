@@ -534,7 +534,8 @@ and target-effect reconciliation are separate typed paths. The latter also cover
 one completed read-only intake with the source writer retained; its exact original
 request and sole terminal turn must match. This source branch only retains the
 current source writer and cannot grant the target writing responsibility. It
-requires current active source authority, protected effect material, independently
+requires current active source authority, exact effect bytes protected by the
+recovery operation evidence store without consuming a business checkpoint input, independently
 reviewed quiescence/effects, rechecked native target facts and natural reader closure.
 Exact record/lease settlement rotates the fence and explicitly retains the target
 writer or returns the same public scope to the current root. It preserves the old
