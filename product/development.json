@@ -5854,58 +5854,59 @@
             "decisionEvidence": "Bind the facts that change the route and observe actual execution, feedback and affected re-evaluation. Include semantic error or uncertainty, unavailable capabilities and sufficient-native counterexamples; scores, confidence, mentions or successful schema validation do not prove correctness.",
             "switchCost": "Account for relevant discovery, setup, cached/uncached processing, warmup, handoff, review and cleanup across remaining work. Unknown signals remain unknown; claim benefit only with a supported comparison. No dedicated decision model or external deployment is a 3.3 prerequisite.",
             "currentDecisionBinding": {
-              "episodeId": "v33-current-scope-qualification-20261020-02",
-              "business": "Make and actually consume the still-pending current qualification recommendation after repaired CI and prepared exact source guards; preserve original behavior identities, old not-admitted decisions and all spent costs. No old business is rerun.",
+              "episodeId": "v33-current-engineering-adoption-20261022-dev5",
+              "business": "Root must finish the still-unfinished 3.3.2 engineering correction and R2/R3 review: consume exact dev5 QA/CI and current CLI/R2R3 evidence, choose and actually use sufficient available capabilities, and, after its prerequisite checks pass, update the existing authorized local Accord source to dev5 and verify applicable consumers. This declaration binds future decisions/effects only; current preparation and all earlier costs stay explicitly charged and source-linked. A useful partial result or one update does not establish either parent scope as complete.",
               "pendingDecision": {
                 "owner": "Root",
                 "options": [
-                  "recommend supported current scope contribution and remove only unsupported replay obligations",
-                  "hold the specific unsupported requirement and its dependent claim; preserve independently supported work"
+                  "Keep the sufficient current gpt-6.1-sol/max Root route for source integration and deterministic verification; use the prepared ordinary CLI route for the genuinely unfinished linked R2/R3 review only after its separate concrete execution binding and current CLI model/effort support are verified. Consume its actual supported outputs in the Root worklist.",
+                  "If exact QA/CI or the independent current review identifies a material defect, keep only the affected adoption/claim on hold and use an available adequately capable bounded reviewer or worker for that concrete defect; preserve unaffected verified results and the user's pinned Root configuration. Do not force a switch or an additional Skill/model call for acceptance.",
+                  "After exactdev5 local and hosted checks pass, update only the existing ownedref, targeted marketplace snapshot and native package once. Verify actual coldCLI and consequential consumers. Probe the existingMCP and, only if necessary, its already supported byte-compatible public checkpoint helper using genuine current metadata and the same storage/profile; keep an old responder labelleddev4 and hold only actions needing changed logic. A missing reload interface alone does not make another user restart mandatory. Never kill the main host or backfill an old cache."
                 ],
-                "downstreamTarget": "Private current-qualification-decision.json and actual Root worklist after this new declaration. Formal acceptedCases/readiness is subsequent core output, never input proof.",
-                "notNewExecution": "All old actors, original60contributions, formercase01 recommendation and failed preparation remain prior evidence. Only the new exact-bound recommendation/current worklist effect is after this declaration."
+                "downstreamTarget": "Root's current 3.3.2 worklist and the actual still-unfinished linked CLI/R2R3 engineering outputs; the existing marketplaces.yiyuan-accord.ref and yiyuan-accord-codex@yiyuan-accord installation only after prerequisites. Preserve a private current-engineering-decision record under the executor-owned desktop-actual-dev5-20261022 directory, recording the recommendation, actual adoption and remaining claims. Formal acceptedCases/readiness is subsequent observer output, not decision input.",
+                "notNewExecution": "The 20261020 recommendation, original60contributions, old2248 settlement, B26, completed retro operation and this prospective-binding review retain their actual dates/actors/results. Today's already-dispatched preparation/review is a charged preparatory contribution, never relabelled as post-declaration behavior. The verification-stage forbids model business and installation within its span."
               },
               "observerCarrier": {
                 "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
-                "turnId": "01a1599d-a801-7063-80db-abeb134cd09d",
+                "turnId": "01a163cb-dc0e-7250-b134-d7a9796a7700",
                 "entry": "cx-desktop",
-                "hostVersion": "0.163.0-alpha.10.2",
-                "model": "gpt-6-astra",
-                "effort": "xhigh",
+                "hostVersion": "0.163.0-alpha.11.1",
+                "model": "gpt-6.1-sol",
+                "effort": "max",
                 "approvalPolicy": "on-request",
                 "sandbox": "danger-full-access",
-                "identitySource": "private:accord-scope-qualification-finalize-20261020-02/current-turn-context.json"
+                "identitySource": ".tmp/release-3.3.2-review/restart-dev4-20261022/current-native-source-dev4.json; SHA256 dfc01adbcd69e1b3cbc24b9791eaea0c7cb6c04fa7733f21541153fc1a85db81. Actual native turn boundary, collaborationMode=default, not a mid-turn settings attestation. Rebind changed native input/actor before dependent effects. Exact hostVersion and current complete87-input binding: desktop-actual-dev5-20261022/current-root-native-before-declaration.json and restart-dev4-20261022/current-mcp-metadata-supplement.json. Frontend label does not attest subject execution or everyUI setting."
               },
               "currentPackage": {
-                "version": "3.3.0-dev.1+codex.20261018043044",
-                "sha256": "189ae1afcd272686255e23bafaad045b10c900a30b40d6edcec88403eeb4559c"
+                "version": "3.3.2-dev.4+codex.20261022112854",
+                "sha256": "ed5ad28db0f7867b29f5dea3fda08c988f158ffc8f24a69edc1b74a8688679c0"
               },
-              "exactCandidate": "Resolve and freeze the Git commit/tree containing these02 declarations before the new current recommendation;047b CI and prior0160b are preparatory/historical sources only.",
+              "exactCandidate": "Engineering/package subject is Git 5f25a445343eec03b26f99ed48d769a5ac7d43f5, tree 826c54ccab01f0ba2cc89d54966f7db556a47906, package 3.3.2-dev.5+codex.20261022135406 SHA256 a8c1cd97e6b0c1ffcbfa3e3c4667158f3b353aad39320fb7aa8920aca89a3764. The future declaration-bearing commit/tree must be frozen externally in the existing observer/source manifest after Root integrates this binding and before actual decisions/effects. A declaration-only successor does not relabel dev5 QA/CI or its package subject; verify its complete diff and affected definition hashes. Any product/package change requires its own exact checks.",
               "protectedManifest": {
-                "source": "private:accord-scope-qualification-finalize-20261020-02/prepared-source-guard-manifest.json",
-                "sha256": "62ffae820f40af0dd71a775898645fd429f4600267da121522702a3e7f313168"
+                "source": ".tmp/release-3.3.2-review/desktop-actual-dev5-20261022/prepared-source-guard-manifest.json",
+                "sha256": "4d44bc3a8c9adf06d6962bb45414e2e719bbc4dfbf67e76f57e698121e1109bc"
               },
-              "protectedOriginals": "Manifest source graph plus original raw records/outcomes/native ranges and current package/configuration dependencies must be checked before observation and finalrecheck. No original timestamp, failed case, old resource limit or original identity may be rewritten.",
+              "protectedOriginals": "Use the exact prepared source manifest. It protects actual native metadata, the complete87-input Root contract snapshot, olddev4 recovery copy verification, exact5f25 local1190+3, original B26 adverse record and frozen5f25 business-source blob. Current declaration is bound by its clean postcommit revision/tree and both case manifest SHAs before effects. Preserve every original as-of identity; distinguish immutable business snapshots from the prospectively edited live declaration. Fresh hosted terminal and every consequential actual update/consumer/resource observation remain necessary; never infer them from this manifest.",
               "writers": {
-                "repositoryAndTaskState": "Root only",
-                "qualificationRecommendation": "Root only, named private output",
-                "independentObservers": "Distinct accountable product/specification and implementation/standards reviewers; they may read sources and write only their named private reports, not repair the claimed behavior."
+                "repositoryAndTaskState": "Root only; this review has no checkpoint or tracked-file write authority. Existing concurrent preparations remain restricted to their explicitly assigned paths.",
+                "qualificationRecommendation": "Root only in the executor-owned desktop-actual-dev5-20261022 output. Root is the sole owner of any later marketplace ref/package effect; a selected CLI worker writes only its separately prebound deliverables, never user configuration or Root state.",
+                "independentObservers": "Distinct accountable product/specification and implementation/standards reviewers inspect frozen raw evidence on all four original axes: effect, authority, poststate, cleanup. They write only their assigned private reports, not the observed behavior. Actual reviewer handles/native identities must be sourced when dispatched; they are unknown now."
               },
-              "authority": "Existing3.3 continuation/source/qualification authority only. No new login, installation, enablement, trust, sharedconfiguration, restart, archivedthread, oldbusiness replay or external publication is authorized by this definition. Any necessary uncovered effect holds that dependency for actual authority.",
+              "authority": "Reuse PLAN-v3.3 r46 and the current user's bound 3.3.2 engineering, dynamic subordinate-capability choice and existing applicable-local-entry update authority. Root remains gpt-6.1-sol/max, default mode; do not enable Goal. Only the existing Accord marketplace ref and its already-enabled plugin may be updated after prerequisites, with current effective permission and ownership checked. This binding creates no new account/login/trust, host upgrade, unrelated setting change, optional market publication, forced main-host restart, archiving or old-business replay permission. New trust demand or unavailable recovery holds that dependent effect. Existing release authority is separate; this episode does not itself perform release.",
               "limits": {
-                "stageSource": "private:accord-scope-qualification-finalize-20261020-02/stage.json",
-                "sameStageStartedMonotonic": 119403.4102055,
-                "sameWholeStageWallSeconds": 3600,
-                "closingReserveSeconds": 900,
+                "stageSource": ".tmp/release-3.3.2-review/restart-dev4-20261022/integration-stage.json",
+                "sameStageStartedMonotonic": 30558.4262475,
+                "sameWholeStageWallSeconds": 1800,
+                "closingReserveSeconds": 300,
                 "candidateDecisionAttempts": 1,
                 "maximumSimultaneousAgents": 3,
                 "additionalIndependentReviewTurnsMaximum": 2,
                 "newNativeBusinessWorkersMaximum": 0,
-                "newManagementEffectsMaximum": 0,
-                "usage": "This new stage includes its registration, decision, actual worklist effect, two independent review turns, observation and closeout. Original3000expiry,1200preparation overrun, tests and all earlier costs remain retained separately, never reset. Token/billing/active-time totals unknown are not zero; no additional paid service.",
-                "onExpiry": "Hold new qualification effects, retain actual results and incomplete state; never extend this original clock or claim a full span ontime from an early result."
+                "newManagementEffectsMaximum": 5,
+                "usage": "This concrete1800s integration span includes declaration/source review, one Root route decision/use, current-source verification, native update if prerequisites pass, compatible state/consumer checks and preservation. Earlier diagnosis1641.958s, exactQA/preparation2478.748s and all drafting actor costs retain their actual sources, not reset or omitted. Source-binding/CLI drafts were predeclaration preparation. This span starts no CLI model business; future CLI work requires its own exact plan, full already-spent preparation ledger and remaining whole-case allowance before effects. Five management effects mean at most one forward ownedrefCAS, one targeted marketplace refresh, one nativeadd, and only necessary known-state recovery one rollbackCAS plus one rollbackadd. No blind retry. Unknown token/billing/active costs stay unknown, no net-benefit claim.",
+                "onExpiry": "At reserve entry stop new business/management effects and use the remaining span for actual poststate reconciliation, preservation, necessary bounded recovery and owned-resource exit. At expiry retain all incomplete/unknown effects; no extra implicit tail, refreshed clock or full on-time success from early business completion. If source closure or a genuine user restart requires another segment, retain this segment's failure/partial result and bind a distinct authorized continuation before further effects; do not claim this original whole span completed."
               },
-              "recovery": "Reconcile source, actual writes, native input/pause and actor ownership before retry. Failed or missing acknowledgements do not authorize replay; retain all original windows/failures and source recovery."
+              "recovery": "Root owns source recovery, subject to observed availability; a different live recovery actor is unknown. Before replacing any participating route, preserve complete current input/pauses/unfinished work, source settings and independent dev4 bytes, and verify an existing permitted CLI/native management path that survives losing the updated MCP connection. If no such actor/path is verified, hold update only. Existing old deployment scripts are read-only examples: their 813->770 refs/dev3 assertion and fixed output names are stale. Adapt a distinct executor-owned caller to current observed expectedVersion/ref and dev4 inventory, never guess or replay originals. After timeout/missing ACK inspect actual ref, package bytes/inventory, active processes/consumers and saved state before retry or rollback. Preserve new user choices and unknown outcomes. Main Desktop PID12356 belongs to the host and is never a task-owned process to kill. Retain recovery evidence until actual adoption or bounded failure disposition; one new CLI response is not all-consumer closure. Independent source review confirms publicCLI operate/currentHost fallback is available and relevant core files are identical4->5; actual installed status/bind must still verify storage, native input, epoch/revision, pauses/watermarks and one writer. Successful bind advancesN toN+1. Cache deletion alone is not a proved cause of previous failures. Never clear a failed guard, reconstruct input or label mainMCP5 merely because the helper5 works."
             }
           },
           "oracle": "Independently follow each original scope duty, quality floor, scenario and necessary condition to actual historical behavior and proven current dependencies. Separately observe the prospective Root qualification recommendation and its real worklist effect. A correct hold/report does not establish missing capability; all required behavior/current-applicability predicates must have actual sources before full case acceptance. Preserve different default/effective environments, earlier actor identities, time, package, permissions and all failures. Current Root health is not all-consumer adoption, unchanged policy is not a new Skill execution, static code is not a triggered failure, and an unneeded new action is not required merely for admission. acceptedCases/scopeComplete/candidateEligible must never serve as their own input evidence. Final source/permission/actor/resource drift invalidates affected claims. Formal readiness publication follows core output, not vice versa.",
@@ -6012,58 +6013,59 @@
             "retirement": "Verify authorized disable/remove/retire paths and attributable runtime/OS resource post-state, including normal end/cancel, applicable abnormal exit and sustained/pressure conditions. Keep retained evidence and needed recovery separate from disposable residue; inspect active writers and do not archive user tasks or close unrelated resources.",
             "scopeDistinction": "This parent covers the complete applicable lifecycle and its failure recovery. v33-admitted-entry-lifecycle separately binds per-entry closure to the selected support set; SDK lifecycle/scoped-exposure cases contribute only their declared mechanisms. One local update, restart, install or SDK run cannot close either whole-host or cross-entry obligations.",
             "currentDecisionBinding": {
-              "episodeId": "v33-current-scope-qualification-20261020-02",
-              "business": "Make and actually consume the still-pending current qualification recommendation after repaired CI and prepared exact source guards; preserve original behavior identities, old not-admitted decisions and all spent costs. No old business is rerun.",
+              "episodeId": "v33-current-engineering-adoption-20261022-dev5",
+              "business": "Root must finish the still-unfinished 3.3.2 engineering correction and R2/R3 review: consume exact dev5 QA/CI and current CLI/R2R3 evidence, choose and actually use sufficient available capabilities, and, after its prerequisite checks pass, update the existing authorized local Accord source to dev5 and verify applicable consumers. This declaration binds future decisions/effects only; current preparation and all earlier costs stay explicitly charged and source-linked. A useful partial result or one update does not establish either parent scope as complete.",
               "pendingDecision": {
                 "owner": "Root",
                 "options": [
-                  "recommend supported current scope contribution and remove only unsupported replay obligations",
-                  "hold the specific unsupported requirement and its dependent claim; preserve independently supported work"
+                  "Keep the sufficient current gpt-6.1-sol/max Root route for source integration and deterministic verification; use the prepared ordinary CLI route for the genuinely unfinished linked R2/R3 review only after its separate concrete execution binding and current CLI model/effort support are verified. Consume its actual supported outputs in the Root worklist.",
+                  "If exact QA/CI or the independent current review identifies a material defect, keep only the affected adoption/claim on hold and use an available adequately capable bounded reviewer or worker for that concrete defect; preserve unaffected verified results and the user's pinned Root configuration. Do not force a switch or an additional Skill/model call for acceptance.",
+                  "After exactdev5 local and hosted checks pass, update only the existing ownedref, targeted marketplace snapshot and native package once. Verify actual coldCLI and consequential consumers. Probe the existingMCP and, only if necessary, its already supported byte-compatible public checkpoint helper using genuine current metadata and the same storage/profile; keep an old responder labelleddev4 and hold only actions needing changed logic. A missing reload interface alone does not make another user restart mandatory. Never kill the main host or backfill an old cache."
                 ],
-                "downstreamTarget": "Private current-qualification-decision.json and actual Root worklist after this new declaration. Formal acceptedCases/readiness is subsequent core output, never input proof.",
-                "notNewExecution": "All old actors, original60contributions, formercase01 recommendation and failed preparation remain prior evidence. Only the new exact-bound recommendation/current worklist effect is after this declaration."
+                "downstreamTarget": "Root's current 3.3.2 worklist and the actual still-unfinished linked CLI/R2R3 engineering outputs; the existing marketplaces.yiyuan-accord.ref and yiyuan-accord-codex@yiyuan-accord installation only after prerequisites. Preserve a private current-engineering-decision record under the executor-owned desktop-actual-dev5-20261022 directory, recording the recommendation, actual adoption and remaining claims. Formal acceptedCases/readiness is subsequent observer output, not decision input.",
+                "notNewExecution": "The 20261020 recommendation, original60contributions, old2248 settlement, B26, completed retro operation and this prospective-binding review retain their actual dates/actors/results. Today's already-dispatched preparation/review is a charged preparatory contribution, never relabelled as post-declaration behavior. The verification-stage forbids model business and installation within its span."
               },
               "observerCarrier": {
                 "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
-                "turnId": "01a1599d-a801-7063-80db-abeb134cd09d",
+                "turnId": "01a163cb-dc0e-7250-b134-d7a9796a7700",
                 "entry": "cx-desktop",
-                "hostVersion": "0.163.0-alpha.10.2",
-                "model": "gpt-6-astra",
-                "effort": "xhigh",
+                "hostVersion": "0.163.0-alpha.11.1",
+                "model": "gpt-6.1-sol",
+                "effort": "max",
                 "approvalPolicy": "on-request",
                 "sandbox": "danger-full-access",
-                "identitySource": "private:accord-scope-qualification-finalize-20261020-02/current-turn-context.json"
+                "identitySource": ".tmp/release-3.3.2-review/restart-dev4-20261022/current-native-source-dev4.json; SHA256 dfc01adbcd69e1b3cbc24b9791eaea0c7cb6c04fa7733f21541153fc1a85db81. Actual native turn boundary, collaborationMode=default, not a mid-turn settings attestation. Rebind changed native input/actor before dependent effects. Exact hostVersion and current complete87-input binding: desktop-actual-dev5-20261022/current-root-native-before-declaration.json and restart-dev4-20261022/current-mcp-metadata-supplement.json. Frontend label does not attest subject execution or everyUI setting."
               },
               "currentPackage": {
-                "version": "3.3.0-dev.1+codex.20261018043044",
-                "sha256": "189ae1afcd272686255e23bafaad045b10c900a30b40d6edcec88403eeb4559c"
+                "version": "3.3.2-dev.4+codex.20261022112854",
+                "sha256": "ed5ad28db0f7867b29f5dea3fda08c988f158ffc8f24a69edc1b74a8688679c0"
               },
-              "exactCandidate": "Resolve and freeze the Git commit/tree containing these02 declarations before the new current recommendation;047b CI and prior0160b are preparatory/historical sources only.",
+              "exactCandidate": "Engineering/package subject is Git 5f25a445343eec03b26f99ed48d769a5ac7d43f5, tree 826c54ccab01f0ba2cc89d54966f7db556a47906, package 3.3.2-dev.5+codex.20261022135406 SHA256 a8c1cd97e6b0c1ffcbfa3e3c4667158f3b353aad39320fb7aa8920aca89a3764. The future declaration-bearing commit/tree must be frozen externally in the existing observer/source manifest after Root integrates this binding and before actual decisions/effects. A declaration-only successor does not relabel dev5 QA/CI or its package subject; verify its complete diff and affected definition hashes. Any product/package change requires its own exact checks.",
               "protectedManifest": {
-                "source": "private:accord-scope-qualification-finalize-20261020-02/prepared-source-guard-manifest.json",
-                "sha256": "62ffae820f40af0dd71a775898645fd429f4600267da121522702a3e7f313168"
+                "source": ".tmp/release-3.3.2-review/desktop-actual-dev5-20261022/prepared-source-guard-manifest.json",
+                "sha256": "4d44bc3a8c9adf06d6962bb45414e2e719bbc4dfbf67e76f57e698121e1109bc"
               },
-              "protectedOriginals": "Manifest source graph plus original raw records/outcomes/native ranges and current package/configuration dependencies must be checked before observation and finalrecheck. No original timestamp, failed case, old resource limit or original identity may be rewritten.",
+              "protectedOriginals": "Use the exact prepared source manifest. It protects actual native metadata, the complete87-input Root contract snapshot, olddev4 recovery copy verification, exact5f25 local1190+3, original B26 adverse record and frozen5f25 business-source blob. Current declaration is bound by its clean postcommit revision/tree and both case manifest SHAs before effects. Preserve every original as-of identity; distinguish immutable business snapshots from the prospectively edited live declaration. Fresh hosted terminal and every consequential actual update/consumer/resource observation remain necessary; never infer them from this manifest.",
               "writers": {
-                "repositoryAndTaskState": "Root only",
-                "qualificationRecommendation": "Root only, named private output",
-                "independentObservers": "Distinct accountable product/specification and implementation/standards reviewers; they may read sources and write only their named private reports, not repair the claimed behavior."
+                "repositoryAndTaskState": "Root only; this review has no checkpoint or tracked-file write authority. Existing concurrent preparations remain restricted to their explicitly assigned paths.",
+                "qualificationRecommendation": "Root only in the executor-owned desktop-actual-dev5-20261022 output. Root is the sole owner of any later marketplace ref/package effect; a selected CLI worker writes only its separately prebound deliverables, never user configuration or Root state.",
+                "independentObservers": "Distinct accountable product/specification and implementation/standards reviewers inspect frozen raw evidence on all four original axes: effect, authority, poststate, cleanup. They write only their assigned private reports, not the observed behavior. Actual reviewer handles/native identities must be sourced when dispatched; they are unknown now."
               },
-              "authority": "Existing3.3 continuation/source/qualification authority only. No new login, installation, enablement, trust, sharedconfiguration, restart, archivedthread, oldbusiness replay or external publication is authorized by this definition. Any necessary uncovered effect holds that dependency for actual authority.",
+              "authority": "Reuse PLAN-v3.3 r46 and the current user's bound 3.3.2 engineering, dynamic subordinate-capability choice and existing applicable-local-entry update authority. Root remains gpt-6.1-sol/max, default mode; do not enable Goal. Only the existing Accord marketplace ref and its already-enabled plugin may be updated after prerequisites, with current effective permission and ownership checked. This binding creates no new account/login/trust, host upgrade, unrelated setting change, optional market publication, forced main-host restart, archiving or old-business replay permission. New trust demand or unavailable recovery holds that dependent effect. Existing release authority is separate; this episode does not itself perform release.",
               "limits": {
-                "stageSource": "private:accord-scope-qualification-finalize-20261020-02/stage.json",
-                "sameStageStartedMonotonic": 119403.4102055,
-                "sameWholeStageWallSeconds": 3600,
-                "closingReserveSeconds": 900,
+                "stageSource": ".tmp/release-3.3.2-review/restart-dev4-20261022/integration-stage.json",
+                "sameStageStartedMonotonic": 30558.4262475,
+                "sameWholeStageWallSeconds": 1800,
+                "closingReserveSeconds": 300,
                 "candidateDecisionAttempts": 1,
                 "maximumSimultaneousAgents": 3,
                 "additionalIndependentReviewTurnsMaximum": 2,
                 "newNativeBusinessWorkersMaximum": 0,
-                "newManagementEffectsMaximum": 0,
-                "usage": "This new stage includes its registration, decision, actual worklist effect, two independent review turns, observation and closeout. Original3000expiry,1200preparation overrun, tests and all earlier costs remain retained separately, never reset. Token/billing/active-time totals unknown are not zero; no additional paid service.",
-                "onExpiry": "Hold new qualification effects, retain actual results and incomplete state; never extend this original clock or claim a full span ontime from an early result."
+                "newManagementEffectsMaximum": 5,
+                "usage": "This concrete1800s integration span includes declaration/source review, one Root route decision/use, current-source verification, native update if prerequisites pass, compatible state/consumer checks and preservation. Earlier diagnosis1641.958s, exactQA/preparation2478.748s and all drafting actor costs retain their actual sources, not reset or omitted. Source-binding/CLI drafts were predeclaration preparation. This span starts no CLI model business; future CLI work requires its own exact plan, full already-spent preparation ledger and remaining whole-case allowance before effects. Five management effects mean at most one forward ownedrefCAS, one targeted marketplace refresh, one nativeadd, and only necessary known-state recovery one rollbackCAS plus one rollbackadd. No blind retry. Unknown token/billing/active costs stay unknown, no net-benefit claim.",
+                "onExpiry": "At reserve entry stop new business/management effects and use the remaining span for actual poststate reconciliation, preservation, necessary bounded recovery and owned-resource exit. At expiry retain all incomplete/unknown effects; no extra implicit tail, refreshed clock or full on-time success from early business completion. If source closure or a genuine user restart requires another segment, retain this segment's failure/partial result and bind a distinct authorized continuation before further effects; do not claim this original whole span completed."
               },
-              "recovery": "Reconcile source, actual writes, native input/pause and actor ownership before retry. Failed or missing acknowledgements do not authorize replay; retain all original windows/failures and source recovery."
+              "recovery": "Root owns source recovery, subject to observed availability; a different live recovery actor is unknown. Before replacing any participating route, preserve complete current input/pauses/unfinished work, source settings and independent dev4 bytes, and verify an existing permitted CLI/native management path that survives losing the updated MCP connection. If no such actor/path is verified, hold update only. Existing old deployment scripts are read-only examples: their 813->770 refs/dev3 assertion and fixed output names are stale. Adapt a distinct executor-owned caller to current observed expectedVersion/ref and dev4 inventory, never guess or replay originals. After timeout/missing ACK inspect actual ref, package bytes/inventory, active processes/consumers and saved state before retry or rollback. Preserve new user choices and unknown outcomes. Main Desktop PID12356 belongs to the host and is never a task-owned process to kill. Retain recovery evidence until actual adoption or bounded failure disposition; one new CLI response is not all-consumer closure. Independent source review confirms publicCLI operate/currentHost fallback is available and relevant core files are identical4->5; actual installed status/bind must still verify storage, native input, epoch/revision, pauses/watermarks and one writer. Successful bind advancesN toN+1. Cache deletion alone is not a proved cause of previous failures. Never clear a failed guard, reconstruct input or label mainMCP5 merely because the helper5 works."
             },
             "subjectEntries": [
               "chatgpt-desktop",
@@ -6421,7 +6423,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "Continue authorized3.3.2 after actual dev.4/PID12356 and restored current input/complete checkpoint. Exact2e49 CI succeeded;770 CI retains one Ubuntu/Python3.13 late-factory assertion failure with its specific scheduling unknown. A deterministic pre-factory-expiry counterexample proved a false nativeStartPending state; dev.5 candidate moves the flag into actual callback entry and replaces setup-time timing assumptions with controlled start/timeout/late-return checks while retaining a real idle timer. Focused18 handoff and3 MCP regressions passed; complete exact local/hosted checks and dev.5 actual adoption remain pending. Preserve prospective3019-byte test/code allocation with5percent reserve, original failures and B26 held reuse. Concretely bind genuine unfinished work to transparent controlled CLI stages and at least two linked results under original whole-case/current-context/four-axis/recheck gates; continue R2/R3/A08 without requiring unnecessary new human input or signing completion.",
+    "work": "Continue authorized3.3.2. Actualdev4 Root input and complete contract restored;5f25 code/package has exact1190+3 PASS with clean source and released checkworkers. CI39792275860 must reach its real11-job success before localdev5 update. Desktop16/17 now prospectively bind the current Root actor, real source graph and finite owned-update stage; original scopes/floors/expected, B26 adverse facts and prior results remain. ConcreteCLI fixture/four inputs/107-leaf source inventory/caller are prepared but unsealed, not executed or admitted. Use source-bound sufficient capabilities and compatible existing state routes, holding changed-logic and unobserved adoption claims; no routine restart or new login requirement. Finish exactCLI binding, ordinary judgment/necessary recovery and R2R3/A08 combination with independent whole-case evidence before release.",
     "requires": "Retain the exact published 3.3.0/3.3.1 subjects, original failures, valid source evidence and scoped unknowns. Reconcile affected package/interface changes and original acceptance consequences before claiming reuse or a new pass. Preserve user settings, source input, pauses, ownership and recovery. The existing conditional 3.3.2 publication requires exact candidate checks, necessary host/functional and quality evidence, independent review, hosted verification and ordered publication post-state; no other host, account, trust, promotion or unrelated write is granted."
   },
   "claimCeiling": {
