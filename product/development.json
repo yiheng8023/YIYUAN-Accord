@@ -107,8 +107,8 @@
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.2-dev.3+codex.20261022065346",
-        "packageSha256": "642d62e07d2c5a46cecaf127af48bb56705b2375734ab6d2d7c01857b99e3b1e",
+        "packageVersion": "3.3.2-dev.4+codex.20261022112854",
+        "packageSha256": "ed5ad28db0f7867b29f5dea3fda08c988f158ffc8f24a69edc1b74a8688679c0",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -6421,7 +6421,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "Continue the authorized 3.3.2 engineering and functional closure using the actual dev.3 MCP, exact stopped-intake settlement and scoped native Skill contribution. Preserve B26's newly verified recovery overrun, unknown late bind and later preservation; its three complete-success reuse claims stay held. Review the five affected concrete case-instance bindings without applying unbound templates: retain CLI execution wiring, at least two linked results, existing definition/observer seams and all scope/quality floors. Bind only genuine remaining execution to its actual sources, actors, authority and finite full-tail budget; prior contributions are not prospective execution. Reuse unaffected evidence while completing full current source impact, independent review and exact observe/recheck. No whole-system qualification or release is established by these engineering results; do not replay ended business or add a control plane to renew old clocks.",
+    "work": "Continue authorized3.3.2 using the actual dev.3 adoption, exact stopped-intake settlement and scoped native Skill contribution/Root consumption at their original subjects. The source-held write-policy transition gap has a red/green strict recovery fix and independent patch review; dev.4 still needs exact clean full checks, hosted CI and applicable actual adoption. Retain B26 overrun, unknown late bind and later preservation; its three complete-success reuse claims remain held. Bind the five case instances only to genuine remaining execution with actual sources, actors, authority and a finite full-tail budget. Preserve CLI execution, at least two linked results, whole-case/same-episode/observe-recheck seams and all quality floors; prior contributions are not prospective execution. Current semantic impact, four-axis independent review and complete A08 combination remain unfinished. Do not sign functional/candidate/release completion, replay ended business or rebuild a control plane.",
     "requires": "Retain the exact published 3.3.0/3.3.1 subjects, original failures, valid source evidence and scoped unknowns. Reconcile affected package/interface changes and original acceptance consequences before claiming reuse or a new pass. Preserve user settings, source input, pauses, ownership and recovery. The existing conditional 3.3.2 publication requires exact candidate checks, necessary host/functional and quality evidence, independent review, hosted verification and ordered publication post-state; no other host, account, trust, promotion or unrelated write is granted."
   },
   "claimCeiling": {

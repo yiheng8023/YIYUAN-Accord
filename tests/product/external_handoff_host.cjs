@@ -24,9 +24,10 @@ rl.on('line', line => {
     cwd: process.cwd(), model: 'fixture', approvalPolicy: 'never', sandbox: {type: 'readOnly'}}});
   if (request.method === 'configRequirements/read') return send({id: request.id, result: {
     requirements: mode === 'requirements-deny' ? {allowedSandboxModes: ['read-only']} : null}});
+  if (request.method === 'thread/resume' && mode === 'resume-ack-loss') return;
   if (request.method === 'thread/resume') return send({id: request.id, result: {
     thread: {id: 'wire-target', ephemeral: false, status: {type: 'idle'}}, cwd: process.cwd(),
-    model: 'fixture', approvalPolicy: 'never', sandbox: mode === 'policy-readonly' ? {type: 'readOnly'} :
+    model: 'fixture', approvalPolicy: 'never', sandbox: mode === 'policy-missing' ? undefined : mode === 'policy-readonly' ? {type: 'readOnly'} :
       {type: 'workspaceWrite', writableRoots: mode === 'policy-extra-root' ? [require('node:path').dirname(process.cwd())] : [],
       networkAccess: mode === 'policy-network', excludeSlashTmp: true, excludeTmpdirEnvVar: true}}});
   if (request.method === 'thread/read') return send({id: request.id, result: {

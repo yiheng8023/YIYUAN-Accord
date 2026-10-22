@@ -202,7 +202,7 @@ function createExternalHandoff(options) {
     record({nativeClosed: closed});
     if (closed?.closed !== true || closed.primaryProcessClosed !== true || closed.exitObserved !== true || closed.closeObserved !== true ||
         closed.exitCode !== 0 || closed.forced !== false || closed.signal !== null) reject('NATIVE_CLOSE_UNVERIFIED');
-    record({priorNative: {connection: priorConnection, closure: closed}, pendingEffect: null,
+    record({priorNative: {connection: priorConnection, closure: closed, intakeReceipt: state.lastNativeReceipt}, pendingEffect: null,
       verification: {...state.verification, writePrepare: evidenceRef}});
     native = null; closePromise = null;
     await startNative();

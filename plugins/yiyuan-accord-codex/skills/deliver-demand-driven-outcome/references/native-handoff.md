@@ -129,6 +129,11 @@ with the source writer still retained: the original intake request, target,
 turn, connection and natural closure must match, with no pending effect or
 business continuation. That branch permits only `source-current`; reconciliation
 cannot grant a target writer that was never transferred.
+After a stopped workspace-write policy transition, retain the original intake
+receipt on its old connection and verify both peers' natural closure. A known
+resume receipt must bind the replacement connection and original persistent target;
+an unknown resume dispatch remains held. Policy rejection or a stopped commit
+review grants no business write, and recovery still needs the effect review below.
 `inspect` may expose `targetReconciliationBasis` with the
 exact record revision and record/lease hashes. Supply those fields, `operationId`,
 current `epoch`/`expectedRevision`, a future `deadlineMs` of at most five minutes,

@@ -731,6 +731,7 @@ const source={kind:'codex-mcp-request-metadata',threadId:'source',sessionTreeId:
 const scopeBinding={requestedScope:'bounded-work',cwd:process.cwd(),sourceThreadId:'source'};
 scopeBinding.scopeRef=hash({threadId:'source',cwd:scopeBinding.cwd,scope:scopeBinding.requestedScope});
 const plan={scopeRef:scopeBinding.scopeRef,cwd:process.cwd(),deadlineMs:100,intake:'Read the fixed intake without changing the task.'},basis={epoch:'old'};
+if(mode.startsWith('source-intake-policy'))plan.sandbox='workspace-write';
 const closed={closed:true,primaryProcessClosed:true,exitObserved:true,closeObserved:true,exitCode:0,
  forced:false,signal:null,pid:12345,recoveryRequired:false,terminationAttempt:null}; // Fixture facts, not a live process claim.
 const r=openCarrierRecorder({path:process.argv[2],create:true});r.bindScope(scopeBinding.scopeRef,'source');
@@ -769,6 +770,38 @@ if(sourceIntake){
  if(mode==='source-intake-committed')state.verification={commit:'fixture-prior-commit'};
  if(mode==='source-intake-incomplete-terminal')state.intake.terminal='interrupted';
  if(mode==='source-intake-wrong-phase')state.failure.priorPhase='writer-transferred';
+ if(mode.startsWith('source-intake-policy')){
+  state.failure.priorPhase='write-policy-transition';state.verification={writePrepare:'independent-write-prepare'};
+  state.priorNative={connection:{...state.connection},closure:{...closed},intakeReceipt:structuredClone(state.lastNativeReceipt)};
+  state.connection={connectionId:'replacement-connection',hostVersion:'fixture'};
+  if(mode!=='source-intake-policy-no-resume'){
+   const ref={connectionId:'replacement-connection',hostVersion:'fixture',method:'thread/resume',requestId:'resume-request'};
+   const sandbox={type:'readOnly'};
+   state.lastNativeReceipt={method:'thread/resume',response:{thread:{id:'target',ephemeral:false},sandbox},
+    request:{kind:'native-request',method:'thread/resume',requestRef:ref,params:{threadId:'target',excludeTurns:true,
+     sandbox:'workspace-write',approvalPolicy:'never',config:{'sandbox_workspace_write.writable_roots':[],
+      'sandbox_workspace_write.network_access':false,'sandbox_workspace_write.exclude_tmpdir_env_var':true,
+      'sandbox_workspace_write.exclude_slash_tmp':true}}}};
+   state.writePolicy={sandbox,resumeRequest:ref};
+  }
+  if(mode==='source-intake-policy-old-forced')state.priorNative.closure.forced=true;
+  if(mode==='source-intake-policy-old-unknown')state.priorNative.closure.closeObserved=false;
+  if(mode==='source-intake-policy-new-forced')state.nativeClosed.forced=true;
+  if(mode==='source-intake-policy-new-unknown')state.nativeClosed.exitObserved=false;
+  if(mode==='source-intake-policy-same-connection')state.connection.connectionId='owned-connection';
+  if(mode==='source-intake-policy-host-change')state.connection.hostVersion='different-host';
+  if(mode==='source-intake-policy-missing-intake')delete state.priorNative.intakeReceipt;
+  if(mode==='source-intake-policy-wrong-intake')state.priorNative.intakeReceipt.request.requestRef.connectionId='other';
+  if(mode==='source-intake-policy-wrong-resume')state.lastNativeReceipt.request.params.threadId='other';
+  if(mode==='source-intake-policy-wrong-response')state.lastNativeReceipt.response.thread.id='other';
+  if(mode==='source-intake-policy-ephemeral')state.lastNativeReceipt.response.thread.ephemeral=true;
+  if(mode==='source-intake-policy-wrong-connection')state.lastNativeReceipt.request.requestRef.connectionId='other';
+  if(mode==='source-intake-policy-wrong-pointer')state.writePolicy.resumeRequest={...state.writePolicy.resumeRequest,requestId:'other'};
+  if(mode==='source-intake-policy-pending-resume')state.pendingEffect={...state.lastNativeReceipt.request};
+  if(mode==='source-intake-policy-pending-start')state.pendingEffect={kind:'owned-native-start'};
+  if(mode==='source-intake-policy-extra-turn')state.turnStarts=2;
+  if(mode==='source-intake-policy-committed')state.verification.commit='prior-commit';
+ }
 }
 if(mode==='forced')state.nativeClosed.forced=true;
 if(mode==='unknown-resource')state.nativeClosed.closeObserved=false;
@@ -805,6 +838,15 @@ console.log(JSON.stringify({mode,result,error,before:exact,beforeSettlement,afte
                 'source-intake-stopped-turn', 'source-intake-post-release', 'source-intake-release',
                 'source-intake-committed', 'source-intake-incomplete-terminal',
                 'source-intake-wrong-phase',
+                'source-intake-policy', 'source-intake-policy-no-resume',
+                'source-intake-policy-old-forced', 'source-intake-policy-old-unknown',
+                'source-intake-policy-new-forced', 'source-intake-policy-new-unknown',
+                'source-intake-policy-same-connection', 'source-intake-policy-host-change',
+                'source-intake-policy-missing-intake', 'source-intake-policy-wrong-intake',
+                'source-intake-policy-wrong-resume', 'source-intake-policy-wrong-response',
+                'source-intake-policy-ephemeral', 'source-intake-policy-wrong-connection',
+                'source-intake-policy-wrong-pointer', 'source-intake-policy-pending-resume',
+                'source-intake-policy-pending-start', 'source-intake-policy-extra-turn', 'source-intake-policy-committed',
             )
             for mode in modes:
                 with self.subTest(mode=mode):
@@ -813,7 +855,7 @@ console.log(JSON.stringify({mode,result,error,before:exact,beforeSettlement,afte
                         encoding='utf-8', capture_output=True, timeout=10)
                     self.assertEqual(run.returncode, 0, run.stderr)
                     result = json.loads(run.stdout)
-                    if mode in ('source', 'retain', 'source-intake'):
+                    if mode in ('source', 'retain', 'source-intake', 'source-intake-policy', 'source-intake-policy-no-resume'):
                         self.assertIsNone(result['error'])
                         self.assertEqual(result['after']['state']['phase'], 'external-target-reconciled')
                         self.assertEqual(result['after']['lease']['writerThreadId'], 'target' if mode=='retain' else 'source')
@@ -823,7 +865,7 @@ console.log(JSON.stringify({mode,result,error,before:exact,beforeSettlement,afte
                         self.assertEqual(result['after']['state']['plan']['deadlineMs'], 100)
                         self.assertEqual(result['after']['state']['reconciliation']['originalPendingEffect'], result['before']['state']['pendingEffect'])
                         self.assertEqual(result['staleWrite'], 'CAS_CONFLICT')
-                        if mode == 'source-intake':
+                        if mode.startswith('source-intake'):
                             self.assertEqual(result['after']['state']['intake'], result['before']['state']['intake'])
                             self.assertEqual(result['after']['state']['reconciliation']['originalPhase'], 'cancelled-held')
                             self.assertEqual(result['after']['state']['reconciliation']['originalSourceRecovery'], 'retained')

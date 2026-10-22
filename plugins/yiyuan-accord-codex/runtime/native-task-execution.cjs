@@ -432,6 +432,7 @@ function createNativeTaskExecution(options) {
     slot.targetRecoveryResource = {state: 'open', connectionId: recovery.reader.connectionId, hostVersion: recovery.reader.hostVersion}; save(slot);
     slot.current();
     if (!text(recovery.reader.connectionId) || recovery.reader.connectionId === recovery.original.record.state.connection.connectionId ||
+        recovery.reader.connectionId === recovery.original.record.state.priorNative?.connection?.connectionId ||
         recovery.reader.hostVersion !== recovery.original.record.state.connection.hostVersion) fail('target-reader-identity-changed');
     recovery.nativeFacts = await targetFacts(slot);
     const evidence = putEvidence(slot, {stage: 'external-known-stopped-target', original: recovery.original,

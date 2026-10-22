@@ -3351,7 +3351,7 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
     def test_execution_workspace_actual_policy_denials_hold_without_writes(self):
         contract = self.execution_write_contract()
         contract['deadlineMs'] = int(time.time()*1000)+60000
-        for mode in ('policy-readonly', 'policy-extra-root', 'policy-network', 'requirements-deny'):
+        for mode in ('policy-readonly', 'policy-extra-root', 'policy-network', 'policy-missing', 'requirements-deny'):
             with self.subTest(mode=mode):
                 _, _, _, call = self.start_execution_wire(peer_mode=mode)
                 operation_id = self.execution_intake(call, {**contract, 'scopeRef': mode})
@@ -3361,6 +3361,7 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
                 self.assertEqual(held['writer'], 'source')
                 self.assertIn(held['failure'], ('NATIVE_WRITE_POLICY_UNVERIFIED', 'NATIVE_REQUIREMENTS_DENIED'))
                 self.assertIsNone(held['reconciliationBasis'])
+                self.assertIsNotNone(held['targetReconciliationBasis'])
                 self.assertFalse((self.work/'review.json').exists())
 
     def test_execution_workspace_review_drift_holds_before_policy_transition(self):
@@ -3375,6 +3376,24 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
         self.assertEqual(held['writer'], 'source')
         wire = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
         self.assertFalse(any(row['method']=='thread/resume' for row in wire))
+
+    def test_execution_unknown_resume_retains_source_lease_without_replay(self):
+        contract = self.execution_write_contract()
+        _, _, _, call = self.start_execution_wire(peer_mode='resume-ack-loss')
+        op = self.execution_intake(call, contract)
+        call('commit', operationId=op)
+        self.execution_accept(call, op, 'write-prepare')
+        self.execution_until(call, op, lambda x: x['pendingEffect'] and
+            x['pendingEffect'].get('method')=='thread/resume' and x['pendingEffect'].get('requestRef'))
+        held = call('cancel', operationId=op, reason='Inspect unknown resume ACK')['structuredContent']
+        self.assertEqual(held['writer'], 'source')
+        self.assertIsNone(held['reconciliationBasis'])
+        self.assertIsNone(held['targetReconciliationBasis'])
+        self.assertFalse((self.work/'review.json').exists())
+        call('commit', operationId=op)
+        wire = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
+        self.assertEqual([row['method'] for row in wire].count('turn/start'), 1)
+        self.assertEqual([row['method'] for row in wire].count('thread/resume'), 1)
 
     def test_execution_workspace_unknown_dispatch_never_replays_or_settles_zero_turn(self):
         contract = self.execution_write_contract()
@@ -3969,16 +3988,40 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
     def test_completed_intake_reconciliation_rechecks_native_turns(self):
         self.check_target_effect_reconciliation('source-intake-native-drift')
 
+    def test_policy_denied_source_lease_uses_effect_reconciliation(self):
+        self.check_target_effect_reconciliation('source-policy')
+
+    def test_requirements_denied_source_lease_uses_effect_reconciliation(self):
+        self.check_target_effect_reconciliation('source-requirements')
+
+    def test_missing_policy_ack_preserves_effect_reconciliation(self):
+        self.check_target_effect_reconciliation('source-policy-missing')
+
+    def test_policy_prepared_commit_denial_keeps_source_recovery(self):
+        self.check_target_effect_reconciliation('source-policy-commit-denied')
+
     def check_target_effect_reconciliation(self, mode):
         contract = self.execution_write_contract()
-        source_intake = mode.startswith('source-intake')
-        process, _, _, call = self.start_execution_wire(peer_mode='normal' if source_intake else 'write-ack-loss' if mode=='ack-loss' else 'write-interrupted')
+        policy_mode = {'source-policy': 'policy-readonly', 'source-policy-missing': 'policy-missing', 'source-requirements': 'requirements-deny',
+                       'source-policy-commit-denied': 'workspace-write'}.get(mode)
+        source_intake = mode.startswith('source-intake') or policy_mode is not None
+        process, _, _, call = self.start_execution_wire(peer_mode=policy_mode or ('normal' if source_intake else 'write-ack-loss' if mode=='ack-loss' else 'write-interrupted'))
         operation_id = self.execution_intake(call, contract)
-        if not source_intake:
+        if policy_mode:
+            call('commit', operationId=operation_id)
+            self.execution_accept(call, operation_id, 'write-prepare')
+            if mode == 'source-policy-commit-denied':
+                waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+                review = waiting['reviewRequest']
+                self.assertEqual(review['stage'], 'commit')
+                call('review', operationId=operation_id, reviewId=review['reviewId'],
+                     observationSha256=review['observationSha256'], decision='deny', sourceRef='fixed-commit-denial')
+            old = self.execution_until(call, operation_id, lambda x: x['phase']=='held')
+        elif not source_intake:
             call('commit', operationId=operation_id)
             for stage in ('write-prepare', 'commit'):
                 self.execution_accept(call, operation_id, stage)
-        if source_intake:
+        if source_intake and not policy_mode:
             old = call('cancel', operationId=operation_id, reason='Actual user pause after read-only intake')['structuredContent']
         elif mode == 'ack-loss':
             self.execution_until(call, operation_id, lambda x: x['writer']=='target' and x['pendingEffect']

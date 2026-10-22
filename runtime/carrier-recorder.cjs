@@ -405,22 +405,53 @@ function externalStopped(state, lease) {
 }
 const stateDigest = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
-function externalStoppedIntake(state, lease) {
-  const intake = state.intake, request = state.lastNativeReceipt?.request;
-  return state.writer === 'source' && state.writerThreadId === state.source.threadId &&
-    lease.writerThreadId === state.source.threadId && state.sourceRecovery === 'retained' &&
-    state.turnStarts === 1 && state.pendingEffect === null &&
-    ['intake-complete', 'awaiting-intake-review'].includes(state.failure?.priorPhase) &&
-    intake?.threadId === state.target.threadId && typeof intake.turnId === 'string' && intake.turnId.trim() &&
-    intake.terminal === 'completed' && !state.stoppedTurn && !state.firstContinuation &&
-    !state.postReleaseTurn && !state.release && !state.verification?.commit &&
-    state.lastNativeReceipt?.method === 'turn/start' && request?.method === 'turn/start' &&
+function externalNaturalClose(closed) {
+  return closed?.closed === true && closed.primaryProcessClosed === true && closed.exitObserved === true &&
+    closed.closeObserved === true && closed.exitCode === 0 && closed.forced === false && closed.signal === null &&
+    Number.isSafeInteger(closed.pid) && closed.pid > 0 && closed.recoveryRequired === false && closed.terminationAttempt === null;
+}
+
+function externalIntakeReceipt(state, receipt, connection) {
+  const request = receipt?.request;
+  return receipt?.method === 'turn/start' && request?.method === 'turn/start' &&
     request.params?.threadId === state.target.threadId &&
     isDeepStrictEqual(request.params.sandboxPolicy, {type: 'readOnly'}) &&
-    request.requestRef?.method === 'turn/start' && request.requestRef.connectionId === state.connection?.connectionId &&
+    request.requestRef?.method === 'turn/start' && request.requestRef.connectionId === connection?.connectionId &&
+    request.requestRef.hostVersion === connection?.hostVersion &&
+    typeof request.requestRef.requestId === 'string' && request.requestRef.requestId.trim() &&
+    receipt.response?.turn?.id === state.intake.turnId;
+}
+
+function externalStoppedIntake(state, lease) {
+  const intake = state.intake;
+  if (!(state.writer === 'source' && state.writerThreadId === state.source.threadId &&
+    lease.writerThreadId === state.source.threadId && state.sourceRecovery === 'retained' &&
+    state.turnStarts === 1 && state.pendingEffect === null &&
+    intake?.threadId === state.target.threadId && typeof intake.turnId === 'string' && intake.turnId.trim() &&
+    intake.terminal === 'completed' && !state.stoppedTurn && !state.firstContinuation &&
+    !state.postReleaseTurn && !state.release && !state.verification?.commit)) return false;
+  if (['intake-complete', 'awaiting-intake-review'].includes(state.failure?.priorPhase)) {
+    return externalIntakeReceipt(state, state.lastNativeReceipt, state.connection);
+  }
+  const prior = state.priorNative, receipt = state.lastNativeReceipt, request = receipt?.request;
+  if (state.failure?.priorPhase !== 'write-policy-transition' || state.plan?.sandbox !== 'workspace-write' ||
+      typeof state.verification?.writePrepare !== 'string' || !state.verification.writePrepare.trim() ||
+      !externalNaturalClose(prior?.closure) || typeof prior?.connection?.connectionId !== 'string' ||
+      !prior.connection.connectionId.trim() || prior.connection.connectionId === state.connection?.connectionId ||
+      prior.connection.hostVersion !== state.connection?.hostVersion ||
+      !externalIntakeReceipt(state, prior.intakeReceipt, prior.connection)) return false;
+  if (isDeepStrictEqual(receipt, prior.intakeReceipt)) return !Object.hasOwn(state, 'writePolicy');
+  return receipt?.method === 'thread/resume' && request?.method === 'thread/resume' &&
+    isDeepStrictEqual(request.params, {threadId: state.target.threadId, excludeTurns: true,
+      sandbox: 'workspace-write', approvalPolicy: 'never', config: {
+        'sandbox_workspace_write.writable_roots': [], 'sandbox_workspace_write.network_access': false,
+        'sandbox_workspace_write.exclude_tmpdir_env_var': true, 'sandbox_workspace_write.exclude_slash_tmp': true}}) &&
+    request.requestRef?.method === 'thread/resume' && request.requestRef.connectionId === state.connection?.connectionId &&
     request.requestRef.hostVersion === state.connection?.hostVersion &&
     typeof request.requestRef.requestId === 'string' && request.requestRef.requestId.trim() &&
-    state.lastNativeReceipt.response?.turn?.id === intake.turnId;
+    receipt.response?.thread?.id === state.target.threadId && receipt.response.thread.ephemeral === false &&
+    isDeepStrictEqual(state.writePolicy?.resumeRequest, request.requestRef) &&
+    isDeepStrictEqual(state.writePolicy.sandbox, receipt.response.sandbox || null);
 }
 
 function externalStoppedTarget(state, lease) {
@@ -438,9 +469,7 @@ function externalStoppedTarget(state, lease) {
     Number.isSafeInteger(state.turnStarts) && state.turnStarts > 0 &&
     Number.isSafeInteger(state.plan?.deadlineMs) && state.plan.deadlineMs > 0 &&
     state.planDigest === stateDigest({plan: state.plan, source, basis: state.basis}) &&
-    closed?.closed === true && closed.primaryProcessClosed === true && closed.exitObserved === true &&
-    closed.closeObserved === true && closed.exitCode === 0 && closed.forced === false && closed.signal === null &&
-    Number.isSafeInteger(closed.pid) && closed.pid > 0 && closed.recoveryRequired === false && closed.terminationAttempt === null &&
+    externalNaturalClose(closed) &&
     (pending === null || pending?.kind === 'native-turn' && pending.threadId === target.threadId && typeof pending.turnId === 'string' ||
       pending?.kind === 'native-request' && pending.method === 'turn/start' && pending.params?.threadId === target.threadId &&
       pending.requestRef?.connectionId === state.connection?.connectionId && pending.requestRef?.method === 'turn/start' &&
