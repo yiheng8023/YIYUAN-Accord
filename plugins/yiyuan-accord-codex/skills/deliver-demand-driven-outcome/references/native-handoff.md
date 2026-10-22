@@ -123,8 +123,13 @@ and no active transfer, a newly justified `prepare` can use the same scope and
 current basis. Transferred writers, unknown turn dispatch, forced/unverified closure
 and stale review or lease remain held; no prior request is replayed.
 
-After target work and writer transfer, use the separate `reconcile-target` branch,
-not the zero-turn API. `inspect` may expose `targetReconciliationBasis` with the
+After a target turn, use the separate `reconcile-target` effect-review branch,
+not the zero-turn API. This also covers exactly one completed read-only intake
+with the source writer still retained: the original intake request, target,
+turn, connection and natural closure must match, with no pending effect or
+business continuation. That branch permits only `source-current`; reconciliation
+cannot grant a target writer that was never transferred.
+`inspect` may expose `targetReconciliationBasis` with the
 exact record revision and record/lease hashes. Supply those fields, `operationId`,
 current `epoch`/`expectedRevision`, a future `deadlineMs` of at most five minutes,
 `writerDisposition: "source-current" | "target-retained"` and a protected
@@ -151,6 +156,13 @@ and effects remain in history. Pauses, active actors, stale evidence, dependent
 unknown effects and unknown settlement remain held; never retry an uncertain CAS.
 
 Retain the version-bound App Server support limit below.
+
+An intake acknowledgment can retain uncertain target protocol recovery without
+proving native input loss. A separately authorized read-only continuation may
+use independently verified actual native input while that recovery remains held.
+Dependent writes or bound-state changes still require supported recovery and the
+actual authority and policy; an intake contract that requests only acknowledgment
+remains acknowledgment-only.
 
 ## Find a usable host connection
 

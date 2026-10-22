@@ -530,7 +530,10 @@ allowlist or proof of effects outside those files. No permission fallback applie
 Actual source quiescence, target understanding, useful continuation, source duty
 release, post-release work, result and resource closure need independent review.
 Persistent records support inspection. Source-retained zero-turn reconciliation
-and post-business target reconciliation are separate typed paths. The latter
+and target-effect reconciliation are separate typed paths. The latter also covers
+one completed read-only intake with the source writer retained; its exact original
+request and sole terminal turn must match. This source branch only retains the
+current source writer and cannot grant the target writing responsibility. It
 requires current active source authority, protected effect material, independently
 reviewed quiescence/effects, rechecked native target facts and natural reader closure.
 Exact record/lease settlement rotates the fence and explicitly retains the target

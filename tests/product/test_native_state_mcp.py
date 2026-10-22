@@ -3960,22 +3960,38 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
     def test_target_effect_reconciled_slot_is_durably_reclaimable(self):
         self.check_target_effect_reconciliation('reclaim')
 
+    def test_completed_intake_source_lease_uses_effect_reconciliation_without_replay(self):
+        self.check_target_effect_reconciliation('source-intake')
+
+    def test_completed_intake_reconciliation_cannot_grant_untransferred_writer(self):
+        self.check_target_effect_reconciliation('source-intake-grant-target')
+
+    def test_completed_intake_reconciliation_rechecks_native_turns(self):
+        self.check_target_effect_reconciliation('source-intake-native-drift')
+
     def check_target_effect_reconciliation(self, mode):
         contract = self.execution_write_contract()
-        process, _, _, call = self.start_execution_wire(peer_mode='write-ack-loss' if mode=='ack-loss' else 'write-interrupted')
+        source_intake = mode.startswith('source-intake')
+        process, _, _, call = self.start_execution_wire(peer_mode='normal' if source_intake else 'write-ack-loss' if mode=='ack-loss' else 'write-interrupted')
         operation_id = self.execution_intake(call, contract)
-        call('commit', operationId=operation_id)
-        for stage in ('write-prepare', 'commit'):
-            self.execution_accept(call, operation_id, stage)
-        if mode == 'ack-loss':
+        if not source_intake:
+            call('commit', operationId=operation_id)
+            for stage in ('write-prepare', 'commit'):
+                self.execution_accept(call, operation_id, stage)
+        if source_intake:
+            old = call('cancel', operationId=operation_id, reason='Actual user pause after read-only intake')['structuredContent']
+        elif mode == 'ack-loss':
             self.execution_until(call, operation_id, lambda x: x['writer']=='target' and x['pendingEffect']
                 and x['pendingEffect']['method']=='turn/start' and x['pendingEffect']['requestRef'])
             old = call('cancel', operationId=operation_id, reason='Inspect uncertain ACK and actual partial effects')['structuredContent']
         else:
             old = self.execution_until(call, operation_id, lambda x: x['phase']=='held')
         process.stdin.close(); process.wait(timeout=5)
-        self.assertEqual(old['writer'], 'target')
-        old_bytes = (self.work/'review.json').read_bytes()
+        original_writer = 'source' if source_intake else 'target'
+        self.assertEqual(old['writer'], original_writer)
+        if source_intake:
+            self.assertFalse((self.work/'review.json').exists())
+        old_bytes = None if source_intake else (self.work/'review.json').read_bytes()
         _, _, _, fresh = self.start_execution_wire(peer_mode='target-still-active' if mode=='active-target' else None)
         old = fresh('inspect', operationId=operation_id)['structuredContent']
         basis = old.get('targetReconciliationBasis')
@@ -4008,7 +4024,7 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             outputs=[{'path': 'review.json'}], nextAction='Reconcile actual effects without replay', canContinue=True, **revised_inputs)['isError'])
         current = self.native_input_preview()
         args = dict(operationId=operation_id, epoch=current['epoch'], expectedRevision=current['revision'],
-            deadlineMs=int(time.time()*1000)+20000, writerDisposition='target-retained' if mode=='target-retained' else 'source-current', effectSourceRef='effects.json', **basis)
+            deadlineMs=int(time.time()*1000)+20000, writerDisposition='target-retained' if mode in ('target-retained', 'source-intake-grant-target') else 'source-current', effectSourceRef='effects.json', **basis)
         if mode == 'stale':
             args['recordRevision'] += 1
         if mode == 'paused':
@@ -4016,12 +4032,13 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
                 reason='Fixture user has not authorized resumption.')['isError'])
         before_turns = sum(json.loads(line)['method']=='turn/start' for line in (self.root/'native-wire.jsonl').read_text().splitlines())
         reply = fresh('reconcile-target', **args)
-        if mode in ('stale', 'unknown', 'paused', 'input-change'):
+        if mode in ('stale', 'unknown', 'paused', 'input-change', 'source-intake-grant-target'):
             self.assertTrue(reply['isError'], reply)
             self.assertEqual(reply['structuredContent']['reason'], {'stale': 'stopped-record-basis-changed',
                 'unknown': 'target-effects-unresolved', 'paused': 'current-source-not-executable',
-                'input-change': 'original-input-invariants-changed'}[mode])
-            self.assertEqual(fresh('inspect', operationId=operation_id)['structuredContent']['writer'], 'target')
+                'input-change': 'original-input-invariants-changed',
+                'source-intake-grant-target': 'source-writer-must-remain-current'}[mode])
+            self.assertEqual(fresh('inspect', operationId=operation_id)['structuredContent']['writer'], original_writer)
             return
         self.assertFalse(reply['isError'], reply)
         waiting = self.execution_until(fresh, operation_id, lambda x: x['reviewRequest'] is not None or
@@ -4062,7 +4079,7 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             return
         if mode == 'effect-drift':
             (self.work/'review.json').write_text('another effect after review snapshot', encoding='utf-8')
-        if mode == 'native-drift':
+        if mode in ('native-drift', 'source-intake-native-drift'):
             history = self.root/'native-wire.jsonl.turns.json'
             history.write_text(json.dumps(json.loads(history.read_text())+[{'id': 'unowned-extra-turn', 'status': 'completed'}]), encoding='utf-8')
         if mode == 'lease-drift':
@@ -4073,20 +4090,23 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             mutation = subprocess.run([self.node, '-e', script, str(BRIDGE.with_name('carrier-recorder.cjs')),
                 str(next(self.state.rglob('carrier.sqlite'))), operation_id, scope], capture_output=True, timeout=5)
             self.assertEqual(mutation.returncode, 0, mutation.stderr)
-        if mode in ('effect-drift', 'lease-drift', 'native-drift'):
+        if mode in ('effect-drift', 'lease-drift', 'native-drift', 'source-intake-native-drift'):
             review = waiting['reviewRequest']
             rejected = fresh('review', operationId=operation_id, reviewId=review['reviewId'],
                 observationSha256=review['observationSha256'], decision='allow', sourceRef='stale-independent-judgment')
             self.assertTrue(rejected['isError'], rejected)
             held = self.execution_until(fresh, operation_id, lambda x: x['phase'] in ('held', 'cancelled-held'))
-            self.assertEqual(held['writer'], 'target')
+            self.assertEqual(held['writer'], original_writer)
             self.assertEqual(held['targetRecoveryResource']['state'], 'closed')
             return
         self.execution_accept(fresh, operation_id, 'external-known-stopped-target')
         done = self.execution_until(fresh, operation_id, lambda x: x['phase']=='external-target-reconciled')
         self.assertEqual(done['writer'], 'target' if mode=='target-retained' else 'source')
         self.assertEqual(done['scopeBinding']['requestedScope'], contract['scopeRef'])
-        self.assertEqual((self.work/'review.json').read_bytes(), old_bytes)
+        if source_intake:
+            self.assertFalse((self.work/'review.json').exists())
+        else:
+            self.assertEqual((self.work/'review.json').read_bytes(), old_bytes)
         self.assertEqual(sum(json.loads(line)['method']=='turn/start' for line in (self.root/'native-wire.jsonl').read_text().splitlines()), before_turns)
         state = json.loads(fresh('read-evidence', operationId=operation_id,
             evidenceId=done['stateEvidence']['sha256'], maxChars=16000)['structuredContent']['text'])
@@ -4098,7 +4118,7 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
         if mode == 'ack-loss':
             self.assertEqual(state['reconciliation']['originalPendingEffect']['requestRef']['method'], 'turn/start')
         contract.update(epoch=current['epoch'], expectedRevision=current['revision'], deadlineMs=int(time.time()*1000)+20000)
-        contract['writeScope']['outputs'][0]['expectedSha256'] = hashlib.sha256(old_bytes).hexdigest()
+        contract['writeScope']['outputs'][0]['expectedSha256'] = hashlib.sha256(old_bytes).hexdigest() if old_bytes is not None else None
         again = fresh('prepare', **contract)
         if mode == 'target-retained':
             self.assertEqual(again['structuredContent']['reason'], 'WRITER_CONFLICT')

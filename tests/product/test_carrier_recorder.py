@@ -725,11 +725,12 @@ class ExternalTargetSettlementTests(unittest.TestCase):
 const {openCarrierRecorder}=require(process.argv[1]);
 const {DatabaseSync}=require('node:sqlite');
 const crypto=require('node:crypto'),mode=process.argv[3];
+const sourceIntake=mode.startsWith('source-intake');
 const hash=x=>crypto.createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const source={kind:'codex-mcp-request-metadata',threadId:'source',sessionTreeId:'source',turnId:'old-turn',callId:'old-call'};
 const scopeBinding={requestedScope:'bounded-work',cwd:process.cwd(),sourceThreadId:'source'};
 scopeBinding.scopeRef=hash({threadId:'source',cwd:scopeBinding.cwd,scope:scopeBinding.requestedScope});
-const plan={scopeRef:scopeBinding.scopeRef,cwd:process.cwd(),deadlineMs:100},basis={epoch:'old'};
+const plan={scopeRef:scopeBinding.scopeRef,cwd:process.cwd(),deadlineMs:100,intake:'Read the fixed intake without changing the task.'},basis={epoch:'old'};
 const closed={closed:true,primaryProcessClosed:true,exitObserved:true,closeObserved:true,exitCode:0,
  forced:false,signal:null,pid:12345,recoveryRequired:false,terminationAttempt:null}; // Fixture facts, not a live process claim.
 const r=openCarrierRecorder({path:process.argv[2],create:true});r.bindScope(scopeBinding.scopeRef,'source');
@@ -741,6 +742,34 @@ const pending={kind:'native-request',method:'turn/start',params:{threadId:'targe
 const state={...initial,phase:'held',writer:'target',writerThreadId:'target',target:{threadId:'target'},
  connection:{connectionId:'owned-connection',hostVersion:'fixture'},turnStarts:2,sourceRecovery:'retained',
  failure:{code:'ACK_LOST',priorPhase:'writer-transferred'},pendingEffect:pending,nativeClosed:{...closed}};
+if(sourceIntake){
+ Object.assign(state,{phase:'cancelled-held',writer:'source',writerThreadId:'source',turnStarts:1,pendingEffect:null,
+  failure:{code:'execution-stopped',cancelReason:'User paused the fixed attempt.',closureError:null,priorPhase:'awaiting-intake-review'},
+  intake:{threadId:'target',turnId:'intake-turn',terminal:'completed',output:'Fixed intake completed.',observedAfterRelease:false,
+   events:[{method:'item/completed',threadId:'target',turnId:'intake-turn',itemType:'agentMessage'}]},
+  lastNativeReceipt:{method:'turn/start',response:{turn:{id:'intake-turn'}},request:{kind:'native-request',sequence:1,method:'turn/start',
+   params:{threadId:'target',input:[{type:'text',text:plan.intake}],sandboxPolicy:{type:'readOnly'}},
+   requestRef:{connectionId:'owned-connection',hostVersion:'fixture',method:'turn/start',requestId:'intake-request'}}}});
+ if(mode==='source-intake-wrong-thread')state.intake.threadId='other-target';
+ if(mode==='source-intake-wrong-turn')state.intake.turnId='other-turn';
+ if(mode==='source-intake-missing-receipt')delete state.lastNativeReceipt;
+ if(mode==='source-intake-wrong-receipt-method')state.lastNativeReceipt.method='thread/start';
+ if(mode==='source-intake-wrong-request-method')state.lastNativeReceipt.request.method='thread/start';
+ if(mode==='source-intake-wrong-receipt-thread')state.lastNativeReceipt.request.params.threadId='other-target';
+ if(mode==='source-intake-wrong-receipt-turn')state.lastNativeReceipt.response.turn.id='other-turn';
+ if(mode==='source-intake-wrong-connection')state.lastNativeReceipt.request.requestRef.connectionId='other-connection';
+ if(mode==='source-intake-wrong-host-version')state.lastNativeReceipt.request.requestRef.hostVersion='other-version';
+ if(mode==='source-intake-wrong-policy')state.lastNativeReceipt.request.params.sandboxPolicy={type:'workspaceWrite'};
+ if(mode==='source-intake-extra-turn')state.turnStarts=2;
+ if(mode==='source-intake-pending')state.pendingEffect={kind:'native-turn',threadId:'target',turnId:'intake-turn',purpose:'intake'};
+ if(mode==='source-intake-first-continuation')state.firstContinuation={threadId:'target',turnId:'business-turn',terminal:'completed'};
+ if(mode==='source-intake-stopped-turn')state.stoppedTurn={threadId:'target',turnId:'business-turn',purpose:'first-continuation',terminal:'interrupted'};
+ if(mode==='source-intake-post-release')state.postReleaseTurn={threadId:'target',turnId:'business-turn',terminal:'completed'};
+ if(mode==='source-intake-release')state.release={kind:'cooperative-duty-release',sourceThreadId:'source'};
+ if(mode==='source-intake-committed')state.verification={commit:'fixture-prior-commit'};
+ if(mode==='source-intake-incomplete-terminal')state.intake.terminal='interrupted';
+ if(mode==='source-intake-wrong-phase')state.failure.priorPhase='writer-transferred';
+}
 if(mode==='forced')state.nativeClosed.forced=true;
 if(mode==='unknown-resource')state.nativeClosed.closeObserved=false;
 const moved=r.compareAndSet('transfer',begun.revision,state,begun.lease);
@@ -748,7 +777,7 @@ let exact=r.read('transfer',scopeBinding.scopeRef);
 const receipt={kind:'external-known-stopped-target',recordRevision:exact.revision,recordSha256:hash(exact.state),leaseSha256:hash(exact.lease),
  originalDeadlineMs:100,originalFailure:state.failure,currentSource:{...source,turnId:'new-turn',callId:'new-call'},
  currentBasis:{epoch:'new',revision:2,authorityRef:'current-authority',snapshotRef:'a'.repeat(64),protectedInputsDigest:'b'.repeat(64),inputComplete:true,paused:false,recoveryRequired:false},
- decision:'allow',sourceRef:'independent-effect-actor-authority-judgment',writerDisposition:mode==='retain'?'target-retained':'source-current',
+ decision:'allow',sourceRef:'independent-effect-actor-authority-judgment',writerDisposition:['retain','source-intake-retain'].includes(mode)?'target-retained':'source-current',
  scopeBinding,readerClosed:closed,observationSha256:'c'.repeat(64),decisionEvidence:'d'.repeat(64),materialSha256:'e'.repeat(64),nativeFactsSha256:'f'.repeat(64),
  originalStateEvidence:hash(exact.state),recoveryDeadlineMs:Date.now()+10000};
 if(mode==='wrong-source')receipt.currentSource.threadId='other';
@@ -756,38 +785,58 @@ if(mode==='expired')receipt.recoveryDeadlineMs=Date.now()-1;
 if(mode==='stale')r.compareAndSet('transfer',exact.revision,exact.state,exact.lease);
 let fault;
 if(mode==='atomic-fault'){fault=new DatabaseSync(process.argv[2]);fault.exec("CREATE TRIGGER fail_target_scope BEFORE UPDATE ON scopes BEGIN SELECT RAISE(ABORT,'fixed failure'); END");}
+const beforeSettlement=r.read('transfer',scopeBinding.scopeRef);
 let result=null,error=null;
 try{result=r.settleExternalStoppedTarget('transfer',exact.revision,exact.lease,receipt);}catch(e){error={code:e.code||null,message:e.message};}
 if(fault){fault.exec('DROP TRIGGER fail_target_scope');fault.close();}
 const after=r.read('transfer',scopeBinding.scopeRef);let staleWrite=null;
 try{r.compareAndSet('transfer',exact.revision,exact.state,exact.lease);}catch(e){staleWrite=e.code;}
-console.log(JSON.stringify({mode,result,error,before:exact,after,staleWrite}));r.close();
+console.log(JSON.stringify({mode,result,error,before:exact,beforeSettlement,after,staleWrite}));r.close();
 '''
         with tempfile.TemporaryDirectory(prefix='accord-target-settlement-') as directory:
-            for mode in ('source', 'retain', 'stale', 'wrong-source', 'expired', 'forced', 'unknown-resource', 'atomic-fault'):
+            modes = (
+                'source', 'retain', 'stale', 'wrong-source', 'expired', 'forced', 'unknown-resource', 'atomic-fault',
+                'source-intake', 'source-intake-retain', 'source-intake-wrong-thread', 'source-intake-wrong-turn',
+                'source-intake-missing-receipt', 'source-intake-wrong-receipt-method',
+                'source-intake-wrong-request-method', 'source-intake-wrong-receipt-thread',
+                'source-intake-wrong-receipt-turn', 'source-intake-wrong-connection',
+                'source-intake-wrong-host-version', 'source-intake-wrong-policy',
+                'source-intake-extra-turn', 'source-intake-pending', 'source-intake-first-continuation',
+                'source-intake-stopped-turn', 'source-intake-post-release', 'source-intake-release',
+                'source-intake-committed', 'source-intake-incomplete-terminal',
+                'source-intake-wrong-phase',
+            )
+            for mode in modes:
                 with self.subTest(mode=mode):
                     run = subprocess.run(['node', '-e', script, str(PLUGIN_RECORDER),
                         str(Path(directory)/(mode+'.sqlite')), mode], cwd=ROOT, text=True,
                         encoding='utf-8', capture_output=True, timeout=10)
                     self.assertEqual(run.returncode, 0, run.stderr)
                     result = json.loads(run.stdout)
-                    if mode in ('source', 'retain'):
+                    if mode in ('source', 'retain', 'source-intake'):
                         self.assertIsNone(result['error'])
                         self.assertEqual(result['after']['state']['phase'], 'external-target-reconciled')
-                        self.assertEqual(result['after']['lease']['writerThreadId'], 'source' if mode=='source' else 'target')
+                        self.assertEqual(result['after']['lease']['writerThreadId'], 'target' if mode=='retain' else 'source')
                         self.assertIsNone(result['after']['lease']['transferId'])
                         self.assertNotEqual(result['after']['lease']['token'], result['before']['lease']['token'])
                         self.assertEqual(result['after']['state']['failure'], result['before']['state']['failure'])
                         self.assertEqual(result['after']['state']['plan']['deadlineMs'], 100)
                         self.assertEqual(result['after']['state']['reconciliation']['originalPendingEffect'], result['before']['state']['pendingEffect'])
                         self.assertEqual(result['staleWrite'], 'CAS_CONFLICT')
+                        if mode == 'source-intake':
+                            self.assertEqual(result['after']['state']['intake'], result['before']['state']['intake'])
+                            self.assertEqual(result['after']['state']['reconciliation']['originalPhase'], 'cancelled-held')
+                            self.assertEqual(result['after']['state']['reconciliation']['originalSourceRecovery'], 'retained')
+                            for key in ('firstContinuation', 'postReleaseTurn', 'release'):
+                                self.assertNotIn(key, result['after']['state'])
                     else:
                         self.assertIsNotNone(result['error'])
-                        self.assertEqual(result['after']['state'], result['before']['state'])
-                        self.assertEqual(result['after']['lease']['writerThreadId'], 'target')
+                        self.assertEqual(result['after']['state'], result['beforeSettlement']['state'])
+                        self.assertEqual(result['after']['lease'], result['beforeSettlement']['lease'])
                         self.assertEqual(result['after']['lease']['transferId'], 'transfer')
-                        if mode != 'stale':
-                            self.assertEqual(result['after']['revision'], result['before']['revision'])
+                        if mode.startswith('source-intake'):
+                            self.assertEqual(result['error']['code'], 'EXTERNAL_TARGET_NOT_SETTLEABLE')
+                        self.assertEqual(result['after']['revision'], result['beforeSettlement']['revision'])
 
 
 if __name__ == "__main__":

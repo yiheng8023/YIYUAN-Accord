@@ -405,13 +405,32 @@ function externalStopped(state, lease) {
 }
 const stateDigest = value => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
+function externalStoppedIntake(state, lease) {
+  const intake = state.intake, request = state.lastNativeReceipt?.request;
+  return state.writer === 'source' && state.writerThreadId === state.source.threadId &&
+    lease.writerThreadId === state.source.threadId && state.sourceRecovery === 'retained' &&
+    state.turnStarts === 1 && state.pendingEffect === null &&
+    ['intake-complete', 'awaiting-intake-review'].includes(state.failure?.priorPhase) &&
+    intake?.threadId === state.target.threadId && typeof intake.turnId === 'string' && intake.turnId.trim() &&
+    intake.terminal === 'completed' && !state.stoppedTurn && !state.firstContinuation &&
+    !state.postReleaseTurn && !state.release && !state.verification?.commit &&
+    state.lastNativeReceipt?.method === 'turn/start' && request?.method === 'turn/start' &&
+    request.params?.threadId === state.target.threadId &&
+    isDeepStrictEqual(request.params.sandboxPolicy, {type: 'readOnly'}) &&
+    request.requestRef?.method === 'turn/start' && request.requestRef.connectionId === state.connection?.connectionId &&
+    request.requestRef.hostVersion === state.connection?.hostVersion &&
+    typeof request.requestRef.requestId === 'string' && request.requestRef.requestId.trim() &&
+    state.lastNativeReceipt.response?.turn?.id === intake.turnId;
+}
+
 function externalStoppedTarget(state, lease) {
   const source = state.source, target = state.target, closed = state.nativeClosed, pending = state.pendingEffect;
   return state.kind === 'external-source-handoff/v1' && ['held', 'cancelled-held'].includes(state.phase) &&
     source?.kind === 'codex-mcp-request-metadata' && source.threadId === source.sessionTreeId &&
     ['threadId', 'turnId', 'callId'].every(k => typeof source[k] === 'string' && source[k].trim()) &&
     typeof target?.threadId === 'string' && target.threadId !== source.threadId &&
-    state.writer === 'target' && state.writerThreadId === target.threadId && lease.writerThreadId === target.threadId &&
+    (state.writer === 'target' && state.writerThreadId === target.threadId && lease.writerThreadId === target.threadId ||
+      externalStoppedIntake(state, lease)) &&
     ['retained', 'controller-owned'].includes(state.sourceRecovery) &&
     typeof state.failure?.code === 'string' && state.failure.code.trim() &&
     ['connectionId', 'hostVersion'].every(k => typeof state.connection?.[k] === 'string' && state.connection[k].trim()) &&
@@ -847,6 +866,7 @@ function openCarrierRecorder(options) {
           scope.writer_thread_id !== lease.writerThreadId || scope.fence_token !== lease.token) reject('CAS_CONFLICT', 'target recovery lease changed');
       const state = parseState(transfer.state_json), current = receipt.currentSource;
       if (!externalStoppedTarget(state, lease) || receipt.kind !== 'external-known-stopped-target' ||
+          state.writer === 'source' && receipt.writerDisposition !== 'source-current' ||
           receipt.recordRevision !== revision || receipt.recordSha256 !== stateDigest(state) || receipt.leaseSha256 !== stateDigest(lease) ||
           receipt.originalStateEvidence !== receipt.recordSha256 || !Number.isSafeInteger(receipt.recoveryDeadlineMs) ||
           receipt.recoveryDeadlineMs <= Date.now() || receipt.recoveryDeadlineMs > Date.now() + 300000 ||
