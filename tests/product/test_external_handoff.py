@@ -28,7 +28,18 @@ const basis={epoch:'input-1',revision:1,authorityRef:'authority-1',snapshotRef:'
  sourceThreadId:source.threadId,sourceTurnId:source.turnId,
  quiescence:{noInFlightEffects:true,noOtherWriters:true,evidenceRef:'independent-drain-1'}};
 const recorder=openCarrierRecorder({path:process.argv[3],create:true});
-let turn=0,closed=false,operation;
+const controlled=['late-factory','factory-clock-expired','before-factory','idle-deadline'].includes(mode);
+let clock=0;
+if(controlled)Object.defineProperty(require('node:perf_hooks').performance,'now',{value:()=>clock});
+const timers=[];
+const realSetTimeout=global.setTimeout,realClearTimeout=global.clearTimeout;
+if(['late-factory','idle-deadline'].includes(mode)){
+ global.setTimeout=(fn,ms)=>{const t={fn,ms,cleared:false,unref(){return this;}};timers.push(t);return t;};
+ global.clearTimeout=t=>{if(timers.includes(t)){t.cleared=true;realClearTimeout(t.real);}else realClearTimeout(t);};
+}
+let factoryEntered,returnFactory;
+const entered=new Promise(r=>factoryEntered=r),factoryGate=new Promise(r=>returnFactory=r);
+let turn=0,closed=false,operation,factoryStarted=false,closeCount=0,beforeFactoryReturn=null;
 const native={connectionId:'fixture-connection',hostVersion:'fixture-no-model',
  async request(method,params,deadline,beforeSend){
   const requestRef={connectionId:this.connectionId,hostVersion:this.hostVersion,
@@ -49,19 +60,41 @@ const native={connectionId:'fixture-connection',hostVersion:'fixture-no-model',
   await check();return {
   terminal:{method:'turn/completed',params:{threadId,turn:{id:turnId,status:mode==='interrupted-continuation'&&turn===2?'interrupted':'completed'}}},
   output:'fixed response '+turnId, events:[{method:'item/completed',threadId,turnId,itemType:'agentMessage'}]};},
- async close(){closed=true;return {closed:true,exitCode:0,signal:null,forced:false};}
+  async close(){closed=true;closeCount++;return {closed:true,exitCode:0,signal:null,forced:false};}
 };
 (async()=>{let error=null;
  try{
   if(mode==='shared-source')source.threadId='descendant';
-  operation=createExternalHandoff({source,recorder,current:async()=>JSON.parse(JSON.stringify(basis)),
-   nativeFactory:async()=>{if(mode==='late-factory')await new Promise(r=>setTimeout(r,80));return native;},
+  operation=createExternalHandoff({source,recorder:{...recorder,compareAndSet(...args){
+     const r=recorder.compareAndSet(...args);
+     if(mode==='before-factory' && args[2].pendingEffect?.kind==='owned-native-start')clock=6000;
+     return r;}},current:async()=>JSON.parse(JSON.stringify(basis)),
+    nativeFactory:async()=>{factoryStarted=true;factoryEntered();
+     if(mode==='late-factory')return factoryGate;
+     if(mode==='factory-clock-expired')clock=6000;
+     return native;},
    verify:async(stage,review,facts)=>{checks.push(stage);return {decision:mode==='review-denied'&&stage==='commit'?'deny':'allow',evidenceRef:'independent-'+stage};}});
-  await operation.prepare({transferId:'transfer-1',scopeRef:'review-scope',cwd:process.cwd(),
+  const preparing=operation.prepare({transferId:'transfer-1',scopeRef:'review-scope',cwd:process.cwd(),
   model:'fixture',intake:'Inspect the candidate; do not review yet.',
   continuation:'Review first bounded section.',postRelease:'Finish remaining review.',
-  deadlineMs:Date.now()+(mode==='late-factory'?30:mode==='idle-deadline'?100:5000)});
-  if(mode==='idle-deadline'){await new Promise(r=>setTimeout(r,150));throw Object.assign(Error('expired'),{code:'DEADLINE_EXCEEDED'});}
+   deadlineMs:Date.now()+(mode==='idle-deadline'?100:5000)});
+  if(mode==='late-factory'){
+   await entered;
+   const active=timers.filter(t=>!t.cleared);
+   if(active.length!==2)throw Error('fixture deadline timers changed');
+   clock=6000;active[1].fn();
+   try{await preparing;}finally{
+    beforeFactoryReturn={closed,pending:operation.inspect().nativeStartPending};
+    returnFactory(native);await new Promise(setImmediate);
+   }
+  }else await preparing;
+   if(mode==='idle-deadline'){
+    // Setup is frozen; arm the original real deadline only once intake exists.
+    const active=timers.filter(t=>!t.cleared);
+    if(active.length!==1 || operation.inspect().phase!=='awaiting-intake-review')throw Error('fixture idle setup changed');
+    active[0].real=realSetTimeout(active[0].fn,active[0].ms);
+    await new Promise(r=>realSetTimeout(r,150));throw Object.assign(Error('expired'),{code:'DEADLINE_EXCEEDED'});
+   }
   if(mode==='changed-input')basis.epoch='new-input';
   if(mode==='inflight')basis.quiescence.noInFlightEffects=false;
   if(mode==='stale-lease'){
@@ -71,10 +104,9 @@ const native={connectionId:'fixture-connection',hostVersion:'fixture-no-model',
   if(mode==='paused')basis.paused=true;
   await operation.release({evidenceRef:'root-reviewed-first-continuation'});
  }catch(e){error={code:e.code,message:e.message};}
- if(mode==='late-factory')await new Promise(r=>setTimeout(r,100));
  let retry=null;
  if(mode==='ack-loss'){try{await operation.commit({evidenceRef:'no replay'});}catch(e){retry=e.code;}}
- console.log(JSON.stringify({error,retry,calls,checks,closed,state:operation?.inspect()??null}));
+  console.log(JSON.stringify({error,retry,calls,checks,closed,factoryStarted,closeCount,beforeFactoryReturn,state:operation?.inspect()??null}));
  recorder.close();
 })().catch(e=>{console.error(e);process.exitCode=1});
 '''
@@ -213,7 +245,29 @@ class ExternalHandoffTests(unittest.TestCase):
                 self.assertTrue(result["closed"])
                 self.assertEqual(result["state"]["phase"], "held")
                 self.assertFalse(result["state"]["nativeStartPending"])
+                self.assertTrue(result['factoryStarted'])
+                self.assertEqual(result['closeCount'], 1)
+                if mode == 'late-factory':
+                    self.assertEqual(result['beforeFactoryReturn'], {'closed': False, 'pending': True})
+                    self.assertTrue(result['state']['lateNativeClosed']['closed'])
         self.assertEqual(self.run_scenario("late-factory")["calls"], [])
+
+    def test_expiry_before_factory_does_not_report_an_inflight_start(self):
+        result = self.run_scenario('before-factory')
+        self.assertEqual(result['error']['code'], 'DEADLINE_EXCEEDED')
+        self.assertFalse(result['factoryStarted'])
+        self.assertEqual(result['closeCount'], 0)
+        self.assertFalse(result['state']['nativeStartPending'])
+        self.assertEqual(result['calls'], [])
+
+    def test_factory_return_after_deadline_is_closed_without_dispatch(self):
+        result = self.run_scenario('factory-clock-expired')
+        self.assertEqual(result['error']['code'], 'NATIVE_START_EXPIRED')
+        self.assertTrue(result['factoryStarted'])
+        self.assertEqual(result['closeCount'], 1)
+        self.assertTrue(result['state']['lateNativeClosed']['closed'])
+        self.assertFalse(result['state']['nativeStartPending'])
+        self.assertEqual(result['calls'], [])
 
     def test_native_owner_uses_real_stdio_frames_preserves_utf8_and_closes(self):
         with tempfile.TemporaryDirectory() as directory:

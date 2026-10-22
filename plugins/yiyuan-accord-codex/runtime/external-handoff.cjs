@@ -178,9 +178,9 @@ function createExternalHandoff(options) {
   }
   async function startNative() {
     record({pendingEffect: {kind: 'owned-native-start'}, nativeClosed: null});
-    nativeStartPending = true;
     native = await bounded(async () => {
       try {
+        nativeStartPending = true;
         const owned = await nativeFactory({cwd: plan.cwd, deadlineMs: plan.deadlineMs});
         if (stopping || cancelled || performance.now() >= deadline) {
           if (owned && typeof owned.close === 'function') lateNativeClosed = copy(await owned.close());
