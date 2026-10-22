@@ -319,7 +319,8 @@
       "tests/product/test_functional_obligation_coverage.py",
       "tests/product/test_observer_deadlines.py",
       "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/references/native-capabilities.md",
-      "tests/product/test_contemporary_contribution.py"
+      "tests/product/test_contemporary_contribution.py",
+      "product/cases/current-five-case-review-v3.3.json"
     ],
     "rule": "The current authorized 3.3.2 OpenAI development slice includes whole-system consistency and engineering corrections, necessary execution reachability and source-bound acceptance strengthening. Reconcile only actual authorized changed and pending files; preserve the immutable predecessor definitions, published identities and original evidence. Current plans remain revisable against source facts. Other hosts remain undecided future candidates and gain no active development, enablement or release authority. Local conformance and synthetic regressions do not establish functional acceptance or publication readiness.",
     "complexityBudget": {
@@ -4994,31 +4995,31 @@
               "timeoutSeconds": 2100,
               "turnTimeoutSeconds": 420,
               "recoveryTimeoutSeconds": 30,
-              "caseSha256": "58fb17c61922932cde0c87038c28a0e4636044e0147e5ed0059846d94c8ef31e",
+              "caseSha256": "b3361c52e46f538fbaaec3e3fa8a716ada4c13764bfd1d367106c46dfe5d6371",
               "host": "codex",
               "entry": "cx-cli",
-              "codexVersion": "0.163.0",
+              "codexVersion": "0.163.0-alpha.11.1",
               "usageCaps": {
-                "totalTokens": 5000000,
-                "uncachedInputTokens": 500000,
+                "totalTokens": 2000000,
+                "uncachedInputTokens": 250000,
                 "outputTokens": 48000
               },
-              "usageScope": "B26 one native thread cumulative four-turn usage; Root preparation/review/recovery costs separately bounded",
+              "usageScope": "One new controlled four-turn native CLI thread cumulative; Root preparation/review/observation/save/recovery/exit separately time-bounded and all costs retained; no net-value/billing claim.",
               "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/ordinary-steering-v3.3.json"
+              "caseFile": "product/cases/current-five-case-review-v3.3.json"
             },
             "privateCaller": {
-              "sha256": "7c99ad7fda1435cecfd804af05bf1278268e399f76b6164595a0597827abcdfd",
+              "sha256": "5a56cdd2fe6964abaf300002e01d4f07ebc6a574de93c4ebe98e98f53336123b",
               "guard": "three-case-existing-admission-boundary/v1"
             },
             "caseKind": "prospective-transparent-synthetic-ordinary-cli-functional-verification",
-            "sourceAndInput": "Use one committed fixture and one actual native thread/episode; actual four original input records and ordered effects. Scope claims are independent, no customer business or old case replay.",
-            "effectiveEnvironment": "Installed package23 and native CLI0.163.0, existing logged-in main user profile; workspace-write; actual inventory, adoption, CLI configuration, user/shared-state protections and actor identities must be observed, not copied from this declaration.",
+            "sourceAndInput": "One new Root-controlled transparent synthetic four-input nativeCLI episode reviewing the genuinely unfinished five-case source/obligation disposition and release disclosure. Immutable431699 Git snapshots and real private sources; existing B26 and939s Root adverse records are delayed to stage4 by declared experimental control. No closed business replay, fabricated fact or expected-to-observed conversion.",
+            "effectiveEnvironment": "Actual selected Codex Desktop binary0.163.0-alpha.11.1, existing enabled installeddev5, workspace-write/approvalnever/elevated; exact no-model workspace write/read probe passed. Actual installed inventory, modelworker adoption, permissions/config/currentcontext/Goal and four native turn receipts remain required; noPATH stableCLI substitution or FullAccess.",
             "qualification": "Root independently reads original native commands/responses, Goal read receipts, protected-source and stage snapshots, actual conditions and resource exits. Preserve unavailable/unknown observations; no expected-to-observed copying or self-awarded flags. Scope floors unchanged.",
-            "budgetAccounting": "New B26 worker ceilings only;2100s whole run,420s/turn,30s recovery;5M total/500k uncached/48k output cumulative. Future Root independent review, effect verification, save and necessary recovery use separate finite timed stages with actual start/deadline/owner/reserve and boundary preservation. Prior preparation/review costs retain original records, not retroactively covered by a new900s draft. No adopted joint Root/peer token cap; complete deduplicated usage/billing remain unknown, limiting whole-cost/net-value/A08 claims. No retrospective old-window extension or weakening of scope floors.",
-            "privatePreparationPlanSha256": "31e4bd02fb7e552707e44ff5b0a33c3dd1eadccc77a8b36fd679b9cdb9d2dae3"
+            "budgetAccounting": "Prospective wholecase14400s from original2026-10-22T14:03:47Z to18:03:47Z includes all preparation/intervals/oldfailures/sharedQA/actor costs. Worker2100s/turn420s/recovery30s and original cumulative2Mtotal/250kuncached/48koutput; RootTail1800s/reserve600 includes original command review, independent four-axis review, observe/recheck, save/recovery/exit. Earlier7200 was draft unexecuted, not an adopted clock extension. Bind actual current original context/authority and final sealed plan before effects; source and unknown effects retained, billing/netvalue unknown. No old B26 or Root900s overrun is repaired by this plan.",
+            "privatePreparationPlanSha256": "98ed87f51445b00959a133c6ca5339527afd23e79b5bdf431e3643f27d6db38b"
           },
-          "oracle": "Evaluate this case independently against its unchanged scope and exact conditions. Consume the same original B26 episode, not relabelled primary-case conclusions. Read actual response and command trace: plan only, no deliverable writes; C lacks authorization, not source facts; no whole-task completion. Verify immutable source and normal entry/authority. Independently derive A+B duration5 under initial budget5; C remains authorization-pending despite known duration/priority. Both linked outputs exist and agree; response answers side question and performs authorized work, complete=false; no evaluator repair. Read full native commands/outputs during pause, not final hash alone: no business writes, including write-then-restore. Both outputs retain exact bytes and mtime from stage2; state-only response preserves real unresolved C decision. Actual input explicitly resumes and changes budget/authorization. Independently derive A+C duration4, B not authorized this round, no pending required decision; both outputs correct every affected field and note, preserve original facts/source and retained old effects. Check normal completion, unknowns and resources separately. Goal null is absence only at each actual read; missing or active is not inactive. Independent review plus bounded observe/recheck remain mandatory. No A08/whole-product or net-value claim.",
+          "oracle": "Evaluate each of the three scopes independently against all retained duties, axes, scenarios and expected leaves using one new exact-bound controlled CLI episode. Read four actual native inputs and full commands: plan-only no deliverable writes; agreement plus source side-question performs authorized partial review producing the two distinct linked artifacts while finalization remains unapproved; pause preserves inputs/results bytes+mtime and performs no business write including write-then-restore; explicit Root resume, finalization authority and real delayed B26 counterevidence cause correct actual changes across both outputs and every affected obligation/disclosure, preserving valid predeadline facts, original identities and unresolved product evidence. Independently derive the source/obligation mappings from protected originals; check all original local business-control, recovery, quality, preservation and cleanup semantics with the new real review target rather than old A/B/C arithmetic. Audit completeness of all five case expected leaves; declarations are never observations. No necessary decision for this limited review remains at completion; product evidence gaps remain unresolved. Actual default mode/Goal absence, whole-work+Root-tail budget, config/package/permissions and process/resource closure require real receipts. Full case/current context/four-axis independent review and exact observe/recheck remain mandatory; no A05/A08, whole product, release or net-value qualification from these artifacts. CurrentRoot939.0098653s/900s and later control corrections must be separately attributed; preserve actual scoped install/CI/Core facts and all unverified transitions. Static source snapshots and future declaration roles are distinct.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5028,7 +5029,8 @@
             "scripts/observe_codex_lifecycle.py",
             "scripts/inspect_native_resources.py",
             "scripts/codex_rpc.py",
-            "product/cases/ordinary-steering-v3.3.json"
+            "product/cases/ordinary-steering-v3.3.json",
+            "product/cases/current-five-case-review-v3.3.json"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -5100,31 +5102,31 @@
               "timeoutSeconds": 2100,
               "turnTimeoutSeconds": 420,
               "recoveryTimeoutSeconds": 30,
-              "caseSha256": "58fb17c61922932cde0c87038c28a0e4636044e0147e5ed0059846d94c8ef31e",
+              "caseSha256": "b3361c52e46f538fbaaec3e3fa8a716ada4c13764bfd1d367106c46dfe5d6371",
               "host": "codex",
               "entry": "cx-cli",
-              "codexVersion": "0.163.0",
+              "codexVersion": "0.163.0-alpha.11.1",
               "usageCaps": {
-                "totalTokens": 5000000,
-                "uncachedInputTokens": 500000,
+                "totalTokens": 2000000,
+                "uncachedInputTokens": 250000,
                 "outputTokens": 48000
               },
-              "usageScope": "B26 one native thread cumulative four-turn usage; Root preparation/review/recovery costs separately bounded",
+              "usageScope": "One new controlled four-turn native CLI thread cumulative; Root preparation/review/observation/save/recovery/exit separately time-bounded and all costs retained; no net-value/billing claim.",
               "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/ordinary-steering-v3.3.json"
+              "caseFile": "product/cases/current-five-case-review-v3.3.json"
             },
             "privateCaller": {
-              "sha256": "7c99ad7fda1435cecfd804af05bf1278268e399f76b6164595a0597827abcdfd",
+              "sha256": "5a56cdd2fe6964abaf300002e01d4f07ebc6a574de93c4ebe98e98f53336123b",
               "guard": "three-case-existing-admission-boundary/v1"
             },
             "caseKind": "prospective-transparent-synthetic-ordinary-cli-functional-verification",
-            "sourceAndInput": "Use one committed fixture and one actual native thread/episode; actual four original input records and ordered effects. Scope claims are independent, no customer business or old case replay.",
-            "effectiveEnvironment": "Installed package23 and native CLI0.163.0, existing logged-in main user profile; workspace-write; actual inventory, adoption, CLI configuration, user/shared-state protections and actor identities must be observed, not copied from this declaration.",
+            "sourceAndInput": "One new Root-controlled transparent synthetic four-input nativeCLI episode reviewing the genuinely unfinished five-case source/obligation disposition and release disclosure. Immutable431699 Git snapshots and real private sources; existing B26 and939s Root adverse records are delayed to stage4 by declared experimental control. No closed business replay, fabricated fact or expected-to-observed conversion.",
+            "effectiveEnvironment": "Actual selected Codex Desktop binary0.163.0-alpha.11.1, existing enabled installeddev5, workspace-write/approvalnever/elevated; exact no-model workspace write/read probe passed. Actual installed inventory, modelworker adoption, permissions/config/currentcontext/Goal and four native turn receipts remain required; noPATH stableCLI substitution or FullAccess.",
             "qualification": "Root independently reads original native commands/responses, Goal read receipts, protected-source and stage snapshots, actual conditions and resource exits. Preserve unavailable/unknown observations; no expected-to-observed copying or self-awarded flags. Scope floors unchanged.",
-            "budgetAccounting": "New B26 worker ceilings only;2100s whole run,420s/turn,30s recovery;5M total/500k uncached/48k output cumulative. Future Root independent review, effect verification, save and necessary recovery use separate finite timed stages with actual start/deadline/owner/reserve and boundary preservation. Prior preparation/review costs retain original records, not retroactively covered by a new900s draft. No adopted joint Root/peer token cap; complete deduplicated usage/billing remain unknown, limiting whole-cost/net-value/A08 claims. No retrospective old-window extension or weakening of scope floors.",
-            "privatePreparationPlanSha256": "31e4bd02fb7e552707e44ff5b0a33c3dd1eadccc77a8b36fd679b9cdb9d2dae3"
+            "budgetAccounting": "Prospective wholecase14400s from original2026-10-22T14:03:47Z to18:03:47Z includes all preparation/intervals/oldfailures/sharedQA/actor costs. Worker2100s/turn420s/recovery30s and original cumulative2Mtotal/250kuncached/48koutput; RootTail1800s/reserve600 includes original command review, independent four-axis review, observe/recheck, save/recovery/exit. Earlier7200 was draft unexecuted, not an adopted clock extension. Bind actual current original context/authority and final sealed plan before effects; source and unknown effects retained, billing/netvalue unknown. No old B26 or Root900s overrun is repaired by this plan.",
+            "privatePreparationPlanSha256": "98ed87f51445b00959a133c6ca5339527afd23e79b5bdf431e3643f27d6db38b"
           },
-          "oracle": "Evaluate this case independently against its unchanged scope and exact conditions. Consume the same original B26 episode, not relabelled primary-case conclusions. Read actual response and command trace: plan only, no deliverable writes; C lacks authorization, not source facts; no whole-task completion. Verify immutable source and normal entry/authority. Independently derive A+B duration5 under initial budget5; C remains authorization-pending despite known duration/priority. Both linked outputs exist and agree; response answers side question and performs authorized work, complete=false; no evaluator repair. Read full native commands/outputs during pause, not final hash alone: no business writes, including write-then-restore. Both outputs retain exact bytes and mtime from stage2; state-only response preserves real unresolved C decision. Actual input explicitly resumes and changes budget/authorization. Independently derive A+C duration4, B not authorized this round, no pending required decision; both outputs correct every affected field and note, preserve original facts/source and retained old effects. Check normal completion, unknowns and resources separately. Goal null is absence only at each actual read; missing or active is not inactive. Independent review plus bounded observe/recheck remain mandatory. No A08/whole-product or net-value claim.",
+          "oracle": "Evaluate each of the three scopes independently against all retained duties, axes, scenarios and expected leaves using one new exact-bound controlled CLI episode. Read four actual native inputs and full commands: plan-only no deliverable writes; agreement plus source side-question performs authorized partial review producing the two distinct linked artifacts while finalization remains unapproved; pause preserves inputs/results bytes+mtime and performs no business write including write-then-restore; explicit Root resume, finalization authority and real delayed B26 counterevidence cause correct actual changes across both outputs and every affected obligation/disclosure, preserving valid predeadline facts, original identities and unresolved product evidence. Independently derive the source/obligation mappings from protected originals; check all original local business-control, recovery, quality, preservation and cleanup semantics with the new real review target rather than old A/B/C arithmetic. Audit completeness of all five case expected leaves; declarations are never observations. No necessary decision for this limited review remains at completion; product evidence gaps remain unresolved. Actual default mode/Goal absence, whole-work+Root-tail budget, config/package/permissions and process/resource closure require real receipts. Full case/current context/four-axis independent review and exact observe/recheck remain mandatory; no A05/A08, whole product, release or net-value qualification from these artifacts. CurrentRoot939.0098653s/900s and later control corrections must be separately attributed; preserve actual scoped install/CI/Core facts and all unverified transitions. Static source snapshots and future declaration roles are distinct.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5134,7 +5136,8 @@
             "scripts/observe_codex_lifecycle.py",
             "scripts/inspect_native_resources.py",
             "scripts/codex_rpc.py",
-            "product/cases/ordinary-steering-v3.3.json"
+            "product/cases/ordinary-steering-v3.3.json",
+            "product/cases/current-five-case-review-v3.3.json"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -5200,31 +5203,31 @@
               "timeoutSeconds": 2100,
               "turnTimeoutSeconds": 420,
               "recoveryTimeoutSeconds": 30,
-              "caseSha256": "58fb17c61922932cde0c87038c28a0e4636044e0147e5ed0059846d94c8ef31e",
+              "caseSha256": "b3361c52e46f538fbaaec3e3fa8a716ada4c13764bfd1d367106c46dfe5d6371",
               "host": "codex",
               "entry": "cx-cli",
-              "codexVersion": "0.163.0",
+              "codexVersion": "0.163.0-alpha.11.1",
               "usageCaps": {
-                "totalTokens": 5000000,
-                "uncachedInputTokens": 500000,
+                "totalTokens": 2000000,
+                "uncachedInputTokens": 250000,
                 "outputTokens": 48000
               },
-              "usageScope": "B26 one native thread cumulative four-turn usage; Root preparation/review/recovery costs separately bounded",
+              "usageScope": "One new controlled four-turn native CLI thread cumulative; Root preparation/review/observation/save/recovery/exit separately time-bounded and all costs retained; no net-value/billing claim.",
               "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/ordinary-steering-v3.3.json"
+              "caseFile": "product/cases/current-five-case-review-v3.3.json"
             },
             "privateCaller": {
-              "sha256": "7c99ad7fda1435cecfd804af05bf1278268e399f76b6164595a0597827abcdfd",
+              "sha256": "5a56cdd2fe6964abaf300002e01d4f07ebc6a574de93c4ebe98e98f53336123b",
               "guard": "three-case-existing-admission-boundary/v1"
             },
             "caseKind": "prospective-transparent-synthetic-ordinary-cli-functional-verification",
-            "sourceAndInput": "Use one committed fixture and one actual native thread/episode; actual four original input records and ordered effects. Scope claims are independent, no customer business or old case replay.",
-            "effectiveEnvironment": "Installed package23 and native CLI0.163.0, existing logged-in main user profile; workspace-write; actual inventory, adoption, CLI configuration, user/shared-state protections and actor identities must be observed, not copied from this declaration.",
+            "sourceAndInput": "One new Root-controlled transparent synthetic four-input nativeCLI episode reviewing the genuinely unfinished five-case source/obligation disposition and release disclosure. Immutable431699 Git snapshots and real private sources; existing B26 and939s Root adverse records are delayed to stage4 by declared experimental control. No closed business replay, fabricated fact or expected-to-observed conversion.",
+            "effectiveEnvironment": "Actual selected Codex Desktop binary0.163.0-alpha.11.1, existing enabled installeddev5, workspace-write/approvalnever/elevated; exact no-model workspace write/read probe passed. Actual installed inventory, modelworker adoption, permissions/config/currentcontext/Goal and four native turn receipts remain required; noPATH stableCLI substitution or FullAccess.",
             "qualification": "Root independently reads original native commands/responses, Goal read receipts, protected-source and stage snapshots, actual conditions and resource exits. Preserve unavailable/unknown observations; no expected-to-observed copying or self-awarded flags. Scope floors unchanged.",
-            "budgetAccounting": "New B26 worker ceilings only;2100s whole run,420s/turn,30s recovery;5M total/500k uncached/48k output cumulative. Future Root independent review, effect verification, save and necessary recovery use separate finite timed stages with actual start/deadline/owner/reserve and boundary preservation. Prior preparation/review costs retain original records, not retroactively covered by a new900s draft. No adopted joint Root/peer token cap; complete deduplicated usage/billing remain unknown, limiting whole-cost/net-value/A08 claims. No retrospective old-window extension or weakening of scope floors.",
-            "privatePreparationPlanSha256": "31e4bd02fb7e552707e44ff5b0a33c3dd1eadccc77a8b36fd679b9cdb9d2dae3"
+            "budgetAccounting": "Prospective wholecase14400s from original2026-10-22T14:03:47Z to18:03:47Z includes all preparation/intervals/oldfailures/sharedQA/actor costs. Worker2100s/turn420s/recovery30s and original cumulative2Mtotal/250kuncached/48koutput; RootTail1800s/reserve600 includes original command review, independent four-axis review, observe/recheck, save/recovery/exit. Earlier7200 was draft unexecuted, not an adopted clock extension. Bind actual current original context/authority and final sealed plan before effects; source and unknown effects retained, billing/netvalue unknown. No old B26 or Root900s overrun is repaired by this plan.",
+            "privatePreparationPlanSha256": "98ed87f51445b00959a133c6ca5339527afd23e79b5bdf431e3643f27d6db38b"
           },
-          "oracle": "Evaluate this case independently against its unchanged scope and exact conditions. Consume the same original B26 episode, not relabelled primary-case conclusions. Read actual response and command trace: plan only, no deliverable writes; C lacks authorization, not source facts; no whole-task completion. Verify immutable source and normal entry/authority. Independently derive A+B duration5 under initial budget5; C remains authorization-pending despite known duration/priority. Both linked outputs exist and agree; response answers side question and performs authorized work, complete=false; no evaluator repair. Read full native commands/outputs during pause, not final hash alone: no business writes, including write-then-restore. Both outputs retain exact bytes and mtime from stage2; state-only response preserves real unresolved C decision. Actual input explicitly resumes and changes budget/authorization. Independently derive A+C duration4, B not authorized this round, no pending required decision; both outputs correct every affected field and note, preserve original facts/source and retained old effects. Check normal completion, unknowns and resources separately. Goal null is absence only at each actual read; missing or active is not inactive. Independent review plus bounded observe/recheck remain mandatory. No A08/whole-product or net-value claim.",
+          "oracle": "Evaluate each of the three scopes independently against all retained duties, axes, scenarios and expected leaves using one new exact-bound controlled CLI episode. Read four actual native inputs and full commands: plan-only no deliverable writes; agreement plus source side-question performs authorized partial review producing the two distinct linked artifacts while finalization remains unapproved; pause preserves inputs/results bytes+mtime and performs no business write including write-then-restore; explicit Root resume, finalization authority and real delayed B26 counterevidence cause correct actual changes across both outputs and every affected obligation/disclosure, preserving valid predeadline facts, original identities and unresolved product evidence. Independently derive the source/obligation mappings from protected originals; check all original local business-control, recovery, quality, preservation and cleanup semantics with the new real review target rather than old A/B/C arithmetic. Audit completeness of all five case expected leaves; declarations are never observations. No necessary decision for this limited review remains at completion; product evidence gaps remain unresolved. Actual default mode/Goal absence, whole-work+Root-tail budget, config/package/permissions and process/resource closure require real receipts. Full case/current context/four-axis independent review and exact observe/recheck remain mandatory; no A05/A08, whole product, release or net-value qualification from these artifacts. CurrentRoot939.0098653s/900s and later control corrections must be separately attributed; preserve actual scoped install/CI/Core facts and all unverified transitions. Static source snapshots and future declaration roles are distinct.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5234,7 +5237,8 @@
             "scripts/observe_codex_lifecycle.py",
             "scripts/inspect_native_resources.py",
             "scripts/codex_rpc.py",
-            "product/cases/ordinary-steering-v3.3.json"
+            "product/cases/ordinary-steering-v3.3.json",
+            "product/cases/current-five-case-review-v3.3.json"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
