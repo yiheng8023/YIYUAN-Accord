@@ -545,6 +545,13 @@ This scoped route supplies no existing GUI control, parent checkpoint transfer,
 shutdown survival or automatic timing. Protocol tests do not qualify autonomous need
 detection or complete ordinary-use continuity.
 
+A fresh recovery reader need not share the stopped execution version. Its new
+connection, actual version and version-change observation are recorded for
+independent review and settlement. Compatibility depends on sufficient complete
+persistent facts, not version-label equality. Reads and closure remain bound to
+that same reader; current source host/turn stability and original actor, effect,
+input/output and transactional lease checks remain required.
+
 The optional `runtime/carrier-handoff.cjs` is a callable integration seam supplied
 in the Codex package. The continuity Skill routes applicable callers to its
 [packaged interface](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md),

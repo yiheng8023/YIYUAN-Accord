@@ -104,7 +104,7 @@ async function launcherVersion(launch, cwd) {
 }
 const string = {type: 'string', minLength: 1, maxLength: 4096};
 const TOOL = Object.freeze({name: 'coordinate_task_execution',
-  description: 'Discover native skills or coordinate one bounded fresh target for this root task. Default is read-only. Optional workspace-write requires declared checkpoint outputs, protected write-authority evidence, exact original hashes and independent write-prepare review; after natural closure of the read-only peer, cold resume must report the restricted actual native policy before commit review or writing. Unsupported policy stays held; no setup or permission fallback. Selected-file snapshots total at most 1 MiB and are not an OS file allowlist or proof of outside-scope effects. Optional skillRequest reuses prepare-skill selection and fresh native inventory for exact typed input in the first continuation; policy metadata is observed, not automatic authorization or prohibition. Root reads the exact Skill source and applicable restrictions. Supply explicit cwd. Capability queries retain the helper defaults: 10 seconds for querying plus at most three 5-second cleanup windows, within the separately configured host tool timeout. prepare requires a current active checkpoint and complete reconciled native input; authoritySourceRef identifies the actual delegation and quiescenceSourceRef must name a protected checkpoint input containing the inspected drain/writer evidence. Those references do not prove authorization or absence of writers. Root must inspect each exact awaiting-review observation and submit its own independent judgment using reviewId and observationSha256. prepare/commit/release run asynchronously; inspect/read-evidence/cancel remain available. reconcile only settles an exact known-stopped source-retained lease after independent review of current authority, original pauses, old actor quiescence and effects; it starts no target and preserves the original failure/deadline. reconcile-target is separate and also covers one completed read-only intake with the source lease retained; that branch only permits source-current and never grants an untransferred target writer. It requires an active current source, exact stopped-target record/lease and a workspace-relative effectSourceRef JSON of kind external-target-effects/v1 with operationId, recordSha256, actorSourceRef, authoritySourceRef, effects[{disposition:no-effect-verified|applied-verified|partial-effects-reviewed,sourceRef}], and unresolved:[]. Its exact bytes are hash-bound in this recovery operation evidence store and re-read before settlement; it need not consume a business checkpoint input. Existing protected-input sources remain supported. These are review inputs, not proofs. Root reviews original invariants, actual local/external effects, actor quiescence and explicit source-current or target-retained ownership. The bounded reader only reads persistent target facts; notLoaded does not prove absence of another controller. After hash-bound review and rechecks, settlement rotates the fence and may return the exact original public scope to the current source. It neither resumes a target nor replays a turn, alters a pause, erases original failures/ACK loss, or declares business completion. The target result is never self-approved. Source identity comes only from native metadata. No default GUI control, permission escalation, replay, permanent daemon or shutdown-survival claim.',
+  description: 'Discover native skills or coordinate one bounded fresh target for this root task. Default is read-only. Optional workspace-write requires declared checkpoint outputs, protected write-authority evidence, exact original hashes and independent write-prepare review; after natural closure of the read-only peer, cold resume must report the restricted actual native policy before commit review or writing. Unsupported policy stays held; no setup or permission fallback. Selected-file snapshots total at most 1 MiB and are not an OS file allowlist or proof of outside-scope effects. Optional skillRequest reuses prepare-skill selection and fresh native inventory for exact typed input in the first continuation; policy metadata is observed, not automatic authorization or prohibition. Root reads the exact Skill source and applicable restrictions. Supply explicit cwd. Capability queries retain the helper defaults: 10 seconds for querying plus at most three 5-second cleanup windows, within the separately configured host tool timeout. prepare requires a current active checkpoint and complete reconciled native input; authoritySourceRef identifies the actual delegation and quiescenceSourceRef must name a protected checkpoint input containing the inspected drain/writer evidence. Those references do not prove authorization or absence of writers. Root must inspect each exact awaiting-review observation and submit its own independent judgment using reviewId and observationSha256. prepare/commit/release run asynchronously; inspect/read-evidence/cancel remain available. reconcile only settles an exact known-stopped source-retained lease after independent review of current authority, original pauses, old actor quiescence and effects; it starts no target and preserves the original failure/deadline. reconcile-target is separate and also covers one completed read-only intake with the source lease retained; that branch only permits source-current and never grants an untransferred target writer. It requires an active current source, exact stopped-target record/lease and a workspace-relative effectSourceRef JSON of kind external-target-effects/v1 with operationId, recordSha256, actorSourceRef, authoritySourceRef, effects[{disposition:no-effect-verified|applied-verified|partial-effects-reviewed,sourceRef}], and unresolved:[]. Its exact bytes are hash-bound in this recovery operation evidence store and re-read before settlement; it need not consume a business checkpoint input. Existing protected-input sources remain supported. These are review inputs, not proofs. Root reviews original invariants, actual local/external effects, actor quiescence and explicit source-current or target-retained ownership. The bounded reader only reads persistent target facts; its fresh connection and actual version are recorded in review and settlement. Root judges sufficient complete facts and current reader compatibility; a changed version label alone grants no equivalence or authority. notLoaded does not prove absence of another controller. After hash-bound review and rechecks, settlement rotates the fence and may return the exact original public scope to the current source. It neither resumes a target nor replays a turn, alters a pause, erases original failures/ACK loss, or declares business completion. The target result is never self-approved. Source identity comes only from native metadata. No default GUI control, permission escalation, replay, permanent daemon or shutdown-survival claim.',
   annotations: {readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: true},
   inputSchema: {type: 'object', additionalProperties: false, properties: {
     action: {type: 'string', enum: ACTIONS}, cwd: string,
@@ -413,11 +413,18 @@ function createNativeTaskExecution(options) {
   async function targetFacts(slot) {
     slot.current();
     const recovery = slot.recovery, state = recovery.original.record.state;
+    const sameReader = () => ['connectionId', 'hostVersion'].every(key => recovery.reader?.[key] === recovery.nativeReader[key]);
+    if (!sameReader()) fail('target-reader-identity-changed');
+    let readRequest = null;
     const reply = await recovery.reader.request('thread/read', {threadId: state.target.threadId, includeTurns: true},
       performance.now() + Math.max(1, recovery.deadlineMs - Date.now()), ref => {
-        recovery.readRequest = ref; slot.targetRecoveryResource.lastReadRequest = ref; save(slot);
+        if (!sameReader() || ref?.connectionId !== recovery.nativeReader.connectionId ||
+            ref.hostVersion !== recovery.nativeReader.hostVersion || ref.method !== 'thread/read' || !text(ref.requestId)) fail('target-reader-identity-changed');
+        readRequest = clone(ref); recovery.readRequest = readRequest;
+        slot.targetRecoveryResource.lastReadRequest = readRequest; save(slot);
       });
     slot.current();
+    if (!readRequest || !sameReader()) fail('target-reader-identity-changed');
     const thread = reply?.thread;
     if (thread?.id !== state.target.threadId || thread.ephemeral !== false ||
         !['idle', 'notLoaded'].includes(thread.status?.type) || !Array.isArray(thread.turns) ||
@@ -440,13 +447,16 @@ function createNativeTaskExecution(options) {
     slot.current();
     if (!text(recovery.reader.connectionId) || recovery.reader.connectionId === recovery.original.record.state.connection.connectionId ||
         recovery.reader.connectionId === recovery.original.record.state.priorNative?.connection?.connectionId ||
-        recovery.reader.hostVersion !== recovery.original.record.state.connection.hostVersion) fail('target-reader-identity-changed');
+        !text(recovery.reader.hostVersion)) fail('target-reader-identity-changed');
+    recovery.nativeReader = {connectionId: recovery.reader.connectionId, hostVersion: recovery.reader.hostVersion,
+      originalHostVersion: recovery.original.record.state.connection.hostVersion,
+      versionChanged: recovery.reader.hostVersion !== recovery.original.record.state.connection.hostVersion};
     recovery.nativeFacts = await targetFacts(slot);
     const evidence = putEvidence(slot, {stage: 'external-known-stopped-target', original: recovery.original,
       originalStateEvidence: putEvidence(slot, recovery.original.record.state), currentSource: slot.caller,
       currentBasis: recovery.current, material: recovery.material, nativeFactsEvidence: putEvidence(slot, recovery.nativeFacts),
-      readRequest: recovery.readRequest, writerDisposition: recovery.args.writerDisposition,
-      requiredJudgment: 'Independently verify original actors cannot dispatch, all material local/external effects and pauses, unchanged original inputs, current authority and explicit writer disposition. notLoaded is connection-local, not proof of no other controller. Statements/selected bytes are not authorization or whole-workspace proof. No resume, replay, business completion or source release is inferred.'});
+      nativeReader: recovery.nativeReader, readRequest: recovery.readRequest, writerDisposition: recovery.args.writerDisposition,
+      requiredJudgment: 'Independently verify this current reader can completely read the original target facts, including any reported version change; a version label alone proves no protocol equivalence. Verify original actors cannot dispatch, all material local/external effects and pauses, unchanged original inputs, current authority and explicit writer disposition. notLoaded is connection-local, not proof of no other controller. Statements/selected bytes are not authorization or whole-workspace proof. No resume, replay, business completion or source release is inferred.'});
     recovery.view = {...recovery.view, phase: 'awaiting-target-effect-review'};
     slot.review = {id: crypto.randomUUID(), stage: 'external-known-stopped-target', evidence, reject() {}};
   }
@@ -460,6 +470,7 @@ function createNativeTaskExecution(options) {
       if (hash(JSON.stringify(facts)) !== hash(JSON.stringify(recovery.nativeFacts))) fail('target-facts-changed');
       const readerClosed = await closeTargetReader(slot);
       if (slot.targetRecoveryResource.state !== 'closed') fail('recovery-resource-unverified');
+      if (['connectionId', 'hostVersion'].some(key => recovery.reader[key] !== recovery.nativeReader[key])) fail('target-reader-identity-changed');
       const current = slot.current(), exact = stoppedRecord(slot, true);
       if (JSON.stringify(exact.basis) !== JSON.stringify(recovery.original.basis)) fail('stopped-record-basis-changed');
       const state = exact.record.state, receipt = {kind: 'external-known-stopped-target', ...exact.basis,
@@ -469,7 +480,7 @@ function createNativeTaskExecution(options) {
         scopeBinding: recovery.material.scopeBinding, writerDisposition: recovery.args.writerDisposition,
         decision: args.decision, sourceRef: args.sourceRef, observationSha256: review.evidence.sha256,
         decisionEvidence: decision.sha256, materialSha256: recovery.materialSha256,
-        nativeFactsSha256: hash(JSON.stringify(facts)), readerClosed};
+        nativeFactsSha256: hash(JSON.stringify(facts)), nativeReader: recovery.nativeReader, nativeReadRequest: recovery.readRequest, readerClosed};
       slot.current();
       slot.targetSettlementAttempt = {id: crypto.randomUUID(), state: 'outcome-unknown',
         recordRevision: exact.record.revision, leaseSha256: exact.basis.leaseSha256, decisionEvidence: decision.sha256};

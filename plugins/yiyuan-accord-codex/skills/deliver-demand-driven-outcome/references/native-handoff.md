@@ -152,6 +152,13 @@ The current source must be active with complete input. Independently review the
 original protected inputs, declared outputs, current authority and all consequential
 local or external effects. The owned reader only reads persistent target facts;
 it does not resume the target. `notLoaded` alone does not exclude other controllers.
+The fresh reader may report a different version from the stopped execution. Its
+connection and actual version, the old version and the version-change observation
+are bound into review evidence and the settlement receipt. Independently verify
+current read compatibility and sufficient complete persistent facts; a version label
+alone proves neither equivalence nor authority. The same reader must supply both
+reads. Current source host/turn stability remains required.
+
 Target facts and effect/input/output bindings are checked again, and the reader
 must naturally close before exact settlement and readback. The transaction ends
 the old transfer and rotates its fence; `source-current` explicitly returns the

@@ -61,6 +61,8 @@
 
 - 8c8bc45f的CI39827261860已终态11/11成功，原321失败不改签。独立只读通用核审查541e4已真实typed加载原explicit-only Skill、形成Root采纳的有源结论并完成三轮/原生正常关闭/40个已记录PID+启动身份退出，scope已settled且无active transfer；仅为有界贡献，不代R2/R3整案。确认旧480cb在99inputs+1output满额时，恢复effects须新增保护输入却又不得删改原合同的可达性缺口；旧目标仍held/intake-only/sourcewriter/nativeclosed，原期限/失败保留。现合入恢复操作自身的精确字节哈希证据修正，100上限及原权限/效果/actor/lease检查不放松，10项隔离定点检查与独审通过。3.3.2-dev.6+codex.20261022200355为待完整检查/CI/安装/实际采用的新候选；本机主MCP仍dev.4，新只读目标实际dev.5；不提前宣称旧scope已结算或发行合格。资料见`.tmp/release-3.3.2-review/common-adapter-audit-8c8bc45f/`。
 
+- ff9d49aa/dev6已精确1197全发现回归+3static、独审、push及原生30成员安装；MCP现实际dev6/PID31320，宿主更新至0.163.0-alpha.11.2。原真实当前输入经观测token仅恢复回执后完整原Goal/99输入/原OUTCOME仍保持。旧480cb满额effects绑定已进入真实reader阶段，随后被新旧reader版本标签.11.2/.11.1相等门槛拒绝，reader26132自然关闭0；原sourcewriter/record16/失败/期限保持。官方现CLI独立只读probe39820能返回原完整1条completed intake并正常退出，支持窄修：记录稳定新reader连接/实际版本/版本差入review和receipt，以完整facts及既有source/effect/actor/contract/lease检查判兼容，不以标签自动放行。15项隔离定点与独审通过；3.3.2-dev.7+codex.20261022211015是待本体完整QA/CI/安装/实际结算的新候选。FF CI39850009099未终态，R2/R3和发行未完成。原7200秒段closeout迟到7382秒已保留，未延旧钟；新版本兼容工序从20:50:50起3600秒。见`common-adapter-audit-8c8bc45f/reader-compatibility-fix/`与`actual-reader-patch-probe.json`。
+
 ## 当前目标与写者
 
 当前目标为3.3.2必要工程修复、全局逐行审查及一致性核验，在原功能/质量和精确证据条件成立后完成发行与适用本机入口更新。Root负责产品整合和最终核验，分支只在明确分配的目标内写入；未归档聊天。3.3.0/3.3.1发行、安装、原资格及CALIBRATION源文更新保留原身份。不要从旧下一步、已结束案例或临时恢复材料重新发起业务、登录、观察器或实验。

@@ -4021,6 +4021,39 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
     def test_full_capacity_reconciliation_rejects_effect_source_hardlink(self):
         self.check_target_effect_reconciliation('source-intake-capacity-effect-hardlink')
 
+    def test_reconciliation_accepts_independently_reviewed_new_reader_version(self):
+        self.check_target_effect_reconciliation('source-intake-reader-new')
+
+    def test_reconciliation_rejects_empty_reader_version(self):
+        self.check_target_effect_reconciliation('source-intake-reader-empty')
+
+    def test_reconciliation_rejects_original_reader_connection(self):
+        self.check_target_effect_reconciliation('source-intake-reader-old-connection')
+
+    def test_reconciliation_rejects_prior_reader_connection(self):
+        self.check_target_effect_reconciliation('source-policy-reader-prior-connection')
+
+    def test_reconciliation_rejects_reader_identity_drift(self):
+        self.check_target_effect_reconciliation('source-intake-reader-drift')
+
+    def test_reconciliation_rejects_unbound_reader_request_reference(self):
+        self.check_target_effect_reconciliation('source-intake-reader-bad-ref')
+
+    def test_reconciliation_rejects_missing_original_turn(self):
+        self.check_target_effect_reconciliation('source-intake-reader-missing')
+
+    def test_reconciliation_rejects_wrong_original_turn(self):
+        self.check_target_effect_reconciliation('source-intake-reader-wrong')
+
+    def test_reconciliation_rejects_duplicate_original_turn(self):
+        self.check_target_effect_reconciliation('source-intake-reader-duplicate')
+
+    def test_reconciliation_rejects_extra_original_turn(self):
+        self.check_target_effect_reconciliation('source-intake-reader-extra')
+
+    def test_reconciliation_rejects_nonterminal_original_turn(self):
+        self.check_target_effect_reconciliation('source-intake-reader-nonterminal')
+
     def check_target_effect_reconciliation(self, mode):
         contract = self.execution_write_contract()
         capacity = mode.startswith('source-intake-capacity')
@@ -4040,7 +4073,8 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             contract.update(epoch=current['epoch'], expectedRevision=current['revision'],
                             deadlineMs=int(time.time()*1000)+20000)
         policy_mode = {'source-policy': 'policy-readonly', 'source-policy-missing': 'policy-missing', 'source-requirements': 'requirements-deny',
-                       'source-policy-commit-denied': 'workspace-write'}.get(mode)
+                       'source-policy-commit-denied': 'workspace-write',
+                       'source-policy-reader-prior-connection': 'policy-readonly'}.get(mode)
         source_intake = mode.startswith('source-intake') or policy_mode is not None
         process, _, _, call = self.start_execution_wire(peer_mode=policy_mode or ('normal' if source_intake else 'write-ack-loss' if mode=='ack-loss' else 'write-interrupted'))
         operation_id = self.execution_intake(call, contract)
@@ -4072,7 +4106,30 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
         if source_intake:
             self.assertFalse((self.work/'review.json').exists())
         old_bytes = None if source_intake else (self.work/'review.json').read_bytes()
-        _, _, _, fresh = self.start_execution_wire(peer_mode='target-still-active' if mode=='active-target' else None)
+        reader_mode = mode.split('reader-', 1)[1] if 'reader-' in mode else None
+        old_state = None
+        if reader_mode:
+            old_state = json.loads(next(self.state.rglob(old['stateEvidence']['sha256']+'.json')).read_text(encoding='utf-8'))
+            if reader_mode in ('old-connection', 'prior-connection'):
+                connection = old_state['connection'] if reader_mode=='old-connection' else old_state['priorNative']['connection']
+                self.env['ACCORD_TEST_READER_CONNECTION_ID'] = connection['connectionId']
+            if reader_mode == 'new':
+                history = self.root/'native-wire.jsonl.turns.json'
+                turns = json.loads(history.read_text())
+                turns[0]['items'] = [{'id': 'original-item', 'type': 'agentMessage', 'text': 'Persistent original item'}]
+                history.write_text(json.dumps(turns), encoding='utf-8')
+            if reader_mode in ('missing', 'wrong', 'duplicate', 'extra', 'nonterminal'):
+                history = self.root/'native-wire.jsonl.turns.json'
+                turns = json.loads(history.read_text())
+                if reader_mode=='missing': turns = []
+                elif reader_mode=='wrong': turns[0]['id'] = 'wrong-turn'
+                elif reader_mode=='duplicate': turns += [dict(turns[0])]
+                elif reader_mode=='extra': turns += [{'id': 'extra-turn', 'status': 'completed'}]
+                else: turns[0]['status'] = 'inProgress'
+                history.write_text(json.dumps(turns), encoding='utf-8')
+        _, _, _, fresh = self.start_execution_wire(peer_mode='reader-'+reader_mode if reader_mode else
+            'target-still-active' if mode=='active-target' else None)
+        self.env.pop('ACCORD_TEST_READER_CONNECTION_ID', None)
         old = fresh('inspect', operationId=operation_id)['structuredContent']
         basis = old.get('targetReconciliationBasis')
         self.assertIsNotNone(basis, 'known-stopped target has no typed effect reconciliation basis')
@@ -4148,12 +4205,37 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
         self.assertFalse(reply['isError'], reply)
         waiting = self.execution_until(fresh, operation_id, lambda x: x['reviewRequest'] is not None or
             x['phase'] in ('held', 'cancelled-held') and not x['busy'])
+        if reader_mode in ('empty', 'old-connection', 'prior-connection', 'bad-ref', 'missing', 'wrong', 'duplicate', 'extra', 'nonterminal'):
+            self.assertIn(waiting['failure'], ('target-reader-identity-changed', 'target-activity-unresolved', 'target-terminal-evidence-mismatch'))
+            self.assertEqual(waiting['writer'], original_writer)
+            self.assertEqual(waiting['targetRecoveryResource']['state'], 'closed')
+            return
         if mode == 'active-target':
             self.assertEqual(waiting['failure'], 'target-activity-unresolved')
             self.assertEqual(waiting['writer'], 'target')
             self.assertEqual(waiting['targetRecoveryResource']['state'], 'closed')
             return
+        self.assertIsNotNone(waiting['reviewRequest'], waiting)
         self.assertEqual(waiting['reviewRequest']['stage'], 'external-known-stopped-target')
+        if reader_mode:
+            packet = json.loads(fresh('read-evidence', operationId=operation_id,
+                evidenceId=waiting['reviewRequest']['observationSha256'], maxChars=16000)['structuredContent']['text'])
+            self.assertEqual(packet['nativeReader']['hostVersion'], 'fixed-native-fixture-next')
+            self.assertEqual(packet['nativeReader']['originalHostVersion'], old_state['connection']['hostVersion'])
+            self.assertTrue(packet['nativeReader']['versionChanged'])
+            if reader_mode == 'new':
+                facts = json.loads(fresh('read-evidence', operationId=operation_id,
+                    evidenceId=packet['nativeFactsEvidence']['evidenceId'], maxChars=16000)['structuredContent']['text'])
+                self.assertEqual(facts['turns'][0]['items'][0]['text'], 'Persistent original item')
+        if reader_mode == 'drift':
+            review = waiting['reviewRequest']
+            rejected = fresh('review', operationId=operation_id, reviewId=review['reviewId'],
+                observationSha256=review['observationSha256'], decision='allow', sourceRef='fixed-reader-review')
+            self.assertTrue(rejected['isError'], rejected)
+            stopped = fresh('inspect', operationId=operation_id)['structuredContent']
+            self.assertEqual(stopped['writer'], original_writer)
+            self.assertEqual(stopped['targetRecoveryResource']['state'], 'closed')
+            return
         if mode == 'cancel':
             stopped = fresh('cancel', operationId=operation_id, reason='Stop administrative recovery')['structuredContent']
             self.assertEqual(stopped['writer'], 'target')
@@ -4230,6 +4312,11 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
         self.assertEqual(sum(json.loads(line)['method']=='turn/start' for line in (self.root/'native-wire.jsonl').read_text().splitlines()), before_turns)
         state = json.loads(fresh('read-evidence', operationId=operation_id,
             evidenceId=done['stateEvidence']['sha256'], maxChars=16000)['structuredContent']['text'])
+        if reader_mode:
+            self.assertEqual(state['reconciliation']['nativeReader'], packet['nativeReader'])
+            self.assertEqual(state['reconciliation']['nativeReadRequest']['connectionId'], packet['nativeReader']['connectionId'])
+            self.assertEqual(state['reconciliation']['nativeReadRequest']['hostVersion'], packet['nativeReader']['hostVersion'])
+            self.assertNotEqual(state['reconciliation']['nativeReadRequest']['requestId'], packet['readRequest']['requestId'])
         self.assertEqual(state['failure'], state['reconciliation']['originalFailure'])
         self.assertEqual(state['plan']['deadlineMs'], contract['deadlineMs'])
         self.assertEqual(state['reconciliation']['originalDeadlineMs'], contract['deadlineMs'])
