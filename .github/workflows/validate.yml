@@ -72,6 +72,7 @@ jobs:
           tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_case_bindings_do_not_count_as_accepted_evidence
           tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_historical_generic_cases_can_be_admitted_without_closing_current_requirements
           tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_entry_coverage_rejects_missing_stale_and_weakened_matrices
+          tests.product.test_admission.CurrentDevelopmentEvidenceTests.test_whole_host_parent_reuses_complete_original_with_fresh_current_review
       - name: Check native fixture path assumptions before the full suite
         run: >-
           python -B -m unittest -v

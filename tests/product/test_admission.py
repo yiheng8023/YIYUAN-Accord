@@ -1926,12 +1926,26 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             contract, case, record, base = self.parent_fixture(case_id)
             frozen = self.canonical_bytes(record)
             original_case = copy.deepcopy(case)
+            original_conditions = {}
+            pending = [("", original_case["conditions"])]
+            while pending:
+                pointer, value = pending.pop()
+                if isinstance(value, (dict, list)) and value:
+                    items = value.items() if isinstance(value, dict) else enumerate(value)
+                    pending.extend((pointer + "/" + str(key).replace("~", "~0").replace("/", "~1"), child)
+                                   for key, child in items)
+                else:
+                    original_conditions[pointer] = value
+            original_stage_seconds = original_case["conditions"]["currentDecisionBinding"]["limits"][
+                "sameWholeStageWallSeconds"]
             def observer(request):
                 result = base(request)
                 if request["phase"] == "observe":
                     material = result["parentApplicability"][case_id]
                     self.assertEqual(len(material["predicateBindings"]), 35)
-                    self.assertEqual(len(material["conditionBindings"]), 60)
+                    self.assertEqual(len(material["conditionBindings"]), len(original_conditions))
+                    self.assertEqual({row["pointer"]: row["originalValue"]
+                                      for row in material["conditionBindings"]}, original_conditions)
                     self.assertEqual(len(material["roles"]), 9)
                     self.assertNotEqual(record["packageSha256"], material["current"]["packageSha256"])
                     material["relationships"] = []
@@ -1947,8 +1961,8 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     for row in historical:
                         row.update(role=root["id"], responsibility="historical-execution")
                     stage = next(row for row in historical if row["pointer"].endswith("/sameWholeStageWallSeconds"))
-                    self.assertEqual(stage["originalValue"], 3600)
-                    self.assertEqual(stage["currentValue"], 3600)
+                    self.assertEqual(stage["originalValue"], original_stage_seconds)
+                    self.assertEqual(stage["currentValue"], original_stage_seconds)
                     for bundle in (result["reviewBundle"], material["reviewBundle"]):
                         for review in bundle["reviews"]:
                             review["reviewedAt"] = Later.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -1972,7 +1986,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def test_whole_host_parent_rejects_unbound_original_current_and_recheck(self):
         case_id = "v33-whole-host-lifecycle-current-development-02"
         variants = ("function-channel", "claim", "role", "fake-current-actor", "predicate", "authority", "cleanup", "condition",
-                    "observer", "time", "episode", "old-package", "old-stage", "delta", "current-package",
+                        "observer", "time", "episode", "old-package", "old-stage", "current-stage", "delta", "current-package",
                     "context", "source-kind", "digest", "review-subject", "expired-review", "current-review",
                     "recheck-package", "recheck-context", "recheck-roles", "recheck-predicates", "recheck-conditions", "recheck-digest")
         with self.history():
@@ -2013,9 +2027,10 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                         result["records"][0]["observedAt"] = datetime.fromisoformat(record["observedAt"]).strftime("%Y-%m-%dT%H:%M:%SZ")
                     elif kind == "episode": result["records"][0]["episodeId"] = "new-execution"
                     elif kind == "old-package": result["records"][0]["packageSha256"] = material["current"]["packageSha256"]
-                    elif kind == "old-stage":
+                    elif kind in ("old-stage", "current-stage"):
                         next(row for row in material["conditionBindings"] if row["pointer"].endswith(
-                            "/sameWholeStageWallSeconds"))["originalValue"] = 7200
+                            "/sameWholeStageWallSeconds"))[
+                                "originalValue" if kind == "old-stage" else "currentValue"] = 7200
                     elif kind == "delta": material["differences"].pop()
                     elif kind == "current-package": material["current"]["packageSha256"] = record["packageSha256"]
                     elif kind == "context": material["current"]["context"]["entry"]["value"] = "cx-cli"
