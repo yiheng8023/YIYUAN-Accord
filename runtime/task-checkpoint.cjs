@@ -49,8 +49,8 @@ function nativeInputDiagnostic(error) {
   const value = nativeInputFailures.get(error);
   return value ? {...value} : null;
 }
-function failNativeInput(stage, reason) {
-  const error = new Error('native-input-evidence-unavailable');
+function failNativeInput(stage, reason, turnConflict = false) {
+  const error = new Error(turnConflict ? 'native-call-turn-conflict' : 'native-input-evidence-unavailable');
   nativeInputFailures.set(error, Object.freeze({
     stage: stage === 'commit-recheck' ? 'commit-recheck' : 'initial-validation',
     readerReason: nativeInputReaderReasons.has(reason) ? reason : 'reader-reason-unavailable'}));
@@ -581,13 +581,15 @@ function turnProofBasis(input, request, evidence, state = null) {
         ({promptSha256, turnId, recordSha256, sourceRef}))},
     acceptedExecution: {turnId: execution.turnId, model: execution.model}};
 }
-function associateCurrentTurn(input, request, state = null) {
+function associateCurrentTurn(input, request, state = null, stage = 'initial-validation') {
   const evidence = inputEvidence(input, request, null, null, state);
+  if (evidence.state !== 'observed') failNativeInput(stage, evidence.reason, true);
   const proof = turnProofBasis(input, request, evidence, state);
   if (!proof || !evidence.latestInputReconciled) return null;
   const association = nativeTurnAssociation(proof.binding, request.currentHost, proof.promptHash,
     proof.captured, proof.acceptedExecution, proof.sourceScan);
-  return association.state === 'observed' ? association : null;
+  if (association.state !== 'observed') failNativeInput(stage, association.reason, true);
+  return association;
 }
 function requireNativeTurn(request, input, expectedCursor = null, stage = 'initial-validation', state = null) {
   if (!request || !Object.hasOwn(request, 'nativeTurnId')) return;
@@ -595,7 +597,7 @@ function requireNativeTurn(request, input, expectedCursor = null, stage = 'initi
   const observed = input?.nativeInputReconciliation?.turnId ?? input?.hostObservation?.turnId ??
     (input?.inputSource === 'host-continuation' ? null : input?.turnId);
   if (!text(expected) || expected.length > 200) fail('native-call-turn-conflict');
-  if (expected !== observed && (request.currentHost?.turnId !== expected || !associateCurrentTurn(input, request, state))) {
+  if (expected !== observed && (request.currentHost?.turnId !== expected || !associateCurrentTurn(input, request, state, stage))) {
     fail('native-call-turn-conflict');
   }
   const evidence = inputEvidence(input, request, expectedCursor, null, state);
