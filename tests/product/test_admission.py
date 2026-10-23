@@ -2417,10 +2417,11 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
     def test_current_applicability_window_covers_observe_recheck_and_final_checks(self):
         from yiyuan_accord import admission
         limit = min(case['maxAgeSeconds'] for case in self.contract['acceptance']['admission']['cases'])
-        for stage in ('observe', 'recheck', 'final'):
+        for stage in ('observe', 'recheck', 'final', 'criterion-source'):
             clock = [0]
             rechecked = [False]
             original_subject = admission.evidence_subject
+            original_git = admission._git
 
             def observer(request):
                 result = self.observer(request)
@@ -2435,13 +2436,55 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     clock[0] = limit
                 return original_subject(root)
 
+            def git(root, *args):
+                result = original_git(root, *args)
+                if (stage == 'criterion-source' and args[0] == 'show'
+                        and args[-1].endswith(':docs/operations/ACCEPTANCE-v3.3.md')):
+                    clock[0] = limit
+                return result
+
             with self.subTest(stage=stage), patch('yiyuan_accord.admission.monotonic',
                     side_effect=lambda: clock[0], create=True), patch(
-                    'yiyuan_accord.admission.evidence_subject', side_effect=subject):
+                    'yiyuan_accord.admission.evidence_subject', side_effect=subject), patch(
+                    'yiyuan_accord.admission._git', side_effect=git):
                 report = self.assess(observer=observer)
                 self.assertEqual(report['acceptedCases'], [])
                 self.assertTrue(all('current-applicability-expired' in reasons
                                     for reasons in report['caseRejections'].values()))
+
+    def test_current_subject_and_checkout_checked_after_criterion_sources(self):
+        from yiyuan_accord import admission
+        for change in ('subject', 'dirty'):
+            changed = [False]
+            original_git = admission._git
+            original_subject = admission.evidence_subject
+            original_clean = admission.clean_git_checkout
+
+            def git(root, *args):
+                result = original_git(root, *args)
+                if (args[0] == 'show'
+                        and args[-1].endswith(':docs/operations/ACCEPTANCE-v3.3.md')):
+                    changed[0] = True
+                return result
+
+            def subject(root):
+                value = original_subject(root)
+                return {**value, 'tree': '0' * 40} if change == 'subject' and changed[0] else value
+
+            def clean(root):
+                return not (change == 'dirty' and changed[0]) and original_clean(root)
+
+            with self.subTest(change=change), patch('yiyuan_accord.admission._git', side_effect=git), patch(
+                    'yiyuan_accord.admission.evidence_subject', side_effect=subject), patch(
+                    'yiyuan_accord.admission.clean_git_checkout', side_effect=clean):
+                report = self.assess(observer=self.observer)
+                self.assertTrue(changed[0])
+                self.assertEqual(report['acceptedCases'], [])
+                self.assertFalse(report['functionalCompletion'])
+                self.assertFalse(report['candidateEligible'])
+                self.assertIn('evidence observer unavailable, invalid or subject changed', report['errors'])
+                if change == 'dirty':
+                    self.assertFalse(report['checkoutClean'])
 
     def test_current_applicability_expiry_is_case_scoped_and_rejects_clock_rollback(self):
         contract = copy.deepcopy(self.contract)

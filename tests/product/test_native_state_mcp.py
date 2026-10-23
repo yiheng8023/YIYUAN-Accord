@@ -244,6 +244,141 @@ class NativeIntegrationFinalizeTests(unittest.TestCase):
         self.assertEqual(saved['resources'], app._close_record)
 
 
+class NativeIntegrationFinishTests(unittest.TestCase):
+    owned_names = ('home', 'workspace', 'state', 'temp', 'marketplace')
+
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory(prefix='native-finish-regression-')
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name).resolve()
+        self.sources = self.root / 'executed-source'
+        self.sources.mkdir()
+        self.source = self.sources / 'source.py'
+        self.source.write_bytes(b'fixed executed source\n')
+        for name in (*self.owned_names, 'retained'):
+            (self.root / name).mkdir()
+        self.original = self.root / 'workspace/keep.txt'
+        self.original.write_bytes(b'preserve exact original\r\n')
+        self.original_bytes = self.original.read_bytes()
+        self.manifest = {'sources': {'source.py': self.sha(self.source)},
+                         'protectedSha256': self.sha(self.original)}
+        self.saved_pass_observations = []
+        self.result = {'status': 'body-completed', 'providerRequests': 3,
+                       'resources': {'forced': False, 'exitCode': 0,
+                                     'after': {'processGroupState': 'absent'}}}
+        self.host = mock.Mock(save=self.save, _remove_owned_tree=self.remove)
+        patch = mock.patch.dict(globals(), ROOT=self.sources)
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    @staticmethod
+    def sha(path):
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+
+    def save(self, path, value):
+        self.assertEqual(path.parent, self.root)
+        if path.name == 'result.json' and value.get('status') == 'passed':
+            # A published final pass must observe all actual tail consequences.
+            self.assertTrue(all(not (self.root/name).exists() for name in self.owned_names))
+            self.assertEqual(self.sha(self.root/'retained/keep.txt'), self.manifest['protectedSha256'])
+            self.assertEqual(self.sha(self.source), self.manifest['sources']['source.py'])
+            self.saved_pass_observations.append(True)
+        path.write_text(json.dumps(value), encoding='utf-8')
+
+    def remove(self, path):
+        self.assertEqual(path.resolve().parent, self.root)
+        self.assertIn(path.name, self.owned_names)
+        shutil.rmtree(path)
+
+    def finish(self):
+        return _finish_native_integration(self.result, self.root, self.host,
+            self.manifest, self.original, scoped_hook=False)
+
+    def saved(self):
+        return json.loads((self.root/'result.json').read_text(encoding='utf-8'))
+
+    def assert_failed(self, exception):
+        saved = self.saved()
+        self.assertEqual(saved['status'], 'failed')
+        self.assertEqual(saved['failure'], type(exception).__name__)
+        self.assertEqual(saved['reason'], str(exception))
+        self.assertIn('ownedDirectoryCleanup', saved['remainingResponsibilities'])
+        self.assertNotIn('sessionEndRetirement', saved['remainingResponsibilities'])
+        self.assertEqual(self.saved_pass_observations, [])
+        return saved
+
+    def test_final_source_failure_preserves_original_and_all_cleanup_responsibilities(self):
+        self.source.write_bytes(b'changed after body checks\n')
+        with self.assertRaises(RuntimeError) as raised:
+            self.finish()
+        saved = self.assert_failed(raised.exception)
+        progress = saved['finalizationProgress']
+        self.assertFalse(progress['sourceVerified'])
+        self.assertFalse(progress['originalRetained'])
+        self.assertEqual(progress['completedRemovals'], [])
+        self.assertIsNone(progress['attemptedRoot'])
+        self.assertEqual(self.original.read_bytes(), self.original_bytes)
+        self.assertTrue(all((self.root/name).is_dir() for name in self.owned_names))
+        self.assertFalse((self.root/'cleanup.json').exists())
+
+    def test_partial_directory_cleanup_keeps_original_error_and_actual_progress(self):
+        partial = self.root/'state/partially-removed.txt'
+        partial.write_bytes(b'owned partial cleanup fixture')
+        original_remove = self.host._remove_owned_tree
+
+        def remove_with_partial_failure(path):
+            if path.name == 'state':
+                partial.unlink()  # Effects can occur before the operation raises.
+                raise OSError('fixed state cleanup failure after a partial effect')
+            original_remove(path)
+
+        self.host._remove_owned_tree = remove_with_partial_failure
+        with self.assertRaisesRegex(OSError, 'fixed state cleanup failure') as raised:
+            self.finish()
+        saved = self.assert_failed(raised.exception)
+        progress = saved['finalizationProgress']
+        self.assertTrue(progress['sourceVerified'])
+        self.assertTrue(progress['originalRetained'])
+        self.assertEqual(progress['completedRemovals'], ['home', 'workspace'])
+        self.assertEqual(progress['attemptedRoot'], 'state')
+        self.assertFalse((self.root/'home').exists())
+        self.assertFalse((self.root/'workspace').exists())
+        self.assertFalse(partial.exists())
+        self.assertTrue(all((self.root/name).is_dir() for name in ('state', 'temp', 'marketplace')))
+        self.assertEqual((self.root/'retained/keep.txt').read_bytes(), self.original_bytes)
+        self.assertFalse((self.root/'cleanup.json').exists())
+
+    def test_complete_real_filesystem_tail_is_saved_passed_only_after_all_checks(self):
+        self.finish()
+        saved = self.saved()
+        self.assertEqual(saved['status'], 'passed')
+        self.assertEqual(saved['providerRequests'], 3)
+        self.assertEqual(self.saved_pass_observations, [True])
+        progress = saved['finalizationProgress']
+        self.assertTrue(progress['sourceVerified'])
+        self.assertTrue(progress['originalRetained'])
+        self.assertEqual(progress['completedRemovals'], list(self.owned_names))
+        self.assertTrue(all(not (self.root/name).exists() for name in self.owned_names))
+        self.assertEqual((self.root/'retained/keep.txt').read_bytes(), self.original_bytes)
+        cleanup = json.loads((self.root/'cleanup.json').read_text(encoding='utf-8'))
+        self.assertEqual(cleanup['removed'], [str(self.root/name) for name in self.owned_names])
+        self.assertTrue(cleanup['originalRetained'])
+        self.assertFalse(cleanup['userHomeTouched'])
+
+    def test_original_changed_after_body_is_not_copied_as_the_protected_original(self):
+        self.original.write_bytes(b'changed during natural close')
+        with self.assertRaises(RuntimeError) as raised:
+            self.finish()
+        saved = self.assert_failed(raised.exception)
+        progress = saved['finalizationProgress']
+        self.assertTrue(progress['sourceVerified'])
+        self.assertFalse(progress['originalRetained'])
+        self.assertEqual(progress['completedRemovals'], [])
+        self.assertIsNone(progress['attemptedRoot'])
+        self.assertTrue(all((self.root/name).is_dir() for name in self.owned_names))
+        self.assertFalse((self.root/'cleanup.json').exists())
+
+
 class NativeStateMcpTests(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(prefix='accord-native-state-mcp-')
@@ -4934,6 +5069,65 @@ def _finalize_native_integration(result, app, fixture, root, host, *, body_faile
                            ', '.join(item['stage'] for item in cleanup_failures))
 
 
+def _finish_native_integration(result, root, host, manifest, original, *, scoped_hook=False):
+    """Save a terminal verdict only after the existing postchecks and owned cleanup."""
+    names = ('home', 'workspace', 'state', 'temp', 'marketplace')
+    progress = {'stage': 'scoped-receipt-check', 'sourceVerified': False,
+                'originalRetained': False, 'completedRemovals': [], 'attemptedRoot': None}
+    result.update(status='finalizing', finalizationProgress=progress)
+    sha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
+    try:
+        if scoped_hook:
+            if list((root/'state').iterdir()):
+                raise RuntimeError('native SessionEnd did not retire the scoped receipt')
+            result['scopedReceiptRetired'] = True
+        progress['stage'] = 'final-source-check'
+        if any(sha(ROOT/name) != digest for name, digest in manifest['sources'].items()):
+            raise RuntimeError('execution sources changed during the episode')
+        progress['sourceVerified'] = True
+        progress['stage'] = 'original-retention'
+        if sha(original) != manifest['protectedSha256']:
+            raise RuntimeError('protected original changed before retention')
+        retained = root/'retained/keep.txt'
+        shutil.copy2(original, retained)
+        if sha(retained) != manifest['protectedSha256'] or sha(original) != manifest['protectedSha256']:
+            raise RuntimeError('protected original retention mismatch')
+        progress['originalRetained'] = True
+        progress['stage'] = 'owned-directory-cleanup'
+        for name in names:
+            target = root/name
+            if target.resolve() != target or target.parent != root:
+                raise ValueError('unsafe cleanup target')
+            progress['attemptedRoot'] = name
+            host._remove_owned_tree(target)
+            progress['completedRemovals'].append(name)
+            progress['attemptedRoot'] = None
+        progress['stage'] = 'cleanup-receipt'
+        host.save(root/'cleanup.json', {'removed': [str(root/name) for name in names],
+                                      'originalRetained': True, 'userHomeTouched': False})
+        progress['stage'] = 'final-result'
+        result.update(status='passed')
+        result.pop('remainingResponsibilities', None)
+        host.save(root/'result.json', result)
+    except BaseException as error:
+        result.update(status='failed', failure=type(error).__name__, reason=str(error))
+        remaining = {'finalizationEvidence': 'not-completed; see finalizationProgress and original error'}
+        if not progress['sourceVerified']:
+            remaining['finalSourceCheck'] = 'not-completed'
+        if scoped_hook and not result.get('scopedReceiptRetired'):
+            remaining['sessionEndRetirement'] = 'not-completed; actual retirement unknown'
+        if len(progress['completedRemovals']) < len(names):
+            remaining['ownedDirectoryCleanup'] = {
+                'remainingOrUnknown': [name for name in names if name not in progress['completedRemovals']],
+                'attemptedRootEffect': 'unknown' if progress['attemptedRoot'] else 'not-dispatched'}
+        result['remainingResponsibilities'] = remaining
+        try:
+            host.save(root/'result.json', result)
+        except BaseException as save_error:
+            raise error from save_error
+        raise
+
+
 def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, scoped_hook=False):
     """Native metadata and host denial or adapter rejection; fixed replies, no model."""
     sys.path.insert(0, str(ROOT))
@@ -5142,7 +5336,7 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, s
                 or {p.name:sha(p) for p in (root/'state').iterdir()} != state_before):
             raise RuntimeError('cache replacement changed original or task state')
         if len(fixture.requests) != 3 or fixture.auth_seen: raise RuntimeError('provider bounds differ')
-        result.update(status='passed', threadId=thread, turnId=turn, nativeCall=call,
+        result.update(status='body-completed', threadId=thread, turnId=turn, nativeCall=call,
             nativeManageCall=manage_call, manageDisposition=manage_disposition,
             providerRequests=len(fixture.requests), sourceSettings=started,
             claimLimit='Native plugin MCP registration and declared host-approval boundary. A denied/rejected write request is neither business success nor a completed state change; no real model judgment, GUI adoption or handoff dispatch. Process-scoped fixture preapproval, when selected, is not a user permission or product default.')
@@ -5156,22 +5350,7 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, s
     finally:
         _finalize_native_integration(result, app, fixture, root, host,
                                      body_failed=body_failed, scoped_hook=scoped_hook)
-    if scoped_hook:
-        if list((root/'state').iterdir()):
-            result.update(status='failed', reason='native SessionEnd did not retire the scoped receipt')
-            host.save(root/'result.json', result)
-            raise RuntimeError(result['reason'])
-        result['scopedReceiptRetired'] = True
-        host.save(root/'result.json', result)
-    if any(sha(ROOT/name) != digest for name,digest in manifest['sources'].items()):
-        raise RuntimeError('execution sources changed during the episode')
-    shutil.copy2(original, root/'retained/keep.txt')
-    removed=[]
-    for name in ('home','workspace','state','temp','marketplace'):
-        target=root/name
-        if target.resolve() != target or target.parent != root: raise ValueError('unsafe cleanup target')
-        host._remove_owned_tree(target); removed.append(str(target))
-    host.save(root/'cleanup.json',{'removed':removed,'originalRetained':True,'userHomeTouched':False})
+    _finish_native_integration(result, root, host, manifest, original, scoped_hook=scoped_hook)
     print(json.dumps({'status':result['status'],'providerRequests':len(fixture.requests),
                       'realModelCalls':0,'resources':result['resources']},ensure_ascii=False))
 

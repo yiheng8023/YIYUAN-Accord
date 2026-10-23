@@ -1471,6 +1471,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
         "scenarios": set(),
     }
     admitted, package_reuse, current_applicability, parent_applicability = set(), {}, {}, {}
+    criterion_sources = {}
     if observer is not None:
         try:
             if not callable(observer):
@@ -1695,6 +1696,27 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     admitted.remove(key)
                     reject_case(key, "current-conditions-changed")
                     case_errors.append(f"{key}: current conditions changed or unavailable")
+            # Criterion reads belong to the same observe-through-final-check
+            # window as the other source reads, before the final subject guards.
+            if policy["schema"] == CURRENT_SCHEMA:
+                for requirement in policy["acceptanceRequirements"]:
+                    for obligation in requirement.get("outcomeObligations", []):
+                        source_key = (obligation["source"]["path"], obligation["source"]["anchor"])
+                        if source_key in criterion_sources or not any(
+                                key in admitted and case["scope"] == obligation["scope"]
+                                and obligation["claim"] in case["claims"]
+                                and obligation["source"]["path"] in case["oracleFiles"]
+                                and (_outcome_value(case["expected"], obligation["pointer"]) is True
+                                     or obligation["id"] in applicable.get(key, {}).get("derivedOutcomes", []))
+                                for key, case in cases.items()):
+                            continue
+                        try:
+                            source = _git(root, "show", f"{subject['revision']}:{source_key[0]}").decode("utf-8")
+                            # Identity only; source interpretation remains a review duty.
+                            criterion_sources[source_key] = re.search(
+                                r"(?<![A-Za-z0-9_-])" + re.escape(source_key[1]) + r"(?![A-Za-z0-9_-])", source) is not None
+                        except (OSError, subprocess.SubprocessError, ValueError, UnicodeError):
+                            criterion_sources[source_key] = False
             if evidence_subject(root) != subject:
                 raise ValueError("subject changed during observation")
             _git(root, "diff", "--quiet", "--no-ext-diff", "--no-textconv", subject["revision"], "--")
@@ -1800,7 +1822,6 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
         # Only a source-bound true consequence in that same scope/claim can
         # discharge an obligation. A generic healthy/no-action contribution
         # remains admitted without standing in for an unobserved capability.
-        criterion_sources = {}
         derived_cases = {**current_applicability, **parent_applicability}
         for requirement in policy["acceptanceRequirements"]:
             if "outcomeObligations" not in requirement:
@@ -1818,17 +1839,6 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 source_cases = [case for case in candidates
                     if obligation["source"]["path"] in case["oracleFiles"]]
                 source_key = (obligation["source"]["path"], obligation["source"]["anchor"])
-                if source_cases and source_key not in criterion_sources:
-                    try:
-                        source = _git(root, "show", f"{subject['revision']}:{source_key[0]}").decode("utf-8")
-                        # Bind an exact criterion identifier in the committed
-                        # oracle source. Interpretation and complete source-to-
-                        # outcome mapping remain independent review duties; no
-                        # particular document format or A05 wording is assumed.
-                        criterion_sources[source_key] = re.search(
-                            r"(?<![A-Za-z0-9_-])" + re.escape(source_key[1]) + r"(?![A-Za-z0-9_-])", source) is not None
-                    except (OSError, subprocess.SubprocessError, ValueError, UnicodeError):
-                        criterion_sources[source_key] = False
                 supported = bool(source_cases) and criterion_sources.get(source_key, False)
                 if not supported:
                     missing_obligations[requirement["id"]].append(obligation["id"])
