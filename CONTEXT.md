@@ -115,7 +115,7 @@ A cohesive responsibility-bearing unit whose narrow interface hides substantial
 policy, state, evidence and lifecycle detail. A native or external capability
 may fill a module role through an adapter without becoming Accord-owned code.
 _Source_: `product/reshaping-guidance.json#/selfBootstrappingCore/productFormRule`,
-`product/reshaping-guidance.json#/selfBootstrappingCore/referenceCore`
+`product/reshaping-guidance.json#/selfBootstrappingCore/referenceCoreImplementation`
 _Avoid_: one file per module, public internals, ownership by participation
 
 **Interface and adapter seam**:

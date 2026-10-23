@@ -3476,7 +3476,17 @@ class EntryTests(unittest.TestCase):
 
 
 
-    def sample_fixture(self, root, *, stem="native-receipt-1"):
+    def sample_release(self, *, pid=1, exit_code=124, controller=None):
+        controller = controller or entry._controller_kind()
+        after = ({"activeProcesses": 0} if controller == "windows-job-object" else
+                 {"controller": controller, "activeProcesses": None,
+                  "processGroupState": "absent", "processGroupId": pid,
+                  "rootPid": pid, "rootExitCode": exit_code, "observationError": None})
+        return {"controller": controller, "evidenceScope": entry._resource_scope(controller),
+                "pid": pid, "after": after,
+                "remainingOwnedProcesses": 0 if controller == "windows-job-object" else None}
+
+    def sample_fixture(self, root, *, stem="native-receipt-1", controller=None):
         samples = [{"time": i, "processes": [{"pid": i + 1, "name": "x" * 40000}]}
                    for i in range(3)]
         sink = entry.ResourceSamples(root, stem)
@@ -3484,29 +3494,31 @@ class EntryTests(unittest.TestCase):
             sink.append(sample)
         record = {"stage": 1, "valid": False, "threadId": "native-thread",
                   "exitCode": 124, "forced": True, "failure": "usage-limit",
-                  "controller": "windows-job-object", "remainingOwnedProcesses": 0,
-                  "evidenceScope": entry._resource_scope("windows-job-object"),
-                  "pid": 1, "after": {"activeProcesses": 0}, **sink.record()}
+                  **self.sample_release(controller=controller), **sink.record()}
         path = root / (stem + ".json")
         entry._save_control(path, record)
         return samples, record, path
 
     def test_samples_preserve_large_and_small(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp).resolve()
-            small = entry.ResourceSamples(root, "resources")
-            small.append({"time": 1, "processes": []})
-            self.assertEqual(small.record(), {"samples": [{"time": 1, "processes": []}]})
-            samples, record, path = self.sample_fixture(root)
-            loaded = entry._read_observer_record(path)
-            self.assertEqual(loaded, record)
-            ref = loaded["sampleEvidence"]
-            rows = [row for chunk in ref["chunks"]
-                    for row in json.loads((root / chunk["path"]).read_bytes())]
-            self.assertEqual(rows, samples)
-            self.assertEqual(ref["count"], len(samples))
-            self.assertLess(path.stat().st_size, entry.RESOURCE_INLINE_BYTES)
-            self.assertNotIn("samples", loaded)
+        for controller in ("windows-job-object", "posix-session-process-group"):
+            with self.subTest(controller=controller), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                small = entry.ResourceSamples(root, "resources")
+                small.append({"time": 1, "processes": []})
+                self.assertEqual(small.record(), {"samples": [{"time": 1, "processes": []}]})
+                samples, record, path = self.sample_fixture(root, controller=controller)
+                loaded = entry._read_observer_record(path)
+                self.assertEqual(loaded, record)
+                self.assertTrue(entry._entry_resources_released(loaded, {
+                    "resourceController": controller,
+                    "resourceEvidenceScope": entry._resource_scope(controller)}))
+                ref = loaded["sampleEvidence"]
+                rows = [row for chunk in ref["chunks"]
+                        for row in json.loads((root / chunk["path"]).read_bytes())]
+                self.assertEqual(rows, samples)
+                self.assertEqual(ref["count"], len(samples))
+                self.assertLess(path.stat().st_size, entry.RESOURCE_INLINE_BYTES)
+                self.assertNotIn("samples", loaded)
 
     def test_samples_reject_bad_refs(self):
         for fault in ("hash", "bytes", "count", "total-count", "total-bytes",
@@ -3590,8 +3602,7 @@ class EntryTests(unittest.TestCase):
             samples = [{"sample": "x" * 900000, "ordinal": i} for i in range(10)]
             stage = result["stages"][0]
             stage.update(samples=samples, failure="usage-limit", exitCode=124, forced=True, valid=False,
-                         controller="windows-job-object", remainingOwnedProcesses=0,
-                         pid=1, after={"activeProcesses": 0}, stage=1)
+                         stage=1, **self.sample_release())
             result.update(caseComplete=False, completedStages=0)
             native = {key: value for key, value in stage.items()
                       if key not in ("fileObservation", "nativeGoalObservation")}
@@ -3616,6 +3627,16 @@ class EntryTests(unittest.TestCase):
     def test_samples_legacy_bound(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
+            control = {"label": "\u4e2d", "payload": ""}
+            encoded = lambda: (json.dumps(control, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+            control["payload"] = "x" * (8 * 1024 * 1024 - len(encoded()))
+            entry._save_control(root / "exact.json", control)
+            self.assertEqual((root / "exact.json").read_bytes(), encoded())
+            self.assertEqual(len(encoded()), 8 * 1024 * 1024)
+            control["payload"] += "x"
+            with self.assertRaisesRegex(ValueError, "size-limit"):
+                entry._save_control(root / "over.json", control)
+            self.assertFalse((root / "over.json").exists())
             oversized = {"schema": "accord-codex-persistent-exec/v1", "stages": [],
                          "unrelated": "x" * (8 * 1024 * 1024)}
             entry.save(root / "result.json", oversized)
@@ -3658,8 +3679,13 @@ class EntryTests(unittest.TestCase):
                 evidence = Path(manifest["evidence"])
                 process, job = Mock(returncode=124, pid=1234), Mock()
                 process.poll.return_value = None
-                sample = {"activeProcesses": 1, "payload": "x" * 70000}
-                cleanup = ({"activeProcesses": 1}, {"activeProcesses": 0}, True, None)
+                after = self.sample_release(pid=1234)["after"]
+                sample = {**after, "payload": "x" * 70000}
+                if entry._controller_kind() == "windows-job-object":
+                    sample["activeProcesses"] = 1
+                else:
+                    sample.update(processGroupState="alive", rootExitCode=None)
+                cleanup = (sample, after, True, None)
                 with patch.object(entry, "RESOURCE_SAMPLE_BYTES", 100000), \
                         patch.object(entry, "_new_controller", return_value=job), \
                         patch.object(entry, "_sample_resources", return_value=sample), \
@@ -3689,6 +3715,58 @@ class EntryTests(unittest.TestCase):
                     entry.save(path, record)
                     with self.assertRaisesRegex(ValueError, "cannot claim success"):
                         entry._read_observer_record(path)
+
+
+
+    def test_group_stat_bounds(self):
+        import io
+        from types import SimpleNamespace
+        from scripts.observe_codex_entry import _linux_group_members
+        def stat(pid=77, pgid=77):
+            tail = ["S", "1", str(pgid), "77"] + ["0"] * 15 + ["123"]
+            return (str(pid) + " (short ) comm) " + " ".join(tail)).encode()
+        for fault in ("none", "other", "race", "read", "oversized", "entries", "time", "members"):
+            with self.subTest(fault=fault):
+                values = iter([77, 78]) if fault == "race" else None
+                getpgid = lambda pid: next(values) if values else (1 if fault in ("other","entries") else 77)
+                count = 513 if fault == "entries" else 33 if fault == "members" else 1
+                directory = Mock()
+                directory.__enter__ = Mock(return_value=iter(SimpleNamespace(name=str(77+i)) for i in range(count)))
+                directory.__exit__ = Mock(return_value=False)
+                def opened(path, mode):
+                    if fault == "read": raise PermissionError()
+                    return io.BytesIO(b"x"*4097 if fault == "oversized" else stat(int(path.parent.name)))
+                clock = iter([0, 1]) if fault == "time" else None
+                with patch.object(entry.sys, "platform", "linux"), \
+                        patch.object(entry.os, "scandir", return_value=directory), \
+                        patch.object(entry.os, "getpgid", side_effect=getpgid, create=True), \
+                        patch.object(Path, "open", opened), \
+                        patch.object(entry.time, "monotonic", side_effect=lambda: next(clock) if clock else 0):
+                    value = _linux_group_members(77)
+                self.assertLess(len(json.dumps(value)), 8192)
+                self.assertLessEqual(value["scanned"], 512)
+                self.assertLessEqual(len(value["members"]), 32)
+                self.assertEqual(value["state"], "observed" if fault in ("none", "other") else "unknown")
+                if fault == "none": self.assertEqual(value["members"][0]["starttime"], 123)
+                if fault == "other": self.assertEqual(value["members"], [])
+
+    def test_group_probe_timeout(self):
+        group = entry.PosixProcessGroup.__new__(entry.PosixProcessGroup)
+        group.pgid = 77
+        for failure in (None, subprocess.TimeoutExpired("reader", .2), OSError()):
+            with patch.object(entry.sys, "platform", "linux"), \
+                    patch.object(entry.time, "monotonic", return_value=10), \
+                    patch.object(entry.subprocess, "run", side_effect=failure,
+                        return_value=argparse.Namespace(returncode=0, stdout=b'{"state":"observed","pgid":77,"members":[]}')) as run:
+                value = group.diagnose_members(10.2)
+                self.assertLessEqual(run.call_args.kwargs["timeout"], .2 + 1e-9)
+                self.assertEqual(value["state"], "unknown" if failure else "observed")
+        for platform, deadline in (("win32", 11), ("darwin", 11), ("linux", 10)):
+            with patch.object(entry.sys, "platform", platform), \
+                    patch.object(entry.time, "monotonic", return_value=10), \
+                    patch.object(entry.subprocess, "run") as run:
+                self.assertEqual(group.diagnose_members(deadline)["state"], "unknown")
+                run.assert_not_called()
 
 
 class ResourceExecutionBindingTests(unittest.TestCase):

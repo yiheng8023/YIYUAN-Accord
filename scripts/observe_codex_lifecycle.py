@@ -1314,9 +1314,10 @@ class _App:
         manifest = self.manifest if manifest is None else manifest
         forced = False
         force_observations = []
+        members_observed = False
 
         def force_owned(reason, before=None):
-            nonlocal forced
+            nonlocal forced, members_observed
             observed = {"reason": reason, "observedAt": time.time()}
             for field, read in (
                 ("rootExitCode", lambda: self.process.poll()),
@@ -1333,7 +1334,16 @@ class _App:
                     observed.setdefault("observationErrors", {})[field] = detail
             force_observations.append(observed)
             forced = True
-            self.job.terminate()
+            try:
+                if (not members_observed and reason != "owned-listener-stop"
+                        and sys.platform.startswith("linux") and isinstance(self.job, PosixProcessGroup)):
+                    members_observed = True
+                    try:
+                        observed["groupMembers"] = self.job.diagnose_members(recovery_deadline)
+                    except Exception:
+                        observed["groupMembers"] = {"state": "unknown"}
+            finally:
+                self.job.terminate()
 
         try:
             recovery_deadline = time.monotonic() + manifest["limits"]["recoverySeconds"]

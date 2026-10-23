@@ -201,6 +201,13 @@ class NativeIntegrationFinalizeTests(unittest.TestCase):
         self.assertEqual(self.result()['status'], 'failed')
         self.assertEqual(self.result()['cleanupFailures'][0]['stage'], 'resource.release')
         self.host._released.assert_not_called()
+        self.assertEqual(set(self.result()['remainingResponsibilities']),
+                         {'finalSourceCheck', 'ownedDirectoryCleanup'})
+        with self.assertRaisesRegex(RuntimeError, 'cleanup failed'):
+            _finalize_native_integration({'status': 'passed'}, app, self.fixture,
+                                         self.root, self.host, body_failed=False, scoped_hook=True)
+        self.assertEqual(self.result()['remainingResponsibilities']['sessionEndRetirement'],
+                         'not-executed; actual retirement unknown')
 
     def test_unobserved_release_cannot_be_saved_as_passed(self):
         app = mock.Mock()
@@ -4879,7 +4886,7 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
                     self.assertFalse(value['diagnostic']['observations'][-1]['gates']['noPendingInputs'])
 
 
-def _finalize_native_integration(result, app, fixture, root, host, *, body_failed):
+def _finalize_native_integration(result, app, fixture, root, host, *, body_failed, scoped_hook=False):
     """Retain the body outcome and every available native release receipt."""
     cleanup_failures = []
 
@@ -4911,6 +4918,12 @@ def _finalize_native_integration(result, app, fixture, root, host, *, body_faile
     if cleanup_failures:
         result['status'] = 'failed'
         result['cleanupFailures'] = cleanup_failures
+    if body_failed or cleanup_failures:
+        result['remainingResponsibilities'] = {
+            'finalSourceCheck': 'not-executed',
+            'ownedDirectoryCleanup': 'not-executed; home/workspace/state/temp/marketplace retained'}
+        if scoped_hook:
+            result['remainingResponsibilities']['sessionEndRetirement'] = 'not-executed; actual retirement unknown'
     try:
         host.save(root/'result.json', result)
     except BaseException:
@@ -5142,7 +5155,7 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, s
         raise
     finally:
         _finalize_native_integration(result, app, fixture, root, host,
-                                     body_failed=body_failed)
+                                     body_failed=body_failed, scoped_hook=scoped_hook)
     if scoped_hook:
         if list((root/'state').iterdir()):
             result.update(status='failed', reason='native SessionEnd did not retire the scoped receipt')

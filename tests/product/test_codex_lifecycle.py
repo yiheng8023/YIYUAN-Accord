@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 import sys
 import time
 import textwrap
@@ -1489,6 +1489,34 @@ class CodexLifecycleTests(unittest.TestCase):
                 self.assertTrue(record['forced'])
                 self.assertTrue(record['readerStopped'])
                 self.assertTrue(lifecycle._record_released(record, manifest))
+
+    def test_linux_group_diagnostic_interrupt_still_forces_owned_cleanup(self):
+        calls = []
+        class Job(lifecycle.PosixProcessGroup):
+            def __init__(self): pass
+            def sample(self): return {'activeProcesses': None}
+            def diagnose_members(self, deadline): raise KeyboardInterrupt('diagnostic interrupted')
+            def terminate(self): calls.append('terminate')
+            def close(self): calls.append('close')
+        with tempfile.TemporaryDirectory() as tmp:
+            app = lifecycle._App.__new__(lifecycle._App)
+            app.manifest = {'limits': {'recoverySeconds': 2}}
+            app.root, app.job = Path(tmp), Job()
+            app.process = Mock()
+            app.process.poll.return_value = app.process.wait.return_value = 0
+            app.process.stdin, app.process.stdout = io.BytesIO(), io.BytesIO()
+            app.reader = Mock()
+            app.reader.is_alive.return_value = False
+            app.stderr, app.stdout = io.BytesIO(), io.BytesIO()
+            app._closed, app._close_record, app.hot_arguments = False, None, None
+            with patch.object(lifecycle.sys, 'platform', 'linux'), \
+                    patch.object(lifecycle, '_begin_release', return_value={}), \
+                    patch.object(lifecycle, '_wait_job', return_value={'activeProcesses': 1}):
+                with self.assertRaisesRegex(KeyboardInterrupt, 'diagnostic interrupted'):
+                    app.close()
+            self.assertEqual(calls, ['terminate', 'close'])
+            self.assertTrue(app._closed)
+            self.assertIsNone(app._close_record)
 
     def test_prepare_rejects_nested_evidence_and_run_rejects_changed_owned_home(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -147,7 +147,7 @@ def digest(path, *, os_shell=False):
 
 
 def save(path, value):
-    Path(path).write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    Path(path).write_bytes((json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
 
 
 
@@ -357,7 +357,7 @@ def _save_control(path, value):
     raw = (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
     if len(raw) > 8 * 1024 * 1024:
         raise ValueError("control-record-size-limit")
-    Path(path).write_bytes(raw)
+    save(path, value)
 
 
 def _usage_caps(caps):
@@ -1363,6 +1363,52 @@ class WindowsJob:
             self.handle = None
 
 
+
+def _linux_group_members(pgid, proc=Path("/proc")):
+    """Bounded racing metadata only; never proof of ownership or release."""
+    result = {"state": "unknown", "pgid": pgid, "members": [], "scanned": 0}
+    if not sys.platform.startswith("linux") or type(pgid) is not int or pgid <= 0:
+        return result
+    deadline = time.monotonic() + .1
+    try:
+        with os.scandir(proc) as entries:
+            for item in entries:
+                if result["scanned"] >= 512 or time.monotonic() >= deadline:
+                    return result
+                result["scanned"] += 1
+                if not item.name.isascii() or not item.name.isdecimal():
+                    continue
+                pid = int(item.name)
+                try:
+                    if os.getpgid(pid) != pgid:
+                        continue
+                    with (proc / item.name / "stat").open("rb") as stream:
+                        raw = stream.read(4097)
+                    left, right = raw.find(b"("), raw.rfind(b")")
+                    tail = raw[right+2:].split()
+                    if len(raw) > 4096 or left < 1 or right <= left or len(tail) < 20:
+                        return result
+                    if int(raw[:left]) != pid or int(tail[2]) != pgid or os.getpgid(pid) != pgid:
+                        return result
+                    row = {"pid": pid, "ppid": int(tail[1]), "pgid": int(tail[2]),
+                           "sid": int(tail[3]), "state": tail[0].decode("ascii"),
+                           "starttime": int(tail[19]),
+                           "comm": "".join(c if c.isprintable() else "?" for c in
+                                          raw[left+1:right].decode("utf-8", "replace")[:16])}
+                    if len(result["members"]) >= 32:
+                        return result
+                    result["members"].append(row)
+                    if len(json.dumps(result).encode()) > 8192:
+                        result["members"].pop()
+                        return result
+                except (OSError, ValueError, UnicodeError):
+                    return result
+        result["state"] = "observed"
+    except OSError:
+        pass
+    return result
+
+
 class PosixProcessGroup:
     """A caller-created session/group, not kernel descendant containment.
 
@@ -1416,6 +1462,28 @@ class PosixProcessGroup:
                 "observationError": observation_error,
                 "lastObservationError": self.last_observation_error,
                 "evidenceScope": "direct child exit and same process group only; escaped descendants, CPU and memory unobserved"}
+
+
+    def diagnose_members(self, deadline):
+        # Isolate a stuck /proc read. The timeout bounds communication, not OS spawn time.
+        unknown = {"state": "unknown", "pgid": self.pgid, "members": []}
+        remaining = min(.25, deadline - time.monotonic())
+        if not sys.platform.startswith("linux") or self.pgid is None or remaining <= 0:
+            return unknown
+        code = ("import json,runpy,sys; m=runpy.run_path(sys.argv[1]); "
+                "print(json.dumps(m['_linux_group_members'](int(sys.argv[2]))))")
+        try:
+            read = subprocess.run([sys.executable, "-B", "-c", code, __file__, str(self.pgid)],
+                stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                start_new_session=True, timeout=remaining, check=False)
+            if read.returncode or len(read.stdout) > 8192:
+                return unknown
+            value = json.loads(read.stdout)
+            if value.get("pgid") == self.pgid and value.get("state") in ("observed", "unknown"):
+                return value
+        except Exception:
+            pass
+        return unknown
 
     def terminate(self):
         if self.pgid is not None and not self.absent:
