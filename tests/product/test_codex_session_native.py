@@ -584,6 +584,17 @@ def _inspect_source_context_exchange(root, thread_id, turn_id, count):
 
 def _inspect_source_restore(root: Path, manifest: dict, post: dict,
                             envelope: dict, config: dict):
+    if (not isinstance(manifest.get("sourceHashes"), dict)
+            or set(manifest["sourceHashes"]) != set(SOURCE_FILES)
+            or any(_sha(root / "retained/executed-sources" / name) != expected
+                   for name, expected in manifest["sourceHashes"].items())
+            or post.get("sourceHashesAfter") != manifest["sourceHashes"]
+            or post.get("codexSha256After") != manifest.get("identities", {}).get("codex", {}).get("sha256")
+            or post.get("nodeSha256After") != manifest.get("identities", {}).get("node", {}).get("sha256")):
+        raise ValueError("restored source frozen execution identity differs")
+    if (not _version_record_ok(root, manifest, "source", "codex")
+            or not _version_record_ok(root, manifest, "node", "node")):
+        raise ValueError("restored source executable version identity differs")
     restore = manifest.get("restore", {})
     portable = _ordinary_dir(root / "retained/prior-evidence")
     previous_manifest = _read_json(portable / "manifest.json")
@@ -1403,6 +1414,43 @@ def native_integration(codex_value, evidence_value, restore_from=None,
 
 
 class CodexSessionNativeOfflineTests(unittest.TestCase):
+
+    def test_source_restore_checks_execution_identity_before_portable_reads(self):
+        from unittest.mock import patch
+        source_hashes = {name: "a" * 64 for name in SOURCE_FILES}
+        identities = {name: {"sha256": name + "-hash"} for name in ("codex", "node")}
+        version_calls = []
+
+        def inspect(change=None):
+            manifest = {"sourceHashes": dict(source_hashes), "identities": identities}
+            post = {"sourceHashesAfter": dict(source_hashes),
+                    "codexSha256After": "codex-hash", "nodeSha256After": "node-hash"}
+            if change == "source-set-missing":
+                manifest["sourceHashes"] = post["sourceHashesAfter"] = {}
+            if change in ("codex-after-drift", "node-after-drift"):
+                post[change.split("-", 1)[0] + "Sha256After"] = "changed"
+
+            def version_record(root, observed, role, name):
+                version_calls.append((role, name))
+                return change != "version-" + role
+
+            def portable_read(_):
+                raise RuntimeError("past existing execution identity guards")
+
+            with patch.dict(_inspect_source_restore.__globals__, {
+                    "_sha": lambda _: "b" * 64 if change == "frozen-source-drift" else "a" * 64,
+                    "_version_record_ok": version_record, "_ordinary_dir": portable_read}):
+                _inspect_source_restore(Path("unused"), manifest, post, {}, {})
+
+        for change in ("frozen-source-drift", "source-set-missing",
+                       "codex-after-drift", "node-after-drift", "version-source", "version-node"):
+            with self.subTest(change=change), self.assertRaisesRegex(ValueError, "execution identity|version identity"):
+                inspect(change)
+        version_calls.clear()
+        with self.assertRaisesRegex(RuntimeError, "past existing execution identity guards"):
+            inspect()
+        self.assertEqual(version_calls, [("source", "codex"), ("node", "node")])
+
     def test_hot_sequence_is_bound_to_original_source_without_downgrade(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
