@@ -3433,8 +3433,18 @@ process.stdout.write(JSON.stringify({originalVersion,before,after,expectedDiagno
             postRelease='Complete the remaining review.', deadlineMs=int(time.time()*1000)+20000,
             authoritySourceRef='native-user-input:fixture', quiescenceSourceRef='drain.json')
 
-    def execution_until(self, call, operation_id, predicate):
-        deadline = time.monotonic()+8
+    def execution_failure_context(self, value):
+        closed = value.get('nativeClosed')
+        closed = closed if isinstance(closed, dict) else {}
+        pending = value.get('pendingEffect')
+        pending = pending if isinstance(pending, dict) else {}
+        return json.dumps({'phase': value.get('phase'), 'failure': value.get('failure'),
+            'busy': value.get('busy'), 'pendingKind': pending.get('kind'),
+            'nativeClosed': {key: closed.get(key) for key in
+                ('closed', 'forced', 'exitCode', 'exitObserved', 'closeObserved')}}, sort_keys=True)
+
+    def execution_until(self, call, operation_id, predicate, *, timeout=8):
+        deadline = time.monotonic()+timeout
         while time.monotonic() < deadline:
             reply = call('inspect', operationId=operation_id)
             self.assertFalse(reply['isError'], reply)
@@ -3442,7 +3452,7 @@ process.stdout.write(JSON.stringify({originalVersion,before,after,expectedDiagno
             if predicate(value):
                 return value
             time.sleep(0.02)
-        self.fail('fixed execution did not reach expected bounded phase')
+        self.fail('fixed execution did not reach expected bounded phase: '+self.execution_failure_context(value))
 
     def test_execution_wire_responds_while_inventory_waits(self):
         _, responses, send, _ = self.start_execution_wire()
@@ -3587,6 +3597,62 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
                     self.assertEqual(value['reason'], 'EEXIST' if row['mode']=='collision' else 'current-source-not-executable')
                     if row['mode']=='invalid': self.assertEqual(row['mkdir'], 0)
 
+    def test_recovery_initialization_retains_recorder_cleanup_owner(self):
+        # Actual wrapper; synthetic state/handles and Map storage, no native work.
+        script = r"""
+const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path'),crypto=require('node:crypto');
+const file=process.argv[1],raw=fs.readFileSync(file,'utf8'),hash=x=>crypto.createHash('sha256').update(x).digest('hex');
+const boom=code=>Object.assign(Error(code),{code}),forbid=()=>{throw boom('NATIVE_FORBIDDEN');};
+(async()=>{const rows=[];for(const mode of ['ok','io','quota','save','once','always']){
+ const cwd=path.resolve('memory-work'),store=path.resolve('memory-store'),id='11111111-1111-4111-8111-111111111111';
+ const source={threadId:'root',sessionTreeId:'root',turnId:'t',callId:'c',model:'m',hostVersion:'v'};
+ const state={phase:'held',source,scopeRef:'s'},body=Buffer.from(JSON.stringify(state)),digest=hash(body);
+ const lease={scopeRef:'s',transferId:id},record={revision:1,state,lease};
+ const dir=path.join(store,'native-executions',hash(JSON.stringify({threadId:'root',cwd})),id),status=path.join(dir,'status.json');
+ const original=JSON.stringify({operationId:id,source,phase:'held',stateEvidence:{evidenceId:digest,sha256:digest}});
+ const mem=new Map([[status,Buffer.from(original)],[path.join(dir,digest+'.json'),body]]),handles=[];
+ if(mode==='quota')for(let n=0;n<4;n++)mem.set(path.join(dir,String(n).repeat(64)+'.json'),Buffer.alloc(4194304-(n===3?512:0)));
+ const disk={existsSync:p=>mem.has(p)||!/[.](json|sqlite|tmp)$/.test(p),realpathSync:p=>p,
+ lstatSync:p=>({isDirectory:()=>!mem.has(p),isFile:()=>mem.has(p),isSymbolicLink:()=>false,nlink:1,size:mem.get(p)?.length||0}),
+ readdirSync:()=>[...mem.keys()].map(p=>path.basename(p)),readFileSync:p=>mem.get(p),
+ writeFileSync(p,b){if(['io','once','always'].includes(mode))throw boom('EIO');mem.set(p,Buffer.from(b));},
+ openSync:p=>{if(mode==='save')throw boom('ENOSPC');return p;},fsyncSync(){},closeSync(){},
+ renameSync(a,b){mem.set(b,mem.get(a));mem.delete(a);},unlinkSync:p=>mem.delete(p)};
+ const open=()=>{const h={calls:0,closed:false},n=handles.push(h);return{inspectExternalStopped:()=>record,close(){h.calls++;if(n===2&&(mode==='always'||mode==='once'&&h.calls===1))throw boom('CLOSE_FAILED');h.closed=true;}};};
+ const snapshot={mode:'active',epoch:'e',revision:1,checkpoint:{canContinue:true},checkpointSource:{sha256:digest},inputReceipt:{present:true},hostObservationCurrent:true,currentInputReconciled:true,
+ nativeInputEvidence:{state:'observed',latestInputReconciled:true,latestNativeInputsComplete:true,pendingInputs:[]},inspection:{inputs:[]}};
+ const maps=[],OwnedMap=class extends Map{constructor(){super();maps.push(this);}};
+ const box={module:{exports:{}},process,Buffer,TextDecoder,Map:OwnedMap,setTimeout,clearTimeout,
+ require:n=>n==='node:fs'?disk:n==='node:child_process'?{spawn:forbid,spawnSync:forbid}:n==='./carrier-recorder.cjs'?{openCarrierRecorder:open}:n.startsWith('./')?{}:require(n)};
+ vm.runInNewContext(raw,box,{filename:file});const e=box.module.exports.createNativeTaskExecution({sourceOf:()=>source,readState:()=>snapshot,storageRoot:store,nativeFactory:forbid});
+ const old={id,dir,cwd,source,stateEvidence:{evidenceId:digest,sha256:digest},recorderClosed:true,recorder:{close(){}},engine:{inspect:()=>state}};maps[0].set(id,old);
+ const request={arguments:{action:'reconcile',cwd,operationId:id,epoch:'e',expectedRevision:1,recordRevision:1,recordSha256:digest,leaseSha256:hash(JSON.stringify(lease)),deadlineMs:Date.now()+10000}};
+ let result,retry,handleCount,afterRetryHandles,unchanged,closed;try{result=await e.call(request);
+ if(['once','always'].includes(mode)){handleCount=handles.length;retry=await e.call(request);afterRetryHandles=handles.length;}
+ unchanged=maps[0].get(id)===old&&mem.get(status).toString()===original&&mem.get(path.join(dir,digest+'.json')).equals(body);
+ }finally{closed=await e.close();}rows.push({mode,result,retry,handleCount,afterRetryHandles,unchanged,handles,closed});
+ }console.log(JSON.stringify(rows));})().catch(e=>{console.error(e);process.exitCode=1;});
+"""
+        run = subprocess.run([self.node, '-e', script, str(BRIDGE.with_name('native-task-execution.cjs'))],
+                             capture_output=True, text=True, encoding='utf-8', timeout=10)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        for row in json.loads(run.stdout):
+            with self.subTest(mode=row['mode']):
+                mode, value = row['mode'], row['result']['value']
+                self.assertEqual(row['result']['isError'], mode != 'ok', row)
+                if mode != 'ok':
+                    self.assertTrue(row['unchanged'], row)
+                    self.assertEqual(value['reason'], {'quota': 'execution-evidence-limit', 'save': 'ENOSPC'}.get(mode, 'EIO'))
+                if mode in ('once', 'always'):
+                    self.assertEqual(value.get('recorderCleanup'), {'state': 'close-unverified', 'code': 'CLOSE_FAILED'})
+                    self.assertTrue(row['retry']['isError'], row)
+                    self.assertEqual(row['retry']['value']['reason'], 'recovery-resource-unverified', row)
+                    self.assertEqual(row['afterRetryHandles'], row['handleCount'], row)
+                    self.assertEqual(row['handles'][1]['calls'], 2, row)
+                self.assertEqual(row['handles'][1]['closed'], mode != 'always', row)
+                if mode == 'always':
+                    self.assertTrue(any(x.get('state') == 'cleanup-unverified' for x in row['closed']), row)
+
     def test_execution_wire_requires_current_source_before_any_native_start(self):
         _, _, _, call = self.start_execution_wire()
         result = call('prepare', epoch='missing', expectedRevision=0, scopeRef='scope', model='fixture',
@@ -3631,8 +3697,8 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
         process.stdin.close(); process.wait(timeout=5)
         self.assertEqual(process.returncode, 0)
 
-    def execution_accept(self, call, operation_id, stage):
-        waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+    def execution_accept(self, call, operation_id, stage, *, timeout=8):
+        waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None, timeout=timeout)
         review = waiting['reviewRequest']
         self.assertEqual(review['stage'], stage)
         result = call('review', operationId=operation_id, reviewId=review['reviewId'],
@@ -3679,13 +3745,13 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             'outputs': [{'path': 'review.json', 'expectedSha256': None, 'expectedEffect': 'Two fixed fixture writes'}]})
         return contract
 
-    def execution_intake(self, call, contract):
+    def execution_intake(self, call, contract, *, timeout=8):
         reply = call('prepare', **contract)
         self.assertFalse(reply['isError'], reply)
         operation_id = reply['structuredContent']['operationId']
         for stage in ('prepare', 'target-created'):
-            self.execution_accept(call, operation_id, stage)
-        self.execution_until(call, operation_id, lambda x: x['phase']=='awaiting-intake-review')
+            self.execution_accept(call, operation_id, stage, timeout=timeout)
+        self.execution_until(call, operation_id, lambda x: x['phase']=='awaiting-intake-review', timeout=timeout)
         return operation_id
 
     def test_execution_workspace_actual_policy_denials_hold_without_writes(self):
@@ -4397,6 +4463,8 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
     def check_target_effect_reconciliation(self, mode):
         contract = self.execution_write_contract()
         capacity = mode.startswith('source-intake-capacity')
+        # Full-capacity filesystem verification has a separate prospective fixture budget.
+        phase_timeout = 30 if capacity else 8
         protected_inputs = ['drain.json']
         if capacity:
             for index in range(98):
@@ -4411,35 +4479,35 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             self.assertEqual(len(current['checkpoint']['inputs']), 99)
             self.assertEqual(len(current['checkpoint']['outputs']), 1)
             contract.update(epoch=current['epoch'], expectedRevision=current['revision'],
-                            deadlineMs=int(time.time()*1000)+20000)
+                            deadlineMs=int(time.time()*1000)+60000)
         policy_mode = {'source-policy': 'policy-readonly', 'source-policy-missing': 'policy-missing', 'source-requirements': 'requirements-deny',
                        'source-policy-commit-denied': 'workspace-write',
                        'source-policy-reader-prior-connection': 'policy-readonly'}.get(mode)
         source_intake = mode.startswith('source-intake') or policy_mode is not None
         process, _, _, call = self.start_execution_wire(peer_mode=policy_mode or ('normal' if source_intake else 'write-ack-loss' if mode=='ack-loss' else 'write-interrupted'))
-        operation_id = self.execution_intake(call, contract)
+        operation_id = self.execution_intake(call, contract, timeout=phase_timeout)
         if policy_mode:
             call('commit', operationId=operation_id)
-            self.execution_accept(call, operation_id, 'write-prepare')
+            self.execution_accept(call, operation_id, 'write-prepare', timeout=phase_timeout)
             if mode == 'source-policy-commit-denied':
-                waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None)
+                waiting = self.execution_until(call, operation_id, lambda x: x['reviewRequest'] is not None, timeout=phase_timeout)
                 review = waiting['reviewRequest']
                 self.assertEqual(review['stage'], 'commit')
                 call('review', operationId=operation_id, reviewId=review['reviewId'],
                      observationSha256=review['observationSha256'], decision='deny', sourceRef='fixed-commit-denial')
-            old = self.execution_until(call, operation_id, lambda x: x['phase']=='held')
+            old = self.execution_until(call, operation_id, lambda x: x['phase']=='held', timeout=phase_timeout)
         elif not source_intake:
             call('commit', operationId=operation_id)
             for stage in ('write-prepare', 'commit'):
-                self.execution_accept(call, operation_id, stage)
+                self.execution_accept(call, operation_id, stage, timeout=phase_timeout)
         if source_intake and not policy_mode:
             old = call('cancel', operationId=operation_id, reason='Actual user pause after read-only intake')['structuredContent']
         elif mode == 'ack-loss':
             self.execution_until(call, operation_id, lambda x: x['writer']=='target' and x['pendingEffect']
-                and x['pendingEffect']['method']=='turn/start' and x['pendingEffect']['requestRef'])
+                and x['pendingEffect']['method']=='turn/start' and x['pendingEffect']['requestRef'], timeout=phase_timeout)
             old = call('cancel', operationId=operation_id, reason='Inspect uncertain ACK and actual partial effects')['structuredContent']
         else:
-            old = self.execution_until(call, operation_id, lambda x: x['phase']=='held')
+            old = self.execution_until(call, operation_id, lambda x: x['phase']=='held', timeout=phase_timeout)
         process.stdin.close(); process.wait(timeout=5)
         original_writer = 'source' if source_intake else 'target'
         self.assertEqual(old['writer'], original_writer)
@@ -4472,7 +4540,7 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
         self.env.pop('ACCORD_TEST_READER_CONNECTION_ID', None)
         old = fresh('inspect', operationId=operation_id)['structuredContent']
         basis = old.get('targetReconciliationBasis')
-        self.assertIsNotNone(basis, 'known-stopped target has no typed effect reconciliation basis')
+        self.assertIsNotNone(basis, 'known-stopped target has no typed effect reconciliation basis: '+self.execution_failure_context(old))
         effect = self.work/'effects.json'
         effect_ref = 'effects.json'
         effect.write_text(json.dumps({'kind': 'external-target-effects/v1', 'operationId': operation_id,
@@ -4518,7 +4586,7 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             nextAction='Reconcile actual effects without replay', canContinue=True, **revised_inputs)['isError'])
         current = self.native_input_preview()
         args = dict(operationId=operation_id, epoch=current['epoch'], expectedRevision=current['revision'],
-            deadlineMs=int(time.time()*1000)+20000, writerDisposition='target-retained' if mode in ('target-retained', 'source-intake-grant-target') else 'source-current', effectSourceRef=effect_ref, **basis)
+            deadlineMs=int(time.time()*1000)+(60000 if capacity else 20000), writerDisposition='target-retained' if mode in ('target-retained', 'source-intake-grant-target') else 'source-current', effectSourceRef=effect_ref, **basis)
         if mode == 'stale':
             args['recordRevision'] += 1
         if mode == 'paused':
@@ -4544,7 +4612,7 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             return
         self.assertFalse(reply['isError'], reply)
         waiting = self.execution_until(fresh, operation_id, lambda x: x['reviewRequest'] is not None or
-            x['phase'] in ('held', 'cancelled-held') and not x['busy'])
+            x['phase'] in ('held', 'cancelled-held') and not x['busy'], timeout=phase_timeout)
         if reader_mode in ('empty', 'old-connection', 'prior-connection', 'bad-ref', 'missing', 'wrong', 'duplicate', 'extra', 'nonterminal'):
             self.assertIn(waiting['failure'], ('target-reader-identity-changed', 'target-activity-unresolved', 'target-terminal-evidence-mismatch'))
             self.assertEqual(waiting['writer'], original_writer)
@@ -4633,12 +4701,12 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             rejected = fresh('review', operationId=operation_id, reviewId=review['reviewId'],
                 observationSha256=review['observationSha256'], decision='allow', sourceRef='stale-independent-judgment')
             self.assertTrue(rejected['isError'], rejected)
-            held = self.execution_until(fresh, operation_id, lambda x: x['phase'] in ('held', 'cancelled-held'))
+            held = self.execution_until(fresh, operation_id, lambda x: x['phase'] in ('held', 'cancelled-held'), timeout=phase_timeout)
             self.assertEqual(held['writer'], original_writer)
             self.assertEqual(held['targetRecoveryResource']['state'], 'closed')
             return
-        self.execution_accept(fresh, operation_id, 'external-known-stopped-target')
-        done = self.execution_until(fresh, operation_id, lambda x: x['phase']=='external-target-reconciled')
+        self.execution_accept(fresh, operation_id, 'external-known-stopped-target', timeout=phase_timeout)
+        done = self.execution_until(fresh, operation_id, lambda x: x['phase']=='external-target-reconciled', timeout=phase_timeout)
         self.assertEqual(done['writer'], 'target' if mode=='target-retained' else 'source')
         self.assertEqual(done['scopeBinding']['requestedScope'], contract['scopeRef'])
         if source_intake:
@@ -4664,7 +4732,7 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
         self.assertEqual(state['reconciliation']['currentSource']['turnId'], 'target-recovery-turn')
         if mode == 'ack-loss':
             self.assertEqual(state['reconciliation']['originalPendingEffect']['requestRef']['method'], 'turn/start')
-        contract.update(epoch=current['epoch'], expectedRevision=current['revision'], deadlineMs=int(time.time()*1000)+20000)
+        contract.update(epoch=current['epoch'], expectedRevision=current['revision'], deadlineMs=int(time.time()*1000)+(60000 if capacity else 20000))
         contract['writeScope']['outputs'][0]['expectedSha256'] = hashlib.sha256(old_bytes).hexdigest() if old_bytes is not None else None
         again = fresh('prepare', **contract)
         if mode == 'target-retained':
@@ -4676,10 +4744,10 @@ for(const mode of ['open','scope','engine','close','scope-close','nonempty','rem
             contract['deadlineMs'] = int(time.time()*1000)+60000
             for number in range(14):
                 transient = fresh('prepare', **{**contract, 'scopeRef': 'denied-after-recovery-'+str(number)})['structuredContent']['operationId']
-                request = self.execution_until(fresh, transient, lambda x: x['reviewRequest'] is not None)['reviewRequest']
+                request = self.execution_until(fresh, transient, lambda x: x['reviewRequest'] is not None, timeout=phase_timeout)['reviewRequest']
                 fresh('review', operationId=transient, reviewId=request['reviewId'],
                     observationSha256=request['observationSha256'], decision='deny', sourceRef='fixed-denial')
-                self.execution_until(fresh, transient, lambda x: x['phase']=='held' and not x['busy'])
+                self.execution_until(fresh, transient, lambda x: x['phase']=='held' and not x['busy'], timeout=phase_timeout)
             following = fresh('prepare', **contract)
             self.assertFalse(following['isError'], following)
             self.assertEqual(fresh('inspect', operationId=operation_id)['structuredContent']['controllerState'], 'not-owned-current-process')

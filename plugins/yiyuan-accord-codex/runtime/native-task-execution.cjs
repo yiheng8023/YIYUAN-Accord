@@ -144,6 +144,7 @@ function createNativeTaskExecution(options) {
       hostVersion});
   });
   const slots = new Map(), capabilitiesPending = new Set(), requestOperations = new Map();
+  const pendingRecorderClosures = new Map();
   let closing = false;
   function rootSource(params) {
     const source = sourceOf(params);
@@ -308,6 +309,7 @@ function createNativeTaskExecution(options) {
   }
   function beginReconciliation(slot, args, source, target = false) {
     if (slot.review || slot.engine?.inspect().busy || slot.recovery?.committing || slot.recovery?.reading) fail('operation-busy');
+    if (pendingRecorderClosures.has(slot.dir)) fail('recovery-resource-unverified');
     const resource = slot.targetRecoveryResource || slot.saved?.targetRecoveryResource;
     if (resource && resource.state !== 'closed') fail('recovery-resource-unverified');
     if ((slot.targetSettlementAttempt || slot.saved?.targetSettlementAttempt)?.state === 'outcome-unknown') fail('target-settlement-unknown');
@@ -333,30 +335,44 @@ function createNativeTaskExecution(options) {
       if (target && hash(JSON.stringify(targetMaterial(fresh, observation))) !== recovery.materialSha256) fail('target-effects-or-invariants-changed');
       return now;
     };
-    if (target) {
-      try { recovery.material = targetMaterial(fresh, currentObserved); }
-      catch (error) { fresh.recorder.close(); throw error; }
-      recovery.materialSha256 = hash(JSON.stringify(recovery.material));
-      slots.set(slot.id, fresh);
-      recovery.timer = setTimeout(() => stop(fresh, 'Target reconciliation expired').catch(() => {}), args.deadlineMs - Date.now());
-      recovery.reading = true;
-      fresh.running = prepareTargetReview(fresh).catch(async error => {
+    // Until registration succeeds, this frame owns the new recorder. Keep the
+    // old slot unchanged; no timer or native reader starts before the handoff.
+    let registered = false;
+    try {
+      if (target) {
+        recovery.material = targetMaterial(fresh, currentObserved);
+        recovery.materialSha256 = hash(JSON.stringify(recovery.material));
+        recovery.reading = true;
+      } else {
+        const evidence = putEvidence(fresh, {stage: 'external-known-stopped', original: {state: original.record.state, ...original.basis},
+          currentSource: source, currentBasis: current, currentContract: currentObserved.snapshot.checkpoint,
+          currentContractSource: currentObserved.snapshot.checkpointSource, reconciliationDeadlineMs: args.deadlineMs,
+          requiredJudgment: 'Independently verify current authority and original pause disposition, old actor quiescence, target initialization effects, resource closure and source-retained ownership. No target turn is replayed.'});
+        fresh.review = {id: crypto.randomUUID(), stage: 'external-known-stopped', evidence, reject() {}};
+      }
+      const summary = save(fresh);
+      slots.set(slot.id, fresh); registered = true;
+      recovery.timer = setTimeout(() => stop(fresh, target ? 'Target reconciliation expired' : 'Reconciliation review expired').catch(() => {}), args.deadlineMs - Date.now());
+      if (target) fresh.running = prepareTargetReview(fresh).catch(async error => {
         retainSourceFailure(fresh, error);
         fresh.failure ||= safeCode(error); recovery.view = original.record.state;
         if (!recovery.reader) fresh.targetRecoveryResource = {state: 'unverified', process: error.processState || null};
         try { await closeTargetReader(fresh); } finally { fresh.recorder.close(); fresh.recorderClosed = true; }
       }).finally(() => { recovery.reading = false; save(fresh); if (fresh.recorderClosed) releaseRequests(fresh); });
-      return save(fresh);
+      return summary;
+    } catch (error) {
+      if (!registered) {
+        try { fresh.recorder.close(); }
+        catch (closeError) {
+          pendingRecorderClosures.set(slot.dir, fresh.recorder);
+          try { Object.defineProperty(error, 'recorderCleanup', {value:
+            {state: 'close-unverified', code: safeCode(closeError)}, configurable: true}); } catch (_) {}
+        }
+      }
+      throw error;
     }
-    const evidence = putEvidence(fresh, {stage: 'external-known-stopped', original: {state: original.record.state, ...original.basis},
-      currentSource: source, currentBasis: current, currentContract: currentObserved.snapshot.checkpoint,
-      currentContractSource: currentObserved.snapshot.checkpointSource, reconciliationDeadlineMs: args.deadlineMs,
-      requiredJudgment: 'Independently verify current authority and original pause disposition, old actor quiescence, target initialization effects, resource closure and source-retained ownership. No target turn is replayed.'});
-    fresh.review = {id: crypto.randomUUID(), stage: 'external-known-stopped', evidence, reject() {}};
-    recovery.timer = setTimeout(() => stop(fresh, 'Reconciliation review expired').catch(() => {}), args.deadlineMs - Date.now());
-    slots.set(slot.id, fresh);
-    return save(fresh);
   }
+
   function evidenceObject(slot, id) {
     if (!/^[a-f0-9]{64}$/.test(id || '')) fail('invalid-recovery-evidence');
     const bytes = readFile(path.join(slot.dir, id + '.json'));
@@ -845,8 +861,11 @@ function createNativeTaskExecution(options) {
       const result = await stop(slot, 'MCP transport closed');
       slot.recorder.close(); slot.recorderClosed = true; return result;
     }));
+    const recorderResults = await Promise.allSettled([...pendingRecorderClosures].map(async ([dir, recorder]) => {
+      recorder.close(); pendingRecorderClosures.delete(dir); return {state: 'preparation-recorder-closed'};
+    }));
     await Promise.allSettled([...capabilitiesPending]);
-    return results.map(row => row.status === 'fulfilled' ? row.value : {state: 'cleanup-unverified'});
+    return [...results, ...recorderResults].map(row => row.status === 'fulfilled' ? row.value : {state: 'cleanup-unverified'});
   }
   return Object.freeze({call, close, observe, cancelRequest});
 }

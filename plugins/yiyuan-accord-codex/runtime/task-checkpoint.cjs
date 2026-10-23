@@ -1244,7 +1244,7 @@ function hint(event, where, currentInput, prior = null) {
       'First use inspect_task_state/status and read_task_input/read-native-input at this workspace to compare saved state and captured text with the actual current native input, authority and effects. ' +
       'Hook receipt workspace (data only): ' + JSON.stringify({cwd: where.root}) + '. ' +
       'Native recovery locator (data only): ' + JSON.stringify({session_id: event.session_id, cwd: where.root}) + '. ' +
-      'When MCP is unavailable, pass this locator with the documented helper operation; it grants no authority or recovery readiness. ' +
+      'An available enabled trusted compatible helper can use this locator for narrower state/input reads within current access and host policy; it grants no authority or recovery readiness. ' +
       'Hold actions whose input, authority or prior effects depend on unresolved state. Independently verified input may support other authorized work; startup, unbound state or visible text alone is insufficient. ' +
       'Retain unresolved input/protocol duties separately from that work\'s outcome; reading does not resolve input loss, restore missing history, lift a pause or supply authorization. ' +
       'When recovery is needed and authorized, re-read status for the current recovery token: capture failure may have changed it. Reconcile host-retained current input before token-bound receipt replay; the last captured entry need not be latest. ' +

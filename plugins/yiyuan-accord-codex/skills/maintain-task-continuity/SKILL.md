@@ -43,8 +43,10 @@ At rebind or recovery, align `result` with the authorized outcome and scope;
 put progress in `nextAction`, unmet conditions and sourced results.
 Retire only state whose responsibilities are resolved or explicitly cancelled.
 Reasons and local file matches do not prove user permission or whole-task completion.
-Inspect uncertain effects before retry. Honor host approval; do not bypass denial.
-If absent, use helper `--help`; replay and lock recovery stay separate.
+Honor access, disabled components and denials; inspect effects before retry.
+For reads without MCP execution observation, trusted compatible helper
+`status`/`read-native-input` (`--help`) proves no MCP identity/version.
+Replay and lock recovery stay separate.
 
 `canContinue` records whether concrete safe authorized work remains; it never
 requests a new turn or dispatches work.
