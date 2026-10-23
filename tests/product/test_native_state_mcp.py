@@ -5441,6 +5441,12 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, s
             result['hookTrust'] = trust
         else:
             extra += ['-c','features.hooks=false']
+        # The shared handler can protectively stop owned execution, so reads no
+        # longer claim read-only approval. Only these isolated fixed-response
+        # probes preapprove the two named reads; user/default policy is untouched.
+        for tool in ('inspect_task_state', 'read_task_input'):
+            extra += ['-c', f'plugins.yiyuan-accord-codex@yiyuan-accord.mcp_servers.accord-state.tools.{tool}.approval_mode="approve"']
+        result['readApproval'] = 'isolated-process-preapproval-of-two-named-state-reads'
         if preapprove_owned_manage_tool:
             # Official per-tool setting, only in this isolated test process. The
             # rejected pause has no receipt and cannot create checkpoint state.
