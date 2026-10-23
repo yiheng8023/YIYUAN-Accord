@@ -1497,6 +1497,63 @@ process.stdout.write(JSON.stringify({result,changed}));
                     self.assertEqual(evidence['reason'], 'native-input-origin-unavailable')
                 shutil.rmtree(self.state)
 
+    def test_native_origin_preserves_bound_compaction_and_rejects_other_prefix_effects(self):
+        for kind in ('matching', 'foreign-thread', 'foreign-turn', 'missing-item-id',
+                     'other-item', 'human', 'interrupt'):
+            with self.subTest(kind=kind):
+                if self.state.exists(): shutil.rmtree(self.state)
+                self.native_context()
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                original = self.helper({'op': 'status'}, session=meta['thread_id'])
+                contract = dict(result='Preserve paused work', inputs=[],
+                    outputs=[{'path': 'report.txt'}], nextAction='Wait for the user', canContinue=False)
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                payload = {'type': 'item_completed', 'thread_id': meta['thread_id'],
+                    'turn_id': meta['turn_id'], 'item': {'type': 'ContextCompaction', 'id': 'compact-1'}}
+                if kind == 'foreign-thread': payload['thread_id'] = 'foreign-thread'
+                if kind == 'foreign-turn': payload['turn_id'] = 'foreign-turn'
+                if kind == 'missing-item-id': payload['item'].pop('id')
+                if kind == 'other-item': payload['item']['type'] = 'CommandExecution'
+                inserts = [{'type': 'event_msg', 'payload': payload}]
+                if kind == 'human': inserts.append({'type': 'response_item', 'payload': {
+                    'type': 'message', 'role': 'user', 'content': [{'type': 'input_text', 'text': 'Earlier input'}]}})
+                if kind == 'interrupt': inserts.append({'type': 'event_msg', 'payload': {'type': 'task_interrupted'}})
+                rows[2:2] = inserts
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                before = self.files()
+                preview = self.native_input_preview(); evidence = preview['nativeInputEvidence']
+                self.assertEqual(self.files(), before)
+                if kind == 'matching':
+                    self.assertEqual(evidence['state'], 'observed', evidence)
+                    self.assertTrue(evidence['latestNativeInputsComplete'])
+                    self.assertFalse(self.manage(action='bind', epoch=original['epoch'],
+                        expectedRevision=0, **contract)['isError'])
+                    self.assertFalse(self.manage(action='pause', epoch=original['epoch'],
+                        expectedRevision=1, reason='Real user pause')['isError'])
+                    before = self.files()
+                    rows.append({'type': 'event_msg', 'payload': {**payload,
+                        'item': {**payload['item'], 'id': 'compact-2'}}})
+                    transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                    before = self.files()
+                    changed = self.native_input_preview()['nativeInputEvidence']
+                    self.assertNotEqual(changed['cursor']['signalsSha256'], evidence['cursor']['signalsSha256'])
+                    rejected = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=2,
+                        evidenceCursor=evidence['cursor'])
+                    self.assertTrue(rejected['isError'])
+                    self.assertEqual(rejected['value']['reason'], 'native-input-evidence-changed')
+                    self.assertEqual(self.files(), before)
+                    self.automatic_capacity_retry('retry-after-compaction')
+                    rebound = self.manage(action='bind', epoch=preview['epoch'], expectedRevision=2, **contract)
+                    self.assertFalse(rebound['isError'], rebound)
+                    self.assertEqual(self.helper({'op': 'status'}, session=meta['thread_id'])['mode'], 'paused')
+                else:
+                    self.assertEqual((evidence['state'], evidence['reason']),
+                        ('unknown', 'native-input-origin-unavailable'))
+                    rejected = self.manage(action='bind', epoch=original['epoch'], expectedRevision=0, **contract)
+                    self.assertTrue(rejected['isError'])
+                    self.assertEqual(self.files(), before)
+
     def test_native_origin_accepts_only_bound_initial_thread_settings(self):
         for kind in ('matching', 'matching-turn', 'missing-thread', 'foreign-thread',
                      'foreign-turn', 'missing-settings', 'missing-model', 'foreign-model',
@@ -4829,12 +4886,14 @@ const frames=[{jsonrpc:'2.0',id:0,method:'initialize',params:{protocolVersion:'2
         self.assertEqual(rows[1]['result']['protocolVersion'], '2025-06-18')
         package_version = json.loads((ROOT/'plugins/yiyuan-accord-codex/.codex-plugin/plugin.json').read_text(encoding='utf-8'))['version']
         self.assertEqual(rows[1]['result']['serverInfo']['version'], package_version)
-        self.assertTrue(rows[2]['result']['tools'][0]['annotations']['readOnlyHint'])
+        self.assertFalse(rows[2]['result']['tools'][0]['annotations']['readOnlyHint'])
+        self.assertTrue(rows[2]['result']['tools'][0]['annotations']['destructiveHint'])
         self.assertIn('contextAssessment', rows[2]['result']['tools'][0]['inputSchema']['properties'])
         self.assertEqual([tool['name'] for tool in rows[2]['result']['tools'][:3]],
                          ['inspect_task_state', 'read_task_input', 'manage_task_state'])
         self.assertEqual(rows[2]['result']['tools'][3]['name'], 'coordinate_task_execution')
-        self.assertTrue(rows[2]['result']['tools'][1]['annotations']['readOnlyHint'])
+        self.assertFalse(rows[2]['result']['tools'][1]['annotations']['readOnlyHint'])
+        self.assertTrue(rows[2]['result']['tools'][1]['annotations']['destructiveHint'])
         self.assertFalse(rows[2]['result']['tools'][2]['annotations']['readOnlyHint'])
         self.assertTrue(rows[2]['result']['tools'][2]['annotations']['destructiveHint'])
         self.assertEqual(rows[2]['result']['tools'][2]['inputSchema']['properties']['action']['enum'],

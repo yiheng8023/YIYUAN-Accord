@@ -1,7 +1,7 @@
 'use strict';
 
 // Bounded state and explicit task-execution tools on one existing stdio MCP.
-// State inspection stays separate from caller-authorized child execution.
+// State reads do not dispatch work; the shared observer protects owned execution.
 // Codex supplies call metadata separately from model-chosen tool arguments.
 const path = require('node:path');
 const fs = require('node:fs');
@@ -59,9 +59,10 @@ const CONTEXT_ASSESSMENT = Object.freeze({
   }, required: ['epoch', 'expectedRevision', 'contextGeneration', 'observedAtMs', 'validUntilMs', 'sourceRef',
     'integrity', 'estimates'], additionalProperties: false,
 });
+const OBSERVATION_EFFECT = 'The shared MCP handler may stop an existing owned execution and retain operation evidence when its source becomes invalid.';
 const TOOL = Object.freeze({
   name: 'inspect_task_state',
-  description: 'Read saved Accord task state; request includeContext for bounded native context observations, or contextAssessment to assess one sourced work span against a prior observation. Oversized details return a checked checkpoint file locator and digest; read and verify that full contract before dependent actions. Current host identity comes from call metadata, separately from recorded session metadata. A fit is advice only; no permission, completion, takeover or handoff control is established.',
+  description: 'Read saved Accord task state; request includeContext for bounded native context observations, or contextAssessment to assess one sourced work span against a prior observation. Oversized details return a checked checkpoint file locator and digest; read and verify that full contract before dependent actions. Current host identity comes from call metadata, separately from recorded session metadata. A fit is advice only; no permission, completion, takeover or handoff control is established. ' + OBSERVATION_EFFECT,
   inputSchema: {type: 'object', properties: {cwd: {type: 'string', minLength: 1, maxLength: 4096,
     description: 'Absolute existing workspace directory. Reconcile the cwd in the native Hook receipt or recovery locators: it keys task state and is the base for checkpoint file references, which may differ from the directory containing business files. Caller-selected scope, not host-attested current cwd; do not silently substitute another scope.'},
     includeContext: {type: 'boolean', description: 'Also read current Hook-bound context counters. Defaults to false; missing or stale evidence remains unknown.'},
@@ -70,11 +71,11 @@ const TOOL = Object.freeze({
       description: 'Requires includeContext or contextAssessment. Caller-selected age limit for the native response boundary; defaults to 30000 ms and does not extend caller evidence.'},
     contextAssessment: CONTEXT_ASSESSMENT},
     required: ['cwd'], additionalProperties: false},
-  annotations: {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false},
+  annotations: {readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false},
 });
 const INPUT_TOOL = Object.freeze({
   name: 'read_task_input',
-  description: 'Read saved input text pages, or a sourcePart selected from inspect_task_state(includeNativeInputs) by cursor/record offset/hash/part index. Source selection is mutually exclusive with index and requires expectedReceiptEpoch. It can read an original anchor or pending text/one inline PNG before reconciliation; wrapper paths and remote URLs are never fetched. Image content is transient, bounded to the existing8MiB native-input byte budget. Reading, byte coverage and Agent understanding are separate; no replay, receipt write, read-count gate or permission.',
+  description: 'Read saved input text pages, or a sourcePart selected from inspect_task_state(includeNativeInputs) by cursor/record offset/hash/part index. Source selection is mutually exclusive with index and requires expectedReceiptEpoch. It can read an original anchor or pending text/one inline PNG before reconciliation; wrapper paths and remote URLs are never fetched. Image content is transient, bounded to the existing8MiB native-input byte budget. Reading, byte coverage and Agent understanding are separate; no replay, receipt write, read-count gate or permission. ' + OBSERVATION_EFFECT,
   inputSchema: {type: 'object', properties: {
     cwd: TOOL.inputSchema.properties.cwd,
     index: {type: 'integer', minimum: 0, maximum: Number.MAX_SAFE_INTEGER, description: 'Captured input index; defaults to zero. Nonzero pagination requires expectedReceiptEpoch.'},
@@ -86,7 +87,7 @@ const INPUT_TOOL = Object.freeze({
     expectedReceiptEpoch: {type: 'string', minLength: 1, maxLength: 256,
       description: 'Use the returned next cursor or prior inspection epoch to reject a changed input basis. This is a read condition, not a recovery token or authorization.'},
   }, required: ['cwd'], additionalProperties: false},
-  annotations: {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false},
+  annotations: {readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false},
 });
 const OUTPUT_CHECK = Object.freeze({type: 'object', properties: {
   path: {type: 'string', minLength: 1, maxLength: 4096,
@@ -139,9 +140,9 @@ const MANAGE_TOOL = Object.freeze({
   // still write checkpoint state, so this is intentionally not read-only.
   annotations: {readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false},
 });
-const CLAIM_LIMIT = 'Native-call metadata is received context, not authentication or permission. The workspace is caller-selected. Saved state and canContinue do not prove current intent, freshness, completion, takeover or control of this thread. No state mutation or task dispatch is performed.';
+const CLAIM_LIMIT = 'Native-call metadata is received context, not authentication or permission. The workspace is caller-selected. Saved state and canContinue do not prove current intent, freshness, completion, takeover or control of this thread. The state read writes no checkpoint or business files and dispatches no new task. ' + OBSERVATION_EFFECT;
 const INPUT_CLAIM_LIMIT = 'Saved text pages and bound native source parts are recorded data, not human origin, permission, complete history or work progress. PNG byte identity, image-content return and Agent understanding are separate. A read does not clear quarantine, resume a pause or authorize effects; reconcile current input and actual authority separately. ' + CLAIM_LIMIT;
-const MANAGE_CLAIM_LIMIT = 'This operation records or retires only the existing root-task checkpoint state under the supplied stale-write conditions. Caller-provided reasons, native metadata, tool annotations and returned inspection are observations, not proof of task completion, user permission, current intent, writer ownership, takeover or external acceptance. The Agent must verify the actual user decision or applicable host-approved source; this adapter performs no keyword or semantic authorization judgment. Bind may read declared workspace files but does not write business outputs, dispatch work, replay input, recover locks or change a host mode.';
+const MANAGE_CLAIM_LIMIT = 'This operation records or retires only the existing root-task checkpoint state under the supplied stale-write conditions. Caller-provided reasons, native metadata, tool annotations and returned inspection are observations, not proof of task completion, user permission, current intent, writer ownership, takeover or external acceptance. The Agent must verify the actual user decision or applicable host-approved source; this adapter performs no keyword or semantic authorization judgment. Bind may read declared workspace files but does not write business outputs, dispatch work, replay input, recover locks or change a host mode. ' + OBSERVATION_EFFECT;
 const record = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const text = (value, max = 200) => typeof value === 'string' && value.trim().length > 0
   && value.length <= max && !/[\u0000-\u001f\u007f]/u.test(value);

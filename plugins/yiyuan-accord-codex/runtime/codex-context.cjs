@@ -226,6 +226,13 @@ function contentEvidence(payload, binding, expectedHash) {
   return {supported: true, parts, prompt: multiText ? multiText.prompt : content[0].text};
 }
 
+function completedCompaction(line, sessionId, turnId) {
+  const payload = line?.type === 'event_msg' ? line.payload : null;
+  return payload?.type === 'item_completed' && payload.thread_id === sessionId &&
+    payload.turn_id === turnId && payload.item?.type === 'ContextCompaction' &&
+    boundedText(payload.item.id, 200);
+}
+
 function retryOrigin(rows, binding, promptHash) {
   for (let index = 0; index + 1 < rows.length; index++) {
     const line = parseRow(rows[index]);
@@ -239,6 +246,7 @@ function retryOrigin(rows, binding, promptHash) {
       if (candidate?.type === 'event_msg' && candidate.payload?.type === 'token_count' &&
           (!Object.hasOwn(candidate.payload, 'turn_id') || candidate.payload.turn_id === binding.turnId) ||
           candidate?.type === 'token_usage_record' && candidate.payload?.turn_id === binding.turnId) continue;
+      if (completedCompaction(candidate, binding.sessionId, binding.turnId)) continue;
       // Initial settings may precede the first input. Locate only within this
       // bound thread/context; the input scan still retains the full control digest.
       const settings = candidate?.payload?.thread_settings;
@@ -414,7 +422,8 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
           : {...descriptor, image: {type: 'image', mimeType: 'image/png', data: pngData(item.image_url).data}, record};
       }
     }
-    if (line.type === 'compacted' || event === 'context_compacted') signals.push([row.offset, digest]);
+    if (line.type === 'compacted' || event === 'context_compacted' ||
+        completedCompaction(line, binding.sessionId, turn)) signals.push([row.offset, digest]);
     if (event && /^(?:task_|turn_|thread_settings_|model_rerouted|interrupt|shutdown|user_message)/u.test(event)) {
       if (!['task_started', 'task_complete', 'task_interrupted', 'turn_aborted', 'task_cancelled',
           'thread_settings_applied', 'model_rerouted', 'shutdown_complete', 'user_message'].includes(event)) {
@@ -653,7 +662,7 @@ function observeNativeTranscript(binding, options = {}) {
     const payloadType = line.type === 'event_msg' ? line.payload?.type : null;
     const responseType = line.type === 'response_item' ? line.payload?.type : null;
     if (payloadType === 'context_compacted' || responseType === 'context_compaction' ||
-        line.type === 'compacted') {
+        line.type === 'compacted' || completedCompaction(line, binding.sessionId, currentTurn)) {
       latestToken = null;
       pendingGeneration = 'compaction';
       generationEvents.push({kind: 'compaction', offset: row.offset});

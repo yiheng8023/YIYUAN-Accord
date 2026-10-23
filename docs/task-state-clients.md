@@ -4,6 +4,8 @@
 
 适用对象：维护者、原生 MCP 接入者及消费此指南的 Agent。原调用模板依据源码 `315e2476e4818545d0dbb6a2c241be72b01ceae4`；输入隔离补充依据 `73120669` 与2026-10-06原生回执对账。
 
+状态及输入读取本身不写检查点或业务文件、不派发新任务；共享 MCP 处理器仍会核对本进程已有所属执行，来源失效时可保护性停止它并保留操作证据。因此两个读取工具不声明为全环境只读；直接 helper 的 `status` 仍是只读查询。
+
 ## 调用前：取得可用的最新观察
 
 先通过宿主已获授权的原生 MCP 路径调用 `inspect_task_state`，参数为 `{cwd: absoluteWorkspace}`。确认返回 `checkpoint.state === "observed"`，读取 `checkpoint.snapshot` 的当前 `epoch`、`revision`、完整合同、pause 与恢复标志。每次管理调用都取同一次最新观察的 epoch/revision；更新后的 revision 再 inspect 取得。旧 `checkpoint.epoch` 是上次绑定依据，不可替代 snapshot.epoch。缺失或不可用观察保持未决。[读取实现](../runtime/native-state-mcp.cjs)、[snapshot](../runtime/task-checkpoint.cjs)。
@@ -27,6 +29,8 @@
 实际需要恢复本任务时，使用既有最新 recovery epoch 与宿主保留的真实当前输入，按该会话进行核对和恢复；不能从哈希重构输入，也不能借此解除其他会话的隔离或暂停。不要为改判已结束案例而事后重放。只停止依赖该未恢复输入基准的动作；助手恢复状态、独立来源证明的当前任务事实和其他已授权职责分别记账，不把局部隔离误报为全宿主故障或完成。
 
 已捕获的多纯文本按当前轮次、原生 part 种类/数量和真实捕获 hash 核对；不按版本猜测拼接。每个原始 part 保留独立描述，仍经已有 enrichment/sourcePart/reconcile 完成覆盖；后续 Skill 原文独立待核，未捕获证明的多文本保持 unsupported。
+
+原生 `ContextCompaction` 完成通知按当前线程、局部轮次及具体 item 核对：输入起点可越过该通知，但控制摘要与上下文代际仍记录压缩；旧计量失效后须有新观察，不因通知解除暂停或补造输入。
 
 所有依赖保存合同的普通状态变更都先核同一份结构/身份规则；无效 checkpoint 保留并报告，不因空谓词而自动退休。
 

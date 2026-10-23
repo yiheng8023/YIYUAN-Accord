@@ -134,8 +134,9 @@ The package also registers one host-managed stdio MCP process with
 `inspect_task_state(cwd, includeContext?, contextMaxAgeMs?, contextAssessment?)`. It reuses checkpoint `status` and returns a selected
 subset of the caller's native MCP metadata separately from that snapshot. The
 caller selects an absolute workspace; the tool does not attest it as the host's
-current cwd. It neither changes saved task state nor opens a control connection or dispatches
-a task. Missing input/state remains unavailable. In the inspected host, Hook
+current cwd. The state read does not write checkpoints or business files, open a control connection or dispatch
+a new task. The shared handler also checks existing owned execution: an invalid source can
+trigger protective cancellation and retain operation evidence. Missing input/state remains unavailable. In the inspected host, Hook
 session identity is shared by descendants: when native session and thread IDs
 differ, the reader holds checkpoint lookup instead of adopting ancestor state.
 State inspection adds a host-owned process lifetime and reuses the existing store.

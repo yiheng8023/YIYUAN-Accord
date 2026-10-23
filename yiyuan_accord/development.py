@@ -174,7 +174,8 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                         "envVars": ["YIYUAN_ACCORD_TASK_STATE_DIR", "CODEX_HOME", "CODEX_CLI_PATH"],
                         "startupTimeoutSeconds": 10, "toolTimeoutSeconds": 30,
                     },
-                    "effect": "read-or-manage-existing-task-checkpoint; optional-context-assessment-is-read-only; explicit-bounded-task-execution-and-independent-review",
+                    "effect": "checkpoint reads do not write checkpoint/business files or dispatch; shared handler may stop existing owned execution and retain operation evidence on invalid source; separate explicit bounded execution and independent review",
+                    "assessment": "optional contextAssessment reuses assess-context with caller-bound epoch/revision/generation, original times and sourced forecasts; fresh native counters; helper query writes no checkpoint; shared execution-observer effects remain applicable",
                     "storage": "existing-task-checkpoint-plus-task-owned-operation-evidence-and-sqlite",
                     "execution": {
                         "entry": "runtime/native-task-execution.cjs",

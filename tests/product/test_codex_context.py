@@ -176,6 +176,26 @@ class CodexContextTests(unittest.TestCase):
         self.write(self.meta(), self.context(), self.usage(), unknown)
         self.assertEqual(self.observe()["reason"], "unknown-token-count")
 
+        completed = {"type": "item_completed", "thread_id": SESSION, "turn_id": TURN,
+                     "item": {"type": "ContextCompaction", "id": "compact-1"}}
+        compact = self.line({"type": "event_msg", "payload": completed})
+        self.write(self.meta(), self.context(), self.usage(), compact)
+        self.assertEqual(self.observe()["reason"], "compaction")
+        self.write(self.meta(), self.context(), self.usage(), compact,
+                   self.usage(last=1000, cumulative=51000))
+        refreshed = self.observe()
+        self.assertEqual(refreshed["state"], "observed")
+        self.assertNotEqual(before["conditions"]["contextGeneration"],
+                            refreshed["conditions"]["contextGeneration"])
+        for field in ("thread_id", "turn_id"):
+            with self.subTest(foreign=field):
+                self.write(self.meta(), self.context(), self.usage(), self.line({
+                    "type": "event_msg", "payload": {**completed, field: "foreign"}}))
+                foreign = self.observe()
+                self.assertEqual(foreign["state"], "observed")
+                self.assertEqual(before["conditions"]["contextGeneration"],
+                                 foreign["conditions"]["contextGeneration"])
+
     def test_rejects_expired_future_contradictory_or_unterminated_token_evidence(self):
         self.write(self.meta(), self.context(), self.usage(timestamp="2026-09-14T11:00:00Z"))
         self.assertEqual(self.observe()["reason"], "token-count-expired")
