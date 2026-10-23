@@ -6,6 +6,9 @@
 
 ### 3.3.2修复、全局审查与条件发布（2026-10-23）
 
+- 2026-10-24当前候选为`3.3.2-dev.10+codex.20261023170439`、30成员SHA`7960a0f82828c36a2df74dec89ec8838a356014468ce303a0f0fdfabbddf6bfb`，尚待自身精确全发现/静态/CI及实际采用。本轮整内核1711行审查和真实组合发现三个跨阶段缺口：损坏checkpoint可在正常变更/退休中绕过读取侧结构检查，多text捕获与reader拼接/内容覆盖不相容，以及acceptedExecution后再重试把旧输入按新执行turn核对。现复用原校验、逐输入hash/原生parts证据及独立inputTurn；未加API、日志、版本白名单或新案例。Root正式原红、3定点及8恢复回归、独审12输入/8相关与二次重试反例/v2绿均保原件，完整QA/CI不能移签。预算原6000/10000预测及20分钟准备段超时保持，新12KB分配/4594000上限保5%余量和18/17/52原判据。资料见`source-consistency-fix-20261024-01/`及`kernel-semantic-review-20261024-01/`。
+- 新2b546目标的334字符intake回执已在源保写权时用原token/真实public input恢复；旧水印字节保持，无模型/业务重放。独审确认真实dev9/PID43308、retro全源和writing-for-agents全文加载，策略未改；指导采用仅部分，首个continuation于16:19:02 UTC中断。原source gate两次读取瞬变原因有有限原件，不据此放松守卫；该目标没有最终业务交付。原actor/MCP已独立核absent，完整持久事实为intake completed/业务 interrupted；reconcile-target后fresh状态确认writer回源/reader自然0关闭。审查回执报expired但效果已结清，原source failure与新expiry同时保留，不重试/重放。当前主连接仍dev8/PID44084，已装dev9；旧d327/147证据各保主体，整体R2/R3、剩余覆盖及3.3.2发布未完成。
+
 - 本轮真实重启后已核dev.8/PID44084实际MCP，完整指导送达；本轮空Page界面数据经原件核对并正常reconcile-input，pending0，原目标/99输入/OUTCOME续接并独立读回48。此前47进度bind拒绝及原输入不变仍保持，不以新turn成功改签。见`restart-dev8-20261023-01.json`及原`record-f941cf91-static-20261023-01/progress-recovery.json`。
 - 定位到轮次拒绝诊断的确定缺口：实际读源/关联失败被折叠为native-call-turn-conflict而丢reason/stage。现复用既有品牌WeakMap/有限字段，仅保留初验或提交前的真实原因，原守卫/拒绝/无写入保持；未加日志、重试或案例。0.63秒原件反例、原9红、隔离夹具后2方法绿及独立正式候选8场景保留。独立对照证实旧测试27个阴性变体中14个被共享回执的旧前缀提前拒绝，现每变体独立夹具，ordinary-start准确锁定目标守卫；不据此宣称产品绕过。净增851/3000B，当前父预算/5%余量及18/17/52不变。源投影为dev.9，其后精确检查、CI与安装后态见下段；主连接仍为本轮已核dev.8。历史实机三次拒绝根因仍未知；新诊断与本轮恢复不代R2/R3完整组合。证据见`turn-association-diagnosis-20261023-01/`。
 - 首个诊断提交`344ea0ff`精确检出在全发现前被两项静态一致性检查拒绝：公共runtime副本及manifest版本未同步。原11.063秒自然exit1、Job0、检出确已移除，原部分QA报告保留；Root补齐两处同源校准，须新精确主体检查，不改签原失败。见`turn-association-diagnosis-20261023-01/344-static-failure-poststate.json`。

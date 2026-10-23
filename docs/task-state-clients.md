@@ -26,6 +26,10 @@
 
 实际需要恢复本任务时，使用既有最新 recovery epoch 与宿主保留的真实当前输入，按该会话进行核对和恢复；不能从哈希重构输入，也不能借此解除其他会话的隔离或暂停。不要为改判已结束案例而事后重放。只停止依赖该未恢复输入基准的动作；助手恢复状态、独立来源证明的当前任务事实和其他已授权职责分别记账，不把局部隔离误报为全宿主故障或完成。
 
+已捕获的多纯文本按当前轮次、原生 part 种类/数量和真实捕获 hash 核对；不按版本猜测拼接。每个原始 part 保留独立描述，仍经已有 enrichment/sourcePart/reconcile 完成覆盖；后续 Skill 原文独立待核，未捕获证明的多文本保持 unsupported。
+
+所有依赖保存合同的普通状态变更都先核同一份结构/身份规则；无效 checkpoint 保留并报告，不因空谓词而自动退休。
+
 ## bind：每次完整绑定当前合同
 
 五字段每次必填且不默认继承：`result` 是当前受托、待实现的完整目标及范围；`inputs` 是完整受保护输入列表（无保护输入时 `[]` 合法）；`outputs` 是完整非空输出谓词列表；`nextAction` 是具体下一动作；`canContinue` 兼容保留为当前安全且已授权工作是否仍可进行的判断记录，不触发新回合或执行。输入与输出合计最多 100 项；path-only 输出仅检查文件，精确要求用 sha256 或 JSON Pointer 值谓词表达。[schema](../plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs#L102)、[bind guard](../plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs#L392)。

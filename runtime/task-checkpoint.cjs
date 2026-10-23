@@ -1041,6 +1041,7 @@ function operate(request) {
     const currentInput = inputLocked(where, () => readInput(where));
     if (!currentInput) fail('native-user-input-receipt-missing');
     const prior = fs.existsSync(where.state) ? readJson(where.state) : null;
+    validateRecoveryIdentity(request, where, currentInput, prior);
     const nativeCursor = ['bind', 'pause', 'retire'].includes(request.op) ? requireNativeTurn(request, currentInput, null, 'initial-validation', prior) : null;
     if (request.op === 'reconcile-native-input') {
       if (needsInput(currentInput) || currentInput.interrupted) fail('native-input-recovery-required');

@@ -1,6 +1,6 @@
 {
   "name": "yiyuan-accord-codex",
-  "version": "3.3.2-dev.9+codex.20261023142417",
+  "version": "3.3.2-dev.10+codex.20261023170439",
   "description": "Helps agents coordinate goals, capabilities, correction, task continuity and delivery checks within the user's authority.",
   "author": {
     "name": "yiheng8023",

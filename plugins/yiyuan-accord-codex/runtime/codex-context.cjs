@@ -155,9 +155,30 @@ function typedAmbient(payload, turnId) {
     metadata.content_item_kinds.length === 1 && metadata.content_item_kinds[0] === 'additional_content.codex_apps_open_page';
 }
 
-function inputHash(line) {
+// Resolve only an already captured input, not a global host flattening rule.
+// A candidate text projection must match the bound Hook/source hash exactly.
+function multipartText(payload, binding, expectedHash) {
+  const content = payload?.content, metadata = payload?.internal_chat_message_metadata_passthrough;
+  if (payload?.type !== 'message' || payload.role !== 'user' ||
+      !Array.isArray(content) || content.length < 2 ||
+      !content.every(item => item?.type === 'input_text' && typeof item.text === 'string') ||
+      metadata?.turn_id !== binding?.turnId || !Array.isArray(metadata?.content_item_kinds) ||
+      metadata.content_item_kinds.length !== content.length ||
+      !metadata.content_item_kinds.every(kind => kind === 'user.text') ||
+      !/^[a-f0-9]{64}$/.test(expectedHash || '')) return null;
+  const parts = content.map(item => item.text);
+  for (const separator of ['', '\n']) {
+    const prompt = parts.join(separator);
+    if (crypto.createHash('sha256').update(prompt).digest('hex') === expectedHash) return {prompt};
+  }
+  return null;
+}
+
+function inputHash(line, binding, expectedHash) {
   const payload = line?.type === 'response_item' ? line.payload : null;
   const content = payload?.content;
+  const multiText = multipartText(payload, binding, expectedHash);
+  if (multiText) return crypto.createHash('sha256').update(multiText.prompt).digest('hex');
   if (payload?.type === 'message' && payload.role === 'user' && wrappedImage(content)) {
     return crypto.createHash('sha256').update(content[0].text).digest('hex');
   }
@@ -183,11 +204,12 @@ function pngData(value) {
     sha256: crypto.createHash('sha256').update(bytes).digest('hex')};
 }
 
-function contentEvidence(payload) {
+function contentEvidence(payload, binding, expectedHash) {
   const content = payload?.content;
   const singleText = Array.isArray(content) && content.length === 1 &&
     content[0]?.type === 'input_text' && typeof content[0].text === 'string';
-  if (payload?.type !== 'message' || !singleText && !wrappedImage(content)) return {supported: false, parts: []};
+  const multiText = multipartText(payload, binding, expectedHash);
+  if (payload?.type !== 'message' || !singleText && !multiText && !wrappedImage(content)) return {supported: false, parts: []};
   const parts = [];
   let mediaBytes = 0;
   for (let partIndex = 0; partIndex < content.length; partIndex++) {
@@ -201,7 +223,7 @@ function contentEvidence(payload) {
       parts.push({partIndex, type: 'image', ...description, encodingScope: 'strict-base64-png-signature'});
     }
   }
-  return {supported: true, parts, prompt: content[0].text};
+  return {supported: true, parts, prompt: multiText ? multiText.prompt : content[0].text};
 }
 
 function retryOrigin(rows, binding, promptHash) {
@@ -225,7 +247,7 @@ function retryOrigin(rows, binding, promptHash) {
           (!Object.hasOwn(candidate.payload, 'turn_id') || candidate.payload.turn_id === binding.turnId) &&
           text(settings?.model) && settings.model === line.payload.model &&
           text(settings.cwd) && path.isAbsolute(settings.cwd) && samePath(settings.cwd, binding.cwd)) continue;
-      if (inputHash(candidate) === promptHash) return index;
+      if (inputHash(candidate, binding, promptHash) === promptHash) return index;
       break;
     }
   }
@@ -245,6 +267,7 @@ function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [p
   }) : origin;
   if (start < 0) return empty('capacity-retry-accepted-execution-unavailable');
   let turn = execution.turnId;
+  let inputTurn = binding.turnId;
   let model = execution.model;
   let completedAt = null;
   let pending = null;
@@ -258,7 +281,7 @@ function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [p
     if (!line) return empty('invalid-complete-tail-record');
     const payload = line.payload;
     if (line.type === 'response_item' && payload?.role === 'user') {
-      if (inputHash(line) !== captured[inputIndex++]) return empty('capacity-retry-input-or-interruption-conflict');
+      if (inputHash(line, {...binding, turnId: inputTurn}, captured[inputIndex]) !== captured[inputIndex++]) return empty('capacity-retry-input-or-interruption-conflict');
       continue;
     }
     if (line.type === 'event_msg' && ['user_message', 'task_interrupted', 'turn_aborted',
@@ -271,6 +294,7 @@ function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [p
         return empty('capacity-retry-context-mismatch');
       }
       if (index === origin && payload.model !== binding.model) return empty('capacity-retry-context-mismatch');
+      inputTurn = payload.turn_id;
       if (index < start) continue;
       if (index === start && payload.model !== execution.model ||
           payload.turn_id !== (pending || turn) || completedAt !== null) {
@@ -361,25 +385,26 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       const sourceMatch = sourceIndex >= 0;
       const ambient = typedAmbient(payload, turn);
       const expected = hooks[inputIndex];
-      const promptHash = inputHash(line);
+      const capturedHash = sourceMatch ? sourced[sourceIndex].promptSha256 : expected?.promptSha256;
+      const promptHash = inputHash(line, {...binding, turnId: turn}, capturedHash);
       const hookMatch = !sourceMatch && !ambient && expected && expected.promptSha256 === promptHash &&
         (!expected.turnId || expected.turnId === turn);
       if (sourceMatch) matchedSources.add(sourceIndex);
       else if (hookMatch) inputIndex++;
       else if (expected && !ambient) return empty('native-captured-input-prefix-mismatch');
-      const content = contentEvidence(payload);
+      const content = contentEvidence(payload, {...binding, turnId: turn}, capturedHash);
       const record = {turnId: turn, sourceRef: sourceRefAtRow, recordOffset: row.offset,
         recordSha256: digest, promptSha256: promptHash, itemId: payload.id ?? null, captured: Boolean(sourceMatch || hookMatch),
         supported: content.supported, parts: content.parts};
       records.push(record);
       if (record.captured) {
-        if (!content.supported || content.parts.some(part => part.type === 'image') && !scan.coverage?.some(item =>
+        if (!content.supported || (content.parts.length > 1) && !scan.coverage?.some(item =>
             item.recordOffset === row.offset && item.recordSha256 === digest && canonical(item.parts) === canonical(content.parts))) {
           enrichments.push(record);
         }
       } else {
         pendingInputs.push({...record,
-          ...(content.supported ? {prompt: content.prompt, promptSha256: inputHash(line)} : {})});
+          ...(content.supported ? {prompt: content.prompt, promptSha256: promptHash} : {})});
       }
       if (scan.readPart?.recordOffset === row.offset && scan.readPart.recordSha256 === digest) {
         const descriptor = content.parts.find(part => part.partIndex === scan.readPart.partIndex);

@@ -719,6 +719,142 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertTrue((self.work / 'source.txt').exists())
         self.assertTrue((self.work / 'report.txt').exists())
 
+    def test_captured_multipart_input_requires_parts_and_pending_skill_reconciliation(self):
+        self.native_context()
+        before = self.native_input_preview()
+        self.assertFalse(self.manage(action='bind', epoch=before['epoch'], expectedRevision=0,
+            result='Keep pending report', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Hold', canContinue=False)['isError'])
+        self.assertFalse(self.manage(action='pause', epoch=before['epoch'],
+            expectedRevision=1, reason='User pause')['isError'])
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        meta['turn_id'] = 'multipart-turn'
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+        rows[1]['payload']['turn_id'] = meta['turn_id']
+        parts = ['provenance\n', 'scope\n', '业务🙂']
+        payload = rows[2]['payload']
+        payload['content'] = [{'type': 'input_text', 'text': value} for value in parts]
+        payload['internal_chat_message_metadata_passthrough'] = {
+            'turn_id': meta['turn_id'], 'content_item_kinds': ['user.text'] * len(parts)}
+        skill = 'Selected Skill original guidance remains a separate source.'
+        rows.append({'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+            'id': 'selected-skill', 'content': [{'type': 'input_text', 'text': skill}]}})
+        def write(data):
+            transcript.write_text(''.join(json.dumps(row) + '\n' for row in data), encoding='utf-8')
+        write(rows)
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': ''.join(parts),
+            'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
+            session=meta['session_id'], hook='UserPromptSubmit')
+        current = self.native_input_preview()
+        evidence = current['nativeInputEvidence']
+        self.assertEqual(evidence['state'], 'observed', evidence)
+        self.assertFalse(evidence['latestNativeInputsComplete'])
+        self.assertEqual(len(evidence['enrichments']), 1)
+        self.assertEqual(evidence['pendingInputs'][0]['itemId'], 'selected-skill')
+        def selected(record, index):
+            return dict(evidenceCursor=evidence['cursor'], recordOffset=record['recordOffset'],
+                        recordSha256=record['recordSha256'], partIndex=index)
+        frozen = self.files()
+        for index, value in enumerate(parts):
+            reply = self.read_input(expectedReceiptEpoch=current['epoch'],
+                sourcePart=selected(evidence['records'][0], index))
+            self.assertEqual(reply['value']['input']['text'], value)
+        reply = self.read_input(expectedReceiptEpoch=current['epoch'],
+            sourcePart=selected(evidence['pendingInputs'][0], 0))
+        self.assertEqual(reply['value']['input']['text'], skill)
+        self.assertEqual(frozen, self.files())
+        for metadata in [{'turn_id': 'foreign'}, {'content_item_kinds': ['user.text']}]:
+            with self.subTest(metadata=metadata):
+                changed = json.loads(json.dumps(rows))
+                changed[2]['payload']['internal_chat_message_metadata_passthrough'].update(metadata)
+                write(changed)
+                changed_files = self.files()
+                self.assertEqual(self.native_input_preview()['nativeInputEvidence']['state'], 'unknown')
+                self.assertEqual(changed_files, self.files())
+        write(rows)
+        changed = json.loads(json.dumps(rows))
+        changed[-1]['payload']['content'][0]['text'] = 'Replaced skill text'
+        write(changed)
+        changed_files = self.files()
+        self.assertTrue(self.read_input(expectedReceiptEpoch=current['epoch'],
+            sourcePart=selected(evidence['pendingInputs'][0], 0))['isError'])
+        self.assertEqual(changed_files, self.files())
+        write(rows)
+        changed = json.loads(json.dumps(rows))
+        changed[2]['payload']['content'][0]['text'] = 'provenance'
+        changed[2]['payload']['content'][1]['text'] = '\nscope\n'
+        write(changed)  # Same flat text, different part boundaries and source bytes.
+        changed_files = self.files()
+        self.assertTrue(self.read_input(expectedReceiptEpoch=current['epoch'],
+            sourcePart=selected(evidence['records'][0], 0))['isError'])
+        self.assertEqual(changed_files, self.files())
+        write(rows)
+        reply = self.manage(action='reconcile-input', epoch=current['epoch'],
+            expectedRevision=current['revision'], evidenceCursor=evidence['cursor'])
+        self.assertFalse(reply['isError'], reply)
+        complete = self.native_input_preview()
+        self.assertTrue(complete['nativeInputEvidence']['latestNativeInputsComplete'], complete)
+        self.assertEqual(complete['mode'], 'paused')
+        rows.append({'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+            'content': [{'type': 'input_text', 'text': 'not'}, {'type': 'input_text', 'text': 'captured'}],
+            'internal_chat_message_metadata_passthrough': {'turn_id': meta['turn_id'],
+                'content_item_kinds': ['user.text', 'user.text']}}})
+        write(rows)
+        pending = self.native_input_preview()
+        self.assertFalse(pending['nativeInputEvidence']['records'][-1]['supported'])
+        frozen = self.files()
+        reply = self.manage(action='reconcile-input', epoch=pending['epoch'],
+            expectedRevision=pending['revision'], evidenceCursor=pending['nativeInputEvidence']['cursor'])
+        self.assertTrue(reply['isError'])
+        self.assertEqual(frozen, self.files())
+        rows.pop()
+        write(rows)
+        self.automatic_capacity_retry('retry-one')
+        retry_skill = 'Selected Skill after retry retains its actual source.'
+        self.append_native_message(text=retry_skill, id='retry-skill')
+        retry = self.native_input_preview()
+        reply = self.manage(action='reconcile-input', epoch=retry['epoch'],
+            expectedRevision=retry['revision'], evidenceCursor=retry['nativeInputEvidence']['cursor'])
+        self.assertFalse(reply['isError'], reply)
+        receipt = json.loads(next(self.state.glob('*.input.json')).read_bytes())
+        self.assertEqual(receipt['nativeInputReconciliation']['turnId'], 'retry-one')
+        self.assertEqual(receipt['nativeInputs'][-1]['prompt'], retry_skill)
+        self.automatic_capacity_retry('retry-two')
+        retry = self.native_input_preview()
+        self.assertTrue(retry['nativeInputEvidence']['latestNativeInputsComplete'])
+        reply = self.manage(action='bind', epoch=retry['epoch'], expectedRevision=retry['revision'],
+            result='Keep pending report', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Hold', canContinue=False)
+        self.assertFalse(reply['isError'], reply)
+        self.assertEqual(reply['value']['observation']['mode'], 'paused')
+
+    def test_manage_rejects_corrupt_saved_checkpoint_before_any_mutation(self):
+        self.native_context()
+        status = self.helper({'op': 'status'},
+            session=self.params['_meta']['x-codex-turn-metadata']['session_id'])
+        contract = dict(result='Deliver required report', inputs=[],
+            outputs=[{'path': 'report.txt'}], nextAction='Write report', canContinue=True)
+        self.assertFalse(self.manage(action='bind', epoch=status['epoch'],
+            expectedRevision=0, **contract)['isError'])
+        state = next(self.state.glob('*.state.json'))
+        damaged = json.loads(state.read_bytes())
+        damaged['outputs'] = []
+        state.write_text(json.dumps(damaged), encoding='utf-8')
+        before = {p.name: p.read_bytes() for p in self.state.glob('*.json')}
+        self.assertEqual(self.inspect()['value']['checkpoint']['reason'],
+                         'invalid-recovery-checkpoint')
+        for args in [dict(action='retire'), dict(action='pause', reason='Hold'),
+                     dict(action='bind', **contract)]:
+            with self.subTest(action=args['action']):
+                for name, content in before.items():
+                    (self.state / name).write_bytes(content)
+                result = self.manage(epoch=status['epoch'], expectedRevision=1, **args)
+                self.assertTrue(result['isError'])
+                self.assertEqual(result['value']['reason'], 'invalid-recovery-checkpoint')
+                self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.glob('*.json')})
+        self.assertFalse((self.work / 'report.txt').exists())
+
     def test_manage_unbound_retirement_removes_only_the_current_receipt(self):
         protected = self.work / 'keep.txt'
         protected.write_text('preserve business data', encoding='utf-8')
