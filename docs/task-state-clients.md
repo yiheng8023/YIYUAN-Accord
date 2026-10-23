@@ -90,7 +90,7 @@ function retireParams(latest, absoluteWorkspace) {
 
 ## 回查：区分未请求与效果未知
 
-当原生输入核验返回 `native-input-evidence-unavailable` 时，内建失败另带 `nativeInputDiagnostic`：`stage` 为 `initial-validation`（首次核验）或 `commit-recheck`（状态提交/退役前复核），`readerReason` 为有限的内建来源原因；未知值统一为 `reader-reason-unavailable`。例如来源在读取后变化可得到 `transcript-path-changed-after-read`。helper 保留原退出码和错误行，并另输出一行同名 JSON；MCP 保留原 reason/isError/effect。任意异常属性、原始文本、路径和输入不会作为这些新增字段反射。没有该字段不等于核验成功，也不能猜测失败阶段。
+原生输入核验的内建来源失败带 `nativeInputDiagnostic`，可随 `native-input-evidence-unavailable` 或容量重试关联的 `native-call-turn-conflict` 返回；仅身份不符、缺少证明等未产生具体读源原因的拒绝不补造诊断。`stage` 为 `initial-validation`（首次核验）或 `commit-recheck`（状态提交/退役前复核），`readerReason` 为有限的内建来源原因；未知值统一为 `reader-reason-unavailable`。例如来源在读取后变化可得到 `transcript-path-changed-after-read`。helper 保留原退出码和错误行，并另输出一行同名 JSON；MCP 保留原 reason/isError/effect。任意异常属性、原始文本、路径和输入不会作为这些字段反射。没有该字段不等于核验成功，也不能猜测失败阶段。
 
 这些信息用于定位被拒边界，不授予重试、恢复、放宽防护或新的权限；仍须核对实际输入、来源和操作后态。此修正不宣称已找出全部历史失败的触发原因，也不启用日志观察器。`inspect_task_state` 的运行时指纹包含 `manageTaskState` 和 `nativeInputDiagnostic`，可核本次改变的已加载函数；它们仍不覆盖闭包、常量、整个软件包或其它进程。
 

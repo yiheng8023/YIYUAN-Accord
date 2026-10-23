@@ -932,23 +932,26 @@ class NativeStateMcpTests(unittest.TestCase):
             ('missing-native-model', lambda r, m: m.pop('model')),
             ('missing-native-version', lambda r, m: m.pop('codex_version')),
         ]
-        meta = self.params['_meta']['x-codex-turn-metadata']
         for label, change in cases:
             with self.subTest(label=label):
-                meta.update(turn_id='current-turn', model='observed-model', codex_version='observed-version')
-                self.native_context()
-                status = self.helper({'op': 'status'}, session=meta['session_id'])
-                self.automatic_capacity_retry()
-                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                f = NativeStateMcpTests(); f.setUp(); self.addCleanup(f.doCleanups)
+                meta = f.params['_meta']['x-codex-turn-metadata']
+                f.native_context()
+                status = f.helper({'op': 'status'}, session=meta['session_id'])
+                f.automatic_capacity_retry()
+                transcript = next(Path(f.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
                 rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
                 change(rows, meta)
                 transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
-                before = self.files()
-                response = self.manage(action='bind', epoch=status['epoch'], expectedRevision=0,
+                before = f.files()
+                response = f.manage(action='bind', epoch=status['epoch'], expectedRevision=0,
                     result='Retain original task', inputs=[], outputs=[{'path': 'report.txt'}],
                     nextAction='Create report.txt', canContinue=True)
                 self.assertEqual(response['value']['reason'], 'native-call-turn-conflict', response)
-                self.assertEqual(self.files(), before)
+                if label == 'ordinary-start':
+                    self.assertEqual(response['value'].get('nativeInputDiagnostic'),
+                        {'stage':'initial-validation','readerReason':'capacity-retry-start-unproven'})
+                self.assertEqual(f.files(), before)
 
     def test_capacity_retry_chain_extends_old_boundary_and_preserves_pause_after_compact(self):
         self.native_context()
@@ -2622,8 +2625,8 @@ process.stdout.write(JSON.stringify({response,changed}));
 
     def test_builtin_reader_failure_phase_survives_mcp_without_state_write(self):
         for action in ('bind', 'pause', 'retire', 'retire-unbound'):
-            for phase in ('initial-validation', 'commit-recheck'):
-                with self.subTest(action=action, phase=phase):
+            for phase, retry in [(p, r) for p in ('initial-validation', 'commit-recheck') for r in (False, True)]:
+                with self.subTest(action=action, phase=phase, retry=retry):
                     f = NativeStateMcpTests(); f.setUp(); self.addCleanup(f.doCleanups)
                     f.native_context()
                     session = f.params['_meta']['x-codex-turn-metadata']['session_id']
@@ -2635,6 +2638,7 @@ process.stdout.write(JSON.stringify({response,changed}));
                     if action not in ('bind', 'retire-unbound'):
                         bound = f.manage(action='bind', epoch=status['epoch'], expectedRevision=0, **contract)
                         self.assertFalse(bound['isError'], bound); revision = 1
+                    if retry: f.automatic_capacity_retry()
                     args = dict(cwd=str(f.work), action='retire' if action == 'retire-unbound' else action,
                                 epoch=status['epoch'], expectedRevision=revision)
                     if action == 'bind': args.update(contract)
@@ -2660,7 +2664,8 @@ process.stdout.write(JSON.stringify(require(process.argv[1]).manageTaskState(x.p
                     self.assertEqual(p.returncode,0,p.stderr)
                     response = json.loads(p.stdout)
                     self.assertTrue(response['isError'],response)
-                    self.assertEqual(response['value']['reason'],'native-input-evidence-unavailable')
+                    self.assertEqual(response['value']['reason'],
+                        'native-call-turn-conflict' if retry else 'native-input-evidence-unavailable')
                     self.assertEqual(response['value'].get('nativeInputDiagnostic'),
                         {'stage':phase,'readerReason':'transcript-unavailable'})
                     self.assertEqual({p.name:p.read_bytes() for p in f.state.glob('*.json')},before)
