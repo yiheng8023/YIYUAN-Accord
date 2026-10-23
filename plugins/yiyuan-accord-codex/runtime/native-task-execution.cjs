@@ -664,7 +664,7 @@ function createNativeTaskExecution(options) {
     }
   }
   async function cancelRequest(requestId) {
-    const slot = requestOperations.get(String(requestId));
+    const slot = requestOperations.get(requestId);
     if (slot) await stop(slot, 'Native MCP request cancelled');
   }
   async function call(params, requestId = null) {
@@ -777,14 +777,14 @@ function createNativeTaskExecution(options) {
           }});
         slots.set(id, slot);
         preparation = null; // The registered slot now owns its recorder and evidence.
-        if (requestId !== null) requestOperations.set(String(requestId), slot);
+        if (requestId !== null) requestOperations.set(requestId, slot);
         const plan = Object.fromEntries(['model', 'effort', 'intake', 'continuation', 'postRelease', 'deadlineMs', 'skillRequest', 'sandbox', 'writeScope'].filter(k => args[k] !== undefined).map(k => [k, args[k]]));
         return {isError: false, value: launch(slot, () => slot.engine.prepare({...plan, cwd: args.cwd, transferId: id, scopeRef}))};
       }
       const slot = load(source, args.cwd, args.operationId);
       if (args.action === 'reconcile' || args.action === 'reconcile-target') {
         const value = beginReconciliation(slot, args, source, args.action === 'reconcile-target');
-        if (requestId !== null) requestOperations.set(String(requestId), slots.get(slot.id));
+        if (requestId !== null) requestOperations.set(requestId, slots.get(slot.id));
         return {isError: false, value};
       }
       if (args.action === 'read-evidence') {
@@ -827,7 +827,7 @@ function createNativeTaskExecution(options) {
       }
       if (args.action === 'commit' || args.action === 'release') {
         if (slot.recovery) fail('operation-not-executable');
-        if (requestId !== null) requestOperations.set(String(requestId), slot);
+        if (requestId !== null) requestOperations.set(requestId, slot);
         return {isError: false, value: launch(slot, () => slot.engine[args.action]({requestedByCall: source.callId}))};
       }
       fail('invalid-task-execution-request');

@@ -638,7 +638,8 @@ async function run(config) {
       if(mode==='failed-turn')turns[turns.length-1].status='failed';
       const target=params.threadId===state.target?.threadId;
       return {thread:{id:params.threadId,
-        ephemeral:finalMode==='cross-ephemeral'&&!target?true:false,
+        ...(config.omitFinalSourceEphemeral&&!target?{}:
+          {ephemeral:finalMode==='cross-ephemeral'&&!target?true:false}),
         status:{type:mode==='active-target'&&target?'active':mode==='idle-target'?'idle':'notLoaded'},
         ...(target?{turns}:{})}};
     }};
@@ -721,6 +722,9 @@ async function run(config) {
     if(mode==='different-receipt'){input.receipt.response.result.turn.id='other-turn';second=await invoke();}
     let finalized=null;
     if(finalMode&&first.result?.status==='continuation-reconciled'){
+      if(Object.hasOwn(config,'priorSourceEphemeral'))Object.assign(state,{
+        sourceEphemeral:config.priorSourceEphemeral,
+        nativeHistoryRetained:typeof config.priorSourceEphemeral==='boolean'?!config.priorSourceEphemeral:null});
       if(finalMode==='third-missing'||finalMode==='third-proven'){
         recoveryTransport.connectionId='third-connection';
       }

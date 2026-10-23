@@ -301,10 +301,38 @@ class CarrierHandoffTests(unittest.TestCase):
             'connectionId':'test-connection','hostVersion':'fixture-host',
             'requestId':'original-continuation-request','method':'turn/start'})['reconciled']
 
-    def finalization_case(self, mode):
+    def finalization_case(self, mode, **options):
         return self.run_case('lost-continuation-ack', reconcile='success', finalize=mode,
             rpcFailureRef={'connectionId':'test-connection','hostVersion':'fixture-host',
-                           'requestId':'original-continuation-request','method':'turn/start'})['reconciled']
+                           'requestId':'original-continuation-request','method':'turn/start'}, **options)['reconciled']
+
+    def test_finalization_missing_current_persistence_retains_only_prior_observation(self):
+        for mode in ('cross', 'same'):
+            for prior in ('absent', None, False, True):
+                with self.subTest(mode=mode, prior=prior):
+                    options = {} if prior == 'absent' else {'priorSourceEphemeral': prior}
+                    result = self.finalization_case(mode, omitFinalSourceEphemeral=True, **options)
+                    self.assertEqual(result['finalized']['first'].get('result', {}).get('status'),
+                                     'finalized', result['finalized'])
+                    state = result['state']
+                    self.assertIsNone(state['sourceEphemeral'])
+                    self.assertIsNone(state['nativeHistoryRetained'])
+                    self.assertIs(state['priorSourcePersistence']['sourceEphemeral'],
+                                  prior if isinstance(prior, bool) else None)
+                    self.assertIs(state['priorSourcePersistence']['nativeHistoryRetained'],
+                                  not prior if isinstance(prior, bool) else None)
+                    self.assertEqual(state['failure'], result['originalState']['failure'])
+                    self.assertEqual(state['plan']['deadlineMs'], result['originalState']['plan']['deadlineMs'])
+                    self.assertEqual(sum(c['method'] == 'thread/unsubscribe' for c in result['calls']),
+                                     int(mode == 'same'))
+
+    def test_finalization_conflicting_known_persistence_holds_before_release(self):
+        for mode, prior in (('same', True), ('cross-ephemeral', False)):
+            with self.subTest(mode=mode):
+                r = self.finalization_case(mode, priorSourceEphemeral=prior)
+                self.assertEqual(r['finalized']['first']['error']['code'], 'SOURCE_PERSISTENCE_CHANGED')
+                self.assertFalse(any(c['method'] == 'thread/unsubscribe' for c in r['calls']))
+                self.assertEqual(r['state']['failure'], r['originalState']['failure'])
 
     def test_recovery_reconciles_one_completed_effect_and_retains_failure_evidence(self):
         r=self.recovery_case('success')

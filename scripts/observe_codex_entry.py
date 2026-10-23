@@ -150,6 +150,216 @@ def save(path, value):
     Path(path).write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+
+# Resource samples are raw evidence, not control-record payload. Small legacy
+# lists keep their shape; larger lists are retained in bounded ordinary chunks.
+RESOURCE_INLINE_BYTES = 64 * 1024
+RESOURCE_CHUNK_BYTES = 512 * 1024
+RESOURCE_ROW_BYTES = 8 * 1024 * 1024 - 3
+RESOURCE_SAMPLE_BYTES = 32 * 1024 * 1024
+LEGACY_RESOURCE_BYTES = 32 * 1024 * 1024
+
+
+def _sample_json(value):
+    if not isinstance(value, dict):
+        raise ValueError("resource sample must be an object")
+    return json.dumps(value, ensure_ascii=False, allow_nan=False,
+                      separators=(",", ":")).encode("utf-8")
+
+
+class ResourceSamples:
+    """Retain every collected sample; budget failure happens after retention."""
+    def __init__(self, evidence, stem):
+        self.root, self.stem = Path(evidence), stem
+        self.pending, self.chunks = [], []
+        self.pending_bytes, self.bytes, self.count = 3, 0, 0
+        self.external, self.exceeded = False, False
+
+    def _flush(self):
+        if not self.pending:
+            return
+        raw = b"[" + b",".join(self.pending) + b"]\n"
+        name = f"{self.stem}.samples-{len(self.chunks) + 1:04d}.json"
+        ordinary_dir(self.root)
+        with (self.root / name).open("xb") as stream:
+            stream.write(raw)
+        self.chunks.append({"path": name, "sha256": hashlib.sha256(raw).hexdigest(),
+                            "bytes": len(raw), "count": len(self.pending)})
+        self.bytes += len(raw)
+        self.pending, self.pending_bytes = [], 3
+
+    def append(self, sample):
+        raw = _sample_json(sample)
+        if self.pending and self.pending_bytes + len(raw) + 1 > RESOURCE_CHUNK_BYTES:
+            self.external = True
+            self._flush()
+        self.pending_bytes += len(raw) + bool(self.pending)
+        self.pending.append(raw)
+        self.count += 1
+        self.external |= self.bytes + self.pending_bytes > RESOURCE_INLINE_BYTES
+        self.exceeded |= (self.bytes + self.pending_bytes > RESOURCE_SAMPLE_BYTES
+                          or len(raw) > RESOURCE_ROW_BYTES)
+        if self.exceeded:
+            # Keep the last observed sample too, even when it caused the limit.
+            self.external = True
+            self._flush()
+            raise ValueError("resource-sample-budget-exceeded")
+
+    def record(self):
+        if not self.external:
+            return {"samples": [json.loads(raw) for raw in self.pending]}
+        self._flush()
+        return {"sampleEvidence": {"schema": "accord-resource-samples/v1",
+                "count": self.count, "bytes": self.bytes, "chunks": self.chunks,
+                "limitExceeded": self.exceeded}}
+
+
+def _observer_name(name):
+    return name in ("result.json", "resources.json") or re.fullmatch(r"native-receipt-[1-9][0-9]*\.json", name)
+
+
+def _observer_bytes(path):
+    # A narrow compatibility envelope for the already-written 12.5/8.52 MiB
+    # inline-sample records. General source and business reads still use 8 MiB.
+    if _observer_name(Path(path).name) and Path(path).lstat().st_size > 8 * 1024 * 1024:
+        raw, limit = read_regular(path, LEGACY_RESOURCE_BYTES), LEGACY_RESOURCE_BYTES
+    else:
+        raw, limit = read_regular(path), 8 * 1024 * 1024
+    if len(raw) > limit:
+        raise ValueError("observation bytes changed beyond read bound")
+    return raw
+
+
+def _unique_json(raw):
+    def pairs(rows):
+        result = {}
+        for key, value in rows:
+            if key in result:
+                raise ValueError("duplicate observation key")
+            result[key] = value
+        return result
+    return json.loads(raw, object_pairs_hook=pairs,
+                      parse_constant=lambda _: (_ for _ in ()).throw(ValueError("non-finite observation")))
+
+
+def _sample_records(value, name):
+    if name == "result.json":
+        if (not isinstance(value, dict) or value.get("schema") != "accord-codex-persistent-exec/v1"
+                or not isinstance(value.get("stages"), list) or len(value["stages"]) > 16):
+            return []
+        return [(row, f"native-receipt-{i}", f"/stages/{i-1}/samples")
+                for i, row in enumerate(value["stages"], 1)]
+    return [(value, Path(name).stem, "/samples")]
+
+
+def _validate_sample_record(record, evidence, stem, track=None):
+    if not isinstance(record, dict):
+        raise ValueError("invalid resource record")
+    ref = record.get("sampleEvidence")
+    if ref is None:
+        if "samples" in record and (not isinstance(record["samples"], list)
+                or any(not isinstance(row, dict) for row in record["samples"])):
+            raise ValueError("invalid inline resource samples")
+        return
+    if ("samples" in record or not isinstance(ref, dict)
+            or set(ref) != {"schema", "count", "bytes", "chunks", "limitExceeded"}
+            or ref["schema"] != "accord-resource-samples/v1"
+            or type(ref["count"]) is not int or ref["count"] <= 0
+            or type(ref["bytes"]) is not int or not 0 < ref["bytes"] <= RESOURCE_SAMPLE_BYTES + RESOURCE_ROW_BYTES + 3
+            or type(ref["limitExceeded"]) is not bool
+            or not isinstance(ref["chunks"], list) or not 1 <= len(ref["chunks"]) <= 256):
+        raise ValueError("invalid resource sample reference")
+    count = size = 0
+    root = ordinary_dir(evidence)
+    expected_names = {f"{stem}.samples-{i:04d}.json" for i in range(1, len(ref["chunks"]) + 1)}
+    if {item.name for item in root.glob(stem + ".samples-*.json")} != expected_names:
+        raise ValueError("resource sample chunk set differs")
+    for index, chunk in enumerate(ref["chunks"], 1):
+        name = f"{stem}.samples-{index:04d}.json"
+        if (not isinstance(chunk, dict) or set(chunk) != {"path", "sha256", "bytes", "count"}
+                or chunk["path"] != name or not _retained_leaf(name)
+                or not isinstance(chunk["sha256"], str) or not re.fullmatch("[0-9a-f]{64}", chunk["sha256"])
+                or type(chunk["bytes"]) is not int or not 0 < chunk["bytes"] <= RESOURCE_ROW_BYTES + 3
+                or type(chunk["count"]) is not int or chunk["count"] <= 0):
+            raise ValueError("unsafe or invalid resource sample chunk")
+        path = Path(evidence) / name
+        ordinary_dir(path.parent)
+        if path.resolve() != path.absolute():
+            raise ValueError("redirected resource sample chunk")
+        before = path.stat()
+        raw = read_regular(path)
+        after = path.stat()
+        if (before.st_ino, before.st_size, before.st_mtime_ns) != (after.st_ino, after.st_size, after.st_mtime_ns):
+            raise ValueError("resource sample chunk changed")
+        if len(raw) != chunk["bytes"] or hashlib.sha256(raw).hexdigest() != chunk["sha256"]:
+            raise ValueError("resource sample chunk bytes differ")
+        rows = _unique_json(raw)
+        if not isinstance(rows, list) or len(rows) != chunk["count"] or any(not isinstance(row, dict) for row in rows):
+            raise ValueError("resource sample chunk count differs")
+        if track is not None:
+            track[path] = chunk["sha256"]
+        count += len(rows)
+        size += len(raw)
+    if count != ref["count"] or size != ref["bytes"] or ref["limitExceeded"] != (size > RESOURCE_SAMPLE_BYTES):
+        raise ValueError("resource sample totals differ")
+    if {item.name for item in root.glob(stem + ".samples-*.json")} != expected_names:
+        raise ValueError("resource sample chunk set changed")
+    if ref["limitExceeded"] and (record.get("valid") is True or not record.get("failure")):
+        raise ValueError("resource evidence limit cannot claim success")
+
+
+def _observer_document(path, raw, track=None):
+    value = _unique_json(raw)
+    records = _sample_records(value, Path(path).name)
+    for record, stem, _ in records:
+        _validate_sample_record(record, Path(path).parent, stem, track)
+    if len(raw) > 8 * 1024 * 1024:
+        # Only full legacy sample-bearing documents qualify for this envelope.
+        if (not records or not any(isinstance(row.get("samples"), list) and row["samples"]
+                                   for row, _, _ in records)
+                or any("sampleEvidence" in row for row, _, _ in records)
+                or any(not {"samples", "exitCode", "forced", "failure"} <= set(row)
+                       for row, _, _ in records)):
+            raise ValueError("oversized control record is not legacy sample evidence")
+        if len(json.dumps(_observer_view(value, path, raw), ensure_ascii=False).encode("utf-8")) > 8 * 1024 * 1024:
+            raise ValueError("legacy control metadata exceeds bound")
+    return value
+
+
+def _read_observer_record(path):
+    return _observer_document(path, _observer_bytes(path))
+
+
+def _observer_view(value, path, raw=None):
+    """Bounded derived view; raw legacy evidence stays byte-for-byte intact."""
+    copied = dict(value)
+    if Path(path).name == "result.json" and isinstance(value.get("stages"), list):
+        copied["stages"] = [dict(row) for row in value["stages"]]
+    for row, _, pointer in _sample_records(copied, Path(path).name):
+        samples = row.get("samples")
+        if not isinstance(samples, list):
+            continue
+        encoded = json.dumps(samples, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        if len(encoded) <= RESOURCE_INLINE_BYTES:
+            continue
+        if raw is None:
+            raw = _observer_bytes(path)
+        row.pop("samples")
+        row["legacySamples"] = {"path": Path(path).name, "sha256": hashlib.sha256(raw).hexdigest(),
+                "bytes": len(raw), "pointer": pointer, "count": len(samples),
+                "contentSha256": hashlib.sha256(encoded).hexdigest(), "contentBytes": len(encoded)}
+    if len(json.dumps(copied, ensure_ascii=False).encode("utf-8")) > 8 * 1024 * 1024:
+        raise ValueError("control-view-size-limit")
+    return copied
+
+
+def _save_control(path, value):
+    raw = (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    if len(raw) > 8 * 1024 * 1024:
+        raise ValueError("control-record-size-limit")
+    Path(path).write_bytes(raw)
+
+
 def _usage_caps(caps):
     allowed = {"totalTokens", "inputTokens", "uncachedInputTokens", "cachedInputTokens", "outputTokens"}
     if (not isinstance(caps, dict) or set(caps) - allowed
@@ -1359,10 +1569,10 @@ def _resource_observation(record, manifest):
 
 def _retained_resource_observations(evidence, manifest, stages):
     observations = []
-    fields = ("controller", "evidenceScope", "exitCode", "pid", "remainingOwnedProcesses", "after")
+    fields = ("controller", "evidenceScope", "exitCode", "pid", "remainingOwnedProcesses", "after", "samples", "sampleEvidence")
     for index, stage in enumerate(stages, 1):
         try:
-            native = json.loads(read_regular(Path(evidence) / f"native-receipt-{index}.json"))
+            native = _read_observer_record(Path(evidence) / f"native-receipt-{index}.json")
             matches = isinstance(native, dict) and all(native.get(key) == stage.get(key) for key in fields)
         except (OSError, ValueError):
             native, matches = None, False
@@ -1658,7 +1868,7 @@ def _inspect_retained(evidence, manifest):
 
     def read(path):
         ordinary_dir(path.parent)
-        raw = read_regular(path)
+        raw = (_observer_bytes(path) if path.parent == evidence and _observer_name(path.name) else read_regular(path))
         before[path] = hashlib.sha256(raw).hexdigest()
         return raw
 
@@ -1670,14 +1880,17 @@ def _inspect_retained(evidence, manifest):
                     raise ValueError("duplicate retained metadata key")
                 result[key] = value
             return result
-        return json.loads(read(path), object_pairs_hook=unique)
+        raw = read(path)
+        return (_observer_document(path, raw, before) if path.parent == evidence and _observer_name(path.name)
+                else json.loads(raw, object_pairs_hook=unique))
 
     def same(left, right):
         return json.dumps(left, sort_keys=True) == json.dumps(right, sort_keys=True)
 
     if not same(read_json(evidence / "manifest.json"), manifest):
         raise ValueError("retained manifest changed during inspection")
-    recorded = read_json(evidence / "result.json")
+    recorded_raw = read(evidence / "result.json")
+    recorded = _observer_document(evidence / "result.json", recorded_raw, before)
     if not isinstance(recorded, dict):
         raise ValueError("persistent result binding mismatch")
     stages = recorded.get("stages")
@@ -1776,14 +1989,14 @@ def _inspect_retained(evidence, manifest):
         raise ValueError("retained history references unrecorded stages")
     for path, expected in before.items():
         ordinary_dir(path.parent)
-        if hashlib.sha256(read_regular(path)).hexdigest() != expected:
+        if hashlib.sha256(_observer_bytes(path) if path.parent == evidence and _observer_name(path.name) else read_regular(path)).hexdigest() != expected:
             raise ValueError("retained evidence changed during inspection")
     for path, expected in directories.items():
         ordinary_dir(path)
         if {p.name for p in path.iterdir()} != expected:
             raise ValueError("retained evidence changed during inspection")
     return {"entryProtocol": "exec-resume", "inspectionMode": "retained-only",
-            "recordedExecution": recorded, "retainedStages": results,
+            "recordedExecution": _observer_view(recorded, evidence / "result.json", recorded_raw), "retainedStages": results,
             "retainedResourceObservations": _retained_resource_observations(evidence, manifest, recorded["stages"]),
             "currentFileObservation": {"decision": "unknown", "reason": "retained-only-no-live-workspace-check",
                                        "semanticDecision": "unreviewed", "files": {}},
@@ -1803,7 +2016,8 @@ def inspect(evidence, *, retained=False):
         for key in ("case", observer_key):
             if digest(manifest[key]) != manifest["sourceHashes"][key]:
                 raise ValueError("bound persistent inspection source changed: " + key)
-        recorded = json.loads(read_regular(evidence / "result.json"))
+        recorded_raw = _observer_bytes(evidence / "result.json")
+        recorded = _observer_document(evidence / "result.json", recorded_raw)
         if (recorded.get("schema") != "accord-codex-persistent-exec/v1"
                 or recorded.get("episode") != manifest["episode"]
                 or not isinstance(recorded.get("stages"), list)
@@ -1823,7 +2037,7 @@ def inspect(evidence, *, retained=False):
             # advanced after this run. These remain caller-recorded evidence.
             installed_checks = _installed_evidence_valid(manifest, recorded)
         return {"entryProtocol": "exec-resume", "caseSchema": manifest.get("caseSchema"),
-                "recordedExecution": recorded,
+                "recordedExecution": _observer_view(recorded, evidence / "result.json", recorded_raw),
                 "retainedResourceObservations": _retained_resource_observations(evidence, manifest, recorded["stages"]),
                 "retainedInstalledChecksValid": installed_checks,
                 "currentFileObservation": current,
@@ -1881,7 +2095,7 @@ def inspect(evidence, *, retained=False):
             input_binding = False
     state = sorted(p.name for p in (evidence / "state").iterdir())
     try:
-        resources = json.loads(read_regular(evidence / "resources.json"))
+        resources = _read_observer_record(evidence / "resources.json")
     except (OSError, ValueError):
         resources = None
     return {"outputs": {"details": details, "summary": summary, "report": report},
@@ -2464,7 +2678,7 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
     prompt_path = evidence / f"prompt-{stage + 1}.txt"
     stdout_path = evidence / f"stdout-{stage + 1}.jsonl"
     stderr_path = evidence / f"stderr-{stage + 1}.txt"
-    process, job, samples = None, _new_controller(), []
+    process, job, samples = None, _new_controller(), ResourceSamples(evidence, f"native-receipt-{stage + 1}")
     stdout_lines = _IncrementalLines(stdout_path, limit=32 * 1024 * 1024)
     stderr_lines = _IncrementalLines(stderr_path, limit=32 * 1024 * 1024)
     configured, started_thread = None, None
@@ -2559,7 +2773,7 @@ def _run_persistent_stage(manifest, stage, thread_id, env, deadline, native_usag
             receipt["usageObservation"] = live_usage
     receipt.update({"stage": stage + 1, "command": command, "exitCode": process.returncode if process else None,
                     "forced": forced, "failure": failure, "elapsedSeconds": time.monotonic() - started,
-                    "remainingOwnedProcesses": after.get("activeProcesses"), "samples": samples,
+                    "remainingOwnedProcesses": after.get("activeProcesses"), **samples.record(),
                     "pid": process.pid if process else None, "controller": controller,
                     "evidenceScope": _resource_scope(controller), "beforeCleanup": before, "after": after,
                     "cleanupState": "released-within-controller-scope" if _released(after, controller) else "unobserved"})
@@ -2677,7 +2891,7 @@ def run_persistent(args):
                 "files": {}, "violations": [], "observationErrors": ["file-inspection-incomplete"]}}
             stages.append(observed)
             phase = "native-receipt-retention"
-            save(evidence / f"native-receipt-{stage + 1}.json", native)
+            _save_control(evidence / f"native-receipt-{stage + 1}.json", native)
             if (getattr(args, "observe_native_goal", False) or manifest.get("admissionBinding") is not None
                     or manifest.get("compositionBinding") is not None):
                 phase = "native-goal-readback"
@@ -2778,7 +2992,7 @@ def run_persistent(args):
         result["poststateRetentionFailure"] = "shared-config-receipt-unwritten"
     if poststate_observation_failed:
         result["poststateObservationFailure"] = "shared-config-observation-unavailable"
-    save(evidence / "result.json", result)
+    _save_control(evidence / "result.json", result)
     if failure is not None:
         raise failure
     return result
@@ -2813,7 +3027,7 @@ def run(args):
         "limit": "config.toml only; changed content may include concurrent work, so no automatic shared cleanup",
     }
     save(evidence / "shared-config.json", config_observation)
-    process, job, samples = None, _new_controller(), []
+    process, job, samples = None, _new_controller(), ResourceSamples(evidence, "resources")
     forced, failure, before_cleanup = False, None, None
     started = time.monotonic()
     try:
@@ -2855,7 +3069,7 @@ def run(args):
                               if config_before["state"] == config_after["state"] == "observed" else None),
             })
             save(evidence / "shared-config.json", config_observation)
-    save(evidence / "resources.json", {"samples": samples, "beforeCleanup": before_cleanup, "afterCleanup": after,
+    _save_control(evidence / "resources.json", {**samples.record(), "beforeCleanup": before_cleanup, "afterCleanup": after,
                                        "elapsedSeconds": time.monotonic() - started, "forced": forced, "failure": failure,
                                        "exitCode": process.returncode if process else None, "controller": controller,
                                        "pid": process.pid if process else None, "cleanupFailure": cleanup_failure,
@@ -2869,7 +3083,7 @@ def run(args):
                          "cleanupFailure": cleanup_failure,
                          "cleanupState": "released-within-controller-scope" if _released(after, controller) else "unobserved"}
     result["runtimeStateRetainedForReview"] = bool(result["runtimeStateResidue"])
-    save(evidence / "result.json", result)
+    _save_control(evidence / "result.json", result)
     return result
 
 

@@ -2122,6 +2122,10 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
       {threadId: targetId, includeTurns: true}, deadline]);
     const sourceThread = threadFrom(sourceRead, sourceId,
       'reconciled-finalization:source-read', input.transferId);
+    if (typeof sourceThread.ephemeral === 'boolean' && typeof state.sourceEphemeral === 'boolean' &&
+        sourceThread.ephemeral !== state.sourceEphemeral) {
+      reject('SOURCE_PERSISTENCE_CHANGED', 'current source persistence conflicts with the retained observation');
+    }
     const targetThread = threadFrom(targetRead, targetId,
       'reconciled-finalization:target-read', input.transferId);
     const sourceStatus = plainObject(sourceThread.status) ? sourceThread.status.type : null;
@@ -2317,7 +2321,7 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
       releaseSourceRef = observedVerdict.sourceRef;
     }
     const observedSourceEphemeral = typeof sourceThread.ephemeral === 'boolean' ?
-      sourceThread.ephemeral : state.sourceEphemeral;
+      sourceThread.ephemeral : null;
     const subscriptionRelease = immutable({...intent, observed: true,
       nativeStatus, evidenceRef: releaseEvidenceRef,
       ...(nativeIntentClosedByNewController || priorIntentMovedToNewController ?
@@ -2325,8 +2329,11 @@ async function finalizeReconciledHandoff(rawInput, rawDependencies) {
     const released = immutable({...current.state,
       phase: 'source-subscription-released', pendingEffect: null,
       sourceRecovery: 'retained', sourceEphemeral: observedSourceEphemeral,
+      priorSourcePersistence: {
+        sourceEphemeral: typeof state.sourceEphemeral === 'boolean' ? state.sourceEphemeral : null,
+        nativeHistoryRetained: typeof state.nativeHistoryRetained === 'boolean' ? state.nativeHistoryRetained : null},
       nativeHistoryRetained: typeof observedSourceEphemeral === 'boolean' ?
-        !observedSourceEphemeral : state.nativeHistoryRetained ?? null,
+        !observedSourceEphemeral : null,
       subscriptionRelease,
       sourceRead: summarizeThread(sourceRead),
       verification: {...current.state.verification,

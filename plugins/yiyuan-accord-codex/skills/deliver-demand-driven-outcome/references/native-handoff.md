@@ -710,6 +710,10 @@ independent verifier and may be supported by a caller-owned checkpoint; it does
 not establish native history or power-loss durability. Ephemeral or unknown
 sources remain usable when that independent recovery requirement is met.
 
+Reconciled finalization retains earlier ledger persistence fields in
+`priorSourcePersistence`; they never fill in missing current metadata. A conflict
+between known current and prior values holds before release authorization or unsubscribe.
+
 On failure retain `CarrierHandoffError.code`, `stage`, `reconciliationRequired`,
 `details` and `state`, alongside the durable recorder and raw native receipts.
 Recorder or connection uncertainty prevents further mutations; an ambiguous native

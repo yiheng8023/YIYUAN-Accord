@@ -3475,6 +3475,222 @@ class EntryTests(unittest.TestCase):
         self.assertEqual(group.sample()["processGroupState"], "absent")
 
 
+
+    def sample_fixture(self, root, *, stem="native-receipt-1"):
+        samples = [{"time": i, "processes": [{"pid": i + 1, "name": "x" * 40000}]}
+                   for i in range(3)]
+        sink = entry.ResourceSamples(root, stem)
+        for sample in samples:
+            sink.append(sample)
+        record = {"stage": 1, "valid": False, "threadId": "native-thread",
+                  "exitCode": 124, "forced": True, "failure": "usage-limit",
+                  "controller": "windows-job-object", "remainingOwnedProcesses": 0,
+                  "evidenceScope": entry._resource_scope("windows-job-object"),
+                  "pid": 1, "after": {"activeProcesses": 0}, **sink.record()}
+        path = root / (stem + ".json")
+        entry._save_control(path, record)
+        return samples, record, path
+
+    def test_samples_preserve_large_and_small(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            small = entry.ResourceSamples(root, "resources")
+            small.append({"time": 1, "processes": []})
+            self.assertEqual(small.record(), {"samples": [{"time": 1, "processes": []}]})
+            samples, record, path = self.sample_fixture(root)
+            loaded = entry._read_observer_record(path)
+            self.assertEqual(loaded, record)
+            ref = loaded["sampleEvidence"]
+            rows = [row for chunk in ref["chunks"]
+                    for row in json.loads((root / chunk["path"]).read_bytes())]
+            self.assertEqual(rows, samples)
+            self.assertEqual(ref["count"], len(samples))
+            self.assertLess(path.stat().st_size, entry.RESOURCE_INLINE_BYTES)
+            self.assertNotIn("samples", loaded)
+
+    def test_samples_reject_bad_refs(self):
+        for fault in ("hash", "bytes", "count", "total-count", "total-bytes",
+                      "duplicate", "escape", "absolute", "missing", "mixed", "extra"):
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                _, record, path = self.sample_fixture(root)
+                ref = record["sampleEvidence"]
+                chunk = ref["chunks"][0]
+                if fault == "hash": chunk["sha256"] = "0" * 64
+                elif fault == "bytes": chunk["bytes"] += 1
+                elif fault == "count": chunk["count"] += 1
+                elif fault == "total-count": ref["count"] += 1
+                elif fault == "total-bytes": ref["bytes"] += 1
+                elif fault == "duplicate": ref["chunks"].append(dict(chunk))
+                elif fault == "escape": chunk["path"] = "../" + chunk["path"]
+                elif fault == "absolute": chunk["path"] = str(root / chunk["path"])
+                elif fault == "missing": (root / chunk["path"]).unlink()
+                elif fault == "mixed": record["samples"] = []
+                elif fault == "extra": (root / "native-receipt-1.samples-9999.json").write_bytes(b"[]")
+                entry.save(path, record)
+                with self.assertRaises((ValueError, OSError)):
+                    entry._read_observer_record(path)
+
+    def test_samples_reject_links_and_drift(self):
+        for fault in ("symlink", "hardlink", "drift"):
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                _, record, path = self.sample_fixture(root)
+                chunk = root / record["sampleEvidence"]["chunks"][0]["path"]
+                if fault != "drift":
+                    original = root / "original.json"
+                    chunk.rename(original)
+                    try:
+                        if fault == "symlink": chunk.symlink_to(original)
+                        else: os.link(original, chunk)
+                    except OSError as error:
+                        self.skipTest("Link fixture unavailable: " + str(error))
+                    with self.assertRaises(ValueError):
+                        entry._read_observer_record(path)
+                else:
+                    read = entry.read_regular
+                    def changed(file, *args, **kwargs):
+                        raw = read(file, *args, **kwargs)
+                        if Path(file) == chunk:
+                            chunk.write_bytes(raw + b" ")
+                        return raw
+                    with patch.object(entry, "read_regular", side_effect=changed):
+                        with self.assertRaisesRegex(ValueError, "changed"):
+                            entry._read_observer_record(path)
+
+    def test_samples_persistent_inspection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest = self.prepared_persistent(root, self.scoped_case(root))
+            evidence = Path(manifest["evidence"])
+            def execute(prepared, *_):
+                (Path(prepared["workspace"]) / "report.json").write_text('{"candidate":"abc"}')
+                _, record, _ = self.sample_fixture(evidence)
+                # run_persistent is the sole receipt writer.
+                (evidence / "native-receipt-1.json").unlink()
+                return record
+            with patch.object(entry, "_run_persistent_stage", side_effect=execute):
+                result = entry.run_persistent(argparse.Namespace(evidence=str(evidence)))
+            frozen = {p.relative_to(evidence): p.read_bytes() for p in evidence.rglob("*") if p.is_file()}
+            for retained in (False, True):
+                with patch.object(entry, "_run_persistent_stage") as forbidden:
+                    checked = entry.inspect(evidence, retained=retained)
+                forbidden.assert_not_called()
+                self.assertFalse(checked["recordedExecution"]["caseComplete"])
+                self.assertEqual(checked["recordedExecution"]["stages"][0]["failure"], "usage-limit")
+                self.assertTrue(checked["retainedResourceObservations"][0]["releasedWithinScope"])
+                self.assertLess(len(json.dumps(checked)), 100000)
+            self.assertEqual(frozen, {p.relative_to(evidence): p.read_bytes() for p in evidence.rglob("*") if p.is_file()})
+
+    def test_samples_legacy_readonly_views(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest, result = self.retained_scoped_fixture(root)
+            evidence = Path(manifest["evidence"])
+            samples = [{"sample": "x" * 900000, "ordinal": i} for i in range(10)]
+            stage = result["stages"][0]
+            stage.update(samples=samples, failure="usage-limit", exitCode=124, forced=True, valid=False,
+                         controller="windows-job-object", remainingOwnedProcesses=0,
+                         pid=1, after={"activeProcesses": 0}, stage=1)
+            result.update(caseComplete=False, completedStages=0)
+            native = {key: value for key, value in stage.items()
+                      if key not in ("fileObservation", "nativeGoalObservation")}
+            entry.save(evidence / "native-receipt-1.json", native)
+            entry.save(evidence / "result.json", result)
+            frozen = {p.name: p.read_bytes() for p in (evidence / "result.json", evidence / "native-receipt-1.json")}
+            self.assertGreater(len(frozen["result.json"]), 8 * 1024 * 1024)
+            with self.assertRaises(ValueError):
+                entry.read_regular(evidence / "result.json")
+            for retained in (False, True):
+                checked = entry.inspect(evidence, retained=retained)
+                viewed = checked["recordedExecution"]["stages"][0]
+                self.assertNotIn("samples", viewed)
+                self.assertEqual(viewed["legacySamples"]["count"], 10)
+                self.assertEqual(viewed["legacySamples"]["pointer"], "/stages/0/samples")
+                self.assertEqual(viewed["legacySamples"]["sha256"], hashlib.sha256(frozen["result.json"]).hexdigest())
+                self.assertEqual(viewed["failure"], "usage-limit")
+                self.assertFalse(checked["recordedExecution"]["caseComplete"])
+                self.assertLess(len(json.dumps(checked)), 100000)
+            self.assertEqual(frozen, {name: (evidence / name).read_bytes() for name in frozen})
+
+    def test_samples_legacy_bound(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            oversized = {"schema": "accord-codex-persistent-exec/v1", "stages": [],
+                         "unrelated": "x" * (8 * 1024 * 1024)}
+            entry.save(root / "result.json", oversized)
+            with self.assertRaisesRegex(ValueError, "not legacy"):
+                entry._read_observer_record(root / "result.json")
+            with self.assertRaisesRegex(ValueError, "size-limit"):
+                entry._save_control(root / "new-result.json", oversized)
+            self.assertFalse((root / "new-result.json").exists())
+
+    def test_samples_ephemeral_inspection(self):
+        for legacy in (False, True):
+            with self.subTest(legacy=legacy), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                manifest = self.prepared(root)
+                evidence = Path(manifest["evidence"])
+                samples, record, path = self.sample_fixture(evidence, stem="resources")
+                if legacy:
+                    for chunk in record.pop("sampleEvidence")["chunks"]:
+                        (evidence / chunk["path"]).unlink()
+                    record["samples"] = [{"payload": "x" * 900000} for _ in range(10)]
+                record["afterCleanup"] = record.pop("after")
+                entry.save(path, record)
+                before = path.read_bytes()
+                with patch.object(entry.subprocess, "Popen") as forbidden:
+                    checked = entry.inspect(evidence)
+                forbidden.assert_not_called()
+                self.assertTrue(checked["retainedResourceObservation"]["releasedWithinScope"])
+                self.assertLess(len(json.dumps(checked)), 100000)
+                self.assertEqual(path.read_bytes(), before)
+                if not legacy:
+                    chunk = evidence / record["sampleEvidence"]["chunks"][0]["path"]
+                    chunk.write_bytes(b"[]")
+                    self.assertFalse(entry.inspect(evidence)["retainedResourceObservation"]["releasedWithinScope"])
+
+    def test_samples_budget_cleanup(self):
+        for persistent in (False, True):
+            with self.subTest(persistent=persistent), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                manifest = self.prepared_persistent(root) if persistent else self.prepared(root)
+                evidence = Path(manifest["evidence"])
+                process, job = Mock(returncode=124, pid=1234), Mock()
+                process.poll.return_value = None
+                sample = {"activeProcesses": 1, "payload": "x" * 70000}
+                cleanup = ({"activeProcesses": 1}, {"activeProcesses": 0}, True, None)
+                with patch.object(entry, "RESOURCE_SAMPLE_BYTES", 100000), \
+                        patch.object(entry, "_new_controller", return_value=job), \
+                        patch.object(entry, "_sample_resources", return_value=sample), \
+                        patch.object(entry, "_close_processes", return_value=cleanup) as close, \
+                        patch.object(entry.subprocess, "Popen", return_value=process), \
+                        patch.object(entry.time, "sleep"), \
+                        patch.dict(os.environ, {"CODEX_HOME": str(root / "isolated-home")}):
+                    if persistent:
+                        record = entry._run_persistent_stage(manifest, 0, None, {}, time.monotonic()+10)
+                        path = evidence / "native-receipt-1.json"
+                        entry._save_control(path, record)
+                    else:
+                        result = entry.run(argparse.Namespace(evidence=str(evidence)))
+                        path = evidence / "resources.json"
+                        self.assertIn("resource-sample-budget-exceeded", result["process"]["failure"])
+                    record = entry._read_observer_record(path)
+                    self.assertEqual(record["exitCode"], 124)
+                    self.assertTrue(record["forced"])
+                    self.assertIn("resource-sample-budget-exceeded", record["failure"])
+                    self.assertEqual(record["sampleEvidence"]["count"], 2)
+                    rows = [row for chunk in record["sampleEvidence"]["chunks"]
+                            for row in json.loads((evidence / chunk["path"]).read_bytes())]
+                    self.assertEqual(rows, [sample, sample])
+                    self.assertTrue(record["sampleEvidence"]["limitExceeded"])
+                    close.assert_called_once()
+                    record["failure"] = None
+                    entry.save(path, record)
+                    with self.assertRaisesRegex(ValueError, "cannot claim success"):
+                        entry._read_observer_record(path)
+
+
 class ResourceExecutionBindingTests(unittest.TestCase):
     def manifests(self, root):
         manifest = EntryTests().prepared_persistent(root)

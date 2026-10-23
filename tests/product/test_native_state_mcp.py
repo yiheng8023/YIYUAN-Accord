@@ -4376,6 +4376,43 @@ const bridge=require(process.argv[1]);
             self.assertLessEqual(result['blocked'], 2)
             self.assertEqual(result['writes'], 200)
 
+    def test_execution_handler_preserves_numeric_and_string_request_ids_for_cancellation(self):
+        script = r"""
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto');
+const [mcpFile,executionFile]=process.argv.slice(-2);
+if(path.basename(mcpFile)!=='native-state-mcp.cjs'||path.basename(executionFile)!=='native-task-execution.cjs')throw Error('Explicit actual module paths required');
+const memory=new Map(),cancelled=[];
+const stat=(f=false)=>({isDirectory:()=>!f,isFile:()=>f,isSymbolicLink:()=>false,nlink:1,size:0,ino:1n,dev:1n});
+const memfs={existsSync:p=>memory.has(p)||!(/\.(json|sqlite|tmp)$/.test(p)),realpathSync:p=>path.resolve(p),lstatSync:p=>({...stat(memory.has(p)),size:memory.get(p)?.length||0}),mkdirSync(){},writeFileSync(p,v){memory.set(p,Buffer.from(v));},readFileSync:p=>memory.get(p),openSync:p=>p,fsyncSync(){},closeSync(){},renameSync(a,b){memory.set(b,memory.get(a));memory.delete(a);},unlinkSync:p=>memory.delete(p),rmdirSync(){}};
+let nativeExports;
+const fakeEngine=()=>{let s={phase:'new',busy:false,writer:'source',sourceRecovery:'retained',turnStarts:0},done,id;return{inspect:()=>s,prepare(p){id=p.transferId;s={...s,phase:'awaiting-review',busy:true};return new Promise(r=>done=r);},async cancel(){cancelled.push(id);s={...s,phase:'cancelled-held',busy:false};done?.();}}};
+const forbid=()=>{throw Error('REAL_PROCESS_OR_NATIVE_FORBIDDEN');};
+const fakeRequire=n=>n==='node:fs'?memfs:n==='node:child_process'?{spawn:forbid,spawnSync:forbid}:n==='./task-checkpoint.cjs'?{}:n==='./codex-capabilities.cjs'?{}:n==='./external-handoff.cjs'?{createExternalHandoff:fakeEngine}:n==='./native-task-execution.cjs'?nativeExports:n==='./carrier-recorder.cjs'?{openCarrierRecorder:()=>({readScope(){throw Object.assign(Error('SCOPE_NOT_FOUND'),{code:'SCOPE_NOT_FOUND'});},read:forbid,close(){}})}:require(n);
+function load(file){const raw=fs.readFileSync(file,'utf8'),box={module:{exports:{}},exports:{},require:fakeRequire,process:{platform:process.platform,env:{},pid:999},Buffer,TextDecoder,Date,Map,Set,setTimeout,clearTimeout,__filename:file,__dirname:path.dirname(file)};vm.runInNewContext(raw,box,{filename:file});return {exports:box.module.exports,sha256:crypto.createHash('sha256').update(raw).digest('hex')};}
+const native=load(executionFile);nativeExports=native.exports;const bridge=load(mcpFile);
+const cwd=path.resolve('mock-request-id-work'),snapshot={epoch:'epoch',revision:1,mode:'active',checkpoint:{canContinue:true},inputReceipt:{present:true},hostObservationCurrent:true,currentInputReconciled:true,nativeInputEvidence:{state:'observed',latestInputReconciled:true,latestNativeInputsComplete:true,pendingInputs:[]},checkpointSource:{sha256:'a'.repeat(64)},inspection:{inputs:[{path:'q.json',current:{present:true,sha256:'a'.repeat(64)},unchanged:true,stable:true}]}};
+const h=bridge.exports.createHandler('controlled-in-memory',{readState:()=>snapshot,storageRoot:path.resolve('mock-request-id-store'),nativeFactory:forbid});
+h({jsonrpc:'2.0',id:0,method:'initialize',params:{protocolVersion:'2025-06-18',capabilities:{},clientInfo:{name:'memory-proof',version:'1'}}});h({jsonrpc:'2.0',method:'notifications/initialized'});
+const params=(scope,callId)=>({name:'coordinate_task_execution',_meta:{callId,'x-codex-turn-metadata':{thread_id:'root',session_id:'root',turn_id:'turn',model:'model',codex_version:'host'}},arguments:{action:'prepare',cwd,epoch:'epoch',expectedRevision:1,scopeRef:scope,model:'model',intake:'read',continuation:'continue',postRelease:'finish',deadlineMs:Date.now()+10000,authoritySourceRef:'authority',quiescenceSourceRef:'q.json'}});
+const cancel=async id=>{h({jsonrpc:'2.0',method:'notifications/cancelled',params:{requestId:id}});await new Promise(setImmediate);};
+(async()=>{let result;try{const a=await h({jsonrpc:'2.0',id:1,method:'tools/call',params:params('scopeA','callA')}),b=await h({jsonrpc:'2.0',id:'1',method:'tools/call',params:params('scopeB','callB')});if(a.result.isError||b.result.isError)throw Error(JSON.stringify({a,b}));const A=a.result.structuredContent.operationId,B=b.result.structuredContent.operationId;await cancel(1);const afterNumeric=cancelled.slice();await cancel('1');const afterString=cancelled.slice();await cancel(1);await cancel('1');result={kind:'actual-MCP-handler-and-task-execution-in-memory',mcpSourceSha256:bridge.sha256,executionSourceSha256:native.sha256,responseIds:[a.id,b.id],responseIdTypes:[typeof a.id,typeof b.id],numericOperation:A,stringOperation:B,afterNumeric,afterString,afterRepeated:cancelled.slice(),numericCancellationCorrect:afterNumeric.length===1&&afterNumeric[0]===A,stringCancellationCorrect:afterString.length===2&&afterString[0]===A&&afterString[1]===B,cleanupRemovedRequestAssociations:cancelled.length===2,noNativeOrModel:true,noRealFsWrites:true};}finally{await h.close();}console.log(JSON.stringify(result));})().catch(e=>{console.error(e.stack);process.exitCode=1;});
+
+"""
+        run = subprocess.run([self.node, '-e', script, str(BRIDGE),
+                              str(BRIDGE.with_name('native-task-execution.cjs'))],
+                             capture_output=True, text=True, encoding='utf-8',
+                             env=self.env, cwd=self.work, timeout=10)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        result = json.loads(run.stdout)
+        self.assertEqual(result['responseIds'], [1, '1'])
+        self.assertEqual(result['responseIdTypes'], ['number', 'string'])
+        self.assertNotEqual(result['numericOperation'], result['stringOperation'])
+        self.assertEqual(result['afterNumeric'], [result['numericOperation']])
+        self.assertEqual(result['afterString'], [result['numericOperation'], result['stringOperation']])
+        self.assertEqual(result['afterRepeated'], result['afterString'])
+        self.assertTrue(result['noNativeOrModel'])
+        self.assertTrue(result['noRealFsWrites'])
+
     def test_transport_limit_keeps_cancel_ping_and_invalid_input_responsive(self):
         script = """
 const {Readable,Writable}=require('node:stream');

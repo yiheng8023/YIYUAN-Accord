@@ -827,6 +827,18 @@ accepted case. Existing exploration mode remains available. Old cases lacking
 the structured execution binding are rejected by this opt-in, never backfilled
 from their historical results; formal observe/recheck and review are still needed.
 
+Resource sampling retains every normal backend sample in order. Small records
+keep inline samples; larger records use ordinary bounded chunk files with exact
+relative names, SHA-256, byte counts and row counts. Persistent receipts/results,
+live and retained inspection, and ephemeral resource inspection share validation;
+control views do not re-embed the complete sample history. The general 8 MiB
+ordinary-file guard remains unchanged. A dedicated, structure-checked 32 MiB
+legacy envelope reads already-written large inline resource records without
+rewriting them. Inspecting evidence neither resumes work nor changes its failure,
+usage, exit or ownership verdict. Formal observation binds the compatible current
+observer; older readers cannot certify new chunk integrity. A single abnormal
+sample beyond the ordinary-file boundary is retained but remains unverified.
+
 For installed-plugin persistent CLI cases, `prepare --sandbox-mode` defaults to
 `workspace-write`; the optional `danger-full-access` value is limited to that
 path and must already be authorized. It does not grant permission, bypass Hook
