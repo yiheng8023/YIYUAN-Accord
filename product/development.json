@@ -321,7 +321,9 @@
       "plugins/yiyuan-accord-codex/skills/coordinate-capabilities/references/native-capabilities.md",
       "tests/product/test_contemporary_contribution.py",
       "product/cases/current-five-case-review-v3.3.json",
-      "product/cases/source-applicability-review-v3.3.json"
+      "product/cases/source-applicability-review-v3.3.json",
+      "yiyuan_accord/obligation_evidence.py",
+      "tests/product/test_obligation_evidence.py"
     ],
     "rule": "The current authorized 3.3.2 OpenAI development slice includes whole-system consistency and engineering corrections, necessary execution reachability and source-bound acceptance strengthening. Reconcile only actual authorized changed and pending files; preserve the immutable predecessor definitions, published identities and original evidence. Current plans remain revisable against source facts. Other hosts remain undecided future candidates and gain no active development, enablement or release authority. Local conformance and synthetic regressions do not establish functional acceptance or publication readiness.",
     "complexityBudget": {
