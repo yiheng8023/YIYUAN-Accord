@@ -18,6 +18,15 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 DRIVER = Path(__file__).with_name('carrier_handoff_host.cjs')
 PROPOSAL_TOOL = 'accord_request_handoff'
+CARRIER_EXECUTION_SOURCES = frozenset({
+    'runtime/carrier-handoff.cjs', 'runtime/carrier-recorder.cjs',
+    'runtime/codex-connection.cjs', 'runtime/codex-context.cjs',
+    'runtime/task-checkpoint.cjs', 'tests/product/carrier_handoff_host.cjs',
+    'plugins/yiyuan-accord-codex/runtime/codex-context.cjs',
+    'tests/product/test_carrier_handoff.py', 'scripts/observe_codex_lifecycle.py',
+    'scripts/observe_codex_entry.py', 'scripts/codex_rpc.py',
+    'scripts/inspect_native_resources.py',
+})
 
 
 FAILED_TRANSFER_SCENARIO = r'''
@@ -1156,13 +1165,17 @@ def inspect_finalize_receipt_evidence(value):
     if not recorded_root.is_absolute() or not source_root.is_absolute():
         raise ValueError('recorded finalize roots are not absolute')
     snapshot=root/'retained/executed-sources'
+    observed_sources=set()
     for source,expected in manifest.get('sourceHashes',{}).items():
         try: relative=pure(source).relative_to(source_root)
         except ValueError: raise ValueError('frozen source is outside recorded source root') from None
+        observed_sources.add('/'.join(relative.parts))
         frozen=snapshot.joinpath(*relative.parts)
         if (not frozen.is_file() or frozen.is_symlink() or frozen.resolve(strict=True)!=frozen
                 or hashlib.sha256(frozen.read_bytes()).hexdigest()!=expected):
             raise ValueError('frozen finalize source differs: '+str(relative))
+    if not CARRIER_EXECUTION_SOURCES<=observed_sources:
+        raise ValueError('necessary execution sources not retained')
     if post.get('sourceHashesAfter')!=manifest.get('sourceHashes'):
         raise ValueError('execution source changed during finalize evidence run')
     config_path=root/'retained/finalize-receipt-config.json';config=read_json(config_path)
@@ -1912,18 +1925,13 @@ def inspect_release_recovery_evidence(value):
     pure=PureWindowsPath if controller=='windows-job-object' else PurePosixPath
     original=pure(manifest.get('evidence',''));source_root=pure(manifest.get('sourceRoot',''))
     need(original.is_absolute() and source_root.is_absolute(),'recorded roots unavailable')
-    required_sources={'runtime/carrier-handoff.cjs','runtime/carrier-recorder.cjs','runtime/codex-connection.cjs',
-        'runtime/codex-context.cjs','runtime/task-checkpoint.cjs','tests/product/carrier_handoff_host.cjs',
-        'plugins/yiyuan-accord-codex/runtime/codex-context.cjs',
-        'tests/product/test_carrier_handoff.py','scripts/observe_codex_lifecycle.py','scripts/observe_codex_entry.py',
-        'scripts/codex_rpc.py','scripts/inspect_native_resources.py'}
     observed_sources=set()
     for name,expected in manifest.get('sourceHashes',{}).items():
         try: relative=pure(name).relative_to(source_root)
         except ValueError: raise ValueError('source outside recorded checkout') from None
         observed_sources.add('/'.join(relative.parts))
         need(sha(data('retained/executed-sources/'+'/'.join(relative.parts)))==expected,'executed source bytes changed')
-    need(required_sources<=observed_sources,'necessary execution sources not retained')
+    need(CARRIER_EXECUTION_SOURCES<=observed_sources,'necessary execution sources not retained')
     def location(value, relative):
         try: observed=pure(value).relative_to(original)
         except (ValueError,TypeError): return False
@@ -2535,6 +2543,36 @@ class SyntheticReleaseRecoveryOracleTests(unittest.TestCase):
         self.write('retained/release-successor-result.json',new)
         self.sync_prior_and_hashes()
         self.reject('original normal-release failure was not retained')
+
+    def test_finalization_requires_each_frozen_execution_source(self):
+        # Exercise the actual inspector provenance block using the existing
+        # synthetic tree; no native owner or model is started.
+        import ast
+        tree = ast.parse(Path(__file__).read_text(encoding='utf-8'))
+        inspector = next(node for node in tree.body if isinstance(node, ast.FunctionDef)
+                         and node.name == 'inspect_finalize_receipt_evidence')
+        def assigns(node, name):
+            return isinstance(node, ast.Assign) and any(
+                isinstance(target, ast.Name) and target.id == name for target in node.targets)
+        begin = next(i for i, node in enumerate(inspector.body) if assigns(node, 'snapshot'))
+        end = next(i for i, node in enumerate(inspector.body) if assigns(node, 'config_path'))
+        code = compile(ast.Module(body=inspector.body[begin:end], type_ignores=[]),
+                       '<actual-finalization-provenance>', 'exec')
+        original = self.read('manifest.json')
+        pure = PureWindowsPath if original['resourceController'] == 'windows-job-object' else PurePosixPath
+        def inspect_sources(sources):
+            manifest = {**original, 'sourceHashes': sources}
+            post = {**self.read('poststate.json'), 'sourceHashesAfter': sources}
+            exec(code, {'root': self.root, 'pure': pure,
+                        'source_root': pure(original['sourceRoot']), 'manifest': manifest,
+                        'post': post, 'hashlib': hashlib,
+                        'CARRIER_EXECUTION_SOURCES': CARRIER_EXECUTION_SOURCES})
+        inspect_sources(original['sourceHashes'])
+        for missing in (None, *self.SOURCES):
+            with self.subTest(missing=missing), self.assertRaisesRegex(
+                    ValueError, 'necessary execution sources not retained'):
+                inspect_sources({name: digest for name, digest in original['sourceHashes'].items()
+                                 if missing is not None and pure(name).relative_to(pure(original['sourceRoot'])).as_posix() != missing})
 
     def test_empty_source_hash_map_cannot_claim_provenance(self):
         manifest = self.read('manifest.json'); manifest['sourceHashes'] = {}
