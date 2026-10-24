@@ -1811,6 +1811,7 @@ process.stdout.write(JSON.stringify({result,changed}));
         receipt = next(self.state.glob('*.input.json')); original = receipt.read_bytes()
         anchor = json.loads(original)['nativeInputReconciliation']['cursor']['anchorOffset']
         self.append_context_usage(4700)
+        short_source = transcript.read_bytes()
         remaining = anchor + 32 * 1024 * 1024 - transcript.stat().st_size
         full, rest = divmod(remaining, 1024 * 1024)
         if 0 < rest < len(prefix) + len(suffix): full -= 1; rest += 1024 * 1024
@@ -1823,7 +1824,7 @@ process.stdout.write(JSON.stringify({result,changed}));
         script = r"""
 const fs=require('node:fs'),{performance}=require('node:perf_hooks');
 const x=JSON.parse(fs.readFileSync(0,'utf8')),open=fs.openSync,close=fs.closeSync,read=fs.readSync;
-const sources=new Map(),locks=new Map(),scans=[],holds=[];let phase='inspect';
+const sources=new Map(),locks=new Map(),scans=[],holds=[];let phase='inspect',changed=false;
 fs.openSync=(file,...args)=>{const fd=open(file,...args);
   if(file===x.transcript){const scan={phase,bytes:0,maxRead:0,priorReads:0,inputLockedBytes:0};sources.set(fd,scan);scans.push(scan);}
   if(file===x.stateLock||file===x.receipt+'.lock')locks.set(fd,{kind:file===x.stateLock?'state':'input',at:performance.now()});
@@ -1836,14 +1837,18 @@ fs.readSync=(fd,buffer,offset,length,position)=>{const n=read(fd,buffer,offset,l
   }return n;
 };
 fs.closeSync=fd=>{if(locks.has(fd)){const lock=locks.get(fd);holds.push({kind:lock.kind,ms:performance.now()-lock.at});locks.delete(fd);}
-  sources.delete(fd);return close(fd);};
-const bridge=require(process.argv[1]),start=performance.now(),inspected=bridge.inspectNativeState(x.params);
+  const source=sources.delete(fd),result=close(fd);
+  if(source&&x.reader&&!changed){changed=true;fs.appendFileSync(x.transcript,'{"type":"response_item","payload":{"type":"reasoning"}}\n');}return result;};
+const bridge=require(process.argv[1]),start=performance.now(),meta=x.params._meta['x-codex-turn-metadata'];
+const inspected=x.reader?require(x.reader).inspectNativeInputs({transcriptPath:x.transcript,sessionId:meta.session_id,
+  turnId:meta.turn_id,cwd:x.params.arguments.cwd},{retainedCursor:JSON.parse(fs.readFileSync(x.receipt)).nativeInputReconciliation.cursor})
+  :bridge.inspectNativeState(x.params);
 const inspectMs=performance.now()-start;phase='bind';
-const bound=bridge.manageTaskState({...x.params,name:'manage_task_state',arguments:{cwd:x.params.arguments.cwd,
+const bound=x.reader?null:bridge.manageTaskState({...x.params,name:'manage_task_state',arguments:{cwd:x.params.arguments.cwd,
   action:'bind',epoch:x.epoch,expectedRevision:0,result:'Retain exact-budget source',inputs:[],outputs:[{path:'report.txt'}],
   nextAction:'Continue bounded work',canContinue:true}});
 process.stdout.write(JSON.stringify({inspected,bound,scans,holds,inspectMs,bindMs:performance.now()-start-inspectMs,
-  memory:process.memoryUsage(),maxRssKiB:process.resourceUsage().maxRSS}));
+  memory:process.memoryUsage(),maxRssKiB:process.resourceUsage().maxRSS,changed}));
 """
         run = subprocess.run([self.node, '-e', script, str(BRIDGE)], input=json.dumps({
             'params': params, 'transcript': str(transcript), 'receipt': str(receipt), 'anchor': anchor,
@@ -1863,6 +1868,20 @@ process.stdout.write(JSON.stringify({inspected,bound,scans,holds,inspectMs,bindM
         self.assertEqual(receipt.read_bytes(), original)
         print('retained-32mib-measurement=' + json.dumps({key: result[key] for key in (
             'scans', 'holds', 'inspectMs', 'bindMs', 'memory', 'maxRssKiB')}, separators=(',', ':')))
+        budget_source = transcript.read_bytes()
+        size = anchor + 32 * 1024 * 1024 - 64 * 1024 - 8192 - len(short_source)
+        transcript.write_bytes(short_source + prefix + b'x' * (size - len(prefix) - len(suffix)) + suffix)
+        measured = subprocess.run([self.node, '-e', script, str(BRIDGE)], input=json.dumps({
+            'params': params, 'transcript': str(transcript), 'receipt': str(receipt), 'anchor': anchor,
+            'stateLock': str(receipt).replace('.input.json', '.lock'), 'epoch': json.loads(original)['epoch'],
+            'reader': str(ROOT / 'runtime' / 'codex-context.cjs')}),
+            capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+        self.assertEqual(measured.returncode, 0, measured.stderr)
+        limited = json.loads(measured.stdout)
+        self.assertTrue(limited['changed'], limited)
+        self.assertEqual(limited['inspected']['state'], 'unknown')
+        self.assertLessEqual(sum(scan['bytes'] for scan in limited['scans']), 32 * 1024 * 1024)
+        transcript.write_bytes(budget_source)
         with transcript.open('ab') as stream: stream.write(b'\n')
         self.assertEqual(self.native_input_preview()['nativeInputEvidence']['reason'],
                          'native-input-recovery-range-exceeded')
@@ -1873,6 +1892,7 @@ process.stdout.write(JSON.stringify({inspected,bound,scans,holds,inspectMs,bindM
         self.assertFalse(self.manage(action='reconcile-input', epoch=pending['epoch'], expectedRevision=0,
             evidenceCursor=pending['nativeInputEvidence']['cursor'])['isError'])
         receipt = next(self.state.glob('*.input.json')); original = receipt.read_bytes()
+        short_source = transcript.read_bytes()
         for _ in range(9): self.append_long_tail_and_repeated_context()
         current = self.assert_latest_context('complete-media-coverage-after-retained-recovery')
         evidence = current['checkpoint']['snapshot']['nativeInputEvidence']; record = evidence['records'][0]
@@ -1882,20 +1902,24 @@ process.stdout.write(JSON.stringify({inspected,bound,scans,holds,inspectMs,bindM
         self.assertFalse(image['isError'], image)
         self.assertEqual(base64.b64decode(image['imageContent']['data']), self.png_fixture())
         baseline = transcript.read_bytes()
-        for change in ('short-read', 'append-read', 'replace-read', 'append-derive', 'append-commit'):
+        for change in ('short-read', 'append-read', 'replace-read', 'append-derive', 'append-commit',
+                       'benign-close', 'user-close', 'benign-close-commit', 'user-close-commit',
+                       'developer-close', 'system-close', 'pause-close', 'compact-close', 'unknown-close'):
             with self.subTest(change=change):
-                transcript.write_bytes(baseline)
+                transcript.write_bytes(short_source if 'close' in change else baseline)
                 script = r"""
 const fs=require('node:fs');const x=JSON.parse(fs.readFileSync(0,'utf8'));
 const open=fs.openSync,close=fs.closeSync,read=fs.readSync,from=Buffer.from;
 const sources=new Set(),inputLocks=new Set();let changed=false,decodes=0;
 const inject=()=>{if(changed)return;changed=true;
   if(x.change==='replace-read'){fs.renameSync(x.transcript,x.transcript+'.old');fs.writeFileSync(x.transcript,x.baseline);}
+  else if(x.change.includes('close'))fs.appendFileSync(x.transcript,x.append);
   else if(x.change!=='short-read')fs.appendFileSync(x.transcript,'\n');
 };
 fs.openSync=(file,...args)=>{const fd=open(file,...args);if(file===x.transcript)sources.add(fd);
   if(file===x.receipt+'.lock')inputLocks.add(fd);return fd;};
-fs.closeSync=fd=>{sources.delete(fd);inputLocks.delete(fd);return close(fd);};
+fs.closeSync=fd=>{const source=sources.delete(fd);inputLocks.delete(fd);const result=close(fd);
+  if(source&&x.change.includes('close')&&(!x.change.includes('commit')||inputLocks.size))inject();return result;};
 fs.readSync=(fd,...args)=>{const n=read(fd,...args);
   if(sources.has(fd)&&args[3]>=x.anchor&&!changed&&
       (['short-read','append-read','replace-read'].includes(x.change)||x.change==='append-commit'&&inputLocks.size)){
@@ -1914,17 +1938,32 @@ process.stdout.write(JSON.stringify({response,changed}));
                     nextAction='Hold source drift', canContinue=False)}
                 request = dict(params=params, transcript=str(transcript), receipt=str(receipt), change=change,
                     anchor=evidence['cursor']['anchorOffset'], baseline='replacement fixture\n')
+                kind = change.split('-')[0]
+                payload = {'type': 'response_item', 'payload': {'type': 'message',
+                    'role': 'assistant' if kind == 'benign' else kind,
+                    'content': [{'type': 'input_text', 'text': 'Later input'}]}}
+                if kind in ('pause', 'compact', 'unknown'):
+                    payload = {'type': {'pause': 'event_msg', 'compact': 'compacted', 'unknown': 'unknown'}[kind],
+                               'payload': {'type': 'turn_aborted'}}
+                request['append'] = json.dumps(payload) + '\n'
                 run = subprocess.run([self.node, '-e', script, str(BRIDGE)], input=json.dumps(request),
                     capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
                 self.assertEqual(run.returncode, 0, run.stderr)
                 result = json.loads(run.stdout)
                 self.assertTrue(result['changed'], result)
-                self.assertTrue(result['response']['isError'], result)
-                diagnostic = result['response']['value']['nativeInputDiagnostic']
-                self.assertEqual(diagnostic['stage'], 'commit-recheck' if change == 'append-commit' else 'initial-validation')
-                self.assertEqual(diagnostic['readerReason'], 'transcript-read-failed' if change == 'short-read'
-                    else 'transcript-path-changed-after-read' if change == 'append-derive' else 'transcript-changed-during-read')
+                if change.startswith('benign'):
+                    self.assertFalse(result['response']['isError'], result)
+                    self.assertEqual(json.loads(next(self.state.glob('*.state.json')).read_bytes())['revision'], 1)
+                else:
+                    self.assertTrue(result['response']['isError'], result)
+                    diagnostic = result['response']['value']['nativeInputDiagnostic']
+                    self.assertEqual(diagnostic['stage'], 'commit-recheck' if 'commit' in change else 'initial-validation')
+                    self.assertEqual(diagnostic['readerReason'], 'transcript-read-failed' if change == 'short-read'
+                        else 'transcript-path-changed-after-read' if change == 'append-derive' or 'close' in change
+                        else 'transcript-changed-during-read')
                 self.assertEqual(receipt.read_bytes(), original)
+                if change.startswith('benign'):
+                    for state in self.state.glob('*.state.json'): state.unlink()
                 self.assertFalse(any(self.state.glob('*.state.json')))
                 self.assertFalse(any(self.state.glob('*.lock')))
 
@@ -5225,8 +5264,11 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
                 if mode.startswith('assistant'):
                     self.assertIsNone(observed['failure'], value)
                     self.assertEqual(observed['reviewRequest']['stage'], 'prepare')
-                    self.assertIn(rows[1]['reason'], ('transcript-changed-before-read', 'transcript-changed-during-read',
-                                                     'transcript-path-changed-after-read'))
+                    if mode == 'assistant-after':
+                        self.assertEqual(rows[1]['reason'], 'bound-native-input-prefix')
+                    else:
+                        self.assertIn(rows[1]['reason'], ('transcript-changed-before-read', 'transcript-changed-during-read',
+                                                         'transcript-path-changed-after-read'))
                     self.assertEqual(rows[2]['reason'], 'bound-native-input-prefix')
                     continue
                 self.assertEqual(observed['failure'], 'current-source-not-executable', value)

@@ -471,7 +471,43 @@ function inspectNativeInputs(binding, scan) {
 
 // Read-only adapter over the one native rollout path supplied by the current Hook.
 // The byte limits bound local I/O only; they are not model capacity or quality limits.
+function retryRecordIsBenign(row) {
+  const line = parseRow(row), value = line?.payload;
+  if (['user', 'developer', 'system'].includes(value?.role)) return false;
+  if (line?.type === 'event_msg') {
+    return ['token_count', 'agent_message', 'agent_reasoning'].includes(value?.type);
+  }
+  if (line?.type !== 'response_item') return false;
+  return value?.type === 'message' ? value.role === 'assistant'
+    : ['reasoning', 'function_call', 'function_call_output', 'custom_tool_call',
+      'custom_tool_call_output'].includes(value?.type);
+}
+
 function observeNativeTranscript(binding, options = {}) {
+  const prior = {};
+  const first = readNativeTranscript(binding, options, prior);
+  // Optional coherent retry only; the unchanged fail-closed reader remains authoritative.
+  // Authenticate every byte this read consumed; unobserved history is not claimed.
+  if (first.reason !== 'transcript-path-changed-after-read' || !prior.identity ||
+      prior.tail.at(-1) !== 0x0a) return first;
+  const remaining = MAX_RETAINED_BYTES - prior.head.length - prior.tail.length;
+  if (remaining <= 0) return first;
+  const next = {maximumBytes: remaining};
+  const second = readNativeTranscript(binding, options, next);
+  if (!next.identity || next.identity.dev !== prior.identity.dev ||
+      next.identity.ino !== prior.identity.ino || next.identity.mode !== prior.identity.mode ||
+      !samePath(next.transcriptPath, prior.transcriptPath) || next.size <= prior.size ||
+      next.tailOffset > prior.tailOffset || next.tailOffset + next.tail.length < prior.size ||
+      !next.head.subarray(0, prior.head.length).equals(prior.head) ||
+      !next.tail.subarray(prior.tailOffset - next.tailOffset,
+        prior.tailOffset - next.tailOffset + prior.tail.length).equals(prior.tail)) return first;
+  const appended = completeLines(next.tail.subarray(prior.size - next.tailOffset), prior.size, false);
+  if (!appended.length || hasUnterminatedRecord(next.tail) ||
+      !appended.every(retryRecordIsBenign) || !next.sourceUnchanged()) return first;
+  return second;
+}
+
+function readNativeTranscript(binding, options = {}, snapshot = null) {
   const inputScan = options.inputScan;
   if (!binding || !['transcriptPath', 'sessionId', 'turnId', 'cwd'].every((key) => text(binding[key])) ||
       !inputScan && !text(binding.model)) {
@@ -536,9 +572,13 @@ function observeNativeTranscript(binding, options = {}) {
     if (!before.isFile()) return empty('transcript-not-regular-file');
     const size = Number(before.size);
     if (!Number.isSafeInteger(size) || size <= 0) return empty('transcript-empty-or-too-large');
-    head = readSlice(fd, 0, Math.min(size, HEAD_BYTES));
     const requiredScan = inputScan || options.retryInputScan;
     const retained = requiredScan?.retainedCursor;
+    if (snapshot?.maximumBytes !== undefined) {
+      const retryBytes = Math.min(size, HEAD_BYTES) + (retained ? size - retained.anchorOffset : Math.min(size, MAX_TAIL_BYTES));
+      if (retryBytes > snapshot.maximumBytes) return empty('transcript-path-changed-after-read');
+    }
+    head = readSlice(fd, 0, Math.min(size, HEAD_BYTES));
     if (retained) {
       const first = completeLines(head, 0, false)[0];
       if (typeof retained !== 'object' || Array.isArray(retained) ||
@@ -597,6 +637,7 @@ function observeNativeTranscript(binding, options = {}) {
         canonical(statIdentity(stat)) === canonical(identity) && samePath(realPath(supplied), transcriptPath);
     } catch (_) { return false; }
   };
+  if (snapshot) Object.assign(snapshot, {identity, size: Number(before.size), head, tail, tailOffset, transcriptPath, sourceUnchanged});
   if (!sourceUnchanged()) return empty('transcript-path-changed-after-read');
   // Parsing, media decoding and proof derivation can outlast the file read.
   // Recheck the same source after deriving a result; this is a bounded snapshot,

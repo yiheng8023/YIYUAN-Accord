@@ -101,14 +101,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.2-dev.12+codex.20261023220213",
+    "version": "3.3.2-dev.13+codex.20261024082306",
     "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.2-dev.12+codex.20261023220213",
-        "packageSha256": "71e3423c1bf9c4a49d1ad1d6a987ea19532065c4e595a79870ff9ab682f04bff",
+        "packageVersion": "3.3.2-dev.13+codex.20261024082306",
+        "packageSha256": "fcaed2c75a5c99377b4df1039e141ae8e192402ffee212a2586730b48b7aa64c",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -6432,7 +6432,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "Current README/catalog v3 material draft job is prospectively bound under the fresh task-specific CLI danger-full-access permission. Its source target remains53e, distinct from the new execution declaration commit. Three existing steering families use the thin source-applicability-review fixture and exact private caller/plan hashes; all18 expected results,17scopes,52obligations and quality floors remain. GO-1 permits source integration only: no native prepare/run until Root reviews clean source, actual remaining7200/600 window and issues exact GO-2. Original B26 complete-current-reuse holds,7414 failures,53477 missed deadline and sandbox-preflight unknowns remain; no old clock or business replay. Root retains globalGoal/nativecheckpoint/99inputs/OUTCOME/recovery and final qualification/publication judgment; one delegated operator owns only this materials task repo/Git work. Current package remains dev12/30members71e342..., with no installation or ACL/config/trust change. Drafts and pure guards do not establish current functional or release qualification; genuine first-round ambiguity or fourth-round correction is judged only if observed.",
+    "work": "The README/catalog material business is delivered and independently reviewed: complete43 normative/157 Git/73 condition/25 contribution enumerations, eight explicit holds, target53e distinct from generation8b35. Original native22b0 is oneof4 failed at the600-second second turn; no fifth turn or replay, and recovered drafts do not qualify that case. The scoped operator returned all queued/active writing to Root. The dev.13 reader repair and207 relevant regressions preserve new-input/pause/source checks; verify exact source/package and actual host adoption, then reuse these drafts to supply actual current context, exact source mappings, semantic impacts and independent review before existing observe/recheck. Original18cases/17scopes/52obligations, quality, authority, old failures and publication conditions remain. Exact8b35 CI is completed/success11of11; the dev.13 source package has30 members; the retained dev.12 cache and live responder keep their original identity until an actual refresh. No current full R2R3 or3.3.2 release qualification is established.",
     "requires": "Retain the exact published 3.3.0/3.3.1 subjects, original failures, valid source evidence and scoped unknowns. Reconcile affected package/interface changes and original acceptance consequences before claiming reuse or a new pass. Preserve user settings, source input, pauses, ownership and recovery. The existing conditional 3.3.2 publication requires exact candidate checks, necessary host/functional and quality evidence, independent review, hosted verification and ordered publication post-state; no other host, account, trust, promotion or unrelated write is granted."
   },
   "claimCeiling": {
