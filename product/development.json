@@ -108,7 +108,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.2-dev.14+codex.20261024123120",
-        "packageSha256": "ad077594bf83aa33a84ff502871f44b6cb5e3c3f3712a8b295b9c3b5edd7b2ce",
+        "packageSha256": "629fc00e90bd19e38744a0bf26dffb83513085201a2203de5fc45c4006a61e5f",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",

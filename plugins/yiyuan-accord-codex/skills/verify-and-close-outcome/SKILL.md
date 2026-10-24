@@ -96,6 +96,13 @@ disabling, uninstalling and retiring. For uncertain reuse, prefer reversible
 inactivity and weigh actual reuse, expiry and upkeep before authorized retirement.
 Completion grants no permission to remove user-selected tools or other components.
 
+For a bound window, assign preparation through review and closeout to actual
+owners with verification/save time. Check time on return and before dependent
+work; close at the reserve boundary. Local success leaves tail duties intact.
+On expiry, preserve effects/unknowns and stop dependent work; later allocations
+stay separate. Use owned deadlines where supported; they cannot preempt
+arbitrary host reasoning.
+
 Before an executor reports its scope closed, have that owner perform authorized
 mechanical cleanup, verify the resource post-state and retain its terminal result,
 including failure, cancellation and a missing supervisor response. Reuse sufficient

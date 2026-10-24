@@ -5,8 +5,7 @@ description: Preserve task state through context pressure, interruption, reconne
 
 # Maintain task continuity
 
-Use current goal and authority. If coordination duties are absent, read the
-[brief entry](../deliver-demand-driven-outcome/SKILL.md); reach specialists as needed.
+Use current goal/authority and [entry duties](../deliver-demand-driven-outcome/SKILL.md) if absent.
 
 ## Modes and saved task state
 
@@ -14,16 +13,7 @@ Honor the user's mode choice and host limits; reconcile goals, pauses, budgets
 and unfinished work after changes. Permission and collaboration modes differ.
 Ordinary continuation enables no Plan/Goal or new goal, resets no budget and
 lifts no pause. Complete achieved Goals through their lifecycle; plans are revisable.
-
-For a bound time window, assign preparation, execution, independent review and
-closeout to actual owners within that original window. Reserve time for their
-return, verification and necessary state saving. Check elapsed time before the
-next dependent step and when control returns; start closeout at the reserve
-boundary. An operation's early success does not release its remaining duties.
-On expiry, preserve results and unknown effects and stop dependent work; keep a
-later recovery or new allocation separate from the failed original window.
-Use supported owner deadlines for controlled resources. They cannot preempt
-arbitrary reasoning in a host that exposes no such control.
+For bound windows, use [closeout](../verify-and-close-outcome/SKILL.md).
 
 When mode state matters, use the host's read-only Goal query (`get_goal` or
 `thread/goal/get` on an existing owned connection), independently of collaboration
@@ -51,8 +41,8 @@ inspected epoch/revision. Retain input baselines, output predicates, pauses and
 unmet work; supply required revision reasons and dispositions.
 At rebind or recovery, align `result` with the authorized outcome and scope;
 put progress in `nextAction`, unmet conditions and sourced results.
-Retire only state whose responsibilities are resolved or explicitly cancelled.
-Reasons and local file matches do not prove user permission or whole-task completion.
+Retire only resolved or explicitly cancelled responsibilities; reasons and file
+matches prove neither authority nor whole-task completion.
 Honor access, disabled components and denials; inspect effects before retry.
 For reads without MCP execution observation, trusted compatible helper
 `status`/`read-native-input` (`--help`) proves no MCP identity/version.
