@@ -80,7 +80,6 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
                 and all(a._text(role[k]) for k in ('actor', 'host', 'entry'))
                 and role['host'] == case['host'] and isinstance(role['profile'], dict) and bool(role['profile'])
                 and selected_entry(contract, role))
-    require(roles['coordinator']['entry'] == case['entry'])
     require(isinstance(execution['managedSkill'], dict) and set(execution['managedSkill']) == {'id', 'sha256'}
             and a._text(execution['managedSkill']['id']))
     require(isinstance(execution['sourcePolicy'], dict) and set(execution['sourcePolicy']) == {'mode', 'sha256'}

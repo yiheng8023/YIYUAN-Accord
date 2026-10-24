@@ -153,6 +153,107 @@ class ObligationEvidenceTests(unittest.TestCase):
             self.assertEqual(report.get('obligationEvidence', {}).get('supplement-1', {}).get('supportedObligations'),
                              self.IDS, report.get('obligationEvidenceRejections'))
 
+    def test_selected_cli_coordinator_can_reuse_desktop_base(self):
+        with self.history():
+            contract, case, base, state = self.role_fixture()
+            def observer(request):
+                result = base(request)
+                if request['phase'] == 'observe':
+                    w = result['obligationEvidence']['supplement-1']
+                    w['execution']['roles']['coordinator']['entry'] = 'cx-cli'
+                    w['chain'][0]['facts']['expectedRoles']['coordinator']['entry'] = 'cx-cli'
+                    for node in w['chain']:
+                        if node['role'] == 'coordinator':
+                            node['facts']['entry'] = 'cx-cli'
+                        w['sources'][node['source']]['sha256'] = a._hash({k: v for k, v in node.items() if k != 'source'})
+                    self.seal(w, state)
+                return result
+            report = self.assess(contract, observer)
+            self.assertEqual(report.get('obligationEvidence', {}).get('supplement-1', {}).get('supportedObligations'),
+                             self.IDS, report.get('obligationEvidenceRejections'))
+            self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+
+    def conflict_observer(self, base, state, *, renamed=False, invalid_bridge=False, operation_collision=False):
+        checked = {}
+        def observer(request):
+            result = base(request)
+            if request['phase'] == 'recheck':
+                result['obligationEvidence'] = copy.deepcopy(checked)
+                return result
+            seed = result['obligationEvidence']['supplement-1']
+            witnesses = {}
+            layout = [('a', self.IDS[:1]), ('b', self.IDS), ('c', self.IDS[1:])]
+            if renamed:
+                layout = [('c', self.IDS[:1]), ('b', self.IDS), ('a', self.IDS[1:])]
+            for name, obligations in layout:
+                if operation_collision and name == 'b':
+                    continue
+                w = copy.deepcopy(seed)
+                w['obligations'] = [row for row in w['obligations'] if row['id'] in obligations]
+                identity = 'shared' if operation_collision else name
+                w['execution']['episodeId'] = 'episode-' + identity
+                w['execution']['operationId'] = 'operation-' + identity
+                for node in w['chain']:
+                    node['episodeId'] = w['execution']['episodeId']
+                    node['operationId'] = w['execution']['operationId']
+                if invalid_bridge and name == 'b':
+                    w['chain'][3]['facts']['useful'] = False
+                for node in w['chain']:
+                    w['sources'][node['source']]['sha256'] = a._hash({k: v for k, v in node.items() if k != 'source'})
+                sealed = {}
+                self.seal(w, sealed)
+                checked[name] = sealed['recheck']
+                witnesses[name] = w
+            result['obligationEvidence'] = witnesses
+            return result
+        return observer
+
+    def test_coherent_coordinator_identity_still_requires_selected_same_host_entry(self):
+        with self.history():
+            contract, case, base, state = self.role_fixture()
+            for field, value in (('entry', 'cx-jetbrains'), ('host', 'claude-code')):
+                with self.subTest(field=field):
+                    def observer(request):
+                        result = base(request)
+                        if request['phase'] == 'observe':
+                            w = result['obligationEvidence']['supplement-1']
+                            w['execution']['roles']['coordinator'][field] = value
+                            w['chain'][0]['facts']['expectedRoles']['coordinator'][field] = value
+                            for node in w['chain']:
+                                if node['role'] == 'coordinator':
+                                    node['facts'][field] = value
+                                w['sources'][node['source']]['sha256'] = a._hash({k: v for k, v in node.items() if k != 'source'})
+                            self.seal(w, state)
+                        return result
+                    report = self.assess(contract, observer)
+                    self.assertFalse(report.get('obligationEvidence'), report.get('obligationEvidenceRejections'))
+                    self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+
+    def test_transitive_conflicts_reject_all_members_regardless_of_key_names(self):
+        with self.history():
+            contract, case, base, state = self.role_fixture()
+            for renamed in (False, True):
+                with self.subTest(renamed=renamed):
+                    report = self.assess(contract, self.conflict_observer(base, state, renamed=renamed))
+                    self.assertFalse(report.get('obligationEvidence'), report.get('obligationEvidenceRejections'))
+                    self.assertEqual(set(report.get('obligationEvidenceRejections', {})), {'a', 'b', 'c'})
+                    self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+
+    def test_invalid_bridge_does_not_poison_valid_independent_witnesses(self):
+        with self.history():
+            contract, case, base, state = self.role_fixture()
+            report = self.assess(contract, self.conflict_observer(base, state, invalid_bridge=True))
+            self.assertEqual(set(report.get('obligationEvidence', {})), {'a', 'c'}, report.get('obligationEvidenceRejections'))
+            self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+
+    def test_operation_conflicts_reject_distinct_obligations_together(self):
+        with self.history():
+            contract, case, base, state = self.role_fixture()
+            report = self.assess(contract, self.conflict_observer(base, state, operation_collision=True))
+            self.assertFalse(report.get('obligationEvidence'), report.get('obligationEvidenceRejections'))
+            self.assertEqual(set(report.get('obligationEvidenceRejections', {})), {'a', 'c'})
+            self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+
     def window_observer(self, contract, base, state, variant):
         def observer(request):
             result = base(request)
@@ -198,7 +299,8 @@ class ObligationEvidenceTests(unittest.TestCase):
     def test_roles_reject_unselected_entries_identity_and_permission_drift(self):
         with self.history():
             contract, case, base, state = self.role_fixture()
-            for variant in ('deferred-entry', 'other-host', 'native-actor-drift', 'native-role-drift',
+            for variant in ('deferred-entry', 'other-host', 'coordinator-deferred-entry', 'coordinator-other-host',
+                            'native-actor-drift', 'native-role-drift',
                             'unconfirmed-target', 'permission-drift', 'retrospective-executor-profile'):
                 with self.subTest(variant=variant):
                     def observer(request):
@@ -209,6 +311,10 @@ class ObligationEvidenceTests(unittest.TestCase):
                                 w['execution']['roles']['executor']['entry'] = 'cx-jetbrains'
                             elif variant == 'other-host':
                                 w['execution']['roles']['executor']['host'] = 'claude-code'
+                            elif variant == 'coordinator-deferred-entry':
+                                w['execution']['roles']['coordinator']['entry'] = 'cx-jetbrains'
+                            elif variant == 'coordinator-other-host':
+                                w['execution']['roles']['coordinator']['host'] = 'claude-code'
                             elif variant == 'native-actor-drift':
                                 w['chain'][2]['facts']['actor'] = 'another-peer'
                             elif variant == 'native-role-drift':

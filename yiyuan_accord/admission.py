@@ -1658,28 +1658,29 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 from .obligation_evidence import evaluate as evaluate_obligation_evidence
                 records_by_case = {row["case"]: row for row in data["records"]
                                    if isinstance(row, dict) and isinstance(row.get("case"), str)}
-                used_obligations, used_operations = set(), set()
                 for witness_id, witness in witnesses.items():
                     try:
                         _json(witness)
                         result = evaluate_obligation_evidence(root, witness, contract, cases, records_by_case,
                             admitted, subject, package_budget, now, candidate_time)
-                        operation = (witness["execution"]["episodeId"], witness["execution"]["operationId"])
-                        overlap = used_obligations & set(result["supportedObligations"])
-                        if overlap or operation in used_operations:
-                            # Reject every conflicting witness, never first-wins.
-                            for prior_id, prior_result in list(supplemental.items()):
-                                prior_execution = witnesses[prior_id]["execution"]
-                                if (set(prior_result["supportedObligations"]) & set(result["supportedObligations"])
-                                        or (prior_execution["episodeId"], prior_execution["operationId"]) == operation):
-                                    supplemental.pop(prior_id)
-                                    supplemental_rejections[prior_id] = "duplicate-or-conflicting-execution"
-                            raise ValueError("duplicate supplementary execution")
-                        used_obligations.update(result["supportedObligations"])
-                        used_operations.add(operation)
                         supplemental[witness_id] = result
                     except (OSError, subprocess.SubprocessError, KeyError, TypeError, ValueError, StopIteration):
                         supplemental_rejections[witness_id] = "supplementary-execution-unsupported"
+                # Build conflict groups only after independent validation. Every
+                # valid member participates, including bridges between groups;
+                # malformed witnesses cannot taint otherwise valid evidence.
+                groups = {}
+                for witness_id, result in supplemental.items():
+                    execution = witnesses[witness_id]["execution"]
+                    keys = [("obligation", oid) for oid in result["supportedObligations"]]
+                    keys.append(("operation", execution["episodeId"], execution["operationId"]))
+                    for group in keys:
+                        groups.setdefault(group, set()).add(witness_id)
+                conflicts = {witness_id for members in groups.values() if len(members) > 1
+                             for witness_id in members}
+                for witness_id in conflicts:
+                    supplemental.pop(witness_id)
+                    supplemental_rejections[witness_id] = "duplicate-or-conflicting-execution"
             review = data["reviewBundle"]
             if review_bundle is not None and _json(review_bundle) != _json(review):
                 errors.append("review input differs from the observer-checked bundle")
