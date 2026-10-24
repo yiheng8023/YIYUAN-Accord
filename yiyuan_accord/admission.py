@@ -1472,6 +1472,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     }
     admitted, package_reuse, current_applicability, parent_applicability = set(), {}, {}, {}
     criterion_sources = {}
+    supplemental, supplemental_rejections = {}, {}
     if observer is not None:
         try:
             if not callable(observer):
@@ -1492,7 +1493,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             observation_started = monotonic()
             data = _strict_json_object(_json(observer(copy.deepcopy(request)), limit=envelope_limit))
             if (not {"records", "reviewBundle"} <= set(data)
-                    or set(data) - {"records", "reviewBundle", "currentApplicability", "parentApplicability"}
+                    or set(data) - {"records", "reviewBundle", "currentApplicability", "parentApplicability", "obligationEvidence"}
                     or not isinstance(data["records"], list)):
                 raise ValueError("invalid observation envelope")
             ordinary_materials = data.get("currentApplicability", {})
@@ -1501,6 +1502,12 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                    for rows in (ordinary_materials, parent_materials)) or set(ordinary_materials) & set(parent_materials):
                 raise ValueError("invalid current applicability mapping")
             materials = {**ordinary_materials, **parent_materials}
+            witnesses = data.get("obligationEvidence", {})
+            if (not isinstance(witnesses, dict)
+                    or any(not _text(key) for key in witnesses)
+                    or witnesses and policy["schema"] != CURRENT_SCHEMA):
+                supplemental_rejections["envelope"] = "supplementary-execution-mapping-invalid"
+                witnesses = {}
             # Raising the composition ceiling must not enlarge a single source
             # record, current/parent material (including its review), or review.
             for item in [*data["records"], *materials.values(), data["reviewBundle"]]:
@@ -1647,6 +1654,32 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     errors.append(f"{key}: source, identity, freshness, conditions or consequence not admitted")
             if not set(materials) <= seen:
                 raise ValueError("current applicability has no original record")
+            if witnesses:
+                from .obligation_evidence import evaluate as evaluate_obligation_evidence
+                records_by_case = {row["case"]: row for row in data["records"]
+                                   if isinstance(row, dict) and isinstance(row.get("case"), str)}
+                used_obligations, used_operations = set(), set()
+                for witness_id, witness in witnesses.items():
+                    try:
+                        _json(witness)
+                        result = evaluate_obligation_evidence(root, witness, contract, cases, records_by_case,
+                            admitted, subject, package_budget, now, candidate_time)
+                        operation = (witness["execution"]["episodeId"], witness["execution"]["operationId"])
+                        overlap = used_obligations & set(result["supportedObligations"])
+                        if overlap or operation in used_operations:
+                            # Reject every conflicting witness, never first-wins.
+                            for prior_id, prior_result in list(supplemental.items()):
+                                prior_execution = witnesses[prior_id]["execution"]
+                                if (set(prior_result["supportedObligations"]) & set(result["supportedObligations"])
+                                        or (prior_execution["episodeId"], prior_execution["operationId"]) == operation):
+                                    supplemental.pop(prior_id)
+                                    supplemental_rejections[prior_id] = "duplicate-or-conflicting-execution"
+                            raise ValueError("duplicate supplementary execution")
+                        used_obligations.update(result["supportedObligations"])
+                        used_operations.add(operation)
+                        supplemental[witness_id] = result
+                    except (OSError, subprocess.SubprocessError, KeyError, TypeError, ValueError, StopIteration):
+                        supplemental_rejections[witness_id] = "supplementary-execution-unsupported"
             review = data["reviewBundle"]
             if review_bundle is not None and _json(review_bundle) != _json(review):
                 errors.append("review input differs from the observer-checked bundle")
@@ -1666,6 +1699,22 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             for name, rows in (("currentApplicability", ordinary_materials), ("parentApplicability", parent_materials)):
                 if rows:
                     recheck_fields.add(name)
+            if witnesses:
+                recheck_fields.add("obligationEvidence")
+            elif "obligationEvidence" in data and "obligationEvidence" in recheck:
+                recheck_fields.add("obligationEvidence")
+            # A malformed optional recheck holds only supplementary obligations.
+            if witnesses:
+                checked_witnesses = recheck.get("obligationEvidence")
+                if not isinstance(checked_witnesses, dict) or set(checked_witnesses) != set(witnesses):
+                    checked_witnesses = {}
+                for witness_id, result in list(supplemental.items()):
+                    expected = {field: result[field] for field in ("evidenceSha256", "current")}
+                    if _json(checked_witnesses.get(witness_id)) != _json(expected):
+                        supplemental.pop(witness_id)
+                        supplemental_rejections[witness_id] = "supplementary-execution-changed"
+                # Keep legacy recheck shape checks separate from optional data.
+                recheck.setdefault("obligationEvidence", {})
             if (set(recheck) != recheck_fields
                     or recheck["subject"] != subject or recheck["observationSha256"] != observation_hash
                     or not isinstance(recheck["conditions"], dict)):
@@ -1707,7 +1756,9 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                                 and obligation["claim"] in case["claims"]
                                 and obligation["source"]["path"] in case["oracleFiles"]
                                 and (_outcome_value(case["expected"], obligation["pointer"]) is True
-                                     or obligation["id"] in applicable.get(key, {}).get("derivedOutcomes", []))
+                                     or obligation["id"] in applicable.get(key, {}).get("derivedOutcomes", [])
+                                     or any(row["baseCase"] == key and obligation["id"] in row["supportedObligations"]
+                                            for row in supplemental.values()))
                                 for key, case in cases.items()):
                             continue
                         try:
@@ -1746,16 +1797,25 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     admitted.remove(key)
                     reject_case(key, "current-impact-review-expired")
                     case_errors.append(f"{key}: impact review expired before final qualification")
+            for witness_id, result in list(supplemental.items()):
+                if (result["baseCase"] not in admitted
+                        or not 0 <= observation_elapsed < cases[result["baseCase"]]["maxAgeSeconds"]
+                        or any(_fresh(row["reviewedAt"], policy["reviewMaxAgeSeconds"], final_now) is None
+                               for row in witnesses[witness_id]["reviewBundle"]["reviews"])):
+                    supplemental.pop(witness_id)
+                    supplemental_rejections[witness_id] = "supplementary-final-qualification-failed"
             if errors:
                 # A dedicated impact review cannot replace the ordinary current
                 # candidate review or rescue another failed source/identity guard.
                 for key in list(admitted & applicable.keys()):
                     admitted.remove(key)
                     reject_case(key, "current-candidate-review-or-source-invalid")
+                supplemental.clear()
         except Exception:
             # External exception text may contain private source data or credentials.
             errors.append("evidence observer unavailable, invalid or subject changed")
             admitted.clear()
+            supplemental.clear()
     if entry_selection is not None and not entry_selection["final"]:
         for key in sorted(admitted & entry_selection["caseIds"]):
             admitted.remove(key)
@@ -1766,6 +1826,11 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                                     "selectedModes": entry_selection["selectedModes"],
                                     "pendingModes": entry_selection["pendingModes"]}
     report["acceptedCases"] = sorted(admitted)
+    supplemental = {key: value for key, value in supplemental.items() if value["baseCase"] in admitted}
+    if supplemental:
+        report["obligationEvidence"] = supplemental
+    if supplemental_rejections:
+        report["obligationEvidenceRejections"] = supplemental_rejections
     if current_applicability:
         report["currentApplicability"] = {key: current_applicability[key]
                                           for key in sorted(admitted & current_applicability.keys())}
@@ -1835,7 +1900,9 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 candidates = [case for key, case in cases.items() if key in admitted
                     and case["scope"] == scope_id and claim in case["claims"]
                     and (_outcome_value(case["expected"], obligation["pointer"]) is True
-                         or obligation["id"] in derived_cases.get(key, {}).get("derivedOutcomes", []))]
+                         or obligation["id"] in derived_cases.get(key, {}).get("derivedOutcomes", [])
+                         or any(row["baseCase"] == key and obligation["id"] in row["supportedObligations"]
+                                for row in supplemental.values()))]
                 source_cases = [case for case in candidates
                     if obligation["source"]["path"] in case["oracleFiles"]]
                 source_key = (obligation["source"]["path"], obligation["source"]["anchor"])
