@@ -4993,34 +4993,34 @@
               "model": "gpt-6.1-sol",
               "reasoning": "high",
               "windowsSandbox": "elevated",
-              "timeoutSeconds": 3600,
-              "turnTimeoutSeconds": 900,
+              "timeoutSeconds": 2100,
+              "turnTimeoutSeconds": 420,
               "recoveryTimeoutSeconds": 30,
-              "caseSha256": "a419ff2370fc174e93e5b558368049216ab556b1452500f4ceb94a6d36aeb447",
+              "caseSha256": "58fb17c61922932cde0c87038c28a0e4636044e0147e5ed0059846d94c8ef31e",
               "host": "codex",
               "entry": "cx-cli",
-              "codexVersion": "0.163.0-alpha.11.2",
+              "codexVersion": "0.163.0",
               "usageCaps": {
-                "totalTokens": 2000000,
-                "uncachedInputTokens": 250000,
+                "totalTokens": 5000000,
+                "uncachedInputTokens": 500000,
                 "outputTokens": 48000
               },
-              "usageScope": "One new controlled four-turn native CLI thread cumulative. Root preparation, all intervals, review, observation, preservation, recovery and exit costs separately bounded and retained; no net-value or billing claim.",
+              "usageScope": "B26 one native thread cumulative four-turn usage; Root preparation/review/recovery costs separately bounded",
               "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/runtime-recorder-audit-v3.3.json"
+              "caseFile": "product/cases/ordinary-steering-v3.3.json"
             },
             "privateCaller": {
-              "sha256": "48fb6957371b774f47a4b45d3fc7ce49f104d9d88dd01af88c3c2495a3a5b9d2",
+              "sha256": "7c99ad7fda1435cecfd804af05bf1278268e399f76b6164595a0597827abcdfd",
               "guard": "three-case-existing-admission-boundary/v1"
             },
             "caseKind": "prospective-transparent-synthetic-ordinary-cli-functional-verification",
-            "sourceAndInput": "One new controlled four-input native CLI instance for the genuinely unfinished recorder/ownership source audit. Three exact immutable98a9520a Git source snapshots and actual historical/later recovery observations, with host IDs de-identified and a private original/alias map. Later material is revealed in stage4 by declared control, not represented as a new-time event. No closed business replay or expected-to-observed conversion.",
-            "effectiveEnvironment": "Prospective current CLI0.163.0-alpha.11.2, enabled installeddev7 exact package2e51e17..., workspace-write/approvalnever/elevated and current effective user environment. Existing project trust and no-model workspace read/write marker were observed without config/login/trust changes. Actual worker adoption, current config/exposure, permissions, context/Goal and four turn/resource receipts remain required. No FullAccess or trust bypass; uncovered access holds.",
+            "sourceAndInput": "Use one committed fixture and one actual native thread/episode; actual four original input records and ordered effects. Scope claims are independent, no customer business or old case replay.",
+            "effectiveEnvironment": "Installed package23 and native CLI0.163.0, existing logged-in main user profile; workspace-write; actual inventory, adoption, CLI configuration, user/shared-state protections and actor identities must be observed, not copied from this declaration.",
             "qualification": "Root independently reads original native commands/responses, Goal read receipts, protected-source and stage snapshots, actual conditions and resource exits. Preserve unavailable/unknown observations; no expected-to-observed copying or self-awarded flags. Scope floors unchanged.",
-            "budgetAccounting": "New instance clock begins2026-10-23T06:46:28.580194Z, max14400s; all new preparation, intervals, worker, review, observation, preservation, recovery and exit costs retained. Worker3600s/turn900s/recovery30s; cumulative2Mtotal/250kuncached/48koutput; RootTail1800s/reserve600. PriorRoot1904.58/1800 and originalCLIstage4timeout/B26/Rootoverruns keep exact failures and limits. This prospective budget never extends an old clock. Unready/unsealed/freshness or insufficient allowance holds effects; billing/netvalue unknown.",
-            "privatePreparationPlanSha256": "3aae191da553c28f46d87625982c456512b83271653f267c1eedb705977b8b66"
+            "budgetAccounting": "New B26 worker ceilings only;2100s whole run,420s/turn,30s recovery;5M total/500k uncached/48k output cumulative. Future Root independent review, effect verification, save and necessary recovery use separate finite timed stages with actual start/deadline/owner/reserve and boundary preservation. Prior preparation/review costs retain original records, not retroactively covered by a new900s draft. No adopted joint Root/peer token cap; complete deduplicated usage/billing remain unknown, limiting whole-cost/net-value/A08 claims. No retrospective old-window extension or weakening of scope floors.",
+            "privatePreparationPlanSha256": "31e4bd02fb7e552707e44ff5b0a33c3dd1eadccc77a8b36fd679b9cdb9d2dae3"
           },
-          "oracle": "Independently assess each retained scope/duty/quality/scenario/expected leaf on one prospectively bound controlled ordinary-language CLI runtime-source audit, preserving the original three IDs and all old failures. Verify four actual inputs/commands and one supported thread: plan-only no substantive review or output writes; explicit scoped agreement plus genuine side question produces two distinct linked draft artifacts; explicit pause preserves originals and both results bytes/mtime with no business read/write or write-then-restore; explicit resume/finalization adds the remaining real caller source and de-identified, privately traceable actual later settlement evidence. Verify real consistent changes across both outputs and all affected findings/disclosures/unknowns/next work, keeping historical actor relationships, failure/deadline and valid prior facts. A changed fact is not automatically a defect; never manufacture an error or systemic-correction pass. If actual required correction or other behavior is absent, withhold that leaf and whole scope. Structure checks remain semanticDecision=unreviewed. Default mode/Goal absence, exact actual model/permissions/config/package, whole-work and Root-tail cost, all attributable resources, current context, complete independent four-axis review and observe/recheck require original evidence. Frozen prompts support a controlled interaction only, not unknown future inputs or arbitrary host coverage. No closed five-case business, original episode or old Root overrun is replayed/repaired; no A05/A08/product/release/net-value qualification is inferred.",
+          "oracle": "Evaluate this case independently against its unchanged scope and exact conditions. Consume the same original B26 episode, not relabelled primary-case conclusions. Read actual response and command trace: plan only, no deliverable writes; C lacks authorization, not source facts; no whole-task completion. Verify immutable source and normal entry/authority. Independently derive A+B duration5 under initial budget5; C remains authorization-pending despite known duration/priority. Both linked outputs exist and agree; response answers side question and performs authorized work, complete=false; no evaluator repair. Read full native commands/outputs during pause, not final hash alone: no business writes, including write-then-restore. Both outputs retain exact bytes and mtime from stage2; state-only response preserves real unresolved C decision. Actual input explicitly resumes and changes budget/authorization. Independently derive A+C duration4, B not authorized this round, no pending required decision; both outputs correct every affected field and note, preserve original facts/source and retained old effects. Check normal completion, unknowns and resources separately. Goal null is absence only at each actual read; missing or active is not inactive. Independent review plus bounded observe/recheck remain mandatory. No A08/whole-product or net-value claim.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5030,10 +5030,7 @@
             "scripts/observe_codex_lifecycle.py",
             "scripts/inspect_native_resources.py",
             "scripts/codex_rpc.py",
-            "product/cases/runtime-recorder-audit-v3.3.json",
-            "runtime/carrier-recorder.cjs",
-            "runtime/carrier-handoff.cjs",
-            "plugins/yiyuan-accord-codex/runtime/native-task-execution.cjs"
+            "product/cases/ordinary-steering-v3.3.json"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -5102,34 +5099,34 @@
               "model": "gpt-6.1-sol",
               "reasoning": "high",
               "windowsSandbox": "elevated",
-              "timeoutSeconds": 3600,
-              "turnTimeoutSeconds": 900,
+              "timeoutSeconds": 2100,
+              "turnTimeoutSeconds": 420,
               "recoveryTimeoutSeconds": 30,
-              "caseSha256": "a419ff2370fc174e93e5b558368049216ab556b1452500f4ceb94a6d36aeb447",
+              "caseSha256": "58fb17c61922932cde0c87038c28a0e4636044e0147e5ed0059846d94c8ef31e",
               "host": "codex",
               "entry": "cx-cli",
-              "codexVersion": "0.163.0-alpha.11.2",
+              "codexVersion": "0.163.0",
               "usageCaps": {
-                "totalTokens": 2000000,
-                "uncachedInputTokens": 250000,
+                "totalTokens": 5000000,
+                "uncachedInputTokens": 500000,
                 "outputTokens": 48000
               },
-              "usageScope": "One new controlled four-turn native CLI thread cumulative. Root preparation, all intervals, review, observation, preservation, recovery and exit costs separately bounded and retained; no net-value or billing claim.",
+              "usageScope": "B26 one native thread cumulative four-turn usage; Root preparation/review/recovery costs separately bounded",
               "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/runtime-recorder-audit-v3.3.json"
+              "caseFile": "product/cases/ordinary-steering-v3.3.json"
             },
             "privateCaller": {
-              "sha256": "48fb6957371b774f47a4b45d3fc7ce49f104d9d88dd01af88c3c2495a3a5b9d2",
+              "sha256": "7c99ad7fda1435cecfd804af05bf1278268e399f76b6164595a0597827abcdfd",
               "guard": "three-case-existing-admission-boundary/v1"
             },
             "caseKind": "prospective-transparent-synthetic-ordinary-cli-functional-verification",
-            "sourceAndInput": "One new controlled four-input native CLI instance for the genuinely unfinished recorder/ownership source audit. Three exact immutable98a9520a Git source snapshots and actual historical/later recovery observations, with host IDs de-identified and a private original/alias map. Later material is revealed in stage4 by declared control, not represented as a new-time event. No closed business replay or expected-to-observed conversion.",
-            "effectiveEnvironment": "Prospective current CLI0.163.0-alpha.11.2, enabled installeddev7 exact package2e51e17..., workspace-write/approvalnever/elevated and current effective user environment. Existing project trust and no-model workspace read/write marker were observed without config/login/trust changes. Actual worker adoption, current config/exposure, permissions, context/Goal and four turn/resource receipts remain required. No FullAccess or trust bypass; uncovered access holds.",
+            "sourceAndInput": "Use one committed fixture and one actual native thread/episode; actual four original input records and ordered effects. Scope claims are independent, no customer business or old case replay.",
+            "effectiveEnvironment": "Installed package23 and native CLI0.163.0, existing logged-in main user profile; workspace-write; actual inventory, adoption, CLI configuration, user/shared-state protections and actor identities must be observed, not copied from this declaration.",
             "qualification": "Root independently reads original native commands/responses, Goal read receipts, protected-source and stage snapshots, actual conditions and resource exits. Preserve unavailable/unknown observations; no expected-to-observed copying or self-awarded flags. Scope floors unchanged.",
-            "budgetAccounting": "New instance clock begins2026-10-23T06:46:28.580194Z, max14400s; all new preparation, intervals, worker, review, observation, preservation, recovery and exit costs retained. Worker3600s/turn900s/recovery30s; cumulative2Mtotal/250kuncached/48koutput; RootTail1800s/reserve600. PriorRoot1904.58/1800 and originalCLIstage4timeout/B26/Rootoverruns keep exact failures and limits. This prospective budget never extends an old clock. Unready/unsealed/freshness or insufficient allowance holds effects; billing/netvalue unknown.",
-            "privatePreparationPlanSha256": "3aae191da553c28f46d87625982c456512b83271653f267c1eedb705977b8b66"
+            "budgetAccounting": "New B26 worker ceilings only;2100s whole run,420s/turn,30s recovery;5M total/500k uncached/48k output cumulative. Future Root independent review, effect verification, save and necessary recovery use separate finite timed stages with actual start/deadline/owner/reserve and boundary preservation. Prior preparation/review costs retain original records, not retroactively covered by a new900s draft. No adopted joint Root/peer token cap; complete deduplicated usage/billing remain unknown, limiting whole-cost/net-value/A08 claims. No retrospective old-window extension or weakening of scope floors.",
+            "privatePreparationPlanSha256": "31e4bd02fb7e552707e44ff5b0a33c3dd1eadccc77a8b36fd679b9cdb9d2dae3"
           },
-          "oracle": "Independently assess each retained scope/duty/quality/scenario/expected leaf on one prospectively bound controlled ordinary-language CLI runtime-source audit, preserving the original three IDs and all old failures. Verify four actual inputs/commands and one supported thread: plan-only no substantive review or output writes; explicit scoped agreement plus genuine side question produces two distinct linked draft artifacts; explicit pause preserves originals and both results bytes/mtime with no business read/write or write-then-restore; explicit resume/finalization adds the remaining real caller source and de-identified, privately traceable actual later settlement evidence. Verify real consistent changes across both outputs and all affected findings/disclosures/unknowns/next work, keeping historical actor relationships, failure/deadline and valid prior facts. A changed fact is not automatically a defect; never manufacture an error or systemic-correction pass. If actual required correction or other behavior is absent, withhold that leaf and whole scope. Structure checks remain semanticDecision=unreviewed. Default mode/Goal absence, exact actual model/permissions/config/package, whole-work and Root-tail cost, all attributable resources, current context, complete independent four-axis review and observe/recheck require original evidence. Frozen prompts support a controlled interaction only, not unknown future inputs or arbitrary host coverage. No closed five-case business, original episode or old Root overrun is replayed/repaired; no A05/A08/product/release/net-value qualification is inferred.",
+          "oracle": "Evaluate this case independently against its unchanged scope and exact conditions. Consume the same original B26 episode, not relabelled primary-case conclusions. Read actual response and command trace: plan only, no deliverable writes; C lacks authorization, not source facts; no whole-task completion. Verify immutable source and normal entry/authority. Independently derive A+B duration5 under initial budget5; C remains authorization-pending despite known duration/priority. Both linked outputs exist and agree; response answers side question and performs authorized work, complete=false; no evaluator repair. Read full native commands/outputs during pause, not final hash alone: no business writes, including write-then-restore. Both outputs retain exact bytes and mtime from stage2; state-only response preserves real unresolved C decision. Actual input explicitly resumes and changes budget/authorization. Independently derive A+C duration4, B not authorized this round, no pending required decision; both outputs correct every affected field and note, preserve original facts/source and retained old effects. Check normal completion, unknowns and resources separately. Goal null is absence only at each actual read; missing or active is not inactive. Independent review plus bounded observe/recheck remain mandatory. No A08/whole-product or net-value claim.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5139,10 +5136,7 @@
             "scripts/observe_codex_lifecycle.py",
             "scripts/inspect_native_resources.py",
             "scripts/codex_rpc.py",
-            "product/cases/runtime-recorder-audit-v3.3.json",
-            "runtime/carrier-recorder.cjs",
-            "runtime/carrier-handoff.cjs",
-            "plugins/yiyuan-accord-codex/runtime/native-task-execution.cjs"
+            "product/cases/ordinary-steering-v3.3.json"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -5205,34 +5199,34 @@
               "model": "gpt-6.1-sol",
               "reasoning": "high",
               "windowsSandbox": "elevated",
-              "timeoutSeconds": 3600,
-              "turnTimeoutSeconds": 900,
+              "timeoutSeconds": 2100,
+              "turnTimeoutSeconds": 420,
               "recoveryTimeoutSeconds": 30,
-              "caseSha256": "a419ff2370fc174e93e5b558368049216ab556b1452500f4ceb94a6d36aeb447",
+              "caseSha256": "58fb17c61922932cde0c87038c28a0e4636044e0147e5ed0059846d94c8ef31e",
               "host": "codex",
               "entry": "cx-cli",
-              "codexVersion": "0.163.0-alpha.11.2",
+              "codexVersion": "0.163.0",
               "usageCaps": {
-                "totalTokens": 2000000,
-                "uncachedInputTokens": 250000,
+                "totalTokens": 5000000,
+                "uncachedInputTokens": 500000,
                 "outputTokens": 48000
               },
-              "usageScope": "One new controlled four-turn native CLI thread cumulative. Root preparation, all intervals, review, observation, preservation, recovery and exit costs separately bounded and retained; no net-value or billing claim.",
+              "usageScope": "B26 one native thread cumulative four-turn usage; Root preparation/review/recovery costs separately bounded",
               "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/runtime-recorder-audit-v3.3.json"
+              "caseFile": "product/cases/ordinary-steering-v3.3.json"
             },
             "privateCaller": {
-              "sha256": "48fb6957371b774f47a4b45d3fc7ce49f104d9d88dd01af88c3c2495a3a5b9d2",
+              "sha256": "7c99ad7fda1435cecfd804af05bf1278268e399f76b6164595a0597827abcdfd",
               "guard": "three-case-existing-admission-boundary/v1"
             },
             "caseKind": "prospective-transparent-synthetic-ordinary-cli-functional-verification",
-            "sourceAndInput": "One new controlled four-input native CLI instance for the genuinely unfinished recorder/ownership source audit. Three exact immutable98a9520a Git source snapshots and actual historical/later recovery observations, with host IDs de-identified and a private original/alias map. Later material is revealed in stage4 by declared control, not represented as a new-time event. No closed business replay or expected-to-observed conversion.",
-            "effectiveEnvironment": "Prospective current CLI0.163.0-alpha.11.2, enabled installeddev7 exact package2e51e17..., workspace-write/approvalnever/elevated and current effective user environment. Existing project trust and no-model workspace read/write marker were observed without config/login/trust changes. Actual worker adoption, current config/exposure, permissions, context/Goal and four turn/resource receipts remain required. No FullAccess or trust bypass; uncovered access holds.",
+            "sourceAndInput": "Use one committed fixture and one actual native thread/episode; actual four original input records and ordered effects. Scope claims are independent, no customer business or old case replay.",
+            "effectiveEnvironment": "Installed package23 and native CLI0.163.0, existing logged-in main user profile; workspace-write; actual inventory, adoption, CLI configuration, user/shared-state protections and actor identities must be observed, not copied from this declaration.",
             "qualification": "Root independently reads original native commands/responses, Goal read receipts, protected-source and stage snapshots, actual conditions and resource exits. Preserve unavailable/unknown observations; no expected-to-observed copying or self-awarded flags. Scope floors unchanged.",
-            "budgetAccounting": "New instance clock begins2026-10-23T06:46:28.580194Z, max14400s; all new preparation, intervals, worker, review, observation, preservation, recovery and exit costs retained. Worker3600s/turn900s/recovery30s; cumulative2Mtotal/250kuncached/48koutput; RootTail1800s/reserve600. PriorRoot1904.58/1800 and originalCLIstage4timeout/B26/Rootoverruns keep exact failures and limits. This prospective budget never extends an old clock. Unready/unsealed/freshness or insufficient allowance holds effects; billing/netvalue unknown.",
-            "privatePreparationPlanSha256": "3aae191da553c28f46d87625982c456512b83271653f267c1eedb705977b8b66"
+            "budgetAccounting": "New B26 worker ceilings only;2100s whole run,420s/turn,30s recovery;5M total/500k uncached/48k output cumulative. Future Root independent review, effect verification, save and necessary recovery use separate finite timed stages with actual start/deadline/owner/reserve and boundary preservation. Prior preparation/review costs retain original records, not retroactively covered by a new900s draft. No adopted joint Root/peer token cap; complete deduplicated usage/billing remain unknown, limiting whole-cost/net-value/A08 claims. No retrospective old-window extension or weakening of scope floors.",
+            "privatePreparationPlanSha256": "31e4bd02fb7e552707e44ff5b0a33c3dd1eadccc77a8b36fd679b9cdb9d2dae3"
           },
-          "oracle": "Independently assess each retained scope/duty/quality/scenario/expected leaf on one prospectively bound controlled ordinary-language CLI runtime-source audit, preserving the original three IDs and all old failures. Verify four actual inputs/commands and one supported thread: plan-only no substantive review or output writes; explicit scoped agreement plus genuine side question produces two distinct linked draft artifacts; explicit pause preserves originals and both results bytes/mtime with no business read/write or write-then-restore; explicit resume/finalization adds the remaining real caller source and de-identified, privately traceable actual later settlement evidence. Verify real consistent changes across both outputs and all affected findings/disclosures/unknowns/next work, keeping historical actor relationships, failure/deadline and valid prior facts. A changed fact is not automatically a defect; never manufacture an error or systemic-correction pass. If actual required correction or other behavior is absent, withhold that leaf and whole scope. Structure checks remain semanticDecision=unreviewed. Default mode/Goal absence, exact actual model/permissions/config/package, whole-work and Root-tail cost, all attributable resources, current context, complete independent four-axis review and observe/recheck require original evidence. Frozen prompts support a controlled interaction only, not unknown future inputs or arbitrary host coverage. No closed five-case business, original episode or old Root overrun is replayed/repaired; no A05/A08/product/release/net-value qualification is inferred.",
+          "oracle": "Evaluate this case independently against its unchanged scope and exact conditions. Consume the same original B26 episode, not relabelled primary-case conclusions. Read actual response and command trace: plan only, no deliverable writes; C lacks authorization, not source facts; no whole-task completion. Verify immutable source and normal entry/authority. Independently derive A+B duration5 under initial budget5; C remains authorization-pending despite known duration/priority. Both linked outputs exist and agree; response answers side question and performs authorized work, complete=false; no evaluator repair. Read full native commands/outputs during pause, not final hash alone: no business writes, including write-then-restore. Both outputs retain exact bytes and mtime from stage2; state-only response preserves real unresolved C decision. Actual input explicitly resumes and changes budget/authorization. Independently derive A+C duration4, B not authorized this round, no pending required decision; both outputs correct every affected field and note, preserve original facts/source and retained old effects. Check normal completion, unknowns and resources separately. Goal null is absence only at each actual read; missing or active is not inactive. Independent review plus bounded observe/recheck remain mandatory. No A08/whole-product or net-value claim.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5242,10 +5236,7 @@
             "scripts/observe_codex_lifecycle.py",
             "scripts/inspect_native_resources.py",
             "scripts/codex_rpc.py",
-            "product/cases/runtime-recorder-audit-v3.3.json",
-            "runtime/carrier-recorder.cjs",
-            "runtime/carrier-handoff.cjs",
-            "plugins/yiyuan-accord-codex/runtime/native-task-execution.cjs"
+            "product/cases/ordinary-steering-v3.3.json"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -5865,59 +5856,58 @@
             "decisionEvidence": "Bind the facts that change the route and observe actual execution, feedback and affected re-evaluation. Include semantic error or uncertainty, unavailable capabilities and sufficient-native counterexamples; scores, confidence, mentions or successful schema validation do not prove correctness.",
             "switchCost": "Account for relevant discovery, setup, cached/uncached processing, warmup, handoff, review and cleanup across remaining work. Unknown signals remain unknown; claim benefit only with a supported comparison. No dedicated decision model or external deployment is a 3.3 prerequisite.",
             "currentDecisionBinding": {
-              "episodeId": "v33-current-runtime-recorder-audit-20261023-prospective",
-              "business": "Root must advance the genuinely unfinished carrier-recorder source audit and necessary callers within the existing 3.3.2 engineering goal: independently choose a sufficient available route, use the separately bound new ordinary-language four-input CLI instance when ready, consume its real linked findings.json/review.md outputs, and correct all actually affected judgments, guidance and unfinished work. This is a prospective binding only. It does not replay the closed five-case business or CLI aaa143, redo dev5/dev7 installation, or qualify either full parent scope from one partial result.",
+              "episodeId": "v33-current-scope-qualification-20261020-02",
+              "business": "Make and actually consume the still-pending current qualification recommendation after repaired CI and prepared exact source guards; preserve original behavior identities, old not-admitted decisions and all spent costs. No old business is rerun.",
               "pendingDecision": {
                 "owner": "Root",
                 "options": [
-                  "Retain the sufficient current Root gpt-6.1-sol/max route for source integration and verification; use one separately prebound gpt-6.1-sol/high workspace-write/never CLI worker for the still-unfinished recorder/caller audit only after fresh authority/context/source/parent receipt and exact committed plan bindings are complete. Actually consume supported results in the engineering worklist, with actual rationale and switch/coordination costs.",
-                  "If actual independent review or execution identifies a material quality, capability, authorization, resource or correction gap, hold only dependent effects and choose a sufficient available bounded capability for that concrete gap. Preserve unaffected verified contributions and pinned Root configuration; do not force a switch, extra model/Skill invocation, fabricated defect or ceremonial reinstall to earn acceptance.",
-                  "Reuse already observed 7cd5/dev7 QA/CI, actual CLI/MCP adoption and old480cb settlement only within their supported identities/equivalence and dates. Recheck consequential current entry differences, permissions, paused work, writer/epoch/revision and resources before dependent effects. If existing healthy components suffice, continue without installation or marketplace/configuration mutation."
+                  "recommend supported current scope contribution and remove only unsupported replay obligations",
+                  "hold the specific unsupported requirement and its dependent claim; preserve independently supported work"
                 ],
-                "downstreamTarget": "The same unfinished runtime recorder/caller engineering review and Root current 3.3.2 worklist. The CLI writes only findings.json/review.md under its separately bound native workspace; Root consumes/corrects downstream engineering judgments in this executor-owned preparation directory or separately authorized repository work. Formal admission/readiness is later original-evidence observer output, never input to the route choice.",
-                "notNewExecution": "Existing 7cd5/dev7 package/CI11/adoption, old480cb settled scope, all original CLI/Root episodes and predeclaration preparation retain actual dates/actors/results. They may be cited as prior contributions but cannot be relabelled as behavior after this declaration. The historical dev5/900939 record identities and their original bound values, Root1904.580194/1800s and preparation2556.512413/2400s failures and other original limits remain immutable; the new whole clock neither resets nor repairs them. Prior preparation spans forbidding model business remain historical, not a permanent zero-worker limit on the separately authorized new instance."
+                "downstreamTarget": "Private current-qualification-decision.json and actual Root worklist after this new declaration. Formal acceptedCases/readiness is subsequent core output, never input proof.",
+                "notNewExecution": "All old actors, original60contributions, formercase01 recommendation and failed preparation remain prior evidence. Only the new exact-bound recommendation/current worklist effect is after this declaration."
               },
               "observerCarrier": {
                 "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
-                "turnId": "01a167b8-095a-7951-ae1d-57f4dc8bea28",
+                "turnId": "01a1599d-a801-7063-80db-abeb134cd09d",
                 "entry": "cx-desktop",
-                "hostVersion": "0.163.0-alpha.11.2",
-                "model": "gpt-6.1-sol",
-                "effort": "max",
-                "approvalPolicy": "unknown-current-UI-permission-not-attested",
-                "sandbox": "unknown-current-UI-permission-not-attested",
-                "identitySource": "Actual root-native-source.json native source at checkpoint43/epoch97b29ff8; exact protected receipt/state/current Goal source in parent-protected-manifest. UI-specific permission controls are not inferred. Worker workspace-write/never is separately bound; current shared CLI danger-full-access/on-request is not inherited."
+                "hostVersion": "0.163.0-alpha.10.2",
+                "model": "gpt-6-astra",
+                "effort": "xhigh",
+                "approvalPolicy": "on-request",
+                "sandbox": "danger-full-access",
+                "identitySource": "private:accord-scope-qualification-finalize-20261020-02/current-turn-context.json"
               },
               "currentPackage": {
-                "version": "3.3.2-dev.7+codex.20261022211015",
-                "sha256": "2e51e17b8d84179d7978597ca93091cd90a2fcac246f6f55a14537c853e077f3"
+                "version": "3.3.0-dev.1+codex.20261018043044",
+                "sha256": "189ae1afcd272686255e23bafaad045b10c900a30b40d6edcec88403eeb4559c"
               },
-              "exactCandidate": "Existing runtime/QA/CI/adoption remain Git7cd5fb0c846c4e28cc83746715e2427c3850deda/package2e51e17b8d84179d7978597ca93091cd90a2fcac246f6f55a14537c853e077f3; business source is exactGit98a9520ab0c97ccb6848ab1854f35e4969d5ee16. After this declaration is committed, the existing caller binds the final clean commit/tree; an external postcommit record binds both parent definitions and manifests before their observed behavior. Those identities cannot be embedded back into their own declaration hash. This is prospective only, no prior event relabelling. Exact private planSHA=3aae191da553c28f46d87625982c456512b83271653f267c1eedb705977b8b66; fixtureSHA=a419ff2370fc174e93e5b558368049216ab556b1452500f4ceb94a6d36aeb447; callerSHA=48fb6957371b774f47a4b45d3fc7ce49f104d9d88dd01af88c3c2495a3a5b9d2. Historicaldev5 and original failed budgets retain prior source identities.",
+              "exactCandidate": "Resolve and freeze the Git commit/tree containing these02 declarations before the new current recommendation;047b CI and prior0160b are preparatory/historical sources only.",
               "protectedManifest": {
-                "source": ".tmp/release-3.3.2-review/runtime-cli-preparation-20261023-01/parent-protected-manifest.json",
-                "sha256": "c664bf1f509a876a0f516e81523f29732470a022127ce52b90b581985fe5d760"
+                "source": "private:accord-scope-qualification-finalize-20261020-02/prepared-source-guard-manifest.json",
+                "sha256": "62ffae820f40af0dd71a775898645fd429f4600267da121522702a3e7f313168"
               },
-              "protectedOriginals": "Frozen parent-protected-manifest.json binds actual Root input receipt/checkpoint43/epoch97b29ff8, original99 protected contract and OUTCOME absence, native authority/context/Goal source, timing failures/costs, source-packet closure, exact plan/caller/fixture, aliases and original/later recovery sources. Final clean subject and both parent definitions/manifests are separately bound in an external postcommit record before effects; never self-hashed into this declaration. Every abstract original duty/quality/expected and all historical failures remain. A changed parent receipt/source holds later effects; no speculative replay.",
+              "protectedOriginals": "Manifest source graph plus original raw records/outcomes/native ranges and current package/configuration dependencies must be checked before observation and finalrecheck. No original timestamp, failed case, old resource limit or original identity may be rewritten.",
               "writers": {
-                "repositoryAndTaskState": "Root only. Returned reviewers wrote assigned private reports; worker has not started and owns only two separately declared workspace deliverables and necessary internal state. No worker writes repository/source/configuration or Root checkpoint.",
-                "qualificationRecommendation": "Root owns the actual route choice, engineering consumption/correction and later evidence-based recommendation. The one selected CLI worker owns only its two prebound deliverables and necessary internal state, not Root state, source/configuration or qualification. No installation/marketplace mutation is needed by this binding.",
-                "independentObservers": "Distinct accountable product/specification and implementation/standards reviewers inspect actual frozen evidence on original effect, authority, poststate and cleanup axes, using original duties/quality/scenarios/expected unchanged. Their reports do not create observed behavior. Final dispatched identities/source handles must be bound from real evidence; none are invented here."
+                "repositoryAndTaskState": "Root only",
+                "qualificationRecommendation": "Root only, named private output",
+                "independentObservers": "Distinct accountable product/specification and implementation/standards reviewers; they may read sources and write only their named private reports, not repair the claimed behavior."
               },
-              "authority": "Reuse the currently bound original global3.3.2 engineering goal, current Root consensus and existing dynamic capability choice authorization; this draft grants no new authority. Root remains gpt-6.1-sol/max/default with actual Goal absent only as currently observed; recheck freshness. The separate exact three-ID plan prospectively binds a new unfinished-business CLI worker; Root later selection, consumption and correction need actual observations. Do not migrate old FullAccess, repeat completed installation, add account/login/trust, enable Goal, upgrade host, force restart, archive, publish or replay old business. Current UI permission details remain unknown. Existing CLI config is context; worker stays workspace-write/never. An uncovered required authority, new trust or failed current owner/source boundary holds only dependent effects.",
+              "authority": "Existing3.3 continuation/source/qualification authority only. No new login, installation, enablement, trust, sharedconfiguration, restart, archivedthread, oldbusiness replay or external publication is authorized by this definition. Any necessary uncovered effect holds that dependency for actual authority.",
               "limits": {
-                "stageSource": ".tmp/release-3.3.2-review/runtime-cli-preparation-20261023-01/execution-plan.candidate.json; SHA256=3aae191da553c28f46d87625982c456512b83271653f267c1eedb705977b8b66",
-                "sameStageStartedMonotonic": "unknown-do-not-reconstruct-from-wall-time",
-                "sameWholeStageWallSeconds": 14400,
-                "closingReserveSeconds": 600,
+                "stageSource": "private:accord-scope-qualification-finalize-20261020-02/stage.json",
+                "sameStageStartedMonotonic": 119403.4102055,
+                "sameWholeStageWallSeconds": 3600,
+                "closingReserveSeconds": 900,
                 "candidateDecisionAttempts": 1,
                 "maximumSimultaneousAgents": 3,
                 "additionalIndependentReviewTurnsMaximum": 2,
-                "newNativeBusinessWorkersMaximum": 1,
+                "newNativeBusinessWorkersMaximum": 0,
                 "newManagementEffectsMaximum": 0,
-                "usage": "New whole instance begins2026-10-23T06:46:28.580194UTC, max14400s, deadline2026-10-23T10:46:28.580194UTC; all preparation, intervals, selected worker, review, observation, preservation/recovery and exit are charged to this unchanged clock. One separately bound worker max3600s, each turn900s, recovery30s; cumulative2Mtotal/250kuncached/48koutput. RootTail1800s/reserve600 within whole, not an extra extension. Parent route/consumption is not a second CLI worker and does not authorize replay or installation. Historical dev5/900939 record identities and original values, and Root1904.580194/1800s plus preparation2556.512413/2400s retain original failures/limits; original stage files/span.json are immutable history rather than this whole boundary. Unknown active/billing/token costs remain unknown and no net-benefit claim follows. Final ledger and sufficient remaining whole allowance must be checked before effects.",
-                "onExpiry": "At reserve entry stop new business/management effects and preserve/reconcile actual effects, paused/unfinished work and owned resource exit. At expiry retain unknown/partial/failure without implicit extra tail, refreshed clock, replay or on-time claim. Any genuinely necessary later authorized continuation must bind a distinct actual segment and preserve all earlier outcomes; no extra model worker is silently created."
+                "usage": "This new stage includes its registration, decision, actual worklist effect, two independent review turns, observation and closeout. Original3000expiry,1200preparation overrun, tests and all earlier costs remain retained separately, never reset. Token/billing/active-time totals unknown are not zero; no additional paid service.",
+                "onExpiry": "Hold new qualification effects, retain actual results and incomplete state; never extend this original clock or claim a full span ontime from an early result."
               },
-              "recovery": "Root owns recovery only while actually available and authoritative; any alternative live owner is unknown until observed. Preserve complete current input/pause/unfinished work and one-writer state before route transfer. CLI timeout, missing ACK, output uncertainty or actor/context drift requires actual poststate, thread/turn/effects/source/outputs/resource inspection before dependent continuation; never blind retry or recreate/replay an unknown turn. Preserve valid partial artifacts and immutable originals under the exact plan; recover only within remaining original new-instance budget and actual authority. Actual existing dev7 adoption and old480cb natural reader close/settlement can be reused within their exact evidence limits, never as new declared behavior, whole-scope acceptance or release. No old dev4/dev5 cache/helper/update script is replayed and no main host/MCP process is task-owned cleanup. Source/writer/epoch/revision, freshness and parent receipt must be rechecked before dependent work; failed guards are not cleared to proceed."
+              "recovery": "Reconcile source, actual writes, native input/pause and actor ownership before retry. Failed or missing acknowledgements do not authorize replay; retain all original windows/failures and source recovery."
             }
           },
           "oracle": "Independently follow each original scope duty, quality floor, scenario and necessary condition to actual historical behavior and proven current dependencies. Separately observe the prospective Root qualification recommendation and its real worklist effect. A correct hold/report does not establish missing capability; all required behavior/current-applicability predicates must have actual sources before full case acceptance. Preserve different default/effective environments, earlier actor identities, time, package, permissions and all failures. Current Root health is not all-consumer adoption, unchanged policy is not a new Skill execution, static code is not a triggered failure, and an unneeded new action is not required merely for admission. acceptedCases/scopeComplete/candidateEligible must never serve as their own input evidence. Final source/permission/actor/resource drift invalidates affected claims. Formal readiness publication follows core output, not vice versa.",
@@ -6024,59 +6014,58 @@
             "retirement": "Verify authorized disable/remove/retire paths and attributable runtime/OS resource post-state, including normal end/cancel, applicable abnormal exit and sustained/pressure conditions. Keep retained evidence and needed recovery separate from disposable residue; inspect active writers and do not archive user tasks or close unrelated resources.",
             "scopeDistinction": "This parent covers the complete applicable lifecycle and its failure recovery. v33-admitted-entry-lifecycle separately binds per-entry closure to the selected support set; SDK lifecycle/scoped-exposure cases contribute only their declared mechanisms. One local update, restart, install or SDK run cannot close either whole-host or cross-entry obligations.",
             "currentDecisionBinding": {
-              "episodeId": "v33-current-runtime-recorder-audit-20261023-prospective",
-              "business": "Root must advance the genuinely unfinished carrier-recorder source audit and necessary callers within the existing 3.3.2 engineering goal: independently choose a sufficient available route, use the separately bound new ordinary-language four-input CLI instance when ready, consume its real linked findings.json/review.md outputs, and correct all actually affected judgments, guidance and unfinished work. This is a prospective binding only. It does not replay the closed five-case business or CLI aaa143, redo dev5/dev7 installation, or qualify either full parent scope from one partial result.",
+              "episodeId": "v33-current-scope-qualification-20261020-02",
+              "business": "Make and actually consume the still-pending current qualification recommendation after repaired CI and prepared exact source guards; preserve original behavior identities, old not-admitted decisions and all spent costs. No old business is rerun.",
               "pendingDecision": {
                 "owner": "Root",
                 "options": [
-                  "Retain the sufficient current Root gpt-6.1-sol/max route for source integration and verification; use one separately prebound gpt-6.1-sol/high workspace-write/never CLI worker for the still-unfinished recorder/caller audit only after fresh authority/context/source/parent receipt and exact committed plan bindings are complete. Actually consume supported results in the engineering worklist, with actual rationale and switch/coordination costs.",
-                  "If actual independent review or execution identifies a material quality, capability, authorization, resource or correction gap, hold only dependent effects and choose a sufficient available bounded capability for that concrete gap. Preserve unaffected verified contributions and pinned Root configuration; do not force a switch, extra model/Skill invocation, fabricated defect or ceremonial reinstall to earn acceptance.",
-                  "Reuse already observed 7cd5/dev7 QA/CI, actual CLI/MCP adoption and old480cb settlement only within their supported identities/equivalence and dates. Recheck consequential current entry differences, permissions, paused work, writer/epoch/revision and resources before dependent effects. If existing healthy components suffice, continue without installation or marketplace/configuration mutation."
+                  "recommend supported current scope contribution and remove only unsupported replay obligations",
+                  "hold the specific unsupported requirement and its dependent claim; preserve independently supported work"
                 ],
-                "downstreamTarget": "The same unfinished runtime recorder/caller engineering review and Root current 3.3.2 worklist. The CLI writes only findings.json/review.md under its separately bound native workspace; Root consumes/corrects downstream engineering judgments in this executor-owned preparation directory or separately authorized repository work. Formal admission/readiness is later original-evidence observer output, never input to the route choice.",
-                "notNewExecution": "Existing 7cd5/dev7 package/CI11/adoption, old480cb settled scope, all original CLI/Root episodes and predeclaration preparation retain actual dates/actors/results. They may be cited as prior contributions but cannot be relabelled as behavior after this declaration. The historical dev5/900939 record identities and their original bound values, Root1904.580194/1800s and preparation2556.512413/2400s failures and other original limits remain immutable; the new whole clock neither resets nor repairs them. Prior preparation spans forbidding model business remain historical, not a permanent zero-worker limit on the separately authorized new instance."
+                "downstreamTarget": "Private current-qualification-decision.json and actual Root worklist after this new declaration. Formal acceptedCases/readiness is subsequent core output, never input proof.",
+                "notNewExecution": "All old actors, original60contributions, formercase01 recommendation and failed preparation remain prior evidence. Only the new exact-bound recommendation/current worklist effect is after this declaration."
               },
               "observerCarrier": {
                 "threadId": "01a12575-32c0-7313-8a52-64ebaa540ec2",
-                "turnId": "01a167b8-095a-7951-ae1d-57f4dc8bea28",
+                "turnId": "01a1599d-a801-7063-80db-abeb134cd09d",
                 "entry": "cx-desktop",
-                "hostVersion": "0.163.0-alpha.11.2",
-                "model": "gpt-6.1-sol",
-                "effort": "max",
-                "approvalPolicy": "unknown-current-UI-permission-not-attested",
-                "sandbox": "unknown-current-UI-permission-not-attested",
-                "identitySource": "Actual root-native-source.json native source at checkpoint43/epoch97b29ff8; exact protected receipt/state/current Goal source in parent-protected-manifest. UI-specific permission controls are not inferred. Worker workspace-write/never is separately bound; current shared CLI danger-full-access/on-request is not inherited."
+                "hostVersion": "0.163.0-alpha.10.2",
+                "model": "gpt-6-astra",
+                "effort": "xhigh",
+                "approvalPolicy": "on-request",
+                "sandbox": "danger-full-access",
+                "identitySource": "private:accord-scope-qualification-finalize-20261020-02/current-turn-context.json"
               },
               "currentPackage": {
-                "version": "3.3.2-dev.7+codex.20261022211015",
-                "sha256": "2e51e17b8d84179d7978597ca93091cd90a2fcac246f6f55a14537c853e077f3"
+                "version": "3.3.0-dev.1+codex.20261018043044",
+                "sha256": "189ae1afcd272686255e23bafaad045b10c900a30b40d6edcec88403eeb4559c"
               },
-              "exactCandidate": "Existing runtime/QA/CI/adoption remain Git7cd5fb0c846c4e28cc83746715e2427c3850deda/package2e51e17b8d84179d7978597ca93091cd90a2fcac246f6f55a14537c853e077f3; business source is exactGit98a9520ab0c97ccb6848ab1854f35e4969d5ee16. After this declaration is committed, the existing caller binds the final clean commit/tree; an external postcommit record binds both parent definitions and manifests before their observed behavior. Those identities cannot be embedded back into their own declaration hash. This is prospective only, no prior event relabelling. Exact private planSHA=3aae191da553c28f46d87625982c456512b83271653f267c1eedb705977b8b66; fixtureSHA=a419ff2370fc174e93e5b558368049216ab556b1452500f4ceb94a6d36aeb447; callerSHA=48fb6957371b774f47a4b45d3fc7ce49f104d9d88dd01af88c3c2495a3a5b9d2. Historicaldev5 and original failed budgets retain prior source identities.",
+              "exactCandidate": "Resolve and freeze the Git commit/tree containing these02 declarations before the new current recommendation;047b CI and prior0160b are preparatory/historical sources only.",
               "protectedManifest": {
-                "source": ".tmp/release-3.3.2-review/runtime-cli-preparation-20261023-01/parent-protected-manifest.json",
-                "sha256": "c664bf1f509a876a0f516e81523f29732470a022127ce52b90b581985fe5d760"
+                "source": "private:accord-scope-qualification-finalize-20261020-02/prepared-source-guard-manifest.json",
+                "sha256": "62ffae820f40af0dd71a775898645fd429f4600267da121522702a3e7f313168"
               },
-              "protectedOriginals": "Frozen parent-protected-manifest.json binds actual Root input receipt/checkpoint43/epoch97b29ff8, original99 protected contract and OUTCOME absence, native authority/context/Goal source, timing failures/costs, source-packet closure, exact plan/caller/fixture, aliases and original/later recovery sources. Final clean subject and both parent definitions/manifests are separately bound in an external postcommit record before effects; never self-hashed into this declaration. Every abstract original duty/quality/expected and all historical failures remain. A changed parent receipt/source holds later effects; no speculative replay.",
+              "protectedOriginals": "Manifest source graph plus original raw records/outcomes/native ranges and current package/configuration dependencies must be checked before observation and finalrecheck. No original timestamp, failed case, old resource limit or original identity may be rewritten.",
               "writers": {
-                "repositoryAndTaskState": "Root only. Returned reviewers wrote assigned private reports; worker has not started and owns only two separately declared workspace deliverables and necessary internal state. No worker writes repository/source/configuration or Root checkpoint.",
-                "qualificationRecommendation": "Root owns the actual route choice, engineering consumption/correction and later evidence-based recommendation. The one selected CLI worker owns only its two prebound deliverables and necessary internal state, not Root state, source/configuration or qualification. No installation/marketplace mutation is needed by this binding.",
-                "independentObservers": "Distinct accountable product/specification and implementation/standards reviewers inspect actual frozen evidence on original effect, authority, poststate and cleanup axes, using original duties/quality/scenarios/expected unchanged. Their reports do not create observed behavior. Final dispatched identities/source handles must be bound from real evidence; none are invented here."
+                "repositoryAndTaskState": "Root only",
+                "qualificationRecommendation": "Root only, named private output",
+                "independentObservers": "Distinct accountable product/specification and implementation/standards reviewers; they may read sources and write only their named private reports, not repair the claimed behavior."
               },
-              "authority": "Reuse the currently bound original global3.3.2 engineering goal, current Root consensus and existing dynamic capability choice authorization; this draft grants no new authority. Root remains gpt-6.1-sol/max/default with actual Goal absent only as currently observed; recheck freshness. The separate exact three-ID plan prospectively binds a new unfinished-business CLI worker; Root later selection, consumption and correction need actual observations. Do not migrate old FullAccess, repeat completed installation, add account/login/trust, enable Goal, upgrade host, force restart, archive, publish or replay old business. Current UI permission details remain unknown. Existing CLI config is context; worker stays workspace-write/never. An uncovered required authority, new trust or failed current owner/source boundary holds only dependent effects.",
+              "authority": "Existing3.3 continuation/source/qualification authority only. No new login, installation, enablement, trust, sharedconfiguration, restart, archivedthread, oldbusiness replay or external publication is authorized by this definition. Any necessary uncovered effect holds that dependency for actual authority.",
               "limits": {
-                "stageSource": ".tmp/release-3.3.2-review/runtime-cli-preparation-20261023-01/execution-plan.candidate.json; SHA256=3aae191da553c28f46d87625982c456512b83271653f267c1eedb705977b8b66",
-                "sameStageStartedMonotonic": "unknown-do-not-reconstruct-from-wall-time",
-                "sameWholeStageWallSeconds": 14400,
-                "closingReserveSeconds": 600,
+                "stageSource": "private:accord-scope-qualification-finalize-20261020-02/stage.json",
+                "sameStageStartedMonotonic": 119403.4102055,
+                "sameWholeStageWallSeconds": 3600,
+                "closingReserveSeconds": 900,
                 "candidateDecisionAttempts": 1,
                 "maximumSimultaneousAgents": 3,
                 "additionalIndependentReviewTurnsMaximum": 2,
-                "newNativeBusinessWorkersMaximum": 1,
+                "newNativeBusinessWorkersMaximum": 0,
                 "newManagementEffectsMaximum": 0,
-                "usage": "New whole instance begins2026-10-23T06:46:28.580194UTC, max14400s, deadline2026-10-23T10:46:28.580194UTC; all preparation, intervals, selected worker, review, observation, preservation/recovery and exit are charged to this unchanged clock. One separately bound worker max3600s, each turn900s, recovery30s; cumulative2Mtotal/250kuncached/48koutput. RootTail1800s/reserve600 within whole, not an extra extension. Parent route/consumption is not a second CLI worker and does not authorize replay or installation. Historical dev5/900939 record identities and original values, and Root1904.580194/1800s plus preparation2556.512413/2400s retain original failures/limits; original stage files/span.json are immutable history rather than this whole boundary. Unknown active/billing/token costs remain unknown and no net-benefit claim follows. Final ledger and sufficient remaining whole allowance must be checked before effects.",
-                "onExpiry": "At reserve entry stop new business/management effects and preserve/reconcile actual effects, paused/unfinished work and owned resource exit. At expiry retain unknown/partial/failure without implicit extra tail, refreshed clock, replay or on-time claim. Any genuinely necessary later authorized continuation must bind a distinct actual segment and preserve all earlier outcomes; no extra model worker is silently created."
+                "usage": "This new stage includes its registration, decision, actual worklist effect, two independent review turns, observation and closeout. Original3000expiry,1200preparation overrun, tests and all earlier costs remain retained separately, never reset. Token/billing/active-time totals unknown are not zero; no additional paid service.",
+                "onExpiry": "Hold new qualification effects, retain actual results and incomplete state; never extend this original clock or claim a full span ontime from an early result."
               },
-              "recovery": "Root owns recovery only while actually available and authoritative; any alternative live owner is unknown until observed. Preserve complete current input/pause/unfinished work and one-writer state before route transfer. CLI timeout, missing ACK, output uncertainty or actor/context drift requires actual poststate, thread/turn/effects/source/outputs/resource inspection before dependent continuation; never blind retry or recreate/replay an unknown turn. Preserve valid partial artifacts and immutable originals under the exact plan; recover only within remaining original new-instance budget and actual authority. Actual existing dev7 adoption and old480cb natural reader close/settlement can be reused within their exact evidence limits, never as new declared behavior, whole-scope acceptance or release. No old dev4/dev5 cache/helper/update script is replayed and no main host/MCP process is task-owned cleanup. Source/writer/epoch/revision, freshness and parent receipt must be rechecked before dependent work; failed guards are not cleared to proceed."
+              "recovery": "Reconcile source, actual writes, native input/pause and actor ownership before retry. Failed or missing acknowledgements do not authorize replay; retain all original windows/failures and source recovery."
             },
             "subjectEntries": [
               "chatgpt-desktop",
@@ -6434,7 +6423,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "当前主MCP实际dev12、宿主0.164及e237 CI11/11已核；沿原条件继续完整R2/R3与原18案/17scope/52义务来源裁定。53477真实三轮只读审阅已送达并应用未改explicit-only Retro/writing，Root最后关闭复核迟到造成原DEADLINE，后已核停效/source-current返权/reader自然0；窄贡献可复用，原控制段不改PASS、不重跑完成业务。先完成finalize-receipt同类离线来源漏核的当前精确检查与托管，运行时包字节不变；核原case/episode身份、当前必要条件、独评与recheck后使用现有v2/v3路线，不将合成结构探针作资格。临时Caller机械收尾driver仅私有离线验证，避免采样间隙，不升级常态工序或发布门槛。剩余源审查与历史档案分清active/retired，原CLI3/4及失败、未知和原输出合同保持，3.3.2仍未发布。",
+    "work": "Main MCP is dev.12 on host 0.164; the original goal, 99 protected inputs and outcome remain bound. The 0c42 source ledger covers 217 paths: 174 full semantic reviews, 41 complete baselines with reviewed deltas and 2 visual reviews. Review subsequent affected changes. Five exact original evidence cases are selected after the later 7414 recorder instance ended. Preserve its 0c42 definitions, 3/4 completion, usage-limit, exit 124, forced closure, original budgets and current counterevidence. All 18 expected results, 17 scopes, 52 obligations and current quality and authority remain; strict v3 case equality is unchanged. Complete current source applicability, coherent original-episode derivations, independent review and observe/recheck before qualification. Operation 53477 supplies actual adoption of unchanged explicit-only Retro and writing guidance plus stopped recovery; its original closure deadline failed. Ordinary context timing and necessary supervisor takeover have sources; replacing the whole Root or GUI is not a universal prerequisite. Translation of ambiguous intent into usable requirements remains unestablished in examined sources. Verify 0c42 CI terminal and the new exact affected checks; 3.3.2 remains unpublished. Reuse closed work and preserve original unknowns and failures without new accounts, trust, observers, business replay or release criteria.",
     "requires": "Retain the exact published 3.3.0/3.3.1 subjects, original failures, valid source evidence and scoped unknowns. Reconcile affected package/interface changes and original acceptance consequences before claiming reuse or a new pass. Preserve user settings, source input, pauses, ownership and recovery. The existing conditional 3.3.2 publication requires exact candidate checks, necessary host/functional and quality evidence, independent review, hosted verification and ordered publication post-state; no other host, account, trust, promotion or unrelated write is granted."
   },
   "claimCeiling": {
