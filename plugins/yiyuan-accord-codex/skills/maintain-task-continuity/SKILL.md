@@ -15,6 +15,16 @@ and unfinished work after changes. Permission and collaboration modes differ.
 Ordinary continuation enables no Plan/Goal or new goal, resets no budget and
 lifts no pause. Complete achieved Goals through their lifecycle; plans are revisable.
 
+For a bound time window, assign preparation, execution, independent review and
+closeout to actual owners within that original window. Reserve time for their
+return, verification and necessary state saving. Check elapsed time before the
+next dependent step and when control returns; start closeout at the reserve
+boundary. An operation's early success does not release its remaining duties.
+On expiry, preserve results and unknown effects and stop dependent work; keep a
+later recovery or new allocation separate from the failed original window.
+Use supported owner deadlines for controlled resources. They cannot preempt
+arbitrary reasoning in a host that exposes no such control.
+
 When mode state matters, use the host's read-only Goal query (`get_goal` or
 `thread/goal/get` on an existing owned connection), independently of collaboration
 mode. Bind task and time: null is absence at that read only; unavailable or failed

@@ -101,14 +101,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.2-dev.13+codex.20261024082306",
+    "version": "3.3.2-dev.14+codex.20261024123120",
     "rule": "Only the current OpenAI distribution is bound here. Bind exact current package bytes after affected changes; historical packages retain immutable identity. Reuse proven common local Codex runtime, configuration and task evidence across CLI/app/IDE when the applicable equivalence is supported, and verify consequential entry differences. Actual participation, behavior, recovery and attributable exit still need sufficient source evidence; frontend labels alone neither prevent reuse nor certify changed bindings. Documentation changes do not imply functional acceptance.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.2-dev.13+codex.20261024082306",
-        "packageSha256": "fcaed2c75a5c99377b4df1039e141ae8e192402ffee212a2586730b48b7aa64c",
+        "packageVersion": "3.3.2-dev.14+codex.20261024123120",
+        "packageSha256": "ad077594bf83aa33a84ff502871f44b6cb5e3c3f3712a8b295b9c3b5edd7b2ce",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -6432,7 +6432,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "dev13 actual main loading, revision74 recovery, exact f209 CI11of11 and unchanged30-member package are verified. The retained README/catalog v3 materials were completed with43 normative/157 file deltas,73 conditions and25 contributions, corrected after independent review, then accepted as two full original-case contributions by actual verify_product observe/recheck at exact f209. Both source-derived a01-usable-delivery contributions retain original episode/package/facts. No old business was rerun. The new source assessment itself took55.784 seconds with final guards and natural0, but Root closeout exceeded its original900-second stage deadline. Keep DEADLINE_EXCEEDED and the retained cleanup diagnostic; do not backdate whole-stage compliance or omit this adverse evidence in subsequent applicability/candidate reviews. Remaining17scope/52/R2R3 and conditional3.3.2 release are unfinished. Reuse the sealed materials/reviews/result; no duplicate maintenance, new cases or reduced floors.",
+    "work": "First verify ccdb2be9 exact hosted terminal; its last observed state is10of11 success with no failures. Independently diagnosed the late Root closeout as a private caller/owner integration gap, not failure of existing native idle deadlines. Dev14 changes only two task-bound Skill bodies and version metadata; all11 runtime package files remain byte-identical to dev13. A private bounded owner now closes its assigned processes/scratch and saves terminal facts independently of another Root callback. Actual verify-development under this owner returned valid/errors-empty with activeProcesses0 and scratch absent in1.30s; targeted old-call-site red and success/error/no-input/ownership/setup counterexamples are separately retained. This improves guidance and the current Windows static route, not arbitrary reasoning preemption, universal caller persistence or whole qualification. Preserve the failed900-second Root window, all old cases/results/failures and all18cases/17scopes/52duties. After CI terminal, reuse sealed two-case v3 acceptance and original ordinary/takeover/composition evidence for remaining R2R3; do not rebuild deliverables, replay closed business or lower original release conditions.",
     "requires": "Retain the exact published 3.3.0/3.3.1 subjects, original failures, valid source evidence and scoped unknowns. Reconcile affected package/interface changes and original acceptance consequences before claiming reuse or a new pass. Preserve user settings, source input, pauses, ownership and recovery. The existing conditional 3.3.2 publication requires exact candidate checks, necessary host/functional and quality evidence, independent review, hosted verification and ordered publication post-state; no other host, account, trust, promotion or unrelated write is granted."
   },
   "claimCeiling": {

@@ -22,6 +22,8 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 - 53477沿原未完tail-consumer scope完成真实CLI0.164三轮只读审阅。协调者选择未改explicit-only Retro，原生完整送达正文、writing依赖完整读取，实际gpt-6.1-sol/high；Root核源后采用有用结论和CI表述纠正。399字符intake仅按真实原件/令牌恢复，旧水印保持，无模型或业务重放。
 - 53477最后Root关闭复核迟到，原30分钟窗口DEADLINE_EXCEEDED保留，原控制段不改PASS。其后fresh reader核三轮completed、peer自然0，已source-current返权且reader自然0；后续停止结算不延长旧窗口，也不抹去有用采用。临时Caller收尾driver仅23项离线反事实，不进入产品，不称live成功或新增门槛。
 
+- 收尾超时已完成独立归因：私有caller结果返回后没有owner接机械尾项，储备未接执行；现有external-handoff idle deadline及result→关闭→closed review不被本例否定。两份现有Skill已补完整时窗与owner责任，源码候选dev.14仅改这两正文和版本，11个runtime成员不变。私有修复保留旧caller，以真实旧AST调用点复现漏尾项，受控owner通过冻结Root、异常、输入超时、关闭错误、输出拒绝及准备/未知marker反例；本轮实际静态核验1.30秒、Job active0/临时scratch已删，独评与功能资格未自动授予。最终磁盘落盘失败与无宿主支持的Root推理抢占仍无保证；旧900秒失败不改签。
+
 ## 下一依赖
 
 1. **dev.13修正和本线程恢复已核。** 保留新增用户、暂停、权限、来源和最终写入守卫；ab31的检查、30包、实载及revision74保存后态已有源证。后续只核新差分的实际影响，不重复本轮安装或旧回归；原失败不补签。

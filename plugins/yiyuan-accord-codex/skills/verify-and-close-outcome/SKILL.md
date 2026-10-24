@@ -96,6 +96,15 @@ disabling, uninstalling and retiring. For uncertain reuse, prefer reversible
 inactivity and weigh actual reuse, expiry and upkeep before authorized retirement.
 Completion grants no permission to remove user-selected tools or other components.
 
+Before an executor reports its scope closed, have that owner perform authorized
+mechanical cleanup, verify the resource post-state and retain its terminal result,
+including failure, cancellation and a missing supervisor response. Reuse sufficient
+owned lifecycle controls and keep waits within the bound work/recovery window.
+Carry residual resources or missing independent judgment as explicit unfinished
+work; a successful result file or process exit cannot stand for that closure.
+When control returns, verify this post-state before lengthy interpretation or
+new work. Independent acceptance and whole-goal completion remain separate.
+
 Order closure by its dependencies: verify business outcomes and resources that
 can close first, retire the resolved task binding through its lifecycle, then
 observe and report that retirement. Keep protocol retirement separate from its
