@@ -496,7 +496,9 @@ flowchart LR
 
 ## 当前推进顺序
 
-2026-10-24案例选择纠偏：原18案中五个同ID的条件曾在d305提交改绑后续runtime-recorder实例，旧record因此不再满足当前v3的整案相等守卫。该后续实例7414已结束，Root现选择各原record对应的完整原case；三steering取88cb、两current-development-02取1935，全部expected、17scope、52义务及当前规范、质量、权限和包不变。新实例五定义完整保于`0c42b884ea45c4c0074b218bb7b8e54d5ea48838:product/development.json#/acceptance/admission/cases`，其原计划、fixture、3/4、2M超限、usage-limit/exit124/forced及后续失败仍是当前适用性复核的反证，不因Git保留或原案选择而豁免。此举纠正证据选择，不放宽相等检查、重放实例或授予资格；原案仍须完整当前规范/Git差分、必要观察、独评与observe/recheck。案例家族、已执行定义和开发控制实例分开导航，结束的实例不再充当永久活动目标；新定义也不能冒充旧record。
+2026-10-24新材料实例：原README/catalog业务不重跑，当前交付是它们在53e来源时点的v3候选材料与关联说明。三steering家族前瞻绑定这项实际未完交付，全部expected、18案/17scope/52义务和质量保持；新执行记录必须使用本次精确提交/定义，不能由88cb或7414旧record代签。用户仅为这项CLI任务批准现有完整访问，业务写入仍限两份新草案，不授予全局配置、信任、ACL、账号、安装或发布权限。薄source-applicability-review夹具替换已结束runtime-recorder夹具；原a419ff字节、manifest和失败保于0c42Git及原私有副本，不改旧路径归因。现有持久CLI接口和三案逐次绑定复用；caller、实际时窗、源及独审冻结后还须Root的独立执行放行，准备声明不启动native或证明行为。首轮若无真实歧义、后补若无实质纠偏，则保对应未观察，不加第五轮求通过。
+
+2026-10-24在53e完成的前序案例选择纠偏：原18案中五个同ID的条件曾在d305提交改绑后续runtime-recorder实例，旧record因此不再满足当前v3的整案相等守卫。该后续实例7414已结束，Root当时选择各原record对应的完整原case；三steering取88cb、两current-development-02取1935，全部expected、17scope、52义务及当前规范、质量、权限和包不变。新实例五定义完整保于`0c42b884ea45c4c0074b218bb7b8e54d5ea48838:product/development.json#/acceptance/admission/cases`，其原计划、fixture、3/4、2M超限、usage-limit/exit124/forced及后续失败仍是当前适用性复核的反证，不因Git保留或原案选择而豁免。此举纠正证据选择，不放宽相等检查、重放实例或授予资格；原案仍须完整当前规范/Git差分、必要观察、独评与observe/recheck。案例家族、已执行定义和开发控制实例分开导航，结束的实例不再充当永久活动目标；新定义也不能冒充旧record。
 
 当前修复段先闭合已证的恢复与清理缺口：原生压缩通知的三个消费者、MCP保护性停止影响披露、满容量测试的事前时间预算，以及恢复初始化失败时的记录器所有权。旧完整QA六个失败及独立复现保留；只放宽合成满容量夹具的准备窗口，产品期限、原输入/输出、暂停、已停止与单写者守卫不变。同一绑定清理未决时拒绝再次开记录器，跨root/cwd的独立操作不受该限制。新源码须按自身主体完成精确检查，不以旧绿或隔离重跑改签原失败；之后继续普通Skill、必要恢复和完整R2/R3组合，已有有效证据照常复用。默认工具审批对普通委派的影响另沿现有调用路线核清，隔离CI的进程预批不代表用户策略已改变或普通采用已通过。
 
