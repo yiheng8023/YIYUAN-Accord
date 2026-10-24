@@ -496,6 +496,8 @@ flowchart LR
 
 ## 当前推进顺序
 
+2026-10-24本轮恢复：ab31的dev.13已在用户重启后由主MCP实际应答，精确CI40079855629终态11/11，完整原合同按真实输入重绑并读回revision74，99保护输入和六项OUTCOME保持。既有53e README/catalog草案的七个原资格source-ID已定位、验SHA及独评，原草案不改；派生视图剩六项hold。原73条件角色分析不代当前差分后果或完整独评。下一步复用已有交付与语义盘点，明确53e→当前代码的后果桥接，沿原R2/R3与52义务推进；不重做材料、重跑闭案或改签22b0/B26/7414/53477失败。参见[当前接续](CONTINUATION.md)。
+
 2026-10-24新材料实例：原README/catalog业务不重跑，当前交付是它们在53e来源时点的v3候选材料与关联说明。三steering家族前瞻绑定这项实际未完交付，全部expected、18案/17scope/52义务和质量保持；新执行记录必须使用本次精确提交/定义，不能由88cb或7414旧record代签。用户仅为这项CLI任务批准现有完整访问，业务写入仍限两份新草案，不授予全局配置、信任、ACL、账号、安装或发布权限。薄source-applicability-review夹具替换已结束runtime-recorder夹具；原a419ff字节、manifest和失败保于0c42Git及原私有副本，不改旧路径归因。现有持久CLI接口和三案逐次绑定复用；caller、实际时窗、源及独审冻结后还须Root的独立执行放行，准备声明不启动native或证明行为。首轮若无真实歧义、后补若无实质纠偏，则保对应未观察，不加第五轮求通过。
 
 2026-10-24在53e完成的前序案例选择纠偏：原18案中五个同ID的条件曾在d305提交改绑后续runtime-recorder实例，旧record因此不再满足当前v3的整案相等守卫。该后续实例7414已结束，Root当时选择各原record对应的完整原case；三steering取88cb、两current-development-02取1935，全部expected、17scope、52义务及当前规范、质量、权限和包不变。新实例五定义完整保于`0c42b884ea45c4c0074b218bb7b8e54d5ea48838:product/development.json#/acceptance/admission/cases`，其原计划、fixture、3/4、2M超限、usage-limit/exit124/forced及后续失败仍是当前适用性复核的反证，不因Git保留或原案选择而豁免。此举纠正证据选择，不放宽相等检查、重放实例或授予资格；原案仍须完整当前规范/Git差分、必要观察、独评与observe/recheck。案例家族、已执行定义和开发控制实例分开导航，结束的实例不再充当永久活动目标；新定义也不能冒充旧record。
