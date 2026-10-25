@@ -4893,6 +4893,11 @@ try {
                 )
 
         with _indexed() as root:
+            nested = root / 'untracked-fixture'
+            nested.mkdir()
+            for pending in (False, True):
+                self.ae(product_control._repository_files(nested, include_untracked=pending),
+                        ([], ['tracked repository surface is unavailable']))
             revision = _git(root, 'rev-parse', 'HEAD', text=True).strip()
             (root / 'vendor').mkdir()
             _git(root, 'update-index', '--add', '--cacheinfo', '160000', revision, 'vendor')

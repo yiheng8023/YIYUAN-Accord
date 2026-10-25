@@ -641,6 +641,11 @@ def _validate_input_evidence(root, program, errors, revision=None):
 
 def _repository_files(root, *, include_untracked=False):
     try:
+        top_level = _bounded_git_bytes(
+            root, ("rev-parse", "--show-toplevel"), 4_096
+        ).decode("utf-8").strip()
+        if Path(top_level).resolve(strict=True) != root.resolve(strict=True):
+            raise ValueError("repository root mismatch")
         output = _bounded_git_bytes(root, ("ls-files", "--stage", "-z"))
         files, errors = set(), set()
         for raw_record in output.split(b"\0"):

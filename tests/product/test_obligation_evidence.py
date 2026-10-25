@@ -16,7 +16,16 @@ class ObligationEvidenceTests(unittest.TestCase):
     history = fixtures.DevelopmentEvidenceTests.history
     observer = fixtures.CurrentDevelopmentEvidenceTests.observer
     commit = fixtures.CurrentDevelopmentEvidenceTests.commit
-    assess = fixtures.CurrentDevelopmentEvidenceTests.assess
+    def assess(self, contract=None, observer=None):
+        clock = a.datetime
+        class FixtureClock(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return clock.now(tz) + timedelta(seconds=2)
+        # Leave room after fixture commits for a strictly ordered execution
+        # before canonical whole-second review; retain outer expiry clocks.
+        with patch.object(fixtures, 'datetime', FixtureClock), patch.object(a, 'datetime', FixtureClock):
+            return fixtures.CurrentDevelopmentEvidenceTests.assess(self, contract, observer)
     IDS = ["a02-delegated-managed-selection", "a02-explicit-policy-native-adoption"]
 
     def flat_fixture(self):
@@ -35,7 +44,10 @@ class ObligationEvidenceTests(unittest.TestCase):
                 result['obligationEvidence'] = {'supplement-1': copy.deepcopy(state['recheck'])}
                 return result
             record = next(r for r in result['records'] if r['case'] == case['id'])
-            stamp = datetime.now(timezone.utc) - timedelta(seconds=1)
+            # Derive the synthetic execution from its already-created review.
+            # A second wall-clock sample can place cleanup after that review.
+            stamp = min(datetime.fromisoformat(r['reviewedAt'].replace('Z', '+00:00'))
+                        for r in result['reviewBundle']['reviews']) - timedelta(seconds=1)
             execution = {'subject': old_subject, 'packageSha256': old_contract['delivery']['hostProjections'][0]['packageSha256'],
                 'episodeId': 'separate-native-episode', 'operationId': 'operation-1',
                 'actor': 'worker-1', 'host': case['host'], 'entry': case['entry'],
@@ -106,6 +118,26 @@ class ObligationEvidenceTests(unittest.TestCase):
 
     def fixture(self):
         return self.role_fixture(split_roles=False)
+
+    def test_fixture_timeline_survives_later_wall_clock_sample(self):
+        wall_clock = datetime
+        sampled = False
+        class LaterFixture(wall_clock):
+            @classmethod
+            def now(cls, tz=None):
+                nonlocal sampled
+                sampled = True
+                return wall_clock.now(tz) + timedelta(seconds=10)
+        class LaterValidation(wall_clock):
+            @classmethod
+            def now(cls, tz=None):
+                return wall_clock.now(tz) + timedelta(seconds=20 if sampled else 0)
+        # The second fixture sample is delayed after the base observer created
+        # its review. Only if that sample occurs does validation advance again,
+        # isolating review ordering instead of rejecting future events.
+        with patch(__name__ + '.datetime', LaterFixture), patch.object(a, 'datetime', LaterValidation):
+            self.test_desktop_selects_cli_peer_and_adopts_with_actual_roles()
+            self.test_late_cleanup_retains_failure_with_timely_adoption()
 
     def role_fixture(self, *, split_roles=True):
         contract, case, base, state = self.flat_fixture()
