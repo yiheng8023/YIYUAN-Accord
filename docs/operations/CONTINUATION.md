@@ -10,6 +10,9 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 
 ## 当前事实
 
+- A07已在精确41b25868下完整通过：同候选正式消费catalog与README两原普通交付case、B28资源压力与环境两原case，原全部结果/条件/负证及两人四轴保持。catalog另经独立成品语义审查提供a07-source-correct-professional-delivery；README补原默认无额外扩展场景与全部相关case，未把A01派生自动当A07，也未缩减scope。actual core四案全接收，A07.complete=true、missingScopes.function=[]、missingObligations=[]；A08.blockedBy不再含A07。来源运行109.200秒/Job0/临时checkout移除，Root于2026-10-25 04:25:51 UTC在原300秒窗口内重核173文件、5个Git blob、2个旧selector及15份普通原件后采纳；结果SHA为de6ea8ab4ee51936779232f26b07038b30fed6e3e8dbcf274ba460ea437b466c。该结论限原声明场景/候选，不拼成R3跨episode因果或全产品通过；其余A01–A06/A08、17scope52及发布继续未齐。
+- 合流前发现仅catalog虽有对应后果但仍缺原README/default场景，已补现成原案；没有制造默认业务或重跑旧CLI。首次准备对尚未写出的同批delta提前预查而拒绝、Root首次采纳脚本把{function:[]}误当非空缺口而拒绝，前者在派发前纠正，后者在Root采纳记录写入前纠正；两次caller拒绝均保留，既有core结果、原判据和源执行未改或重跑。各审查预算估计/过宽投影的原披露保留，不据本源核验宣称整段成本优势。
+
 - f990eb24的CI40152354200已终态11/11成功，各精确HEAD及原失败分列。当前源核验仅复用旧业务，不安装或更改运行包。
 - 原B28资源压力与环境适配两case已在精确f990eb24以现有v3正式接收：各完整14结果叶/59条件、6原限度、84完整Git/23规范差分及两人四轴齐全，保原a0eb主体/episode与两UUID。新增三派生为a07-owned-resources-and-required-load-recovery、a07-os-and-host-workload-adaptation、a06-changed-environment-actual-adaptation；160→96MiB是两次连续Job的真实回读，85是声明式续做，随后正常0及缓存复用/内外层归零，不是活Job改额或异常恢复。actual observe/recheck/finalsource用105.316秒，Job0/临时checkout移除；Root于2026-10-25 03:35:15 UTC在原300秒窗口内复核134文件、12次Git blob读取（5个不同blob）和2个旧selector后采纳。该报告的A07仅余普通交付义务，旧f209普通交付保原主体，尚未合成当前全资格；A06其余生命周期、A08异常/持续压力底线、必要独立接管及整体17scope52/发布继续未齐。
 - 资源源范围已校正：独立quota episode实际有40次CPU/IO/RSS采样和正常退出稳定；B28实际有Job内存限额及内外层归零。不能泛称完全无CPU/RAM实测，也不把两episode拼成异常退出或全机负载保证；原863有限影响评估与3cfe有限声明一致性不因此升级或撤销。旧观察器消失的原因/退出码仍未知，不当作活进程取消成功。
@@ -46,7 +49,7 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 
 1. **当前代码、安装及有限采用已核。** dev.14指导/owner修正、反例与真实静态/R2/R3来源执行已核；ab31、ccdb、70b87、863检查各保主体。本轮主MCP14实际加载，仅按真实新依赖复核，不重复安装或旧回归；旧失败不补签。
 2. **复用已核普通交付与健康继续。** f209两案及70b87原R2整案各有完整材料、四轴和正式两相来源结果，后者只新增健康继续派生。Root900/53477时序负项已直接绑定并经有限原function范围裁定，仍保原失败，不等于当前整体及时性或全部成本通过。
-3. **推进精确剩余行为与完整合取。** 原R3两案与原R2健康继续、两普通交付、两Skill精确义务及3cfe声明一致性各保正式接收主体，不重复从零核或混成一个当前全资格。库存接管的归属已核清，但自主及时发现、必要接管及安全源释放的完整普通链仍未由它证明；wholeRoot/任意GUI更替不是额外门槛。优先将已接收普通交付与本轮资源适配在精确候选下按现成来源合流；A02其余发现/停用/生态/模型成本义务、B26/7414/22b0、genuine ambiguity/steering、必要异常退出及其余52/17scope按实际缺口推进，不由本轮窄结果或CI代验，也不为计分造业务。
+3. **推进精确剩余行为与完整合取。** 原R3两案与原R2健康继续、两普通交付、两Skill精确义务及3cfe声明一致性各保正式接收主体，不重复从零核或混成一个当前全资格。库存接管的归属已核清，但自主及时发现、必要接管及安全源释放的完整普通链仍未由它证明；wholeRoot/任意GUI更替不是额外门槛。A07在41b原范围已闭，不重复普通交付或资源来源消费；继续A02其余发现/停用/生态/模型成本义务、B26/7414/22b0、genuine ambiguity/steering、必要异常退出及其余52/17scope按实际缺口推进，不由本轮窄结果或CI代验，也不为计分造业务。
 4. 按实际必要修复对齐源码、文档和投影，核精确最终候选、独立复核与CI；条件成立才按原授权发布并更新本机入口。当前材料任务已关闭，后续不重置其原7200秒/600秒保留窗口。
 
 旧Hook code1、原MCP退出根因、旧约20.5MB原生区间语义、配置mtime写者、B5拒绝访问/未知归属和旧资源终态按原证据保留，不被新成功改绿。全成本/计费/因果净收益及无存活控制者自动唤醒、任意GUI/未来宿主保证仍未建立。只有新事实影响当前必要行动时，重开其受影响责任；用户已停的Hook观察器不启动替代常驻任务。
@@ -66,5 +69,7 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 - 最新声明一致性：同根下claim-consistency-current-20261025-01/的parent-material.final-v2.json、两份review-*.final-v2.json及observe-owned/run-01/root-adoption.json；结果SHA为c74825c413348fa236654abc52289064ae9ddf5be762bfa1a2b901e1e1728b9b。压缩后的有限继续选择在continuity-duty-20261025-01/post-compaction-decision.json；预备包不表示启动接管。
 
 本轮资源与环境来源见同根pressure-current-20261025-01/的两份review-ready-v3材料、两份review-*.final.json及observe-owned/run-01/root-adoption.json；结果SHA为fd789634585c3c9be72ec5ca0ba00e2c7b46e7cfa03f14e0fb3e68ec0b26bef5。范围差额与A02线索在pressure-exit-source-gap-20261025-01/review.json、a02-remaining-evidence-20261025-01/model-policy-review.json。
+
+最新A07全范围来源见同根a07-convergence-20261025-01/：四份review-ready材料、普通两组与README追加两组独评、scope-case-coverage.json及observe-owned/run-01/root-adoption.json。旧f209/41b等接收结果保各自精确身份；新记录只同步事实，不重启全套旧业务。
 
 必要状态由宿主状态和可验证交接承载；旧时间线不再常驻，证据、未决责任和失败均保留。
