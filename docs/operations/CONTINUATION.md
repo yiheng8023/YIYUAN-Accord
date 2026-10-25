@@ -10,6 +10,11 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 
 ## 当前事实
 
+- **A02政策精确义务已在b6de9ab2接收。** 原case的33结果/48条件、80完整Git差分/22规范差分、五负证与八质量保持，经两人四轴及actual observe/recheck/final-source，新增`a02-disabled-excluded-unavailable`；结果SHA为9480cffab41f15e4de532decda6e0ac345d73ca2a216e4b0f69a14ed67b5526b。来源执行104.439秒、自然0/Job0/scratch移除/controller关闭；Root于2026-10-25 11:24:40 UTC在原300秒窗内重核120文件/5Git后采纳。原Oct11 actor的实际停用、明确工具/Skill效果排除与未知VSCode路径hold，经原Oct20采用链复用，不改标成新的Oct20执行；原判据不要求三个故障或额外独立具名excluded Skill。两PDF来源路径不同，不能统称全部禁用。既有53477两Skill义务保464原主体；本报告不含其补充，未撤销其旧资格，也未拼成全A02/17scope52/R2R3。
+- 新输入所列动态发现、主动联网比较、推荐安装、自主选用和用途结束后的退出/退役，已在原能力协调/生命周期指导及A02/A06/A08覆盖，不新增门槛或安装权限。准备中的config11a30等值断言、旧文件缺席分支、sourceDelta引用错误及Root错误单SHA稿均保留；最后以完整80项canonical差分原件修引用和生成器，经双约束反例与新精确四轴后才消费，未放宽core。原作者输出越界、611秒及26.755秒迟保存与当前实际来源窗的合规分别记，不宣称整轮预算或效益通过。
+- 当前共享config为9201c91a，Root未改它；与既有pre-install比较相比新增两个上下文覆盖项缺失，写者及完整旧11a30字节仍未知。相关插件选择/存储信任/沙箱/审批与7ab一致，30源码与安装成员逐字节相同；当前Root MCP为dev.14/PID21340，仅限这一应答者。Python/Git/MCP来源消费不调用旧helper/notify；其具体值和归属保持限制，不恢复用户设置，也不由配置补猜有效上下文容量。A06/A07保原验收，未重跑或安装。
+- A04原后态叶的有限SDK/caller/material/archive/活动视图纠正已有独立来源支持；现有v3不能把新Root行为写成另一个CLI实例，补充通道也只支持两A02且依赖已准入base，表达限制已定位。真实witness已找到四核验窗、修复代码与点runtime，尚须定位纠正写动作的原生前绑/身份/约束及必要质量负证；材料充分后最小修typed通道。不得把另一个before-change义务、全Root成本或全入口新采用额外塞进这一后态叶。未授全A04或新的发行资格。
+
 - **A06已在精确7ab1555a完成同候选验收。** 复用五原案（环境适应、SDK scoped-exposure、selected-entry、whole-host、SDK lifecycle）的完整v3、原case/record/episode/时间/负证和四轴回执，actual observe/recheck/final-source全部接收；A06.complete=true，function与package-lifecycle缺口均为空，原五义务齐全。结果SHA为eb0bb79ca67d49d16aa9ae12614d8ffd8226bb83ff337eb48b018cfbef070e00。来源执行188.610秒、自然0/Job active0/scratch移除/controller关闭；Root于2026-10-25 09:21:36 UTC在原300秒窗内重核207固定文件和5个Git blob后采纳。未重跑原业务；SDK原Windows/base、f990 POSIX/hot、当前Root重审及0.164接口声明仍分开，不代表所有入口新的实际采用或全R2/R3/发行通过。
 - SDK完整parent/v2、v3路由修复已提交7ab1555a，原v1五类/其它scope/function及21叶与全部守卫保持；5项针对性回归、3项精确静态通过，[CI40171485439](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40171485439)终态11/11成功。插件30成员/dev.14与配置保持，无安装或重启。A07保其41b原声明范围通过；A01–A05/A08、完整17scope52及发行条件仍未齐。
 - 本轮私有caller失败已修正而不改生产守卫：首轮parent错入function入口，120.199秒正确拒三案；改用父入口并补齐三项parent recheck字段后，三案56.338秒正式接收，Root08:35:46 UTC窗内复核166文件/5Git采纳。首次五案合流因caller误用1MB单材料哈希限额而全局拒绝，140.378秒正常关闭；以真实1,470,898B反例对齐API既有2MB批次限额后才获最终合流，产品与单材料限额未变。旧脚本、失败与caller独审hold保留；材料资格来源类型和归档成员定位修正保原字节/资格/平台，旧容器SHA不冒充子叶。一次native检查明确返回transcript-path-changed-after-read，另一次未保存原返回的冻结断言拒绝字段仍未知；后续重新读取r98/99保护源/Goal后继续，不宣称已定位或修复宿主读取根因。
@@ -24,7 +29,7 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 - 原B28资源压力与环境适配两case已在精确f990eb24以现有v3正式接收：各完整14结果叶/59条件、6原限度、84完整Git/23规范差分及两人四轴齐全，保原a0eb主体/episode与两UUID。新增三派生为a07-owned-resources-and-required-load-recovery、a07-os-and-host-workload-adaptation、a06-changed-environment-actual-adaptation；160→96MiB是两次连续Job的真实回读，85是声明式续做，随后正常0及缓存复用/内外层归零，不是活Job改额或异常恢复。actual observe/recheck/finalsource用105.316秒，Job0/临时checkout移除；Root于2026-10-25 03:35:15 UTC在原300秒窗口内复核134文件、12次Git blob读取（5个不同blob）和2个旧selector后采纳。该报告的A07仅余普通交付义务，旧f209普通交付保原主体，尚未合成当前全资格；A06其余生命周期、A08异常/持续压力底线、必要独立接管及整体17scope52/发布继续未齐。
 - 资源源范围已校正：独立quota episode实际有40次CPU/IO/RSS采样和正常退出稳定；B28实际有Job内存限额及内外层归零。不能泛称完全无CPU/RAM实测，也不把两episode拼成异常退出或全机负载保证；原863有限影响评估与3cfe有限声明一致性不因此升级或撤销。旧观察器消失的原因/退出码仍未知，不当作活进程取消成功。
 - 本轮准备稿的originalSources类型混用被原core预检拦住，完整source assembly又拒绝了6条历史摘要配live源码路径的引用；均在派发前保留旧稿并更正，未放宽守卫。后者逐项匹配原H的4ca70806 Git原件，保原摘要/条件指针；两条旧file.json/case selector也按明确文件摘要和JSON键核验，未启通用猜路径。审查读取预算估计超界及投影截断均据实保留，不宣称整段高效或全成本优势。
-- A02后续来源已定位：53477三轮实际Sol/high有原生记录，2,044,203 tokens及原1800秒失败/成本未知保持；1935 reader的requested high不能证明actual effort。其原来源已引用真实retro-disabled原生替代链，excluded/unavailable仍需按实际适用范围核，不把未知目标控制或禁用清单直接写成组合义务通过。
+- A02后续来源已定位：53477三轮实际Sol/high有原生记录，2,044,203 tokens及原1800秒失败/成本未知保持；1935 reader的requested high不能证明actual effort。原停用/排除/未知路径hold现已按上面的b6精确义务接收；其余入口发现/必要采用、生态比较及模型/相关全成本义务仍须分别核，不用一个策略结果代全A02。
 
 - 96a6181b的CI40109480874、修复464bb87e的CI40115601707及记录3cfe0a87的CI40124294805均已终态11/11成功；各保精确HEAD。464新增独立obligationEvidence，解开后续真实执行与已闭旧case的错误耦合；保v1–v3、原18/17/52和父R3同episode规则。真实角色、原窗口、补充自身source/package/current差分、8质量、逐义务负证、精确四轴及两相/最终交集分别核对，补充不修原expected或新增acceptedCases。角色/过期效果/传递冲突/历史carrier入口耦合的真实红与后续绿保留。f2完整新模块10tests/427.655秒及最终相关6方法、既有3守卫通过，464三精确静态和四轴均通过。
 - 在464正式接收原dynamic-routing-02的完整当前适用性：33叶、48条件、原27来源、80完整源码/22规范差分；另以actual53477独立operation/episode接收a02-delegated-managed-selection与a02-explicit-policy-native-adoption。Retro原生正文及writing依赖全文、Root受托选择及有用采用均有原始来源；源及policy不改，用户无需点名Skill。两窄义务只证明其实际范围，不等于全A02或R2/R3。new source run-02用50.342秒关闭Job/临时checkout，Root于19:08:40 UTC在窗口内重核135文件、7原生字节范围和6历史Git来源后采纳；原业务未重跑。
@@ -56,7 +61,7 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 
 1. **当前代码、安装及有限采用已核。** dev.14指导/owner修正、反例与真实静态/R2/R3来源执行已核；ab31、ccdb、70b87、863检查各保主体。本轮主MCP14实际加载，仅按真实新依赖复核，不重复安装或旧回归；旧失败不补签。
 2. **复用已核普通交付与健康继续。** f209两案及70b87原R2整案各有完整材料、四轴和正式两相来源结果，后者只新增健康继续派生。Root900/53477时序负项已直接绑定并经有限原function范围裁定，仍保原失败，不等于当前整体及时性或全部成本通过。
-3. **推进精确剩余行为与完整合取。** A06现已在7ab完整通过，其五原案与已有四轴/实际两相结果保留复用，不重复生命周期业务； 原R3两案与原R2健康继续、两普通交付、两Skill精确义务及3cfe声明一致性各保正式接收主体，不重复从零核或混成一个当前全资格。库存接管的归属已核清，但自主及时发现、必要接管及安全源释放的完整普通链仍未由它证明；wholeRoot/任意GUI更替不是额外门槛。A07在41b原范围已闭，不重复普通交付或资源来源消费；继续A02其余发现/停用/生态/模型成本义务、B26/7414/22b0、genuine ambiguity/steering、必要异常退出及其余52/17scope按实际缺口推进，不由本轮窄结果或CI代验，也不为计分造业务。
+3. **推进精确剩余行为与完整合取。** A06现已在7ab完整通过，其五原案与已有四轴/实际两相结果保留复用，不重复生命周期业务； 原R3两案与原R2健康继续、两普通交付、两Skill精确义务及3cfe声明一致性各保正式接收主体，不重复从零核或混成一个当前全资格。库存接管的归属已核清，但自主及时发现、必要接管及安全源释放的完整普通链仍未由它证明；wholeRoot/任意GUI更替不是额外门槛。A07在41b原范围已闭，不重复普通交付或资源来源消费；继续A02其余发现/生态/模型成本义务、B26/7414/22b0、genuine ambiguity/steering、必要异常退出及其余52/17scope按实际缺口推进，不由本轮窄结果或CI代验，也不为计分造业务。
 4. 按实际必要修复对齐源码、文档和投影，核精确最终候选、独立复核与CI；条件成立才按原授权发布并更新本机入口。当前材料任务已关闭，后续不重置其原7200秒/600秒保留窗口。
 
 旧Hook code1、原MCP退出根因、旧约20.5MB原生区间语义、配置mtime写者、B5拒绝访问/未知归属和旧资源终态按原证据保留，不被新成功改绿。全成本/计费/因果净收益及无存活控制者自动唤醒、任意GUI/未来宿主保证仍未建立。只有新事实影响当前必要行动时，重开其受影响责任；用户已停的Hook观察器不启动替代常驻任务。
@@ -82,3 +87,5 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 最新SDK作用域来源见同根a06-sdk-exposure-current-20261025-01/：material.review-ready-v2.json、两份review-*.json、archive-identity.json与observe-owned/run-01/root-adoption.json。后续whole-host/selected-entry parent与SDK package-lifecycle分别核原范围，不能用Root14或11/11状态代原件、当前所需消费者和完整A06。
 
 必要状态由宿主状态和可验证交接承载；旧时间线不再常驻，证据、未决责任和失败均保留。
+
+最新A02政策来源：同根a02-policy-reuse-20261025-01/的executor-material-b6/material.v3.json、两份review-*/review-v3.json、current-root-package-policy-b6.json及observe-owned/run-01/root-adoption.json；结果及主体见当前事实。A04最小真实witness准备在a04-current-correction-20261025-01/witness-preparation/，后态独评与Astra设计建议均保其有限范围和未完字段。
