@@ -10,6 +10,12 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 
 ## 当前事实
 
+- f990eb24的CI40152354200已终态11/11成功，各精确HEAD及原失败分列。当前源核验仅复用旧业务，不安装或更改运行包。
+- 原B28资源压力与环境适配两case已在精确f990eb24以现有v3正式接收：各完整14结果叶/59条件、6原限度、84完整Git/23规范差分及两人四轴齐全，保原a0eb主体/episode与两UUID。新增三派生为a07-owned-resources-and-required-load-recovery、a07-os-and-host-workload-adaptation、a06-changed-environment-actual-adaptation；160→96MiB是两次连续Job的真实回读，85是声明式续做，随后正常0及缓存复用/内外层归零，不是活Job改额或异常恢复。actual observe/recheck/finalsource用105.316秒，Job0/临时checkout移除；Root于2026-10-25 03:35:15 UTC在原300秒窗口内复核134文件、12次Git blob读取（5个不同blob）和2个旧selector后采纳。该报告的A07仅余普通交付义务，旧f209普通交付保原主体，尚未合成当前全资格；A06其余生命周期、A08异常/持续压力底线、必要独立接管及整体17scope52/发布继续未齐。
+- 资源源范围已校正：独立quota episode实际有40次CPU/IO/RSS采样和正常退出稳定；B28实际有Job内存限额及内外层归零。不能泛称完全无CPU/RAM实测，也不把两episode拼成异常退出或全机负载保证；原863有限影响评估与3cfe有限声明一致性不因此升级或撤销。旧观察器消失的原因/退出码仍未知，不当作活进程取消成功。
+- 本轮准备稿的originalSources类型混用被原core预检拦住，完整source assembly又拒绝了6条历史摘要配live源码路径的引用；均在派发前保留旧稿并更正，未放宽守卫。后者逐项匹配原H的4ca70806 Git原件，保原摘要/条件指针；两条旧file.json/case selector也按明确文件摘要和JSON键核验，未启通用猜路径。审查读取预算估计超界及投影截断均据实保留，不宣称整段高效或全成本优势。
+- A02后续来源已定位：53477三轮实际Sol/high有原生记录，2,044,203 tokens及原1800秒失败/成本未知保持；1935 reader的requested high不能证明actual effort。其原来源已引用真实retro-disabled原生替代链，excluded/unavailable仍需按实际适用范围核，不把未知目标控制或禁用清单直接写成组合义务通过。
+
 - 96a6181b的CI40109480874、修复464bb87e的CI40115601707及记录3cfe0a87的CI40124294805均已终态11/11成功；各保精确HEAD。464新增独立obligationEvidence，解开后续真实执行与已闭旧case的错误耦合；保v1–v3、原18/17/52和父R3同episode规则。真实角色、原窗口、补充自身source/package/current差分、8质量、逐义务负证、精确四轴及两相/最终交集分别核对，补充不修原expected或新增acceptedCases。角色/过期效果/传递冲突/历史carrier入口耦合的真实红与后续绿保留。f2完整新模块10tests/427.655秒及最终相关6方法、既有3守卫通过，464三精确静态和四轴均通过。
 - 在464正式接收原dynamic-routing-02的完整当前适用性：33叶、48条件、原27来源、80完整源码/22规范差分；另以actual53477独立operation/episode接收a02-delegated-managed-selection与a02-explicit-policy-native-adoption。Retro原生正文及writing依赖全文、Root受托选择及有用采用均有原始来源；源及policy不改，用户无需点名Skill。两窄义务只证明其实际范围，不等于全A02或R2/R3。new source run-02用50.342秒关闭Job/临时checkout，Root于19:08:40 UTC在窗口内重核135文件、7原生字节范围和6历史Git来源后采纳；原业务未重跑。
 - 该实际来源run-01被核心拒绝、未授任何case/义务资格，47.629秒机械关闭有效。私有材料生成器误把source-analysis放入current-observation槽，并重复拼接8条basis超过原4096字限；修正只改引用槽/去重措辞、完整96格负证与来源仍保留，经新精确独审和组装时实际core预检后才跑run-02，未放宽核心。当前observer另补精确99输入/目标/输出/epoch/revision守卫，真实旧AST空集红及10反例保留；旧R2/R3四条实际回执已独立复核当时确有原99输入和目标/输出，未重跑或倒签新守卫。
@@ -40,7 +46,7 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 
 1. **当前代码、安装及有限采用已核。** dev.14指导/owner修正、反例与真实静态/R2/R3来源执行已核；ab31、ccdb、70b87、863检查各保主体。本轮主MCP14实际加载，仅按真实新依赖复核，不重复安装或旧回归；旧失败不补签。
 2. **复用已核普通交付与健康继续。** f209两案及70b87原R2整案各有完整材料、四轴和正式两相来源结果，后者只新增健康继续派生。Root900/53477时序负项已直接绑定并经有限原function范围裁定，仍保原失败，不等于当前整体及时性或全部成本通过。
-3. **推进精确剩余行为与完整合取。** 原R3两案与原R2健康继续、两普通交付、两Skill精确义务及3cfe声明一致性各保正式接收主体，不重复从零核或混成一个当前全资格。库存接管的归属已核清，但自主及时发现、必要接管及安全源释放的完整普通链仍未由它证明；wholeRoot/任意GUI更替不是额外门槛。A02其余发现/停用/生态/模型成本义务、B26/7414/22b0、genuine ambiguity/steering、压力退出及其余52/17scope按实际缺口推进，不由本轮窄结果或CI代验，也不为计分造业务。
+3. **推进精确剩余行为与完整合取。** 原R3两案与原R2健康继续、两普通交付、两Skill精确义务及3cfe声明一致性各保正式接收主体，不重复从零核或混成一个当前全资格。库存接管的归属已核清，但自主及时发现、必要接管及安全源释放的完整普通链仍未由它证明；wholeRoot/任意GUI更替不是额外门槛。优先将已接收普通交付与本轮资源适配在精确候选下按现成来源合流；A02其余发现/停用/生态/模型成本义务、B26/7414/22b0、genuine ambiguity/steering、必要异常退出及其余52/17scope按实际缺口推进，不由本轮窄结果或CI代验，也不为计分造业务。
 4. 按实际必要修复对齐源码、文档和投影，核精确最终候选、独立复核与CI；条件成立才按原授权发布并更新本机入口。当前材料任务已关闭，后续不重置其原7200秒/600秒保留窗口。
 
 旧Hook code1、原MCP退出根因、旧约20.5MB原生区间语义、配置mtime写者、B5拒绝访问/未知归属和旧资源终态按原证据保留，不被新成功改绿。全成本/计费/因果净收益及无存活控制者自动唤醒、任意GUI/未来宿主保证仍未建立。只有新事实影响当前必要行动时，重开其受影响责任；用户已停的Hook观察器不启动替代常驻任务。
@@ -58,5 +64,7 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 - dev.13实际恢复及原源映射：同根下restart-dev13-20261024-01/observation.json、current-applicability-review-20261024-01/resolution.json、original-qualification-source-review-20261024-01/review.json；原草案与22b0材料仍在current-material-instance-preparation-20261024-01/。
 - 原案/当前责任：同根下case-projection-correction-20261024-01/plan.json、final-metadata-applicability-20261024-01/（含case身份、必要接管、原episode与53477映射），a01-a03-a04-current-source-20261024-01/及actual-a01-source-813/current-counterevidence-disposition.json。
 - 最新声明一致性：同根下claim-consistency-current-20261025-01/的parent-material.final-v2.json、两份review-*.final-v2.json及observe-owned/run-01/root-adoption.json；结果SHA为c74825c413348fa236654abc52289064ae9ddf5be762bfa1a2b901e1e1728b9b。压缩后的有限继续选择在continuity-duty-20261025-01/post-compaction-decision.json；预备包不表示启动接管。
+
+本轮资源与环境来源见同根pressure-current-20261025-01/的两份review-ready-v3材料、两份review-*.final.json及observe-owned/run-01/root-adoption.json；结果SHA为fd789634585c3c9be72ec5ca0ba00e2c7b46e7cfa03f14e0fb3e68ec0b26bef5。范围差额与A02线索在pressure-exit-source-gap-20261025-01/review.json、a02-remaining-evidence-20261025-01/model-policy-review.json。
 
 必要状态由宿主状态和可验证交接承载；旧时间线不再常驻，证据、未决责任和失败均保留。
