@@ -4996,36 +4996,33 @@
               "reasoning": "high",
               "windowsSandbox": "elevated",
               "timeoutSeconds": 2100,
-              "turnTimeoutSeconds": 600,
+              "turnTimeoutSeconds": 420,
               "recoveryTimeoutSeconds": 30,
-              "caseSha256": "b1a3ceeffe80659345bbbb24377b9e6ab3f624d725483c08cf3fa1104cb8f1d9",
+              "caseSha256": "58fb17c61922932cde0c87038c28a0e4636044e0147e5ed0059846d94c8ef31e",
               "host": "codex",
               "entry": "cx-cli",
-              "codexVersion": "0.164.0",
+              "codexVersion": "0.163.0",
               "usageCaps": {
-                "totalTokens": 2000000,
-                "uncachedInputTokens": 250000,
+                "totalTokens": 5000000,
+                "uncachedInputTokens": 500000,
                 "outputTokens": 48000
               },
-              "usageScope": "One new current-materials native CLI thread cumulative over four controlled stages only;2M total/250k uncached/48k output. Root preparation, intervals, independent verification, preservation, recovery and closeout have a separate7200s window with600s reserve whose actual start/deadline Root must freeze. Preserve prior preparation costs and all historical limits/failures; no billing or net-value claim.",
+              "usageScope": "B26 one native thread cumulative four-turn usage; Root preparation/review/recovery costs separately bounded",
               "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/source-applicability-review-v3.3.json",
-              "sandboxMode": "danger-full-access"
+              "caseFile": "product/cases/ordinary-steering-v3.3.json"
             },
-            "caseKind": "prospective-real-current-source-applicability-material-delivery",
-            "sourceAndInput": "One new controlled four-input nativeexec/resume instance for the genuinely unfinished README/catalog v3 candidate-material drafts, using the complete Root mechanical seed as-of53e and exact selected old records/qualification sources. Old254k recorder fixture, B26/7414 and all old actor/output/manifest failures remain immutable. Source staging is declared, standards visible fromstage1, and no original business is repeated.",
-            "effectiveEnvironment": "Existing enableddev12 package and stable nativeCLI0.164.0, gpt-6.1-sol/high, default/no-unrequestedGoal. The user explicitly approved danger-full-access only for this new CLI materials job; it is a process control, not full profile or Windows sandbox-backend participation evidence. Existing windowsSandbox=elevated is the retained runner preference, not a new setup. Actual executable/config/Hook/trust/permission/context/Goal/adoption and source/resource observations remain required; no login/trust/config/ACL/host repair or extra source.",
-            "qualification": "Root independently reads actual public input/response/tool traces and both entire new material drafts, exact source/seed/helper outputs, old/current/execution identity and current observations. Pure helpers, declaredexpected and filecheck structure do not self-qualify. All13expected leaves, scope duties/quality/scenarios and complete independent reviews/observe-recheck remain unchanged. If genuine ambiguity or substantive correction is absent, withhold that behavior/wholecase rather than fabricate it.",
-            "budgetAccounting": "One new current-materials native CLI thread cumulative over four controlled stages only;2M total/250k uncached/48k output. Root preparation, intervals, independent verification, preservation, recovery and closeout have a separate7200s window with600s reserve whose actual start/deadline Root must freeze. Preserve prior preparation costs and all historical limits/failures; no billing or net-value claim. Root must freeze actual7200s start/deadline and600s reserve before the new actual preparation/dispatch; prior candidate/source preparation costs stay separately recorded known/unknown and are not retroactively zeroed. Old300s/361s,7414 and all prior limits/failures remain; no extension, replay or fifthturn.",
-            "permissionScope": "Actual human approval, as reported by Root, covers only existingCLI danger-full-access for this materials job. It does not authorize auth/private reasoning/parentstate/config/ACL/extra-trust/other-job changes. Read only declared repository/Git and precise existing source allowlist; write only thetwo outputs.",
-            "materialTargetSeparation": "Mechanical materials target53e443361ec5d468ab0cffb86fa0b8b9328198aa as-of. This case has a new prospective execution declaration subject aftercommit; future native actor/episode/time are observed, never copied from53e or oldrecords.",
             "privateCaller": {
-              "sha256": "b3257f37455d7448fd56b64bb611f3e768ef693799c00162cdae6f03eaed9650",
+              "sha256": "7c99ad7fda1435cecfd804af05bf1278268e399f76b6164595a0597827abcdfd",
               "guard": "three-case-existing-admission-boundary/v1"
             },
-            "privatePreparationPlanSha256": "9c729ef89413c193967cf8512bc8171b34ce93200af45679b6b4ab826b358ddf"
+            "caseKind": "prospective-transparent-synthetic-ordinary-cli-functional-verification",
+            "sourceAndInput": "Use one committed fixture and one actual native thread/episode; actual four original input records and ordered effects. Scope claims are independent, no customer business or old case replay.",
+            "effectiveEnvironment": "Installed package23 and native CLI0.163.0, existing logged-in main user profile; workspace-write; actual inventory, adoption, CLI configuration, user/shared-state protections and actor identities must be observed, not copied from this declaration.",
+            "qualification": "Root independently reads original native commands/responses, Goal read receipts, protected-source and stage snapshots, actual conditions and resource exits. Preserve unavailable/unknown observations; no expected-to-observed copying or self-awarded flags. Scope floors unchanged.",
+            "budgetAccounting": "New B26 worker ceilings only;2100s whole run,420s/turn,30s recovery;5M total/500k uncached/48k output cumulative. Future Root independent review, effect verification, save and necessary recovery use separate finite timed stages with actual start/deadline/owner/reserve and boundary preservation. Prior preparation/review costs retain original records, not retroactively covered by a new900s draft. No adopted joint Root/peer token cap; complete deduplicated usage/billing remain unknown, limiting whole-cost/net-value/A08 claims. No retrospective old-window extension or weakening of scope floors.",
+            "privatePreparationPlanSha256": "31e4bd02fb7e552707e44ff5b0a33c3dd1eadccc77a8b36fd679b9cdb9d2dae3"
           },
-          "oracle": "Independently assess this new prospective actual four-stage current-materials delivery under the unchanged scope, duties, quality, scenarios and all13expected leaves. Verify useful requirements/plan before writes without pre-awarding genuine ambiguity; then Root-authorized fixed two-file v3 candidate-material drafting, real explicit pause, and explicit resume with already-existing historical adverse evidence. At least original README/catalog cases require complete53e-as-of mechanical normative/Git deltas, everycondition/expected contribution bound or preciselyheld, sourced derived outcomes, exact old/current/execution subjects and a matching readable note. Do not rename the completed14-row source adjudication or rerun old business. Steering references remain hold, not old full-case success. Root does not approve an unseen first plan or new authority. Verify both linked results, actual native actions/mode/Goal/permissions/Hook participation, source preservation and attributable resource/whole-work accounting. Require substantive correction only if the real late evidence demands it; no fakeA01/A04, no forced diff or fifth turn. Preserve original300s/7414/other failures, unknown effects and valid original facts. Filechecker semanticDecision remainsunreviewed; no self-awarded flags, formal material/case admission, wholeR2R3/A08/release or net-value inference.",
+          "oracle": "Evaluate this case independently against its unchanged scope and exact conditions. Consume the same original B26 episode, not relabelled primary-case conclusions. Read actual response and command trace: plan only, no deliverable writes; C lacks authorization, not source facts; no whole-task completion. Verify immutable source and normal entry/authority. Independently derive A+B duration5 under initial budget5; C remains authorization-pending despite known duration/priority. Both linked outputs exist and agree; response answers side question and performs authorized work, complete=false; no evaluator repair. Read full native commands/outputs during pause, not final hash alone: no business writes, including write-then-restore. Both outputs retain exact bytes and mtime from stage2; state-only response preserves real unresolved C decision. Actual input explicitly resumes and changes budget/authorization. Independently derive A+C duration4, B not authorized this round, no pending required decision; both outputs correct every affected field and note, preserve original facts/source and retained old effects. Check normal completion, unknowns and resources separately. Goal null is absence only at each actual read; missing or active is not inactive. Independent review plus bounded observe/recheck remain mandatory. No A08/whole-product or net-value claim.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5035,7 +5032,7 @@
             "scripts/observe_codex_lifecycle.py",
             "scripts/inspect_native_resources.py",
             "scripts/codex_rpc.py",
-            "product/cases/source-applicability-review-v3.3.json"
+            "product/cases/ordinary-steering-v3.3.json"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -5105,36 +5102,33 @@
               "reasoning": "high",
               "windowsSandbox": "elevated",
               "timeoutSeconds": 2100,
-              "turnTimeoutSeconds": 600,
+              "turnTimeoutSeconds": 420,
               "recoveryTimeoutSeconds": 30,
-              "caseSha256": "b1a3ceeffe80659345bbbb24377b9e6ab3f624d725483c08cf3fa1104cb8f1d9",
+              "caseSha256": "58fb17c61922932cde0c87038c28a0e4636044e0147e5ed0059846d94c8ef31e",
               "host": "codex",
               "entry": "cx-cli",
-              "codexVersion": "0.164.0",
+              "codexVersion": "0.163.0",
               "usageCaps": {
-                "totalTokens": 2000000,
-                "uncachedInputTokens": 250000,
+                "totalTokens": 5000000,
+                "uncachedInputTokens": 500000,
                 "outputTokens": 48000
               },
-              "usageScope": "One new current-materials native CLI thread cumulative over four controlled stages only;2M total/250k uncached/48k output. Root preparation, intervals, independent verification, preservation, recovery and closeout have a separate7200s window with600s reserve whose actual start/deadline Root must freeze. Preserve prior preparation costs and all historical limits/failures; no billing or net-value claim.",
+              "usageScope": "B26 one native thread cumulative four-turn usage; Root preparation/review/recovery costs separately bounded",
               "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/source-applicability-review-v3.3.json",
-              "sandboxMode": "danger-full-access"
+              "caseFile": "product/cases/ordinary-steering-v3.3.json"
             },
-            "caseKind": "prospective-real-current-source-applicability-material-delivery",
-            "sourceAndInput": "One new controlled four-input nativeexec/resume instance for the genuinely unfinished README/catalog v3 candidate-material drafts, using the complete Root mechanical seed as-of53e and exact selected old records/qualification sources. Old254k recorder fixture, B26/7414 and all old actor/output/manifest failures remain immutable. Source staging is declared, standards visible fromstage1, and no original business is repeated.",
-            "effectiveEnvironment": "Existing enableddev12 package and stable nativeCLI0.164.0, gpt-6.1-sol/high, default/no-unrequestedGoal. The user explicitly approved danger-full-access only for this new CLI materials job; it is a process control, not full profile or Windows sandbox-backend participation evidence. Existing windowsSandbox=elevated is the retained runner preference, not a new setup. Actual executable/config/Hook/trust/permission/context/Goal/adoption and source/resource observations remain required; no login/trust/config/ACL/host repair or extra source.",
-            "qualification": "Root independently reads actual public input/response/tool traces and both entire new material drafts, exact source/seed/helper outputs, old/current/execution identity and current observations. Pure helpers, declaredexpected and filecheck structure do not self-qualify. All13expected leaves, scope duties/quality/scenarios and complete independent reviews/observe-recheck remain unchanged. If genuine ambiguity or substantive correction is absent, withhold that behavior/wholecase rather than fabricate it.",
-            "budgetAccounting": "One new current-materials native CLI thread cumulative over four controlled stages only;2M total/250k uncached/48k output. Root preparation, intervals, independent verification, preservation, recovery and closeout have a separate7200s window with600s reserve whose actual start/deadline Root must freeze. Preserve prior preparation costs and all historical limits/failures; no billing or net-value claim. Root must freeze actual7200s start/deadline and600s reserve before the new actual preparation/dispatch; prior candidate/source preparation costs stay separately recorded known/unknown and are not retroactively zeroed. Old300s/361s,7414 and all prior limits/failures remain; no extension, replay or fifthturn.",
-            "permissionScope": "Actual human approval, as reported by Root, covers only existingCLI danger-full-access for this materials job. It does not authorize auth/private reasoning/parentstate/config/ACL/extra-trust/other-job changes. Read only declared repository/Git and precise existing source allowlist; write only thetwo outputs.",
-            "materialTargetSeparation": "Mechanical materials target53e443361ec5d468ab0cffb86fa0b8b9328198aa as-of. This case has a new prospective execution declaration subject aftercommit; future native actor/episode/time are observed, never copied from53e or oldrecords.",
             "privateCaller": {
-              "sha256": "b3257f37455d7448fd56b64bb611f3e768ef693799c00162cdae6f03eaed9650",
+              "sha256": "7c99ad7fda1435cecfd804af05bf1278268e399f76b6164595a0597827abcdfd",
               "guard": "three-case-existing-admission-boundary/v1"
             },
-            "privatePreparationPlanSha256": "9c729ef89413c193967cf8512bc8171b34ce93200af45679b6b4ab826b358ddf"
+            "caseKind": "prospective-transparent-synthetic-ordinary-cli-functional-verification",
+            "sourceAndInput": "Use one committed fixture and one actual native thread/episode; actual four original input records and ordered effects. Scope claims are independent, no customer business or old case replay.",
+            "effectiveEnvironment": "Installed package23 and native CLI0.163.0, existing logged-in main user profile; workspace-write; actual inventory, adoption, CLI configuration, user/shared-state protections and actor identities must be observed, not copied from this declaration.",
+            "qualification": "Root independently reads original native commands/responses, Goal read receipts, protected-source and stage snapshots, actual conditions and resource exits. Preserve unavailable/unknown observations; no expected-to-observed copying or self-awarded flags. Scope floors unchanged.",
+            "budgetAccounting": "New B26 worker ceilings only;2100s whole run,420s/turn,30s recovery;5M total/500k uncached/48k output cumulative. Future Root independent review, effect verification, save and necessary recovery use separate finite timed stages with actual start/deadline/owner/reserve and boundary preservation. Prior preparation/review costs retain original records, not retroactively covered by a new900s draft. No adopted joint Root/peer token cap; complete deduplicated usage/billing remain unknown, limiting whole-cost/net-value/A08 claims. No retrospective old-window extension or weakening of scope floors.",
+            "privatePreparationPlanSha256": "31e4bd02fb7e552707e44ff5b0a33c3dd1eadccc77a8b36fd679b9cdb9d2dae3"
           },
-          "oracle": "Independently assess this new prospective actual four-stage current-materials delivery under the unchanged scope, duties, quality, scenarios and all13expected leaves. Verify useful requirements/plan before writes without pre-awarding genuine ambiguity; then Root-authorized fixed two-file v3 candidate-material drafting, real explicit pause, and explicit resume with already-existing historical adverse evidence. At least original README/catalog cases require complete53e-as-of mechanical normative/Git deltas, everycondition/expected contribution bound or preciselyheld, sourced derived outcomes, exact old/current/execution subjects and a matching readable note. Do not rename the completed14-row source adjudication or rerun old business. Steering references remain hold, not old full-case success. Root does not approve an unseen first plan or new authority. Verify both linked results, actual native actions/mode/Goal/permissions/Hook participation, source preservation and attributable resource/whole-work accounting. Require substantive correction only if the real late evidence demands it; no fakeA01/A04, no forced diff or fifth turn. Preserve original300s/7414/other failures, unknown effects and valid original facts. Filechecker semanticDecision remainsunreviewed; no self-awarded flags, formal material/case admission, wholeR2R3/A08/release or net-value inference.",
+          "oracle": "Evaluate this case independently against its unchanged scope and exact conditions. Consume the same original B26 episode, not relabelled primary-case conclusions. Read actual response and command trace: plan only, no deliverable writes; C lacks authorization, not source facts; no whole-task completion. Verify immutable source and normal entry/authority. Independently derive A+B duration5 under initial budget5; C remains authorization-pending despite known duration/priority. Both linked outputs exist and agree; response answers side question and performs authorized work, complete=false; no evaluator repair. Read full native commands/outputs during pause, not final hash alone: no business writes, including write-then-restore. Both outputs retain exact bytes and mtime from stage2; state-only response preserves real unresolved C decision. Actual input explicitly resumes and changes budget/authorization. Independently derive A+C duration4, B not authorized this round, no pending required decision; both outputs correct every affected field and note, preserve original facts/source and retained old effects. Check normal completion, unknowns and resources separately. Goal null is absence only at each actual read; missing or active is not inactive. Independent review plus bounded observe/recheck remain mandatory. No A08/whole-product or net-value claim.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5144,7 +5138,7 @@
             "scripts/observe_codex_lifecycle.py",
             "scripts/inspect_native_resources.py",
             "scripts/codex_rpc.py",
-            "product/cases/source-applicability-review-v3.3.json"
+            "product/cases/ordinary-steering-v3.3.json"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -5208,36 +5202,33 @@
               "reasoning": "high",
               "windowsSandbox": "elevated",
               "timeoutSeconds": 2100,
-              "turnTimeoutSeconds": 600,
+              "turnTimeoutSeconds": 420,
               "recoveryTimeoutSeconds": 30,
-              "caseSha256": "b1a3ceeffe80659345bbbb24377b9e6ab3f624d725483c08cf3fa1104cb8f1d9",
+              "caseSha256": "58fb17c61922932cde0c87038c28a0e4636044e0147e5ed0059846d94c8ef31e",
               "host": "codex",
               "entry": "cx-cli",
-              "codexVersion": "0.164.0",
+              "codexVersion": "0.163.0",
               "usageCaps": {
-                "totalTokens": 2000000,
-                "uncachedInputTokens": 250000,
+                "totalTokens": 5000000,
+                "uncachedInputTokens": 500000,
                 "outputTokens": 48000
               },
-              "usageScope": "One new current-materials native CLI thread cumulative over four controlled stages only;2M total/250k uncached/48k output. Root preparation, intervals, independent verification, preservation, recovery and closeout have a separate7200s window with600s reserve whose actual start/deadline Root must freeze. Preserve prior preparation costs and all historical limits/failures; no billing or net-value claim.",
+              "usageScope": "B26 one native thread cumulative four-turn usage; Root preparation/review/recovery costs separately bounded",
               "runner": "scripts/observe_codex_entry.py",
-              "caseFile": "product/cases/source-applicability-review-v3.3.json",
-              "sandboxMode": "danger-full-access"
+              "caseFile": "product/cases/ordinary-steering-v3.3.json"
             },
-            "caseKind": "prospective-real-current-source-applicability-material-delivery",
-            "sourceAndInput": "One new controlled four-input nativeexec/resume instance for the genuinely unfinished README/catalog v3 candidate-material drafts, using the complete Root mechanical seed as-of53e and exact selected old records/qualification sources. Old254k recorder fixture, B26/7414 and all old actor/output/manifest failures remain immutable. Source staging is declared, standards visible fromstage1, and no original business is repeated.",
-            "effectiveEnvironment": "Existing enableddev12 package and stable nativeCLI0.164.0, gpt-6.1-sol/high, default/no-unrequestedGoal. The user explicitly approved danger-full-access only for this new CLI materials job; it is a process control, not full profile or Windows sandbox-backend participation evidence. Existing windowsSandbox=elevated is the retained runner preference, not a new setup. Actual executable/config/Hook/trust/permission/context/Goal/adoption and source/resource observations remain required; no login/trust/config/ACL/host repair or extra source.",
-            "qualification": "Root independently reads actual public input/response/tool traces and both entire new material drafts, exact source/seed/helper outputs, old/current/execution identity and current observations. Pure helpers, declaredexpected and filecheck structure do not self-qualify. All13expected leaves, scope duties/quality/scenarios and complete independent reviews/observe-recheck remain unchanged. If genuine ambiguity or substantive correction is absent, withhold that behavior/wholecase rather than fabricate it.",
-            "budgetAccounting": "One new current-materials native CLI thread cumulative over four controlled stages only;2M total/250k uncached/48k output. Root preparation, intervals, independent verification, preservation, recovery and closeout have a separate7200s window with600s reserve whose actual start/deadline Root must freeze. Preserve prior preparation costs and all historical limits/failures; no billing or net-value claim. Root must freeze actual7200s start/deadline and600s reserve before the new actual preparation/dispatch; prior candidate/source preparation costs stay separately recorded known/unknown and are not retroactively zeroed. Old300s/361s,7414 and all prior limits/failures remain; no extension, replay or fifthturn.",
-            "permissionScope": "Actual human approval, as reported by Root, covers only existingCLI danger-full-access for this materials job. It does not authorize auth/private reasoning/parentstate/config/ACL/extra-trust/other-job changes. Read only declared repository/Git and precise existing source allowlist; write only thetwo outputs.",
-            "materialTargetSeparation": "Mechanical materials target53e443361ec5d468ab0cffb86fa0b8b9328198aa as-of. This case has a new prospective execution declaration subject aftercommit; future native actor/episode/time are observed, never copied from53e or oldrecords.",
             "privateCaller": {
-              "sha256": "b3257f37455d7448fd56b64bb611f3e768ef693799c00162cdae6f03eaed9650",
+              "sha256": "7c99ad7fda1435cecfd804af05bf1278268e399f76b6164595a0597827abcdfd",
               "guard": "three-case-existing-admission-boundary/v1"
             },
-            "privatePreparationPlanSha256": "9c729ef89413c193967cf8512bc8171b34ce93200af45679b6b4ab826b358ddf"
+            "caseKind": "prospective-transparent-synthetic-ordinary-cli-functional-verification",
+            "sourceAndInput": "Use one committed fixture and one actual native thread/episode; actual four original input records and ordered effects. Scope claims are independent, no customer business or old case replay.",
+            "effectiveEnvironment": "Installed package23 and native CLI0.163.0, existing logged-in main user profile; workspace-write; actual inventory, adoption, CLI configuration, user/shared-state protections and actor identities must be observed, not copied from this declaration.",
+            "qualification": "Root independently reads original native commands/responses, Goal read receipts, protected-source and stage snapshots, actual conditions and resource exits. Preserve unavailable/unknown observations; no expected-to-observed copying or self-awarded flags. Scope floors unchanged.",
+            "budgetAccounting": "New B26 worker ceilings only;2100s whole run,420s/turn,30s recovery;5M total/500k uncached/48k output cumulative. Future Root independent review, effect verification, save and necessary recovery use separate finite timed stages with actual start/deadline/owner/reserve and boundary preservation. Prior preparation/review costs retain original records, not retroactively covered by a new900s draft. No adopted joint Root/peer token cap; complete deduplicated usage/billing remain unknown, limiting whole-cost/net-value/A08 claims. No retrospective old-window extension or weakening of scope floors.",
+            "privatePreparationPlanSha256": "31e4bd02fb7e552707e44ff5b0a33c3dd1eadccc77a8b36fd679b9cdb9d2dae3"
           },
-          "oracle": "Independently assess this new prospective actual four-stage current-materials delivery under the unchanged scope, duties, quality, scenarios and all13expected leaves. Verify useful requirements/plan before writes without pre-awarding genuine ambiguity; then Root-authorized fixed two-file v3 candidate-material drafting, real explicit pause, and explicit resume with already-existing historical adverse evidence. At least original README/catalog cases require complete53e-as-of mechanical normative/Git deltas, everycondition/expected contribution bound or preciselyheld, sourced derived outcomes, exact old/current/execution subjects and a matching readable note. Do not rename the completed14-row source adjudication or rerun old business. Steering references remain hold, not old full-case success. Root does not approve an unseen first plan or new authority. Verify both linked results, actual native actions/mode/Goal/permissions/Hook participation, source preservation and attributable resource/whole-work accounting. Require substantive correction only if the real late evidence demands it; no fakeA01/A04, no forced diff or fifth turn. Preserve original300s/7414/other failures, unknown effects and valid original facts. Filechecker semanticDecision remainsunreviewed; no self-awarded flags, formal material/case admission, wholeR2R3/A08/release or net-value inference.",
+          "oracle": "Evaluate this case independently against its unchanged scope and exact conditions. Consume the same original B26 episode, not relabelled primary-case conclusions. Read actual response and command trace: plan only, no deliverable writes; C lacks authorization, not source facts; no whole-task completion. Verify immutable source and normal entry/authority. Independently derive A+B duration5 under initial budget5; C remains authorization-pending despite known duration/priority. Both linked outputs exist and agree; response answers side question and performs authorized work, complete=false; no evaluator repair. Read full native commands/outputs during pause, not final hash alone: no business writes, including write-then-restore. Both outputs retain exact bytes and mtime from stage2; state-only response preserves real unresolved C decision. Actual input explicitly resumes and changes budget/authorization. Independently derive A+C duration4, B not authorized this round, no pending required decision; both outputs correct every affected field and note, preserve original facts/source and retained old effects. Check normal completion, unknowns and resources separately. Goal null is absence only at each actual read; missing or active is not inactive. Independent review plus bounded observe/recheck remain mandatory. No A08/whole-product or net-value claim.",
           "oracleFiles": [
             "docs/operations/PLAN-v3.3.md",
             "docs/operations/ACCEPTANCE-v3.3.md",
@@ -5247,7 +5238,7 @@
             "scripts/observe_codex_lifecycle.py",
             "scripts/inspect_native_resources.py",
             "scripts/codex_rpc.py",
-            "product/cases/source-applicability-review-v3.3.json"
+            "product/cases/ordinary-steering-v3.3.json"
           ],
           "maxAgeSeconds": 86400,
           "expected": {
@@ -6438,7 +6429,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "A06 exact7ab, A07 exact41b, A02 policy exactb6 and two Skill duties exact464 retain their accepted subjects. Exact1ae/tree4f6 passed1258 complete local tests and3 statics; owner7830.173s returned0/allclosed and Root rehashed219 source files within the original8400s allocation. CI40206019033 completed11/11. The separately reviewed typed A04 poststate witness was actually consumed by public verify_product observe/recheck/final-source, then accepted by Root17:51:33UTC within its new300s allocation after120 files/33 public native ranges/5Git subjects/current-input checks. Result3fff15f6 supports only a04-actual-retroactive-correction; no case/scope/quality/scenario or wholeA04 contribution. Original four300s windows, material observedAt/freshness, c45 CI9/11, old local failures/timeouts and unknown native causes remain. Current environment input was natively reconciled and full99-input/one-output contract reboundr114; no pending, RootMCPdev14/PID21340, no Goal. Point recovery after metadata quiescence does not prove reader code repair or continuous reliability. Next inspect reusable sources for the other three A04 obligations, remaining A02 discovery/model/ecosystem duties, genuinely necessary A05 takeover and A08 same-business remainder. Original18/17/52, all quality/scenario/cx-cli/conditional release requirements remain; no old business replay or3.3.2 qualification.",
+    "work": "Retain exact1ae1258 complete local tests/3 statics and CI40206019033 at their own subject, plus separately accepted A04 correction3fff and all prior scoped evidence. Consensusr50 explicitly retires only the new material-draft carrier as a mandatory product prerequisite, restoring the three complete88cb reference cases. Preserve8b definitions, useful drafts, original failures, clocks and permission scopes. This is a real case-selection change, not metadata-only. Reassess full original cases under existing strictv3 with exact current code/norm/package differences, independent reviews, actual observe/recheck/final-source and all original13expected, quality, ordinaryCLI/current adoption and same-business duties. Current qualification remains incomplete. In parallel, perform the authorized proportionate pre-release review of side effects, stale active data/debt, package versus repository/private evidence size, performance/resource costs, coverage breadth/weakest links, coupling, recovery/update/rollback, security/provenance/licensing and unnecessary complexity. Reuse evidence, correct demonstrated defects and retain recoverability; do not replay closed business or add arbitrary cases/gates. No3.3.2 publication before original functional/quality and exact final-candidate conditions.",
     "requires": "Retain the exact published 3.3.0/3.3.1 subjects, original failures, valid source evidence and scoped unknowns. Reconcile affected package/interface changes and original acceptance consequences before claiming reuse or a new pass. Preserve user settings, source input, pauses, ownership and recovery. The existing conditional 3.3.2 publication requires exact candidate checks, necessary host/functional and quality evidence, independent review, hosted verification and ordered publication post-state; no other host, account, trust, promotion or unrelated write is granted."
   },
   "claimCeiling": {
@@ -6467,7 +6458,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r49",
+    "revision": "r50",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",
