@@ -341,6 +341,152 @@ class ContemporaryContributionTests(unittest.TestCase):
                     self.assertEqual(rejected['acceptedCases'], [])
                     self.assertFalse(rejected['acceptanceRequirements']['A08']['complete'])
 
+    def sdk_lifecycle_fixture(self, version=2):
+        case_id = 'v33-codex-sdk-lifecycle-01'
+        current, case, record, legacy, observe = self.contemporary_fixture(case_id)
+        def observed(request):
+            result = observe(request)
+            if request['phase'] == 'observe':
+                material = result['parentApplicability'][case_id]
+                material['schema'] = 'yiyuan-accord-parent-applicability/v' + str(version)
+                if version == 3:
+                    material['contemporary']['derivedOutcomes'] = []
+                material['roles'][0].update(responsibility='historical-execution',
+                    currentActor=None, currentSources=[])
+                for row in material['conditionBindings']:
+                    row['responsibility'] = 'historical-execution'
+                for row in material['predicateBindings']:
+                    row['responsibility'] = 'actual-current-reassessment'
+                material['relationships'] = []
+                self.fixture.sign_parent_material(material)
+            return result
+        return current, case, record, legacy, observed
+
+    def test_sdk_lifecycle_complete_contemporary_bridge_preserves_original_identity(self):
+        for version in (2, 3):
+            with self.subTest(version=version), self.fixture.history():
+                current, case, record, _, observe = self.sdk_lifecycle_fixture(version)
+                original, original_case, phases = copy.deepcopy(record), copy.deepcopy(case), []
+                def checked(request):
+                    phases.append(request['phase'])
+                    result = observe(request)
+                    if request['phase'] == 'observe':
+                        material = result['parentApplicability'][case['id']]
+                        self.assertEqual(len(material['predicateBindings']), 21)
+                        self.assertEqual([(r['entry'], r['mode']) for r in material['roles']], [('cx-sdk', None)])
+                        self.assertEqual(material['original']['qualification']['claim'], 'package-lifecycle')
+                        self.assertTrue(material['original']['qualification']['knownFailuresAndLimits'])
+                    return result
+                report = self.fixture.assess(current, checked)
+                self.assertEqual(report['acceptedCases'], [case['id']], report['caseRejections'])
+                self.assertEqual(report['errors'], [])
+                self.assertEqual(phases, ['observe', 'recheck'])
+                self.assertEqual(record, original)
+                self.assertEqual(case, original_case)
+                self.assertEqual(case['conditions']['execution']['resourceController'], 'windows-job-object')
+                supported = report['currentParentApplicability'][case['id']]
+                self.assertIn('complete-package-changed', supported['reconciledReasons'])
+                self.assertFalse(report['functionalCompletion'])
+                self.assertFalse(report['candidateEligible'])
+                self.assertFalse(report['acceptanceRequirements']['A06']['complete'])
+
+    def test_sdk_lifecycle_bridge_rejects_incomplete_or_misbound_sources(self):
+        with self.fixture.history():
+            current, case, record, legacy, observe = self.sdk_lifecycle_fixture(3)
+            for route in (legacy, self.fixture.replay([record])):
+                self.assertEqual(self.fixture.assess(current, route)['acceptedCases'], [])
+            mutations = {
+                'predicate': lambda material: material['predicateBindings'].pop(),
+                'condition': lambda material: material['conditionBindings'].pop(),
+                'role': lambda material: material['roles'].clear(),
+                'wrong-role': lambda material: material['roles'][0].update(entry='cx-cli'),
+                'duplicate-role': lambda material: material['roles'].append(copy.deepcopy(material['roles'][0])),
+                'current-consequence': lambda material: material['differences'][0].update(currentConsequences=[]),
+                'source-delta': lambda material: material['differences'].pop(),
+                'normative-delta': lambda material: material['contemporary']['normativeDifferences'].pop(),
+                'missing-contribution': lambda material: material['contemporary']['contributions'].pop(),
+                'f990-insufficient-bridge': lambda material: material['contemporary']['contributions'][0].update(
+                    disposition='unresolved', currentSources=[]),
+                'qualification': lambda material: material['original']['qualification'].update(decision='not-run'),
+                'original-final-source': lambda material: material['original']['qualification'].update(finalOutcomeSources=[]),
+                'negative-disposition': lambda material: material['original']['qualification']['knownFailuresAndLimits'][0].update(
+                    disposition='silently-ignored'),
+                'old-package': lambda material: material['original'].update(packageSha256='0' * 64),
+                'current-package': lambda material: material['current'].update(packageSha256='0' * 64),
+                'expired-review': lambda material: material['reviewBundle']['reviews'][0].update(reviewedAt='2000-01-01T00:00:00Z'),
+                'review-axis': lambda material: material['reviewBundle']['reviews'].pop(),
+                'posix-count-is-not-zero': lambda material: next(r for r in material['predicateBindings']
+                    if r['pointer'] == '/cleanup/ownedProcesses').update(currentValue=None),
+                'wrong-controller': lambda material: next(r for r in material['conditionBindings']
+                    if r['pointer'] == '/execution/resourceController').update(currentValue='posix-session-process-group'),
+                'unsourced-derived-outcome': lambda material: material['contemporary']['derivedOutcomes'].append({}),
+            }
+            for kind, change in mutations.items():
+                with self.subTest(rejection=kind):
+                    report = self.fixture.assess(current, self.mutate(observe, change, parent=True))
+                    self.assertEqual(report['acceptedCases'], [], kind)
+                    self.assertIn(case['id'], report['caseRejections'])
+            def drift(rows):
+                rows[case['id']]['contemporary']['sourceDelta']['sha256'] = '0' * 64
+            report = self.fixture.assess(current, self.mutate(observe, lambda material: None, parent=True, recheck=drift))
+            self.assertIn('current-applicability-changed', report['caseRejections'][case['id']])
+            # Structural rejection does not authenticate arbitrary source claims.
+            def hot_record(request):
+                result = observe(request)
+                if request['phase'] == 'observe':
+                    result['records'][0]['conditions']['execution'].update(
+                        resourceController='posix-session-process-group', caseVariant='hot-reload')
+                    result['records'][0]['facts']['cleanup']['value']['ownedProcesses'] = None
+                return result
+            self.assertEqual(self.fixture.assess(current, hot_record)['acceptedCases'], [])
+            def ordinary_channel(request):
+                result = observe(request)
+                result['currentApplicability'] = result.pop('parentApplicability')
+                return result
+            self.assertEqual(self.fixture.assess(current, ordinary_channel)['acceptedCases'], [])
+            protected = self.fixture.root / 'README.md'
+            before = protected.read_bytes()
+            def changed_after_recheck(request):
+                result = observe(request)
+                if request['phase'] == 'recheck': protected.write_bytes(before + b'\nchanged after observation\n')
+                return result
+            try:
+                self.assertEqual(self.fixture.assess(current, changed_after_recheck)['acceptedCases'], [])
+            finally:
+                protected.write_bytes(before)
+            original_case = copy.deepcopy(case)
+            case['conditions']['execution']['limits']['providerRequests'] = 6
+            self.fixture.commit(current)
+            self.assertEqual(self.fixture.assess(current, observe)['acceptedCases'], [])
+            self.assertEqual(record['conditions'], original_case['conditions'])
+
+    def test_sdk_route_does_not_open_other_complete_case_claims(self):
+        for case_id in ('v33-codex-sdk-scoped-exposure-01', 'v33-cli-readme-semantic-review-20261020-01',
+                        'synthetic-other-lifecycle'):
+            with self.subTest(case=case_id), self.fixture.history():
+                saved = self.fixture.contract
+                if case_id == 'synthetic-other-lifecycle':
+                    changed = copy.deepcopy(saved)
+                    policy = changed['acceptance']['admission']
+                    extra = copy.deepcopy(next(c for c in policy['cases'] if c['id'] == 'v33-codex-sdk-lifecycle-01'))
+                    scope = copy.deepcopy(next(c for c in policy['scopes'] if c['id'] == extra['scope']))
+                    extra.update(id=case_id, scope=case_id)
+                    scope['id'] = case_id
+                    policy['cases'].append(extra)
+                    policy['scopes'].append(scope)
+                    self.fixture.contract = changed
+                try:
+                    current, case, _, _, observe = self.contemporary_fixture(case_id)
+                finally:
+                    self.fixture.contract = saved
+                for version in (2, 3):
+                    def schema(material):
+                        material['schema'] = 'yiyuan-accord-parent-applicability/v' + str(version)
+                        if version == 3: material['contemporary']['derivedOutcomes'] = []
+                    report = self.fixture.assess(current, self.mutate(observe, schema, parent=True))
+                    self.assertEqual(report['acceptedCases'], [])
+                    self.assertIn('current-applicability-unsupported', report['caseRejections'][case_id])
+
     def test_explicit_current_review_retains_original_effect_without_new_outcome(self):
         with self.fixture.history():
             current, case, record, legacy, observe = self.contemporary_fixture()

@@ -46,6 +46,7 @@ _PARENT_CLAIMS = {"v33-admitted-entry-delivery": "function",
                   "v33-system-impact-assessment": "impact-assessment"}
 _ENTRY_COVERAGE_SCOPE = "v33-codex-entry-coverage"
 _HOST_LIFECYCLE_SCOPE = "v33-codex-lifecycle"
+_SDK_LIFECYCLE_SCOPE = "v33-codex-sdk-lifecycle"
 _SELECTED_SUBJECT_SCOPES = {_HOST_LIFECYCLE_SCOPE, "v33-system-integration"}
 _ENTRY_COVERAGE_PREDICATES = {
     "discoveryDenominatorBound", "officialAndActualSourcesReconciled",
@@ -1158,6 +1159,11 @@ def _current_impact(root, material, record, original_contract, original, contrac
                                                  else "yiyuan-accord-current-applicability/v1"))
     if parent:
         claim = _PARENT_CLAIMS.get(case["scope"])
+        # SDK reuse requires the complete v2/v3 bridge; v1 stays closed.
+        if contemporary and case["scope"] == _SDK_LIFECYCLE_SCOPE:
+            claim = "package-lifecycle"
+            require(all(v["host"] == "codex" and v["entry"] == "cx-sdk"
+                        for v in (original, case)))
         require(claim is not None and original_contract["schema"] == contract["schema"]
                 == "yiyuan-accord-development/v5" and all(
                 c["acceptance"]["admission"]["schema"] == CURRENT_SCHEMA
@@ -1198,7 +1204,7 @@ def _current_impact(root, material, record, original_contract, original, contrac
         "case", "scope", "claim", "episodeId", "recordSha256", "subject", "decision",
         "stage", "qualifiedAt", "sources", "finalOutcomeSources", "knownFailuresAndLimits"})
     require(qualification["case"] == case["id"] and qualification["scope"] == case["scope"]
-            and qualification["claim"] == (_PARENT_CLAIMS[case["scope"]] if parent else "function")
+            and qualification["claim"] == (claim if parent else "function")
             and qualification["subject"] == original_subject
             and qualification["recordSha256"] == _hash(record)
             and qualification["episodeId"] == record["episodeId"]
@@ -1346,6 +1352,8 @@ def _parent_bindings(material, record, case, refs, require):
     entries = case.get("subjectEntries", case["conditions"].get("subjectEntries", [case["entry"]]))
     selected = {(entry, None) for entry in entries} | {
         (entry, mode) for entry in entries for mode in modes.get(entry, [])}
+    if case["scope"] == _SDK_LIFECYCLE_SCOPE:
+        require(selected == {("cx-sdk", None)})
     roles = material["roles"]
     require(isinstance(roles, list) and len(roles) == len(selected))
     by_id, identities = {}, set()
