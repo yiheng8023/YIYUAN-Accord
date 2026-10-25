@@ -10,6 +10,9 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 
 ## 当前事实
 
+- 原v33-codex-sdk-scoped-exposure-01已在精确d03978a4下经完整v3/两人四轴及actual observe/recheck/finalsource接收，新增a06-enable-reuse-disable-exit。保原d855/原episode、15结果叶/38条件及73完整Git/23规范差分；原0.154固定响应、无真实模型/账户的作用域机制，不能写成当前0.164实测、普通Skill采用或所有消费者加载。来源运行49.596秒，Job0/临时checkout移除；Root于2026-10-25 05:51:35 UTC在原300秒窗内重核257份固定源（含156归档成员）后采纳。结果SHA为3e05559110cd53f66457784aaf3cd29db6a7455beb8f77206a14e7f7c08c3a4b。该单案报告不含此前f990环境适配贡献，不代表其被撤销，也不拼成全A06/17scope52/R2R3。
+- SDK时间与角色已分清：早期source-verification的not-run/unknown保持原阶段，后续d855 ADMISSION与原发布前00:33复核的同一摘要确认最终资格；qualifiedAt只按原独立观察到合格状态的时刻，内部首次返回未知、原23:35执行时刻不改。当前Desktop Root为来源协调者，cx-sdk是被评估界面；0.164版本/schema只支持接口声明，原实际禁用/请求排除/恢复/清根和25资源回执来自旧原件。当前runner不同于原manifest程序，已核源码差分，未拿新程序代旧执行。所有原失败、全成本未知及审查读取估计超界均保留。
+
 - A07已在精确41b25868下完整通过：同候选正式消费catalog与README两原普通交付case、B28资源压力与环境两原case，原全部结果/条件/负证及两人四轴保持。catalog另经独立成品语义审查提供a07-source-correct-professional-delivery；README补原默认无额外扩展场景与全部相关case，未把A01派生自动当A07，也未缩减scope。actual core四案全接收，A07.complete=true、missingScopes.function=[]、missingObligations=[]；A08.blockedBy不再含A07。来源运行109.200秒/Job0/临时checkout移除，Root于2026-10-25 04:25:51 UTC在原300秒窗口内重核173文件、5个Git blob、2个旧selector及15份普通原件后采纳；结果SHA为de6ea8ab4ee51936779232f26b07038b30fed6e3e8dbcf274ba460ea437b466c。该结论限原声明场景/候选，不拼成R3跨episode因果或全产品通过；其余A01–A06/A08、17scope52及发布继续未齐。
 - 合流前发现仅catalog虽有对应后果但仍缺原README/default场景，已补现成原案；没有制造默认业务或重跑旧CLI。首次准备对尚未写出的同批delta提前预查而拒绝、Root首次采纳脚本把{function:[]}误当非空缺口而拒绝，前者在派发前纠正，后者在Root采纳记录写入前纠正；两次caller拒绝均保留，既有core结果、原判据和源执行未改或重跑。各审查预算估计/过宽投影的原披露保留，不据本源核验宣称整段成本优势。
 
@@ -71,5 +74,7 @@ Root已接回当前材料任务的操作及tracked/.git写权；受托执行者�
 本轮资源与环境来源见同根pressure-current-20261025-01/的两份review-ready-v3材料、两份review-*.final.json及observe-owned/run-01/root-adoption.json；结果SHA为fd789634585c3c9be72ec5ca0ba00e2c7b46e7cfa03f14e0fb3e68ec0b26bef5。范围差额与A02线索在pressure-exit-source-gap-20261025-01/review.json、a02-remaining-evidence-20261025-01/model-policy-review.json。
 
 最新A07全范围来源见同根a07-convergence-20261025-01/：四份review-ready材料、普通两组与README追加两组独评、scope-case-coverage.json及observe-owned/run-01/root-adoption.json。旧f209/41b等接收结果保各自精确身份；新记录只同步事实，不重启全套旧业务。
+
+最新SDK作用域来源见同根a06-sdk-exposure-current-20261025-01/：material.review-ready-v2.json、两份review-*.json、archive-identity.json与observe-owned/run-01/root-adoption.json。后续whole-host/selected-entry parent与SDK package-lifecycle分别核原范围，不能用Root14或11/11状态代原件、当前所需消费者和完整A06。
 
 必要状态由宿主状态和可验证交接承载；旧时间线不再常驻，证据、未决责任和失败均保留。
