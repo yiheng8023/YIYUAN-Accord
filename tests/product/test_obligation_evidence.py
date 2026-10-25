@@ -3,6 +3,7 @@ import copy
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 from tests.product import test_admission as fixtures
 from yiyuan_accord import admission as a
@@ -436,6 +437,164 @@ class ObligationEvidenceTests(unittest.TestCase):
             report = self.assess(contract, observer)
             self.assertIn(case['id'], report['acceptedCases'], report['errors'])
             self.assertFalse(report.get('obligationEvidence'), report.get('obligationEvidenceRejections'))
+
+
+    def correction_fixture(self, change=lambda w: None):
+        contract, case, base, state = self.flat_fixture()
+        def observer(request):
+            result = base(request)
+            if request['phase'] != 'observe':
+                return result
+            w = result['obligationEvidence']['supplement-1']
+            w.update(schema='yiyuan-accord-obligation-execution-evidence/v2',
+                     type='independent-native-root-correction-poststate')
+            w.pop('base'); w.pop('obligations')
+            w['obligation'] = copy.deepcopy(next(o for r in contract['acceptance']['admission']['acceptanceRequirements']
+                for o in r['outcomeObligations'] if o['id'] == 'a04-actual-retroactive-correction'))
+            for key in ('managedSkill', 'sourcePolicy'): w['execution'].pop(key)
+            w['sourceEpochs'] = [{'subject': w['execution'].pop('subject'),
+                'projectionPackageSha256': w['execution'].pop('packageSha256'),
+                'differences': w.pop('differences'), 'normativeDifferences': w.pop('normativeDifferences')}]
+            revision = w['sourceEpochs'][0]['subject']['revision']
+            w['execution']['loadedPackage'] = {'sha256': None, 'sources': ['native-load'],
+                'limits': 'Point observation; full loaded bytes unknown.'}
+            w['execution'].update(actor='root', entry='cx-desktop')
+            stamp = min(datetime.fromisoformat(r['reviewedAt'].replace('Z', '+00:00')) for r in w['reviewBundle']['reviews'])
+            w['current'].update(observedAt=stamp.isoformat(), maxAgeSeconds=300)
+            affected = {'target': 'old-copy', 'disposition': 'corrected-and-verified',
+                'before': ['pre-effect-binding'], 'after': ['useful-adoption'],
+                'verification': ['useful-adoption'], 'basis': 'Dependent copy corrected; source preserved.'}
+            facts = [('authority', {'origin': 'native-user-input', 'task': 'Correct the affected copy',
+                'constraints': 'Keep source', 'permissions': {'write': 'copy'}, 'oneWriter': 'root'}),
+                ('correction', {'callId': 'native-call-1', 'cause': ['pre-effect-binding'],
+                    'targets': ['useful-adoption'], 'result': ['native-load'], 'success': True}),
+                ('poststate', {'affected': [affected], 'preserved': ['pre-effect-binding'],
+                    'retainedFailures': [], 'verification': ['native-load'], 'adoption': ['useful-adoption']}),
+                ('cleanup', {'resourcesReleased': True, 'poststate': ['native-load']})]
+            w['chain'] = []
+            for i, (kind, fact) in enumerate(facts):
+                node = {'type': kind, 'at': (stamp-timedelta(seconds=1, microseconds=-i)).isoformat(),
+                        'actor': 'root', 'facts': fact, 'sourceEpochs': [] if kind == 'authority' else [revision]}
+                w['sources'][kind] = {'sourceRef': 'fixture://' + kind, 'sha256': a._hash(node), 'kind': 'execution-observation'}
+                w['chain'].append({**node, 'source': kind})
+            change(w)
+            # Reseal node identities too: rejection must exercise the changed
+            # relationship, not an incidental stale node digest.
+            for node in w['chain']:
+                if isinstance(node, dict):
+                    w['sources'][node['source']]['sha256'] = a._hash({k: v for k, v in node.items() if k != 'source'})
+            self.seal(w, state)
+            # No base case can carry this independent consequence.
+            result['records'] = []
+            return result
+        return contract, observer
+
+    def test_independent_correction_does_not_admit_cases_or_complete_scope(self):
+        with self.history():
+            report = self.assess(*self.correction_fixture())
+            self.assertEqual(report['acceptedCases'], [])
+            leaf = report.get('obligationEvidence', {}).get('supplement-1', {})
+            self.assertNotIn('baseCase', leaf)
+            self.assertEqual(leaf.get('supportedObligations'), ['a04-actual-retroactive-correction'],
+                             (report['errors'], report.get('obligationEvidenceRejections')))
+            self.assertEqual(leaf.get('operationId'), 'operation-1')
+            missing = report['acceptanceRequirements']['A04']['missingObligations']
+            self.assertNotIn('a04-actual-retroactive-correction', missing)
+            self.assertEqual(len(missing), 3)
+            self.assertFalse(report['acceptanceRequirements']['A04']['complete'])
+            self.assertFalse(report['candidateEligible'])
+
+    def test_invalid_independent_correction_cannot_rescue_its_leaf(self):
+        changes = [lambda w: w.update(base={'case': 'failed-cli'}),
+            lambda w: w['obligation'].update(id='a08-same-business-complete-composition'),
+            lambda w: w['execution'].update(entry='fixture-undeclared-entry'),
+            lambda w: w['sourceEpochs'][0].update(projectionPackageSha256='0'*64),
+            lambda w: w['chain'].__setitem__(1, None),
+            lambda w: w['chain'][0].update(at=w['chain'][1]['at']),
+            lambda w: w['chain'][2]['facts']['affected'][0].update(disposition='unresolved'),
+            lambda w: w['chain'][3]['facts'].update(resourcesReleased=False),
+            lambda w: w['chain'][1].update(sourceEpochs=['f'*40]),
+            lambda w: w['quality'].pop(), lambda w: w['sourceEpochs'][0]['differences'].clear(),
+            lambda w: w['sourceEpochs'][0]['normativeDifferences'].clear(),
+            lambda w: w['current'].update(observedAt='2000-01-01T00:00:00Z'),
+            lambda w: w['reviewBundle']['reviews'].pop()]
+        for i, change in enumerate(changes):
+            with self.subTest(i=i), self.history():
+                report = self.assess(*self.correction_fixture(change))
+                self.assertFalse(report.get('obligationEvidence'))
+                self.assertIn('a04-actual-retroactive-correction', report['acceptanceRequirements']['A04']['missingObligations'])
+
+    def test_multiple_source_epochs_and_different_loaded_bytes_remain_distinct(self):
+        def change(w):
+            current = w['current']
+            w['execution']['loadedPackage']['sha256'] = 'a'*64
+            w['sourceEpochs'].append({'subject': current['subject'], 'projectionPackageSha256': current['packageSha256'],
+                                     'differences': [], 'normativeDifferences': []})
+            w['chain'][-1]['sourceEpochs'] = [current['subject']['revision']]
+        for bad in (None, 'package', 'delta'):
+            def variation(w):
+                change(w)
+                if bad == 'package': w['sourceEpochs'][1]['projectionPackageSha256'] = '0'*64
+                if bad == 'delta': w['sourceEpochs'][1]['differences'].append({'path': 'undeclared'})
+            with self.subTest(bad=bad), self.history():
+                report = self.assess(*self.correction_fixture(variation))
+                self.assertEqual('supplement-1' in report.get('obligationEvidence', {}), bad is None,
+                                 (report['errors'], report.get('obligationEvidenceRejections')))
+
+    def test_undeclared_independent_route_stays_closed(self):
+        with self.history():
+            contract, observer = self.correction_fixture()
+            contract['acceptance']['admission'].pop('independentObligationEvidence')
+            self.commit(contract)
+            report = self.assess(contract, observer)
+            self.assertFalse(report.get('obligationEvidence'))
+            self.assertIn('a04-actual-retroactive-correction', report['acceptanceRequirements']['A04']['missingObligations'])
+
+    def test_current_entry_deferral_holds_independent_leaf(self):
+        with self.history():
+            contract, observer = self.correction_fixture()
+            policy = contract['acceptance']['admission']
+            for row in [*policy['scopes'], *policy['cases']]:
+                conditions = row['conditions']
+                parent = row.get('scope', row.get('id')) in {
+                    'v33-admitted-entry-delivery', 'v33-admitted-entry-lifecycle'}
+                if 'entryDispositions' in conditions:
+                    conditions['entryDispositions']['cx-desktop'].update(
+                        status='deferred', basis='Synthetic current deferral.')
+                    if parent: row['subjectEntries'].remove('cx-desktop')
+                if 'subjectEntries' in conditions:
+                    conditions['subjectEntries'].remove('cx-desktop')
+                    conditions.get('selectedModes', {}).pop('cx-desktop', None)
+                if parent or 'subjectEntries' in conditions:
+                    for matrix in row.get('expected', {}).get('effect', {}).values():
+                        if isinstance(matrix, dict): matrix.pop('cx-desktop', None)
+            self.assertEqual(a.admission_contract_errors(contract), [])
+            self.commit(contract)
+            report = self.assess(contract, observer)
+            self.assertEqual(report['errors'], [])
+            self.assertEqual(report.get('obligationEvidenceRejections', {}).get('supplement-1'),
+                             'supplementary-execution-unsupported')
+            self.assertFalse(report.get('obligationEvidence'))
+            self.assertIn('a04-actual-retroactive-correction', report['acceptanceRequirements']['A04']['missingObligations'])
+
+    def test_independent_current_observation_expires_only_at_final_check(self):
+        shift = [timedelta(0)]
+        class Clock(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return datetime.now(tz) + shift[0]
+        with self.history():
+            contract, base = self.correction_fixture()
+            def observer(request):
+                result = base(request)
+                if request['phase'] == 'recheck': shift[0] = timedelta(seconds=301)
+                return result
+            with patch.object(a, 'datetime', Clock):
+                report = self.assess(contract, observer)
+            self.assertEqual(report.get('obligationEvidenceRejections', {}).get('supplement-1'),
+                             'supplementary-final-qualification-failed', report['errors'])
+            self.assertFalse(report.get('obligationEvidence'))
+            self.assertIn('a04-actual-retroactive-correction', report['acceptanceRequirements']['A04']['missingObligations'])
 
 
 if __name__ == '__main__':

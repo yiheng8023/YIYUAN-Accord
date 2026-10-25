@@ -153,6 +153,18 @@ def _outcome_value(expected, pointer):
     return value
 
 
+_INDEPENDENT_OBLIGATION_POLICY = {"type": "independent-native-root-correction-poststate",
+                                   "obligation": "a04-actual-retroactive-correction"}
+
+
+def _independent_obligation(row, obligation=None):
+    if row.get("evidenceKind") != _INDEPENDENT_OBLIGATION_POLICY["type"]:
+        return False
+    return obligation is None or (row["scope"] == obligation["scope"]
+        and row["claim"] == obligation["claim"] and row["criterion"] == obligation["source"]
+        and obligation["id"] in row["supportedObligations"])
+
+
 def _outcome_mapping_required(contract):
     # Earlier immutable declarations retain their exact schema and digest. The
     # corrected release line cannot return to label-only coverage by omitting
@@ -385,6 +397,10 @@ def admission_contract_errors(contract):
     fields = {"schema", "rule", "reviewPolicy", "reviewMaxAgeSeconds", "requiredCoverage", "scopes", "cases"}
     if current:
         fields |= {"requiredHosts", "acceptanceRequirements"}
+        if "independentObligationEvidence" in policy:
+            fields.add("independentObligationEvidence")
+            if policy["independentObligationEvidence"] != _INDEPENDENT_OBLIGATION_POLICY:
+                return ["independent obligation evidence policy is invalid"]
     if (not isinstance(policy, dict) or set(policy) != fields
             or policy.get("schema") not in {SCHEMA, IMPACT_SCHEMA, CURRENT_SCHEMA} or not _text(policy.get("rule"))
             or type(policy.get("reviewMaxAgeSeconds")) is not int or policy["reviewMaxAgeSeconds"] <= 0
@@ -1760,15 +1776,16 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                 for requirement in policy["acceptanceRequirements"]:
                     for obligation in requirement.get("outcomeObligations", []):
                         source_key = (obligation["source"]["path"], obligation["source"]["anchor"])
-                        if source_key in criterion_sources or not any(
+                        independent = any(_independent_obligation(row, obligation) for row in supplemental.values())
+                        if source_key in criterion_sources or not (independent or any(
                                 key in admitted and case["scope"] == obligation["scope"]
                                 and obligation["claim"] in case["claims"]
                                 and obligation["source"]["path"] in case["oracleFiles"]
                                 and (_outcome_value(case["expected"], obligation["pointer"]) is True
                                      or obligation["id"] in applicable.get(key, {}).get("derivedOutcomes", [])
-                                     or any(row["baseCase"] == key and obligation["id"] in row["supportedObligations"]
+                                      or any(row.get("baseCase") == key and obligation["id"] in row["supportedObligations"]
                                             for row in supplemental.values()))
-                                for key, case in cases.items()):
+                                for key, case in cases.items())):
                             continue
                         try:
                             source = _git(root, "show", f"{subject['revision']}:{source_key[0]}").decode("utf-8")
@@ -1807,8 +1824,12 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     reject_case(key, "current-impact-review-expired")
                     case_errors.append(f"{key}: impact review expired before final qualification")
             for witness_id, result in list(supplemental.items()):
-                if (result["baseCase"] not in admitted
-                        or not 0 <= observation_elapsed < cases[result["baseCase"]]["maxAgeSeconds"]
+                independent = _independent_obligation(result)
+                base = result.get("baseCase")
+                limit = result["current"]["maxAgeSeconds"] if independent else cases[base]["maxAgeSeconds"]
+                if ((not independent and base not in admitted)
+                        or not 0 <= observation_elapsed < limit
+                        or (independent and _fresh(result["current"]["observedAt"], limit, final_now) is None)
                         or any(_fresh(row["reviewedAt"], policy["reviewMaxAgeSeconds"], final_now) is None
                                for row in witnesses[witness_id]["reviewBundle"]["reviews"])):
                     supplemental.pop(witness_id)
@@ -1835,7 +1856,9 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                                     "selectedModes": entry_selection["selectedModes"],
                                     "pendingModes": entry_selection["pendingModes"]}
     report["acceptedCases"] = sorted(admitted)
-    supplemental = {key: value for key, value in supplemental.items() if value["baseCase"] in admitted}
+    supplemental = {key: value for key, value in supplemental.items()
+        if (value.get("baseCase") in admitted or (_independent_obligation(value)
+            and (entry_selection is None or value["entry"] in entry_selection["selected"])))}
     if supplemental:
         report["obligationEvidence"] = supplemental
     if supplemental_rejections:
@@ -1910,16 +1933,17 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     and case["scope"] == scope_id and claim in case["claims"]
                     and (_outcome_value(case["expected"], obligation["pointer"]) is True
                          or obligation["id"] in derived_cases.get(key, {}).get("derivedOutcomes", [])
-                         or any(row["baseCase"] == key and obligation["id"] in row["supportedObligations"]
+                          or any(row.get("baseCase") == key and obligation["id"] in row["supportedObligations"]
                                 for row in supplemental.values()))]
                 source_cases = [case for case in candidates
                     if obligation["source"]["path"] in case["oracleFiles"]]
                 source_key = (obligation["source"]["path"], obligation["source"]["anchor"])
-                supported = bool(source_cases) and criterion_sources.get(source_key, False)
+                independent = any(_independent_obligation(row, obligation) for row in supplemental.values())
+                supported = (bool(source_cases) or independent) and criterion_sources.get(source_key, False)
                 if not supported:
                     missing_obligations[requirement["id"]].append(obligation["id"])
-                    reason = ("consequence-unobserved" if not candidates else
-                              "criterion-not-in-case-oracle" if not source_cases else "criterion-anchor-unavailable")
+                    reason = ("consequence-unobserved" if not candidates and not independent else
+                              "criterion-not-in-case-oracle" if not source_cases and not independent else "criterion-anchor-unavailable")
                     obligation_reasons[requirement["id"]][obligation["id"]] = reason
                     coverage["outcomeObligations"].append(obligation["id"])
                     completed[claim] = False

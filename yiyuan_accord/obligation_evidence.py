@@ -16,6 +16,8 @@ _SCOPE = 'v33-dynamic-model-routing'
 
 
 def evaluate(root, witness, contract, cases, records, admitted, subject, budget, now, candidate_time):
+    if isinstance(witness, dict) and witness.get('schema') == 'yiyuan-accord-obligation-execution-evidence/v2':
+        return _correction(root, witness, contract, subject, budget, now, candidate_time)
     # Local import keeps the seam internal and reuses the existing bounded source
     # readers, review policy and canonical identity rather than another verifier.
     from . import admission as a
@@ -50,15 +52,7 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
         selected.append(oid)
     sources = witness['sources']
     require(isinstance(sources, dict) and 1 <= len(sources) <= 128)
-    for name, source in sources.items():
-        require(a._text(name) and isinstance(source, dict) and set(source) == {'sourceRef', 'sha256', 'kind'}
-                and a._text(source['sourceRef']) and isinstance(source['sha256'], str)
-                and re.fullmatch(r'[0-9a-f]{64}', source['sha256']) is not None
-                and source['kind'] in {'execution-observation', 'current-observation', 'source-analysis'})
-
-    def refs(values, kind):
-        return (isinstance(values, list) and bool(values) and len(values) == len(set(values))
-                and all(isinstance(v, str) and v in sources and sources[v]['kind'] == kind for v in values))
+    refs = _source_references(sources, require)
 
     execution = witness['execution']
     require(isinstance(execution, dict) and set(execution) == {
@@ -179,8 +173,167 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
     require(set(cleanup) == identity_fields | {'resourcesReleased', 'poststate'}
             and cleanup['resourcesReleased'] is True and a._text(cleanup['poststate']))
 
+    deadline_accounted = _quality(contract, witness['quality'], witness['knownFailuresAndLimits'], selected, refs, require)
+    require(previous_time <= deadline or deadline_accounted)
+
+    changes = a._impact_differences(root, revision, subject['revision'], (old_package, package),
+                                    case['oracleFiles'], budget, complete=True)
+    _differences(witness['differences'], changes, 'path', refs, require)
+    _differences(witness['normativeDifferences'], a._normative_differences(old_contract, contract), 'pointer', refs, require)
+    digest = a._hash({k: v for k, v in witness.items() if k != 'reviewBundle'})
+    policy = contract['acceptance']['admission']
+    review_policy = policy['reviewPolicy']
+    require(set(review_policy['requiredAxes']) == {'product', 'specification', 'implementation', 'standards'}
+            and review_policy['minimumReviewers'] >= 2
+            and any(set(pair) == {'specification', 'implementation'} for pair in review_policy['independentAxes']))
+    require(a.evaluate_review_bundle(witness['reviewBundle'], subject['revision'], subject['tree'],
+        policy=review_policy, expected_evidence_sha256=digest)['decision'] == 'pass')
+    require(all((at := a._fresh(r['reviewedAt'], policy['reviewMaxAgeSeconds'], now)) is not None
+                and at.timestamp() >= max(candidate_time, previous_time.timestamp())
+                for r in witness['reviewBundle']['reviews']))
+    return {'evidenceSha256': digest, 'current': copy.deepcopy(current), 'baseCase': key,
+            'supportedObligations': sorted(selected), 'episodeId': execution['episodeId']}
+
+
+def _correction(root, witness, contract, subject, budget, now, candidate_time):
+    """Independent consequence only: never a substitute case or CLI admission."""
+    from . import admission as a
+
+    def require(value):
+        if not value:
+            raise ValueError('unsupported independent correction')
+
+    require(contract['acceptance']['admission'].get('independentObligationEvidence')
+            == a._INDEPENDENT_OBLIGATION_POLICY)
+    require(set(witness) == {'schema', 'type', 'obligation', 'execution', 'chain', 'sources',
+        'quality', 'knownFailuresAndLimits', 'current', 'sourceEpochs', 'reviewBundle'}
+        and witness['type'] == 'independent-native-root-correction-poststate')
+    oid = 'a04-actual-retroactive-correction'
+    obligation = next(o for r in contract['acceptance']['admission']['acceptanceRequirements']
+                      if r['id'] == 'A04' for o in r['outcomeObligations'] if o['id'] == oid)
+    require(witness['obligation'] == obligation and obligation['scope'] == 'v33-systemic-correction'
+            and obligation['claim'] == 'function' and obligation['expected'] is True)
+    sources = witness['sources']
+    require(isinstance(sources, dict) and 1 <= len(sources) <= 128)
+    refs = _source_references(sources, require)
+
+    execution = witness['execution']
+    require(isinstance(execution, dict) and set(execution) == {'loadedPackage', 'episodeId',
+        'operationId', 'actor', 'host', 'entry', 'profile'}
+        and all(a._text(execution[k]) for k in ('episodeId', 'operationId', 'actor', 'host', 'entry'))
+        and isinstance(execution['profile'], dict) and bool(execution['profile']))
+    loaded = execution['loadedPackage']
+    require(isinstance(loaded, dict) and set(loaded) == {'sha256', 'sources', 'limits'}
+            and (loaded['sha256'] is None or isinstance(loaded['sha256'], str)
+                 and re.fullmatch(r'[0-9a-f]{64}', loaded['sha256']))
+            and refs(loaded['sources']) and a._text(loaded['limits']))
+
+    def projection(source, rev, expected):
+        entries = {r['id']: r['host'] for r in source['capabilityMap']['entrySurfaces']['rows']}
+        dispositions = next(s for s in source['acceptance']['admission']['scopes']
+                            if s['id'] == 'v33-openai-entry-applicability')['conditions']['entryDispositions']
+        require(entries.get(execution['entry']) == execution['host']
+                and dispositions.get(execution['entry'], {}).get('status') == 'selected')
+        projection = next(p for p in source['delivery']['hostProjections'] if p['id'] == execution['host'])
+        package = PurePosixPath(projection['manifest']).parents[1].as_posix()
+        require(a._revision_package_snapshot(root, rev, package, budget)['sha256'] == expected == projection['packageSha256'])
+        return package
+    current = witness['current']
+    policy = contract['acceptance']['admission']
+    require(isinstance(current, dict) and set(current) == {'subject', 'packageSha256', 'context', 'observedAt', 'maxAgeSeconds'}
+            and current['subject'] == subject and type(current['maxAgeSeconds']) is int
+            and 0 < current['maxAgeSeconds'] <= policy['reviewMaxAgeSeconds']
+            and isinstance(current['context'], dict)
+            and set(current['context']) == {'configuration', 'authority', 'helpers', 'continuingState'}
+            and all(refs(v, 'current-observation') for v in current['context'].values()))
+    observed = a._fresh(current['observedAt'], current['maxAgeSeconds'], now)
+    require(observed is not None and observed.timestamp() >= candidate_time)
+    package = projection(contract, subject['revision'], current['packageSha256'])
+    epochs = witness['sourceEpochs']
+    require(isinstance(epochs, list) and 1 <= len(epochs) <= 32)
+    revisions = set()
+    for epoch in epochs:
+        require(isinstance(epoch, dict) and set(epoch) == {
+            'subject', 'projectionPackageSha256', 'differences', 'normativeDifferences'})
+        old = epoch['subject']
+        require(isinstance(old, dict) and set(old) == {'revision', 'tree'}
+                and isinstance(old['revision'], str) and re.fullmatch(r'[0-9a-f]{40}', old['revision'])
+                and old['revision'] not in revisions)
+        revision = old['revision']
+        revisions.add(revision)
+        a._git(root, 'merge-base', '--is-ancestor', revision, subject['revision'])
+        require(old['tree'] == a._git(root, 'rev-parse', '--verify', revision + '^{tree}').decode('ascii').strip())
+        old_contract = a._strict_json_object(a._git(root, 'show', f'{revision}:product/development.json').decode('utf-8'))
+        require(old_contract.get('schema') == contract['schema'] and not a.admission_contract_errors(old_contract))
+        old_package = projection(old_contract, revision, epoch['projectionPackageSha256'])
+        _differences(epoch['differences'], a._impact_differences(root, revision, subject['revision'],
+            (old_package, package), [obligation['source']['path']], budget, complete=True), 'path', refs, require)
+        _differences(epoch['normativeDifferences'], a._normative_differences(old_contract, contract), 'pointer', refs, require)
+    chain = witness['chain']
+    require(isinstance(chain, list) and 4 <= len(chain) <= 128 and all(isinstance(n, dict) for n in chain)
+            and [n.get('type') for n in chain[:-2]] == ['authority'] + ['correction'] * (len(chain)-3)
+            and {n.get('type') for n in chain[-2:]} == {'poststate', 'cleanup'})
+    previous, effects, used = None, set(), set()
+    for node in chain:
+        require(isinstance(node, dict) and set(node) == {'type', 'at', 'actor', 'source', 'facts', 'sourceEpochs'}
+                and node['actor'] == execution['actor'] and refs([node['source']])
+                and sources[node['source']]['sha256'] == a._hash({k: v for k, v in node.items() if k != 'source'}))
+        at = a._fresh(node['at'], float('inf'), now)
+        require(at is not None and (previous is None or at > previous))
+        previous = at
+        require(isinstance(node['sourceEpochs'], list)
+                and len(node['sourceEpochs']) == len(set(node['sourceEpochs']))
+                and set(node['sourceEpochs']) <= revisions
+                and (node['type'] == 'authority' or node['sourceEpochs']))
+        used.update(node['sourceEpochs'])
+        facts = node['facts']
+        require(isinstance(facts, dict))
+        if node['type'] == 'authority':
+            require(set(facts) == {'origin', 'task', 'constraints', 'permissions', 'oneWriter'}
+                    and facts['origin'] == 'native-user-input' and a._text(facts['task'])
+                    and a._text(facts['constraints']) and isinstance(facts['permissions'], dict)
+                    and bool(facts['permissions']) and facts['oneWriter'] == execution['actor'])
+        elif node['type'] == 'correction':
+            require(set(facts) == {'callId', 'cause', 'targets', 'result', 'success'}
+                    and a._text(facts['callId']) and facts['callId'] not in effects
+                    and all(refs(facts[k]) for k in ('cause', 'targets', 'result')) and facts['success'] is True)
+            effects.add(facts['callId'])
+        elif node['type'] == 'poststate':
+            require(set(facts) == {'affected', 'preserved', 'retainedFailures', 'verification', 'adoption'}
+                    and all(refs(facts[k]) for k in ('preserved', 'verification', 'adoption'))
+                    and isinstance(facts['retainedFailures'], list)
+                    and (not facts['retainedFailures'] or refs(facts['retainedFailures'])))
+            affected = facts['affected']
+            require(isinstance(affected, list) and 1 <= len(affected) <= 128)
+            names = set()
+            for row in affected:
+                require(isinstance(row, dict) and set(row) == {'target', 'disposition', 'before', 'after', 'verification', 'basis'}
+                        and a._text(row['target']) and row['target'] not in names
+                        and row['disposition'] in {'corrected-and-verified', 'valid-and-preserved'}
+                        and all(refs(row[k]) for k in ('before', 'after', 'verification')) and a._text(row['basis']))
+                names.add(row['target'])
+        else:
+            require(set(facts) == {'resourcesReleased', 'poststate'}
+                    and facts['resourcesReleased'] is True and refs(facts['poststate']))
+    require(previous <= observed and used == revisions)
+    _quality(contract, witness['quality'], witness['knownFailuresAndLimits'], [oid], refs, require)
+    digest = a._hash({k: v for k, v in witness.items() if k != 'reviewBundle'})
+    review = policy['reviewPolicy']
+    require(set(review['requiredAxes']) == {'product', 'specification', 'implementation', 'standards'}
+            and review['minimumReviewers'] >= 2
+            and any(set(pair) == {'specification', 'implementation'} for pair in review['independentAxes'])
+            and a.evaluate_review_bundle(witness['reviewBundle'], subject['revision'], subject['tree'],
+                policy=review, expected_evidence_sha256=digest)['decision'] == 'pass'
+            and all((at := a._fresh(r['reviewedAt'], policy['reviewMaxAgeSeconds'], now)) is not None
+                    and at >= observed for r in witness['reviewBundle']['reviews']))
+    return {'evidenceKind': witness['type'], 'evidenceSha256': digest, 'current': copy.deepcopy(current),
+            'scope': obligation['scope'], 'claim': obligation['claim'], 'criterion': copy.deepcopy(obligation['source']),
+            'supportedObligations': [oid], 'episodeId': execution['episodeId'], 'operationId': execution['operationId'], 'entry': execution['entry']}
+
+
+def _quality(contract, quality, negatives, selected, refs, require):
+    from . import admission as a
     axes = {q['id'] for q in contract['systemOptimization']['qualityAxes']}
-    quality = witness['quality']
     require(isinstance(quality, list) and len(quality) == len(axes))
     seen = set()
     for row in quality:
@@ -189,7 +342,6 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
                 and row['disposition'] == 'supported' and a._text(row['basis'])
                 and refs(row['sources'], 'execution-observation'))
         seen.add(row['axis'])
-    negatives = witness['knownFailuresAndLimits']
     require(isinstance(negatives, list) and len(negatives) <= 128)
     deadline_accounted = False
     for row in negatives:
@@ -207,35 +359,33 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
                 and a._text(impact['basis']) and refs(impact['sources'], 'execution-observation'))
             impacted.add(impact['obligation'])
         deadline_accounted |= row['kind'] == 'deadline-exceeded'
-    require(previous_time <= deadline or deadline_accounted)
+    return deadline_accounted
 
-    def deltas(actual, expected, field):
-        require(isinstance(actual, list) and len(actual) == len(expected))
-        expected = {r[field]: r for r in expected}
-        seen = set()
-        for row in actual:
-            require(isinstance(row, dict) and set(row) == set(next(iter(expected.values()), {})) | {
-                'basis', 'sources', 'currentConsequences'})
-            name = row[field]
-            require(isinstance(name, str) and name in expected and name not in seen
-                    and all(row[k] == v for k, v in expected[name].items())
-                    and a._text(row['basis']) and refs(row['sources'], 'source-analysis')
-                    and refs(row['currentConsequences'], 'current-observation'))
-            seen.add(name)
-    changes = a._impact_differences(root, revision, subject['revision'], (old_package, package),
-                                    case['oracleFiles'], budget, complete=True)
-    deltas(witness['differences'], changes, 'path')
-    deltas(witness['normativeDifferences'], a._normative_differences(old_contract, contract), 'pointer')
-    digest = a._hash({k: v for k, v in witness.items() if k != 'reviewBundle'})
-    policy = contract['acceptance']['admission']
-    review_policy = policy['reviewPolicy']
-    require(set(review_policy['requiredAxes']) == {'product', 'specification', 'implementation', 'standards'}
-            and review_policy['minimumReviewers'] >= 2
-            and any(set(pair) == {'specification', 'implementation'} for pair in review_policy['independentAxes']))
-    require(a.evaluate_review_bundle(witness['reviewBundle'], subject['revision'], subject['tree'],
-        policy=review_policy, expected_evidence_sha256=digest)['decision'] == 'pass')
-    require(all((at := a._fresh(r['reviewedAt'], policy['reviewMaxAgeSeconds'], now)) is not None
-                and at.timestamp() >= max(candidate_time, previous_time.timestamp())
-                for r in witness['reviewBundle']['reviews']))
-    return {'evidenceSha256': digest, 'current': copy.deepcopy(current), 'baseCase': key,
-            'supportedObligations': sorted(selected), 'episodeId': execution['episodeId']}
+
+def _differences(actual, expected, field, refs, require):
+    from . import admission as a
+    require(isinstance(actual, list) and len(actual) == len(expected))
+    expected = {r[field]: r for r in expected}
+    seen = set()
+    for row in actual:
+        require(isinstance(row, dict) and set(row) == set(next(iter(expected.values()), {})) | {
+            'basis', 'sources', 'currentConsequences'})
+        name = row[field]
+        require(isinstance(name, str) and name in expected and name not in seen
+                and all(row[k] == v for k, v in expected[name].items())
+                and a._text(row['basis']) and refs(row['sources'], 'source-analysis')
+                and refs(row['currentConsequences'], 'current-observation'))
+        seen.add(name)
+
+
+def _source_references(sources, require):
+    from . import admission as a
+    for key, row in sources.items():
+        require(a._text(key) and isinstance(row, dict) and set(row) == {'sourceRef', 'sha256', 'kind'}
+                and a._text(row['sourceRef']) and isinstance(row['sha256'], str)
+                and re.fullmatch(r'[0-9a-f]{64}', row['sha256'])
+                and row['kind'] in {'execution-observation', 'current-observation', 'source-analysis'})
+    def refs(values, kind='execution-observation'):
+        return (isinstance(values, list) and bool(values) and len(values) == len(set(values))
+                and all(isinstance(v, str) and v in sources and sources[v]['kind'] == kind for v in values))
+    return refs
