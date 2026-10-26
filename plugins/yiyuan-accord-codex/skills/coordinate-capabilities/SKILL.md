@@ -83,9 +83,8 @@ nor execution. Do not fix a model ladder or infer missing access/cache/cost fact
 
 Before creating a native subagent, choose its model and reasoning effort for
 that bound subtask, then supply the selected values through the actual dispatch
-interface's supported fields. The parent's values may fit; select them deliberately
-for this work. A recommendation that never reaches the create/spawn request is
-unfinished coordination. When a control is unavailable, retain that specific
+interface's supported fields. Select the parent's values only when they fit this
+subtask. When a control is unavailable, retain that specific
 limitation instead of claiming that inheritance implements the choice.
 Choose context inheritance separately. If a history mode cannot carry the needed
 model/effort controls, use a permitted compatible mode with a sufficient brief and
@@ -93,7 +92,6 @@ sources; preserve both the context need and selected configuration.
 Reuse an existing agent while its role and settings fit. On a material reassignment,
 inspect whether that host's follow-up interface can change them; where it cannot,
 select a suitable fresh allocation, reconcile shared effects and keep one writer.
-Different interfaces can have different update controls.
 Verify the selected agent's effective settings and substitutions where supported
 metadata exists. Keep requested and observed settings distinct; parent metadata,
 request arguments and self-reported names do not establish that observation.
