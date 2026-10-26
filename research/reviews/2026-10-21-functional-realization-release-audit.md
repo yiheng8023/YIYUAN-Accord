@@ -34,7 +34,23 @@
 
 原件、请求观察、候选、独审与回归保于`.tmp/c45fix/model-effort-fix-01/`；4db失败原日志和小投影、原artifact保于`.tmp/c45fix/ci-40284772939-macos-native/`。停止的观察器不恢复，旧失败、32MiB/8MiB、18案/17scope/52义务及全部功能/质量/发行底线保持。
 
-## 2026-10-27 dev.16精确检查、本机安装与当前适用性
+## 2026-10-27 五案当前消费与资源闭合（faf47827）
+
+精确faf47827dd1be8c2db3ba0d7eea80f9e43c18167/tree6c6f00bc171c0fbbd01334954b34eb2d933d6d3b的28项受影响检查、三静态及219源字节检查通过；CI40371905800终态11/11成功。旧3612的Windows/Python3.10失败与4db两次Mac失败保各自主体及未知根因。dev.16的30成员/766,958B包未变，实际Root在两次r13回调中加载dev.16/PID32352。配置相对安装后只新增六个既有Hook内容摘要变化，当前SHA6c46c6d34ec0b6608e4a1a085014d9b8ff4055649755bf384145dca2e70cdb4f；其余解析配置相同，写者/触发未知，不推断全部Hook执行或新增信任授权。
+
+原三steering案例已经完整当前材料、两位独立审阅者四轴及公开两相消费者接受，覆盖11项有限义务。原1935模型选择与原6c影响父案例随后分别保33/48、39/50完整基底，经同样独立四轴及实际消费者接受，新增三项：实际模型/推理与相关成本取舍、独立平衡影响、持续压力与退出底线。累计为同一faf上五案、14/52项贡献，另19项旧主体资格待当前桥、19项源/合取缺口；没有一次最终合并验收，也未授完整A02/A08、17scope、R2/R3或发行。普通CLI、当前源读者及宿主共同机制的复用均保各自角色，未重跑旧业务或改原时钟。
+
+模型原reader的Sol/high已由原始turn_context范围独立核实，原Astra/xhigh Root选择与1935实际采用链保持。早期准备/集成/收尾超时及完整Root/peer账单、缓存和因果净收益未知不被抹除，也不添加完美账单或正净收益门槛。两次SDK工作仍因300/120秒及缺JSON失败，但分别在360/180秒总envelope内完成interrupt、匹配interrupted终态、unsubscribe、native0、Job0及CloseHandle；晚期同parent采用不倒填05:55原record。原SDK日志当前路径不可读的限制保留，有限退出链另由原执行输出、native-result、控制器及Root采用原件支持。
+
+原三案私有owner因立即要求Job0而exit1/forced，初始成员身份未知；最终Job0、独立核源及后续清理是恢复，不是自然退出成功。该已执行caller保留停用。新的两案caller直接复用现有_close_processes自然排空，实际211.805秒，worker与launcher均0，Job从1个进程（本次PID1352）到0、forced=false、句柄关闭，219源及202固定来源稳定，副本移除。新PID不识别旧成员或修复旧失败。首次准备器把所有fragment摘要误作片段摘要、以及原数据包把父材料误放普通入口的HOLD，均在派发前发现，代码/数据原版保留；只有独立复核后的新packet-02执行。
+
+六入口源裁定已逐12项找到有限角色实际使用，CLI嵌套、Desktop micro、Work同归档和Remote第二次Stop/恢复的后续纠正不能被早期矩阵盖回；当前分母充分性与必要使用适用性仍待独立完整桥。A05必要监督者接管与后续当前Root接管有各自有限来源；健康继续、先核效果不重放、继承与成本可复用，无人提醒的风险发现及及时动作仍须对准实际episode，不强造迁移或全Root替换门槛。
+
+原生r14绑定保持原99输入/单OUTCOME六目标谓词。用户新增update_plan展示偏好已落实，不等于选择Plan/Goal模式。另纠正Root预算预估：codex-context.cjs的32MiB保留预算作用于已核anchor之后的区间，不是整个日志长度；实际r14区间15,786,822B、输入完整。原错误预估保留，未提高上限、移动anchor或启动无必要迁移。当前工程指标为4,549,560B/219源/20,955B主指导，指标内余10,440B；另计observer生产5,480B后的保守余量4,960B，不声明全成本节约。
+
+来源位于私有model-effort-fix-01下的faf-current-source-consumer-01、faf-model-exit-source-consumer-02/packet-02/run-01、remaining-outcomes-after-model-exit-faf/gaps.v2.json、a02-entry-source-adjudication、a05-continuity-source-adjudication及progress-sync-20261027-05。原记录、失败、未决和完成谓词均保留；正式发行仍受全部原条件约束。
+
+## 2026-10-27 dev.16精确检查、本机安装与当前适用性（历史观察）
 
 精确3612eb86d2f13fbfc1a0107cc89e103f88213a2b/tree1ce343c340b8ded11abd85fe7e0df3cbbd6c6e63的三项静态在干净副本15.205秒通过，219份源字节均未变；副本随后移除，接续中断后重新核实缺席及原闭合记录，没有重放清理。主分支已推送并与远端一致。当前产品代码/测试指标为4,547,905B、主指导20,955B，完整新增维护成本及前述计数口径差保持。
 
