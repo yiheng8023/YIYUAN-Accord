@@ -34,6 +34,22 @@
 
 原件、请求观察、候选、独审与回归保于`.tmp/c45fix/model-effort-fix-01/`；4db失败原日志和小投影、原artifact保于`.tmp/c45fix/ci-40284772939-macos-native/`。停止的观察器不恢复，旧失败、32MiB/8MiB、18案/17scope/52义务及全部功能/质量/发行底线保持。
 
+## 2026-10-27 dev.16精确检查、本机安装与当前适用性
+
+精确3612eb86d2f13fbfc1a0107cc89e103f88213a2b/tree1ce343c340b8ded11abd85fe7e0df3cbbd6c6e63的三项静态在干净副本15.205秒通过，219份源字节均未变；副本随后移除，接续中断后重新核实缺席及原闭合记录，没有重放清理。主分支已推送并与远端一致。当前产品代码/测试指标为4,547,905B、主指导20,955B，完整新增维护成本及前述计数口径差保持。
+
+本地同步沿计划第39行持续授权完成。marketplace add因既有同名不同ref拒绝，实际配置/marker/checkout无变化；后用原生config/read与有expectedVersion的config/value/write仅更新既有ref至3612，再用原生marketplace upgrade。独立TOML比较确认其它设置不变，enabled状态及30安装成员均与dev.16精确包匹配，包SHA为ef87d2bd9cceb87a73b735bf38f2524bfa3dd2197659f6980fd7a06413dd7a98。有限配置执行者自然0、exit/close均观察到；此结论只覆该launcher/stdio。实际主聊天MCP仍为dev.14/PID22388，安装成功不代刷新或语义采用。
+
+[CI40356541210](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40356541210)已终态10/11失败，唯一Windows/Python3.10在test_darwin_probe_observes_natural_child_exit断言unknown不等于observed，1286项/3961.706秒/1FAIL。Mac/Ubuntu原生Job均成功；Root独立核SHA的Mac生命周期产物358cf0a2及MCP产物0904b20c显示机制/两MCP变体通过、0真实模型调用，十份原生资源自然0/组absent。新增诊断没有触发，不构成旧两次偶发根因已解决的证据；全部旧失败、未知成员及原7.5秒宽限保持。新产物不代当前Desktop加载、完整业务或发行条件。
+
+本次真实人类续作输入与page_id:null数据经原生协调后绑定r9/fb8123f3，原99输入/单OUTCOME六谓词保持，当前无pending或replay/resume标记。旧bb链的无context/终态未知仍保留，没有倒清历史效果。原三案的五项continuing职责及runner四类后果已由独立Astra/high审阅；Root另完成原八组命令/响应、四Goal get=null配对、四worker与十inventory退出、保护源及阶段成品独读。原业务未重放、旧时钟未扩；Root本次300秒来源独读实际318.121秒的超时保留。c838未签材料不改签，新3612未签材料的准备结果见下，不授当前资格、全R2/R3或3.3.2发行。
+
+后续修正保持生产0.25秒预算：测试先准备真实自然退出的Python fixture，再在诊断窗中实读其管道/退出码，仍要求observed/closed而非接受unknown。受控0.35秒启动延迟使旧测试失败、新测试通过；这证实夹具时限假设的问题，不证明原CI唯一因果。全部子进程及管道已按测试记录闭合，原失败不改签。
+
+独立来源核对另证实retained-only合同与实际caller冲突：59e98加入的live resourceInspector SHA守卫位于旧保留分支前，合法旧资料在进入只读检查前恒拒。现仅前移retained分支，保结构、内容/记录关联和普通live源漂移拒绝；新增changed/missing成对回归。精确旧inspect函数在新回归有2ERROR，当前28项受影响检查4.675秒全通过、219源未变。首个私有反例driver误改另一module实例而未真正走旧函数，已明确记为无效，不充作red证据；源码补丁第一次定位失败未写文件，原调用亦保留。
+
+当前公开CLI已实际只读回读原B26四阶段及四资源记录，均匹配，0.371秒/exit0；104份execution文件的SHA/大小/mtime/集合前后相同，另份旧retained-inspection摘要89d4a146保持。它仍报告currentFileObservation unknown，不核live进程/安装或授当前资格。三案3612未签v2材料已逐项映射87源/24规范差分，57项精确ledger复用、30项补充影响；39贡献与五派生保未决和原身份，尚需当前context、独立四轴及合法消费。准备实际998.501秒超过720秒规划估计保留，不混入旧业务预算。模型单义务要求相关成本取舍；完整Root/peer去重账单和因果正净收益不是额外准入门槛，未知仍限制相应全成本/净收益声明。
+
 ## 2026-10-26 接管后工具续轮修复（dev.15源码）
 
 当前新Root已按实际用户指令、接收核验和正式写权释放接过原Goal、99输入、单OUTCOME六谓词和全部未决；旧Root保留来源恢复。原18案/17scope/52义务及必要功能、质量、独审、精确CI和发行条件保持，3.3.2仍未发布。

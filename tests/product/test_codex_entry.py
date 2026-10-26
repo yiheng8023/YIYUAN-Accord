@@ -1205,6 +1205,32 @@ class EntryTests(unittest.TestCase):
         self.assertTrue(result["caseComplete"])
         return manifest, result
 
+    def test_retained_inspection_does_not_require_the_old_live_resource_inspector(self):
+        for fault in ("changed", "missing"):
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp).resolve()
+                manifest, result = self.retained_scoped_fixture(root)
+                evidence = Path(manifest["evidence"])
+                inspector = root / "old-resource-inspector.py"
+                inspector.write_bytes(b"# old bound live inspection source\n")
+                manifest["resourceInspector"] = str(inspector)
+                manifest["sourceHashes"]["resourceInspector"] = entry.digest(inspector)
+                entry.save(evidence / "manifest.json", manifest)
+                if fault == "changed":
+                    inspector.write_bytes(b"# newer live inspection source\n")
+                else:
+                    inspector.unlink()
+                before = {path.relative_to(evidence): path.read_bytes()
+                          for path in evidence.rglob("*") if path.is_file()}
+                checked = entry.inspect(evidence, retained=True)
+                self.assertEqual(checked["recordedExecution"], result)
+                self.assertEqual(checked["retainedStages"][0]["state"], "verified")
+                self.assertEqual(checked["currentFileObservation"]["decision"], "unknown")
+                with self.assertRaises((OSError, ValueError)):
+                    entry.inspect(evidence)
+                self.assertEqual({path.relative_to(evidence): path.read_bytes()
+                                  for path in evidence.rglob("*") if path.is_file()}, before)
+
     def test_retained_inspection_verifies_current_and_legacy_flat_stage_copies(self):
         for legacy in (False, True):
             with self.subTest(legacy=legacy), tempfile.TemporaryDirectory() as tmp:
@@ -3761,48 +3787,46 @@ class EntryTests(unittest.TestCase):
             read.assert_called_once_with(77, 10.2)
 
     def test_darwin_probe_observes_natural_child_exit(self):
-        # Real local child exit/pipe closure; synthetic ps output, no macOS claim.
+        # Prepare a real exited child before the diagnostic window. Python startup
+        # is a fixture precondition, not a guarantee of the production .25s budget.
+        # Pipe reads and natural-exit handling remain real; no macOS claim.
         import selectors
-        children, killed = [], []
-        popen = subprocess.Popen
-        def spawn(args, **kwargs):
-            kwargs.pop("start_new_session", None)
-            if os.name == "nt": kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
-            child = popen([sys.executable, "-B", "-c",
-                           "import sys; sys.stdout.write('78 1 77 S fixture\\n')"], **kwargs)
-            terminate = child.kill
-            def kill():
-                killed.append(child.pid)
-                return terminate()
-            child.kill = kill
-            children.append(child)
-            return child
+        killed = []
+        child = subprocess.Popen([sys.executable, "-B", "-c",
+            "import sys; sys.stdout.write('78 1 77 S fixture\\n')"],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+        terminate = child.kill
+        def kill():
+            killed.append(child.pid)
+            return terminate()
+        child.kill = kill
         class ReadyAfterExit:
             def register(self, stream, events): pass
             def select(self, timeout):
                 try:
-                    children[0].wait(timeout=timeout)
+                    child.wait(timeout=timeout)
                     return [(None, 1)]
                 except subprocess.TimeoutExpired:
                     return []
             def close(self): pass
         try:
+            self.assertEqual(child.wait(timeout=5), 0)
             with patch.object(entry.sys, "platform", "darwin"), \
                     patch.object(selectors, "DefaultSelector", return_value=ReadyAfterExit()), \
-                    patch.object(entry.subprocess, "Popen", side_effect=spawn):
+                    patch.object(entry.subprocess, "Popen", return_value=child):
                 value = entry._darwin_group_members(77, time.monotonic() + .25)
             self.assertEqual(value["probeState"], "closed")
             self.assertEqual(value["state"], "observed")
-            self.assertEqual(children[0].returncode, 0)
+            self.assertEqual(child.returncode, 0)
             self.assertEqual(killed, [])
-            self.assertTrue(children[0].stdout.closed)
-            self.localProbeClosure = {"pid": children[0].pid, "exitCode": children[0].returncode,
+            self.assertTrue(child.stdout.closed)
+            self.localProbeClosure = {"pid": child.pid, "exitCode": child.returncode,
                                       "forced": False, "pipeClosed": True}
         finally:
-            for child in children:
-                if child.poll() is None: child.kill()
-                child.wait(timeout=2)  # Fixture recovery only; never changes the production deadline.
-                child.stdout.close()
+            if child.poll() is None: child.kill()
+            child.wait(timeout=2)  # Fixture recovery only; never changes the production deadline.
+            child.stdout.close()
 
     def test_darwin_group_snapshot_bounds(self):
         import io

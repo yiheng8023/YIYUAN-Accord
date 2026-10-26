@@ -2166,10 +2166,10 @@ def _inspect_retained(evidence, manifest):
 
 def inspect(evidence, *, retained=False):
     manifest = load_manifest(evidence, require_workspace=not retained)
-    if "resourceInspector" in manifest and digest(manifest["resourceInspector"]) != manifest["sourceHashes"]["resourceInspector"]:
-        raise ValueError("bound resource inspection source changed")
     if retained:
         return _inspect_retained(evidence, manifest)
+    if "resourceInspector" in manifest and digest(manifest["resourceInspector"]) != manifest["sourceHashes"]["resourceInspector"]:
+        raise ValueError("bound resource inspection source changed")
     if manifest.get("entryProtocol") == "exec-resume":
         evidence = Path(evidence)
         observer_key = ("coordinationObserver" if manifest.get("caseSchema", "yiyuan-accord-coordination-case/v1")
