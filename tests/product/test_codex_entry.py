@@ -3750,6 +3750,142 @@ class EntryTests(unittest.TestCase):
                 if fault == "none": self.assertEqual(value["members"][0]["starttime"], 123)
                 if fault == "other": self.assertEqual(value["members"], [])
 
+    def test_darwin_group_probe_dispatch(self):
+        group = entry.PosixProcessGroup.__new__(entry.PosixProcessGroup)
+        group.pgid = 77
+        snapshot = {"state": "observed", "pgid": 77, "members": [{"pid": 78}]}
+        with patch.object(entry.sys, "platform", "darwin"), \
+                patch.object(entry.time, "monotonic", return_value=10), \
+                patch.object(entry, "_darwin_group_members", return_value=snapshot, create=True) as read:
+            self.assertEqual(group.diagnose_members(10.2), snapshot)
+            read.assert_called_once_with(77, 10.2)
+
+    def test_darwin_probe_observes_natural_child_exit(self):
+        # Real local child exit/pipe closure; synthetic ps output, no macOS claim.
+        import selectors
+        children, killed = [], []
+        popen = subprocess.Popen
+        def spawn(args, **kwargs):
+            kwargs.pop("start_new_session", None)
+            if os.name == "nt": kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+            child = popen([sys.executable, "-B", "-c",
+                           "import sys; sys.stdout.write('78 1 77 S fixture\\n')"], **kwargs)
+            terminate = child.kill
+            def kill():
+                killed.append(child.pid)
+                return terminate()
+            child.kill = kill
+            children.append(child)
+            return child
+        class ReadyAfterExit:
+            def register(self, stream, events): pass
+            def select(self, timeout):
+                try:
+                    children[0].wait(timeout=timeout)
+                    return [(None, 1)]
+                except subprocess.TimeoutExpired:
+                    return []
+            def close(self): pass
+        try:
+            with patch.object(entry.sys, "platform", "darwin"), \
+                    patch.object(selectors, "DefaultSelector", return_value=ReadyAfterExit()), \
+                    patch.object(entry.subprocess, "Popen", side_effect=spawn):
+                value = entry._darwin_group_members(77, time.monotonic() + .25)
+            self.assertEqual(value["probeState"], "closed")
+            self.assertEqual(value["state"], "observed")
+            self.assertEqual(children[0].returncode, 0)
+            self.assertEqual(killed, [])
+            self.assertTrue(children[0].stdout.closed)
+            self.localProbeClosure = {"pid": children[0].pid, "exitCode": children[0].returncode,
+                                      "forced": False, "pipeClosed": True}
+        finally:
+            for child in children:
+                if child.poll() is None: child.kill()
+                child.wait(timeout=2)  # Fixture recovery only; never changes the production deadline.
+                child.stdout.close()
+
+    def test_darwin_group_snapshot_bounds(self):
+        import io
+        import selectors
+        outputs = {
+            "valid": b"78 1 77 S /opt/tool name\n79 1 99 S foreign\n",
+            "oversized": b"x" * 8193,
+            "rows": b"1 1 99 S x\n" * 513,
+            "members": b"".join(f"{i} 1 77 S x\n".encode() for i in range(1, 34)),
+            "malformed": b"78 bad 77 S x\n",
+            "partial": b"78 1 77 S x",
+            "duplicate": b"78 1 77 S x\n78 1 77 S y\n",
+            "state": b"78 1 77 ??? x\n",
+            "nonzero": b"78 1 77 S x\n",
+            "timeout": b"",
+            "spawn": b"",
+            "selector-close": b"78 1 77 S x\n",
+            "poll": b"78 1 77 S x\n",
+            "reap": b"",
+            "pipe-close": b"78 1 77 S x\n",
+            "late-spawn": b"",
+            "json-cap": b"1" * 4100 + b" " + b"1" * 3950 + b" 77 S x\n",
+        }
+        for fault, output in outputs.items():
+            with self.subTest(fault=fault):
+                clock, data = [10.0], io.BytesIO(output)
+                process, poller = Mock(), Mock()
+                process.pid = 123
+                process.stdout.fileno.return_value = 4
+                process.poll.return_value = None if fault in ("timeout", "reap", "late-spawn") else 0
+                process.wait.return_value = 1 if fault == "nonzero" else 0
+                if fault == "poll": process.poll.side_effect = OSError()
+                if fault == "reap": process.wait.side_effect = subprocess.TimeoutExpired("ps", .1)
+                if fault == "selector-close": poller.close.side_effect = OSError()
+                if fault == "pipe-close": process.stdout.close.side_effect = OSError()
+                def select(timeout):
+                    clock[0] += timeout if fault in ("timeout", "reap") else .001
+                    return [] if fault in ("timeout", "reap") else [(None, 1)]
+                poller.select.side_effect = select
+                process.kill.side_effect = lambda: setattr(process.poll, "return_value", -9)
+                def spawn_process(*args, **kwargs):
+                    if fault == "spawn": raise OSError()
+                    if fault == "late-spawn": clock[0] = 10.24
+                    return process
+                with patch.object(entry.sys, "platform", "darwin"), \
+                        patch.object(entry.time, "monotonic", side_effect=lambda: clock[0]), \
+                        patch.object(selectors, "DefaultSelector", return_value=poller), \
+                        patch.object(entry.os, "read", side_effect=lambda fd, size: data.read(size)) as read, \
+                        patch.object(entry.subprocess, "Popen", side_effect=spawn_process) as spawn:
+                    value = entry._darwin_group_members(77, 10.25)
+                self.assertEqual(value["state"], "observed" if fault == "valid" else "unknown")
+                self.assertLessEqual(len(json.dumps(value).encode()), 8192)
+                self.assertLessEqual(len(value["members"]), 32)
+                self.assertLessEqual(clock[0], 10.25)
+                self.assertTrue(all(call.args[1] <= 4096 for call in read.call_args_list))
+                self.assertNotIn("foreign", json.dumps(value))
+                if fault == "valid":
+                    self.assertEqual(value["probeState"], "closed")
+                    process.kill.assert_not_called()
+                    process.wait.assert_called_once()
+                    self.assertEqual(value["members"], [{"pid": 78, "ppid": 1, "pgid": 77,
+                                                       "state": "S", "comm": "/opt/tool name"}])
+                    self.assertEqual(spawn.call_args.args[0],
+                        ["/bin/ps", "-g", "77", "-o", "pid=,ppid=,pgid=,state=,comm="])
+                    self.assertEqual(spawn.call_args.kwargs["env"], {"LC_ALL": "C", "COMMAND_MODE": "unix2003"})
+                if fault in ("timeout", "poll", "reap", "late-spawn"): process.kill.assert_called_once()
+                self.assertTrue(all(0 <= call.kwargs["timeout"] <= 10.25 - clock[0] + 1e-9
+                                    for call in process.wait.call_args_list))
+                if fault == "reap":
+                    self.assertEqual(value["probePid"], 123)
+                    self.assertEqual(value["probeState"], "unobserved-after-kill")
+                if fault != "spawn":
+                    process.stdout.close.assert_called_once()
+                    poller.close.assert_called_once()
+        for platform, pgid, deadline in (("win32", 77, 11), ("linux", 77, 11),
+                                         ("darwin", None, 11), ("darwin", True, 11),
+                                         ("darwin", -1, 11), ("darwin", 77, 10)):
+            with patch.object(entry.sys, "platform", platform), \
+                    patch.object(entry.time, "monotonic", return_value=10), \
+                    patch.object(entry.subprocess, "Popen") as spawn:
+                self.assertEqual(entry._darwin_group_members(pgid, deadline)["state"], "unknown")
+                spawn.assert_not_called()
+
     def test_group_probe_timeout(self):
         group = entry.PosixProcessGroup.__new__(entry.PosixProcessGroup)
         group.pgid = 77
@@ -3761,7 +3897,7 @@ class EntryTests(unittest.TestCase):
                 value = group.diagnose_members(10.2)
                 self.assertLessEqual(run.call_args.kwargs["timeout"], .2 + 1e-9)
                 self.assertEqual(value["state"], "unknown" if failure else "observed")
-        for platform, deadline in (("win32", 11), ("darwin", 11), ("linux", 10)):
+        for platform, deadline in (("win32", 11), ("freebsd", 11), ("linux", 10)):
             with patch.object(entry.sys, "platform", platform), \
                     patch.object(entry.time, "monotonic", return_value=10), \
                     patch.object(entry.subprocess, "run") as run:

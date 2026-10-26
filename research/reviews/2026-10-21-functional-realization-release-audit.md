@@ -10,13 +10,29 @@
 
 有界候选应用由显式选择的gpt-6-astra/high独审者读取两份原件、候选和相关引用，未读Root预设诊断；其自行选gpt-6.1-sol/high、none历史并通过原生接口创建一个只读子代理。Root另从宿主库存核对应handle存在且两者completed；子代理派发字段由其直接父审阅者报告，Root自己的原生记录独立证实本线程Luna/medium与Astra/high请求。所有有效后端模型、effort及替换仍unknown，不能由请求、父设置或代理自报推定。该次是候选指导应用和请求到达验证，不是已安装、Hook加载、普通全链或全A02证明。
 
-首个6f精确静态因支持Skill10,145B超原10KB失败；删155B重复表达后为9,990B，选型语义与原上限保持，失败不改签。两份指导净增1,149B，无新产品文件或代码/测试字节；9项现有可执行Hook来源、长路径、原文保护、子代理/根暂停与版本隔离回归用时8.365秒全通过，源文件未变。独立原文与宿主schema复核未见阻断。源码包为3.3.2-dev.16+codex.20261026080128，30成员/759,651B，包SHA为dcf239a54e7aa6842cbc1b5a3ac247b42db312acb988c395041e2249a319278d。新版本安装/加载及精确候选检查仍待；本地按需同步持续授权见计划第39行，最终3.3.2发行条件保持。
+随后Root按原生subAgentActivity中的三个实际child threadId，各限读其自有rollout首1MiB并在首turn_context处停止，未输出指令正文。三份宿主执行上下文分别记录gpt-6.1-sol/high、gpt-6-astra/high和gpt-6-luna/medium；model/effort与collaboration_mode.settings和实际选型相符，父线程/actor亦核对。各record SHA/offset保于native-child-config-observations.json。这支持本次三个子代理的宿主执行配置已按选择应用，纠正此前仅因库存不含遥测而笼统保持设置unknown的说法；后端替换、全部其它模型、安装采用及全A02仍不外推。
 
-4db的在途CI40284772939已出现macOS原生生命周期失败：未设Hook的变体通过；scoped变体3次fixture请求、0真实模型调用后，主进程0退出而进程组未在原7.5秒宽限内清空，强制回收后group absent。失败保留在resource.release，自然退出、最后来源核验、目录清理与SessionEnd职责不能因此改签；具体滞留进程及根因尚未知。该资源代码在本次指导切片中未改，最终新主体仍须核所需托管质量。
+6f/1648两次精确静态因支持Skill超实际9KB失败；Root首次误读上限为10KB，错误与原失败保留。删155B重复表达后为9,990B；按用户明确的工程灵活性前瞻分配10.5KB支持Skill容量，保可读完整选型流程，全部功能/质量/权限和发行条件保持。两份指导净增1,149B，无新产品文件或代码/测试字节；9项现有可执行Hook来源、长路径、原文保护、子代理/根暂停与版本隔离回归用时8.365秒全通过，源文件未变。独立原文与宿主schema复核未见阻断。源码包为3.3.2-dev.16+codex.20261026080128，30成员/759,651B，包SHA为dcf239a54e7aa6842cbc1b5a3ac247b42db312acb988c395041e2249a319278d。新版本安装/加载及精确候选检查仍待；本地按需同步持续授权见计划第39行，最终3.3.2发行条件保持。
+
+4db的CI40284772939首轮终态10/11，macOS原生生命周期失败：未设Hook的变体通过；scoped变体3次fixture请求、0真实模型调用后，主进程0退出而进程组未在原7.5秒宽限内清空，强制回收后group absent。失败保留在resource.release，自然退出、最后来源核验、目录清理与SessionEnd职责不能因此改签；具体滞留进程及根因尚未知。仅重跑该失败Job121445735506一次作诊断，未改宽限或自然释放判据。该资源代码在本次指导切片中未改，最终新主体仍须核所需托管质量。
 
 当前旧MCP14另在真实容量错误后拒绝续绑：原生记录为精确server_overloaded后resume_interrupted_task、自身root、空parent/agent及匹配context，未见新用户输入或暂停。兼容修正仅补两处容量边trigger；原件红测4个子组失败，候选8组复用原守卫通过，正式源码22项回归53.457秒通过，原暂停/恢复旗标和提交前保护不变。新增2,131B（context54、两份checkpoint各38、tests2001），前瞻4KB切片在原4.75M内，现投影4,505,619B、余6,881B，无总扩容。旧MCP拒绝及r7后态、首次helper只读观察token-count-expired均保原；新helper与已加载消费者分别核验。
 
-原件、请求观察、候选、独审与9项回归保于`.tmp/c45fix/model-effort-fix-01/`；4db失败原日志和小投影、原artifact保于`.tmp/c45fix/ci-40284772939-macos-native/`。停止的观察器不恢复，旧失败、32MiB/8MiB、18案/17scope/52义务及全部功能/质量/发行底线保持。
+同轮晚到首输入的真实来源定位另确认两项问题：已发生Reasoning等输出使origin查找提前停止，原实现还会跳过被拒的旧输入/控制去选择后面重复context。候选只为历史origin跨过有归属的既定输出/元数据形状，完整字节仍纳入原prefix证明；遇旧user/control/unknown立即拒绝，不扩global benign append。25变体在原实现20失败，候选9入口通过；Sol/high只读独审无阻断，正式源码22项58.821秒通过且219源字节未变。新增10,110B=生产2,300+测试7,810；前瞻11KB切片及总体4.76M，5%238,000储备/usable4,522,000，当前4,515,729B、余6,271B。原4.75M及3,229B超额、所有无效中间夹具/失败保留。当前30成员/761,951B包SHA为db3d536730d12b35e1e91b43140a2214ccfdec17c40214819b537f360b7a5052，未安装或证明加载。
+
+宿主真实中断后当前恢复轮次为01a177be；SessionStart使当前receipt为2bca4eda，r8仍绑定a64，interrupt/resume标记保留。新源码只读状态从origin-unavailable进展到native-input-control-needs-reconciliation，状态/输入字节不变；未把来源定位成功写成恢复完成。
+
+私有red进一步确认：合法token replay保留原input basis并清恢复标记后，历史turn_aborted仍使scanner和两个后续关联caller无条件拒绝。修正只接受中断收据、同一保留输入/来源、精确interrupted→root resume→matching context的直接链；原锚点及旧prefix、暂停、读取限额不变，后续控制仍HOLD。新增10项、原16项、精确整合10项通过；正式源码37项80.815秒通过且219源未变。净增16,718B=生产6,568+测试10,150，前瞻18KB切片/总4.8M、5%240,000储备/usable4,560,000，当前4,532,447B。原4.76M/超10,447B、原red及两次夹具脚本失败保留。当前30成员/766,958B包SHA为ef87d2bd9cceb87a73b735bf38f2524bfa3dd2197659f6980fd7a06413dd7a98，仍未安装或证明加载。
+
+实际Root另有abort→bb start→当前start；bb缺context/终态。原生read_thread实际也报bb为inProgress、0items，不能据此宣布未执行或已取消；候选有对应反例并保持拒绝。未在此真实链重放输入或写当前状态，r8及原99路径/六谓词保持，只有已授权active-plan视图待显式重绑。恢复过程中Root几次schema读取误展开大量元数据并截断，原调用保留；后续只取决定所需的叶字段及数量，不宣称整段高效或全成本合规。
+
+4db的第二次Mac Job121525613161仍失败；这次在scoped Hook discovery域PID/PGID6337，根0而组在原宽限后仍alive，强制后absent。第一次失败是scoped mcp-state域12631；两次unscoped正常，第一次Hook discovery正常。各资源主体分列，未用健康片段覆盖失败；第二份artifact SHA为f34905ae2791a0fbf13af02c9d4907272a27673b9aa47f2f9951082f493eaf4b。残留成员身份未知，正在补原before-force边界的Darwin有限组内快照；不改grace、强制语义或释放判据，也不继续重跑同一旧主体。
+
+该诊断现已源码集成：只读本任务PGID的PID/PPID/PGID/state/comm，8KiB+1哨兵/512行/32成员、原0.25秒预算及清理储备不延长。Root独审发现独立probe闭合未知可能被原group释放掩盖；原候选8个反例失败后，补明确probe闭合状态及可选after.diagnosticProbeState hold，共享释放/清理/检查caller均拒绝未知，保原absent与force/body failure、旧记录兼容。六既有文件净增20,938B=生产5,480+测试15,458，前瞻22KB切片在现4.8M内；当前4,553,385B、余6,615B。17私有入口及正式源码17项0.771秒均通过，源码未变；三次本地受控Python probe自然0、管道关闭、PID后查absent，非原生Mac实测。第一次Root集成仅因私有文件层级定位错误，在任何六份代码写入前停止；随后按全部精确SHA一起预检后采用。原失败/旧候选保留，当前Mac原因仍未知，须由新精确托管证据判定。
+
+最终工作区静态实测为219文件、4,547,905 productCodeAndTestBytes和20,955主指导字节；唯一错误是保留`.tmp`，须在精确干净副本核验。此前4,553,385/余6,615是把全部六文件增量加入基数的保守投影；control.py计数实际不含三个observer脚本的5,480生产字节，因此产品代码/测试指标余12,095。仍保完整新增维护成本及原投影，不把这个计数口径差当全成本节省。功能完成仍false，未获得原生、全R2/R3或发行资格。
+
+原件、请求观察、候选、独审与回归保于`.tmp/c45fix/model-effort-fix-01/`；4db失败原日志和小投影、原artifact保于`.tmp/c45fix/ci-40284772939-macos-native/`。停止的观察器不恢复，旧失败、32MiB/8MiB、18案/17scope/52义务及全部功能/质量/发行底线保持。
 
 ## 2026-10-26 接管后工具续轮修复（dev.15源码）
 

@@ -1409,6 +1409,97 @@ def _linux_group_members(pgid, proc=Path("/proc")):
     return result
 
 
+def _darwin_group_members(pgid, deadline):
+    """Racing PGID snapshot only; never containment, ownership or release proof."""
+    import selectors
+    result = {"state": "unknown", "pgid": pgid, "members": [], "scanned": 0}
+    if sys.platform != "darwin" or type(pgid) is not int or pgid <= 0:
+        return result
+    now = time.monotonic()
+    deadline = min(deadline, now + .25)
+    if deadline <= now:
+        return result
+    # Keep termination/reaping inside this same budget; OS spawn time is not bounded.
+    read_deadline = deadline - min(.05, (deadline - now) / 2)
+    process = poller = None
+    try:
+        # Apple ps.1: -g selects process groups, -o empty headings suppress headers.
+        # Unix2003 avoids legacy -g semantics. No args or environment are requested.
+        process = subprocess.Popen(["/bin/ps", "-g", str(pgid), "-o", "pid=,ppid=,pgid=,state=,comm="],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            env={"LC_ALL": "C", "COMMAND_MODE": "unix2003"}, start_new_session=True)
+        poller = selectors.DefaultSelector()
+        poller.register(process.stdout, selectors.EVENT_READ)
+        raw = bytearray()
+        while True:
+            remaining = read_deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError("group snapshot deadline")
+            if not poller.select(remaining):
+                continue
+            block = os.read(process.stdout.fileno(), min(4096, 8193 - len(raw)))
+            if not block:
+                break
+            raw.extend(block)
+            if len(raw) > 8192:
+                raise ValueError("group snapshot output limit")
+        if process.wait(timeout=max(0, read_deadline - time.monotonic())) != 0 or raw and raw[-1] != 10:
+            return result
+        seen = set()
+        for line in raw.decode("utf-8", "replace").splitlines():
+            if result["scanned"] >= 512 or time.monotonic() >= read_deadline:
+                return result
+            result["scanned"] += 1
+            fields = line.split(None, 4)
+            if len(fields) != 5 or not all(value.isascii() and value.isdecimal() for value in fields[:3]):
+                return result
+            pid, ppid, group = map(int, fields[:3])
+            if group != pgid:
+                continue  # Retain only the caller-bound PGID, even on unexpected ps selection.
+            if pid <= 0 or pid in seen or not re.fullmatch(r"[A-Za-z+<>]{1,16}", fields[3]):
+                return result
+            if len(result["members"]) >= 32:
+                return result
+            seen.add(pid)
+            result["members"].append({"pid": pid, "ppid": ppid, "pgid": group,
+                "state": fields[3], "comm": "".join(c if c.isprintable() else "?" for c in fields[4][:64])})
+            if len(json.dumps(result).encode()) > 8192:
+                result["members"].pop()
+                return result
+        result["state"] = "observed"
+    except Exception:
+        pass  # Diagnostic failure must not replace the owned group's original failure.
+    finally:
+        try:
+            if poller is not None:
+                poller.close()
+        except Exception:
+            result["state"] = "unknown"
+        finally:
+            if process is not None:
+                try:
+                    try:
+                        exited = type(process.poll()) is int
+                    except Exception:
+                        exited = False
+                        result["state"] = "unknown"
+                    if not exited:
+                        process.kill()
+                        if type(process.wait(timeout=max(0, deadline - time.monotonic()))) is not int:
+                            raise ValueError("probe exit unobserved")
+                    result.update(probePid=process.pid, probeState="closed")
+                except Exception:
+                    result.update(state="unknown", probePid=process.pid, probeState="unobserved-after-kill")
+                finally:
+                    try:
+                        process.stdout.close()
+                    except Exception:
+                        result["state"] = "unknown"
+        if len(json.dumps(result).encode()) > 8192:
+            result.update(state="unknown", members=[])
+    return result
+
+
 class PosixProcessGroup:
     """A caller-created session/group, not kernel descendant containment.
 
@@ -1465,6 +1556,8 @@ class PosixProcessGroup:
 
 
     def diagnose_members(self, deadline):
+        if sys.platform == "darwin":
+            return _darwin_group_members(self.pgid, deadline)
         # Isolate a stuck /proc read. The timeout bounds communication, not OS spawn time.
         unknown = {"state": "unknown", "pgid": self.pgid, "members": []}
         remaining = min(.25, deadline - time.monotonic())

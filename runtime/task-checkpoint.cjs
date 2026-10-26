@@ -512,7 +512,7 @@ function checkpointOriginProof(input, request, state) {
   return proof;
 }
 function retainedOriginCursor(input, request, state) {
-  return input.nativeInputReconciliation?.cursor ?? checkpointOriginProof(input, request, state)?.cursor;
+  return input.nativeInputReconciliation?.cursor ?? input.nativeControlRecovery?.cursor ?? checkpointOriginProof(input, request, state)?.cursor;
 }
 function originProofForCommit(input, request, cursor, prior, cwd) {
   if (!cursor) {
@@ -526,7 +526,7 @@ function originProofForCommit(input, request, cursor, prior, cwd) {
     epoch: input.epoch, session: request.session_id, cwd, nativeInputOriginProof: proof});
   return {nativeInputOriginProof: proof};
 }
-function inputEvidence(input, request, expectedCursor = null, readPart = null, state = null) {
+function inputEvidence(input, request, expectedCursor = null, readPart = null, state = null, resumeControl = null) {
   const basis = inputBasis(input);
   if (!basis) return {state: 'unknown', reason: input?.nativeContextSource || input?.nativeInputBasis
     ? 'native-input-basis-unavailable' : 'native-input-source-unbound', pendingInputs: []};
@@ -542,6 +542,7 @@ function inputEvidence(input, request, expectedCursor = null, readPart = null, s
         recordSha256: item.nativeEvidence?.recordSha256, sourceRef: item.nativeEvidence?.sourceRef})),
     host: request.currentHost, expectedTurnId: request.nativeTurnId, expectedCursor,
     retainedCursor: retainedOriginCursor(input, request, state),
+    recoveredControl: input.nativeControlRecovery, resumeControl,
     coverage: input.nativeInputReconciliation?.recordCoverage, readPart});
 }
 function projectInputEvidence(evidence) {
@@ -577,6 +578,7 @@ function turnProofBasis(input, request, evidence, state = null) {
     captured: evidence.records.map(item => item.promptSha256),
     sourceScan: {anchorHash: basis.promptSha256, expectedCursor: evidence.cursor,
       retainedCursor: retainedOriginCursor(input, request, state),
+      recoveredControl: input.nativeControlRecovery,
       coverage: input.nativeInputReconciliation?.recordCoverage,
       captured: evidence.records.map(({promptSha256, turnId, recordSha256, sourceRef}) =>
         ({promptSha256, turnId, recordSha256, sourceRef}))},
@@ -1511,6 +1513,20 @@ function handleHook(event) {
     input.nativeInputBasis = Object.hasOwn(event, 'recovery_epoch') ? previousBasis
       : previousBasis?.source.turnId === input.turnId && previousBasis?.source.transcriptPath === input.nativeContextSource?.transcriptPath
         ? previousBasis : inputBasis(input);
+    if (previous?.nativeControlRecovery && canonical(input.nativeInputBasis) === canonical(previousBasis)) {
+      input.nativeControlRecovery = previous.nativeControlRecovery;
+    }
+    if (Object.hasOwn(event, 'recovery_epoch') && previous?.interrupted && previous.needsResumeReconciliation &&
+        !previous.needsNativeReplay && previousBasis) {
+      const source = input.nativeContextSource;
+      if (input.promptSha256 !== previous.promptSha256 || !source || source.sessionId !== previousBasis.source.sessionId ||
+          !samePath(source.transcriptPath, previousBasis.source.transcriptPath)) fail('native-replay-control-unproven');
+      const evidence = inputEvidence(input, {session_id: event.session_id, cwd: event.cwd}, null, null, prior,
+        {turnId: source.turnId, model: source.model});
+      if (evidence.state !== 'observed' || !evidence.latestInputReconciled || !evidence.latestNativeInputsComplete ||
+          !evidence.recoveredControl) fail('native-replay-control-unproven');
+      input.nativeControlRecovery = evidence.recoveredControl;
+    }
     if (previous?.nativeInputReconciliation && canonical(input.nativeInputBasis) === canonical(previousBasis) &&
         previous.nativeInputReconciliation.turnId === input.turnId && input.nativeContextSource) {
       input.nativeInputReconciliation = {...previous.nativeInputReconciliation,
@@ -1632,7 +1648,7 @@ const HELP = {
   retire: 'op=retire requires verified local predicates and a resolved pause, or explicit user-cancelled disposition plus reason. Without a checkpoint, use current epoch, expectedRevision=0 and reason to retire only the receipt, including after verified exit without an end Hook. Removes only checkpoint files; does not prove task completion.',
   recovery: 'op=recover-lock with lock=state or input requires a provably dead owner. Input recovery invalidates an existing receipt because native input may have been lost. A surviving caller must replay the actual current native input before binding or continuation; do not ask for repeated user input when the host retains it. Uncertain or live ownership is preserved. Cooperating recovery callers share a .lock.recovery gate; all copies recovering the same session must honor it, or the caller must establish exclusive maintenance. A leftover gate is not automatically reclaimed, even with a dead PID: preserve it until a caller establishes quiescence and bounded maintenance authority. Normal task operations do not acquire this recovery gate.',
   resume: 'SessionStart/resume sets needsResumeReconciliation without changing the contract or pause state. New native user input enters normally; absent new input, the native caller may replay actual current retained input with recovery_epoch. Neither route resumes paused work or reconciles the saved binding automatically. Existing needsNativeReplay quarantine from real input loss remains strict. Inspect current authority, effects and writer ownership before binding. No cross-task adoption, writer lock or host permission enforcement.',
-  replay: 'After input failure or recovery, replay the actual current UserPromptSubmit event through --hook UserPromptSubmit with recovery_epoch from status. The derived token binds the receipt and failure watermarks, including a missing receipt. Use null only when no receipt or failure watermark exists. A later uncaptured native input changes the token; ordinary inputs cannot silently clear quarantine. Never reconstruct missing human intent from the old checkpoint.',
+  replay: 'After input failure or recovery, replay the actual current UserPromptSubmit event through --hook UserPromptSubmit with recovery_epoch from status. The derived token binds the receipt and failure watermarks, including a missing receipt. Use null only when no receipt or failure watermark exists. A later uncaptured native input changes the token; ordinary inputs cannot silently clear quarantine. Never reconstruct missing human intent from the old checkpoint. Source-bound interrupted recovery verifies the unchanged retained input and exact interrupted-turn/root-resume/context sequence; unknown intervening activity holds. Retained byte-prefix proof covers only that historical control, not new input, control, permission or unknown effects; saved pauses remain.',
   inputFailure: 'Input loss is conservatively latched outside the input lock. Unidentified input transport failure invalidates helper freshness only in the native caller working directory. Recovery acknowledges it per session. Small failure watermarks remain until the owning state directory is safely retired. If the watermark itself cannot persist, cross-process protection is unknown and the native caller must hold continuation; this helper is not a host permission barrier.',
   limits: 'Existence checks prove only existence; JSON pointers and hashes share observed file bytes, followed by a stability recheck. External writers are not locked: this is local evidence, not an atomic workspace transaction. Caller owns goal, source trust, authority, predicate adequacy and external acceptance. Native context reads only bounded metadata from the Hook-bound transcript and returns no conversation text; no extra model call.',
 };

@@ -10,8 +10,10 @@ import re
 
 
 def native_processes_released(after, controller="windows-job-object"):
-    """Judge only the declared controller's observed exit boundary."""
+    """Judge controller exit and any retained diagnostic-probe closure hold."""
     if not _valid_after(after, controller):
+        return False
+    if after.get("diagnosticProbeState", "closed") != "closed":
         return False
     if controller == "windows-job-object":
         return type(after.get("activeProcesses")) is int and after["activeProcesses"] == 0
@@ -24,6 +26,9 @@ def native_processes_released(after, controller="windows-job-object"):
 
 def _valid_after(after, controller):
     if not isinstance(after, dict):
+        return False
+    if "diagnosticProbeState" in after and (type(after["diagnosticProbeState"]) is not str
+            or after["diagnosticProbeState"] not in ("closed", "unobserved")):
         return False
     if controller == "windows-job-object":
         return (after.get("controller", controller) == controller

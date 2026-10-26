@@ -380,6 +380,177 @@ class NativeIntegrationFinishTests(unittest.TestCase):
 
 
 class NativeStateMcpTests(unittest.TestCase):
+    def _resume_control_append_rows(self, rows):
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        with transcript.open('a', encoding='utf-8') as stream:
+            for row in rows:
+                stream.write(json.dumps({'timestamp': datetime.now(timezone.utc).isoformat(), **row}) + '\n')
+        return transcript
+
+    def _resume_control_resumed(self, *, alter=None, replay=True, before=None, initialize=True, turn='resume-turn'):
+        if initialize:
+            self.native_context()
+        if before:
+            before(self)
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        session, old = meta['session_id'], meta['turn_id']
+        original = json.loads(next(self.state.glob('*.input.json')).read_bytes())
+        self.helper({'hook_event_name': 'Interrupt'}, session=session, hook='Interrupt')
+        self.helper({'hook_event_name': 'SessionStart', 'source': 'resume'}, session=session, hook='SessionStart')
+        token = self.helper({'op': 'status'}, session=session)['epoch']
+        rows = [
+            {'type': 'event_msg', 'payload': {'type': 'turn_aborted', 'turn_id': old, 'reason': 'interrupted'}},
+            {'type': 'event_msg', 'payload': {'type': 'task_started', 'turn_id': turn,
+                'root_turn_id': turn, 'turn_attribution': {'turn_id': turn,
+                'root_turn_id': turn, 'turn_trigger': 'resume_interrupted_task',
+                'parent_turn_id': None, 'initiating_agent_path': None}}},
+            {'type': 'turn_context', 'payload': {'turn_id': turn, 'model': meta['model'], 'cwd': str(self.work)}},
+        ]
+        if alter:
+            alter(rows)
+        transcript = self._resume_control_append_rows(rows)
+        meta['turn_id'] = turn
+        if replay:
+            self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Continue this work.',
+                'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript),
+                'recovery_epoch': token}, session=session, hook='UserPromptSubmit')
+        return original, transcript
+
+    def _resume_control_fresh(self):
+        case = NativeStateMcpTests('test_resumed_historical_interrupt_no_longer_blocks_current_input')
+        case.setUp()
+        self.addCleanup(case.doCleanups)
+        return case
+
+    def _resume_control_bind_contract(self, epoch, revision=0):
+        return self.manage(action='bind', epoch=epoch, expectedRevision=revision,
+            result='Continue the original bounded task', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Create report', canContinue=True)
+
+    def test_resumed_historical_interrupt_no_longer_blocks_current_input(self):
+        original, _ = self._resume_control_resumed()
+        before = self.files()
+        preview = self.native_input_preview()
+        self.assertFalse(preview['needsResumeReconciliation'])
+        self.assertEqual(preview['nativeInputEvidence']['state'], 'observed', preview['nativeInputEvidence'])
+        self.assertTrue(preview['nativeInputEvidence']['latestInputReconciled'])
+        saved = json.loads(next(self.state.glob('*.input.json')).read_bytes())
+        self.assertEqual(saved['nativeInputBasis'], original['nativeInputBasis'])
+        self.assertEqual(self.files(), before)
+
+    def test_recovery_remains_usable_for_capacity_and_app_message_successors(self):
+        for mode in ('capacity', 'app'):
+            with self.subTest(mode=mode):
+                f = self._resume_control_fresh()
+                f._resume_control_resumed()
+                epoch = f.native_input_preview()['epoch']
+                if mode == 'capacity':
+                    f.automatic_capacity_retry('after-recovery')
+                    f.append_context_usage(4500)
+                else:
+                    f.append_app_message_edge('after-recovery')
+                result = f._resume_control_bind_contract(epoch)
+                self.assertFalse(result['isError'], result)
+                seen = f.inspect({**f.params, 'arguments': {'cwd': str(f.work), 'includeContext': True}})
+                self.assertEqual(seen['value']['context']['state'], 'observed', seen)
+
+    def test_second_token_recovery_extends_exact_prefix_without_resetting_anchor(self):
+        original, _ = self._resume_control_resumed()
+        self._resume_control_resumed(initialize=False, turn='second-resume')
+        preview = self.native_input_preview()
+        self.assertEqual(preview['nativeInputEvidence']['state'], 'observed')
+        saved = json.loads(next(self.state.glob('*.input.json')).read_bytes())
+        self.assertEqual(saved['nativeInputBasis'], original['nativeInputBasis'])
+        self.assertEqual(len(saved['nativeControlRecovery']['resumes']), 2)
+
+    def test_new_control_after_recovery_is_not_covered_by_old_proof(self):
+        for event in ('turn_aborted', 'task_interrupted', 'task_cancelled', 'shutdown_complete', 'user_message', 'turn_unknown'):
+            with self.subTest(event=event):
+                f = self._resume_control_fresh()
+                f._resume_control_resumed()
+                epoch = f.native_input_preview()['epoch']
+                f._resume_control_append_rows([{'type': 'event_msg', 'payload': {'type': event, 'turn_id': 'resume-turn', 'reason': 'interrupted'}}])
+                before = f.files()
+                self.assertEqual(f.native_input_preview()['nativeInputEvidence']['state'], 'unknown')
+                self.assertTrue(f._resume_control_bind_contract(epoch)['isError'])
+                self.assertEqual(f.files(), before)
+
+    def test_resume_trigger_alone_does_not_reconcile_interrupt(self):
+        self._resume_control_resumed(replay=False)
+        preview = self.native_input_preview()
+        self.assertTrue(preview['needsResumeReconciliation'])
+        self.assertEqual(preview['nativeInputEvidence']['state'], 'unknown')
+        self.assertTrue(self._resume_control_bind_contract(preview['epoch'])['isError'])
+
+    def test_recovery_requires_exact_control_identity_and_direct_resume(self):
+        changes = (
+            lambda r: r[0]['payload'].update(type='task_cancelled'),
+            lambda r: r[0]['payload'].update(reason='cancelled'),
+            lambda r: r[0]['payload'].pop('reason'),
+            lambda r: r[0]['payload'].update(turn_id='foreign'),
+            lambda r: r[1]['payload']['turn_attribution'].update(parent_turn_id='other'),
+            lambda r: r[1]['payload']['turn_attribution'].update(initiating_agent_path='child'),
+            lambda r: r[1]['payload']['turn_attribution'].update(turn_trigger='capacity_retry_automatic'),
+            lambda r: r[2]['payload'].update(model='different'),
+            lambda r: r.insert(1, {'type': 'response_item', 'payload': {'role': 'user',
+                'content': [{'type': 'input_text', 'text': 'Stop this work.'}]}}),
+            lambda r: r.insert(1, {'type': 'response_item', 'payload': {'type': 'function_call',
+                'name': 'write', 'arguments': '{}'}}),
+        )
+        for index, alter in enumerate(changes):
+            with self.subTest(index=index):
+                f = self._resume_control_fresh()
+                with self.assertRaisesRegex(AssertionError, 'native-replay-control-unproven'):
+                    f._resume_control_resumed(alter=alter)
+                saved = json.loads(next(f.state.glob('*.input.json')).read_bytes())
+                self.assertNotIn('nativeControlRecovery', saved)
+                self.assertTrue(saved['needsResumeReconciliation'])
+
+    def test_changed_original_prefix_does_not_reuse_recovery_cursor(self):
+        _, transcript = self._resume_control_resumed()
+        original = transcript.read_bytes()
+        transcript.write_bytes(original.replace(b'Continue this work.', b'Withdraw this work.'))
+        before = self.files()
+        self.assertEqual(self.native_input_preview()['nativeInputEvidence']['state'], 'unknown')
+        self.assertEqual(self.files(), before)
+
+    def test_unresolved_intermediate_resume_start_is_not_silently_skipped(self):
+        def intermediate(rows):
+            pending = json.loads(json.dumps(rows[1]))
+            pending['payload'].update(turn_id='unobserved-resume', root_turn_id='unobserved-resume')
+            pending['payload']['turn_attribution'].update(turn_id='unobserved-resume', root_turn_id='unobserved-resume')
+            rows.insert(1, pending)
+        with self.assertRaisesRegex(AssertionError, 'native-replay-control-unproven'):
+            self._resume_control_resumed(alter=intermediate)
+        saved = json.loads(next(self.state.glob('*.input.json')).read_bytes())
+        self.assertTrue(saved['needsResumeReconciliation'])
+        self.assertNotIn('nativeControlRecovery', saved)
+
+    def test_recovery_preserves_existing_pause_and_unresolved_effects(self):
+        def pause(f):
+            epoch = f.native_input_preview()['epoch']
+            self.assertFalse(f._resume_control_bind_contract(epoch)['isError'])
+            result = f.manage(action='pause', epoch=epoch, expectedRevision=1, reason='Unknown prior effect; hold')
+            self.assertFalse(result['isError'], result)
+            f.saved_state = next(f.state.glob('*.state.json')).read_bytes()
+        self._resume_control_resumed(before=pause)
+        preview = self.native_input_preview()
+        self.assertEqual(preview['mode'], 'paused')
+        self.assertEqual(next(self.state.glob('*.state.json')).read_bytes(), self.saved_state)
+        self.assertEqual(preview['nativeInputEvidence']['state'], 'observed')
+
+    def test_input_loss_does_not_gain_historical_control_proof(self):
+        def lost(f):
+            receipt = next(f.state.glob('*.input.json'))
+            data = json.loads(receipt.read_bytes())
+            data['needsNativeReplay'] = True
+            receipt.write_text(json.dumps(data), encoding='utf-8')
+        self._resume_control_resumed(before=lost)
+        saved = json.loads(next(self.state.glob('*.input.json')).read_bytes())
+        self.assertNotIn('nativeControlRecovery', saved)
+        self.assertEqual(self.native_input_preview()['nativeInputEvidence']['state'], 'unknown')
+
+
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(prefix='accord-native-state-mcp-')
         self.addCleanup(temporary.cleanup)
@@ -1771,6 +1942,96 @@ process.stdout.write(JSON.stringify({result,changed}));
             result='Keep the authorized contract', inputs=[], outputs=[{'path': 'report.txt'}],
             nextAction='Create report', canContinue=True)
         self.assertFalse(result['isError'], result)
+
+    def test_native_origin_late_first_input_retains_control_and_pause_guards(self):
+        variants = ('late', 'same-context', 'earlier-human', 'same-text', 'interrupt',
+            'abort', 'cancel', 'shutdown', 'complete', 'unknown-event', 'unknown-row',
+            'foreign-thread', 'foreign-turn', 'missing-id', 'other-item',
+            'foreign-context', 'changed-model', 'changed-cwd', 'missing-cwd', 'foreign-count', 'bad-completion-time',
+            'agent-turn', 'agent-role', 'metadata-trigger', 'world-shape')
+        for kind in variants:
+            with self.subTest(kind=kind):
+                f = NativeStateMcpTests(); f.setUp(); self.addCleanup(f.doCleanups)
+                f.native_context()
+                meta = f.params['_meta']['x-codex-turn-metadata']
+                status = f.helper({'op': 'status'}, session=meta['session_id'])
+                contract = dict(result='Retain paused scope', inputs=[], outputs=[{'path': 'report.txt'}],
+                    nextAction='Wait', canContinue=False)
+                self.assertFalse(f.manage(action='bind', epoch=status['epoch'], expectedRevision=0, **contract)['isError'])
+                self.assertFalse(f.manage(action='pause', epoch=status['epoch'], expectedRevision=1, reason='User pause')['isError'])
+                f.automatic_capacity_retry('resumed-turn', trigger='resume_interrupted_task')
+                transcript = next(Path(f.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                context = {'type': 'turn_context', 'payload': {'turn_id': meta['turn_id'],
+                    'model': meta['model'], 'cwd': str(f.work)}}
+                complete = {'type': 'item_completed', 'thread_id': meta['session_id'],
+                    'turn_id': meta['turn_id'], 'item': {'type': 'Reasoning', 'id': 'reasoning-1'},
+                    'started_at_ms': 1, 'completed_at_ms': 2}
+                prefix = [{'type': 'event_msg', 'payload': complete},
+                    {'type': 'response_item', 'payload': {'type': 'reasoning'}},
+                    {'type': 'response_item', 'payload': {'type': 'function_call', 'name': 'fixture'}},
+                    {'type': 'response_item', 'payload': {'type': 'function_call_output', 'output': 'fixture'}}]
+                for item in ('AgentMessage', 'SubAgentActivity', 'CommandExecution', 'McpToolCall', 'FileChange'):
+                    prefix.append({'type': 'event_msg', 'payload': {**complete, 'item': {'type': item, 'id': item}}})
+                agent = {'type': 'agent_message', 'id': 'agent-1', 'author': '/root/child', 'recipient': '/root',
+                    'content': [{'type': 'input_text', 'text': 'Report'}, {'type': 'encrypted_content'}],
+                    'internal_chat_message_metadata_passthrough': {'turn_id': meta['turn_id']}}
+                metadata = {'trigger_turn': False}
+                world = {'full': False, 'state': {'environments': {'fixture': {}}}}
+                prefix.extend([{'type': 'response_item', 'payload': agent},
+                    {'type': 'inter_agent_communication_metadata', 'payload': metadata},
+                    {'type': 'world_state', 'payload': world}])
+                if kind == 'bad-completion-time': complete['completed_at_ms'] = 0
+                if kind == 'agent-turn': agent['internal_chat_message_metadata_passthrough']['turn_id'] = 'foreign'
+                if kind == 'agent-role': agent['role'] = 'user'
+                if kind == 'metadata-trigger': metadata['trigger_turn'] = True
+                if kind == 'world-shape': world['state']['unknown'] = {}
+                if kind in ('foreign-thread', 'foreign-turn'):
+                    complete['thread_id' if kind == 'foreign-thread' else 'turn_id'] = 'foreign'
+                if kind == 'missing-id': complete['item'].pop('id')
+                if kind == 'other-item': complete['item']['type'] = 'UnknownCompletedItem'
+                if kind in ('same-context', 'foreign-context', 'changed-model', 'changed-cwd', 'missing-cwd'):
+                    if kind == 'foreign-context': context['payload']['turn_id'] = 'foreign'
+                    if kind == 'changed-model': context['payload']['model'] = 'foreign'
+                    if kind == 'changed-cwd': context['payload']['cwd'] = str(f.root)
+                    if kind == 'missing-cwd': context['payload'].pop('cwd')
+                    prefix.append(context)
+                if kind in ('earlier-human', 'same-text'):
+                    prefix.append({'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+                        'content': [{'type': 'input_text', 'text': 'Late bound input' if kind == 'same-text' else 'Earlier human'}]}})
+                events = dict(interrupt='task_interrupted', abort='turn_aborted', cancel='task_cancelled',
+                    shutdown='shutdown_complete', complete='task_complete', **{'unknown-event': 'unknown_event'})
+                if kind in events: prefix.append({'type': 'event_msg', 'payload': {'type': events[kind]}})
+                if kind == 'unknown-row': prefix.append({'type': 'unrecognized_record', 'payload': {}})
+                if kind == 'foreign-count': prefix.append({'type': 'event_msg', 'payload': {'type': 'token_count', 'turn_id': 'foreign'}})
+                if kind not in ('late', 'same-context'): prefix.append(json.loads(json.dumps(context)))
+                prefix.append({'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+                    'content': [{'type': 'input_text', 'text': 'Late bound input'}],
+                    'internal_chat_message_metadata_passthrough': {'turn_id': meta['turn_id'], 'content_item_kinds': ['user.text']}}})
+                with transcript.open('a', encoding='utf-8') as stream:
+                    for row in prefix: stream.write(json.dumps({'timestamp': datetime.now(timezone.utc).isoformat(), **row})+'\n')
+                f.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Late bound input', 'turn_id': meta['turn_id'], 'model': meta['model'],
+                    'transcript_path': str(transcript)}, session=meta['session_id'], hook='UserPromptSubmit')
+                if kind == 'late':
+                    f.append_native_message(text='Second same-turn input')
+                    f.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Second same-turn input', 'turn_id': meta['turn_id'], 'model': meta['model'],
+                        'transcript_path': str(transcript)}, session=meta['session_id'], hook='UserPromptSubmit')
+                before = f.files()
+                preview = f.native_input_preview()
+                self.assertEqual(f.files(), before)
+                result = f.manage(action='bind', epoch=preview['epoch'], expectedRevision=2, **contract)
+                if kind in ('late', 'same-context'):
+                    self.assertEqual(preview['nativeInputEvidence']['state'], 'observed', preview)
+                    self.assertFalse(result['isError'], result)
+                    self.assertEqual(f.helper({'op': 'status'}, session=meta['session_id'])['mode'], 'paused')
+                    self.assertEqual(next(f.state.glob('*.input.json')).read_bytes(),
+                        before[next(f.state.glob('*.input.json')).relative_to(f.root).as_posix()])
+                    # Earlier metadata is part of the protected byte prefix, not ignored append.
+                    raw = transcript.read_text(encoding='utf-8')
+                    transcript.write_text(raw.replace('"fixture": {}', '"fixture": {"changed": true}'), encoding='utf-8')
+                    self.assertNotEqual(f.native_input_preview()['nativeInputEvidence']['state'], 'observed')
+                else:
+                    self.assertTrue(result['isError'], result)
+                    self.assertEqual(f.files(), before)
 
     def test_native_origin_skips_typed_ambient_before_first_hook_input(self):
         for text in ('Host page context', 'Continue this work.'):

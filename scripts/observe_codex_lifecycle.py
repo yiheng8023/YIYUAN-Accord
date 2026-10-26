@@ -1336,7 +1336,8 @@ class _App:
             forced = True
             try:
                 if (not members_observed and reason != "owned-listener-stop"
-                        and sys.platform.startswith("linux") and isinstance(self.job, PosixProcessGroup)):
+                        and (sys.platform.startswith("linux") or sys.platform == "darwin")
+                        and isinstance(self.job, PosixProcessGroup)):
                     members_observed = True
                     try:
                         observed["groupMembers"] = self.job.diagnose_members(recovery_deadline)
@@ -1378,7 +1379,17 @@ class _App:
                 force_owned("job-not-empty", after)
                 after = _wait_job(self.job, recovery_deadline)
             self.reader.join(timeout=max(0, recovery_deadline - time.monotonic()))
+            # The diagnostic's separate session is outside the original PGID.
+            # Preserve that group's final facts while holding unclosed probe effects.
+            probes = [item.get("groupMembers") for item in force_observations]
+            probe_unknown = any(isinstance(value, dict) and ("probePid" in value or "probeState" in value)
+                and (value.get("probeState") != "closed" or type(value.get("probePid")) is not int
+                     or value["probePid"] <= 0) for value in probes)
+            if probe_unknown:
+                after = {**after, "diagnosticProbeState": "unobserved"}
             record = _resource_record(manifest, self.process, forced, after)
+            if probe_unknown:
+                record["cleanupState"] = "diagnostic-probe-unobserved"
             _complete_release(record, release, after_grace, after)
             record["readerStopped"] = not self.reader.is_alive()
             if force_observations:

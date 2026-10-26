@@ -233,6 +233,32 @@ function completedCompaction(line, sessionId, turnId) {
     boundedText(payload.item.id, 200);
 }
 
+// Historical output before a late first input stays inside the verified prefix.
+// This is not the benign-append policy: metadata here grants no new authority.
+function lateOriginOutput(row, binding) {
+  const line = parseRow(row), value = line?.payload;
+  if (Object.hasOwn(value || {}, 'turn_id') && value.turn_id !== binding.turnId ||
+      Object.hasOwn(value || {}, 'thread_id') && value.thread_id !== binding.sessionId) return false;
+  if (retryRecordIsBenign(row)) return true;
+  if (line?.type === 'event_msg') return value?.type === 'item_completed' &&
+    value.thread_id === binding.sessionId && value.turn_id === binding.turnId &&
+    ['Reasoning', 'AgentMessage', 'SubAgentActivity', 'CommandExecution', 'McpToolCall', 'FileChange'].includes(value.item?.type) &&
+    boundedText(value.item.id, 200) && integer(value.started_at_ms) && integer(value.completed_at_ms) &&
+    value.completed_at_ms >= value.started_at_ms;
+  if (line?.type === 'response_item') return value?.type === 'agent_message' &&
+    !Object.hasOwn(value, 'role') && boundedText(value.id, 200) &&
+    boundedText(value.author, 200) && boundedText(value.recipient, 200) &&
+    value.internal_chat_message_metadata_passthrough?.turn_id === binding.turnId &&
+    Array.isArray(value.content) && value.content.length > 0 &&
+    value.content.every(item => ['input_text', 'encrypted_content'].includes(item?.type));
+  if (line?.type === 'inter_agent_communication_metadata') return value?.trigger_turn === false &&
+    Object.keys(value).join(',') === 'trigger_turn';
+  return line?.type === 'world_state' && value?.full === false &&
+    Object.keys(value).sort().join(',') === 'full,state' &&
+    value.state && Object.keys(value.state).join(',') === 'environments' &&
+    value.state.environments && typeof value.state.environments === 'object' && !Array.isArray(value.state.environments);
+}
+
 function retryOrigin(rows, binding, promptHash) {
   for (let index = 0; index + 1 < rows.length; index++) {
     const line = parseRow(rows[index]);
@@ -256,7 +282,12 @@ function retryOrigin(rows, binding, promptHash) {
           text(settings?.model) && settings.model === line.payload.model &&
           text(settings.cwd) && path.isAbsolute(settings.cwd) && samePath(settings.cwd, binding.cwd)) continue;
       if (inputHash(candidate, binding, promptHash) === promptHash) return index;
-      break;
+      if (lateOriginOutput(rows[next], binding)) continue;
+      if (candidate?.type === 'turn_context' && candidate.payload?.turn_id === binding.turnId &&
+          candidate.payload.model === line.payload.model && text(candidate.payload.cwd) && text(line.payload.cwd) &&
+          samePath(candidate.payload.cwd, line.payload.cwd)) continue;
+      // Do not jump over a rejected input/control to a later repeated context.
+      return -1;
     }
   }
   return -1;
@@ -265,7 +296,7 @@ function retryOrigin(rows, binding, promptHash) {
 // Keep the original input prefix separate from a receipt-accepted execution
 // turn (for example retained-input recovery). Only the saved receipt supplies
 // that starting turn; a trigger claim or latest context alone cannot.
-function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [promptHash], accepted = null) {
+function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [promptHash], accepted = null, recovered = []) {
   const origin = retryOrigin(rows, binding, promptHash);
   if (origin < 0) return empty('capacity-retry-original-input-unavailable');
   const execution = accepted || binding;
@@ -294,6 +325,7 @@ function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [p
     }
     if (line.type === 'event_msg' && ['user_message', 'task_interrupted', 'turn_aborted',
           'task_cancelled', 'shutdown_complete'].includes(payload?.type)) {
+      if (index < start && recovered.includes(rows[index].offset)) continue;
       return empty('capacity-retry-input-or-interruption-conflict');
     }
     if (line.type === 'turn_context') {
@@ -369,7 +401,7 @@ function taskMessageMatches(payload, turnId) {
 
 // This proof starts at the saved execution, retaining the same human origin.
 // It composes only native app-message and unchanged narrow capacity edges.
-function appToolContinuation(rows, binding, host, promptHash, sourceRef, captured = [promptHash], accepted) {
+function appToolContinuation(rows, binding, host, promptHash, sourceRef, captured = [promptHash], accepted, recovered = []) {
   const reject = () => empty('native-tool-continuation-unproven');
   const origin = retryOrigin(rows, binding, promptHash);
   if (origin < 0) return reject();
@@ -402,7 +434,10 @@ function appToolContinuation(rows, binding, host, promptHash, sourceRef, capture
       continue;
     }
     if (line.type === 'event_msg' && ['user_message', 'task_interrupted', 'turn_aborted',
-          'task_cancelled', 'shutdown_complete'].includes(value?.type)) return reject();
+          'task_cancelled', 'shutdown_complete'].includes(value?.type)) {
+      if (index < start && recovered.includes(row.offset)) continue;
+      return reject();
+    }
     if (line.type === 'turn_context') {
       if (!text(value?.turn_id) || !text(value.model) || !text(value.cwd) ||
           !samePath(value.cwd, binding.cwd) || !integer(Date.parse(line.timestamp))) return reject();
@@ -466,14 +501,14 @@ function appToolContinuation(rows, binding, host, promptHash, sourceRef, capture
     sourceRef: `${sourceRef}#byte=${firstToolOffset}`, hostSourceRef: host.sourceRef};
 }
 
-function continuationAssociation(rows, binding, host, promptHash, sourceRef, captured = [promptHash], accepted) {
-  const retry = capacityRetry(rows, binding, host, promptHash, sourceRef, captured, accepted);
+function continuationAssociation(rows, binding, host, promptHash, sourceRef, captured = [promptHash], accepted, recovered = []) {
+  const retry = capacityRetry(rows, binding, host, promptHash, sourceRef, captured, accepted, recovered);
   if (retry.state === 'observed' || !rows.some(row => {
     const line = parseRow(row);
     return line?.type === 'event_msg' && line.payload?.type === 'task_started' &&
       line.payload.turn_attribution?.turn_trigger === 'app_tool_send_message';
   })) return retry;
-  return appToolContinuation(rows, binding, host, promptHash, sourceRef, captured, accepted);
+  return appToolContinuation(rows, binding, host, promptHash, sourceRef, captured, accepted, recovered);
 }
 
 function associateNativeTurn(binding, host, promptHash, captured, acceptedExecution, retryInputScan) {
@@ -494,15 +529,37 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
   const hooks = scan.captured.filter(item => !item.recordSha256);
   const sourced = scan.captured.filter(item => item.recordSha256);
   const matchedSources = new Set();
+  // Only token-bound replay proposes one additional interruption reconciliation.
+  // Retained entries must still match the immutable byte prefix on every read.
+  const recovered = scan.recoveredControl;
+  if (recovered && (!recovered.cursor || !Array.isArray(recovered.resumes))) return empty('native-input-evidence-changed');
+  const resumes = [...(recovered?.resumes || []), ...(scan.resumeControl ? [scan.resumeControl] : [])];
+  if (resumes.length > 64 || resumes.some(item => !item || Object.keys(item).sort().join(',') !== 'model,turnId' ||
+      !boundedText(item.turnId, 200) || !boundedText(item.model, 200)) ||
+      new Set(resumes.map(item => item.turnId)).size !== resumes.length) return empty('native-input-evidence-changed');
+  let resumeIndex = 0, pendingResume = null;
+  const recoveredInterruptOffsets = [];
   let selectedPart = null;
   for (let index = start; index < rows.length; index++) {
     const row = rows[index], line = parseRow(row), payload = line?.payload;
     if (!line) return empty('invalid-complete-tail-record');
     const digest = crypto.createHash('sha256').update(row.bytes).digest('hex');
+    if (pendingResume && line.type !== 'turn_context' &&
+        !(line.type === 'event_msg' && payload?.type === 'task_started')) {
+      return empty('native-input-control-needs-reconciliation');
+    }
     if (line.type === 'turn_context') {
       if (!text(payload?.turn_id) || !text(payload.model) || !text(payload.cwd) ||
           !samePath(payload.cwd, binding.cwd) || index === start && binding.model && payload.model !== binding.model) {
         return empty('native-input-context-conflict');
+      }
+      if (pendingResume) {
+        const expected = resumes[resumeIndex];
+        if (!pendingResume.started || payload.turn_id !== expected.turnId || payload.model !== expected.model ||
+            !integer(Date.parse(line.timestamp)) || Date.parse(line.timestamp) < pendingResume.at) {
+          return empty('native-input-control-needs-reconciliation');
+        }
+        resumeIndex++; pendingResume = null;
       }
       turn = payload.turn_id; model = payload.model;
       if (index === start) originModel = model;
@@ -558,10 +615,33 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       }
       signals.push([row.offset, digest]);
       if (event === 'model_rerouted' && text(payload.to_model)) model = payload.to_model;
+      if (event === 'turn_aborted' && resumes[resumeIndex] && payload.reason === 'interrupted' &&
+          payload.turn_id === turn && turn !== resumes[resumeIndex].turnId && integer(Date.parse(line.timestamp))) {
+        if (resumeIndex < (recovered?.resumes.length || 0) && row.offset >= recovered.cursor.endOffset) {
+          return empty('native-input-evidence-changed');
+        }
+        pendingResume = {at: Date.parse(line.timestamp), started: false};
+        recoveredInterruptOffsets.push(row.offset);
+        continue;
+      }
+      if (event === 'task_started' && pendingResume) {
+        const expected = resumes[resumeIndex], at = Date.parse(line.timestamp), attribution = payload.turn_attribution;
+        if (pendingResume.started || payload.turn_id !== expected.turnId || payload.root_turn_id !== expected.turnId ||
+            attribution?.turn_id !== expected.turnId || attribution.root_turn_id !== expected.turnId ||
+            attribution.turn_trigger !== 'resume_interrupted_task' || attribution.parent_turn_id !== null ||
+            attribution.initiating_agent_path !== null || !integer(at) || at < pendingResume.at) {
+          return empty('native-input-control-needs-reconciliation');
+        }
+        pendingResume = {at, started: true};
+      }
       if (['task_interrupted', 'turn_aborted', 'task_cancelled', 'shutdown_complete', 'user_message'].includes(event)) {
         return empty('native-input-control-needs-reconciliation');
       }
     }
+  }
+  if (pendingResume || resumeIndex !== resumes.length || scan.resumeControl &&
+      (turn !== scan.resumeControl.turnId || model !== scan.resumeControl.model)) {
+    return empty('native-input-control-needs-reconciliation');
   }
   if (inputIndex !== hooks.length || matchedSources.size !== sourced.length) return empty('native-captured-input-prefix-incomplete');
   if (scan.host && (scan.host.threadId !== binding.sessionId || scan.host.turnId !== turn || scan.host.model !== model)) {
@@ -571,12 +651,12 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
   const cursor = {sourceId: `${identity.dev}:${identity.ino}`, headSha256: headHash, anchorOffset,
     endOffset: tailOffset + tail.length, prefixSha256: crypto.createHash('sha256')
       .update(tail.subarray(anchorOffset - tailOffset)).digest('hex'), signalsSha256: sha(signals)};
-  for (const expected of [scan.retainedCursor, scan.expectedCursor].filter(Boolean)) {
+  for (const expected of [scan.retainedCursor, scan.expectedCursor, recovered?.cursor].filter(Boolean)) {
     const prefix = tail.subarray(anchorOffset - tailOffset, expected.endOffset - tailOffset);
     if (expected.sourceId !== cursor.sourceId || expected.headSha256 !== cursor.headSha256 ||
         expected.anchorOffset !== anchorOffset || expected.endOffset > cursor.endOffset ||
         expected.endOffset < anchorOffset || expected === scan.expectedCursor && expected.signalsSha256 !== cursor.signalsSha256 ||
-        expected === scan.retainedCursor && expected.signalsSha256 !== sha(signals.filter(([offset]) => offset < expected.endOffset)) ||
+        expected !== scan.expectedCursor && expected.signalsSha256 !== sha(signals.filter(([offset]) => offset < expected.endOffset)) ||
         expected.prefixSha256 !== crypto.createHash('sha256').update(prefix).digest('hex')) {
       return empty('native-input-evidence-changed');
     }
@@ -584,6 +664,7 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
   if (scan.readPart && !selectedPart) return empty('native-source-record-unavailable');
   const supported = records.every(record => record.supported);
   return {state: 'observed', reason: 'bound-native-input-prefix', cursor, pendingInputs, records, enrichments,
+    ...(resumes.length ? {recoveredControl: {resumes, cursor}, recoveredInterruptOffsets} : {}),
     ...(selectedPart ? {selectedPart} : {}),
     capturedPrefixMatched: true, latestInputReconciled: pendingInputs.length === 0,
     latestNativeInputsComplete: pendingInputs.length === 0 && enrichments.length === 0 && supported,
@@ -790,14 +871,16 @@ function readNativeTranscript(binding, options = {}, snapshot = null) {
   if (inputScan) return finish(scanNativeInputs(tailRows, tail, tailOffset, binding, inputScan, identity,
     crypto.createHash('sha256').update(headRows[0].bytes).digest('hex'),
     `codex-rollout:${relative.split(path.sep).join('/')}`));
+  let recoveredInterruptOffsets = [];
   if (options.retryInputScan) {
     const evidence = scanNativeInputs(tailRows, tail, tailOffset, binding, options.retryInputScan, identity,
       crypto.createHash('sha256').update(headRows[0].bytes).digest('hex'),
       `codex-rollout:${relative.split(path.sep).join('/')}`);
     if (evidence.state !== 'observed' || !evidence.latestInputReconciled) return finish(empty('native-input-evidence-changed'));
+    recoveredInterruptOffsets = evidence.recoveredInterruptOffsets || [];
   }
   const association = retry ? continuationAssociation(tailRows, binding, liveHost.host, options.retryInputSha256,
-    `codex-rollout:${relative.split(path.sep).join('/')}`, options.capturedInputHashes, accepted) : null;
+    `codex-rollout:${relative.split(path.sep).join('/')}`, options.capturedInputHashes, accepted, recoveredInterruptOffsets) : null;
   if (proofOnly) return finish(association);
   if (association && association.state !== 'observed') return empty('current-host-turn-mismatch');
   binding = association ? {...binding, turnId: association.conditions.turnId, model: association.conditions.model} : execution;

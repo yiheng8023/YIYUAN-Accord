@@ -56,6 +56,24 @@ class NativeResourceRecordsTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 read_native_resource_records(self.root, self.labels)
 
+    def test_probe_hold_preserves_absent_group_and_legacy_records(self):
+        controller = "posix-session-process-group"
+        after = {"controller": controller, "activeProcesses": None, "processGroupId": 42,
+                 "rootPid": 42, "rootExitCode": 0, "processGroupState": "absent"}
+        for state in ("legacy", "closed", "unobserved", None, False, {}, [], "unexpected"):
+            with self.subTest(state=state):
+                sample = dict(after)
+                if state != "legacy": sample["diagnosticProbeState"] = state
+                self.write("resumed", {"controller": controller, "exitCode": 0, "forced": True, "after": sample})
+                self.assertEqual(native_processes_released(sample, controller), state in ("legacy", "closed"))
+                if state in ("legacy", "closed", "unobserved"):
+                    record = read_native_resource_records(self.root, self.labels)["resumed"]
+                    self.assertEqual(record["after"]["processGroupState"], "absent")
+                    self.assertEqual(native_processes_released(record["after"], controller), state != "unobserved")
+                else:
+                    with self.assertRaises(ValueError):
+                        read_native_resource_records(self.root, self.labels)
+
     def test_posix_group_records_preserve_unknown_counts_and_observation_failures(self):
         after = {"controller": "posix-session-process-group", "activeProcesses": None,
                  "processGroupId": 42, "rootPid": 42, "rootExitCode": 0,

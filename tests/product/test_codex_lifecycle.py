@@ -1490,6 +1490,97 @@ class CodexLifecycleTests(unittest.TestCase):
                 self.assertTrue(record['readerStopped'])
                 self.assertTrue(lifecycle._record_released(record, manifest))
 
+    def test_darwin_group_snapshot_cannot_suppress_force(self):
+        for failure, released in ((None, True), (OSError("snapshot unavailable"), True), (None, False)):
+            with self.subTest(failure=failure, released=released), tempfile.TemporaryDirectory() as tmp:
+                calls = []
+                class Job(lifecycle.PosixProcessGroup):
+                    def __init__(self): pass
+                    def sample(self): return {"activeProcesses": 1}
+                    def diagnose_members(self, deadline):
+                        calls.append(("diagnose", deadline))
+                        if failure: raise failure
+                        return {"state": "observed", "pgid": 77, "members": [{"pid": 78}]}
+                    def terminate(self): calls.append("terminate")
+                    def close(self): calls.append("close")
+                app = lifecycle._App.__new__(lifecycle._App)
+                app.manifest, app.root, app.job = {"limits": {"recoverySeconds": 2}}, Path(tmp), Job()
+                app.process, app.reader = Mock(), Mock()
+                app.process.returncode = 0
+                app.process.poll.return_value = app.process.wait.return_value = 0
+                app.process.stdin, app.process.stdout = io.BytesIO(), io.BytesIO()
+                app.reader.is_alive.return_value = False
+                app.stderr, app.stdout = io.BytesIO(), io.BytesIO()
+                app._closed, app._close_record, app.hot_arguments = False, None, None
+                with patch.object(lifecycle.sys, "platform", "darwin"), \
+                        patch.object(lifecycle.time, "monotonic", return_value=10), \
+                        patch.object(lifecycle, "_begin_release", return_value={}), \
+                        patch.object(lifecycle, "_wait_job", side_effect=[{"activeProcesses": 1},
+                            {"activeProcesses": 0 if released else 1}]):
+                    if released:
+                        record = app.close()
+                    else:
+                        with self.assertRaisesRegex(RuntimeError, "release unobserved"):
+                            app.close()
+                        record = json.loads((Path(tmp) / "resources.json").read_text())
+                self.assertEqual(calls, [("diagnose", 12), "terminate", "close"])
+                observation = record["forceObservations"][0]
+                self.assertEqual(observation["reason"], "job-not-empty")
+                self.assertEqual(observation["groupMembers"]["state"], "unknown" if failure else "observed")
+                self.assertTrue(record["forced"])
+                self.assertEqual(record["exitCode"], 0)
+                self.assertEqual(lifecycle._record_released(record, app.manifest), released)
+                self.assertTrue(app._closed)
+
+    def test_probe_closure_holds_absent_group_and_downstream_cleanup(self):
+        controller = "posix-session-process-group"
+        for probe_state, probe_pid in (("closed", 123), ("unobserved-after-kill", 123), ({}, 123),
+                                       ("closed", None), ("closed", True), ("closed", "123")):
+            with self.subTest(probe_state=probe_state, probe_pid=probe_pid), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                native = root / "native" / "discovery"
+                native.mkdir(parents=True)
+                absent = {"controller": controller, "activeProcesses": None,
+                    "processGroupId": 77, "rootPid": 77, "rootExitCode": 0, "processGroupState": "absent"}
+                alive = {**absent, "processGroupState": "alive"}
+                calls = []
+                class Job(lifecycle.PosixProcessGroup):
+                    def __init__(self): pass
+                    def sample(self): return dict(alive)
+                    def diagnose_members(self, deadline):
+                        return {"state": "observed" if probe_state == "closed" else "unknown",
+                                "pgid": 77, "members": [], "probePid": probe_pid, "probeState": probe_state}
+                    def terminate(self): calls.append("terminate")
+                    def close(self): calls.append("close")
+                app = lifecycle._App.__new__(lifecycle._App)
+                app.manifest = {"limits": {"recoverySeconds": 2}, "resourceController": controller}
+                app.root, app.job, app.process, app.reader = native, Job(), Mock(), Mock()
+                app.process.pid, app.process.returncode = 77, 0
+                app.process.poll.return_value = app.process.wait.return_value = 0
+                app.process.stdin, app.process.stdout = io.BytesIO(), io.BytesIO()
+                app.reader.is_alive.return_value = False
+                app.stderr, app.stdout = io.BytesIO(), io.BytesIO()
+                app._closed, app._close_record, app.hot_arguments = False, None, None
+                released = probe_state == "closed" and type(probe_pid) is int and probe_pid > 0
+                with patch.object(lifecycle.sys, "platform", "darwin"), \
+                        patch.object(lifecycle.time, "monotonic", return_value=10), \
+                        patch.object(lifecycle, "_wait_job", side_effect=[dict(alive), dict(absent)]):
+                    if released:
+                        app.close()
+                    else:
+                        with self.assertRaisesRegex(RuntimeError, "release unobserved"):
+                            app.close()
+                self.assertEqual(calls, ["terminate", "close"])
+                record = lifecycle.read_native_resource_records(root / "native", ("discovery",))["discovery"]
+                self.assertEqual(record["after"]["processGroupState"], "absent")
+                self.assertEqual(record["after"]["rootExitCode"], 0)
+                self.assertTrue(record["forced"])
+                self.assertEqual(record["forceObservations"][0]["reason"], "job-not-empty")
+                self.assertEqual(lifecycle._record_released(record, app.manifest), released)
+                self.assertEqual(lifecycle._observed_release(record, app.manifest), released)
+                self.assertEqual(lifecycle._invoked_processes_released(root, app.manifest), released)
+                self.assertEqual(lifecycle.native_processes_released(record["after"], controller), released)
+
     def test_linux_group_diagnostic_interrupt_still_forces_owned_cleanup(self):
         calls = []
         class Job(lifecycle.PosixProcessGroup):
