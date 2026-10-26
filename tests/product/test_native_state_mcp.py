@@ -972,6 +972,318 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertEqual(turn_conflict['value']['reason'], 'native-call-turn-conflict')
         self.assertEqual(self.files(), before)
 
+    def append_app_message_edge(self, turn, *, capacity=False, alter=None):
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        original = meta['turn_id']
+        previous_root = getattr(self, '_app_message_root', original)
+        root = turn if capacity else 'sender-root-' + turn
+        error = {'codex_error_info': 'server_overloaded',
+                 'message': 'Selected model is at capacity. Please try a different model.'} if capacity else None
+        rows = [
+            {'type': 'event_msg', 'payload': {'type': 'task_complete', 'turn_id': original,
+                'root_turn_id': previous_root, 'error': error}},
+            {'type': 'event_msg', 'payload': {'type': 'task_started', 'turn_id': turn,
+                'root_turn_id': root, 'turn_attribution': {'turn_id': turn, 'root_turn_id': root,
+                    'turn_trigger': 'capacity_retry_automatic' if capacity else 'app_tool_send_message',
+                    'parent_turn_id': None if capacity else 'sender-turn-' + turn,
+                    'initiating_agent_path': None}}},
+            {'type': 'turn_context', 'payload': {'turn_id': turn, 'model': meta['model'], 'cwd': str(self.work)}},
+        ]
+        if not capacity:
+            rows.append({'type': 'response_item', 'payload': {'type': 'function_call_output',
+                'id': 'inbound-' + turn, 'namespace': 'codex_app', 'name': 'send_message_to_thread',
+                'output': '<codex_delegation>\n  <source_thread_id>aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee</source_thread_id>'
+                          '\n  <input>Continue the existing authorized goal.</input>\n</codex_delegation>',
+                'internal_chat_message_metadata_passthrough': {'turn_id': turn}}})
+        if alter:
+            alter(rows)
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        with transcript.open('a', encoding='utf-8') as stream:
+            stamp = datetime.now(timezone.utc).isoformat()
+            for row in rows:
+                stream.write(json.dumps({'timestamp': stamp, **row}) + '\n')
+        meta['turn_id'] = turn
+        self._app_message_root = root
+        self.append_context_usage(4500)
+        return rows
+
+    def app_message_contract(self):
+        self.native_context()
+        (self.work / 'protected.txt').write_text('Keep the original source.', encoding='utf-8')
+        session = self.params['_meta']['x-codex-turn-metadata']['session_id']
+        status = self.helper({'op': 'status'}, session=session)
+        contract = dict(result='Retain the original authorized outcome', inputs=['protected.txt'],
+            outputs=[{'path': 'report.txt'}], nextAction='Continue bounded authorized work', canContinue=True)
+        bound = self.manage(action='bind', epoch=status['epoch'], expectedRevision=0, **contract)
+        self.assertFalse(bound['isError'], bound)
+        return session, status, contract
+
+    def test_app_message_continuation_binds_and_observes_without_human_input_replacement(self):
+        session, status, contract = self.app_message_contract()
+        receipt = next(self.state.glob('*.input.json'))
+        original = receipt.read_bytes()
+        self.append_app_message_edge('message-turn')
+        self.params['arguments'].update(includeContext=True, includeNativeInputs=True)
+        inspected = self.inspect()['value']
+        evidence = inspected['checkpoint']['snapshot']['nativeInputEvidence']
+        self.assertTrue(evidence['latestNativeInputsComplete'])
+        self.assertEqual(evidence['pendingInputs'], [])
+        self.assertEqual(len(evidence['records']), 1)  # A tool record is not a human input.
+        context = inspected['context']
+        self.assertEqual(context['state'], 'observed', context)
+        self.assertEqual(context['conditions']['turnId'], 'message-turn')
+        self.assertEqual(context['lastResponseTokens'], 4500)
+        response = self.manage(action='bind', epoch=status['epoch'], expectedRevision=1, **contract)
+        self.assertFalse(response['isError'], response)
+        current = self.helper({'op': 'status'}, session=session)
+        self.assertEqual(current['revision'], 2)
+        self.assertEqual(current['checkpoint']['result'], contract['result'])
+        self.assertEqual(current['checkpoint']['outputs'], contract['outputs'])
+        self.assertTrue(all(item['unchanged'] for item in current['inspection']['inputs']))
+        self.assertEqual(receipt.read_bytes(), original)
+
+    def test_app_message_continuation_composes_multiple_and_capacity_edges(self):
+        for edges in (('tool', 'tool'), ('capacity', 'tool'), ('tool', 'capacity'),
+                      ('tool', 'capacity', 'tool')):
+            with self.subTest(edges=edges):
+                case = NativeStateMcpTests('test_context_is_opt_in_and_current_version_comes_from_native_call')
+                case.setUp()
+                try:
+                    session, status, contract = case.app_message_contract()
+                    receipt = next(case.state.glob('*.input.json')); original = receipt.read_bytes()
+                    for index, kind in enumerate(edges):
+                        case.append_app_message_edge('edge-' + str(index), capacity=kind == 'capacity')
+                    case.params['arguments'].update(includeContext=True, includeNativeInputs=True)
+                    context = case.inspect()['value']['context']
+                    self.assertEqual(context['state'], 'observed', context)
+                    self.assertEqual(context['conditions']['turnId'], 'edge-' + str(len(edges) - 1))
+                    result = case.manage(action='bind', epoch=status['epoch'], expectedRevision=1, **contract)
+                    self.assertFalse(result['isError'], result)
+                    self.assertEqual(receipt.read_bytes(), original)
+                    self.assertEqual(case.helper({'op': 'status'}, session=session)['revision'], 2)
+                finally:
+                    case.doCleanups()
+
+    def test_app_message_continuation_rejects_forged_or_incomplete_transport(self):
+        def quoted(rows):
+            rows[3] = {'type': 'response_item', 'payload': {'type': 'message', 'role': 'assistant',
+                'content': [{'type': 'output_text', 'text': rows[3]['payload']['output']}]}}
+        def duplicate(rows):
+            rows.append(json.loads(json.dumps(rows[3])))
+        def swapped(rows):
+            rows[2], rows[3] = rows[3], rows[2]
+        variants = {
+            'namespace': lambda rows: rows[3]['payload'].update(namespace='functions'),
+            'tool-name': lambda rows: rows[3]['payload'].update(name='exec'),
+            'passthrough-turn': lambda rows: rows[3]['payload']['internal_chat_message_metadata_passthrough'].update(turn_id='foreign'),
+            'missing-passthrough': lambda rows: rows[3]['payload'].pop('internal_chat_message_metadata_passthrough'),
+            'missing-record-id': lambda rows: rows[3]['payload'].pop('id'),
+            'trigger-only': lambda rows: rows.pop(),
+            'quoted-wrapper': quoted,
+            'malformed-wrapper': lambda rows: rows[3]['payload'].update(output='ordinary stdout <input>continue</input>'),
+            'root-attribution': lambda rows: rows[1]['payload']['turn_attribution'].update(root_turn_id='foreign'),
+            'attribution-turn': lambda rows: rows[1]['payload']['turn_attribution'].update(turn_id='foreign'),
+            'parent-missing': lambda rows: rows[1]['payload']['turn_attribution'].update(parent_turn_id=None),
+            'subagent': lambda rows: rows[1]['payload']['turn_attribution'].update(initiating_agent_path='/root/child'),
+            'unproved-composer': lambda rows: rows[1]['payload']['turn_attribution'].update(turn_trigger='composer'),
+            'context-cwd': lambda rows: rows[2]['payload'].update(cwd=str(self.root)),
+            'context-model': lambda rows: rows[2]['payload'].update(model='unobserved-model'),
+            'completion-root': lambda rows: rows[0]['payload'].update(root_turn_id='foreign'),
+            'completion-error': lambda rows: rows[0]['payload'].update(error={'codex_error_info': 'unknown'}),
+            'duplicate-message': duplicate,
+            'wrong-order': swapped,
+        }
+        for name, alter in variants.items():
+            with self.subTest(variant=name):
+                case = NativeStateMcpTests('test_context_is_opt_in_and_current_version_comes_from_native_call')
+                case.setUp()
+                try:
+                    _, status, contract = case.app_message_contract()
+                    case.append_app_message_edge('message-turn', alter=alter)
+                    before = case.files()
+                    rejected = case.manage(action='bind', epoch=status['epoch'], expectedRevision=1, **contract)
+                    self.assertTrue(rejected['isError'], rejected)
+                    self.assertEqual(rejected['value']['reason'], 'native-call-turn-conflict')
+                    self.assertEqual(case.files(), before)
+                finally:
+                    case.doCleanups()
+
+    def test_app_message_continuation_does_not_weaken_capacity_failure_proof(self):
+        _, status, contract = self.app_message_contract()
+        self.append_app_message_edge('message-turn')
+        self.append_app_message_edge('retry-turn', capacity=True,
+            alter=lambda rows: rows[0]['payload'].update(error=None))
+        before = self.files()
+        rejected = self.manage(action='bind', epoch=status['epoch'], expectedRevision=1, **contract)
+        self.assertTrue(rejected['isError'], rejected)
+        self.assertEqual(rejected['value']['reason'], 'native-call-turn-conflict')
+        self.assertEqual(self.files(), before)
+
+    def test_app_message_continuation_preserves_pause_and_recovery_rejection(self):
+        session, status, contract = self.app_message_contract()
+        paused = self.manage(action='pause', epoch=status['epoch'], expectedRevision=1,
+            reason='Actual user pause retained by the fixture.')
+        self.assertFalse(paused['isError'], paused)
+        receipt = next(self.state.glob('*.input.json')); original = receipt.read_bytes()
+        self.append_app_message_edge('message-turn')
+        bound = self.manage(action='bind', epoch=status['epoch'], expectedRevision=2, **contract)
+        self.assertFalse(bound['isError'], bound)
+        current = self.helper({'op': 'status'}, session=session)
+        self.assertEqual(current['mode'], 'paused')
+        self.assertEqual(current['checkpoint']['reason'], 'Actual user pause retained by the fixture.')
+        self.assertEqual(receipt.read_bytes(), original)
+        self.helper({'hook_event_name': 'Interrupt'}, session=session, hook='Interrupt')
+        interrupted = self.helper({'op': 'status'}, session=session)
+        before = self.files()
+        rejected = self.manage(action='bind', epoch=interrupted['epoch'], expectedRevision=3, **contract)
+        self.assertTrue(rejected['isError'], rejected)
+        self.assertEqual(self.files(), before)
+
+    def test_app_message_mixed_chain_rejects_invalid_capacity_edges_and_unread_input(self):
+        variants = {
+            'error-code': lambda rows: rows[0]['payload']['error'].update(codex_error_info='unknown'),
+            'error-message': lambda rows: rows[0]['payload']['error'].update(message='Model busy'),
+            'root': lambda rows: (rows[1]['payload'].update(root_turn_id='foreign'),
+                rows[1]['payload']['turn_attribution'].update(root_turn_id='foreign')),
+            'parent': lambda rows: rows[1]['payload']['turn_attribution'].update(parent_turn_id='unexpected-parent'),
+            'initiating-agent': lambda rows: rows[1]['payload']['turn_attribution'].update(initiating_agent_path='/root/child'),
+            'attribution-turn': lambda rows: rows[1]['payload']['turn_attribution'].update(turn_id='foreign'),
+            'trigger': lambda rows: rows[1]['payload']['turn_attribution'].update(turn_trigger='unknown_retry'),
+            'time-order': lambda rows: rows[1].update(timestamp='2020-01-01T00:00:00+00:00'),
+            'current-context': lambda rows: rows[2]['payload'].update(model='unobserved-model'),
+            'human-input': lambda rows: rows.append({'type': 'response_item', 'payload': {'type': 'message',
+                'role': 'user', 'content': [{'type': 'input_text', 'text': 'Actual unreviewed input'}]}}),
+            'interruption': lambda rows: rows.append({'type': 'event_msg', 'payload': {'type': 'task_interrupted'}}),
+            'duplicate-turn': lambda rows: None,
+        }
+        for name, alter in variants.items():
+            with self.subTest(variant=name):
+                case = NativeStateMcpTests('test_context_is_opt_in_and_current_version_comes_from_native_call')
+                case.setUp()
+                try:
+                    _, status, contract = case.app_message_contract()
+                    case.append_app_message_edge('message-turn')
+                    case.append_app_message_edge('message-turn' if name == 'duplicate-turn' else 'retry-turn',
+                        capacity=True, alter=alter)
+                    if name == 'human-input':
+                        case.params['arguments']['includeNativeInputs'] = True
+                        pending = case.inspect()['value']['checkpoint']['snapshot']['nativeInputEvidence']
+                        self.assertEqual(len(pending['pendingInputs']), 1)
+                    before = case.files()
+                    rejected = case.manage(action='bind', epoch=status['epoch'], expectedRevision=1, **contract)
+                    self.assertTrue(rejected['isError'], rejected)
+                    self.assertEqual(rejected['value']['reason'], 'native-call-turn-conflict')
+                    if name not in ('current-context', 'human-input', 'interruption'):
+                        self.assertEqual(rejected['value']['nativeInputDiagnostic']['readerReason'],
+                            'native-tool-continuation-unproven')
+                    self.assertEqual(case.files(), before)
+                finally:
+                    case.doCleanups()
+
+    def test_app_message_continuation_keeps_the_existing_finite_chain_limit(self):
+        for count in (64, 65):
+            with self.subTest(count=count):
+                case = NativeStateMcpTests('test_context_is_opt_in_and_current_version_comes_from_native_call')
+                case.setUp()
+                try:
+                    _, status, contract = case.app_message_contract()
+                    for index in range(count):
+                        case.append_app_message_edge('message-' + str(index))
+                    before = case.files()
+                    response = case.manage(action='bind', epoch=status['epoch'], expectedRevision=1, **contract)
+                    self.assertEqual(response['isError'], count == 65, response)
+                    if count == 65:
+                        self.assertEqual(response['value']['nativeInputDiagnostic']['readerReason'],
+                            'native-tool-continuation-unproven')
+                        self.assertEqual(case.files(), before)
+                finally:
+                    case.doCleanups()
+
+    def test_app_message_ack_is_ordinary_output_and_cannot_supply_the_inbound_edge(self):
+        def ack(payload, keep_envelope=False):
+            payload['call_id'] = 'local-call-id'
+            if not keep_envelope:
+                payload['output'] = json.dumps({'threadId': 'other-thread'})
+        for ack_only, keep_envelope in ((False, False), (True, False), (True, True)):
+            with self.subTest(ack_only=ack_only, keep_envelope=keep_envelope):
+                case = NativeStateMcpTests('test_context_is_opt_in_and_current_version_comes_from_native_call')
+                case.setUp()
+                try:
+                    _, status, contract = case.app_message_contract()
+                    def alter(rows):
+                        if ack_only:
+                            ack(rows[3]['payload'], keep_envelope)
+                        else:
+                            ordinary = json.loads(json.dumps(rows[3])); ordinary['payload']['id'] = 'ordinary-ack'
+                            ack(ordinary['payload']); rows.append(ordinary)
+                    case.append_app_message_edge('message-turn', alter=alter)
+                    before = case.files()
+                    result = case.manage(action='bind', epoch=status['epoch'], expectedRevision=1, **contract)
+                    self.assertEqual(result['isError'], ack_only, result)
+                    if ack_only:
+                        self.assertEqual(result['value']['reason'], 'native-call-turn-conflict')
+                        self.assertEqual(case.files(), before)
+                finally:
+                    case.doCleanups()
+
+    def test_app_message_records_fence_late_control_without_becoming_user_inputs(self):
+        _, status, _ = self.app_message_contract()
+        self.append_app_message_edge('message-turn')
+        self.params['arguments']['includeNativeInputs'] = True
+        snapshot = self.inspect()['value']['checkpoint']['snapshot']
+        evidence = snapshot['nativeInputEvidence']
+        self.assertTrue(evidence['latestNativeInputsComplete'])
+        self.assertEqual(len(evidence['records']), 1)
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        late = {'type': 'response_item', 'payload': {'type': 'function_call_output',
+            'id': 'late-inbound', 'namespace': 'codex_app', 'name': 'send_message_to_thread',
+            'output': '<codex_delegation><source_thread_id>aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee</source_thread_id>'
+                      '<input>Changed scope must be reviewed.</input></codex_delegation>',
+            'internal_chat_message_metadata_passthrough': {'turn_id': 'message-turn'}}}
+        with transcript.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'timestamp': datetime.now(timezone.utc).isoformat(), **late}) + '\n')
+        before = self.files()
+        rejected = self.manage(action='reconcile-input', epoch=status['epoch'], expectedRevision=1,
+            evidenceCursor=evidence['cursor'])
+        self.assertTrue(rejected['isError'], rejected)
+        self.assertEqual(rejected['value']['reason'], 'native-input-evidence-changed')
+        self.assertEqual(self.files(), before)
+
+    def test_app_tool_cold_start_does_not_manufacture_a_human_receipt(self):
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        session = '11111111-2222-4333-8444-555555555555'
+        meta.update(thread_id=session, session_id=session, turn_id='cold-tool-turn')
+        self.env['CODEX_HOME'] = str(self.root / 'codex-home')
+        transcript = Path(self.env['CODEX_HOME']) / 'sessions/2026/09/20' / (
+            'rollout-2026-09-20T00-00-00-' + session + '.jsonl')
+        transcript.parent.mkdir(parents=True)
+        rows = [
+            {'type': 'session_meta', 'payload': {'id': session, 'cwd': str(self.work),
+                'source': 'vscode', 'cli_version': 'observed-version'}},
+            {'type': 'event_msg', 'payload': {'type': 'task_started', 'turn_id': 'cold-tool-turn',
+                'root_turn_id': 'source-turn', 'turn_attribution': {'turn_id': 'cold-tool-turn',
+                    'root_turn_id': 'source-turn', 'parent_turn_id': 'source-turn',
+                    'initiating_agent_path': None, 'turn_trigger': 'app_tool_create_thread'}}},
+            {'type': 'turn_context', 'payload': {'turn_id': 'cold-tool-turn',
+                'model': meta['model'], 'cwd': str(self.work)}},
+            {'type': 'response_item', 'payload': {'type': 'function_call_output', 'id': 'cold-tool-input',
+                'namespace': 'codex_app', 'name': 'create_thread',
+                'output': '<codex_delegation><source_thread_id>aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee</source_thread_id>'
+                          '<input>Authorized task data, without a human receipt.</input></codex_delegation>',
+                'internal_chat_message_metadata_passthrough': {'turn_id': 'cold-tool-turn'}}},
+        ]
+        stamp = datetime.now(timezone.utc).isoformat()
+        transcript.write_text(''.join(json.dumps({'timestamp': stamp, **row}) + '\n' for row in rows),
+            encoding='utf-8')
+        before = self.files()
+        result = self.manage(action='bind', epoch='unbound-tool-event', expectedRevision=0,
+            result='No invented human input', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Keep cold-start receipt gap explicit', canContinue=False)
+        self.assertTrue(result['isError'], result)
+        self.assertEqual(result['value']['reason'], 'native-user-input-receipt-missing')
+        self.assertEqual(self.files(), before)
+
+
     def automatic_capacity_retry(self, turn='retry-turn', trigger='capacity_retry_automatic'):
         meta = self.params['_meta']['x-codex-turn-metadata']
         original = meta['turn_id']
@@ -1904,8 +2216,12 @@ process.stdout.write(JSON.stringify({inspected,bound,scans,holds,inspectMs,bindM
         baseline = transcript.read_bytes()
         for change in ('short-read', 'append-read', 'replace-read', 'append-derive', 'append-commit',
                        'benign-close', 'user-close', 'benign-close-commit', 'user-close-commit',
-                       'developer-close', 'system-close', 'pause-close', 'compact-close', 'unknown-close'):
+                       'developer-close', 'system-close', 'pause-close', 'compact-close', 'unknown-close',
+                       'task-close', 'task-close-commit'):
             with self.subTest(change=change):
+                # Isolate later variants even when an earlier red assertion leaves fixture state.
+                for prior_state in self.state.glob('*.state.json'):
+                    prior_state.unlink()
                 transcript.write_bytes(short_source if 'close' in change else baseline)
                 script = r"""
 const fs=require('node:fs');const x=JSON.parse(fs.readFileSync(0,'utf8'));
@@ -1942,6 +2258,13 @@ process.stdout.write(JSON.stringify({response,changed}));
                 payload = {'type': 'response_item', 'payload': {'type': 'message',
                     'role': 'assistant' if kind == 'benign' else kind,
                     'content': [{'type': 'input_text', 'text': 'Later input'}]}}
+                if kind == 'task':
+                    payload = {'type': 'response_item', 'payload': {'type': 'function_call_output',
+                        'id': 'late-task', 'namespace': 'codex_app', 'name': 'send_message_to_thread',
+                        'output': '<codex_delegation><source_thread_id>aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee</source_thread_id>'
+                                  '<input>Actual late control data</input></codex_delegation>',
+                        'internal_chat_message_metadata_passthrough': {
+                            'turn_id': self.params['_meta']['x-codex-turn-metadata']['turn_id']}}}
                 if kind in ('pause', 'compact', 'unknown'):
                     payload = {'type': {'pause': 'event_msg', 'compact': 'compacted', 'unknown': 'unknown'}[kind],
                                'payload': {'type': 'turn_aborted'}}

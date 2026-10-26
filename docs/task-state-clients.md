@@ -34,6 +34,16 @@
 
 所有依赖保存合同的普通状态变更都先核同一份结构/身份规则；无效 checkpoint 保留并报告，不因空谓词而自动退休。
 
+## 已有输入依据下的原生 App 消息续轮
+
+正常完成后的 `app_tool_send_message` 轮次与容量重试不同。已有可核输入依据时，适配器联合核对原生启动归属、接收 turn/context/cwd/model，以及同轮 `codex_app/send_message_to_thread` 入站记录。发送方 root 可以不同于接收 turn；各轮完成事件必须保持其实际归属。仅有触发名称、XML 文本或普通 stdout 均不足以建立关联。带 `call_id` 的本地调用结果不能充当入站委派证明。
+
+该关联保留原输入 anchor、回执和人类文本 hash，不把工具正文转换为 `UserPromptSubmit` 或新的授权。原暂停、恢复隔离、权限、来源字节及提交前复核仍适用；调用者须核对消息的真实职责、已发生效果和必要授权。连续工具轮次及与合法容量重试的混合链均需完整有序证明，容量边的原错误与归属约束不变。
+
+已识别的入站任务记录进入控制摘要。使用旧 cursor 协调、提交或进行来源一致性重读时，迟到的任务记录不能作为普通工具输出自动放行。它们仍不进入人类输入记录列表；`latestNativeInputsComplete`、执行关联、授权与业务完成分别判断。
+
+无既有回执、输入 basis 或可信原生来源定位的工具冷启动不由此分支解决。不能伪造用户输入、移动旧 anchor 或清除失败水印来补齐它；独立核实真实指令后已获授权的只读工作，与依赖绑定的写入分别处置。
+
 ## bind：每次完整绑定当前合同
 
 五字段每次必填且不默认继承：`result` 是当前受托、待实现的完整目标及范围；`inputs` 是完整受保护输入列表（无保护输入时 `[]` 合法）；`outputs` 是完整非空输出谓词列表；`nextAction` 是具体下一动作；`canContinue` 兼容保留为当前安全且已授权工作是否仍可进行的判断记录，不触发新回合或执行。输入与输出合计最多 100 项；path-only 输出仅检查文件，精确要求用 sha256 或 JSON Pointer 值谓词表达。[schema](../plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs#L102)、[bind guard](../plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs#L392)。
@@ -98,7 +108,7 @@ function retireParams(latest, absoluteWorkspace) {
 
 ## 回查：区分未请求与效果未知
 
-原生输入核验的内建来源失败带 `nativeInputDiagnostic`，可随 `native-input-evidence-unavailable` 或容量重试关联的 `native-call-turn-conflict` 返回；仅身份不符、缺少证明等未产生具体读源原因的拒绝不补造诊断。`stage` 为 `initial-validation`（首次核验）或 `commit-recheck`（状态提交/退役前复核），`readerReason` 为有限的内建来源原因；未知值统一为 `reader-reason-unavailable`。例如来源在读取后变化可得到 `transcript-path-changed-after-read`。helper 保留原退出码和错误行，并另输出一行同名 JSON；MCP 保留原 reason/isError/effect。任意异常属性、原始文本、路径和输入不会作为这些字段反射。没有该字段不等于核验成功，也不能猜测失败阶段。
+原生输入核验的内建来源失败带 `nativeInputDiagnostic`，可随 `native-input-evidence-unavailable` 或原生续轮关联的 `native-call-turn-conflict` 返回；仅身份不符、缺少证明等未产生具体读源原因的拒绝不补造诊断。`stage` 为 `initial-validation`（首次核验）或 `commit-recheck`（状态提交/退役前复核），`readerReason` 为有限的内建来源原因；未知值统一为 `reader-reason-unavailable`。例如来源在读取后变化可得到 `transcript-path-changed-after-read`。helper 保留原退出码和错误行，并另输出一行同名 JSON；MCP 保留原 reason/isError/effect。任意异常属性、原始文本、路径和输入不会作为这些字段反射。没有该字段不等于核验成功，也不能猜测失败阶段。
 
 这些信息用于定位被拒边界，不授予重试、恢复、放宽防护或新的权限；仍须核对实际输入、来源和操作后态。此修正不宣称已找出全部历史失败的触发原因，也不启用日志观察器。`inspect_task_state` 的运行时指纹包含 `manageTaskState` 和 `nativeInputDiagnostic`，可核本次改变的已加载函数；它们仍不覆盖闭包、常量、整个软件包或其它进程。
 

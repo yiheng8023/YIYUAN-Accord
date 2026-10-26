@@ -350,6 +350,132 @@ function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [p
     sourceRef: `${sourceRef}#byte=${retryOffset}`, hostSourceRef: host.sourceRef};
 }
 
+
+// Native task transport is data, not human input or an authority grant.
+function nativeTaskOutput(payload) {
+  return payload?.type === 'function_call_output' && payload.namespace === 'codex_app' &&
+    !Object.hasOwn(payload, 'call_id') && ['create_thread', 'send_message_to_thread'].includes(payload.name);
+}
+
+function taskMessageMatches(payload, turnId) {
+  if (!nativeTaskOutput(payload) || Object.hasOwn(payload, 'role') ||
+      !boundedText(payload.id, 200) ||
+      payload.internal_chat_message_metadata_passthrough?.turn_id !== turnId ||
+      typeof payload.output !== 'string' || Buffer.byteLength(payload.output, 'utf8') > MAX_NATIVE_MEDIA_BYTES) return false;
+  const wrapper = new RegExp(`^<codex_delegation>\\s*<source_thread_id>(${UUID})</source_thread_id>` +
+    '\\s*<input>([\\s\\S]*)</input>\\s*</codex_delegation>$', 'u').exec(payload.output.trim());
+  return Boolean(wrapper && wrapper[2].trim());
+}
+
+// This proof starts at the saved execution, retaining the same human origin.
+// It composes only native app-message and unchanged narrow capacity edges.
+function appToolContinuation(rows, binding, host, promptHash, sourceRef, captured = [promptHash], accepted) {
+  const reject = () => empty('native-tool-continuation-unproven');
+  const origin = retryOrigin(rows, binding, promptHash);
+  if (origin < 0) return reject();
+  const execution = accepted || binding;
+  const start = rows.findIndex((row, index) => {
+    const line = index >= origin ? parseRow(row) : null;
+    return line?.type === 'turn_context' && line.payload?.turn_id === execution.turnId &&
+      line.payload.model === execution.model;
+  });
+  if (start < 0) return reject();
+  let turn = execution.turnId, model = execution.model, root = turn;
+  for (let index = origin; index < start; index++) {
+    const line = parseRow(rows[index]), value = line?.payload;
+    if (line?.type === 'event_msg' && value?.type === 'task_started' && value.turn_id === turn) {
+      const attribution = value.turn_attribution;
+      if (!boundedText(value.root_turn_id, 200) || attribution?.turn_id !== turn ||
+          attribution.root_turn_id !== value.root_turn_id || attribution.initiating_agent_path !== null) return reject();
+      root = value.root_turn_id;
+    }
+  }
+  let inputTurn = binding.turnId, inputIndex = 0, completed = null, pending = null;
+  let needsMessage = false, messageSeen = false, edges = 0, tools = 0, retries = 0, firstToolOffset = null;
+  let boundaryAt = Date.parse(parseRow(rows[start]).timestamp);
+  const visited = new Set([turn]), messageIds = new Set();
+  for (let index = origin; index < rows.length; index++) {
+    const row = rows[index], line = parseRow(row), value = line?.payload;
+    if (!line) return reject();
+    if (line.type === 'response_item' && value?.role === 'user') {
+      if (inputHash(line, {...binding, turnId: inputTurn}, captured[inputIndex]) !== captured[inputIndex++]) return reject();
+      continue;
+    }
+    if (line.type === 'event_msg' && ['user_message', 'task_interrupted', 'turn_aborted',
+          'task_cancelled', 'shutdown_complete'].includes(value?.type)) return reject();
+    if (line.type === 'turn_context') {
+      if (!text(value?.turn_id) || !text(value.model) || !text(value.cwd) ||
+          !samePath(value.cwd, binding.cwd) || !integer(Date.parse(line.timestamp))) return reject();
+      inputTurn = value.turn_id;
+      if (index < start) continue;
+      if (index === start && value.model !== execution.model ||
+          value.turn_id !== (pending?.turnId || turn) || completed !== null ||
+          pending && Date.parse(line.timestamp) < boundaryAt) return reject();
+      if (pending) {
+        turn = pending.turnId; root = pending.root; needsMessage = pending.tool; messageSeen = false;
+      }
+      model = value.model; pending = null;
+      continue;
+    }
+    if (index < start) continue;
+    if (line.type === 'response_item' && nativeTaskOutput(value)) {
+      if (!taskMessageMatches(value, turn) || messageIds.has(value.id) ||
+          pending || completed !== null) return reject();
+      messageIds.add(value.id);
+      if (needsMessage) {
+        if (value.name !== 'send_message_to_thread') return reject();
+        messageSeen = true;
+      }
+    }
+    if (line.type !== 'event_msg') continue;
+    if (value?.type === 'model_rerouted' && text(value.to_model)) model = value.to_model;
+    if (value?.type === 'task_complete') {
+      const at = Date.parse(line.timestamp);
+      if (pending || completed || needsMessage && !messageSeen || value.turn_id !== turn ||
+          value.root_turn_id !== root || !integer(at) || at < boundaryAt) return reject();
+      completed = {at, error: value.error};
+    }
+    if (value?.type === 'task_started') {
+      const attribution = value.turn_attribution, next = value.turn_id, at = Date.parse(line.timestamp);
+      if (!completed || pending || !boundedText(next, 200) || visited.has(next) ||
+          attribution?.turn_id !== next || !boundedText(value.root_turn_id, 200) ||
+          attribution.root_turn_id !== value.root_turn_id || attribution.initiating_agent_path !== null ||
+          !integer(at) || at < completed.at || ++edges > 64) return reject();
+      const tool = attribution.turn_trigger === 'app_tool_send_message';
+      if (tool) {
+        if (completed.error != null || !boundedText(attribution.parent_turn_id, 200) ||
+            attribution.parent_turn_id === next) return reject();
+        tools++; firstToolOffset ??= row.offset;
+      } else {
+        if (!['capacity_retry_automatic', 'capacity_retry_manual'].includes(attribution.turn_trigger) ||
+            value.root_turn_id !== next || attribution.parent_turn_id !== null ||
+            completed.error?.codex_error_info !== 'server_overloaded' ||
+            completed.error.message !== 'Selected model is at capacity. Please try a different model.') return reject();
+        retries++;
+      }
+      pending = {turnId: next, root: value.root_turn_id, tool};
+      visited.add(next); completed = null; boundaryAt = at;
+    }
+  }
+  if (inputIndex !== captured.length || !tools || pending || completed ||
+      needsMessage && !messageSeen || turn !== host.turnId || model !== host.model) return reject();
+  return {state: 'observed', reason: 'native-app-tool-continuation',
+    originalTurnId: binding.turnId, acceptedExecutionTurnId: execution.turnId,
+    toolContinuationCount: tools, retryCount: retries,
+    conditions: {threadId: binding.sessionId, turnId: turn, model, hostVersion: host.hostVersion},
+    sourceRef: `${sourceRef}#byte=${firstToolOffset}`, hostSourceRef: host.sourceRef};
+}
+
+function continuationAssociation(rows, binding, host, promptHash, sourceRef, captured = [promptHash], accepted) {
+  const retry = capacityRetry(rows, binding, host, promptHash, sourceRef, captured, accepted);
+  if (retry.state === 'observed' || !rows.some(row => {
+    const line = parseRow(row);
+    return line?.type === 'event_msg' && line.payload?.type === 'task_started' &&
+      line.payload.turn_attribution?.turn_trigger === 'app_tool_send_message';
+  })) return retry;
+  return appToolContinuation(rows, binding, host, promptHash, sourceRef, captured, accepted);
+}
+
 function associateNativeTurn(binding, host, promptHash, captured, acceptedExecution, retryInputScan) {
   return observeNativeTranscript(binding, {now: Date.now(), maxAgeMs: 1,
     retryHost: host, retryInputSha256: promptHash, capturedInputHashes: captured,
@@ -382,6 +508,7 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       if (index === start) originModel = model;
       signals.push([row.offset, digest]);
     }
+    if (line.type === 'response_item' && nativeTaskOutput(payload)) signals.push([row.offset, digest]);
     const user = line.type === 'response_item' && payload?.role === 'user';
     const event = line.type === 'event_msg' ? payload?.type : null;
     if (user) {
@@ -473,7 +600,7 @@ function inspectNativeInputs(binding, scan) {
 // The byte limits bound local I/O only; they are not model capacity or quality limits.
 function retryRecordIsBenign(row) {
   const line = parseRow(row), value = line?.payload;
-  if (['user', 'developer', 'system'].includes(value?.role)) return false;
+  if (['user', 'developer', 'system'].includes(value?.role) || nativeTaskOutput(value)) return false;
   if (line?.type === 'event_msg') {
     return ['token_count', 'agent_message', 'agent_reasoning'].includes(value?.type);
   }
@@ -669,7 +796,7 @@ function readNativeTranscript(binding, options = {}, snapshot = null) {
       `codex-rollout:${relative.split(path.sep).join('/')}`);
     if (evidence.state !== 'observed' || !evidence.latestInputReconciled) return finish(empty('native-input-evidence-changed'));
   }
-  const association = retry ? capacityRetry(tailRows, binding, liveHost.host, options.retryInputSha256,
+  const association = retry ? continuationAssociation(tailRows, binding, liveHost.host, options.retryInputSha256,
     `codex-rollout:${relative.split(path.sep).join('/')}`, options.capturedInputHashes, accepted) : null;
   if (proofOnly) return finish(association);
   if (association && association.state !== 'observed') return empty('current-host-turn-mismatch');
