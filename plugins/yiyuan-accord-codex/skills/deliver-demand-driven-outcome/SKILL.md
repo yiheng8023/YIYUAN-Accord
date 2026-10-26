@@ -81,8 +81,8 @@ condition applies; sufficient ordinary handling needs no extra ceremony. Skills
 may cooperate or return to earlier judgment as evidence changes; the host triggers
 native Hook events. This list specifies responsibilities, not invocation order.
 
-- A material capability gap, domain uncertainty, model/effort choice, independent
-  collaboration or plausible ecosystem benefit:
+- Native subagent delegation; a material capability gap, domain uncertainty,
+  model/effort choice or plausible ecosystem benefit:
   [Coordinate capabilities](../coordinate-capabilities/SKILL.md).
 - Large reads or long work; context/host/model changes; modes, checkpoints,
   interruption, recovery or handoff:

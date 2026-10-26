@@ -331,7 +331,7 @@ function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [p
       const at = Date.parse(line.timestamp);
       if (completedAt === null || pending || !boundedText(next, 200) || visited.has(next) ||
           payload.root_turn_id !== next || attribution?.turn_id !== next ||
-          attribution.root_turn_id !== next || !['capacity_retry_automatic', 'capacity_retry_manual'].includes(attribution.turn_trigger) ||
+          attribution.root_turn_id !== next || !['capacity_retry_automatic', 'capacity_retry_manual', 'resume_interrupted_task'].includes(attribution.turn_trigger) ||
           attribution.parent_turn_id !== null || attribution.initiating_agent_path !== null ||
           !integer(at) || at < completedAt || ++retryCount > 64) return empty('capacity-retry-start-unproven');
       pending = next;
@@ -447,7 +447,7 @@ function appToolContinuation(rows, binding, host, promptHash, sourceRef, capture
             attribution.parent_turn_id === next) return reject();
         tools++; firstToolOffset ??= row.offset;
       } else {
-        if (!['capacity_retry_automatic', 'capacity_retry_manual'].includes(attribution.turn_trigger) ||
+        if (!['capacity_retry_automatic', 'capacity_retry_manual', 'resume_interrupted_task'].includes(attribution.turn_trigger) ||
             value.root_turn_id !== next || attribution.parent_turn_id !== null ||
             completed.error?.codex_error_info !== 'server_overloaded' ||
             completed.error.message !== 'Selected model is at capacity. Please try a different model.') return reject();

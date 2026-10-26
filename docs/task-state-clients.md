@@ -34,6 +34,8 @@
 
 所有依赖保存合同的普通状态变更都先核同一份结构/身份规则；无效 checkpoint 保留并报告，不因空谓词而自动退休。
 
+容量错误后的宿主`resume_interrupted_task`仅在此前精确`server_overloaded`及完整容量消息、同Root归属、空parent/agent、有序context、原输入及恢复/暂停守卫全部成立时参与容量证明。触发名称本身不解除真实中断或暂停，也不授予新权限。
+
 ## 已有输入依据下的原生 App 消息续轮
 
 正常完成后的 `app_tool_send_message` 轮次与容量重试不同。已有可核输入依据时，适配器联合核对原生启动归属、接收 turn/context/cwd/model，以及同轮 `codex_app/send_message_to_thread` 入站记录。发送方 root 可以不同于接收 turn；各轮完成事件必须保持其实际归属。仅有触发名称、XML 文本或普通 stdout 均不足以建立关联。带 `call_id` 的本地调用结果不能充当入站委派证明。

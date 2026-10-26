@@ -1308,6 +1308,40 @@ class NativeStateMcpTests(unittest.TestCase):
         meta['turn_id'] = turn
         return records
 
+    def test_capacity_resume_retains_capacity_and_mixed_chain_guards(self):
+        capacity_fn = NativeStateMcpTests.automatic_capacity_retry
+        message_fn = NativeStateMcpTests.append_app_message_edge
+        def resumed(case, *args, **kwargs):
+            kwargs.setdefault('trigger', 'resume_interrupted_task')
+            return capacity_fn(case, *args, **kwargs)
+        def resumed_message(case, turn, *, capacity=False, alter=None):
+            def change(rows):
+                if capacity:
+                    rows[1]['payload']['turn_attribution']['turn_trigger'] = 'resume_interrupted_task'
+                if alter:
+                    alter(rows)
+            return message_fn(case, turn, capacity=capacity, alter=change)
+        methods = (
+            'test_manage_capacity_retry_uses_bound_native_proof_without_replacing_input',
+            'test_capacity_retry_rejects_missing_changed_foreign_and_new_input_proof',
+            'test_capacity_retry_bounded_origin_and_recovery_flags_cannot_be_bypassed',
+            'test_capacity_retry_rechecks_receipt_failure_and_native_proof_before_write',
+            'test_capacity_retry_chain_extends_old_boundary_and_preserves_pause_after_compact',
+            'test_capacity_retry_context_cannot_combine_proof_with_a_changed_second_snapshot',
+            'test_app_message_continuation_composes_multiple_and_capacity_edges',
+            'test_app_message_mixed_chain_rejects_invalid_capacity_edges_and_unread_input',
+        )
+        with mock.patch.object(NativeStateMcpTests, 'automatic_capacity_retry', resumed), \
+                mock.patch.object(NativeStateMcpTests, 'append_app_message_edge', resumed_message):
+            for method in methods:
+                with self.subTest(method=method):
+                    case = NativeStateMcpTests(method)
+                    case.setUp()
+                    try:
+                        getattr(case, method)()
+                    finally:
+                        case.doCleanups()
+
     def test_manage_capacity_retry_uses_bound_native_proof_without_replacing_input(self):
         self.native_context()
         session = self.params['_meta']['x-codex-turn-metadata']['session_id']

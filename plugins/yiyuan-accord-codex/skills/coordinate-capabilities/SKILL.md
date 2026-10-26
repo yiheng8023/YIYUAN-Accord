@@ -1,6 +1,6 @@
 ---
 name: coordinate-capabilities
-description: Compare and combine host or external capabilities for a material gap, domain uncertainty, model choice, delegation or ecosystem benefit. Use when capability decisions affect the route; adequate simple work stays local.
+description: Select and apply model, effort and context choices for native subagent delegation; compare host or external capabilities for a material gap, domain uncertainty or ecosystem benefit. Adequate simple work stays local.
 ---
 
 # Select and coordinate capabilities
@@ -64,25 +64,6 @@ Delegate only with effective availability and user permission. Defaults never
 override a disabled choice; use an adequate single-agent route while preserving
 any necessary independent-review gap and the user's restriction.
 
-For a material verification gap that benefits from an independent perspective,
-delegate a bounded review to a native subagent when host rules permit and useful
-non-overlapping work can continue locally. Bind the goal, source/artifact snapshot,
-read-only scope, expected findings and resource limits. Give the reviewer raw
-evidence rather than the proposed verdict. Select context inheritance explicitly
-using the current host controls. A fresh independent review normally needs the
-bound brief and raw artifacts, not copied conversation; use history only when
-needed and its prerequisites hold. Inspect findings, correct confirmed
-defects and recheck affected outputs; reviewer completion or agreement is not
-proof of correctness. After needed results are incorporated, release unneeded
-allocations through the host's supported lifecycle. Check whether explicit close
-or host-managed reclamation applies; completion alone need not release retained
-state. Preserve still-needed descendants and shared resources.
-Retain returned handles through structured host references or storage, and use
-the exact owned target on later calls. Verify closure against that allocation;
-a wrong-target or not-found result does not prove the original agent was closed.
-Reconcile failed or unknown release before declaring resource closure.
-Keep adequate simple work local, and do not impose review on every task.
-
 Discover current account and dispatch-supported models/efforts when selection
 matters, including user-selected configurations once task needs are known.
 Separate model support, account access, client-visible or opt-in efforts and
@@ -99,6 +80,44 @@ unfinished work and continue independent safe actions while waiting.
 Verify actual execution and substitutions. Recheck after
 material changes or errors; names, versions and listings prove neither fitness
 nor execution. Do not fix a model ladder or infer missing access/cache/cost facts.
+
+Before creating a native subagent, choose its model and reasoning effort for
+that bound subtask, then supply the selected values through the actual dispatch
+interface's supported fields. The parent's values may fit; select them deliberately
+for this work. A recommendation that never reaches the create/spawn request is
+unfinished coordination. When a control is unavailable, retain that specific
+limitation instead of claiming that inheritance implements the choice.
+Choose context inheritance separately. If a history mode cannot carry the needed
+model/effort controls, use a permitted compatible mode with a sufficient brief and
+sources; preserve both the context need and selected configuration.
+Reuse an existing agent while its role and settings fit. On a material reassignment,
+inspect whether that host's follow-up interface can change them; where it cannot,
+select a suitable fresh allocation, reconcile shared effects and keep one writer.
+Different interfaces can have different update controls.
+Verify the selected agent's effective settings and substitutions where supported
+metadata exists. Keep requested and observed settings distinct; parent metadata,
+request arguments and self-reported names do not establish that observation.
+Retain unknowns and correct the affected allocation when evidence warrants it.
+
+For a material verification gap that benefits from an independent perspective,
+delegate a bounded review to a native subagent when host rules permit and useful
+non-overlapping work can continue locally. Bind the goal, source/artifact snapshot,
+read-only scope, expected findings and resource limits. Give the reviewer raw
+evidence rather than the proposed verdict. Apply the model, effort and context
+choices above. A fresh independent review normally needs the bound brief and raw
+artifacts, not copied conversation; use history only when needed and its
+prerequisites hold. Inspect findings, correct confirmed
+defects and recheck affected outputs; reviewer completion or agreement is not
+proof of correctness. After needed results are incorporated, release unneeded
+allocations through the host's supported lifecycle. Check whether explicit close
+or host-managed reclamation applies; completion alone need not release retained
+state. Preserve still-needed descendants and shared resources.
+Retain returned handles through structured host references or storage, and use
+the exact owned target on later calls. Verify closure against that allocation;
+a wrong-target or not-found result does not prove the original agent was closed.
+Reconcile failed or unknown release before declaring resource closure.
+Keep adequate simple work local, and do not impose review on every task.
+
 
 Capabilities cannot add goals or grant permission. Installation, enablement,
 account/data access, material cost, external writes and irreversible effects need
