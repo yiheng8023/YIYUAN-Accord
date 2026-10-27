@@ -33,6 +33,10 @@ A cold task with only tool-origin content and no stored input basis cannot use t
 delegation authority and a native user-input receipt are separate evidence.
 Repeating the app message does not supply the missing basis.
 
+Observed native user text in a later turn can be explicitly reconciled against
+the retained input basis. Reading alone does not reconcile state, resume a pause
+or establish permission.
+
 Choose the MCP route when bounded owned execution meets the goal. An independent
 app Root needs its own supported input route. Preserve source recovery and report
 the specific unsupported condition before requesting any necessary personal action.

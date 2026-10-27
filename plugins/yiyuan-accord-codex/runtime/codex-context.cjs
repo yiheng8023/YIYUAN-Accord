@@ -296,7 +296,7 @@ function retryOrigin(rows, binding, promptHash) {
 // Keep the original input prefix separate from a receipt-accepted execution
 // turn (for example retained-input recovery). Only the saved receipt supplies
 // that starting turn; a trigger claim or latest context alone cannot.
-function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [promptHash], accepted = null, recovered = []) {
+function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [promptHash], accepted = null, recovered = [], unchanged = false) {
   const origin = retryOrigin(rows, binding, promptHash);
   if (origin < 0) return empty('capacity-retry-original-input-unavailable');
   const execution = accepted || binding;
@@ -373,7 +373,7 @@ function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [p
       retryOffset = rows[index].offset;
     }
   }
-  if (inputIndex !== captured.length || !retryCount || pending || completedAt !== null || turn !== host.turnId || model !== host.model) {
+  if (inputIndex !== captured.length || !retryCount && !unchanged || pending || completedAt !== null || turn !== host.turnId || model !== host.model) {
     return empty('capacity-retry-current-turn-unproven');
   }
   return {state: 'observed', reason: 'native-automatic-capacity-retry',
@@ -509,6 +509,62 @@ function continuationAssociation(rows, binding, host, promptHash, sourceRef, cap
       line.payload.turn_attribution?.turn_trigger === 'app_tool_send_message';
   })) return retry;
   return appToolContinuation(rows, binding, host, promptHash, sourceRef, captured, accepted, recovered);
+}
+
+// Only explicit source reconciliation supplies this checked scan. A later human
+// cannot erase an unproved execution between the saved accepted turn and itself.
+function nativeHumanContinuation(rows, binding, host, hash, sourceRef, scan, accepted, recovered) {
+  const reject = () => empty('native-human-continuation-unproven'), execution = accepted || binding;
+  const context = row => { const line = parseRow(row); return line?.type === 'turn_context' ? line.payload : null; };
+  const start = rows.findIndex(row => context(row)?.turn_id === execution.turnId && context(row).model === execution.model);
+  const at = rows.findIndex((row, index) => index > start && context(row)?.turn_id === host.turnId);
+  if (start < 0 || at < 0 || host.turnId === execution.turnId) return reject();
+  const prefix = rows.slice(0, at), previous = prefix.findLast(row => context(row));
+  const prior = context(previous), root = prefix.map(parseRow).findLast(line =>
+    line?.payload?.type === 'task_started' && line.payload.turn_id === prior.turn_id)?.payload.root_turn_id || prior.turn_id;
+  let human = null;
+  for (const row of rows.slice(at)) {
+    const line = parseRow(row), p = line?.payload, meta = p?.internal_chat_message_metadata_passthrough;
+    if (line?.type === 'turn_context' && (p.turn_id !== host.turnId || p.model !== host.model ||
+        !samePath(p.cwd, binding.cwd) || Object.hasOwn(p, 'source') ||
+        Object.hasOwn(p, 'root_turn_id') && p.root_turn_id !== host.turnId)) return reject();
+    if (line?.type === 'event_msg' && ['task_started', 'task_complete'].includes(p?.type)) return reject();
+    if (line?.type === 'response_item' && p?.type === 'message' && p.role === 'user' &&
+        boundedText(p.id, 200) && meta?.turn_id === host.turnId && Array.isArray(p.content) && p.content.length &&
+        p.content.every(item => item?.type === 'input_text') && Array.isArray(meta.content_item_kinds) &&
+        meta.content_item_kinds.length === p.content.length && meta.content_item_kinds.every(kind => kind === 'user.text') &&
+        Array.isArray(meta.content_item_metadata) && meta.content_item_metadata.length === p.content.length &&
+        meta.content_item_metadata.every(item => item?.provenance?.type === 'user')) {
+      human = scan.records.find(item => item.recordOffset === row.offset && item.turnId === host.turnId && item.supported);
+    }
+  }
+  if (!human) return reject();
+  let completions = 0, starts = 0, invalidBoundary = false;
+  const before = prefix.filter(row => {
+    const line = parseRow(row), p = line?.payload;
+    if (line?.type !== 'event_msg') return true;
+    if (p?.type === 'task_started' && p.turn_id === host.turnId) {
+      const a = p.turn_attribution;
+      if (row.offset > previous.offset && a?.turn_trigger === 'composer' && a.turn_id === host.turnId && a.root_turn_id === host.turnId &&
+          p.root_turn_id === host.turnId && a.parent_turn_id === null && a.initiating_agent_path === null) { starts++; return false; }
+    }
+    if (row.offset > previous.offset && p?.type === 'task_complete' && p.turn_id === prior.turn_id &&
+        p.root_turn_id === root && p.error == null) {
+      if (starts) invalidBoundary = true;
+      completions++; return false;
+    }
+    return true;
+  });
+  if (invalidBoundary || completions > 1 || starts > 1) return reject();
+  let proof = continuationAssociation(before, binding, {...host, turnId: prior.turn_id, model: prior.model}, hash,
+    sourceRef, scan.records.filter(item => item.recordOffset < rows[at].offset).map(item => item.promptSha256), accepted, recovered);
+  // The previous execution may have stayed on its already accepted turn.
+  if (proof.state !== 'observed') proof = capacityRetry(before, binding,
+    {...host, turnId: prior.turn_id, model: prior.model}, hash, sourceRef,
+    scan.records.filter(item => item.recordOffset < rows[at].offset).map(item => item.promptSha256), accepted, recovered, true);
+  return proof.state === 'observed' ? {state: 'observed', reason: 'native-human-input-continuation',
+    conditions: {threadId: binding.sessionId, turnId: host.turnId, model: host.model, hostVersion: host.hostVersion},
+    sourceRef: human.sourceRef, hostSourceRef: host.sourceRef} : reject();
 }
 
 function associateNativeTurn(binding, host, promptHash, captured, acceptedExecution, retryInputScan) {
@@ -871,16 +927,22 @@ function readNativeTranscript(binding, options = {}, snapshot = null) {
   if (inputScan) return finish(scanNativeInputs(tailRows, tail, tailOffset, binding, inputScan, identity,
     crypto.createHash('sha256').update(headRows[0].bytes).digest('hex'),
     `codex-rollout:${relative.split(path.sep).join('/')}`));
-  let recoveredInterruptOffsets = [];
+  let recoveredInterruptOffsets = [], inputProof = null;
   if (options.retryInputScan) {
     const evidence = scanNativeInputs(tailRows, tail, tailOffset, binding, options.retryInputScan, identity,
       crypto.createHash('sha256').update(headRows[0].bytes).digest('hex'),
       `codex-rollout:${relative.split(path.sep).join('/')}`);
     if (evidence.state !== 'observed' || !evidence.latestInputReconciled) return finish(empty('native-input-evidence-changed'));
     recoveredInterruptOffsets = evidence.recoveredInterruptOffsets || [];
+    inputProof = evidence;
   }
-  const association = retry ? continuationAssociation(tailRows, binding, liveHost.host, options.retryInputSha256,
+  let association = retry ? continuationAssociation(tailRows, binding, liveHost.host, options.retryInputSha256,
     `codex-rollout:${relative.split(path.sep).join('/')}`, options.capturedInputHashes, accepted, recoveredInterruptOffsets) : null;
+  if (retry && inputProof && association.state !== 'observed') {
+    const human = nativeHumanContinuation(tailRows, binding, liveHost.host, options.retryInputSha256,
+      `codex-rollout:${relative.split(path.sep).join('/')}`, inputProof, accepted, recoveredInterruptOffsets);
+    if (human.state === 'observed') association = human;
+  }
   if (proofOnly) return finish(association);
   if (association && association.state !== 'observed') return empty('current-host-turn-mismatch');
   binding = association ? {...binding, turnId: association.conditions.turnId, model: association.conditions.model} : execution;

@@ -438,6 +438,90 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertEqual(saved['nativeInputBasis'], original['nativeInputBasis'])
         self.assertEqual(self.files(), before)
 
+    def test_native_human_turn_controls_are_not_erased(self):
+        for edge in ('completed-before', 'completed-after', 'failed-complete', 'early-start', 'start-before-complete', 'wrong-root', 'ordered-start'):
+            with self.subTest(edge=edge):
+                case = self._resume_control_fresh(); case.native_context()
+                initial = case.native_input_preview()
+                contract = dict(result='Keep original', inputs=[], outputs=[{'path': 'out.txt'}],
+                    nextAction='Review actual reply', canContinue=False)
+                self.assertFalse(case.manage(action='bind', epoch=initial['epoch'], expectedRevision=0, **contract)['isError'])
+                meta = case.params['_meta']['x-codex-turn-metadata']; old = meta['turn_id']; new = 'human-control'
+                context = lambda turn: {'type': 'turn_context', 'payload': {'turn_id': turn,
+                    'root_turn_id': turn, 'model': meta['model'], 'cwd': str(case.work)}}
+                human = {'type': 'response_item', 'payload': {'type': 'message', 'id': new, 'role': 'user',
+                    'content': [{'type': 'input_text', 'text': 'Synthetic native human reply'}],
+                    'internal_chat_message_metadata_passthrough': {'turn_id': new, 'content_item_kinds': ['user.text'],
+                    'content_item_metadata': [{'provenance': {'type': 'user'}}]}}}
+                start = {'type': 'event_msg', 'payload': {'type': 'task_started', 'turn_id': new, 'root_turn_id': new,
+                    'turn_attribution': {'turn_id': new, 'root_turn_id': new, 'turn_trigger': 'composer',
+                    'parent_turn_id': None, 'initiating_agent_path': None}}}
+                done = lambda turn, error=None: {'type': 'event_msg', 'payload': {'type': 'task_complete',
+                    'turn_id': turn, 'root_turn_id': turn, 'error': error}}
+                rows = {'completed-before': [context(new), done(new), human],
+                    'completed-after': [context(new), human, done(new)],
+                    'failed-complete': [context(new), human, done(new, {'codex_error_info': 'server_overloaded'})],
+                    'early-start': [start, context(old), context(new), human],
+                    'start-before-complete': [start, done(old), context(new), human],
+                    'wrong-root': [context(new), human],
+                    'ordered-start': [done(old), start, context(new), human]}[edge]
+                if edge == 'wrong-root': rows[0]['payload']['root_turn_id'] = 'foreign-turn'
+                case._resume_control_append_rows(rows); meta['turn_id'] = new
+                pending = case.native_input_preview(); before = case.files()
+                result = case.manage(action='reconcile-input', epoch=pending['epoch'],
+                    expectedRevision=pending['revision'], evidenceCursor=pending['nativeInputEvidence']['cursor'])
+                if edge == 'ordered-start':
+                    self.assertFalse(result['isError'], result)
+                else:
+                    self.assertTrue(result['isError'], edge)
+                    self.assertEqual(result['value']['reason'], 'native-call-turn-conflict')
+                    self.assertEqual(case.files(), before)
+
+
+    def test_native_human_turn_reconciliation_preserves_lineage(self):
+        def append(case, turn, provenance=True):
+            meta = case.params['_meta']['x-codex-turn-metadata']; meta['turn_id'] = turn
+            payload = {'type': 'message', 'id': turn, 'role': 'user',
+                'content': [{'type': 'input_text', 'text': 'Actual synthetic answer'}]}
+            if provenance:
+                payload['internal_chat_message_metadata_passthrough'] = {'turn_id': turn,
+                    'content_item_kinds': ['user.text'], 'content_item_metadata': [{'provenance': {'type': 'user'}}]}
+            return case._resume_control_append_rows([
+                {'type': 'turn_context', 'payload': {'turn_id': turn, 'model': meta['model'], 'cwd': str(case.work)}},
+                {'type': 'response_item', 'payload': payload}])
+        for route in ('native', 'capacity', 'app', 'missing-provenance', 'unproved-intermediate'):
+            with self.subTest(route=route):
+                case = self._resume_control_fresh(); case.native_context()
+                contract = dict(result='Preserve original task', inputs=[], outputs=[{'path': 'out.txt'}],
+                    nextAction='Await actual reply', canContinue=False)
+                initial = case.native_input_preview()
+                self.assertFalse(case.manage(action='bind', epoch=initial['epoch'], expectedRevision=0, **contract)['isError'])
+                self.assertFalse(case.manage(action='pause', epoch=initial['epoch'], expectedRevision=1, reason='Keep pause')['isError'])
+                if route == 'capacity': case.automatic_capacity_retry('before-human')
+                if route == 'app': case.append_app_message_edge('before-human')
+                if route == 'unproved-intermediate': append(case, 'unaccepted', False)
+                rounds = 2 if route in ('native', 'capacity', 'app') else 1
+                for index in range(rounds):
+                    append(case, f'answer-{index}', route != 'missing-provenance')
+                    pending = case.native_input_preview(); evidence = pending['nativeInputEvidence']; before = case.files()
+                    self.assertTrue(case.manage(action='bind', epoch=pending['epoch'], expectedRevision=pending['revision'], **contract)['isError'])
+                    result = case.manage(action='reconcile-input', epoch=pending['epoch'], expectedRevision=pending['revision'], evidenceCursor=evidence['cursor'])
+                    if route in ('missing-provenance', 'unproved-intermediate'):
+                        self.assertEqual(result['value']['reason'], 'native-call-turn-conflict'); self.assertEqual(case.files(), before); continue
+                    self.assertFalse(result['isError'], result)
+                    current = case.native_input_preview(); self.assertEqual(current['mode'], 'paused')
+                    self.assertNotEqual(current['epoch'], pending['epoch'])
+                    self.assertTrue(current['nativeInputEvidence']['latestNativeInputsComplete'])
+                    case.append_context_usage(4500)
+                    context = case.inspect({**case.params, 'arguments': {'cwd': str(case.work), 'includeContext': True}})['value']['context']
+                    self.assertEqual(context['state'], 'observed', context)
+                    self.assertFalse(case.manage(action='bind', epoch=current['epoch'], expectedRevision=current['revision'], revisionReason='Reviewed real source', **contract)['isError'])
+                    self.assertEqual(case.native_input_preview()['mode'], 'paused')
+                if route == 'native':
+                    case.automatic_capacity_retry('after-human')
+                    case.append_context_usage(4500)
+                    self.assertEqual(case.inspect({**case.params, 'arguments': {'cwd': str(case.work), 'includeContext': True}})['value']['context']['state'], 'observed')
+
     def test_recovery_remains_usable_for_capacity_and_app_message_successors(self):
         for mode in ('capacity', 'app'):
             with self.subTest(mode=mode):
