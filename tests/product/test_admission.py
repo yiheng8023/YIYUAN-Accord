@@ -1734,18 +1734,25 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                                 impact.assert_not_called()
                     self.assertEqual(self.canonical_bytes(record), frozen)
 
-    def aggregate_fixture(self):
+    def aggregate_fixture(self, *, twin=False):
         # Repeated condition values and their applicability bindings compose a
         # large envelope; every original case, record and material stays bounded.
         contract = copy.deepcopy(self.contract)
         case_id = 'v33-system-integration-live-development-01'
         case = next(row for row in contract['acceptance']['admission']['cases'] if row['id'] == case_id)
         case['conditions']['syntheticCapacity'] = {str(i): '界' * 800 for i in range(100)}
+        twin_case = copy.deepcopy(case)
+        twin_case['id'] += '-capacity-twin'
+        if twin:
+            contract['acceptance']['admission']['cases'].append(twin_case)
+        original_contract = copy.deepcopy(contract)
         with patch.object(self, 'contract', contract):
             contract, case, record, base = self.parent_fixture(case_id)
         envelopes = {}
+        twin_material = None
 
         def observer(request):
+            nonlocal twin_material
             result = base(request)
             if request['phase'] == 'observe':
                 material = result['parentApplicability'][case_id]
@@ -1753,9 +1760,57 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     if row['pointer'].startswith('/syntheticCapacity/'):
                         row['basis'] = '界' * 1200
                 self.sign_parent_material(material)
+                if twin:
+                    from yiyuan_accord.admission import _definition, _hash
+                    # The base capture observed both synthetic twins together.
+                    other = copy.deepcopy(record)
+                    other.update(case=twin_case['id'], episodeId=twin_case['id'],
+                        definitionSha256=_definition(original_contract, twin_case),
+                        sourceRef='fixture://episode/' + twin_case['id'])
+                    for fact in other['facts'].values():
+                        fact['episodeId'] = other['episodeId']
+                    twin_material = copy.deepcopy(material)
+                    old = twin_material['original']
+                    old.update(recordSha256=_hash(other), definitionSha256=other['definitionSha256'],
+                               episodeId=other['episodeId'])
+                    old['qualification'].update(case=other['case'], episodeId=other['episodeId'],
+                                                recordSha256=_hash(other))
+                    twin_material['current']['definitionSha256'] = _definition(contract, twin_case)
+                    twin_material['sources']['final']['sha256'] = _hash({
+                        'syntheticFinalCaseAccepted': other['case'], 'otherCloseoutHeld': True})
+                    for relation in twin_material['relationships']:
+                        relation['episodeId'] = other['episodeId']
+                    self.sign_parent_material(twin_material)
+                    result['records'].append(other)
+                    result['parentApplicability'][other['case']] = twin_material
+            elif twin:
+                from yiyuan_accord.admission import _hash
+                result['parentApplicability'][twin_case['id']] = {
+                    'evidenceSha256': _hash({k: v for k, v in twin_material.items() if k != 'reviewBundle'}),
+                    **{k: copy.deepcopy(twin_material[k]) for k in
+                       ('current', 'conditionBindings', 'predicateBindings', 'roles', 'relationships')}}
             envelopes[request['phase']] = copy.deepcopy(result)
             return result
         return contract, case, observer, envelopes
+
+    def test_current_multi_case_observe_and_recheck_exceed_two_megabytes(self):
+        with self.history():
+            contract, case, observer, envelopes = self.aggregate_fixture(twin=True)
+            report = self.assess(contract, observer)
+            self.assertIn('observe', envelopes)
+            observed_bytes = len(self.canonical_bytes(envelopes['observe']))
+            self.assertGreater(observed_bytes, 2_000_000)
+            self.assertEqual(report['errors'], [], {'errors': report['errors'],
+                'observedBytes': observed_bytes, 'phases': list(envelopes)})
+            self.assertEqual(report['acceptedCases'], sorted((case['id'], case['id'] + '-capacity-twin')))
+            self.assertEqual(set(envelopes), {'observe', 'recheck'})
+            for value in envelopes.values():
+                self.assertGreater(len(self.canonical_bytes(value)), 2_000_000)
+            for value in [*envelopes['observe']['records'], envelopes['observe']['reviewBundle'],
+                          *envelopes['observe']['parentApplicability'].values(),
+                          *envelopes['recheck']['conditions'].values(),
+                          *envelopes['recheck']['parentApplicability'].values()]:
+                self.assertLess(len(self.canonical_bytes(value)), 1_000_000)
 
     def test_current_aggregate_observe_and_recheck_keep_individual_limits(self):
         with self.history():
@@ -1789,6 +1844,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 self.assertLess(len(self.canonical_bytes(item)), 1_000_000)
 
     def test_current_aggregate_caps_and_untrusted_values_fail_closed(self):
+        from yiyuan_accord.admission import _CURRENT_ENVELOPE_LIMIT
         with self.history():
             contract, case, observer, envelopes = self.aggregate_fixture()
             self.assertIn(case['id'], self.assess(contract, observer)['acceptedCases'])
@@ -1806,16 +1862,24 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                     if phase == 'recheck':
                         result['observationSha256'] = request['observationSha256']
                     if kind == 'observe-total' and phase == 'observe':
-                        finding = {'severity': 'P3', 'disposition': 'pass'}
-                        count = ((2_000_001 - len(self.canonical_bytes(result)))
-                                 // (len(self.canonical_bytes(finding)) + 1) + 1)
-                        result['reviewBundle']['reviews'][0]['findings'] = [finding] * count
+                        # Compose bounded records, rather than overflowing one review.
+                        present = {row['case'] for row in result['records']}
+                        for extra in self.observer(request)['records']:
+                            if extra['case'] not in present:
+                                extra['sourceRef'] += '/' + 'x' * 450_000
+                                result['records'].append(extra)
+                                if len(self.canonical_bytes(result)) > _CURRENT_ENVELOPE_LIMIT:
+                                    break
                         sizes.update(review=len(self.canonical_bytes(result['reviewBundle'])),
+                                     recordMaximum=max(len(self.canonical_bytes(r)) for r in result['records']),
                                      total=len(self.canonical_bytes(result)))
                     elif kind == 'recheck-total' and phase == 'recheck':
                         # Every condition item stays small; only their composition overflows.
-                        result['conditions']['synthetic-extra-1'] = '界' * 160_000
-                        result['conditions']['synthetic-extra-2'] = '界' * 160_000
+                        padding = '界' * 160_000
+                        for index in range(_CURRENT_ENVELOPE_LIMIT // len(padding.encode('utf-8')) + 2):
+                            result['conditions']['synthetic-extra-' + str(index)] = padding
+                            if len(self.canonical_bytes(result)) > _CURRENT_ENVELOPE_LIMIT:
+                                break
                         sizes['total'] = len(self.canonical_bytes(result))
                     elif kind in ('record', 'review', 'current-material', 'parent-material') and phase == 'observe':
                         if kind == 'record': item = result['records'][0]
@@ -1824,7 +1888,7 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                             item = result['parentApplicability'][case['id']]
                             if kind == 'current-material':
                                 result['currentApplicability'] = result.pop('parentApplicability')
-                        # The whole envelope fits 2 MB but this one item exceeds 1 MB.
+                        # The whole envelope fits its budget but this one item exceeds 1 MB.
                         item['syntheticPadding'] = 'x' * (1_000_001 - len(self.canonical_bytes(item)))
                         sizes.update(item=len(self.canonical_bytes(item)), total=len(self.canonical_bytes(result)))
                     elif kind in ('recheck-conditions', 'recheck-material') and phase == 'recheck':
@@ -1844,12 +1908,14 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 with self.subTest(kind=kind):
                     report = self.assess(contract, invalid)
                     if kind in ('observe-total', 'recheck-total'):
-                        self.assertGreater(sizes['total'], 2_000_000)
+                        self.assertGreater(sizes['total'], _CURRENT_ENVELOPE_LIMIT)
                     if 'review' in sizes:
                         self.assertLess(sizes['review'], 1_000_000)
+                    if 'recordMaximum' in sizes:
+                        self.assertLess(sizes['recordMaximum'], 1_000_000)
                     if 'item' in sizes:
                         self.assertGreater(sizes['item'], 1_000_000)
-                        self.assertLess(sizes['total'], 2_000_000)
+                        self.assertLess(sizes['total'], _CURRENT_ENVELOPE_LIMIT)
                     self.assertEqual(report['acceptedCases'], [])
                     self.assertTrue(report['errors'])
                     self.assertEqual(phases, ['observe'] if kind in (

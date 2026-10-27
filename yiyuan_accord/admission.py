@@ -27,9 +27,9 @@ SCHEMA = "yiyuan-accord-evidence-admission/v3"
 IMPACT_SCHEMA = "yiyuan-accord-evidence-admission/v4"
 CURRENT_SCHEMA = "yiyuan-accord-evidence-admission/v5"
 _LIMIT = 1_000_000
-# v5 composes individually bounded records and current-applicability materials.
+# The full v5 case set composes multiple individually bounded sources.
 # Legacy envelopes and every individual item retain the original limit.
-_CURRENT_ENVELOPE_LIMIT = 2_000_000
+_CURRENT_ENVELOPE_LIMIT = 8_000_000
 _CLAIMS = {"function", "incremental-value", "package-lifecycle"}
 _CASE_FIELDS = set("id scope host entry duties qualityAxes scenarios claims oracle oracleFiles conditions maxAgeSeconds expected".split())
 _SCOPE_FIELDS = set("id host entry duties qualityAxes scenarios claims conditions rule".split())
