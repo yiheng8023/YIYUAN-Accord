@@ -435,6 +435,7 @@ class ObligationEvidenceTests(unittest.TestCase):
                         if variant == 'base-failed':
                             r = next(r for r in result['records'] if r['case'] == case['id'])
                             r['facts']['effect']['value'] = {}
+                            w['differences'][0]['sources'].append('actual')
                         if variant == 'deadline-undisclosed':
                             w['chain'][0]['facts']['deadlineAt'] = w['chain'][1]['at']
                             w['sources']['pre-effect-binding']['sha256'] = a._hash({k: v for k, v in w['chain'][0].items() if k != 'source'})
@@ -451,6 +452,72 @@ class ObligationEvidenceTests(unittest.TestCase):
                         self.assertIn(case['id'], report['acceptedCases'], report['errors'])
                     else:
                         self.assertNotIn(case['id'], report['acceptedCases'])
+                        self.assertEqual(report.get('obligationEvidenceRejectionCodes'),
+                                         ['supplementary-base-case-not-admitted'])
+
+    def test_reference_diagnostics_preserve_optional_failure_and_guard_order(self):
+        for version in (1, 2):
+            with self.subTest(version=version), self.history():
+                def change(w):
+                    section = w if version == 1 else w['sourceEpochs'][0]
+                    row = section[field][0]
+                    row['sources'].append('actual')
+                    if variant == 'current':
+                        row['sources'] = ['analysis']
+                        row['currentConsequences'].append('analysis')
+                    elif variant == 'hash': row['newSha256'] = '0' * 64
+                    elif variant == 'shape': row['extra'] = True
+                    elif variant == 'unknown': row['sources'].append('private-source-canary')
+                    elif variant == 'duplicate': row['sources'].append('actual')
+                    elif variant == 'unhashable': row['sources'].append({})
+                if version == 1:
+                    contract, case, base, state = self.fixture()
+                    def observer(request):
+                        result = base(request)
+                        if request['phase'] == 'observe':
+                            w = result['obligationEvidence']['supplement-1']
+                            change(w)
+                            self.seal(w, state)
+                        return result
+                else:
+                    contract, observer = self.correction_fixture(change)
+                for field in ('differences', 'normativeDifferences'):
+                    for variant in ('analysis', 'current', 'hash', 'shape', 'unknown', 'duplicate', 'unhashable'):
+                        with self.subTest(field=field, variant=variant):
+                            report = self.assess(contract, observer)
+                            code = {'analysis': 'source-analysis-reference-kind-mismatch',
+                                    'current': 'current-observation-reference-kind-mismatch'}.get(variant)
+                            self.assertEqual(report.get('obligationEvidenceRejectionCodes', []), [code] if code else [])
+                            self.assertEqual(report['obligationEvidenceRejections']['supplement-1'],
+                                             'supplementary-execution-unsupported')
+                            self.assertFalse(report.get('obligationEvidence'))
+                            self.assertEqual(report['errors'], [])
+                            if version == 1:
+                                self.assertIn(case['id'], report['acceptedCases'])
+                                self.assertTrue(set(self.IDS) <= set(report['acceptanceRequirements']['A02']['missingObligations']))
+                            else:
+                                self.assertEqual(report['acceptedCases'], [])
+                                self.assertIn('a04-actual-retroactive-correction',
+                                              report['acceptanceRequirements']['A04']['missingObligations'])
+                            self.assertFalse(report['candidateEligible'])
+                            self.assertNotIn('private-source-canary', repr(report))
+
+    def test_supplement_exception_text_and_foreign_codes_are_not_diagnostics(self):
+        from yiyuan_accord import obligation_evidence
+        with self.history():
+            contract, case, observer, _ = self.fixture()
+            for error in (ValueError('private-exception-canary'),
+                          a._CaseRejection('private-exception-canary', ['unhashable'])):
+                error.codes = getattr(error, 'codes', ('source-analysis-reference-kind-mismatch',))
+                with self.subTest(type=type(error).__name__), patch.object(
+                        obligation_evidence, 'evaluate', side_effect=error):
+                    report = self.assess(contract, observer)
+                    self.assertIn(case['id'], report['acceptedCases'])
+                    self.assertEqual(report['errors'], [])
+                    self.assertEqual(report['obligationEvidenceRejections']['supplement-1'],
+                                     'supplementary-execution-unsupported')
+                    self.assertNotIn('obligationEvidenceRejectionCodes', report)
+                    self.assertNotIn('private-exception-canary', repr(report))
 
     def test_omission_preserves_legacy_envelope_result(self):
         # No optional field means the existing input and verdict stay identical.

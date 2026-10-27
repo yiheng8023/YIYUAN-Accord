@@ -554,6 +554,35 @@ class ContemporaryContributionTests(unittest.TestCase):
             report = self.fixture.assess(current, self.mutate(observe, lambda material: None, recheck=changed))
             self.assertIn('current-applicability-changed', report['caseRejections'][case['id']])
 
+    def test_normative_reference_diagnostics_preserve_rejection_precedence(self):
+        for parent in (None, 'v33-system-integration-live-development-01'):
+            with self.subTest(parent=parent), self.fixture.history():
+                current, case, record, _, observe = self.contemporary_fixture(parent)
+                frozen = copy.deepcopy(record)
+                self.assertEqual(self.fixture.assess(current, observe)['acceptedCases'], [case['id']])
+                for variant in ('analysis', 'current', 'hash', 'impact', 'unknown', 'duplicate', 'unhashable'):
+                    def wrong(material):
+                        row = material['contemporary']['normativeDifferences'][0]
+                        row['sources'].append('actual')
+                        if variant == 'current':
+                            row['sources'] = ['analysis']
+                            row['currentConsequences'].append('analysis')
+                        elif variant == 'hash': row['newSha256'] = '0' * 64
+                        elif variant == 'impact': row['impact'] = []
+                        elif variant == 'unknown': row['sources'].append('private-source-canary')
+                        elif variant == 'duplicate': row['sources'].append('actual')
+                        elif variant == 'unhashable': row['sources'].append({})
+                    with self.subTest(variant=variant):
+                        report = self.fixture.assess(current, self.mutate(observe, wrong, parent=bool(parent)))
+                        code = {'analysis': 'source-analysis-reference-kind-mismatch',
+                                'current': 'current-observation-reference-kind-mismatch'}.get(variant)
+                        self.assertEqual(report['caseRejections'][case['id']],
+                            sorted(['current-applicability-unsupported'] + ([code] if code else [])))
+                        self.assertEqual(report['acceptedCases'], [])
+                        self.assertFalse(report['candidateEligible'])
+                        self.assertNotIn('private-source-canary', repr(report))
+                        self.assertEqual(record, frozen)
+
     def test_parent_retains_complete_roles_predicates_and_same_episode_chain(self):
         parent = 'v33-system-integration-live-development-01'
         with self.fixture.history():

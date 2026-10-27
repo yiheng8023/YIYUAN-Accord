@@ -22,8 +22,10 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
     # readers, review policy and canonical identity rather than another verifier.
     from . import admission as a
 
-    def require(value):
+    def require(value, *codes):
         if not value:
+            if codes:
+                raise a._CaseRejection(*codes)
             raise ValueError('unsupported supplementary execution')
 
     require(isinstance(witness, dict) and set(witness) == {
@@ -33,7 +35,8 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
     base = witness['base']
     require(isinstance(base, dict) and set(base) == {'case', 'recordSha256'})
     key = base['case']
-    require(isinstance(key, str) and key in admitted and key in cases and key in records)
+    require(isinstance(key, str) and key in cases and key in records)
+    require(key in admitted, 'supplementary-base-case-not-admitted')
     case, record = cases[key], records[key]
     require(case['scope'] == _SCOPE and a._impact_eligible(contract, case)
             and base['recordSha256'] == a._hash(record))
@@ -199,8 +202,10 @@ def _correction(root, witness, contract, subject, budget, now, candidate_time):
     """Independent consequence only: never a substitute case or CLI admission."""
     from . import admission as a
 
-    def require(value):
+    def require(value, *codes):
         if not value:
+            if codes:
+                raise a._CaseRejection(*codes)
             raise ValueError('unsupported independent correction')
 
     require(contract['acceptance']['admission'].get('independentObligationEvidence')
@@ -373,8 +378,12 @@ def _differences(actual, expected, field, refs, require):
         name = row[field]
         require(isinstance(name, str) and name in expected and name not in seen
                 and all(row[k] == v for k, v in expected[name].items())
-                and a._text(row['basis']) and refs(row['sources'], 'source-analysis')
-                and refs(row['currentConsequences'], 'current-observation'))
+                and a._text(row['basis']))
+        require(refs(row['sources'], None))
+        require(refs(row['sources'], 'source-analysis'), 'source-analysis-reference-kind-mismatch')
+        require(refs(row['currentConsequences'], None))
+        require(refs(row['currentConsequences'], 'current-observation'),
+                'current-observation-reference-kind-mismatch')
         seen.add(name)
 
 
@@ -386,6 +395,8 @@ def _source_references(sources, require):
                 and re.fullmatch(r'[0-9a-f]{64}', row['sha256'])
                 and row['kind'] in {'execution-observation', 'current-observation', 'source-analysis'})
     def refs(values, kind='execution-observation'):
-        return (isinstance(values, list) and bool(values) and len(values) == len(set(values))
-                and all(isinstance(v, str) and v in sources and sources[v]['kind'] == kind for v in values))
+        return (isinstance(values, list) and bool(values)
+                and all(isinstance(v, str) and v in sources for v in values)
+                and len(values) == len(set(values))
+                and (kind is None or all(sources[v]['kind'] == kind for v in values)))
     return refs

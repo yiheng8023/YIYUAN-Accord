@@ -935,6 +935,17 @@ coverage retain their existing outputs. An absent reason is not admission; use
 `acceptedCases` and the complete report. Diagnostics do not refresh timestamps,
 change predicates or convert historical observations into current acceptance.
 
+Current and parent applicability retain `current-applicability-unsupported` and
+may append `source-analysis-reference-kind-mismatch` or
+`current-observation-reference-kind-mismatch` after the preceding row and reference
+checks pass. Optional execution witnesses retain their existing rejection strings.
+`obligationEvidenceRejectionCodes`, when present, is a sorted, deduplicated list
+of those static kind codes or `supplementary-base-case-not-admitted` from the
+first failed check. It aggregates across rejected witnesses without attributing
+codes to witness IDs. It contains no source contents or exception messages and
+does not affect the global error list, evidence eligibility or scoring. An absent
+detail does not imply that later checks ran or that no other defect exists.
+
 Commit the implementation, case definition and oracle files as A before observing
 E. At candidate B, the verifier binds HEAD/tree before static reads, verifies A
 is an ancestor, and checks the full affected package and oracle files. Case

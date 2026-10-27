@@ -1118,8 +1118,12 @@ def _contemporary_review(section, original_contract, original, contract, case, d
                 and len(row["affectedPointers"]) == len(set(row["affectedPointers"]))
                 and isinstance(row["impact"], str) and row["impact"] in {
                     "original-observation-still-applies", "current-consequence-supported"}
-                and _text(row["basis"]) and refs(row["sources"], "source-analysis")
-                and refs(row["currentConsequences"], "current-observation"))
+                and _text(row["basis"]))
+        require(refs(row["sources"]))
+        require(refs(row["sources"], "source-analysis"), "source-analysis-reference-kind-mismatch")
+        require(refs(row["currentConsequences"]))
+        require(refs(row["currentConsequences"], "current-observation"),
+                "current-observation-reference-kind-mismatch")
         seen.add(pointer)
     source = section["sourceDelta"]
     require(isinstance(source, dict) and set(source) == {"sha256", "source"}
@@ -1159,9 +1163,9 @@ def _current_impact(root, material, record, original_contract, original, contrac
     this function. Independent impact reviews must bind this exact material.
     Qualification concerns the final *case claim*, not unrelated episode errors.
     """
-    def require(condition):
+    def require(condition, *codes):
         if not condition:
-            raise _CaseRejection("current-applicability-unsupported")
+            raise _CaseRejection("current-applicability-unsupported", *codes)
 
     derived = isinstance(material, dict) and material.get("schema") == (
         "yiyuan-accord-parent-applicability/v3" if parent else "yiyuan-accord-current-applicability/v3")
@@ -1497,6 +1501,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
     admitted, package_reuse, current_applicability, parent_applicability = set(), {}, {}, {}
     criterion_sources = {}
     supplemental, supplemental_rejections = {}, {}
+    supplemental_rejection_codes = set()
     if observer is not None:
         try:
             if not callable(observer):
@@ -1688,8 +1693,14 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                         result = evaluate_obligation_evidence(root, witness, contract, cases, records_by_case,
                             admitted, subject, package_budget, now, candidate_time)
                         supplemental[witness_id] = result
-                    except (OSError, subprocess.SubprocessError, KeyError, TypeError, ValueError, StopIteration):
+                    except (OSError, subprocess.SubprocessError, KeyError, TypeError, ValueError, StopIteration) as error:
                         supplemental_rejections[witness_id] = "supplementary-execution-unsupported"
+                        if isinstance(error, _CaseRejection):
+                            supplemental_rejection_codes.update(code for code in error.codes
+                                if isinstance(code, str) and code in {
+                                    "supplementary-base-case-not-admitted",
+                                    "source-analysis-reference-kind-mismatch",
+                                    "current-observation-reference-kind-mismatch"})
                 # Build conflict groups only after independent validation. Every
                 # valid member participates, including bridges between groups;
                 # malformed witnesses cannot taint otherwise valid evidence.
@@ -1863,6 +1874,8 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
         report["obligationEvidence"] = supplemental
     if supplemental_rejections:
         report["obligationEvidenceRejections"] = supplemental_rejections
+    if supplemental_rejection_codes:
+        report["obligationEvidenceRejectionCodes"] = sorted(supplemental_rejection_codes)
     if current_applicability:
         report["currentApplicability"] = {key: current_applicability[key]
                                           for key in sorted(admitted & current_applicability.keys())}
