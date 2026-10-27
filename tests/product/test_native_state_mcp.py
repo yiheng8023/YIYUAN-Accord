@@ -522,6 +522,67 @@ class NativeStateMcpTests(unittest.TestCase):
                     case.append_context_usage(4500)
                     self.assertEqual(case.inspect({**case.params, 'arguments': {'cwd': str(case.work), 'includeContext': True}})['value']['context']['state'], 'observed')
 
+    def test_pending_native_human_chain_preserves_terminal_boundaries(self):
+        for mode in ('two', 'ambient', 'three', 'no-completion', 'missing-provenance',
+                     'before-human', 'late-human', 'failed', 'wrong-root', 'unproved', 'accepted-late'):
+            with self.subTest(mode=mode):
+                case = self._resume_control_fresh(); case.native_context()
+                receipt = next(case.state.glob('*.input.json')); original = json.loads(receipt.read_bytes())
+                generation = 'acknowledged-chain-history'
+                marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+                marker.write_text(json.dumps({'schema': 1, 'generation': generation}), encoding='utf-8')
+                original['failures'] = {'session': generation}
+                receipt.write_text(json.dumps(original), encoding='utf-8')
+                initial = case.native_input_preview()
+                (case.work/'protected.txt').write_text('original', encoding='utf-8')
+                contract = dict(result='Preserve original outcome', inputs=['protected.txt'],
+                    outputs=[{'path': 'out.txt'}], nextAction='Review pending native input', canContinue=False)
+                self.assertFalse(case.manage(action='bind', epoch=initial['epoch'], expectedRevision=0, **contract)['isError'])
+                self.assertFalse(case.manage(action='pause', epoch=initial['epoch'], expectedRevision=1, reason='Keep pause')['isError'])
+                original = json.loads(receipt.read_bytes()); meta = case.params['_meta']['x-codex-turn-metadata']
+                context = lambda turn: {'type': 'turn_context', 'payload': {
+                    'turn_id': turn, 'model': meta['model'], 'cwd': str(case.work)}}
+                def human(turn, identity=None):
+                    return {'type': 'response_item', 'payload': {'type': 'message', 'id': identity or turn,
+                        'role': 'user', 'content': [{'type': 'input_text', 'text': identity or turn}],
+                        'internal_chat_message_metadata_passthrough': {'turn_id': turn,
+                            'content_item_kinds': ['user.text'], 'content_item_metadata': [{'provenance': {'type': 'user'}}]}}}
+                done = lambda turn: {'type': 'event_msg', 'payload': {
+                    'type': 'task_complete', 'turn_id': turn, 'root_turn_id': turn, 'error': None}}
+                rows = [context('first'), human('first'), done('first'), context('second'), human('second')]
+                if mode == 'ambient':
+                    rows.insert(4, {'type': 'response_item', 'payload': {'type': 'message', 'id': 'page', 'role': 'user',
+                        'content': [{'type': 'input_text', 'text': '<external_codex_apps_open_page>{"page_id":null}</external_codex_apps_open_page>'}],
+                        'internal_chat_message_metadata_passthrough': {'turn_id': 'second',
+                            'content_item_kinds': ['additional_content.codex_apps_open_page']}}})
+                if mode == 'accepted-late': rows = [done(meta['turn_id']), human(meta['turn_id'], 'late'), context('second'), human('second')]
+                if mode == 'three': rows.extend([done('second'), context('third'), human('third')])
+                if mode == 'no-completion': del rows[2]
+                if mode == 'missing-provenance': rows[1]['payload'].pop('internal_chat_message_metadata_passthrough')
+                if mode == 'before-human': rows[1], rows[2] = rows[2], rows[1]
+                if mode == 'late-human': rows.insert(3, human('first', 'after-completion'))
+                if mode == 'failed': rows[2]['payload']['error'] = {'codex_error_info': 'server_overloaded'}
+                if mode == 'wrong-root': rows[0]['payload']['root_turn_id'] = 'foreign'
+                if mode == 'unproved': rows.insert(3, context('unproved'))
+                case._resume_control_append_rows(rows); meta['turn_id'] = 'third' if mode == 'three' else 'second'
+                pending = case.native_input_preview(); evidence = pending['nativeInputEvidence']; before = case.files()
+                self.assertEqual(evidence['state'], 'observed', evidence)
+                result = case.manage(action='reconcile-input', epoch=pending['epoch'],
+                    expectedRevision=pending['revision'], evidenceCursor=evidence['cursor'])
+                if mode not in ('two', 'ambient', 'three', 'no-completion'):
+                    self.assertTrue(result['isError'], result)
+                    self.assertEqual(result['value']['reason'], 'native-call-turn-conflict')
+                    self.assertEqual(case.files(), before); continue
+                self.assertFalse(result['isError'], result)
+                saved = json.loads(receipt.read_bytes()); current = case.native_input_preview()
+                self.assertEqual(saved['nativeInputs'][:len(original['nativeInputs'])], original['nativeInputs'])
+                self.assertEqual(saved['failures'], original['failures']); self.assertTrue(marker.exists())
+                self.assertEqual(current['mode'], 'paused')
+                self.assertTrue(current['nativeInputEvidence']['latestNativeInputsComplete'])
+                self.assertEqual((case.work/'protected.txt').read_text(encoding='utf-8'), 'original')
+
+
+
     def test_recovery_remains_usable_for_capacity_and_app_message_successors(self):
         for mode in ('capacity', 'app'):
             with self.subTest(mode=mode):

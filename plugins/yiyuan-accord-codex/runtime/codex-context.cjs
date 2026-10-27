@@ -513,8 +513,9 @@ function continuationAssociation(rows, binding, host, promptHash, sourceRef, cap
 
 // Only explicit source reconciliation supplies this checked scan. A later human
 // cannot erase an unproved execution between the saved accepted turn and itself.
-function nativeHumanContinuation(rows, binding, host, hash, sourceRef, scan, accepted, recovered) {
+function nativeHumanContinuation(rows, binding, host, hash, sourceRef, scan, accepted, recovered, depth = 0, closedBefore = null) {
   const reject = () => empty('native-human-continuation-unproven'), execution = accepted || binding;
+  if (depth >= 64) return reject();
   const context = row => { const line = parseRow(row); return line?.type === 'turn_context' ? line.payload : null; };
   const start = rows.findIndex(row => context(row)?.turn_id === execution.turnId && context(row).model === execution.model);
   const at = rows.findIndex((row, index) => index > start && context(row)?.turn_id === host.turnId);
@@ -538,8 +539,9 @@ function nativeHumanContinuation(rows, binding, host, hash, sourceRef, scan, acc
       human = scan.records.find(item => item.recordOffset === row.offset && item.turnId === host.turnId && item.supported);
     }
   }
-  if (!human) return reject();
-  let completions = 0, starts = 0, invalidBoundary = false;
+  if (!human || closedBefore !== null && scan.records.some(item =>
+      item.turnId === host.turnId && item.recordOffset >= closedBefore)) return reject();
+  let completions = 0, starts = 0, invalidBoundary = false, completionOffset = null;
   const before = prefix.filter(row => {
     const line = parseRow(row), p = line?.payload;
     if (line?.type !== 'event_msg') return true;
@@ -551,17 +553,24 @@ function nativeHumanContinuation(rows, binding, host, hash, sourceRef, scan, acc
     if (row.offset > previous.offset && p?.type === 'task_complete' && p.turn_id === prior.turn_id &&
         p.root_turn_id === root && p.error == null) {
       if (starts) invalidBoundary = true;
-      completions++; return false;
+      completions++; completionOffset = row.offset; return false;
     }
     return true;
   });
-  if (invalidBoundary || completions > 1 || starts > 1) return reject();
+  if (invalidBoundary || completions > 1 || starts > 1 ||
+      completionOffset !== null && scan.records.some(item =>
+        item.turnId === prior.turn_id && item.recordOffset >= completionOffset)) return reject();
   let proof = continuationAssociation(before, binding, {...host, turnId: prior.turn_id, model: prior.model}, hash,
     sourceRef, scan.records.filter(item => item.recordOffset < rows[at].offset).map(item => item.promptSha256), accepted, recovered);
   // The previous execution may have stayed on its already accepted turn.
   if (proof.state !== 'observed') proof = capacityRetry(before, binding,
     {...host, turnId: prior.turn_id, model: prior.model}, hash, sourceRef,
     scan.records.filter(item => item.recordOffset < rows[at].offset).map(item => item.promptSha256), accepted, recovered, true);
+  // Prove each earlier native human turn; retain the original accepted basis.
+  // Carry its terminal offset so filtering cannot revive input after completion.
+  if (proof.state !== 'observed') proof = nativeHumanContinuation(before, binding,
+    {...host, turnId: prior.turn_id, model: prior.model}, hash, sourceRef, scan,
+    accepted, recovered, depth + 1, completionOffset);
   return proof.state === 'observed' ? {state: 'observed', reason: 'native-human-input-continuation',
     conditions: {threadId: binding.sessionId, turnId: host.turnId, model: host.model, hostVersion: host.hostVersion},
     sourceRef: human.sourceRef, hostSourceRef: host.sourceRef} : reject();
