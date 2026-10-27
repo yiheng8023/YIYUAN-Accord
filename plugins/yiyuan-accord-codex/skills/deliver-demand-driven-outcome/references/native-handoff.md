@@ -24,6 +24,19 @@ The caller decides when a transfer is needed from current evidence and owns the
 semantic checks, native configuration, authentication, budgets and recovery route.
 This module performs the bounded transfer after those conditions are established.
 
+## App task input compatibility
+
+Before choosing app `create_thread` or `send_message_to_thread` for a transfer,
+check the selected route's input support. The native task-state reader recognizes
+an observed app-tool successor using an existing trusted native input basis.
+A cold task with only tool-origin content and no stored input basis cannot use that path;
+delegation authority and a native user-input receipt are separate evidence.
+Repeating the app message does not supply the missing basis.
+
+Choose the MCP route when bounded owned execution meets the goal. An independent
+app Root needs its own supported input route. Preserve source recovery and report
+the specific unsupported condition before requesting any necessary personal action.
+
 ## Ordinary root task through the MCP execution interface
 
 Use `coordinate_task_execution` only when its loaded runtime actually exposes the
