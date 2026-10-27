@@ -524,7 +524,7 @@ class NativeStateMcpTests(unittest.TestCase):
 
     def test_pending_native_human_chain_preserves_terminal_boundaries(self):
         for mode in ('two', 'ambient', 'three', 'no-completion', 'missing-provenance',
-                     'before-human', 'late-human', 'failed', 'wrong-root', 'unproved', 'accepted-late'):
+                     'before-human', 'late-human', 'failed', 'wrong-root', 'unproved', 'accepted-late', 'async-start', 'unknown-start', 'async-parent'):
             with self.subTest(mode=mode):
                 case = self._resume_control_fresh(); case.native_context()
                 receipt = next(case.state.glob('*.input.json')); original = json.loads(receipt.read_bytes())
@@ -555,6 +555,13 @@ class NativeStateMcpTests(unittest.TestCase):
                         'content': [{'type': 'input_text', 'text': '<external_codex_apps_open_page>{"page_id":null}</external_codex_apps_open_page>'}],
                         'internal_chat_message_metadata_passthrough': {'turn_id': 'second',
                             'content_item_kinds': ['additional_content.codex_apps_open_page']}}})
+                if mode in ('async-start', 'unknown-start', 'async-parent'):
+                    start = {'type': 'event_msg', 'payload': {'type': 'task_started', 'turn_id': 'first',
+                        'root_turn_id': 'first', 'turn_attribution': {'turn_id': 'first', 'root_turn_id': 'first',
+                            'turn_trigger': 'send_user_message_async_question', 'parent_turn_id': None, 'initiating_agent_path': None}}}
+                    if mode == 'unknown-start': start['payload']['turn_attribution']['turn_trigger'] = 'unknown'
+                    if mode == 'async-parent': start['payload']['turn_attribution']['parent_turn_id'] = 'foreign'
+                    rows[:0] = [done(meta['turn_id']), start]
                 if mode == 'accepted-late': rows = [done(meta['turn_id']), human(meta['turn_id'], 'late'), context('second'), human('second')]
                 if mode == 'three': rows.extend([done('second'), context('third'), human('third')])
                 if mode == 'no-completion': del rows[2]
@@ -569,7 +576,7 @@ class NativeStateMcpTests(unittest.TestCase):
                 self.assertEqual(evidence['state'], 'observed', evidence)
                 result = case.manage(action='reconcile-input', epoch=pending['epoch'],
                     expectedRevision=pending['revision'], evidenceCursor=evidence['cursor'])
-                if mode not in ('two', 'ambient', 'three', 'no-completion'):
+                if mode not in ('two', 'ambient', 'three', 'no-completion', 'async-start'):
                     self.assertTrue(result['isError'], result)
                     self.assertEqual(result['value']['reason'], 'native-call-turn-conflict')
                     self.assertEqual(case.files(), before); continue

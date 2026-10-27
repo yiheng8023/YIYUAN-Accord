@@ -547,7 +547,7 @@ function nativeHumanContinuation(rows, binding, host, hash, sourceRef, scan, acc
     if (line?.type !== 'event_msg') return true;
     if (p?.type === 'task_started' && p.turn_id === host.turnId) {
       const a = p.turn_attribution;
-      if (row.offset > previous.offset && a?.turn_trigger === 'composer' && a.turn_id === host.turnId && a.root_turn_id === host.turnId &&
+      if (row.offset > previous.offset && ['composer', 'send_user_message_async_question'].includes(a?.turn_trigger) && a.turn_id === host.turnId && a.root_turn_id === host.turnId &&
           p.root_turn_id === host.turnId && a.parent_turn_id === null && a.initiating_agent_path === null) { starts++; return false; }
     }
     if (row.offset > previous.offset && p?.type === 'task_complete' && p.turn_id === prior.turn_id &&
