@@ -18,6 +18,7 @@ _SCOPE = 'v33-dynamic-model-routing'
 def evaluate(root, witness, contract, cases, records, admitted, subject, budget, now, candidate_time):
     if isinstance(witness, dict) and witness.get('schema') == 'yiyuan-accord-obligation-execution-evidence/v2':
         return _correction(root, witness, contract, subject, budget, now, candidate_time)
+    goal = isinstance(witness, dict) and witness.get('schema') == 'yiyuan-accord-obligation-execution-evidence/v3'
     # Local import keeps the seam internal and reuses the existing bounded source
     # readers, review policy and canonical identity rather than another verifier.
     from . import admission as a
@@ -31,24 +32,30 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
     require(isinstance(witness, dict) and set(witness) == {
         'schema', 'base', 'obligations', 'execution', 'chain', 'sources', 'quality',
         'knownFailuresAndLimits', 'current', 'differences', 'normativeDifferences', 'reviewBundle'})
-    require(witness['schema'] == 'yiyuan-accord-obligation-execution-evidence/v1')
+    require(witness['schema'] == ('yiyuan-accord-obligation-execution-evidence/v3' if goal
+                                else 'yiyuan-accord-obligation-execution-evidence/v1'))
+    if goal:
+        require(contract['acceptance']['admission'].get('supplementalGoalEvidence') == a._SUPPLEMENTAL_GOAL_POLICY)
     base = witness['base']
     require(isinstance(base, dict) and set(base) == {'case', 'recordSha256'})
     key = base['case']
     require(isinstance(key, str) and key in cases and key in records)
     require(key in admitted, 'supplementary-base-case-not-admitted')
     case, record = cases[key], records[key]
-    require(case['scope'] == _SCOPE and a._impact_eligible(contract, case)
+    require(case['scope'] == ('v33-goal-authority-correction' if goal else _SCOPE) and a._impact_eligible(contract, case)
             and base['recordSha256'] == a._hash(record))
+    if goal:
+        require(key == a._SUPPLEMENTAL_GOAL_POLICY['baseCase'] and case['entry'] == 'cx-cli')
+    allowed = {a._SUPPLEMENTAL_GOAL_POLICY['obligation']} if goal else _ALLOWED
     obligations = {row['id']: row for requirement in contract['acceptance']['admission']['acceptanceRequirements']
-                   if requirement['id'] == 'A02' for row in requirement['outcomeObligations']}
+                   if requirement['id'] == ('A01' if goal else 'A02') for row in requirement['outcomeObligations']}
     rows = witness['obligations']
-    require(isinstance(rows, list) and 1 <= len(rows) <= len(_ALLOWED))
+    require(isinstance(rows, list) and 1 <= len(rows) <= len(allowed))
     selected = []
     for row in rows:
         require(isinstance(row, dict) and set(row) == {'id', 'criterion'})
         oid = row['id']
-        require(isinstance(oid, str) and oid in _ALLOWED and oid in obligations and oid not in selected)
+        require(isinstance(oid, str) and oid in allowed and oid in obligations and oid not in selected)
         obligation = obligations[oid]
         require(obligation['scope'] == case['scope'] and obligation['claim'] == 'function'
                 and row['criterion'] == obligation['source'] and row['criterion']['path'] in case['oracleFiles'])
@@ -58,12 +65,16 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
     refs = _source_references(sources, require)
 
     execution = witness['execution']
-    require(isinstance(execution, dict) and set(execution) == {
-        'subject', 'packageSha256', 'episodeId', 'operationId', 'roles', 'managedSkill', 'sourcePolicy'})
+    common_keys = () if goal else ('managedSkill', 'sourcePolicy')
+    execution_fields = {'subject', 'packageSha256', 'episodeId', 'operationId', 'roles'} | set(common_keys)
+    if goal:
+        execution_fields.add('inputMode')
+    require(isinstance(execution, dict) and set(execution) == execution_fields)
     require(all(a._text(execution[k]) for k in ('episodeId', 'operationId'))
             and execution['episodeId'] != record['episodeId'])
     roles = execution['roles']
-    require(isinstance(roles, dict) and set(roles) == {'coordinator', 'executor', 'consumer', 'cleanup'})
+    required_roles = {'coordinator', 'executor', 'consumer', 'cleanup'} | ({'requester'} if goal else set())
+    require(isinstance(roles, dict) and set(roles) == required_roles)
 
     def selected_entry(source, role):
         dispositions = next(s for s in source['acceptance']['admission']['scopes']
@@ -77,12 +88,16 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
                 and all(a._text(role[k]) for k in ('actor', 'host', 'entry'))
                 and role['host'] == case['host'] and isinstance(role['profile'], dict) and bool(role['profile'])
                 and selected_entry(contract, role))
-    require(isinstance(execution['managedSkill'], dict) and set(execution['managedSkill']) == {'id', 'sha256'}
-            and a._text(execution['managedSkill']['id']))
-    require(isinstance(execution['sourcePolicy'], dict) and set(execution['sourcePolicy']) == {'mode', 'sha256'}
-            and execution['sourcePolicy']['mode'] == 'explicit-only')
-    require(all(isinstance(v, str) and re.fullmatch(r'[0-9a-f]{64}', v)
-                for v in (execution['managedSkill']['sha256'], execution['sourcePolicy']['sha256'])))
+    if goal:
+        require(roles['executor']['entry'] == case['entry']
+                and execution['inputMode'] in {'ordinary-user', 'transparent-maintainer-evaluation'})
+    else:
+        require(isinstance(execution['managedSkill'], dict) and set(execution['managedSkill']) == {'id', 'sha256'}
+                and a._text(execution['managedSkill']['id']))
+        require(isinstance(execution['sourcePolicy'], dict) and set(execution['sourcePolicy']) == {'mode', 'sha256'}
+                and execution['sourcePolicy']['mode'] == 'explicit-only')
+        require(all(isinstance(v, str) and re.fullmatch(r'[0-9a-f]{64}', v)
+                    for v in (execution['managedSkill']['sha256'], execution['sourcePolicy']['sha256'])))
     old_subject = execution['subject']
     require(isinstance(old_subject, dict) and set(old_subject) == {'revision', 'tree'}
             and isinstance(old_subject['revision'], str) and re.fullmatch(r'[0-9a-f]{40}', old_subject['revision']))
@@ -107,11 +122,18 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
         'configuration', 'authority', 'helpers', 'continuingState'}
         and all(refs(v, 'current-observation') for v in current['context'].values()))
 
-    common = {k: execution[k] for k in ('managedSkill', 'sourcePolicy')}
-    identity_fields = {'actor', 'host', 'entry', 'profile', 'managedSkill', 'sourcePolicy', 'permissions'}
+    common = {k: execution[k] for k in common_keys}
+    identity_fields = {'actor', 'host', 'entry', 'profile', 'permissions'} | set(common_keys)
     chain = witness['chain']
-    types = ('pre-effect-binding', 'select', 'native-load', 'useful-adoption', 'cleanup')
-    role_names = ('coordinator', 'coordinator', 'executor', 'consumer', 'cleanup')
+    types = (('pre-effect-binding', 'ordinary-goal-input', 'goal-interpretation',
+              'requirements-applied', 'useful-adoption', 'cleanup') if goal else
+             ('pre-effect-binding', 'select', 'native-load', 'useful-adoption', 'cleanup'))
+    role_names = (('coordinator', 'requester', 'executor', 'executor', 'consumer', 'cleanup') if goal else
+                  ('coordinator', 'coordinator', 'executor', 'consumer', 'cleanup'))
+    if goal and isinstance(chain, list) and len(chain) == 6 and isinstance(chain[0], dict) \
+            and chain[0].get('type') == 'ordinary-goal-input':
+        types = ('ordinary-goal-input', 'pre-effect-binding', *types[2:])
+        role_names = ('requester', 'coordinator', *role_names[2:])
     require(isinstance(chain, list) and len(chain) == len(types))
     previous_sequence, previous_time = -1, None
     for node, kind, role_name in zip(chain, types, role_names, strict=True):
@@ -128,16 +150,20 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
         at = a._fresh(node['at'], float('inf'), now)
         require(at is not None and (previous_time is None or at > previous_time))
         previous_sequence, previous_time = node['sequence'], at
-    bound, selection, native, adoption, cleanup = [n['facts'] for n in chain]
-    require(set(bound) == identity_fields | {'subject', 'packageSha256', 'naturalInput', 'selectionDelegation',
+    binding = next(n for n in chain if n['type'] == 'pre-effect-binding')
+    bound = binding['facts']
+    bound_fields = identity_fields | {'subject', 'packageSha256', 'naturalInput',
         'oneWriter', 'resourceLimits', 'deadlineAt', 'expectedRoles', 'rolePermissions'}
+    bound_fields |= {'inputMode'} if goal else {'selectionDelegation'}
+    require(set(bound) == bound_fields
         and bound['subject'] == old_subject and bound['packageSha256'] == execution['packageSha256']
         and a._text(bound['naturalInput']) and a._text(bound['deadlineAt'])
-        and bound['selectionDelegation'] == 'coordinator'
         and isinstance(bound['permissions'], dict) and bool(bound['permissions'])
-        and bound['oneWriter'] == roles['coordinator']['actor'] and isinstance(bound['resourceLimits'], dict)
+        and bound['oneWriter'] == ('executor' if goal else roles['coordinator']['actor'])
+        and isinstance(bound['resourceLimits'], dict)
         and type(bound['resourceLimits'].get('seconds')) is int
         and bound['resourceLimits']['seconds'] > 0)
+    require(bound['inputMode'] == execution['inputMode'] if goal else bound['selectionDelegation'] == 'coordinator')
     expected_roles, permissions = bound['expectedRoles'], bound['rolePermissions']
     require(isinstance(expected_roles, dict) and set(expected_roles) == set(roles)
             and isinstance(permissions, dict) and set(permissions) == set(roles))
@@ -151,30 +177,36 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
     require(all(node['facts'].get('permissions') == permissions[name]
                 for node, name in zip(chain, role_names, strict=True)))
     committed = int(a._git(root, 'show', '-s', '--format=%ct', revision).strip())
-    require(a._fresh(chain[0]['at'], float('inf'), now).timestamp() >= committed)
+    binding_at = a._fresh(binding['at'], float('inf'), now)
+    require(binding_at.timestamp() >= committed)
     deadline = a._fresh(bound['deadlineAt'], float('inf'), now)
     # A deadline may be future relative to this review; parse without extending it.
     if deadline is None:
         from datetime import datetime
         deadline = datetime.fromisoformat(bound['deadlineAt'].replace('Z', '+00:00'))
-    window_seconds = (deadline - a._fresh(chain[0]['at'], float('inf'), now)).total_seconds()
+    window_seconds = (deadline - binding_at).total_seconds()
     # seconds is the sourced ceiling from this pre-effect binding, not an
     # unrelated positive number or permission to extend the declared deadline.
     require(deadline.tzinfo is not None and 0 < window_seconds <= bound['resourceLimits']['seconds'])
     # Negative attribution can explain late mechanical cleanup; it cannot
     # retroactively authorize the actions that form the claimed obligation.
-    require(all(a._fresh(node['at'], float('inf'), now) <= deadline for node in chain[1:4]))
-    require(set(selection) == identity_fields | {'selectionAuthority', 'confirmedExecutor', 'confirmedPermissions'}
-            and selection['selectionAuthority'] == 'coordinator-delegated'
-            and selection['confirmedExecutor'] == roles['executor']
-            and selection['confirmedPermissions'] == permissions['executor'])
-    require(set(native) == identity_fields | {'origin', 'fullBodyLoaded', 'dependenciesLoaded'}
-            and native['origin'] == 'native-skill-loader' and native['fullBodyLoaded'] is True
-            and native['dependenciesLoaded'] is True)
-    require(set(adoption) == identity_fields | {'useful', 'actualEffect'}
-            and adoption['useful'] is True and a._text(adoption['actualEffect']))
-    require(set(cleanup) == identity_fields | {'resourcesReleased', 'poststate'}
-            and cleanup['resourcesReleased'] is True and a._text(cleanup['poststate']))
+    require(all(a._fresh(node['at'], float('inf'), now) <= deadline
+                for node in chain if node['type'] not in {'pre-effect-binding', 'cleanup'}))
+    if goal:
+        _goal_chain(chain, execution, identity_fields, sources, refs, require)
+    else:
+        _, selection, native, adoption, cleanup = [n['facts'] for n in chain]
+        require(set(selection) == identity_fields | {'selectionAuthority', 'confirmedExecutor', 'confirmedPermissions'}
+                and selection['selectionAuthority'] == 'coordinator-delegated'
+                and selection['confirmedExecutor'] == roles['executor']
+                and selection['confirmedPermissions'] == permissions['executor'])
+        require(set(native) == identity_fields | {'origin', 'fullBodyLoaded', 'dependenciesLoaded'}
+                and native['origin'] == 'native-skill-loader' and native['fullBodyLoaded'] is True
+                and native['dependenciesLoaded'] is True)
+        require(set(adoption) == identity_fields | {'useful', 'actualEffect'}
+                and adoption['useful'] is True and a._text(adoption['actualEffect']))
+        require(set(cleanup) == identity_fields | {'resourcesReleased', 'poststate'}
+                and cleanup['resourcesReleased'] is True and a._text(cleanup['poststate']))
 
     deadline_accounted = _quality(contract, witness['quality'], witness['knownFailuresAndLimits'], selected, refs, require)
     require(previous_time <= deadline or deadline_accounted)
@@ -196,6 +228,49 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
                 for r in witness['reviewBundle']['reviews']))
     return {'evidenceSha256': digest, 'current': copy.deepcopy(current), 'baseCase': key,
             'supportedObligations': sorted(selected), 'episodeId': execution['episodeId']}
+
+
+def _goal_chain(chain, execution, identity_fields, sources, refs, require):
+    """Identity links do not establish genuine ambiguity or useful adoption."""
+    from . import admission as a
+    facts = {n['type']: n['facts'] for n in chain}
+    bound, incoming = facts['pre-effect-binding'], facts['ordinary-goal-input']
+    interpretation, applied = facts['goal-interpretation'], facts['requirements-applied']
+    adopted, cleanup = facts['useful-adoption'], facts['cleanup']
+    require(set(incoming) == identity_fields | {'origin', 'inputSource', 'naturalInput'}
+            and incoming['origin'] == execution['inputMode']
+            and incoming['naturalInput'] == bound['naturalInput']
+            and refs([incoming['inputSource']]))
+    require(set(interpretation) == identity_fields | {'inputSource', 'materialSources', 'resolution', 'requirements'}
+            and interpretation['inputSource'] == incoming['inputSource']
+            and refs(interpretation['materialSources']))
+    resolution = interpretation['resolution']
+    require(isinstance(resolution, dict) and set(resolution) == {'mode', 'alternatives', 'basis', 'clarificationSources'}
+            and resolution['mode'] in {'source-grounded-interpretation', 'necessary-clarification'}
+            and a._text(resolution['basis']) and isinstance(resolution['alternatives'], list)
+            and 2 <= len(resolution['alternatives']) <= 8
+            and all(a._text(v) for v in resolution['alternatives'])
+            and len(set(resolution['alternatives'])) == len(resolution['alternatives'])
+            and (resolution['clarificationSources'] == []
+                 or refs(resolution['clarificationSources'])))
+    require(resolution['mode'] != 'necessary-clarification' or refs(resolution['clarificationSources']))
+
+    def artifact(value):
+        return (isinstance(value, dict) and set(value) == {'id', 'source', 'sha256'}
+            and a._text(value['id']) and refs([value['source']])
+            and value['sha256'] == sources[value['source']]['sha256'])
+    def same_artifact(value, expected):
+        return artifact(value) and all(value[k] == expected[k] for k in ('id', 'sha256'))
+    requirements = interpretation['requirements']
+    require(artifact(requirements))
+    require(set(applied) == identity_fields | {'requirements', 'applicationSources', 'output'}
+            and same_artifact(applied['requirements'], requirements) and refs(applied['applicationSources'])
+            and artifact(applied['output']))
+    require(set(adopted) == identity_fields | {'requirements', 'output', 'useSources', 'useful'}
+            and same_artifact(adopted['requirements'], requirements) and same_artifact(adopted['output'], applied['output'])
+            and refs(adopted['useSources']) and adopted['useful'] is True)
+    require(set(cleanup) == identity_fields | {'resourcesReleased', 'poststate'}
+            and cleanup['resourcesReleased'] is True and refs(cleanup['poststate']))
 
 
 def _correction(root, witness, contract, subject, budget, now, candidate_time):

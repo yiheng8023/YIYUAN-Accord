@@ -696,5 +696,207 @@ class ObligationEvidenceTests(unittest.TestCase):
             self.assertIn('a04-actual-retroactive-correction', report['acceptanceRequirements']['A04']['missingObligations'])
 
 
+    def goal_fixture(self, change=lambda w: None, *, enabled=True):
+        contract, _, base, state = self.role_fixture()
+        case = next(c for c in contract['acceptance']['admission']['cases']
+                    if c['id'] == a._SUPPLEMENTAL_GOAL_POLICY['baseCase'])
+        if not enabled:
+            contract['acceptance']['admission'].pop('supplementalGoalEvidence')
+            self.commit(contract)
+        def observer(request):
+            result = base(request)
+            if request['phase'] != 'observe':
+                return result
+            w = result['obligationEvidence']['supplement-1']
+            record = next(r for r in result['records'] if r['case'] == case['id'])
+            w.update(schema=a._SUPPLEMENTAL_GOAL_POLICY['schema'],
+                     base={'case': case['id'], 'recordSha256': a._hash(record)})
+            w['obligations'] = [{'id': a._SUPPLEMENTAL_GOAL_POLICY['obligation'],
+                'criterion': copy.deepcopy(next(o for r in contract['acceptance']['admission']['acceptanceRequirements']
+                    for o in r['outcomeObligations'] if o['id'] == a._SUPPLEMENTAL_GOAL_POLICY['obligation'])['source'])}]
+            for k in ('managedSkill', 'sourcePolicy'):
+                w['execution'].pop(k)
+            w['execution']['inputMode'] = 'transparent-maintainer-evaluation'
+            roles = w['execution']['roles']
+            roles['requester'] = {**copy.deepcopy(roles['coordinator']), 'actor': 'maintainer-input-driver'}
+            def source(key, value):
+                w['sources'][key] = {'sourceRef': 'fixture://' + key, 'sha256': a._hash(value),
+                                     'kind': 'execution-observation'}
+                return key
+            text = 'Organize these supplied records so tomorrow\'s colleague can use them.'
+            incoming = source('ordinary-input', {'text': text, 'origin': 'transparent-maintainer-evaluation'})
+            material = source('supplied-records', {'synthetic': True, 'rows': ['pending', 'confirmed']})
+            def artifact(key, value):
+                source(key, value)
+                return {'id': key, 'source': key, 'sha256': w['sources'][key]['sha256']}
+            requirements = artifact('requirements', {'use': 'contact pending registrants', 'retain': 'confirmed'})
+            output = artifact('result-bundle', {'contact': ['pending'], 'sourcePreserved': True})
+            use = source('consumer-use', {'used': 'pending contact identified from delivered artifact'})
+            application = source('actual-application', {'requirements': requirements, 'output': output})
+            poststate = source('owned-resource-poststate', {'worker': 0, 'originalsUnchanged': True})
+            bound = {k: copy.deepcopy(v) for k, v in w['chain'][0]['facts'].items()
+                     if k not in {'managedSkill', 'sourcePolicy', 'selectionDelegation'}}
+            bound.update(naturalInput=text, inputMode=w['execution']['inputMode'], oneWriter='executor',
+                         expectedRoles=copy.deepcopy(roles),
+                         rolePermissions={name: {'readOnly': True} for name in roles})
+            facts = [bound,
+                {'origin': w['execution']['inputMode'], 'inputSource': incoming, 'naturalInput': text},
+                {'inputSource': incoming, 'materialSources': [material], 'requirements': requirements,
+                 'resolution': {'mode': 'source-grounded-interpretation',
+                    'alternatives': ['on-site check-in list', 'pending-contact work list'],
+                    'basis': 'The supplied handover note specifies contacting pending registrants.',
+                    'clarificationSources': []}},
+                {'requirements': copy.deepcopy(requirements), 'applicationSources': [application], 'output': output},
+                {'requirements': copy.deepcopy(requirements), 'output': copy.deepcopy(output),
+                 'useSources': [use], 'useful': True},
+                {'resourcesReleased': True, 'poststate': [poststate]}]
+            kinds = ('pre-effect-binding', 'ordinary-goal-input', 'goal-interpretation',
+                     'requirements-applied', 'useful-adoption', 'cleanup')
+            names = ('coordinator', 'requester', 'executor', 'executor', 'consumer', 'cleanup')
+            stamp = datetime.fromisoformat(w['chain'][0]['at'].replace('Z', '+00:00'))
+            w['chain'] = []
+            for i, (kind, name, fact) in enumerate(zip(kinds, names, facts, strict=True)):
+                node = {'type': kind, 'episodeId': w['execution']['episodeId'],
+                    'operationId': w['execution']['operationId'], 'sequence': i,
+                    'at': (stamp + timedelta(milliseconds=i)).isoformat(), 'role': name,
+                    'facts': {**copy.deepcopy(roles[name]), 'permissions': {'readOnly': True}, **fact}}
+                w['chain'].append({**node, 'source': source(kind, node)})
+            package = Path(contract['delivery']['hostProjections'][0]['manifest']).parents[1].as_posix()
+            changes = a._impact_differences(self.root, w['execution']['subject']['revision'], request['subject']['revision'],
+                (package, package), case['oracleFiles'], {'calls': 0, 'files': 0, 'bytes': 0}, complete=True)
+            w['differences'] = [{**row, 'basis': 'Synthetic complete source comparison',
+                'sources': ['analysis'], 'currentConsequences': ['actual']} for row in changes]
+            change(w)
+            for node in w['chain']:
+                w['sources'][node['source']]['sha256'] = a._hash({k: v for k, v in node.items() if k != 'source'})
+            self.seal(w, state)
+            return result
+        return contract, case, observer, state
+
+    def test_a01_v3_source_grounded_requirements_support_only_existing_leaf(self):
+        with self.history():
+            contract, case, observer, _ = self.goal_fixture()
+            report = self.assess(contract, observer)
+            self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+            leaf = report.get('obligationEvidence', {}).get('supplement-1', {})
+            self.assertEqual(leaf.get('baseCase'), case['id'], report.get('obligationEvidenceRejections'))
+            self.assertEqual(leaf.get('supportedObligations'), ['a01-ambiguous-goal-to-requirements'])
+            self.assertNotIn('evidenceKind', leaf)
+            self.assertNotIn('a01-ambiguous-goal-to-requirements',
+                             report['acceptanceRequirements']['A01']['missingObligations'])
+            self.assertFalse(report['candidateEligible'])
+
+    def test_a01_v3_allows_sourced_clarification_without_mandatory_question(self):
+        def clarify(w):
+            w['sources']['necessary-answer'] = {'sourceRef': 'fixture://answer', 'sha256': 'c'*64,
+                                               'kind': 'execution-observation'}
+            w['chain'][2]['facts']['resolution'].update(mode='necessary-clarification',
+                                                       clarificationSources=['necessary-answer'])
+        with self.history():
+            contract, case, observer, _ = self.goal_fixture(clarify)
+            report = self.assess(contract, observer)
+            self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+            self.assertTrue(report.get('obligationEvidence'), report.get('obligationEvidenceRejections'))
+
+    def test_a01_v3_actual_input_can_arrive_before_effect_binding(self):
+        def prior_input(w):
+            bound, incoming = w['chain'][:2]
+            incoming['at'] = (datetime.fromisoformat(bound['at']) - timedelta(milliseconds=1)).isoformat()
+            incoming['sequence'], bound['sequence'] = 0, 1
+            w['chain'][:2] = [incoming, bound]
+        with self.history():
+            contract, case, observer, _ = self.goal_fixture(prior_input)
+            report = self.assess(contract, observer)
+            self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+            self.assertTrue(report.get('obligationEvidence'), report.get('obligationEvidenceRejections'))
+
+    def test_a01_v3_equivalent_artifact_source_aliases_keep_identity(self):
+        def aliases(w):
+            for name, i, field in [('requirements-alias', 3, 'requirements'), ('output-alias', 4, 'output')]:
+                value = w['chain'][i]['facts'][field]
+                w['sources'][name] = copy.deepcopy(w['sources'][value['source']])
+                value['source'] = name
+        with self.history():
+            contract, case, observer, _ = self.goal_fixture(aliases)
+            report = self.assess(contract, observer)
+            self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+            self.assertTrue(report.get('obligationEvidence'), report.get('obligationEvidenceRejections'))
+
+    def goal_deadline_failure(self, w):
+        w['knownFailuresAndLimits'] = [{'kind': 'deadline-exceeded', 'sources': ['cleanup'],
+            'impacts': [{'obligation': 'a01-ambiguous-goal-to-requirements',
+                'qualityAxes': [q['axis'] for q in w['quality']], 'disposition': 'unaffected',
+                'basis': 'Only mechanical cleanup was late.', 'sources': ['cleanup']}]}]
+
+    def test_a01_v3_late_cleanup_can_be_accounted_but_not_late_adoption(self):
+        for adoption_late in (False, True):
+            with self.subTest(adoption_late=adoption_late), self.history():
+                def change(w):
+                    i = 3 if adoption_late else 4
+                    at = datetime.fromisoformat(w['chain'][i]['at']) + timedelta(microseconds=500)
+                    w['chain'][0]['facts']['deadlineAt'] = at.isoformat()
+                    self.goal_deadline_failure(w)
+                contract, case, observer, _ = self.goal_fixture(change)
+                report = self.assess(contract, observer)
+                self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+                self.assertEqual(bool(report.get('obligationEvidence')), not adoption_late,
+                                 report.get('obligationEvidenceRejections'))
+
+    def test_a01_v3_policy_omission_preserves_base_and_keeps_leaf_open(self):
+        with self.history():
+            contract, case, observer, _ = self.goal_fixture(enabled=False)
+            report = self.assess(contract, observer)
+            self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+            self.assertFalse(report.get('obligationEvidence'))
+            self.assertIn('a01-ambiguous-goal-to-requirements',
+                          report['acceptanceRequirements']['A01']['missingObligations'])
+
+    def test_a01_v3_policy_rejects_other_schema_obligation_case_or_extra_field(self):
+        for change in ({'schema': 'yiyuan-accord-obligation-execution-evidence/v1'},
+                       {'obligation': 'a04-actual-retroactive-correction'},
+                       {'baseCase': 'another-case'}, {'extra': True}):
+            with self.subTest(change=change):
+                contract = copy.deepcopy(self.contract)
+                contract['acceptance']['admission']['supplementalGoalEvidence'].update(change)
+                self.assertIn('supplemental goal evidence policy is invalid', a.admission_contract_errors(contract))
+
+    def test_a01_v3_resealed_wrong_relationships_do_not_rescue_leaf(self):
+        def wrong_entry(w):
+            w['execution']['roles']['executor']['entry'] = 'cx-desktop'
+            w['chain'][0]['facts']['expectedRoles']['executor']['entry'] = 'cx-desktop'
+            for node in w['chain']:
+                if node['role'] == 'executor': node['facts']['entry'] = 'cx-desktop'
+        changes = {
+            'foreign-obligation': lambda w: w['obligations'][0].update(id='a02-delegated-managed-selection'),
+            'record-substitution': lambda w: w['base'].update(recordSha256='0'*64),
+            'selected-but-wrong-entry': wrong_entry,
+            'requester-role-confusion': lambda w: w['chain'][1].update(role='executor'),
+            'input-without-origin': lambda w: w['chain'][1]['facts'].update(origin='file-exists'),
+            'input-substitution': lambda w: w['chain'][1]['facts'].update(naturalInput='A different clear goal'),
+            'missing-input-locator': lambda w: w['sources'].pop('ordinary-input'),
+            'unrelated-input-link': lambda w: w['chain'][2]['facts'].update(inputSource='supplied-records'),
+            'unsourced-clarification': lambda w: w['chain'][2]['facts']['resolution'].update(mode='necessary-clarification'),
+            'missing-goal-alternatives': lambda w: w['chain'][2]['facts']['resolution'].update(alternatives=['formatting']),
+            'requirements-id-switch': lambda w: w['chain'][3]['facts']['requirements'].update(id='another-requirement'),
+            'requirements-hash-switch': lambda w: w['chain'][4]['facts']['requirements'].update(sha256='0'*64),
+            'output-id-switch': lambda w: w['chain'][4]['facts']['output'].update(id='another-output'),
+            'output-hash-switch': lambda w: w['chain'][4]['facts']['output'].update(sha256='0'*64),
+            'unused-result': lambda w: w['chain'][4]['facts'].update(useful=False),
+            'no-use-source': lambda w: w['chain'][4]['facts'].update(useSources=[]),
+            'old-coordinator-writer': lambda w: w['chain'][0]['facts'].update(oneWriter='root-desktop'),
+            'missing-resource-release': lambda w: w['chain'][5]['facts'].update(resourcesReleased=False),
+            'missing-quality': lambda w: w['quality'].pop(),
+            'historical-current-authority': lambda w: w['current']['context'].update(authority=['ordinary-input']),
+        }
+        for name, change in changes.items():
+            with self.subTest(name=name), self.history():
+                contract, case, observer, _ = self.goal_fixture(change)
+                report = self.assess(contract, observer)
+                self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+                self.assertFalse(report.get('obligationEvidence'), name)
+                self.assertIn('a01-ambiguous-goal-to-requirements',
+                              report['acceptanceRequirements']['A01']['missingObligations'])
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -155,6 +155,9 @@ def _outcome_value(expected, pointer):
 
 _INDEPENDENT_OBLIGATION_POLICY = {"type": "independent-native-root-correction-poststate",
                                    "obligation": "a04-actual-retroactive-correction"}
+_SUPPLEMENTAL_GOAL_POLICY = {"schema": "yiyuan-accord-obligation-execution-evidence/v3",
+    "obligation": "a01-ambiguous-goal-to-requirements",
+    "baseCase": "v33-goal-authority-correction-steering-01"}
 
 
 def _independent_obligation(row, obligation=None):
@@ -401,6 +404,10 @@ def admission_contract_errors(contract):
             fields.add("independentObligationEvidence")
             if policy["independentObligationEvidence"] != _INDEPENDENT_OBLIGATION_POLICY:
                 return ["independent obligation evidence policy is invalid"]
+        if "supplementalGoalEvidence" in policy:
+            fields.add("supplementalGoalEvidence")
+            if policy["supplementalGoalEvidence"] != _SUPPLEMENTAL_GOAL_POLICY:
+                return ["supplemental goal evidence policy is invalid"]
     if (not isinstance(policy, dict) or set(policy) != fields
             or policy.get("schema") not in {SCHEMA, IMPACT_SCHEMA, CURRENT_SCHEMA} or not _text(policy.get("rule"))
             or type(policy.get("reviewMaxAgeSeconds")) is not int or policy["reviewMaxAgeSeconds"] <= 0
