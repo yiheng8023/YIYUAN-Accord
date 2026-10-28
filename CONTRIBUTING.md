@@ -37,6 +37,12 @@ Keep the bilingual overviews equivalent, check links and Mermaid syntax, and
 preserve feedback and conditional ordering. Diagrams explain the current design;
 completion and support claims still require the plan's linked acceptance evidence.
 
+When development changes behavior, interfaces, scope or evidence, update affected
+current guidance and bilingual user-facing copy in the same change. Distinguish
+what is implemented, what is verified for a specific subject and conditions, and
+what is published; preserve historical evidence. Release only when needed and
+authorized, after the applicable conditions are met.
+
 ## Reuse, change and subtraction
 
 Use host discovery, execution, state and lifecycle controls where they fit,
@@ -227,7 +233,8 @@ ownership, successful exit or protection of unobserved filesystem locations.
 The native lifecycle CI jobs run the existing
 [package lifecycle observer](scripts/observe_codex_lifecycle.py) on Linux and
 macOS with a version-bound official Codex CLI, an isolated configuration home
-and four fixed loopback responses. They do not call a model service or use a
+and fixed loopback responses. The base episode uses four; the hot-reload episode
+uses six. They do not call a model service or use a
 ChatGPT account. The 600-second episode, 60-second request and 15-second recovery
 bounds apply to this CI observation, not to product defaults. Package installation,
 actual Hook/Skill exposure, interruption/resume and cleanup are checked within
@@ -236,7 +243,9 @@ its result cannot prove that a descendant which starts another session was
 contained. The observer records its controller and the scope it can observe.
 
 The workflow retains source-package, raw diagnostics and its separate readback
-for 14 days, then removes the job-owned installation and working files. Preserve
+for 14 days. Its job-owned installation and working-file cleanup step runs only
+when the job is successful; a failed or cancelled job does not establish that
+step's cleanup. Preserve
 any evidence needed for a release decision before the CI artifacts expire;
 CI success alone does not grant formal admission. These jobs provide native
 macOS/Linux mechanism evidence; they do not run the Xcode interface. JetBrains

@@ -156,8 +156,8 @@ the full contract, and recheck current input, revision, digest and recovery flag
 before dependent effects. The saved file contains baselines and predicates, not
 the omitted current business-file observations; inspect those files separately
 when needed. This fallback neither empties unresolved duties nor raises the bound.
-The separate `manage_task_state` tool reuses `bind`, `pause` and `retire` in that
-same runtime and storage. It accepts only their declared fields, caller-observed
+The separate `manage_task_state` tool reuses `bind`, `pause`, `retire` and
+`reconcile-input` in that same runtime and storage. It accepts only their declared fields, caller-observed
 epoch/revision and workspace; native root identity and `nativeTurnId` come from
 MCP metadata. The helper checks the turn initially and again under the input lock
 before publication/deletion, including host continuation that retains the human
@@ -191,14 +191,27 @@ An execution error requires post-state inspection; a successful operation with
 oversized inspection details returns a compact success receipt rather than hiding
 the applied mutation. Transport failure does not establish absence of prior effects.
 The same process exposes `read_task_input(cwd, index?, offset?, maxChars?,
-expectedReceiptEpoch?)` for recovery text. It reuses `read-native-input` without
+expectedReceiptEpoch?, sourcePart?)` for recovery text or a bound native source
+part. It reuses `read-native-input` without
 another store or control connection, selects only the root session from native
 call metadata and returns captured-input pages with their original hashes and
 input-loss/resume/interruption flags. The returned next cursor pins the observed
 receipt epoch; a changed epoch rejects that page instead of joining different
 bases. Captured input is not complete history, attachments, work progress or new
-authority. Reading does not replay input, clear quarantine, resume pauses or
-establish restoration. The command helper remains available where this tool is not.
+authority. With `includeNativeInputs`, an inspected cursor, record offset and
+hash, and part index can select original or pending text or one inline PNG;
+the source selection requires the observed receipt epoch and cannot be combined
+with `index`. Image content is transient and within the existing 8 MiB input
+budget; wrapper paths and remote URLs are not fetched. Reading bytes does not
+prove understanding, replay input, clear quarantine, resume pauses or establish
+restoration. The command helper remains available where this tool is not.
+For `native-input-reconciliation-required`, inspect with `includeNativeInputs`,
+review the actual pending source content and coverage, then use the same observed
+epoch, revision and evidence cursor for `reconcile-input`. The operation checks
+native identity and source freshness, records the supported input coverage under
+a new receipt epoch, and requires an explicit full contract rebind. It does not
+clear recovery flags or resume a pause; unsupported or unavailable evidence remains
+unresolved. See the [client guide](task-state-clients.md) for the parameters.
 Context reads are opt-in. They reuse the Hook-bound transcript reader and match
 its thread, turn and model to this call's native metadata; the recorded session
 version remains separate from the current host version. Different input epochs

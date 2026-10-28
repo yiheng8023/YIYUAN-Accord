@@ -56,7 +56,7 @@ Codex multi-agent v2 的根会话文件也可能带第二个 UUID 后缀，子�
 
 `result` 跨工作段保留总体目标；阶段成果、版本和 CI 进度放在 `nextAction`、必要的 `unresolved` 及有来源的结果记录中。必要重绑或恢复时核对这些字段是否仍服务同一目标；局部工序完成或局部等待只影响其依赖，不替代完整目标，也不阻断独立可做工作。目标确因实际用户决定或已授权范围变化而改变时，核实依据和影响后修订；文字变化本身既不证明也不否定授权。运行时只保存正文，不判断目标语义。
 
-以下三段是调用参数模板：只生成 MCP tools/call 的 params，不连接、不调用工具、不自动判断 permission。`latest` 必须是真实最新 inspect 结果的 structuredContent（或宿主规范化结果中已解析的同一对象）；所有文字、路径、布尔判断由接入者按当前任务证据填入。准备参数后若输入或状态变化，重新 inspect 并审查。禁止用本指南里的占位名称当任务事实。
+以下模板只生成 MCP tools/call 的 params，不连接、不调用工具、不自动判断 permission。`latest` 必须是真实最新 inspect 结果的 structuredContent（或宿主规范化结果中已解析的同一对象）；所有文字、路径、布尔判断由接入者按当前任务证据填入。准备参数后若输入或状态变化，重新 inspect 并审查。禁止用本指南里的占位名称当任务事实。
 
 ```js
 function bindParams(latest, absoluteWorkspace, reviewedContract) {
@@ -80,6 +80,35 @@ function bindParams(latest, absoluteWorkspace, reviewedContract) {
 修订输出谓词需 `revisionReason`；变更或移除旧输入需每个受影响输入的 `inputRevisions: [{path, observed, reason}]`，observed 精确匹配当前 inspection.inputs[].current 指纹；不存在文件为 `{present:false}`，存在文件为 `{present:true, sha256}`。初始绑定或新增保护不需此处分；额外/重复处分会失败。核对实际用户决定和受影响范围，再提交完整合同。[输入修订](../runtime/task-checkpoint.cjs)、[合同修订](../runtime/task-checkpoint.cjs)。
 
 `unresolved` 省略才继承旧未决条件；显式列表替换它们，移除/重述旧条件需 revisionReason 和事实或授权范围变更依据。任何未决条件阻止 verified-local 与成功退役。重绑保留旧 pause；仅在实际恢复授权成立且 prior.mode=paused 时附非空 `resumeReason` 解除。reason 文字不是授权证据。恢复隔离/输入丢失不是 resumeReason 能解决的条件；本管理工具不 replay 或 recover-lock。[未决与恢复规则](../runtime/task-checkpoint.cjs)。
+
+## reconcile-input：审查来源后对账并重绑
+
+当返回 `native-input-reconciliation-required` 时，以同一工作区调用 `inspect_task_state` 并传 `includeNativeInputs: true`。核对实际 root/turn、宿主、输入依据、待处理记录、来源及覆盖；按需读取原始内容并审查用户意图和授权。没有可信来源、可用 cursor 或受支持内容时保持未决。上文超长回退须先取得完整证据，不把省略列表当空值。
+
+`read_task_input` 可用该观察的 `nativeInputEvidence.cursor`，结合记录的 `recordOffset`、`recordSha256` 和有序 part 的索引读取 `sourcePart`；必须提供同次 `snapshot.epoch` 作为 `expectedReceiptEpoch`，不能同时传 `index`。文本按 Unicode 字符分页，`maxChars` 默认 4000、最大 16000，后续使用返回的 `next`。受支持的单个 inline PNG 可作为临时图像内容返回，受既有 8 MiB 输入字节预算约束；不读取包装路径或抓取远程 URL。读取、字节覆盖、理解和授权分别判断，不产生回执写入或解除隔离。[读取 schema 与 guard](../plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs)。
+
+```js
+function sourcePartParams(latest, absoluteWorkspace, reviewedRecord, partIndex) {
+  const snapshot = latest.checkpoint.snapshot;
+  return {name: "read_task_input", arguments: {
+    cwd: absoluteWorkspace, expectedReceiptEpoch: snapshot.epoch,
+    sourcePart: {evidenceCursor: snapshot.nativeInputEvidence.cursor,
+      recordOffset: reviewedRecord.recordOffset,
+      recordSha256: reviewedRecord.recordSha256, partIndex}
+  }};
+}
+
+function reconcileInputParams(latest, absoluteWorkspace) {
+  const snapshot = latest.checkpoint.snapshot;
+  return {name: "manage_task_state", arguments: {
+    cwd: absoluteWorkspace, action: "reconcile-input",
+    epoch: snapshot.epoch, expectedRevision: snapshot.revision,
+    evidenceCursor: snapshot.nativeInputEvidence.cursor
+  }};
+}
+```
+
+仅在实际审查完待处理输入及覆盖、权限和身份后提交对账；适配器从原生调用元数据取得身份，继续检查轮次、来源与 cursor，不能由参数伪造。它写入本任务输入回执并生成新 epoch，不写业务文件、不触发执行，也不解除 pause、恢复标志或水印。成功后重新 inspect，按新 epoch 和最新 revision 审查并完整 bind 上述五字段；旧合同不会自动重绑。失败或传输不确定时先核对后态，不能盲目重试。对账不证明语义理解、用户授权或完成。[对账实现](../plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs)。
 
 ## pause：保存暂停及未完成条件
 
