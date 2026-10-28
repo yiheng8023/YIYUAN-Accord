@@ -830,7 +830,6 @@ function readNativeTranscript(binding, options = {}, snapshot = null) {
     return empty('noncanonical-rollout-path');
   }
   if (match[4].toLowerCase() !== binding.sessionId.toLowerCase()) return empty('rollout-thread-identity-mismatch');
-  if ((retry || inputScan) && match[5]) return empty('capacity-retry-subagent-rollout');
 
   let fd;
   let before;
@@ -926,6 +925,18 @@ function readNativeTranscript(binding, options = {}, snapshot = null) {
   }
   if (!samePath(meta.cwd, binding.cwd)) return empty('session-cwd-mismatch');
   if ((retry || inputScan) && !['cli', 'vscode', 'exec', 'appServer'].includes(meta.source)) return empty('capacity-retry-root-source-unproven');
+  // v2 root rollouts can have a UUID suffix; children can be unsuffixed.
+  // The shared session/tree ID must equal the bound thread, independently of
+  // the filename suffix. Keep the native caller's thread/tree isolation and
+  // all subsequent input/continuation checks. The retained cursor starts at
+  // turn_context, so a preceding task_started need not remain in its window.
+  if (retry || inputScan) {
+    if (match[5] && meta.multi_agent_version !== 'v2') return empty('capacity-retry-subagent-rollout');
+    if (meta.multi_agent_version === 'v2' && (meta.session_id !== binding.sessionId ||
+        meta.thread_source === 'subagent' || meta.parent_thread_id != null || meta.agent_path != null)) {
+      return empty('capacity-retry-root-source-unproven');
+    }
+  }
 
   if (hasUnterminatedRecord(tail) || retainedOrigin && tail.at(-1) !== 0x0a) return empty('unterminated-tail-record');
   const tailRows = completeLines(tail, tailOffset, tailOffset > 0 && !retainedOrigin);

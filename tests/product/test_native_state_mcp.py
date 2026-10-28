@@ -1665,6 +1665,97 @@ class NativeStateMcpTests(unittest.TestCase):
                     finally:
                         case.doCleanups()
 
+    def test_v2_suffixed_root_input_bind_and_retry_preserve_receipt(self):
+        self.native_context(v2=True)
+        preview = self.native_input_preview()
+        self.assertEqual(preview['nativeInputEvidence']['state'], 'observed', preview['nativeInputEvidence'])
+        receipt = next(self.state.glob('*.input.json'))
+        original = receipt.read_bytes()
+        contract = dict(result='Keep original scope', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Verify the result', canContinue=True)
+        self.assertFalse(self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0,
+            **contract)['isError'])
+        # Rebinding consumes the retained cursor, whose anchor is after task_started.
+        self.assertFalse(self.manage(action='bind', epoch=preview['epoch'], expectedRevision=1,
+            **contract)['isError'])
+        self.automatic_capacity_retry()
+        result = self.manage(action='bind', epoch=preview['epoch'], expectedRevision=2, **contract)
+        self.assertFalse(result['isError'], result)
+        self.assertEqual(receipt.read_bytes(), original)
+
+    def test_v2_root_format_rejects_child_and_missing_identity_without_writes(self):
+        cases = [
+            ('version-missing', lambda p, m: p.pop('multi_agent_version')),
+            ('version-unknown', lambda p, m: p.update(multi_agent_version='v3')),
+            ('tree-missing', lambda p, m: p.pop('session_id')),
+            ('child-id', lambda p, m: p.update(id='aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee')),
+            ('foreign-tree', lambda p, m: p.update(session_id='aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee')),
+            ('child-source', lambda p, m: p.update(source={'subagent': {'thread_spawn': {
+                'parent_thread_id': m['thread_id'], 'depth': 1, 'agent_path': '/root/child'}}})),
+            ('source-missing', lambda p, m: p.pop('source')),
+            ('child-classification', lambda p, m: p.update(thread_source='subagent')),
+            ('parent-thread', lambda p, m: p.update(parent_thread_id=m['thread_id'])),
+            ('agent-path', lambda p, m: p.update(agent_path='/root/child')),
+            ('malformed-parent', lambda p, m: p.update(parent_thread_id=False)),
+            ('malformed-agent', lambda p, m: p.update(agent_path=0)),
+            ('native-child', lambda p, m: m.update(thread_id='aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee')),
+        ]
+        for label, change in cases:
+            with self.subTest(case=label):
+                f = NativeStateMcpTests(); f.setUp()
+                try:
+                    f.native_context(v2=True)
+                    meta = f.params['_meta']['x-codex-turn-metadata']
+                    transcript = next(Path(f.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                    rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                    change(rows[0]['payload'], meta)
+                    transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                    status = f.helper({'op': 'status'}, session=meta['session_id'])
+                    before = f.files()
+                    result = f.manage(action='bind', epoch=status['epoch'], expectedRevision=0,
+                        result='Preserve root ownership', inputs=[], outputs=[{'path': 'report.txt'}],
+                        nextAction='Keep unproven identity unresolved', canContinue=False)
+                    self.assertTrue(result['isError'], result)
+                    self.assertEqual(f.files(), before)
+                finally:
+                    f.doCleanups()
+
+    def test_v2_unsuffixed_child_metadata_still_rejected(self):
+        self.native_context()
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+        rows[0]['payload'].update(multi_agent_version='v2', session_id='foreign-root-tree')
+        transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+        before = self.files()
+        evidence = self.native_input_preview()['nativeInputEvidence']
+        self.assertEqual(evidence['reason'], 'capacity-retry-root-source-unproven')
+        self.assertEqual(self.files(), before)
+
+    def test_v2_suffixed_root_retains_long_origin_and_rejects_child_retry(self):
+        self.native_context(v2=True)
+        preview = self.native_input_preview()
+        contract = dict(result='Keep original scope', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Verify the result', canContinue=False)
+        self.assertFalse(self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0,
+            **contract)['isError'])
+        receipt = next(self.state.glob('*.input.json')); original = receipt.read_bytes()
+        for _ in range(9):
+            self.append_long_tail_and_repeated_context()
+        evidence = self.assert_latest_context('v2-suffixed-retained-origin')['checkpoint']['snapshot']['nativeInputEvidence']
+        self.assertGreater(evidence['cursor']['endOffset'] - evidence['cursor']['anchorOffset'], 16*1024*1024)
+        self.automatic_capacity_retry()
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        rows = transcript.read_bytes().splitlines(keepends=True)
+        start = json.loads(rows[-2]); start['payload']['turn_attribution']['initiating_agent_path'] = '/root/child'
+        rows[-2] = json.dumps(start).encode()+b'\n'; transcript.write_bytes(b''.join(rows))
+        before = self.files()
+        result = self.manage(action='bind', epoch=preview['epoch'], expectedRevision=1, **contract)
+        self.assertTrue(result['isError'], result)
+        self.assertEqual(result['value']['reason'], 'native-call-turn-conflict')
+        self.assertEqual(self.files(), before)
+        self.assertEqual(receipt.read_bytes(), original)
+
     def test_manage_capacity_retry_uses_bound_native_proof_without_replacing_input(self):
         self.native_context()
         session = self.params['_meta']['x-codex-turn-metadata']['session_id']
@@ -3746,13 +3837,14 @@ process.stdout.write(JSON.stringify(require(process.argv[1]).manageTaskState(x.p
     def files(self):
         return {p.relative_to(self.root).as_posix(): p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
 
-    def native_context(self, age=0):
+    def native_context(self, age=0, *, v2=False):
         session = '11111111-2222-4333-8444-555555555555'
         meta = self.params['_meta']['x-codex-turn-metadata']
         meta.update(thread_id=session, session_id=session)
         self.env['CODEX_HOME'] = str(self.root / 'codex-home')
         transcript = Path(self.env['CODEX_HOME']) / 'sessions/2026/09/20' / (
-            'rollout-2026-09-20T00-00-00-' + session + '.jsonl')
+            'rollout-2026-09-20T00-00-00-' + session +
+            ('_aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee' if v2 else '') + '.jsonl')
         transcript.parent.mkdir(parents=True, exist_ok=True)
         stamp = datetime.fromtimestamp(time.time()-age, timezone.utc).isoformat()
         records = [
@@ -3765,6 +3857,13 @@ process.stdout.write(JSON.stringify(require(process.argv[1]).manageTaskState(x.p
                 'last_token_usage': {'total_tokens': 4000}, 'total_token_usage': {'total_tokens': 500000},
                 'model_context_window': 12000}}},
         ]
+        if v2:
+            records[0]['payload'].update(session_id=session, source='vscode', multi_agent_version='v2',
+                history_mode='paginated', thread_source='agent_created_thread')
+            records.insert(1, {'type': 'event_msg', 'payload': {'type': 'task_started',
+                'turn_id': meta['turn_id'], 'root_turn_id': meta['turn_id'], 'turn_attribution': {
+                    'turn_id': meta['turn_id'], 'root_turn_id': meta['turn_id'], 'turn_trigger': 'composer',
+                    'parent_turn_id': None, 'initiating_agent_path': None}}})
         transcript.write_text(''.join(json.dumps({'timestamp': stamp, **row})+'\n' for row in records), encoding='utf-8')
         self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': 'Continue this work.',
             'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
