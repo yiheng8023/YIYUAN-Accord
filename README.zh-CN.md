@@ -32,7 +32,7 @@ YIYUAN Accord 的设计目标是为人与 AI 的长期协作提供协调与可�
 >
 > 当前设计、历史处置、系统图、未完工作和收官标准统一见 [3.3 共识节点与计划](docs/operations/PLAN-v3.3.md)。[v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1) 是保留的发布基点，旧版本范围与证据以其精确 tag 为准，不继承为 3.3 支持声明。
 
-3.3.0和3.3.1保留已发布的历史身份。[实现与验收复核](research/reviews/2026-10-21-functional-realization-release-audit.md)已接收当前开发主体的绑定功能及普通任务组合证据。3.3.2现为稳定候选，精确包、最终检查和公开后态仍须核验，尚未发布。
+3.3.0和3.3.1保留已发布的历史身份。2026-10-28检查点的3.3.2仍为稳定候选：[复核](research/reviews/2026-10-21-functional-realization-release-audit.md)记录已接收的绑定功能证据及[cfde2ae3代码候选的11项CI结果](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40634304024)。最终源码资格、公开发行和适用本机入口采用仍待核验；已发行身份以[公开release](https://github.com/yiheng8023/YIYUAN-Accord/releases)为准。
 
 Accord在宿主正常交互中保任务责任、恢复与按需交接。临时开发用Stop自动续轮已从3.3撤回，不自动增加对话回合；宿主目标模式等长程控制仍由用户明确选择。
 
@@ -80,7 +80,7 @@ flowchart TD
 
 三个任务状态 MCP 工具用于检查根任务已存状态、评估下一段工作余量、取回已捕获输入，以及管理必要检查点。生命周期工具只绑定、暂停或退役 Accord 自有任务状态，不写业务文件、不改变宿主模式；更新须绑定已观察的输入、修订号及当前原生轮次，解除用户暂停或取消任务仍须核对真实用户决定。工具复用同一个宿主管理的 Node 进程及现有状态存储。捕获输入不是完整历史或新授权，调用元数据及理由文字不授予权限，子任务也不会承接共享会话的根状态。这些状态工具不重放输入、不派发交接。其共享处理器也会核对已有所属执行；来源失效时可能保护性停止该执行并保留操作证据。
 
-尚未发布的3.3.2候选包另加 `coordinate_task_execution`，用于原生Skill库存、受托准备Skill输入及当前根任务下的有限新目标。转移须有当前授权、来源静止、范围写者所有权，并独立核验实际接收、续作、结果和关闭。默认只读；声明的工作区写入范围还须在写入前核实原生有效限制。它不控制已有GUI线程，也不自动替换根Agent。实现检查不等于普通使用验收，详见包内[能力接口](plugins/yiyuan-accord-codex/skills/coordinate-capabilities/references/native-capabilities.md)和[交接接口](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md#ordinary-root-task-through-the-mcp-execution-interface)。
+3.3.2的Codex包另加 `coordinate_task_execution`，用于原生Skill库存、受托准备Skill输入及当前根任务下的有限新目标。转移须有当前授权、来源静止、范围写者所有权，并独立核验实际接收、续作、结果和关闭。默认只读；声明的工作区写入范围还须在写入前核实原生有效限制。它不控制已有GUI线程，也不自动替换根Agent。实现检查不等于普通使用验收，详见包内[能力接口](plugins/yiyuan-accord-codex/skills/coordinate-capabilities/references/native-capabilities.md)和[交接接口](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md#ordinary-root-task-through-the-mcp-execution-interface)。
 
 启用输入 Hook 后，3.3包会把根任务的原生输入文字保留在既有本机回执中，供恢复时按需读取。子代理输入使用宿主自身的任务状态，不更新根检查点；此辅助器不提供独立子代理检查点。每份回执上限为 8 MiB，按任务生命周期处理；中断时即使尚未建立检查点，输入仍保留用于恢复，单纯退出不会将它删除。这份本地副本可能包含敏感文字。它不是完整对话或进度记录，也不产生新授权。保留与失败边界见[架构说明](docs/architecture.md#current-candidate-and-scoped-connections)。
 

@@ -69,6 +69,17 @@ trusted origin before validation. The history readers fail with an unmet-source
 prerequisite rather than substituting current helpers. The product-suite CI
 matrix uses `fetch-depth: 0`.
 
+On Windows, use a short full-history checkout and a separately owned short
+`TEMP`/`TMP`/`TMPDIR` for the checker process. Keep those environment changes
+within the owned process scope and verify its cleanup. Short temporary files
+alone do not avoid a long-checkout Git `revision:path` failure: one retained
+case failed from a 160-character cwd and succeeded from a 51-character cwd.
+This is a bounded observation, not a fix for every Windows path. Preserve the
+original failure and diagnose the same command before rerunning the affected
+whole class with its historical objects and assertions unchanged. A successful
+class recheck does not turn a timed-out full suite into a pass; keep the complete
+required checks and exact hosted CI bound to their actual subjects.
+
 Run these commands from the repository root:
 
 ~~~powershell
