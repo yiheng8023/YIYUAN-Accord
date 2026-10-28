@@ -242,6 +242,22 @@ the recorded episode. A POSIX process group is not a Windows Job or a sandbox:
 its result cannot prove that a descendant which starts another session was
 contained. The observer records its controller and the scope it can observe.
 
+The separate `test_native_state_mcp.py --native-codex` rejection and scoped-Hook
+fixtures use three fixed replies and keep their existing 150-second work,
+30-second request and 15-second recovery bounds. Codex 0.156 starts a default
+curated-repository Git sync independently of the local Accord installation.
+These MCP fixtures explicitly replace that unrelated source with a task-owned
+empty Git catalogue through a process-private URL-prefix rewrite. They retain
+real Git, native plugin installation, Hook/MCP checks and the original natural
+release requirement. The manifest records this source substitution; the active
+Git repository (including refs, objects and configuration), retained copy and
+private rewrite file must match before exposure and at final verification.
+The private retained Git event trace records actual commands for later diagnosis.
+This isolation belongs only to these MCP fixtures, not the shared environment
+builder or other lifecycle cases. It does not qualify public catalogue content,
+default network startup or upstream background-task shutdown. Preserve original
+failures and evaluate platform results against their recorded inputs.
+
 The workflow retains source-package, raw diagnostics and its separate readback
 for 14 days. Its job-owned installation and working-file cleanup step runs only
 when the job is successful; a failed or cancelled job does not establish that

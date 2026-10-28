@@ -379,6 +379,87 @@ class NativeIntegrationFinishTests(unittest.TestCase):
         self.assertFalse((self.root/'cleanup.json').exists())
 
 
+class NativeStartupCatalogueTests(unittest.TestCase):
+    def fixture(self):
+        sys.path.insert(0, str(ROOT))
+        from scripts import observe_codex_lifecycle as host
+        root = Path(tempfile.mkdtemp(prefix='accord-native-startup-')).resolve()
+        self.addCleanup(host._remove_owned_tree, root)
+        for name in ('home', 'workspace', 'state', 'temp', 'commands', 'retained'):
+            (root/name).mkdir()
+        manifest = {'evidence': str(root), 'node': shutil.which('node'), 'codex': 'unused',
+            'ownedRoots': {name: str(root/name) for name in ('home', 'workspace', 'state', 'temp')},
+            'limits': {'requestSeconds': 5, 'recoverySeconds': 5},
+            'resourceController': host._controller_kind()}
+        return root, manifest, host, host._owned_environment(manifest)
+
+    def test_real_git_resolves_only_the_selected_prefix_without_shared_config_changes(self):
+        root, manifest, host, env = self.fixture()
+        before = dict(env)
+        controlled = _prepare_native_startup_catalogue(manifest, env, host, time.monotonic()+30)
+        self.assertEqual(env, before)
+        self.assertEqual({k for k in controlled if controlled[k] != env.get(k)},
+                         {'GIT_CONFIG_GLOBAL', 'GIT_TRACE2_EVENT'})
+        git = manifest['startupFixture']['git']
+        for source, expected in (
+            ('https://github.com/openai/plugins.git', manifest['startupFixture']['replacementUrl']),
+            ('https://github.com/yiheng8023/YIYUAN-Accord.git', 'https://github.com/yiheng8023/YIYUAN-Accord.git'),
+        ):
+            resolved = subprocess.run([git, 'ls-remote', '--get-url', source], cwd=root/'workspace',
+                env=controlled, check=True, capture_output=True, text=True, timeout=5)
+            self.assertEqual(resolved.stdout.strip(), expected)
+        _verify_native_startup_catalogue(manifest, host)
+        self.assertEqual(len(list((root/'commands').glob('startup-git-*/record.json'))), 3)
+        for record in (root/'commands').glob('startup-git-*/record.json'):
+            value = json.loads(record.read_text(encoding='utf-8'))
+            self.assertFalse(value['forced'])
+            self.assertTrue(host._released(value['after']))
+
+    def test_changed_active_or_retained_fixture_input_is_rejected(self):
+        _, manifest, host, env = self.fixture()
+        _prepare_native_startup_catalogue(manifest, env, host, time.monotonic()+30)
+        row = manifest['startupFixture']['inputs'][0]
+        for key in ('path', 'retainedPath'):
+            target = Path(row[key])
+            original = target.read_bytes()
+            target.write_bytes(original+b'\n# changed\n')
+            with self.assertRaisesRegex(RuntimeError, 'startup fixture sources changed'):
+                _verify_native_startup_catalogue(manifest, host)
+            target.write_bytes(original)
+
+    def test_git_served_refs_config_and_objects_are_bound_with_retained_copy(self):
+        _, manifest, host, env = self.fixture()
+        _prepare_native_startup_catalogue(manifest, env, host, time.monotonic()+30)
+        fixture = manifest['startupFixture']
+        paths = ['.git/HEAD', '.git/config']
+        paths += [next(p for p in fixture['repositoryHashes'] if p.startswith('.git/objects/'))]
+        for key in ('repository', 'retainedRepository'):
+            for name in paths:
+                target = Path(fixture[key])/name
+                original = target.read_bytes()
+                mode = target.stat().st_mode
+                target.chmod(0o600)  # Git objects are read-only on Windows.
+                target.write_bytes(original+b'changed')
+                with self.assertRaisesRegex(RuntimeError, 'startup fixture sources changed'):
+                    _verify_native_startup_catalogue(manifest, host)
+                target.write_bytes(original)
+                target.chmod(mode)
+            added = Path(fixture[key])/'.git/refs/heads/injected'
+            added.write_text('0'*40+'\n', encoding='utf-8')
+            with self.assertRaisesRegex(RuntimeError, 'startup fixture sources changed'):
+                _verify_native_startup_catalogue(manifest, host)
+            added.unlink()
+
+    def test_forced_preparation_is_not_promoted_to_natural_release(self):
+        root, manifest, host, env = self.fixture()
+        result = {'exitCode': 0, 'forced': True, 'failure': None, 'after': {}}
+        with mock.patch.object(host, '_run_cli', return_value=(result, None)):
+            with self.assertRaisesRegex(RuntimeError, 'preparation did not naturally release'):
+                _prepare_native_startup_catalogue(manifest, env, host, time.monotonic()+30)
+        self.assertNotIn('startupFixture', manifest)
+        self.assertFalse((root/'temp/startup.gitconfig').exists())
+
+
 class NativeStateMcpTests(unittest.TestCase):
     def _resume_control_append_rows(self, rows):
         transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
@@ -6200,6 +6281,80 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
                     self.assertFalse(value['diagnostic']['observations'][-1]['gates']['noPendingInputs'])
 
 
+def _prepare_native_startup_catalogue(manifest, env, host, deadline):
+    """Keep this MCP fixture's unrelated curated Git startup off the public network."""
+    root = Path(manifest['evidence'])
+    temporary = Path(manifest['ownedRoots']['temp'])
+    if temporary.resolve() != root/'temp' or temporary.is_symlink():
+        raise ValueError('startup fixture must stay in its owned temporary root')
+    repository = temporary/'curated-fixture'
+    repository.mkdir()
+    hooks = temporary/'empty-git-hooks'
+    hooks.mkdir()
+    catalogue = repository/'.agents/plugins/marketplace.json'
+    catalogue.parent.mkdir(parents=True)
+    catalogue.write_text(json.dumps({'name': 'openai-curated-remote',
+        'interface': {'displayName': 'Empty native MCP startup fixture'},
+        'plugins': []}) + '\n', encoding='utf-8')
+    git = Path(shutil.which('git')).resolve(strict=True)
+    git_manifest = {**manifest, 'codex': str(git)}
+    setup_env = {**env, 'GIT_AUTHOR_DATE': '2000-01-01T00:00:00+0000',
+                 'GIT_COMMITTER_DATE': '2000-01-01T00:00:00+0000'}
+    common = ['-c', 'core.hooksPath='+str(hooks), '-c', 'init.templateDir=',
+              '-c', 'core.autocrlf=false', '-C', str(repository)]
+    for label, args in (
+        ('init', ['init', '-q', '--initial-branch=main']),
+        ('add', ['add', '.agents/plugins/marketplace.json']),
+        ('commit', ['-c', 'user.name=Accord fixture', '-c', 'user.email=fixture@localhost',
+                    'commit', '-q', '--no-gpg-sign', '-m', 'Empty startup catalogue']),
+    ):
+        record, _ = host._run_cli(git_manifest, 'startup-git-'+label,
+            common+args, setup_env, deadline, auth_store_override=None)
+        if record['exitCode'] or record['forced'] or record['failure'] or not host._released(record['after']):
+            raise RuntimeError('startup fixture preparation did not naturally release')
+    config = temporary/'startup.gitconfig'
+    config.write_text('[url "'+repository.as_uri()+'"]\n'
+                      '    insteadOf = https://github.com/openai/plugins.git\n', encoding='utf-8')
+    retained = root/'retained/startup-fixture'
+    retained.mkdir()
+    retained_repository = retained/'repository'
+    shutil.copytree(repository, retained_repository)
+    repository_hashes = host._tree_hashes(repository)
+    inputs = []
+    for source in (config,):
+        target = retained/source.name
+        shutil.copyfile(source, target)
+        inputs.append({'path': str(source), 'retainedPath': str(target), 'sha256': host.digest(source)})
+    manifest['startupFixture'] = {'kind': 'local-empty-curated-catalogue',
+        'originalUrl': 'https://github.com/openai/plugins.git',
+        'replacementUrl': repository.as_uri(), 'git': str(git),
+        # Installed Git for Windows uses hard links; bind its bytes like the
+        # native Codex binary, without relaxing owned-input digest guards.
+        'gitSha256': hashlib.sha256(git.read_bytes()).hexdigest(),
+        'repository': str(repository), 'retainedRepository': str(retained_repository),
+        'repositoryHashes': repository_hashes,
+        'inputs': inputs,
+        'claimLimit': 'Process-private Git URL-prefix rewrite for the unrelated default curated repository. '
+                      'Real Git, Accord installation, Hook/MCP and natural-release checks remain; '
+                      'no public curated repository content or default network startup acceptance.'}
+    _verify_native_startup_catalogue(manifest, host)
+    host.save(root/'manifest.json', manifest)
+    return {**env, 'GIT_CONFIG_GLOBAL': str(config),
+            'GIT_TRACE2_EVENT': str(retained/'git-trace.jsonl')}
+
+
+def _verify_native_startup_catalogue(manifest, host):
+    fixture = manifest.get('startupFixture')
+    if fixture is None:
+        return  # Historical records and other lifecycle fixtures keep their own inputs.
+    if (hashlib.sha256(Path(fixture['git']).read_bytes()).hexdigest() != fixture['gitSha256']
+            or any(host._tree_hashes(fixture[key]) != fixture['repositoryHashes']
+                   for key in ('repository', 'retainedRepository'))
+            or any(host.digest(row[key]) != row['sha256']
+                   for row in fixture['inputs'] for key in ('path', 'retainedPath'))):
+        raise RuntimeError('native startup fixture sources changed')
+
+
 def _finalize_native_integration(result, app, fixture, root, host, *, body_failed, scoped_hook=False):
     """Retain the body outcome and every available native release receipt."""
     cleanup_failures = []
@@ -6263,6 +6418,7 @@ def _finish_native_integration(result, root, host, manifest, original, *, scoped
         progress['stage'] = 'final-source-check'
         if any(sha(ROOT/name) != digest for name, digest in manifest['sources'].items()):
             raise RuntimeError('execution sources changed during the episode')
+        _verify_native_startup_catalogue(manifest, host)
         progress['sourceVerified'] = True
         progress['stage'] = 'original-retention'
         if sha(original) != manifest['protectedSha256']:
@@ -6354,6 +6510,10 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, s
     profile.mkdir()
     env.update(HOME=str(profile), USERPROFILE=str(profile))
     deadline = time.monotonic()+150
+    # Codex 0.156 starts a detached curated-repository sync before hooks/list.
+    # This fixed-response test targets the local Accord package, not that remote
+    # repository. Bind an explicit local Git source instead of relaxing shutdown.
+    env = _prepare_native_startup_catalogue(manifest, env, host, deadline)
     def command(label, arguments):
         record, value = host._run_cli(manifest, label, arguments, env, deadline)
         if (record['exitCode'] or record['forced'] or record['failure']
@@ -6398,7 +6558,7 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, s
 
     fixture = host._Fixture(manifest, response)
     app = None
-    result = {'realModelCalls': 0, 'status': 'pending'}
+    result = {'realModelCalls': 0, 'status': 'pending', 'startupFixture': manifest['startupFixture']}
     body_failed = False
     try:
         extra = ['-c','features.code_mode_host=false']
@@ -6528,6 +6688,7 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, s
         if scoped_hook:
             result['nativeInputCall'] = result.pop('nativeManageCall')
             result['claimLimit'] = 'Native Hook input and context read through the installed MCP environment whitelist; isolated profile, three fixed local provider replies, zero real model calls. No business delivery, GUI adoption or full acceptance claim.'
+        result['claimLimit'] += ' Default curated startup uses the declared local empty Git fixture; public-network startup and upstream background-task shutdown are not qualified by this result.'
     except BaseException as error:
         body_failed = True
         result.update(status='failed', failure=type(error).__name__, reason=str(error))
