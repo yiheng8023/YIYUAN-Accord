@@ -5,7 +5,7 @@
 > 2026-10-28正式发布：[v3.3.2](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.2)，精确发行提交`ef8bde2a`；后续文档记录不移动该标签。
 
 - 精确发行提交已完成绑定18案、17范围、52义务及A01–A08来源验收；[全部11项CI检查](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40644847135)成功。
-- 本机原生安装和完整包字节已核验；当前聊天实际加载仍待刷新后确认，详见[接续记录](docs/operations/CONTINUATION.md#当前事实)。原失败、时间超限和未观察范围保持。
+- 本机原生安装、完整包字节及当前桌面的3.3.2实际加载和任务恢复已核验，无需重启，详见[接续记录](docs/operations/CONTINUATION.md#当前事实)。原失败、时间超限和未观察范围保持。
 
 - 修正Codex 0.165的验证harness兼容性：将原生Hook的组合hash按官方接口
   分为声明及内容两项可信pin，保留旧单hash、启停、信任、身份和来源守卫。
