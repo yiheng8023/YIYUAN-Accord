@@ -1924,7 +1924,7 @@ class CodexLifecycleTests(unittest.TestCase):
                 lifecycle.main()
             self.assertEqual(stopped.exception.code, 1)
 
-    def trust_boundary_run(self, changed=None):
+    def trust_boundary_run(self, changed=None, *, current_hash="fixture-current-hash", expected_state=None):
         """Exercise the producer's discovery-to-trust boundary without processes."""
         with tempfile.TemporaryDirectory() as tmp:
             args, manifest = self.fixture(Path(tmp).resolve(), hooks=json.dumps({
@@ -1932,19 +1932,25 @@ class CodexLifecycleTests(unittest.TestCase):
                     "command": "node ${PLUGIN_ROOT}/runtime/task-checkpoint.cjs"}]}]}}))
             installed = Path(manifest["ownedRoots"]["home"]) / "plugins/cache/fixture"
             key = manifest["pluginId"] + ":session_start:fixture"
-            hook = {"key": key, "currentHash": "fixture-current-hash", "enabled": True,
+            hook = {"key": key, "currentHash": current_hash, "enabled": True,
                     "sourcePath": str(installed / "hooks/hooks.json"), "trustStatus": "untrusted"}
             package_path = str(installed / "skills/demo/SKILL.md")
             standalone_path = manifest["standaloneSkill"]["path"]
 
             class App:
-                def __init__(self, _manifest, label, *_args, **_kwargs): self.label = label
+                def __init__(self, _manifest, label, *_args, **_kwargs):
+                    self.label, self.arguments = label, _args[0]
                 def initialize(self): pass
                 def close(self, _manifest): return {}
                 def rpc(self, method, _params):
                     if method == "hooks/list":
                         row = hook if self.label == "discovery" else {
                             **hook, "trustStatus": "trusted", **(changed or {})}
+                        if self.label != "discovery" and expected_state is not None:
+                            actual = [v for v in self.arguments if v.startswith("hooks.state=")]
+                            expected = "hooks.state=" + lifecycle._toml({key: expected_state})
+                            if actual != [expected]:
+                                row["trustStatus"] = "untrusted"
                         return {"data": [{"hooks": [row]}]}
                     if method == "skills/list": return {"data": [{"skills": [
                         {"path": package_path, "enabled": True},
@@ -1963,12 +1969,81 @@ class CodexLifecycleTests(unittest.TestCase):
             with patch.object(lifecycle, "_run_cli", side_effect=command), \
                     patch.object(lifecycle, "_Fixture", return_value=fixture), \
                     patch.object(lifecycle, "_App", App), \
-                    patch.object(lifecycle, "_argv", return_value=[]), \
+                    patch.object(lifecycle, "_argv", side_effect=lambda manifest, fixture, extra=(), **kw: [manifest["codex"], "app-server", *extra]), \
                     patch.object(lifecycle, "_invoked_processes_released", return_value=True), \
                     patch.object(lifecycle, "_start_turn",
                         side_effect=RuntimeError("after-trust-control")) as model_action:
                 result = lifecycle.run(args)
             return result, model_action.call_count
+
+    def test_composite_hook_trust_cli_override_keeps_official_content_pin(self):
+        declaration, content = "sha256:" + "a" * 64, "sha256:" + "b" * 64
+        result, calls = self.trust_boundary_run(current_hash=declaration + "/" + content,
+            expected_state={"enabled": True, "trusted_hash": declaration, "trusted_content_hash": content})
+        self.assertEqual(result["failureReason"], "after-trust-control")
+        self.assertEqual(calls, 1, "official composite trust must pass before model/control dispatch")
+
+    def test_composite_hook_trust_hot_reload_keeps_both_pins_and_guards(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            installed = Path(tmp).resolve()
+            declaration, content = "sha256:" + "a" * 64, "sha256:" + "b" * 64
+            key = lifecycle.PLUGIN_ID + ":composite"
+            trust = {key: {"enabled": True, "trusted_hash": declaration, "trusted_content_hash": content}}
+            row = {"key": key, "currentHash": declaration + "/" + content, "enabled": True,
+                   "trustStatus": "trusted", "sourcePath": str(installed / "hooks/hooks.json")}
+            observed = {"data": [{"hooks": [row]}]}
+            self.assertTrue(lifecycle._hot_hooks_match(observed, trust, installed))
+            for changed in ({"currentHash": declaration + "/sha256:" + "c" * 64},
+                            {"currentHash": "other/" + content}, {"trustStatus": "untrusted"},
+                            {"enabled": False}, {"sourcePath": str(installed.parent / "foreign.json")}):
+                with self.subTest(changed=changed):
+                    self.assertFalse(lifecycle._hot_hooks_match({"data": [{"hooks": [{**row, **changed}]}]}, trust, installed))
+
+    def test_native_mcp_cli_trust_uses_both_composite_pins_before_turn(self):
+        from tests.product import test_native_state_mcp as native
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            executable, node = root / "fixture.exe", root / "node.exe"
+            executable.write_bytes(b"not executed")
+            node.write_bytes(b"not executed")
+            declaration, content = "sha256:" + "a" * 64, "sha256:" + "b" * 64
+            key = lifecycle.PLUGIN_ID + ":composite"
+            expected = "hooks.state=" + lifecycle._toml({key: {"enabled": True,
+                "trusted_hash": declaration, "trusted_content_hash": content}})
+            case = self
+            class App:
+                def __init__(self, manifest, label, argv, *args): self.label, self.argv = label, argv
+                def initialize(self): pass
+                def close(self, *args): return {"forced": False, "after": {"activeProcesses": 0}}
+                def rpc(self, method, params):
+                    if method == "hooks/list": return {"data": [{"hooks": [{"key": key,
+                        "currentHash": declaration + "/" + content}]}]}
+                    if method == "thread/start":
+                        case.assertEqual([v for v in self.argv if v.startswith("hooks.state=")], [expected])
+                        raise RuntimeError("after-native-trust-control")
+                    return {}
+            fixture = type("Fixture", (), {"close": lambda self: None})()
+            with patch.object(native.shutil, "which", return_value=str(node)), \
+                    patch.object(lifecycle, "_App", App), \
+                    patch.object(lifecycle, "_Fixture", return_value=fixture), \
+                    patch.object(lifecycle, "_declared_hook_count", return_value=1), \
+                    patch.object(lifecycle, "_released", return_value=True), \
+                    patch.object(lifecycle, "_argv", side_effect=lambda m, f, extra=(): ["fixture", *extra]), \
+                    patch.object(lifecycle, "_run_cli", return_value=({"exitCode": 0, "forced": False,
+                        "failure": None, "after": {"activeProcesses": 0}}, {})), \
+                    self.assertRaisesRegex(RuntimeError, "after-native-trust-control"):
+                native.native_integration(str(executable), str(root / "evidence"), scoped_hook=True)
+
+    def test_hook_trust_normalization_preserves_legacy_and_first_separator(self):
+        self.assertEqual(lifecycle._hook_trust_state("legacy", enabled=False),
+                         {"enabled": False, "trusted_hash": "legacy"})
+        self.assertEqual(lifecycle._hook_trust_state("declaration/content/remaining"),
+                         {"enabled": True, "trusted_hash": "declaration", "trusted_content_hash": "content/remaining"})
+        self.assertTrue(lifecycle._hook_trust_matches("legacy", {"trusted_hash": "legacy"}))
+        self.assertFalse(lifecycle._hook_trust_matches("legacy", {"trusted_hash": "legacy", "trusted_content_hash": "foreign"}))
+        self.assertFalse(lifecycle._hook_trust_matches("declaration/content", {"trusted_hash": "declaration"}))
+        self.assertFalse(lifecycle._hook_trust_matches(None, {"trusted_hash": "legacy"}))
+        self.assertFalse(lifecycle._hook_trust_matches("legacy", None))
 
     def test_failed_trust_check_does_not_report_trusted_package(self):
         result, calls = self.trust_boundary_run({"trustStatus": "untrusted"})

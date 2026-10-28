@@ -394,6 +394,33 @@ def _toml(value):
     return json.dumps(value)
 
 
+def _hook_trust_state(current_hash, enabled=True):
+    """Mirror native RPC normalization before direct CLI TOML overrides.
+
+    Modern currentHash is declaration/content; legacy single hashes are kept.
+    Exact values come from native discovery, never a locally computed approval.
+    """
+    if not isinstance(current_hash, str) or type(enabled) is not bool:
+        raise ValueError("invalid native Hook trust state")
+    declaration, separator, content = current_hash.partition("/")
+    state = {"enabled": enabled, "trusted_hash": declaration}
+    if separator:
+        state["trusted_content_hash"] = content
+    return state
+
+
+def _hook_trust_matches(current_hash, state):
+    """Compare both native hash pins; caller still checks enabled/trust/source."""
+    if not isinstance(state, dict):
+        return False
+    try:
+        expected = _hook_trust_state(current_hash)
+    except ValueError:
+        return False
+    return all(state.get(key) == expected.get(key)
+               for key in ("trusted_hash", "trusted_content_hash"))
+
+
 def _hook_rows(result):
     try:
         return [hook for group in result["data"] for hook in group["hooks"]]
@@ -1609,7 +1636,7 @@ def _start_turn(app, ephemeral, prompt):
 def _hot_hooks_match(hooks, trust, installed):
     rows = [row for row in _hook_rows(hooks) if row.get("key", "").startswith(PLUGIN_ID + ":")]
     return (len(rows) == len(trust) and {row.get("key") for row in rows} == set(trust)
-            and all(row.get("currentHash") == trust[row["key"]]["trusted_hash"]
+            and all(_hook_trust_matches(row.get("currentHash"), trust[row["key"]])
                     and row.get("enabled") is True and row.get("trustStatus") == "trusted"
                     and isinstance(row.get("sourcePath"), str)
                     and Path(row["sourcePath"]).is_relative_to(installed) for row in rows))
@@ -1810,7 +1837,7 @@ def run(args):
             raise RuntimeError("installed hooks or complete Skill inventory absent")
         result["loadedObject"] = {"installedPath": str(installed), "hookSourcePaths": hook_sources,
                                   "skillPaths": [skill["path"] for skill in package_skills]}
-        trust = {hook["key"]: {"enabled": True, "trusted_hash": hook["currentHash"]} for hook in owned}
+        trust = {hook["key"]: _hook_trust_state(hook["currentHash"]) for hook in owned}
         standalone_path = manifest["standaloneSkill"]["path"]
         controls = [skill for skill in _skill_rows(skills) if Path(skill["path"]).resolve() == Path(standalone_path)]
         if len(controls) != 1 or controls[0].get("pluginId") is not None or not controls[0].get("enabled"):
@@ -1834,7 +1861,7 @@ def run(args):
                 raise RuntimeError("hook state mismatch")
             if any(h.get("trustStatus") != "trusted" for h in checked if h.get("enabled")):
                 raise RuntimeError("hook trust mismatch")
-            if any(h.get("currentHash") != states[h["key"]]["trusted_hash"]
+            if any(not _hook_trust_matches(h.get("currentHash"), states[h["key"]])
                    for h in checked if h.get("enabled")):
                 raise RuntimeError("hook definition changed after discovery")
             visible = _skill_rows(app.rpc("skills/list", {"cwds": [manifest["ownedRoots"]["workspace"]], "forceReload": True}))
@@ -2145,7 +2172,7 @@ def _inspect_session_end(manifest, records, helper_rows):
                 or requests[-1] != unsubscribe):
             raise ValueError("SessionEnd native thread differs")
         _, hooks = reply("hooks/list")
-        states = {h["key"]: {"enabled": True, "trusted_hash": h["currentHash"]} for h in owned}
+        states = {h["key"]: _hook_trust_state(h["currentHash"]) for h in owned}
         states[keys[0]]["enabled"] = enabled
         if observed["hookKey"] != keys[0] or observed["states"] != states:
             raise ValueError("SessionEnd selected Hook differs")
@@ -2154,7 +2181,7 @@ def _inspect_session_end(manifest, records, helper_rows):
             raise ValueError("SessionEnd enabled Hook set differs")
         if any(k not in checked or checked[k].get("enabled") is not v["enabled"]
                or checked[k].get("trustStatus") != "trusted"
-               or checked[k].get("currentHash") != v["trusted_hash"] for k, v in states.items()):
+               or not _hook_trust_matches(checked[k].get("currentHash"), v) for k, v in states.items()):
             raise ValueError("SessionEnd native Hook state differs")
         statuses = [r for r in helper_rows if r.get("phase") == "request"
                     and r.get("request", {}).get("session_id") == thread]
@@ -2190,7 +2217,7 @@ def _inspect_hot_reload(manifest, installed, thread, prior, provider_rows, reque
     root, hot = Path(manifest["evidence"]), _hot_binding(manifest)
     original_hooks = [row for row in _hook_rows(json.loads(read_regular(root / "retained/hooks-before.json")))
                       if row.get("key", "").startswith(PLUGIN_ID + ":")]
-    trust = {row["key"]: {"enabled": True, "trusted_hash": row["currentHash"]} for row in original_hooks}
+    trust = {row["key"]: _hook_trust_state(row["currentHash"]) for row in original_hooks}
     launch = json.loads(read_regular(root / "retained/hot-reload-launch.json"))
     argv = resources["resumed"].get("arguments", [])
     if (not trust or len(trust) != manifest["declaredHookRegistrations"] or launch.get("trust") != trust

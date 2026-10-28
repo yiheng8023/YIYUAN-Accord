@@ -6311,7 +6311,7 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, s
                 if h.get('key', '').startswith('yiyuan-accord-codex@yiyuan-accord:')]
             if len(owned) != host._declared_hook_count(package):
                 raise RuntimeError('owned Hook registrations differ')
-            trust = {h['key']:{'enabled':True, 'trusted_hash':h['currentHash']} for h in owned}
+            trust = {h['key']:host._hook_trust_state(h['currentHash']) for h in owned}
             result['hookDiscoveryResources'] = app.close(manifest)
             if (result['hookDiscoveryResources'].get('forced')
                     or not host._released(result['hookDiscoveryResources']['after'])):
