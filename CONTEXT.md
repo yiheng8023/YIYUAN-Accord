@@ -2,8 +2,10 @@
 
 This is the derived glossary for YIYUAN Accord. The current consensus, dynamic
 evaluation and procedures live in `docs/operations/PLAN-v3.3.md`.
-`product/development.json` is its machine validation projection; selectors into the unchanged
-v3.1 documents below describe the predecessor and remain useful where compatible.
+`product/development.json` is its machine validation projection. Selectors into
+the unchanged v3.1 `product/constitution.json`, `product/program.json` and
+`product/acceptance.json` describe the predecessor and remain useful where
+compatible; they do not establish current implementation or acceptance.
 The glossary explains an open, Agent-neutral,
 mechanism-neutral and product-form-neutral collaboration system without adding semantic authority. Its
 broad mission concerns human-AI collaboration; its current product surface
@@ -62,15 +64,17 @@ _Source_: `product/constitution.json#/domainModel/missionScope`
 _Avoid_: current verified product scope
 
 **Human-Agent product scope**:
-The currently implemented and evaluated surface for people working with
-tool-using Agents through host projections.
+The product's scope for people working with tool-using Agents through host
+adaptations. Actual implementation and evaluation are bounded by their evidence.
 _Source_: `product/constitution.json#/domainModel/currentProductScope`
 _Avoid_: universal human-AI coverage
 
 **Adaptive collaboration system**:
-The portable reliability kernel plus context-tailored discovery, routing,
-carriers, topology, continuity, verification and lifecycle mechanics that turn
-a goal into a bounded outcome without becoming domain authority.
+The vendor-neutral collaboration system and its portable reliability kernel,
+designed to compose host, Accord and suitable external capabilities for
+discovery, continuity, verification and lifecycle responsibilities without
+becoming domain authority. A bounded outcome still requires actual execution
+and evidence.
 _Source_: `product/constitution.json#/domainModel/productCategory`,
 `product/constitution.json#/purpose`
 _Avoid_: thin contract alone, universal runtime, fixed workflow

@@ -1,8 +1,8 @@
 # Code of Conduct
 
-YIYUAN Accord is a public, Agent-neutral, demand-driven human-Agent
-collaboration quality research project. Participation should stay evidence-based,
-respectful, and focused on bounded, observable human-Agent collaboration.
+YIYUAN Accord is an open-source, vendor-neutral human-Agent collaboration
+system. Participation should stay evidence-based, respectful, and focused on
+bounded, observable human-Agent collaboration.
 
 ## Expected behavior
 

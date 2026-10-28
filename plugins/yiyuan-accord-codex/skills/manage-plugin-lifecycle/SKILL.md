@@ -1,6 +1,6 @@
 ---
 name: manage-plugin-lifecycle
-description: Set up, install, update, reload, roll back or remove plugins and reconcile host upgrades within existing authority. Verify prerequisites, actual adoption and recovery, preserving unrelated settings and user components.
+description: Manage plugin lifecycle within existing authority. Use for setup, installation, update, reload, rollback, removal or host upgrades; verify prerequisites, actual adoption and recovery while preserving unrelated settings and user components.
 ---
 
 # Manage plugin lifecycle

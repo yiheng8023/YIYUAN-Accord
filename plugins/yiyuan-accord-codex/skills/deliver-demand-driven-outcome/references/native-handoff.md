@@ -1009,7 +1009,7 @@ choose a context threshold or discover a control connection.
   These references do not replace the existing semantic verifier or source-state
   reads. Connection identity and callbacks remain bound throughout the operation.
 
-All deadlines use the monotonic clock described below. Subscription happens before
+All deadlines use the monotonic clock described above. Subscription happens before
 preparation and sending. Unrelated tasks are ignored; identical duplicate receipts
 do not create another dispatch. Conflicting receipts, a new source turn from the
 request anchor onward, a mismatched connection or out-of-order source terminal

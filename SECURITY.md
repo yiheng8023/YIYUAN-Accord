@@ -1,6 +1,6 @@
 # Security policy
 
-YIYUAN Accord is an Agent-neutral human-Agent collaboration system. The current
+YIYUAN Accord is a vendor-neutral human-Agent collaboration system. The current
 3.3 adaptation supplies one coordination Skill, four specialist Skills, native
 Hooks and a host-managed local state MCP process. Its enabled input Hook can
 retain native input and task-recovery state locally; that material may contain

@@ -1,7 +1,7 @@
 {
   "name": "yiyuan-accord-codex",
-  "version": "3.3.3",
-  "description": "Helps agents coordinate goals, capabilities, correction, task continuity and delivery checks within the user's authority.",
+  "version": "3.3.4",
+  "description": "Helps agents pursue user outcomes by assessing feasibility, coordinating capabilities, correcting work and verifying results within the user's authority.",
   "author": {
     "name": "yiheng8023",
     "url": "https://github.com/yiheng8023"
@@ -22,8 +22,8 @@
   },
   "interface": {
     "displayName": "YIYUAN Accord",
-    "shortDescription": "Coordinate tasks, recovery and verified delivery",
-    "longDescription": "Tell your agent the outcome you need. YIYUAN Accord helps it choose and combine available capabilities, adapt to changes, check results and preserve unfinished work. Accord's general collaboration design is separate from its host adapters. Version 3.3 focuses on OpenAI execution environments; this package provides the Codex adaptation. This package includes task guidance, lifecycle Hooks and tools for preserving task state, recovering captured input and assessing context capacity. Operation depends on supported host interfaces and user permissions. Recovery and handoff depend on supported host interfaces, valid authority and verified continuity. The package provides an optional handoff integration interface. Its task coordination tool can inspect native Skill metadata, prepare an exact Skill input and manage a bounded read-only native target with explicit source-bound review. These interfaces require applicable authorization and host support; they do not establish a default host control connection, automatic timing or full functional acceptance.",
+    "shortDescription": "Pursue outcomes with coordinated, verified work",
+    "longDescription": "Tell your agent what you want to achieve. YIYUAN Accord is designed to help it assess feasibility, establish necessary conditions, choose and combine native and external capabilities, correct affected work, preserve continuity and verify the result. It works within your choices and permissions. Accord's general collaboration design is supplier-neutral and separate from host adapters; this package provides the Codex adaptation. Actual behavior depends on the host, available capabilities and the task's conditions.",
     "developerName": "yiheng8023",
     "category": "Developer Tools",
     "capabilities": [
@@ -32,7 +32,7 @@
     ],
     "websiteURL": "https://github.com/yiheng8023/YIYUAN-Accord",
     "defaultPrompt": [
-      "Help me complete this task, choose suitable capabilities, verify the result and preserve unfinished work for continuation."
+      "Help me achieve this outcome: [describe your goal]."
     ],
     "brandColor": "#DE2910",
     "composerIcon": "./assets/yiyuan-nexus-icon-red.svg",

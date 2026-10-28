@@ -1,6 +1,6 @@
 ---
 name: deliver-demand-driven-outcome
-description: Coordinate an authorized outcome across changed goals, capability gaps, correction, verification and continuity. Use when overall task responsibility needs reconciliation; reuse these duties when already supplied by Accord's entry Hook.
+description: Coordinate an authorized outcome from feasibility and capability choice through correction, continuity and verification. Use when overall task responsibility needs reconciliation; reuse these duties when already supplied by Accord's entry Hook.
 ---
 
 # Coordinate the current task

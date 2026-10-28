@@ -12,7 +12,7 @@
 | Declaration | Empower every dream. | 宣言：助力每一个梦想。 |
 | Mission | Support reliable long-term human–AI collaboration | 为人与AI的长期协作提供协调与可靠性支持 |
 | Tagline | Keep human-AI work aligned from intent to delivery | 让人与AI的协作从意图到交付保持一致 |
-| Description | An open-source collaboration reliability system for AI agents. Designed to preserve goals, handle changes, coordinate capabilities, and verify delivery throughout ongoing work. | 面向AI Agent的开源协作可靠性系统，旨在持续工作中承接目标、处理变化、协调能力并核验交付。 |
+| Description | An open-source, vendor-neutral human–Agent collaboration system. Designed to understand goals, assess feasibility, compose capabilities, handle changes and continuity, and verify delivery and resource state. | 供应商中立的人与Agent开源协作系统，旨在理解目标、评估可行性、组合能力、处理变化与连续性，并核验交付和资源后态。 |
 
 项目发布说明底稿：
 
@@ -38,7 +38,7 @@
 
 ### Agent 怎样协调工作
 
-Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和还缺什么条件，在获准范围内选择、组合宿主已有能力与 Accord 组件，随着情况变化调整做法，并检查实际结果。若条件不足或影响先前判断，Agent 应说明、修正受影响的工作，并保留尚未完成的事项以便继续。用户不必预先掌握工具协调、配置或任务交接。
+Accord 的设计目标是让 Agent 从理解目标开始，判断是否可行和还缺什么条件，在获准范围内选择、组合宿主能力、Accord 组件与适用的第三方能力，随着情况变化调整做法，并核验实际结果和所属资源后态。若条件不足或影响先前判断，Agent 应说明、修正受影响的工作，并保留尚未完成的事项以便继续。用户不必预先掌握工具协调、配置或任务交接。
 
 3.3当前范围为已选OpenAI本地执行及其Remote控制路线，包括CLI、SDK、Codex Desktop、VS Code、Work Local/Remote和手机Remote；本包为Codex适配。各入口及模式支持仍须实际验收，Linux/macOS CLI和通用连续性保留；其它执行位置没有当前适配承诺。普通Chat独立用途、网页Chat、JetBrains及Xcode本版延期，能力仍未知；研究或内容能否构成完整结果仍按具体任务判断，这不恢复本版已延期的适配。Claude不在3.3分发范围，供应商中立定位保持。
 
@@ -66,7 +66,7 @@ You do not need to learn plugins, commands, or model settings first. Tell the Ag
 
 ### How the Agent coordinates the work
 
-Accord is designed to have the Agent start by understanding the goal, assess feasibility and missing conditions, choose and combine host capabilities and Accord components within its authorization, adapt as circumstances change, and check the actual result. If conditions are missing or earlier judgments are affected, the Agent should explain and correct the affected work, while preserving unfinished items for continuation. Users need not first learn tool coordination, configuration, or task handoff.
+Accord is designed to have the Agent start by understanding the goal, assess feasibility and missing conditions, choose and combine host capabilities, Accord components and suitable third-party capabilities within its authorization, adapt as circumstances change, and verify the actual result and owned resource state. If conditions are missing or earlier judgments are affected, the Agent should explain and correct the affected work, while preserving unfinished items for continuation. Users need not first learn tool coordination, configuration, or task handoff.
 
 Version 3.3 covers selected local OpenAI execution paths and their Remote controls, including CLI, SDK, Codex Desktop, VS Code, Work Local/Remote and mobile Remote; this package provides the Codex adaptation. Each entry and mode still needs actual acceptance. Linux/macOS CLI and shared continuity remain; other execution locations have no current adaptation commitment. Independent ordinary Chat, web Chat, JetBrains and Xcode are deferred for this release, with capabilities still unknown. Research or content may form a complete result for a specific task; this does not reopen deferred adaptation. Claude is outside 3.3 distribution. Vendor independence is unchanged.
 
@@ -99,7 +99,7 @@ This description covers the design intent and scope of 3.3, not verified univers
     "developmentPackageSnapshot": null
   },
   "scope": {
-    "purpose": "Designed to help an Agent understand a goal, assess feasibility and missing conditions, coordinate available host capabilities and Accord components within authorization, adapt to changes, check results, correct affected work, and preserve unfinished items.",
+    "purpose": "Designed to help an Agent understand a goal, assess feasibility and missing conditions, compose host capabilities, Accord components and suitable third-party capabilities within authorization, adapt to changes, verify results and owned resource state, correct affected work, and preserve unfinished items.",
     "howToStart": "State the desired outcome in everyday language; optionally add background, constraints, priorities, and how to check the result. No technical setup knowledge is assumed in this introductory explanation.",
     "normalInteraction": "Preserve task duties, recovery and appropriate handoff without automatically adding conversation turns. Host long-running controls remain the user's explicit choice.",
     "subtaskAllocation": "Select models and efforts against actual task needs and current host support; no fixed tier count or requirement to inherit. Keeping an adequate current choice is valid. Preserve user-pinned main-model choices and authority boundaries; optimality remains unverified.",

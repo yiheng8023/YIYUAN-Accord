@@ -1,7 +1,7 @@
 interface:
   display_name: "Task Coordination"
-  short_description: "Coordinate work, check results and preserve continuity"
-  default_prompt: "Use $deliver-demand-driven-outcome to coordinate this task, verify the result and preserve unfinished work within my instructions."
+  short_description: "Coordinate work toward your intended outcome"
+  default_prompt: "Use $deliver-demand-driven-outcome to help me achieve this outcome: [describe your goal]."
 
 policy:
   allow_implicit_invocation: true

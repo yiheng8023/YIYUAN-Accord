@@ -280,7 +280,7 @@ class SkillReferencePackageTests(unittest.TestCase):
                          '14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026')
         self.assertEqual(translated['originalSourceSha256'],
                          '9f9019523491d9e41f7d3e41ee5bd3c783b0a1049fb280242959198fb88a439a')
-        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3'):
+        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4'):
             with self.subTest(version=version):
                 self.assertEqual(foundation(version), translated)
 
@@ -297,6 +297,8 @@ class SkillReferencePackageTests(unittest.TestCase):
             package_version='3.3.2-dev.1+codex.20261021091952', **options)
         self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
             package_version='3.3.3', **options), current)
+        self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
+            package_version='3.3.4', **options), current)
         execution = current['nativeTaskStateMcp']
         self.assertEqual(execution['executionTool'], 'coordinate_task_execution')
         self.assertEqual(execution['execution']['entry'], 'runtime/native-task-execution.cjs')
@@ -1194,12 +1196,12 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertEqual(self.contract["authority"]["conditionalRelease"]["decision"],
                          "user-authorized-after-acceptance")
         self.assertFalse(self.contract["authority"]["conditionalRelease"]["ready"])
-        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.3")
+        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.4")
         self.assertEqual(self.contract["predecessorSnapshot"], old["predecessorSnapshot"])
         self.assertEqual({p["id"] for p in self.contract["delivery"]["hostProjections"]}, {"codex"})
         self.assertEqual({p["id"] for p in old["delivery"]["hostProjections"]}, {"codex", "claude-code"})
-        self.assertEqual(self.contract["cycle"]["claudeAdaptation"], "candidate-for-v3.4")
-        self.assertEqual(self.contract["cycle"]["futureAdaptationVersion"], "3.4")
+        self.assertEqual(self.contract["cycle"]["claudeAdaptation"], "candidate-only")
+        self.assertEqual(self.contract["cycle"]["futureAdaptationVersion"], "undecided")
         self.assertEqual(self.contract["cycle"]["existingHosts"], ["codex"])
 
     def test_development_cannot_borrow_publication_or_expand_hosts(self):
@@ -1210,6 +1212,8 @@ class SuccessorDevelopmentTests(unittest.TestCase):
                 ("cycle", "claudeAdaptation", "next-version-not-in-v3.3-distribution"),
                 ("cycle", "claudeAdaptation", "cancelled-by-user"),
                 ("cycle", "futureAdaptationVersion", "3.3"),
+                ("cycle", "futureAdaptationVersion", "3.4"),
+                ("cycle", "claudeAdaptation", "candidate-for-v3.4"),
                 ("cycle", "futureAdaptationCandidates", []),
                 ("cycle", "existingHosts", ["codex", "claude-code", "new-host"]),
                 ("cycle", "versionState", ("development-target-not-published"

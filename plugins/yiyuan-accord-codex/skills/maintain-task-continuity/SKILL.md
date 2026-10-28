@@ -1,6 +1,6 @@
 ---
 name: maintain-task-continuity
-description: Preserve task state through context pressure, interruption, reconnect, user-selected mode changes and handoff. Use before large reads or long work, on material context changes, or when recovery and unfinished-state protection are needed.
+description: Preserve task state and unfinished work. Use before large reads or long work, on material context or user-selected mode changes, or for interruption, reconnect, recovery and handoff.
 ---
 
 # Maintain task continuity

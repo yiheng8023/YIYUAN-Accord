@@ -15,15 +15,27 @@ def _emit(report, as_json):
 def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(prog="python -m yiyuan_accord")
+    parser = argparse.ArgumentParser(
+        prog="python -m yiyuan_accord",
+        description=("Maintainer source and admission checks for YIYUAN Accord. "
+                     "A successful check does not by itself establish live host "
+                     "behavior, release authorization or product value."))
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    for command in ("verify", "host-check", "verify-development"):
-        child = subparsers.add_parser(command)
-        child.add_argument("--root", type=Path, default=Path.cwd())
-        child.add_argument("--json", action="store_true")
+    commands = {
+        "verify": "Check product sources, preserved predecessor integrity and applicable admission records.",
+        "host-check": "Check an adapter declaration for static consistency; does not start or qualify a live host.",
+        "verify-development": "Check the current development contract and its machine projections.",
+    }
+    for command, description in commands.items():
+        child = subparsers.add_parser(command, help=description, description=description)
+        child.add_argument("--root", type=Path, default=Path.cwd(),
+                           help="Repository directory (default: current directory).")
+        child.add_argument("--json", action="store_true",
+                           help="Emit compact single-line JSON instead of indented JSON.")
         if command == "host-check":
-            child.add_argument("--adapter", required=True)
+            child.add_argument("--adapter", required=True,
+                               help="Adapter declaration ID, for example codex.")
 
     args = parser.parse_args()
     if args.command == "host-check":

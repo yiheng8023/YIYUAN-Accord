@@ -17,7 +17,7 @@ Their repository location does not make those interfaces universal requirements.
 Keep host formats, observations and controls within the applicable adaptation;
 replace them by evidenced equivalents when adapting another host.
 
-The 3.3.1 foundation is the [English translation](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)
+The current 3.3 foundation is the [English translation](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)
 of the [Chinese source](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.zh-CN.md).
 The Chinese text is the semantic basis; its translation and source are pinned
 separately. Entry hooks load English, while Chinese remains available on demand.
@@ -116,8 +116,13 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current candidate and scoped connections
 
-The current Codex package is an unreleased `3.3.2` development candidate; versioning
-is not publication evidence. Released `3.3.0` and `3.3.1` retain their immutable identities.
+The latest published Codex package is [3.3.3](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.3),
+released from exact commit `1d965e79`. Its compatibility correction and actual
+local adoption are recorded in [current continuation](operations/CONTINUATION.md#当前事实).
+The [3.3.2 release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.2)
+and its bound qualification retain their exact `ef8bde2a` subject; earlier releases
+also remain immutable. Version declarations and candidate validation alone do not
+establish publication or adoption by another task or entry.
 The package exposes one brief coordinator and four independently discoverable specialist
 Skills for capabilities, continuity, verification and plugin lifecycle. Native
 SessionStart and SubagentStart supply the English meta-guidance translation and the same
@@ -406,9 +411,9 @@ prerequisite. Tool absence, unknown data or a policy denial must remain distinct
 from a successful query, renewal or recovery. Source and probe limits are in the
 [bounded observation](operations/PROCEDURE-v3.3.md#无agents入口与原生上下文工具边界2026-09-11).
 
-This is a candidate shape, not architecture law. Skill/Hook count, dependencies,
+This is the current implementation shape, not architecture law. Skill/Hook count, dependencies,
 layout and admission may change together when evidence supports the change.
-Whole-entry autonomy and incremental value remain unverified. Accepted cases and
+General autonomy or incremental value beyond the admitted scope is not established. Accepted cases and
 impact assessments support only their declared conditions, subject to current
 dependencies and independent qualification; use the bound evidence in continuation
 instead of treating a historical count as the current state.
@@ -517,7 +522,7 @@ Transcript data is still read only on demand. A missing optional module leaves
 ordinary status usable and is reported when context is requested; code loading
 does not establish permissions or adopt a newer on-disk runtime generation.
 
-The 3.3.2 development package's separate `coordinate_task_execution` MCP tool
+The Codex package's separate `coordinate_task_execution` MCP tool
 connects a current root task to native Skill discovery, prepared typed Skill input
 and a bounded task-owned fresh target. Its [ordinary-root interface](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md#ordinary-root-task-through-the-mcp-execution-interface)
 owns the exact request, review and recovery schema. `native-task-execution.cjs`

@@ -1,6 +1,6 @@
 ---
 name: coordinate-capabilities
-description: Select and apply model, effort and context choices for native subagent delegation; compare host or external capabilities for a material gap, domain uncertainty or ecosystem benefit. Adequate simple work stays local.
+description: Choose and coordinate capabilities for the task. Use for native subagent delegation and its model, effort and context choices, or a material gap, domain uncertainty or plausible benefit from host or external capabilities. Adequate simple work stays local.
 ---
 
 # Select and coordinate capabilities

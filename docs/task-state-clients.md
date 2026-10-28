@@ -20,7 +20,7 @@ Codex multi-agent v2 的根会话文件也可能带第二个 UUID 后缀，子�
 
 保留窗从原输入的 `turn_context` 开始，紧前 `task_started` 可能已在窗外，因此不新增“必须读到首次启动事件”的条件。后续容量重试、恢复、人类与 App 消息续轮仍按各自归属链核验；输入摘要、暂停、读取预算、文件变更和提交前复核均保留。旧版 `capacity-retry-subagent-rollout` 也可能来自合法的新格式根会话，须核对实际元数据后更新兼容实现，不能重写回执、变更线程身份或清除水印来放行。
 
-3.3.2开发实现会在有原生轮次校验的健康bind中，将`nativeInputOriginProof`随检查点一次原子保存；它绑定当时的精确回执、输入基准、epoch、session和工作区，仅供再次核验时定位原生来源。客户端不传此字段，只读inspect不保存它，也不修改输入回执。普通查找窗仍为16 MiB，保留证明后的原锚点至当前末尾验证窗仍为32 MiB；旧basis、漂移、暂停或超过验证窗都不会因已有proof而自动放行。该机制不滚动原锚点，也不独自证明无限连续性或接管完成。
+当前实现沿用3.3.2开发期加入的机制：在有原生轮次校验的健康bind中，将`nativeInputOriginProof`随检查点一次原子保存；它绑定当时的精确回执、输入基准、epoch、session和工作区，仅供再次核验时定位原生来源。客户端不传此字段，只读inspect不保存它，也不修改输入回执。普通查找窗仍为16 MiB，保留证明后的原锚点至当前末尾验证窗仍为32 MiB；旧basis、漂移、暂停或超过验证窗都不会因已有proof而自动放行。该机制不滚动原锚点，也不独自证明无限连续性或接管完成。
 
 `includeNativeInputs:true` 的证据摘要过大时，`nativeInputEvidence.details` 为 `omitted-bounded-result`，保留真实来源、完整性和恢复标志，并给出各列表的 `counts`；列表和对账 cursor 被省略，不表示空输入或已读完。按其 `detailRead` 使用可用、兼容的现有 helper 执行只读 `status` 请求，保持相同的宿主环境和状态存储选择。核对返回的 storage、epoch、revision 及原生来源/宿主，再读取完整证据与需要的源部件；任何变化或不可用仍待核。只有取得并审查完整来源后，才使用其新鲜 cursor 对账。回退不安装组件、不改共享配置、不写状态，也不授予新的权限；helper 路径不可用时保留未决并寻找已获授权的兼容入口。
 
@@ -122,4 +122,4 @@ bind 缺参返回 `invalid-task-state-binding`、requiredFields/missingFields �
 
 宿主拒绝可能发生在 adapter 前；按实际 disposition 保留未完成工作，不能换策略或路线绕过拒绝。App Server 的工具错误有结果，宿主拒绝无结果；其规范化结果不重复原始 MCP isError。管理记录、原生 metadata、工具 annotations、原因文字及本地谓词均不证明 permission、当前意图、写者所有权、接管或外部验收。[架构：调用身份与效果边界](architecture.md#current-candidate-and-scoped-connections)。
 
-验证边界：本指南按源码静态核对，模板仅做隔离参数构造核对；未调用真实 MCP 状态、模型业务、CLI 或 SDK，未建立新信任。普通模型行为与真实宿主接入仍未验证。本次是已有仓库交付补充，不是新 case 或 F-A 通过证据。
+验证边界：本指南按源码静态核对，模板仅做隔离参数构造核对；未调用真实 MCP 状态、模型业务、CLI 或 SDK，未建立新信任。本指南的静态核对本身不提供普通模型行为或真实宿主接入证据；产品当前已验证范围及限制见[当前接续](operations/CONTINUATION.md#当前事实)。本指南不是新增 case 或 F-A 通过证据。

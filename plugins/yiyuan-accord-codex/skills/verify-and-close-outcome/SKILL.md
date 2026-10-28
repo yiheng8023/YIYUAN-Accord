@@ -1,6 +1,6 @@
 ---
 name: verify-and-close-outcome
-description: Review results against source evidence, correct affected work and obsolete task conditions, retain useful lessons, and close owned resources. Use for consequential checks, changed dependencies, stale active guidance or cleanup gaps; preserve domain-specific validation.
+description: Verify results, correct affected work and close owned resources. Use for consequential checks, changed dependencies, obsolete active conditions or guidance, useful lessons or cleanup gaps; preserve source evidence and domain-specific validation.
 ---
 
 # Verify and close the outcome
