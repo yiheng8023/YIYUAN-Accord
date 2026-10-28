@@ -34,6 +34,8 @@ YIYUAN Accord 的设计目标是为人与 AI 的长期协作提供协调与可�
 
 [YIYUAN Accord 3.3.2](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.2)已于2026-10-28发布，发行提交为`ef8bde2a`。其绑定18案、17范围、52义务的资格及[全部11项CI检查](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40644847135)均已通过，证据和限制见[发行复核](research/reviews/2026-10-21-functional-realization-release-audit.md)。3.3.0和3.3.1保留历史身份，后续文档提交不改变3.3.2发行主体。
 
+3.3.3补丁源码修复新版Codex根会话带UUID后缀时的输入核验误判，保留线程隔离、输入回执和恢复校验。若旧版出现`capacity-retry-subagent-rollout`，应核对真实会话身份并更新兼容包，不要手动改写回执或状态。升级后须核对实际加载及任务恢复；具体发行/验证状态见[当前接续](docs/operations/CONTINUATION.md#当前事实)与[更新日志](CHANGELOG.md)。
+
 Accord在宿主正常交互中保任务责任、恢复与按需交接。临时开发用Stop自动续轮已从3.3撤回，不自动增加对话回合；宿主目标模式等长程控制仍由用户明确选择。
 
 ## 协作问题与目标
