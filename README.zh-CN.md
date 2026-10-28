@@ -32,7 +32,7 @@ YIYUAN Accord 的设计目标是为人与 AI 的长期协作提供协调与可�
 >
 > 当前设计、历史处置、系统图、未完工作和收官标准统一见 [3.3 共识节点与计划](docs/operations/PLAN-v3.3.md)。[v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1) 是保留的发布基点，旧版本范围与证据以其精确 tag 为准，不继承为 3.3 支持声明。
 
-3.3.0和3.3.1保留已发布的历史身份。2026-10-28检查点的3.3.2仍为稳定候选：[复核](research/reviews/2026-10-21-functional-realization-release-audit.md)记录已接收的绑定功能证据及[cfde2ae3代码候选的11项CI结果](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40634304024)。最终源码资格、公开发行和适用本机入口采用仍待核验；已发行身份以[公开release](https://github.com/yiheng8023/YIYUAN-Accord/releases)为准。
+[YIYUAN Accord 3.3.2](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.2)已于2026-10-28发布，发行提交为`ef8bde2a`。其绑定18案、17范围、52义务的资格及[全部11项CI检查](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40644847135)均已通过，证据和限制见[发行复核](research/reviews/2026-10-21-functional-realization-release-audit.md)。3.3.0和3.3.1保留历史身份，后续文档提交不改变3.3.2发行主体。
 
 Accord在宿主正常交互中保任务责任、恢复与按需交接。临时开发用Stop自动续轮已从3.3撤回，不自动增加对话回合；宿主目标模式等长程控制仍由用户明确选择。
 

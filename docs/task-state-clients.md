@@ -1,6 +1,6 @@
 # MCP 任务状态调用指南
 
-本文的三个状态工具与3.3.2包另加的 `coordinate_task_execution` 分工不同。后者用于原生Skill库存、受托输入准备及有限新目标执行；精确`96276ddf`的原绑定范围内真实采用与普通任务组合证据已接收；本次文档同步后的最终源码仍须核证据适用性、精确候选资格和发行后态，不能由旧接收推定所有入口或新主体完成。按需读取包内[能力接口](../plugins/yiyuan-accord-codex/skills/coordinate-capabilities/references/native-capabilities.md)或[接管接口](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md#ordinary-root-task-through-the-mcp-execution-interface)，不能把下文状态参数模板用于派发执行。
+本文的三个状态工具与3.3.2包另加的 `coordinate_task_execution` 分工不同。后者用于原生Skill库存、受托输入准备及有限新目标执行；最终`ef8bde2a`已完成原绑定18案/17scope/52义务及A01–A08来源消费、Root采用和精确11/11 CI。公开发行与本机实际参与后态见[当前接续](operations/CONTINUATION.md#当前事实)；旧案例、源码声明或缓存存在均不证明所有入口完成。按需读取包内[能力接口](../plugins/yiyuan-accord-codex/skills/coordinate-capabilities/references/native-capabilities.md)或[接管接口](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md#ordinary-root-task-through-the-mcp-execution-interface)，不能把下文状态参数模板用于派发执行。
 
 适用对象：维护者、原生 MCP 接入者及消费此指南的 Agent。原调用模板依据源码 `315e2476e4818545d0dbb6a2c241be72b01ceae4`；输入隔离补充依据 `73120669` 与2026-10-06原生回执对账。
 
