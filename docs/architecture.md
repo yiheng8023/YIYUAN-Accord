@@ -114,11 +114,13 @@ observed Desktop settings deletion handler archives supplied tasks before
 deleting a worktree. Those effects need their respective authority. The source
 records this code observation and its limits; no deletion experiment was run.
 
-### Current candidate and scoped connections
+### Current release and scoped connections
 
-The latest published Codex package is [3.3.3](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.3),
-released from exact commit `1d965e79`. Its compatibility correction and actual
-local adoption are recorded in [current continuation](operations/CONTINUATION.md#当前事实).
+The latest published Codex package is [3.3.4](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.4),
+released from exact commit `e58f016a` after all 11 required CI checks passed.
+It aligns product and development descriptions; executable guards remain unchanged.
+Publication, local installation and actual adoption are recorded separately in
+[current continuation](operations/CONTINUATION.md#当前事实).
 The [3.3.2 release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.2)
 and its bound qualification retain their exact `ef8bde2a` subject; earlier releases
 also remain immutable. Version declarations and candidate validation alone do not
