@@ -1,10 +1,10 @@
 # 当前接续
 
-本页保存已验证的 CI 维护及已结束3.3.2/3.3.3/3.3.4工作的来源边界。共识与工序见[计划](PLAN-v3.3.md)，结果定义见[基线](BASELINE-v3.3.md)，判据见[验收](ACCEPTANCE-v3.3.md)。真实输入、暂停、效果和写者以当前来源核对；本页不唤醒执行或授予权限。
+本页保留当前工作、已核事实与必要历史限制。共识与工序见[计划](PLAN-v3.3.md)，结果定义见[基线](BASELINE-v3.3.md)，判据见[验收](ACCEPTANCE-v3.3.md)。它是项目开发的接续入口；应用任务沿宿主状态与必要的 Accord 状态恢复，不要求用户维护本页。真实输入、暂停、效果和写者以当前来源核对，本页不唤醒执行或授予权限。
 
 ## 目标与当前写者
 
-当前推进（2026-10-29）：用户同意启动对照评价初版，并将后续重心明确为巩固、软件工程质量和自上而下有限重塑。Root 继续作为共享仓库唯一写者；两路独立审阅只读。新增[评价说明](../../research/evaluations/accord-toggle-v1.md)、六份合成任务、输入准备/只读成品检查工具及校准反例；既有 README 与发行任务保持已结束。当前只建立评价方法和材料，真实双组业务与产品增益仍未验证，不能把校准检查或配置清单当成收益。
+当前推进（2026-10-29）：用户已开启目标模式，授权第一轮系统核查、真实对照及有据的有限重塑。Root 是共享仓库唯一写者；系统关系、治理消费者与执行路线三路审查只读。当前源码关系审阅未发现需重写分层的已证实缺陷；修正失效的当前依赖导航，精简结果表和已结束阶段的重复日志，保留定义、锚点、来源、失败及必要未知。对照校准初版已提交，工程主体 `4b8063ac` 的 [CI #1033](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40890632557)仍按实际终态单独核定；独立术语修正 `78d3525f` 不继承为新的工程通过。真实模型加载、两组其它条件一致和无污染仍须验证，未派发配对业务、未证明产品增益。
 
 初版核验进度：20项有区分力的校准检查通过，包含合法表达、原件变更、坏JSON、遗漏、旧结果未修正、路径等价与实际链接拒读；两路审阅发现的中断谓词、失败/未知分类和团队数量口径已修正。当前CLI单插件进程级开关已由精确上游源码及两个新进程清单支持：相同中立临时目录下3.3.4分别enabled=false/true、均installed=true，两进程自然退出、配置/用户AGENTS摘要未变、临时目录已移除。这仅证明配置清单，实际模型加载、其它组件一致及无指令/记忆污染仍须在真实配对前核实。新增开发成本前瞻登记为4个具名文件及有限容量调整，现有质量、身份与发行条件保持；224文件相同字节副本的产品、Codex适配、开发声明三项静态及20项校准通过，进程后态为零且检查副本已移除。首次副本核对因新增JSON换行不一致拒绝，按仓库LF规范修正后重核，原拒绝保留且字节守卫未弱化。最终增量复核与仓库后态另核；云端检查须按本次源码提交单独取证，本地通过不等于托管通过。
 
@@ -74,152 +74,48 @@ Codex 0.165.0-alpha.1.2 后续真实根会话带 UUID 后缀，已安装 3.3.2 �
 
 本记录属于发行后的事实同步；发行身份固定为上述精确提交，后续记录提交不移动标签或继承为新的发行主体。依据实际剩余依赖继续核验，不重跑已闭业务，不新增全UI或正增益门槛。
 
+### 仍适用的历史限制
+
+原失败与未知继续保留：cfde 的 10 ERROR、3600 秒超时和 `sourceAfter=null` 不因短路径复验变成通过；legacy34880 的内部后代与实际启动器未证，未发现泄漏不等于完整关闭，不停止未知归属资源。旧 Hook/MCP 退出原因、部分 native 读取拒绝、配置变更写者、B5 拒绝访问及旧资源后态分别保其原未知。
+
+用户已停止的 Hook 观察器不启动替代常驻任务；只有新事实影响当前必要行动时，才重核对应责任。全成本、计费与因果净收益，无存活控制者自动唤醒，以及任意 GUI/未来宿主保证仍未建立。对最终磁盘落盘失败的恢复，以及无宿主支持的 Root 推理抢占，仍无保证。
+
+原 `.tmp/release-3.3.2-review/`、`.tmp/c45fix/` 材料仍按原所有者、实例和有限范围保留；详细路径/hash见下方精确历史导航。[0c42旧时间线](https://github.com/yiheng8023/YIYUAN-Accord/blob/0c42b884ea45c4c0074b218bb7b8e54d5ea48838/docs/operations/CONTINUATION.md)保原时点。历史定位不授当前权限或恢复已闭业务。
+
 ### 历史观察（cfde候选检查点）
 
-2026-10-28本次文档同步前已核的代码候选为`cfde2ae332d8e0618fe3dc1db392e71ff4a30999`/tree`cc5d1ab1786f8ac9911a096fc4ed9ea698564d97`；[CI40634304024](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40634304024)已终态11/11成功。Hook组合hash的canonical harness修正只涉及观察器/测试，原启停、信任及来源守卫不变；3.3.2包SHA`6815f82a3a6c2d22423014a8a02a52d324a15cf5544509ba9898691a7afe0bb0`，相对dev.20的29个非manifest成员字节未变。精确三静态及0.165.0-alpha.1.2受控Hook/MCP/cache探针通过；后者三次完整30成员快照一致、3个固定本地回复、零真实模型调用，限于安装/接口证据。
-
-本地原整套检查保留3600.159秒超时、owner/worker1及10个ERROR事件（该历史inspection class的8项whole ERROR及2个subtest ERROR）。错误发生在提取固定历史Git脚本：同命令在160字符长cwd报`Filename too long`/exit128，在51字符短cwd为exit0；没有改历史Git源、产品断言或共享配置。短路径整class原9方法复验为13.968秒、零失败/错误；Root已独核9个原ID、2个成功subtest、219源重哈希、owner/worker0、Job自然0、controller关闭及短clone/hooks/scratch均absent。Root另核原03所属checkout/hooks/scratch三路径已移除，247个文件及58个目录完整核验后保于3,349,085B ZIP。原10ERROR、3600秒超时及`sourceAfter=null`仍保持失败/未知，不倒补为完整sourceAfter，不替原整套改签成功，也不推出所有Windows路径已修。
-
-该历史检查点的下一边界：以当时文档同步后的最终源码为主体，重新绑定必要全源/规范后果、当前证据消费、独立审查及受影响检查；cfde的CI不冒充后续文档提交的CI。依原授权核tag/release/public后态，再更新适用本机持久source ref并核实际加载/恢复。尚未发行、未完成本机采用；不重跑已闭业务、不添全UI或正增益门槛。
+原文、证据定位和当时的依赖保存在[精确历史记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/78d3525fc41441a724456a3ee3abaf65b75401b1/docs/operations/CONTINUATION.md#L77-L84)；按需回查，不恢复旧待办或权限。
 
 ### 已接收的962功能来源（保原主体）
 
-2026-10-28当前已接收：精确`96276ddf24e47df89142992c74709daccce2498f`的CI40604844234终态11/11成功（01:08:24Z）；完整来源消费接收18案、17scope及52义务，A01–A08完整，`functionalCompletion`、`repositoryCandidateReady`、`candidateEligible`均为true。报告为本轮私有目录`continuation-89-20261028-02/whole18-consumer-962-01/run-01/verification.json`，SHA`3d077098a29be6429d7cef4484228affbc8b9a5306ec02890b94b7bdf89e4e75`；Root采用SHA`1095b77f4a113657a93302073e45c973de6f30d966600bc7858cb7a31ef00a53`。这些结论限于绑定案例，不是当前所有隐藏界面、所有客户端或发行后态。
-
-原五项缺口均已补齐并在该主体联合消费；A01使用独立实际CLI模糊目标→计划内用途选择→要求/同文件修订→Root四人联络清单采用，原B26明确链、13贡献及旧episode不改。Root实际重判/采用两个direct全部144叶和60条件，16桥保705条件、237父谓词、406贡献、38角色、6关系及202旧负项，独立53477保原执行与两义务；两人四轴精确审核及真实Root74两相/最终守卫已完成。worker/owner均0，176.552秒内Job自然归零、无force、句柄关闭；219源与761固定源不变，副本和空hooks已核后移除。原A01包装器在合法报告后误断言整A01而exit1、时间导出格式拒绝及原始材料均保留，不靠重跑求绿。
-
-R2/R3与原质量来源核定支持进入S5，未发现应新增业务、全UI重验或正增益门槛。`incrementalValue`仍未验证，当前相应requiredCoverage为空，不宣称收益。Root自设3600秒源工程段整体失败：总采用4261.340秒、迟661.340秒，含晚到确认，不限称机械收尾；原02:50角色采用、03:17消费及03:20终审按各自原窗有效。总协调成本/及时性不授整体PASS。该962核定时进入获准3.3.2稳定候选准备，保原99输入、OUTCOME六谓词、全部失败/未知及唯一写者；新候选必须重绑源码/包、独评、托管检查与实际发行/本机入口后态。
-
-工程额度维持4.87M、5%243,500储备/可用4,626,500及原文件/主指导限制；旧4.83等数值保其原主体。旧版资格、来源角色、客户端/权限/UI未知及legacy34880后代/启动器未知不改签，不重跑已闭业务、不停止未知资源。
-
-- 此前历史阶段已接收的完整来源消费绑定`2d59bfbef653f13a3f78dea1ada481dfe3505182`，不是随后诊断改动的资格：原18案均接收、47/52义务、14/17范围，A03/A04/A06/A07完整；报告`current20-source-consumer-2d59-02/run-01/verification.json` SHA`d5841e14436522c89012bf19e24c771fc63695ef50f9b1cc9f4586c7c1b23409`。实际Root的dev.20两相读取、原业务身份、失败和资源自然关闭均保留。2d59精确CI40507965963为11/11成功；不把它移签到后续源码。
-- 安全拒绝诊断修正的精确源码为`4a5660ea2f1be74bb7c66954b73c12aa3b000cfd`，CI40540956752已终态11/11成功。原失败材料1.073秒复现、修后1.084秒给出静态具体原因且仍拒绝；普通输出、拒绝顺序和计分不变。新增接口4方法/50变体317.327秒、正向/兼容四方法42.852秒及更正名称后的deferral检查11.749秒均通过；误拼名称的loader失败保留。两路源码独审及三项洁净静态适用于该源码，后续记录提交另绑检查。
-- A05的释放后有用续做与必要独立接管已在精确4a分两次正式单案来源消费中接收：报告位于`ci-five-gap-4a5660ea-20261028-01/a05-consumer-4a-v2/run-01/verification.json`（SHA`68ac24d7000e40160a71ea1e108982aae5fc4f03e5480ab7ad85954abff5135f`）及`a05-necessary-consumer-4a/run-01/verification.json`（SHA`0e96a85d2f52586b058d13d98854fa22389e111d9e459fb9581dc70cb63392ed`），均在`.tmp/c45fix/model-effort-fix-01/`下本轮目录内。原29贡献、52条件、旧失败和各阶段身份保留；新增材料经两人四轴及真实Root两相读取，第二次219源字节不变、77.928秒内owner/worker自然0、Job1→0、句柄关闭、副本移除，Root另核空hooks已移除。早期空parent recheck拒绝、索引/转录修正及原时钟均留档。
-- A02生态发现/选择及A05自主风险发现/择时已在精确`ced23e04`分别正式单案接收：本轮目录内`a02-consumer-ced23e04/run-01/verification.json` SHA`c5c7b331d906afe76a045c823ec39f759474807c07026c3070ebeba44ce1a947`，`a05-timing-consumer-ced23e04/run-01/verification.json` SHA`a612113b384b3cb70378f1eca1dba48a27f5f642874c89b852e36a77bcb1d5ca`。A05该主体六项义务均接收；真实Root62/63两相及原生历史源重核通过，两次各219源不变、owner/worker自然0（73.344秒/143.539秒）、Job0、句柄关闭、副本及空hooks移除。择时v1的年份错误和差分错指合同被独审HOLD，原版保留；v2只修两处及关联hash后重审、消费，原失败及guard拒绝不抹除。
-- **原五项缺口的前态保留**：此前只余`a01-ambiguous-goal-to-requirements`；原B26清晰链仍不能改称模糊。上方已接收的独立实际A01与完整962消费接续该前态，不把当时四份单案结果倒签为联合资格。
-- 代码/测试净增8,094B；原8KB估计超94B保留，前瞻细化本项9KB，现总4.83MB/5%241,500B保留、可用4,588,500B不变。计数4,580,991B，另计observer维护5,480B后余2,029B；219文件、primary20,955B。只读审查者停止且无helper/pending；Root继续唯一写者。未更改插件包或共享配置，当前MCP仍dev.20；未给本轮改动签完整功能或发行资格。
+原文、证据定位和当时的依赖保存在[精确历史记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/78d3525fc41441a724456a3ee3abaf65b75401b1/docs/operations/CONTINUATION.md#L85-L101)；按需回查，不恢复旧待办或权限。
 
 ### 历史观察（以下四项保原57570时点）
 
-- **57570ced的六案已在一次正式来源消费中接收，覆盖19/52义务、4/17范围。** 两相均由真实Root/dev.16/PID32352回读r22；307固定来源和219源字节不变，worker与owner均exit0，46.212秒内Job自然1→0、forced=false、句柄关闭且副本移除。完整功能、候选资格和3.3.2发布仍未成立；不把faf的CI改归此主体。
-- A07 v2曾被公开准入正确拒绝：差分列表的canonical摘要错误关联到整文件引用。v3另加精确片段来源后才获本次接收；原76.957秒失败、人工审阅漏检、自然Job关闭及之后单独核219源再移除副本均保留，未改原业务或时钟。
-- 17份现有案例正文与独立Skill见证合计4,933,384B；待补applicability直接记录与签名预留后为5,283,384B。当前修复仅将v5聚合预算由2MB前瞻分配为8MB；每个record、材料、review及recheck项的1MB、旧协议1MB和源码64calls/4096files/64MiB预算保持。2,312,536B合成双案在旧值下红，在新值下两相通过；4项针对性回归通过，不是业务资格。按本次字节差计算代码/测试为4,554,012B，另计observer后的保守余量508B；新提交的静态与精确CI须另绑定核验。
-- entry记录的pendingEntries/pendingModes已在另版改回整数0，cleanup明确为unknown/null而未准入。旧inventory peer34880的直接进程/stdio关闭有源，内部后代及实际启动器仍未证；未发现泄漏，也不推定完整关闭。applicability当前不支持普通或父材料路径，仍须现有direct current-source-selection的真实Root判断；其它已备无签材料不自动获得资格。当前Root保留r23的原99输入路径、单OUTCOME六谓词、未决责任和唯一写者；update_plan持续展示，未启用Plan/Goal模式。
+原文、证据定位和当时的依赖保存在[精确历史记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/78d3525fc41441a724456a3ee3abaf65b75401b1/docs/operations/CONTINUATION.md#L102-L108)；按需回查，不恢复旧待办或权限。
 
 ### 历史观察（以下五项保原faf时点）
 
-- **当前源码验证主体为faf47827；精确CI已11/11成功。** 28项受影响检查、干净副本三静态及219源字节稳定检查通过。主聊天MCP在实际r13两相回调中为dev.16/PID32352；30成员/766,958B包SHA仍为ef87d2bd9cceb87a73b735bf38f2524bfa3dd2197659f6980fd7a06413dd7a98。当前代码/测试4,549,560B、主指导20,955B；指标内余10,440B，另计observer生产文件5,480B后的保守余量4,960B。
-- **五个原案例已在同一faf源码分两次正式消费，累计14/52项有限义务。** 原三案保11项；新模型选择与影响父案例新增模型/推理及相关成本取舍、独立平衡影响、持续压力与退出底线三项。两份新材料均经独立四轴审阅，实际observe/recheck及最终源守卫通过。这是两个报告的同主体贡献并集，不是一次最终合并验收；另19项旧主体资格待当前桥、19项仍待具体源裁定。完整17scope、R2/R3及3.3.2发行仍未完成。
-- 新两案执行器与worker均exit0，211.805秒；复用现有关闭函数后，Job从1个进程自然归零、forced=false、句柄关闭，219源及202固定来源不变，副本移除。原三案私有owner的exit1/强制回收/初始成员未知保持失败；准备器错误摘要口径及父材料路由HOLD均在派发前保留并修正，不改原件或旧签时。
-- 六入口逐12项已有有限实际使用来源，CLI嵌套、Desktop micro、Work同归档及Remote第二次Stop/恢复的后续纠正均须采用；当前分母充分性及必要使用适用性另判，不重做已闭业务。A05原真实必要监督者接管、健康继续、先核效果不重放与继承/成本有源；自主风险发现及及时动作仍须精确归属，不增加全Root替换门槛。
-- 当前原生绑定r14/6b59826b，原99输入及单OUTCOME六目标谓词保持；用户要求后续展示update_plan，已实际使用，未选择Plan/Goal模式。当前config为6c46c6d3：相对安装后1611232a只变六个既有Hook的trusted_content_hash，其余解析设置相同，写者/触发未知。32MiB源预算约束已验证anchor之后的保留区间；r14实际区间15,786,822B且输入完整，不能用整个日志超过32MiB推定必须迁移。
+原文、证据定位和当时的依赖保存在[精确历史记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/78d3525fc41441a724456a3ee3abaf65b75401b1/docs/operations/CONTINUATION.md#L109-L116)；按需回查，不恢复旧待办或权限。
 
 ### 历史观察（以下各保原主体与时点）
 
-- **发布前整体复核已形成有限结果并纠偏，未授全局资格。** [全局审查更新](../../research/reviews/2026-10-21-functional-realization-release-audit.md#2026-10-26-发布前系统质量复核c838e9d6)区分750,835B发行投影、约11.7MB仓库和约464MB开发证据；未删原件或恢复材料。该次6处旧活动状态及业务/回执/案例/已闭阶段下一步已修，旧4.62M/218活动预算按当时真实4.71M/220对齐；后续工具续轮修复的前瞻预算见下。所查链未确认新权限绕过或破坏性副作用；当前普通运行性能与整体收益保持未知，原必要功能/组合余项仍待证。
-- **c838e9d6/tree5ff4deaf的r50选择及精确CI已核。** 精确3静态和独审通过，旧Root27.336秒内核219源/3完整原案及全部未改判据；所属Job0/scratch移除/controller关闭。接收方已实际查验CI40227360209 completed/success、11/11；a13eae01仅四记录视图并有意skip CI，不把c838或1ae检查归给它或新dev.15。
-- **dev.16已内置子代理模型/推理选择，并已安装；当前聊天仍加载dev.14。** 委派前按子任务选择并填写实际支持字段，上下文另判；复用、换型按接口能力执行。三个真实子代理的宿主执行上下文分别确认Sol/high、Astra/high、Luna/medium，后端替换仍unknown。指导独审与9项Hook/暂停/版本回归通过；容量续轮、晚到首输入及受控中断恢复各保原回归主体，37项恢复检查不与17项资源检查混成整链。6f/1648静态失败及Root误读上限保留，支持Skill为9,990B/10.5KB。当前30成员/766,958B包SHA为ef87d2bd9cceb87a73b735bf38f2524bfa3dd2197659f6980fd7a06413dd7a98。工程额度4.8M、5%储备240,000B，当前代码/测试4,547,905B；全部原验收及发行条件保持。详见[选型修复](../../research/reviews/2026-10-21-functional-realization-release-audit.md#2026-10-26-子代理模型推理选型修正dev16源码)。
-- **当前真实续作输入已协调并恢复有效绑定。** 当前epoch为fb8123f3，原99输入稳定、单OUTCOME六谓词保持，无pending或replay/resume标记；当前原生检查确认可继续。先前bb中间start无context/终态的历史及恢复失败保留，新人类输入不倒清其未知效果，也未对该旧链伪造replay。
-- **3612eb86的3静态通过，CI终态10/11失败。** [CI40356541210](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40356541210)仅Windows/Python3.10在Darwin合成探针测试断言失败，1286项中1FAIL；Mac/Ubuntu原生Job均成功，Root独读的十份Mac原生资源自然0/组absent、0真实模型调用。诊断未触发，旧4db两次偶发根因仍未知。测试现将真实Python启动准备放到诊断窗外，仍核真实管道/自然退出及observed/closed；生产0.25秒及未知hold未放宽。受控延迟原测试失败、修后通过，不能据此倒推原CI唯一根因。
-- **retained-only检查的早期live源守卫缺口已修，28项受影响检查通过。** 原合同只回读旧字节和关联记录，旧resourceInspector更新却在分支前恒拒；现只前移保留检查分支，普通live inspect/run的源码漂移拒绝保持。修改/缺失旧inspector的正例及live拒绝成对核验，旧函数反例2ERROR保留。当前公开CLI已实际只读通过原B26四阶段及四份资源关联，104份execution原件及另份原retained报告保原；不重放业务、不核live状态或授当前资格。独审无阻断，新精确静态/托管检查待核。
-- **dev.15工具续轮修复已提交为4db5facd，未单独安装。** 正常工具新轮次原先在完整人类输入下仍被容量重试专属证明拒绝；现联合核原生归属与同轮入站记录，保原人类来源、回执、暂停和容量重试约束，并防迟到任务记录沿旧cursor放行。20项隔离回归通过；首次正式源码408项回归407通过、1项因漏改顶层交付版本失败，补齐后失败项及版本隔离对照2项均通过，原失败不改签。精确干净3静态和独审通过，源码未变、验证副本已移除。CI40284772939首轮终态10/11，macOS原生生命周期未自然释放进程组；原7.5秒宽限和失败保留。已仅重跑该失败Job作一次诊断，未改资源逻辑或将强制回收改签自然退出。30成员/758,410B包SHA为2db344542758e3caa642fac672939bd0719957ecdd97904019c2b413561b2365。原4.75M/5%储备及4,503,488B/219文件保原主体；冷启动、32MiB长来源和原A05/全R2R3仍待。
-- **此前有界fresh接续未形成有用工作，已安全返权。** `9ae56e9b-eec3-4a99-9dc0-8c60f57972d3`仅转交只读current-responsibility-review；两轮只读状态核对未读材料，原因包含调用者含混的恢复前提。随后原源守卫拒绝，原`DEADLINE_EXCEEDED`保留；没有源职责释放或A05资格。独立核完整两轮/实际公开调用与效果后，既有协议已返还原scope，源恢复保留；原执行者51588及新恢复reader47224均自然0/stdio关闭，无目标重放。该次native读取首拒绝stage/stat根因仍未知；诊断完整草案10,566B在原4.71M预算下超余10,009B，未采用/未测试。当时工具续轮切片后的9,012B余量也不足；后续新容量用于具名已证问题，不自动采纳这份旧草案。旧Root来源已超32MiB；不移动原anchor或提高读取限额来过关。
-
-- **当前共识r50显式调整三项steering的案例选择。** 新v3材料草案属于可替换验收载体，不是用户独立要求的产品成果；移除8b将其设成完整case前提的选择，完整恢复88cb对应三案，保留全部原13expected、18案/17scope/52义务、质量/场景、普通CLI与当前采用和同业务组合。8b定义、有效材料/Root效果、失败、旧时钟及权限保原；这是真实准入前提变更，不能当措辞清理。原fixture及新材料fixture均保留。当前只完成治理选择，完整原案仍须经现有v3当前适用性、独审、两相和最终守卫；不因此授A04或R2/R3全资格。
-- 原三案的五项continuing职责及runner四类后果已独审；Root另核原生八组命令/响应、四组Goal空值RPC、四worker/十inventory退出、保护源与阶段成品，未重跑业务。新3612未签v2材料逐项处置87源/24规范差分，三案保34/34/28条件、各13贡献及五派生；仍需当前context、独立四轴与合法消费，后续修复另加差分桥。Root300秒独读实际318.121秒、材料作者720秒准备估计实际998.501秒均保负项，不混入旧业务时钟或新增门槛。c838原材料不改签，当前资格/全成本不预授。
-- 用户要求的发布前全局质量复核已并入原工序：副作用/权限数据、过期活跃数据与历史债务、资产/性能、覆盖广度/木桶、耦合、恢复和升级回滚、维护、依赖来源许可、准确披露及过度工程。按实际证据优化，区分发行包、仓库和私有开发证据，保原始材料/恢复与未知归属；不扩任意门槛，不重启已停观察器。
-
-- **A02政策精确义务已在b6de9ab2接收。** 原case的33结果/48条件、80完整Git差分/22规范差分、五负证与八质量保持，经两人四轴及actual observe/recheck/final-source，新增`a02-disabled-excluded-unavailable`；结果SHA为9480cffab41f15e4de532decda6e0ac345d73ca2a216e4b0f69a14ed67b5526b。来源执行104.439秒、自然0/Job0/scratch移除/controller关闭；Root于2026-10-25 11:24:40 UTC在原300秒窗内重核120文件/5Git后采纳。原Oct11 actor的实际停用、明确工具/Skill效果排除与未知VSCode路径hold，经原Oct20采用链复用，不改标成新的Oct20执行；原判据不要求三个故障或额外独立具名excluded Skill。两PDF来源路径不同，不能统称全部禁用。既有53477两Skill义务保464原主体；本报告不含其补充，未撤销其旧资格，也未拼成全A02/17scope52/R2R3。
-- 新输入所列动态发现、主动联网比较、推荐安装、自主选用和用途结束后的退出/退役，已在原能力协调/生命周期指导及A02/A06/A08覆盖，不新增门槛或安装权限。准备中的config11a30等值断言、旧文件缺席分支、sourceDelta引用错误及Root错误单SHA稿均保留；最后以完整80项canonical差分原件修引用和生成器，经双约束反例与新精确四轴后才消费，未放宽core。原作者输出越界、611秒及26.755秒迟保存与当前实际来源窗的合规分别记，不宣称整轮预算或效益通过。
-- 本机既有默认来源已通过原生配置CAS从70b87固定到3612；原marketplace add拒绝及其无变化后态保留，随后原生upgrade成功。dev.16启用、30成员全部匹配精确源码，独立解析比较确认只改该ref；当前config SHA为1611232a。实际应答MCP仍为dev.14/PID22388，当前聊天刷新及所需采用待证。A06/A07保原范围，不因本次工程同步重跑已闭业务；原预检、失败、CAS、安装与退出记录保于私有lifecycle-dev16。
-- **A04实际回溯纠正义务已在精确1ae8072c接收。** 两人四轴分别核准精确typed材料与普通候选后，实际`verify_product`的observe/recheck、最终来源复核及Root采纳均完成；结果SHA为3fff15f6e872ba340f1e7ba9d38ab19a8c011614bd32766c852ea36e59995a15，仅新增`a04-actual-retroactive-correction`，不贡献case、scope、质量、场景或父项。来源执行69.389秒、自然0/Job0/scratch移除/controller关闭；Root于2026-10-25 17:51:33 UTC在新分配的原300秒窗内核120文件、33公开原生记录范围、5个Git主体及当前输入后采纳。原四个300秒执行窗、16:26:35的7200秒材料观察与旧失败均未重置。以下工程历史保留原条件：该切片于12:03:45UTC/r107前绑后实施typed v2，v1及原cx-cli整案路线保留。首稿17项检查473.045秒通过；独立Spec发现投影/实际加载包、多sourceEpoch、operationId及反例重封的缺口，已修正；19项相关回归490.008秒及新增最终过期/完整入口deferral两项14.235秒分别通过，两轴增量复核均无新问题。隔离完整产品回归已失败：1000项后有3个失败，随后触及4800秒内层时限；4837.002秒时所属Job、scratch及controller均已关闭。c45cbe0b的CI40199402099已终态9/11：Ubuntu/Python3.14与Windows/Python3.10均在旧v1晚清理用例失败；不得将较小检查通过替代完整回归或该提交CI通过。一次规则说明4100字符越过原4096文本限额及一次共用差分提取漏导入均已定位纠正，原失败保留；独立审查输出截断/记账限制不算完整PASS。工程切片由20/22KB前态细化至24KB增量；22,352B草稿越过22KB的规划失败保留、4,710,000总字节/保5%235,500余量；原18/17/52、质量/场景、220文件及发行条件不降。其它A04义务、A05、全R2/R3仍未齐。
-- **1ae8072c/tree4f6ffcca的完整检查已通过。** 本地1258项测试7801.273秒及3项静态检查成功，owner7830.173秒自然0、全部所属资源关闭；Root在原8400秒窗内重核全部219源文件。精确CI40206019033已终态11/11。修复了夹具独立取时造成的旧v1晚清理断言，以及仓库清单向上借用父Git根的问题；固定版回归通过、仅还原旧stamp的反例被拒绝。修复净增2375字节，总4,473,943字节，原4,710,000总额及5%储备保持。固定树1182的24项/静态3及独立补丁审查保原范围，不改签旧c45的9/11、原local三FAIL/超时或原A04切片超估。原native缺policy ACK失败仍未解释，长路径SQLite失败不代其归因。原件见`.tmp/c45fix/full-01/root-verification.json`及`a04-consumer-executor-01/run-01/root-adoption.json`；witness工厂及这一叶的实际消费已执行，不再列为待办。
-- 本轮仅日期/环境信息的真实原生输入已接收，原99输入/1输出六谓词完整重绑r114；Root后续真实读确认99项均稳定匹配、无pending、MCP仍dev.14/PID21340，未启Goal。此前多次path-changed及evidence-changed拒绝保留；1秒metadata安静后接续成功，不代表已查明原失败瞬间或修复了代码。原输入、输出截断与协议字段误用亦保留。A04其余三义务及两function scope、普通必要接管、A02余项和完整R2/R3仍待；token-count-expired的容量观察保持未知。
-
-- **A06已在精确7ab1555a完成同候选验收。** 复用五原案（环境适应、SDK scoped-exposure、selected-entry、whole-host、SDK lifecycle）的完整v3、原case/record/episode/时间/负证和四轴回执，actual observe/recheck/final-source全部接收；A06.complete=true，function与package-lifecycle缺口均为空，原五义务齐全。结果SHA为eb0bb79ca67d49d16aa9ae12614d8ffd8226bb83ff337eb48b018cfbef070e00。来源执行188.610秒、自然0/Job active0/scratch移除/controller关闭；Root于2026-10-25 09:21:36 UTC在原300秒窗内重核207固定文件和5个Git blob后采纳。未重跑原业务；SDK原Windows/base、f990 POSIX/hot、当前Root重审及0.164接口声明仍分开，不代表所有入口新的实际采用或全R2/R3/发行通过。
-- SDK完整parent/v2、v3路由修复已提交7ab1555a，原v1五类/其它scope/function及21叶与全部守卫保持；5项针对性回归、3项精确静态通过，[CI40171485439](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40171485439)终态11/11成功。插件30成员/dev.14与配置保持，无安装或重启。A07保其41b原声明范围通过；A01–A05/A08、完整17scope52及发行条件仍未齐。
-- 本轮私有caller失败已修正而不改生产守卫：首轮parent错入function入口，120.199秒正确拒三案；改用父入口并补齐三项parent recheck字段后，三案56.338秒正式接收，Root08:35:46 UTC窗内复核166文件/5Git采纳。首次五案合流因caller误用1MB单材料哈希限额而全局拒绝，140.378秒正常关闭；以真实1,470,898B反例对齐API既有2MB批次限额后才获最终合流，产品与单材料限额未变。旧脚本、失败与caller独审hold保留；材料资格来源类型和归档成员定位修正保原字节/资格/平台，旧容器SHA不冒充子叶。一次native检查明确返回transcript-path-changed-after-read，另一次未保存原返回的冻结断言拒绝字段仍未知；后续重新读取r98/99保护源/Goal后继续，不宣称已定位或修复宿主读取根因。
-
-- 原v33-codex-sdk-scoped-exposure-01已在精确d03978a4下经完整v3/两人四轴及actual observe/recheck/finalsource接收，新增a06-enable-reuse-disable-exit。保原d855/原episode、15结果叶/38条件及73完整Git/23规范差分；原0.154固定响应、无真实模型/账户的作用域机制，不能写成当前0.164实测、普通Skill采用或所有消费者加载。来源运行49.596秒，Job0/临时checkout移除；Root于2026-10-25 05:51:35 UTC在原300秒窗内重核257份固定源（含156归档成员）后采纳。结果SHA为3e05559110cd53f66457784aaf3cd29db6a7455beb8f77206a14e7f7c08c3a4b。该单案报告不含此前f990环境适配贡献，不代表其被撤销，也不拼成全A06/17scope52/R2R3。
-- SDK时间与角色已分清：早期source-verification的not-run/unknown保持原阶段，后续d855 ADMISSION与原发布前00:33复核的同一摘要确认最终资格；qualifiedAt只按原独立观察到合格状态的时刻，内部首次返回未知、原23:35执行时刻不改。当前Desktop Root为来源协调者，cx-sdk是被评估界面；0.164版本/schema只支持接口声明，原实际禁用/请求排除/恢复/清根和25资源回执来自旧原件。当前runner不同于原manifest程序，已核源码差分，未拿新程序代旧执行。所有原失败、全成本未知及审查读取估计超界均保留。
-
-- A07已在精确41b25868下完整通过：同候选正式消费catalog与README两原普通交付case、B28资源压力与环境两原case，原全部结果/条件/负证及两人四轴保持。catalog另经独立成品语义审查提供a07-source-correct-professional-delivery；README补原默认无额外扩展场景与全部相关case，未把A01派生自动当A07，也未缩减scope。actual core四案全接收，A07.complete=true、missingScopes.function=[]、missingObligations=[]；A08.blockedBy不再含A07。来源运行109.200秒/Job0/临时checkout移除，Root于2026-10-25 04:25:51 UTC在原300秒窗口内重核173文件、5个Git blob、2个旧selector及15份普通原件后采纳；结果SHA为de6ea8ab4ee51936779232f26b07038b30fed6e3e8dbcf274ba460ea437b466c。该结论限原声明场景/候选，不拼成R3跨episode因果或全产品通过；其余A01–A06/A08、17scope52及发布继续未齐。
-- 合流前发现仅catalog虽有对应后果但仍缺原README/default场景，已补现成原案；没有制造默认业务或重跑旧CLI。首次准备对尚未写出的同批delta提前预查而拒绝、Root首次采纳脚本把{function:[]}误当非空缺口而拒绝，前者在派发前纠正，后者在Root采纳记录写入前纠正；两次caller拒绝均保留，既有core结果、原判据和源执行未改或重跑。各审查预算估计/过宽投影的原披露保留，不据本源核验宣称整段成本优势。
-
-- f990eb24的CI40152354200已终态11/11成功，各精确HEAD及原失败分列。当前源核验仅复用旧业务，不安装或更改运行包。
-- 原B28资源压力与环境适配两case已在精确f990eb24以现有v3正式接收：各完整14结果叶/59条件、6原限度、84完整Git/23规范差分及两人四轴齐全，保原a0eb主体/episode与两UUID。新增三派生为a07-owned-resources-and-required-load-recovery、a07-os-and-host-workload-adaptation、a06-changed-environment-actual-adaptation；160→96MiB是两次连续Job的真实回读，85是声明式续做，随后正常0及缓存复用/内外层归零，不是活Job改额或异常恢复。actual observe/recheck/finalsource用105.316秒，Job0/临时checkout移除；Root于2026-10-25 03:35:15 UTC在原300秒窗口内复核134文件、12次Git blob读取（5个不同blob）和2个旧selector后采纳。该报告的A07仅余普通交付义务，旧f209普通交付保原主体，尚未合成当前全资格；A06其余生命周期、A08异常/持续压力底线、必要独立接管及整体17scope52/发布继续未齐。
-- 资源源范围已校正：独立quota episode实际有40次CPU/IO/RSS采样和正常退出稳定；B28实际有Job内存限额及内外层归零。不能泛称完全无CPU/RAM实测，也不把两episode拼成异常退出或全机负载保证；原863有限影响评估与3cfe有限声明一致性不因此升级或撤销。旧观察器消失的原因/退出码仍未知，不当作活进程取消成功。
-- 本轮准备稿的originalSources类型混用被原core预检拦住，完整source assembly又拒绝了6条历史摘要配live源码路径的引用；均在派发前保留旧稿并更正，未放宽守卫。后者逐项匹配原H的4ca70806 Git原件，保原摘要/条件指针；两条旧file.json/case selector也按明确文件摘要和JSON键核验，未启通用猜路径。审查读取预算估计超界及投影截断均据实保留，不宣称整段高效或全成本优势。
-- A02后续来源已定位：53477三轮实际Sol/high有原生记录，2,044,203 tokens及原1800秒失败/成本未知保持；1935 reader的requested high不能证明actual effort。原停用/排除/未知路径hold现已按上面的b6精确义务接收；其余入口发现/必要采用、生态比较及模型/相关全成本义务仍须分别核，不用一个策略结果代全A02。
-
-- 96a6181b的CI40109480874、修复464bb87e的CI40115601707及记录3cfe0a87的CI40124294805均已终态11/11成功；各保精确HEAD。464新增独立obligationEvidence，解开后续真实执行与已闭旧case的错误耦合；保v1–v3、原18/17/52和父R3同episode规则。真实角色、原窗口、补充自身source/package/current差分、8质量、逐义务负证、精确四轴及两相/最终交集分别核对，补充不修原expected或新增acceptedCases。角色/过期效果/传递冲突/历史carrier入口耦合的真实红与后续绿保留。f2完整新模块10tests/427.655秒及最终相关6方法、既有3守卫通过，464三精确静态和四轴均通过。
-- 在464正式接收原dynamic-routing-02的完整当前适用性：33叶、48条件、原27来源、80完整源码/22规范差分；另以actual53477独立operation/episode接收a02-delegated-managed-selection与a02-explicit-policy-native-adoption。Retro原生正文及writing依赖全文、Root受托选择及有用采用均有原始来源；源及policy不改，用户无需点名Skill。两窄义务只证明其实际范围，不等于全A02或R2/R3。new source run-02用50.342秒关闭Job/临时checkout，Root于19:08:40 UTC在窗口内重核135文件、7原生字节范围和6历史Git来源后采纳；原业务未重跑。
-- 该实际来源run-01被核心拒绝、未授任何case/义务资格，47.629秒机械关闭有效。私有材料生成器误把source-analysis放入current-observation槽，并重复拼接8条basis超过原4096字限；修正只改引用槽/去重措辞、完整96格负证与来源仍保留，经新精确独审和组装时实际core预检后才跑run-02，未放宽核心。当前observer另补精确99输入/目标/输出/epoch/revision守卫，真实旧AST空集红及10反例保留；旧R2/R3四条实际回执已独立复核当时确有原99输入和目标/输出，未重跑或倒签新守卫。
-- 原53477时序已按精确公开原生记录补齐：Root前绑批准23:33:05.796、typed选择/实际目标许可23:46:18.509、Retro及writing依赖已全到达23:46:29.784、Root窄采用23:58:46.127，均在原00:00:32截止前；00:08:37.314晚结算回源/peer-reader自然0，busy=true界限保留。原1800秒FAIL、目标总2,044,203tokens及可得分项、Root/总计费/净收益未知、CI过称实际更正时序与后代观察限度均不抹去。初始399字符真实输入回执恢复与后来未全量核实分开归属；当前只读旧operation回查不替全局idle或新执行。定位者实际42seek超40上限2次的疏漏也保留，不影响这些经完整字节hash独立核过的事实。
-- 当前219文件/4,449,276代码测试字节，在已核220文件/4,700,000容量内，原5%储备235,000保持，扣储备后可用余15,724。本次SDK路由切片净增10,525B（生产423B、测试10,102B），无新产品文件；原10,000B预估/10,307B草稿越估与前瞻12,000B分配均保留。原db路径登记、f2容量静态失败和本次先集成后核配额的准备疏漏保留；新模块删除会将验证复杂度搬回长admission，故保独立模块与复用fixture的回归，不靠合并文件掩盖规模。本轮变更位于通用Python准入/契约及测试，插件30成员/14版运行时字节和当前配置11a30保持，未重复安装/重启。
-- ccdb2be9的CI40091049585、70b87的CI40096397719及8633387e的CI40102617394均已终态11/11成功。dev.14已原生安装，30成员SHA为629fc00e90bd19e38744a0bf26dffb83513085201a2203de5fc45c4006a61e5f，默认来源70b87。该来源观察时主MCP已实际加载dev.14/PID42012，入口指导亦已送达；此前13/PID54616保当时身份，不外推全部入口采用。该观察时配置SHA为11a30da87fa48e175f22e3138c211515deaf64d7038c8848c48691bfe2f7c0dc：相对安装前除已准ref，还有Hook摘要、宿主helper路径/version及notify变化；权限/模型和全部30安装成员保持。差异写者未知，本来源消费者不使用这些NodeREPL/browser/notify helper，未改配置或信任。
-- 原R2 case在70b87下以完整89源码/22规范/52条件/29贡献、两类四轴及真实observe/recheck获接收，唯一派生为a05-healthy-same-task-continuation。原episode压缩、继承与有用继续有源；20261011库存接管不被硬拼入。执行owner用52.544秒自动关闭Job/临时checkout并保存终态，Root于14:00:37 UTC复核61源后采纳。f209两普通案保其原主体；这些结果不并成整体A05/R2R3或发行通过。
-- 两原R3 parent在8633387e下正式接收：integration的35叶/62条件/9角色/6条原因果边，impact的39叶/50条件/1角色；各89源码/22规范差分及材料、候选四轴齐全。18项通用hold已按有限原claim逐叶裁定并注册直接正负来源，76历史条件补当前实际复读源而不复活历史角色。当时新增两派生为a08-same-business-complete-composition及a08-independent-balanced-impact；平衡评估中性/负面且归因受限，保未知总成本和原失败，不宣称正收益或全A08。run-02实际44.744秒、两相/最终守卫通过，owner自动关闭Job/临时checkout；Root于15:56:13 UTC复核122源，在原窗口内采纳。当时压力退出及声明一致性派生仍held，后者后续推进见下文；未并合不同主体报告为整体资格。
-- 该来源消费的run-01因审查回执非规范UTC秒格式被严格拒绝，未准入；68.521秒机械关闭有效，原输入、报告和失败保留。只将真实原时刻转换成UTC秒表示，未重签判断；caller组装时已加现有review validator预检，run-02属于更正后新来源核验，未重放业务或放松生产守卫。
-- 在精确3cfe0a87下补原integration的a08-claim-and-exact-candidate-consistency：原冻结区间内四条工程最终答复、另两条无关观察器答复和当前真实3cfe答复均已定位原生字节；完整91源码/23规范差分、原35贡献/62条件/9角色/6关系与30条限度保留，经两人四轴和真实observe/recheck获接收，并保同业务组合派生。来源执行45.564秒，Job0/临时checkout移除；Root于2026-10-25 01:48:23 UTC在原300秒窗口内复核129文件、7原生范围和3个Git blob采纳。仅证明有限声明、范围及候选相符；863的impact保原主体，压力退出、A01–A07及整体A08/17scope52/发布仍未齐。准备稿误把单job19:36:46写作整体终态、误写24条限度，均经独审拒绝并更正为实际最晚job20:16:12/30条，旧稿与hold保留；不从job时刻推断未取得的workflow状态切换时刻。Root另有诊断输出选中父报告而截断的执行疏漏，后续按精确叶核结论，未修改原报告或宣称效率增益。
-- 本轮自主发现754512/828400原生边界并保存完整目标/责任后，宿主真实compact使边界降为129660；当前收据、99保护源、原六OUTCOME与单写者已复核，选择健康同任务继续，撤回尚未启动且已无必要的fresh预备路线。该真实变化不代验独立接管。A05有限复核及原三steering公开输入复读未发现新的生产缺陷；库存接管和当前普通模糊意图的完整缺口继续保留，不制造输入、压力或迁移求通过。
-- 库存必要监督接管已精确归属到退役v33-ledger-effect-recovery-01/4a356d91及其未注册资格的获准续作。关键状态继承、单写者和后续有用结果有源；但原监督已超限且用户已提示接管，首次新监督续作又超限，不能证明自主及时发现或完整首次源释放链。当前整案拒绝正确；本轮未证实需要生产修正或新计分通道，不把它塞进研发episode，也不再把单纯缺wholeRoot/GUI更替列作门槛。
-- README/catalog的53e时点v3双草案已于原时窗内交付并独评：43规范差分、157完整Git差分、73条件及25结果贡献齐全，8项hold明确，非consumer-ready。实际生成主体和8b35执行声明分列，原源和旧资格不变；不重做旧业务或14项来源裁定。
-- 唯一CLI尝试22b0仅完成1/4：第二阶段600.185秒超时、124/forced，原两输出缺失，后两阶段未运行。长命令创建错误206和后续stdin无完成回执保留；后续受托者补完材料不倒签该失败。65保护源/配置保持，已知native、Goal reader、生成进程及受控Job后态已核；仅限所属范围。
-- Root随后两次原生进度bind不可用，返回transcript-path-changed-after-read；事后仍revision73、真实输入完整、pending0。小夹具已复现正常append同reason，也证明只放松增长检查会漏新输入；现场唯一原因未定。ab31的有界重取证修正已通过207项相关回归、3项精确清洁静态及CI40079855629终态11/11，原初始/最终守卫、控制消息和读取预算保持。用户重启后主MCP实际为dev.13/PID54616；本轮按真实输入重绑并读回revision74，99输入匹配、pending0、原六项OUTCOME仍缺。旧失败及unknown不改签。
-- 本轮来源核验调用55.784秒、两相及最终来源守卫完成，executor自然0、精确临时checkout已移除；但Root整体900秒阶段未按11:21:32.997138 UTC截止完成收尾，当前保存已超时1211秒以上。原DEADLINE_EXCEEDED保留；独立来源核验的两案接收与整段执行合规分别判断，后续资格须披露该新反证。首次私有材料25条旧未决句与current-applicable矛盾已由两独评发现并在新派生版本纠正；旧报告和原件均保留。
-- 用户要求核新全局英文元指导，已对齐CALIBRATION定稿并保留有效中文链接、原版和权限；本线程已实际加载。其它客户端采用不外推。
-- dev.13恢复节点的主MCP为3.3.2-dev.13+codex.20261024082306/PID54616，宿主报告0.164.0-alpha.11.1；稳定CLI版本仅读为0.164.0。当时30包SHA为fcaed2c75a5c99377b4df1039e141ae8e192402ffee212a2586730b48b7aa64c并逐项核验；当前安装已按上文更新14，加载与采用范围分列。旧dev.12/PID46244及71e342包保原身份。
-- 两草案缺失的七个原资格source-ID已从原注册定位并逐字节核验，独评确认原case/record/episode/package/时序关系和映射；B32仅为后续reaffirmation，不能改签B29原主体。原草案和失败未改。随后以当前f209派生材料补齐43规范/157源码差分、73条件角色、25贡献及当前来源，经两人四轴独评和正式observe/recheck，两案在f209来源核验时获接收，并各提供a01-usable-delivery有源派生；没有重跑旧业务。整体17scope/52/R2R3仍未完成。
-- 0c42的114项/三静态及CI11/11、53e精确清洁三静态与UTF8一方法两变体、8b35精确清洁两静态及CI40069800796终态11/11各保主体。原工作根269项执行的UTF8两个子场景因保留.tmp被正确拒绝，原exit1不改签；未重跑全组。
-- 0c42的217条tracked来源已有覆盖：174完整语义、41完整基线加已审差分、2视觉；Root已逐项重算摘要。覆盖不等于功能或发布完成率。当前五case投影、计划和本页的后续变化另按实际差分复核，不冒充0c42原字节；旧未读/partial计数不再作为全仓待办。
-- 53477沿原未完tail-consumer scope完成真实CLI0.164三轮只读审阅。协调者选择未改explicit-only Retro，原生完整送达正文、writing依赖完整读取，实际gpt-6.1-sol/high；Root核源后采用有用结论和CI表述纠正。399字符intake仅按真实原件/令牌恢复，旧水印保持，无模型或业务重放。
-- 53477最后Root关闭复核迟到，原30分钟窗口DEADLINE_EXCEEDED保留，原控制段不改PASS。其后fresh reader核三轮completed、peer自然0，已source-current返权且reader自然0；后续停止结算不延长旧窗口，也不抹去有用采用。临时Caller收尾driver仅23项离线反事实，不进入产品，不称live成功或新增门槛。
-
-- 收尾超时已完成独立归因：私有caller结果返回后没有owner接机械尾项，储备未接执行；现有external-handoff idle deadline及result→关闭→closed review不被本例否定。两份现有Skill已补完整时窗与owner责任，源码候选dev.14仅改这两正文和版本，11个runtime成员不变。私有修复保留旧caller，以真实旧AST调用点复现漏尾项，受控owner通过冻结Root、异常、输入超时、关闭错误、输出拒绝及准备/未知marker反例；本轮实际静态核验1.30秒、Job active0/临时scratch已删，独评与功能资格未自动授予。最终磁盘落盘失败与无宿主支持的Root推理抢占仍无保证；旧900秒失败不改签。
+原文、证据定位和当时的依赖保存在[精确历史记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/78d3525fc41441a724456a3ee3abaf65b75401b1/docs/operations/CONTINUATION.md#L117-L179)；按需回查，不恢复旧待办或权限。
 
 ## 当前文本对齐的下一依赖
 
-1. 现行产品及开发文案已完成整合与独立语义复核，精确源码/包按最终提交核验；保留ef8的18/17/52资格、3.3.3修复与既有发行主体，原业务、历史失败和法律原件不重做或改签。
-2. 精确e58的11项CI、3.3.4发行、本机完整包、6个Hook/5个Skill目录，以及同一聊天实际3.3.4加载、输入完整性与r12重绑/读回均已核；旧运行时观测保留其时点，不再作为活动等待条件。
-3. 本轮后态文档按已核来源同步；最终提交、所属资源、结果文件与协议退役由当前任务收尾记录核验。原恢复记录保留，不归档聊天或新增自动续轮。后续文档CI按自己的提交单独留证，不替代e58发行检查，也不为刷新数字反复推送文档。
+本节仅保留已结束的 3.3.4 文本对齐阶段入口。原三项依赖与收尾说明见[精确历史记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/78d3525fc41441a724456a3ee3abaf65b75401b1/docs/operations/CONTINUATION.md#L181-L185)，其发行、本机采用及协议退役已完成，不作为本轮待办。当前工作见[目标与当前写者](#目标与当前写者)。
 
 ## 57570时点依赖记录（历史保留）
 
-1. 复用faf五案及14项贡献，补齐19项旧资格的当前源码、规范、条件与角色桥；A06/A07等已闭业务不重跑。
-2. 沿六入口源裁定继续判当前发现分母及必要使用，保实际入口/模式差异、后续修正和未知；不能把安装或库存当使用，也不重复制造演示。
-3. 核A01真实模糊目标、A02生态比较与实际处置、A05无人提醒的风险发现/及时动作等精确缺口；仅真实缺证且前瞻绑定成立时才做必要代表性执行。
-4. 完成原普通入口/R2R3、全部F/A与组合质量、最终精确候选独审及CI后，才按原授权发布3.3.2并核本机入口。保持update_plan可见；按实际原生区间和预算判断连续性，保留恢复能力。
+原文、证据定位和当时的依赖保存在[精确历史记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/78d3525fc41441a724456a3ee3abaf65b75401b1/docs/operations/CONTINUATION.md#L187-L193)；按需回查，不恢复旧待办或权限。
 
 ## 上一轮依赖记录（保留原文）
 
-1. **完成两项修复的新精确检查，并继续dev.16当前入口验证。** 3612的旧10/11保留，修后28项及只读旧记录消费通过；核新提交的静态/CI，继续核当前聊天实际加载和所需采用。默认来源及安装字节已核，包成员未受这两项observer/test修复影响。本地按需同步沿计划第39行持续授权；3.3.2公开发布仍守全部原功能、质量和最终精确检查条件。
-2. **复用已核普通交付与健康继续。** f209两案及70b87原R2整案各有完整材料、四轴和正式两相来源结果，后者只新增健康继续派生。Root900/53477时序负项已直接绑定并经有限原function范围裁定，仍保原失败，不等于当前整体及时性或全部成本通过。
-3. **推进精确剩余行为与完整合取。** A06现已在7ab完整通过，其五原案与已有四轴/实际两相结果保留复用，不重复生命周期业务； 原R3两案与原R2健康继续、两普通交付、两Skill精确义务及3cfe声明一致性各保正式接收主体，不重复从零核或混成一个当前全资格。库存接管的归属已核清，但自主及时发现、必要接管及安全源释放的完整普通链仍未由它证明；wholeRoot/任意GUI更替不是额外门槛。A07在41b原范围已闭，不重复普通交付或资源来源消费；先按r50完整原三案复核当前适用性，保B26/7414/22b0原身份与失败；继续A02其余发现/生态/模型成本义务、genuine ambiguity、必要接管/异常退出及其余52/17scope按实际缺口推进，不由本轮窄结果或CI代验，也不为计分造业务。
-4. 按实际必要修改对源码、文档与投影核精确发行候选；完成独审和CI及全部原必要验收后，才按原授权发布并更新本机入口。上列既有来源执行者按各自闭合记录保留；本轮dev.16工程检查按其实际资源后态判断，不续用原7200秒/600秒保留窗。
-
-旧Hook code1、原MCP退出根因、旧约20.5MB原生区间语义、配置mtime写者、B5拒绝访问/未知归属和旧资源终态按原证据保留，不被新成功改绿。全成本/计费/因果净收益及无存活控制者自动唤醒、任意GUI/未来宿主保证仍未建立。只有新事实影响当前必要行动时，重开其受影响责任；用户已停的Hook观察器不启动替代常驻任务。
+原文、证据定位和当时的依赖保存在[精确历史记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/78d3525fc41441a724456a3ee3abaf65b75401b1/docs/operations/CONTINUATION.md#L194-L202)；按需回查，不恢复旧待办或权限。
 
 <a id="发布后功能实现与验收依据复核2026-10-21"></a>
 
 ## 按需来源与历史导航
 
-完整旧时间线、当时版本/PID、失败、预算、发布/安装证据及当时下一步精确保于[0c42b884不可变接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/0c42b884ea45c4c0074b218bb7b8e54d5ea48838/docs/operations/CONTINUATION.md)，即0c42b884:docs/operations/CONTINUATION.md；仅为具体差异或恢复责任回查，不恢复旧待办。其它历史入口见[HISTORY](HISTORY.md)和[PROCEDURE](PROCEDURE-v3.3.md)。
-
-以下均为 .tmp/release-3.3.2-review/ 下原3.3.2阶段的材料索引，按需读取；“当前”“最新”和“后续”指各自原主体，不构成本轮待办：
-
-- 当前来源身份账：global-review-current-0c42-20261024-01/ledger.json，SHA为4fdbd3dc7b6ace28450122d1c1b66963a9a7f5f9493c32943c444cf7c087d03a；原基账global-review-current-e237.json及独立贡献保留，不沿用旧覆盖计数。
-- 当前检查与实际采用：同根下finalize-source-check-0c42b884-20261024-01/、ordinary-skill-dev12-20261024-01/。
-- dev.13实际恢复及原源映射：同根下restart-dev13-20261024-01/observation.json、current-applicability-review-20261024-01/resolution.json、original-qualification-source-review-20261024-01/review.json；原草案与22b0材料仍在current-material-instance-preparation-20261024-01/。
-- 原案/当前责任：同根下case-projection-correction-20261024-01/plan.json、final-metadata-applicability-20261024-01/（含case身份、必要接管、原episode与53477映射），a01-a03-a04-current-source-20261024-01/及actual-a01-source-813/current-counterevidence-disposition.json。
-- 最新声明一致性：同根下claim-consistency-current-20261025-01/的parent-material.final-v2.json、两份review-*.final-v2.json及observe-owned/run-01/root-adoption.json；结果SHA为c74825c413348fa236654abc52289064ae9ddf5be762bfa1a2b901e1e1728b9b。压缩后的有限继续选择在continuity-duty-20261025-01/post-compaction-decision.json；预备包不表示启动接管。
-
-本轮资源与环境来源见同根pressure-current-20261025-01/的两份review-ready-v3材料、两份review-*.final.json及observe-owned/run-01/root-adoption.json；结果SHA为fd789634585c3c9be72ec5ca0ba00e2c7b46e7cfa03f14e0fb3e68ec0b26bef5。范围差额与A02线索在pressure-exit-source-gap-20261025-01/review.json、a02-remaining-evidence-20261025-01/model-policy-review.json。
-
-最新A07全范围来源见同根a07-convergence-20261025-01/：四份review-ready材料、普通两组与README追加两组独评、scope-case-coverage.json及observe-owned/run-01/root-adoption.json。旧f209/41b等接收结果保各自精确身份；新记录只同步事实，不重启全套旧业务。
-
-最新SDK作用域来源见同根a06-sdk-exposure-current-20261025-01/：material.review-ready-v2.json、两份review-*.json、archive-identity.json与observe-owned/run-01/root-adoption.json。后续whole-host/selected-entry parent与SDK package-lifecycle分别核原范围，不能用Root14或11/11状态代原件、当前所需消费者和完整A06。
-
-必要状态由宿主状态和可验证交接承载；旧时间线不再常驻，证据、未决责任和失败均保留。
-
-最新A02政策来源：同根a02-policy-reuse-20261025-01/的executor-material-b6/material.v3.json、两份review-*/review-v3.json、current-root-package-policy-b6.json及observe-owned/run-01/root-adoption.json；结果及主体见当前事实。A04早期准备保留在a04-current-correction-20261025-01/witness-preparation/；当前精确typed材料、两组独评、普通候选和实际消费/Root采纳在`.tmp/c45fix/a04-review-material-01/`、`a04-material-*`、`a04-ordinary-impl-standards/`及`a04-consumer-executor-01/run-01/`，各保有限范围与未完字段。
+原文、证据定位和当时的依赖保存在[精确历史记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/78d3525fc41441a724456a3ee3abaf65b75401b1/docs/operations/CONTINUATION.md#L205-L225)；按需回查，不恢复旧待办或权限。

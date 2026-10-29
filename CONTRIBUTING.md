@@ -14,6 +14,12 @@ the machine validation projection, not a competing source of user decisions.
 current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks;
 their old criteria and workflow prescriptions do not govern this successor.
 
+These project documents govern Accord development and evidence review. Ordinary
+application tasks use sufficient host state and necessary continuity support;
+users do not maintain this repository's plans or continuation log. Keep one
+current source for each decision or status, and link ended stages at exact
+Git revisions while retaining applicable limits and unfinished duties.
+
 Maintainers and Agents own:
 
 - recovering current Git, task authority and decision-relevant environment facts;
