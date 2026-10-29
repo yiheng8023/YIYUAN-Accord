@@ -11,8 +11,8 @@
 | 产品名 | YIYUAN Accord | 项目统一名称 |
 | Declaration | Empower every dream. | 宣言：助力每一个梦想。 |
 | Mission | Support reliable long-term human–AI collaboration | 为人与AI的长期协作提供协调与可靠性支持 |
-| Tagline | Keep human-AI work aligned from intent to delivery | 让人与AI的协作从意图到交付保持一致 |
-| Description | An open-source, vendor-neutral human–Agent collaboration system. Designed to understand goals, assess feasibility, compose capabilities, handle changes and continuity, and verify delivery and resource state. | 供应商中立的人与Agent开源协作系统，旨在理解目标、评估可行性、组合能力、处理变化与连续性，并核验交付和资源后态。 |
+| Tagline | Make tools adapt to people, rather than making people adapt to tools. | 让工具适应人，而非人适应工具。 |
+| Description | An open-source human–AI collaboration system whose general design is independent of any vendor or host. It aims to let users describe goals while the assistant and host coordinate capabilities, settings, execution, changes and result checks. | 通用设计不绑定模型厂商或宿主的开源人机协作系统，旨在让用户直接描述目标，由助手与宿主共同协调能力、设置、执行、变化和结果核验。 |
 
 项目发布说明底稿：
 
@@ -152,6 +152,48 @@ This checklist records duties for first-use copy and the existing release work; 
 以上待办服务于本次首次使用说明及既定发布工作，不新增迁移、安装、发布或对外发帖授权。
 This checklist serves first-use copy and the existing release work; it grants no migration, installation, publication or posting authority.
 
+## 启用与未启用对照准备
+
+2026-10-29：本节承接用户确认的 README 与传播方向，**只完成方案准备，尚未运行对照或形成收益结论**。版本发布、功能验收、CI、安装和增量价值分别判断；不预设正收益，也不为传播挑选弱基线。
+
+目标：在相同可用条件下，比较启用与未启用 Accord 对完整交付、变化处理、恢复、用户负担及总成本的实际影响。必要自动化与质量保持，合理额外开销不等于失败。
+
+| 配对前冻结的条件 | 执行与记录要求 |
+|---|---|
+| 版本与入口 | 绑定宿主、后端、OS、插件包和精确版本/摘要。只切换目标作用域内 Accord 的启用状态，不用全局禁插件开关顺便移除其它能力。核对当前入口的实际 Hook 支持。 |
+| 模型与工具 | 两组保有相同的主模型/推理选择、可用子模型、原生和第三方工具、权限及资源上限。保留各组获准调度与恢复能力，记录实际选择、并发和切换，不能强制对照组走较弱路线。 |
+| 指令、记忆与材料 | 两组用新会话、相同中立目录和材料快照。核对实际生效的用户/项目指令、记忆、已加载 Skill 和状态。当前产品仓库本身含 Accord 指导，不直接拿来作为未启用基线；禁用或卸载不能清除已经进入上下文的指导。 |
+| 输入与人工介入 | 用相同初始需求、预定变化和恢复输入；运行前冻结救援规则。分别记录必要授权/本人动作与可避免的催促、纠错和救场，不给任一组隐藏辅导，也不抹去安装与首次信任成本。 |
+| 判据与成本 | 先核可独立检查的成品、原件保护、要求完整性和真实效果，再报告人工次数/时间、端到端时间、模型/工具用量、冷/热加载、缓存、并发及退出成本。不可取得的字段保留未知；账户配额不是本任务费用。 |
+
+首轮可选三类同材料、同交付要求的真实任务；具体材料、预算、触发节点、重复次数和判据在实际派发前冻结，不由下表自动授予执行或新增费用：
+
+| 类别 | 真实触发 | 主要核验 |
+|---|---|---|
+| 中途需求变化 | 到预定工作节点后追加影响已有输出的一项要求 | 是否修正受影响成果，同时保住原件、其它要求及有效工作；实际人工介入。 |
+| 中断与续作 | 在相同语义节点中断，沿双方共同支持的原生路线恢复 | 目标、暂停、授权和未完工作是否准确继承；先核既有实际效果与写者，避免重复动作，核最终完整性和恢复成本。 |
+| 简单任务基线 | 一次输入即可完成的低风险转换或小修改，不刻意制造故障 | 正确成品、响应速度、额外流程、用户负担与总成本；保留无增益或退化。 |
+
+试行建议每类两个独立配对，交换两组先后顺序，共十二次运行；此为有限场景观察的起点，不是统计显著性、全任务收益或所有入口的证明。任务提示不预先点名 Accord 或其 Skill。运行中上游、模型、权限或配置漂移时停止相依配对，核清差异后另绑；保留原失败和已经发生的效果。
+
+每次保留任务/材料摘要、实际配置、时间和用量、输入与介入时间线、输出和独立检查、资源退出及异常。完整私有记录与可公开脱敏报告分开。最终展示成对结果、全部试行的成功/失败/无差异和适用限制，不拼接不同实例作一条自主成功链；检查点、调用次数、录屏流畅或评分本身不作为净价值。README 只放可回查的摘要，完整报告和复现条件保持公开可发现；图示场景标明设计目标。
+
+传播素材优先复用同一真实运行的录像、成品与报告，在 NEXUS 资产体系维护；不得把原始私人回执写入公开仓库。本节没有制作新视频、图片或向社媒发布，实际对外发布仍按对应授权核对。
+
+### Comparison protocol in English
+
+Status: **preparation only; no comparison runs or measured benefits yet**. Compare enabled and disabled Accord against the same required deliverable, quality and automation level. Version qualification, CI, installation and incremental value remain separate findings.
+
+Before dispatch, freeze paired host/backend/package versions and hashes, OS, main model/effort, available submodels, native and external tools, permissions, resource limits and task materials. Toggle only Accord in the target scope, preserving other plugins and both groups' native scheduling/recovery capabilities. Record actual allocation rather than forcing identical tool paths. Check current entry and Hook support.
+
+Use fresh sessions and equal neutral workspaces. Inspect effective user/project instructions, memory, loaded Skills and state; this product repository's Accord instructions would contaminate a disabled baseline. Disabling or uninstalling does not erase loaded context. Give both arms the same initial request, scheduled change and recovery input, with a rescue policy set in advance. Separate necessary authorization/personal actions from avoidable prompting, correction and rescue. Include setup and first-use trust costs; give neither arm hidden coaching.
+
+Start with three task types: an added requirement affecting earlier output; interruption and native recovery at the same semantic milestone; and a simple one-prompt task without an artificial fault. Check the actual deliverable, complete requirements, protected originals, corrected effects, retained goals/pauses/authority, no duplicate actions and resource exit. Record human effort, full elapsed time, model/tool use, cold/warm loading, caching, concurrency and recovery/exit costs. Unknown costs stay unknown; account quota is not task cost. Reasonable overhead does not excuse missing automation or quality, nor imply failure by itself.
+
+A possible pilot uses two independent pairs per type, counterbalancing order: twelve runs. Freeze the actual sample count, budget, milestones and criteria before execution. Such a pilot supports bounded observations, not statistical significance, all-task gains or cross-entry claims. Do not name Accord or its Skills in ordinary task prompts. Material upstream/model/configuration drift holds the affected pair for reconciliation; original failures and effects remain recorded.
+
+Retain configuration, input/intervention timelines, outputs, independent checks, usage and cleanup for every run. Publish paired successes, failures, ties and regressions with limitations and reproducible conditions. Private raw records and public redacted reports are separate; do not splice episodes into one autonomous chain. Checkpoints, call counts, smooth video or scores alone are not value evidence. The README will carry a traceable summary; full reports remain discoverable. Reuse those same real runs for NEXUS communication assets, subject to separate publication authority. No new video, image or social post has been produced here.
+
 ## 演示与可复用素材
 
 采用一条约60–90秒的真实任务录屏，脚本为待验证的拍摄意图：
@@ -168,8 +210,8 @@ This checklist serves first-use copy and the existing release work; it grants no
 | 内容 | 当前情况 | 完成条件 |
 |---|---|---|
 | 精确发行与更新日志 | 以当前接续和精确版本公开记录核对 | 验收、候选审查、已有适用发布授权及其条件、同版本公开后态成立 |
-| README整体修订 | 用户已授权按最新共识按需更新，发布前仍需整体校准 | 发布前按实际成品整体复核中英文定位、能力及限制、安装使用、示例、徽章与链接，不能仅沿用开发期文案 |
-| 安装与使用入口 | 待正式版本绑定 | 新用户能取得精确包，按真实支持条件完成安装和使用；市场收录不冒充必需前提 |
+| README整体修订 | 入口分层由双语 README 与[用户指南](../user-guide.md)承接 | 每次改动按实际成品复核中英文定位、能力及限制、安装使用、图示与链接，不能仅沿用开发期文案 |
+| 安装与使用入口 | 以3.3.4精确发行、当前支持入口、启用和首次 Hook 信任说明为基准 | 新用户能取得精确包，按真实支持条件完成安装和使用；市场收录不冒充必需前提，指南不代验每位用户的实际加载 |
 | 演示及效果说明 | 已有局部试验，不是完整演示 | 同版本真实完整任务、可复验成品、参与边界及限制 |
 | 发布页面 | 本文仅底稿 | 更新文案、缩略图、截图、视频、关联工具致谢和可用链接；在实际发布表单重新检查限制 |
 

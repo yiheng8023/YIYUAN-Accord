@@ -4,9 +4,6 @@
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/github/actions/workflow/status/yiheng8023/YIYUAN-Accord/validate.yml?branch=main&amp;label=CI&amp;logo=github" alt="CI 状态"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/releases/latest"><img src="https://img.shields.io/github/v/release/yiheng8023/YIYUAN-Accord?color=blue&amp;label=Release" alt="最新发布版本"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/stargazers"><img src="https://img.shields.io/github/stars/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=ffaa00" alt="GitHub Stars"></a>
-  <a href="https://github.com/yiheng8023/YIYUAN-Accord/network/members"><img src="https://img.shields.io/github/forks/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=grey" alt="GitHub Forks"></a>
-  <img src="https://img.shields.io/badge/Python-3.10%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10 至 3.14 CI">
-  <img src="https://img.shields.io/badge/CI-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="Linux、Windows 与 macOS CI">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/yiheng8023/YIYUAN-Accord?color=green" alt="Apache-2.0 许可证"></a>
 </p>
 
@@ -16,223 +13,75 @@
 
 **让工具适应人，而非人适应工具。**
 
-3.3内置[中文元指导原文](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.zh-CN.md)及其[英文译文](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)，以中文为语义基准。受支持、已启用且可信的入口Hook加载英文版，连同任务协调指导传入；中文版按需阅读，保持用户AGENTS.md独立。安装和实际加载仍需核验；它不提高宿主指令优先级，也不证明所有宿主、其它未选环境模式或子代理路径都已覆盖。
+YIYUAN Accord 是开源的人与 AI 协作系统。它的目标是让你直接说想完成什么，由 AI 助手与宿主共同理解需求、选择能力、推进任务并核对结果。你不必先研究宿主的设置、选项、模型、工具和工作流程，再亲自把它们组织起来。
 
-**插件参与前提：** 对应宿主入口允许使用插件，Accord已安装并在该作用域启用，所用Hook/MCP满足必要信任与权限且实际加载。ChatGPT桌面“设置 → 常规 → 插件（允许ChatGPT使用已安装的插件）”是其中的总使用开关，不能只看安装状态。开关由用户掌控；关闭时不宣称Accord在该入口参与，也不自行开启。
+Accord 的通用设计不绑定某一家模型厂商或宿主。**当前发行提供 OpenAI 环境下的 Codex 适配**，其它宿主适配属于后续方向；这不代表当前已经支持所有宿主或所有 OpenAI 入口。
 
-子代理是按需可选能力，不是使用Accord的前置条件。先核用户选择及宿主有效启停和权限；关闭或不可用时采用足够的单代理方案，必要的独立核验缺口如实保留。部分宿主的Ultra允许主动委派，但不代替有效启停与授权核对，具体默认会随入口和版本变化。见[官方子代理说明](https://learn.chatgpt.com/docs/agent-configuration/subagents)。
+## 它要解决什么问题
 
-项目中目标、权限、责任与证据的用语见[词表](GLOSSARY.md)。
+- **工具很多，却需要你自己调度。** 让助手按任务发现和协调宿主、Accord 及第三方能力，处理必要设置与依赖；只有确需你决定、授权或本人操作时才打扰你。
+- **需求改了，旧成果没有跟上。** 跟进补充和调整，修正受影响的工作，保留仍然有效的要求与成果。
+- **中断后，要重新交代一遍。** 在宿主支持的流程中保留目标、进度和未完事项，为继续工作提供恢复依据。
+- **做了很多，却难以判断是否完成。** 按约定核对成果、实际影响和收尾情况，说明剩余问题。
 
-YIYUAN Accord 是供应商中立的人与 Agent 协作系统，设计目标是为人与 AI 的长期协作提供协调与可靠性支持：让 Agent 在用户提出目标或初步构想后，澄清需求、评估可行性、补足必要条件，并在授权范围内持续负责执行、纠偏、恢复和结果验证。它力求让用户无需先学会工具、配置、模型调度或任务交接；熟练用户同样保有直接操作和调整路线的自主权。
+这些是需要用真实任务持续检验的目标。启用/未启用的公平对照正在准备，将同时公开结果质量、人工介入、耗时与用量；**目前不提供实测增益数字**。见[对照方案](docs/operations/LAUNCH-v3.3.md#启用与未启用对照准备)。
 
-项目开源，不以盈利为目标，以工业/商业生产级标准建设，追求平权、普惠和用户自主。项目决策以用户权益、可验证价值和可持续维护为依据，商业资助与平台关系不改变供应商中立原则。通用协作设计与具体宿主适配分离，按实际价值复用宿主能力和成熟资源。
+## 开始使用
 
-> **3.3 范围与证据。** 当前范围为已选的本地 OpenAI 执行路线：CLI、SDK、Codex Desktop 和 VS Code；Work Local 是在共享后端本地执行的模式；Remote 桌面/手机复用已选本地宿主作为交互控制通道，手机不是独立执行环境。共用机制复用有效证据，实际适用性和必要差异仍须验收。普通 Chat 独立用途、web Chat、JetBrains 和 Xcode 已延期，相关能力仍未知；Linux/macOS CLI 与通用连续性保留。Claude 不在 3.3 分发范围，供应商中立性不变。
->
-> 当前设计、历史处置、系统图、未完工作和收官标准统一见 [3.3 共识节点与计划](docs/operations/PLAN-v3.3.md)。[v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1) 是保留的发布基点，旧版本范围与证据以其精确 tag 为准，不继承为 3.3 支持声明。
+当前正式版为 [3.3.4](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.4)。请选择支持插件的 Codex CLI 或桌面入口，并确保该宿主能运行兼容 Node（当前受测推荐为 Node 24）。普通使用不需要 Python。
 
-[YIYUAN Accord 3.3.2](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.2)已于2026-10-28发布，发行提交为`ef8bde2a`。其绑定18案、17范围、52义务的资格及[全部11项CI检查](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40644847135)均已通过，证据和限制见[发行复核](research/reviews/2026-10-21-functional-realization-release-audit.md)。3.3.0和3.3.1保留历史身份，后续文档提交不改变3.3.2发行主体。
+1. **安装。** 从本项目来源安装 YIYUAN Accord；CLI 登记来源可使用：
 
-[3.3.3补丁](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.3)已于2026-10-28发布，精确提交`1d965e79`及[11项CI](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40679555642)均已核。它修复新版Codex根会话带UUID后缀时的输入核验误判，保留线程隔离、输入回执和恢复校验。若旧版出现`capacity-retry-subagent-rollout`，应核对真实会话身份并更新兼容包，不要手动改写回执或状态。升级后须核对实际加载及任务恢复；具体本机后态见[当前接续](docs/operations/CONTINUATION.md#当前事实)与[更新日志](CHANGELOG.md)。
+   ```sh
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.4
+   ```
 
-Accord在宿主正常交互中保任务责任、恢复与按需交接。临时开发用Stop自动续轮已从3.3撤回，不自动增加对话回合；宿主目标模式等长程控制仍由用户明确选择。
+2. **启用插件。** 确认宿主允许使用插件，并在实际使用范围内启用 Accord。CLI 在 `/plugins` 中选择来源、安装，并对已安装项按 `Space` 启停。
+3. **首次审阅并信任 Hook。** Hook 是在任务事件发生时运行的插件脚本。安装或启用插件不会自动信任它们；CLI 可在 `/hooks` 中审阅并信任 Accord 的当前定义。桌面的具体方式由安装执行者按所用版本核实，见用户指南。
+4. **新建任务，直接描述目标。** 例如：“帮我完成这件事；中途有变化时，继续修正受影响的工作，并在交付前检查结果。”
 
-## 协作问题与目标
-
-Agent 可能做了很多工作，却偏离目标、忽略一句话中的部分意图、中断后丢失未完责任，或把局部测试通过误认为交付完成。用户于是成了工具协调员和故障恢复者。
-
-Accord 希望把这些责任交回 Agent：理解连续输入，主动研究和创造可建立的条件，按需组织宿主、自身与外部能力，纠正受影响的历史判断和产物，核验结果及资源后态。只有真正需要用户决定、授权或本人完成的步骤，才以普通语言说明。
-
-这是需要持续验证的目标。世界级是改进志向；实际成熟度由普通使用中的结果、可靠性、用户负担和完整成本证明。
+**安装、启用、Hook 信任和实际加载缺一不可。** 完整步骤、安装请求模板及未生效排查见[用户指南](docs/user-guide.md#中文使用指南)。当前官方文档不支持 Codex IDE 扩展原生插件入口；在编辑器终端运行 CLI 是另一条路线，见[具体入口限制](docs/user-guide.md#当前入口与运行条件)。
 
 ## 如何工作
 
 ```mermaid
 flowchart TD
-    U["用户的想法、补充与调整"] --> T["目标、约束与授权<br/>验收标准"]
-    T --> C["评估可行性<br/>建立必要条件"]
-    H["宿主、Accord 与生态能力<br/>按需复用、组合或补建"] <--> C
-    C --> E["Agent 执行与观察<br/>纠偏与恢复"]
-    E --> V["核验结果与系统影响<br/>完整性、关键短板与净价值"]
-    V -->|仍有缺口| C
-    V -->|目标或约束变化| T
-    V -->|满足约定| R["交付与资源后态<br/>未完及后续责任"]
-    S["持续状态<br/>目标、来源、依赖与决策<br/>证据与未完责任"] --- T
-    S --- C
-    S --- E
-    S --- V
+    U["你提出目标、补充与调整"] --> A["Accord 与宿主 AI 助手协作<br/>理解需求，选择能力与必要设置"]
+    A --> E["执行任务并保留进度<br/>处理变化、异常与未完工作"]
+    E --> V["按约定核对结果与实际影响"]
+    V -->|需要修正或恢复| A
+    V -->|达到约定| R["交付成果，说明未完事项<br/>释放本任务占用的资源"]
 ```
 
-这张总览图展示 Accord 的协调职责及其反馈关系。[详细系统图](docs/operations/PLAN-v3.3.md#稳定关系与动态方法)和[开发工序与依赖](docs/operations/PLAN-v3.3.md#工序与依赖)保留在共识计划中；实现与验收进展见下文[当前证据](#能力边界与当前证据)。
+宿主提供模型、工具和执行能力；Accord 补充任务协调、连续性和核验机制。实际工作可以并行、嵌套或返回前一步，这张图是职责总览。原理及完整关系见[用户指南](docs/user-guide.md#原理与进阶阅读)、[架构](docs/architecture.md)和[详细系统图](docs/operations/PLAN-v3.3.md#稳定关系与动态方法)。
 
-起点—过程—结果是一组可以并行、嵌套和反馈的关系。语义解释变化，事件触发相关重审，负边界保护目标、授权和证据；具体路径由任务决定。局部确定性操作可以标准化，全程不套固定 SOP。
+## 使用前需要知道
 
-插件是具体宿主中的交付形式。Accord 的协作职责贯穿用户意图、宿主与外围能力、实际结果；关键判断、状态变化和结果反馈需接通，但不要求所有调用经过统一代理，也不取得高于用户或宿主的权限。用户操作引起重要变化且意图不明时才确认预期结果，明确选择持续有效；纠偏不能擅自恢复用户设置。
+- 你的模型、推理强度和使用限制继续有效；Accord 不能越过宿主权限、替你启用已关闭的功能，也不要求先重置现有环境。子代理是可选能力。
+- Accord 不训练模型、不扩大上下文，也不自动增加对话回合。长程运行仍使用宿主能力并遵循你的选择。
+- 启用输入 Hook 后，根任务输入会保留在本机用于恢复，可能包含敏感文字；退出会话不一定立即删除。见[隐私与保存](docs/user-guide.md#输入保存与隐私)。
+- 额外协调可能增加上下文、耗时和计算开销。已有验收和 CI 各有适用范围，不能替代普通使用中的收益对照。见[版本与证据](docs/user-guide.md#版本与证据)。
 
-你明确选择的模型、推理强度和使用限制应持续生效，适用的现有配置应保持稳定。子任务调度不自动授权更改主模型。对于既有授权未涵盖的变更，包括改变你固定的选择或跨越服务商、账户、数据访问、重大费用边界，Agent 应先说明影响并取得必要决定；已有明确授权无需重复确认。
+## 进一步了解与参与
 
-动态适应面向实际环境。Accord 应利用宿主已有的获准能力逐步建立缺失条件、验证生效并形成恢复路径，即驱动宿主自举；不要求用户先重置成默认环境。开发隔离只是定位原因的手段，实际适应与自举能力仍须通过真实任务验证。
+[用户指南](docs/user-guide.md#中文使用指南) · [设计与当前计划](docs/operations/PLAN-v3.3.md) · [验收依据](docs/operations/ACCEPTANCE-v3.3.md) · [当前接续](docs/operations/CONTINUATION.md) · [更新日志](CHANGELOG.md)
 
-自知、自洽、自治、自学、自纠、自愈、自证和自进化，是支撑自举的能力维度。认知上的监测与调整须连接工程上的执行、反馈和恢复；工程自举不以主观意识为前提。经验需经过验证才能复用，判断与结果须接受可反驳的证据检查，改进要能发现退化并撤回有害变化。这些是[设计与验收方向](docs/operations/PLAN-v3.3.md#自举的能力维度与证据)，不代表八项已全部实现。
-
-3.3包通过一个简短入口 Skill、四个专用 Skill、原生事件提示和可选任务状态机制参与宿主工作，仓库工具用于契约和证据检查。可见、调用、执行和产生可靠效果是不同阶段。组件数量、是否需要运行时及其形态，均按真实缺口和生命周期成本选择。
-
-用户无需创建或替换 `AGENTS.md` 来补足 Accord 的入口职责。已有用户及项目指令是需要尊重和协调的外部条件；旧 Skill 可以贡献局部职责，但不定义完整协作链路。
-
-三个任务状态 MCP 工具用于检查根任务已存状态、评估下一段工作余量、取回已捕获输入，以及管理必要检查点。生命周期工具只绑定、暂停或退役 Accord 自有任务状态，不写业务文件、不改变宿主模式；更新须绑定已观察的输入、修订号及当前原生轮次，解除用户暂停或取消任务仍须核对真实用户决定。工具复用同一个宿主管理的 Node 进程及现有状态存储。捕获输入不是完整历史或新授权，调用元数据及理由文字不授予权限，子任务也不会承接共享会话的根状态。这些状态工具不重放输入、不派发交接。其共享处理器也会核对已有所属执行；来源失效时可能保护性停止该执行并保留操作证据。
-
-3.3.2的Codex包另加 `coordinate_task_execution`，用于原生Skill库存、受托准备Skill输入及当前根任务下的有限新目标。转移须有当前授权、来源静止、范围写者所有权，并独立核验实际接收、续作、结果和关闭。默认只读；声明的工作区写入范围还须在写入前核实原生有效限制。它不控制已有GUI线程，也不自动替换根Agent。实现检查不等于普通使用验收，详见包内[能力接口](plugins/yiyuan-accord-codex/skills/coordinate-capabilities/references/native-capabilities.md)和[交接接口](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md#ordinary-root-task-through-the-mcp-execution-interface)。
-
-启用输入 Hook 后，3.3包会把根任务的原生输入文字保留在既有本机回执中，供恢复时按需读取。子代理输入使用宿主自身的任务状态，不更新根检查点；此辅助器不提供独立子代理检查点。每份回执上限为 8 MiB，按任务生命周期处理；中断时即使尚未建立检查点，输入仍保留用于恢复，单纯退出不会将它删除。这份本地副本可能包含敏感文字。它不是完整对话或进度记录，也不产生新授权。保留与失败边界见[架构说明](docs/architecture.md#current-candidate-and-scoped-connections)。
-
-宿主的按钮、菜单、快捷键、设置、任务与项目操作、模型、权限、记忆、自动化、运行环境及扩展能力，都属于发现范围；不能只查看当前工具列表。Agent 逐项判断用途和条件，按需使用，核验效果及退出状态。覆盖不等于全部启用，未知不能冒充已覆盖。
-
-覆盖主张限于已选入口的职责和有充分依据的来源集合，绑定日期、已知版本及限制。来源须说明必要职责、已知接口、矛盾及反例，不能只选方便的工具列表；影响必要结果的事实未决，会阻断相依主张。其它不可观察信息仍作为限制保留，不写成已验证。Remote客户端控制连接主机，可有条件复用主机证据，不宣称认证所有当前或隐藏的客户端界面。
-
-生态矩阵管理也是核心职责：插件、App、Skill、MCP 等扩展的组合、依赖、冲突和生命周期都需按任务管理。安装、上下文暴露、连接与进程占用分别核对，选择合适作用域，按需启用、复用和退出，避免无界全局常驻。减少无实际价值的依赖，同时优先复用能够充分承接职责的宿主能力、工具和成熟实现，不把自研设为默认。退出时保护用户选择及其它任务的共享依赖，并验证实际释放；不能假定卸载会清除已进入上下文的内容。
-
-## 能力边界与当前证据
-
-### 任务状态与正常交互
-
-3.3不注册Stop自动续轮。任务状态保未完责任、暂停与源观察，不能据此增加用户回合。Agent在宿主正常任务流程中执行和验证，按实际需要恢复或交接；结束本轮不等于丢失任务。历史开发版Hook“已阻止”不再作为产品要求，也不是完成判定。
-
-资格证据绑定精确版本、入口、环境和条件。单项功能案和不同任务不能合并证明完整组合验收、入口整体交付与生命周期、系统集成或完整独立影响评估。适用结果与未完责任见[验收视图](docs/operations/ACCEPTANCE-v3.3.md)和[当前接续](docs/operations/CONTINUATION.md)；历史失败与未知仍保留。共有机制可在核对实际适用性和必要差异后复用；入口、版本或配置标签本身不构成跨环境证明。开发脚本、控制器代办和人工提示本身不证明普通用户可自主得到同样结果。
-
-Accord 不训练模型、不扩大原生上下文，也不越过宿主的权限或接口边界。必要条件不足时，Agent 研究可行替代或补足办法；真实限制仍需说明并保留未完责任。参考核心或提示词不能单独充当执行和权限保障。
-
-3.3借助宿主已有模型、支持的工具与Accord组件完成任务所需的判断和核验。判断实现仅作为可选能力，按实际需要、可达性、权限和收益选择，不排定独立模型接入。用户无需额外部署模型、另开评估模型账号或默认承担额外API调用；平台API开放不等于当前宿主已采用，开发侧试用也不自动成为用户侧默认。现有生态能力仍按需复用。宿主原有的使用条件和费用仍然适用。
-
-介入可能增加上下文占用、时间、计算成本、指令冲突或维护负担。按实际结果评估净影响；同等效果下优先低负担路线，必要时缩小、替换或退役介入。必要自动化不承诺零 Token、零 CPU 时间或零耗时。错误组件造成的既有影响仍须追溯和修正。
-
-当前未完项见[共识节点](docs/operations/PLAN-v3.3.md)，判据见[验收视图](docs/operations/ACCEPTANCE-v3.3.md)，带条件的观察见[历史试验记录](docs/operations/PROCEDURE-v3.3.md)。历史事实见[更新日志](CHANGELOG.md)与各版本发布记录，历史通过结果不能直接证明当前版本通过；只有核对实际适用性、必要差异和当前依赖后，才能在原证据范围内复用。
-
-## 安装与维护
-
-正式发布后的宿主安装、传播材料更新及项目治理安排见[发布后计划](docs/operations/PLAN-v3.3.md#发布后的部署传播与治理)。OpenAI公共插件目录保持可选，是否投放按实际价值、兼容性、用户负担和维护成本另议，没有固定提交承诺，也不表示已收录；长期以项目或组织为管理主体，避免依赖个人账号作为唯一控制点。
-
-安装前先核对精确版本对应的 GitHub Release 与不可变 tag。冻结候选或持续变化的开发分支本身，不构成已接受发行或发布回执。
-
-可以把安装意图交给具备相应能力的 Agent：
-
-> 核对已接受的精确版本和当前宿主条件，保留无关配置与插件，在授权范围内完成安装并验证实际生效；遇到必要信任或本人动作时，准备好具体事项再告诉我。
-
-登记、安装字节、当前任务可见性、实际参与及效果分别核验。启用 Hook 需要相应运行环境、原生事件和宿主信任。更新、回滚与移除需健康执行者和恢复路径；已加载内容、安装状态和运行资源分别处理。完整历史命令和边界可查看 [v3.2.1 README](https://github.com/yiheng8023/YIYUAN-Accord/blob/v3.2.1/README.zh-CN.md)，执行前核对当前宿主支持。
-
-当前包通过 `node` 启动 Hook 和状态 MCP。执行者须核实实际宿主进程能找到并运行兼容的 Node；另一个终端能找到它，或宿主安装目录内带有它，都不能代替这一核验。优先复用合适的已有运行时，补装前取得必要授权。当前受测推荐为仍在维护的 Node 24 版本：CI 使用 Node 24，本地有限检查覆盖 24.19.0 和 24.21.0。其它主版本及最低兼容版本仍未验证，不表示所有 24.x 补丁都已测试；证据与边界见[运行时评估](research/reviews/2026-10-09-node-runtime-compatibility.md)。普通入口没有 Python 或第三方 npm 依赖，也不要求额外的第三方 Skill 或 MCP 服务；具体任务仍可能需要其它工具或访问条件。Codex 包的范围转移及可选 SDK 记录器需要 Node 内建的 `node:sqlite.DatabaseSync`；加载入口、读取任务状态和 Skill 库存不打开该记录器。
-
-下文维护者使用的 `host-check` 检查静态包契约，不检查用户宿主的运行时是否可用。实际 Hook 参与和 MCP 连接仍须通过所选入口核验。
-
-前置条件按常规依赖处理：已有兼容 Node 可复用，不必每个插件各带一份；缺少时安装当前受测推荐的维护中 Node 24，并确保目标宿主能执行 `node --version`。安装后必要时重开宿主，让新环境生效，再核 Hook/MCP 的实际参与。普通入口不需要 Python、额外 npm 包或第三方 Skill；权限、插件启用与信任仍由用户掌控。
-
-生命周期 Skill 可通过普通安装请求或明确选择来提供引导。当前包还保留可选的官方 `onboardingSkill` 声明；当前客户端未显示独立 Setup 按钮，不应反复查找、重装或因此阻塞正常使用。声明元数据已解析，不代表该专用界面已验证。零 Node 自动准备、一键安装和私有运行时打包均不作为3.3发布前置；必要运行条件、兼容性与结果核验仍保留。
-
-运行时兼容还须结合所选宿主入口与后端、受支持的 Hook/MCP 接口、OS/架构和有效权限。Accord 当前的 Hook/MCP 命令启动独立 Node 进程，其版本不必与宿主内部 Node 相同；若组件共用宿主解释器，则须同时满足双方要求。宿主自带运行时，或某个 SDK/npm 启动器声明的版本范围，都不单独证明 Accord 兼容；保留宿主管理的组件并验证实际组合。
-
-切换版本前，执行者应核对未完成工作和稍后才启动的 Hook。已加载的组件仍能工作，不代表之后的 Hook 还能找到可执行文件。应由不依赖待更新插件的健康执行者，在宿主支持且能够核验的安全时机切换；无法确认时，保留准备成果、暂不切换。独立备份保留原包，实际恢复还需要可用工具、相应权限和恢复后的状态核验。
-
-这些检查和协调由执行者负责。用户只需参与确有必要的决定、授权或本人操作，并得到具体影响的说明；已有明确授权无需重复确认。新进程发现和隔离检查，不能证明已有会话或此前失败的真实 Hook 已恢复。
-
-## 开发、评估与贡献
-
-当前分支先读[共识节点与计划](docs/operations/PLAN-v3.3.md)及[接续导航](docs/operations/CONTINUATION.md)，按需参考[机器投影](product/development.json)和[架构](docs/architecture.md)。冻结的 3.1 权威文件与 Golden Tasks 是历史输入，不是当前开发验收。
-
-维护者可在不安装插件的情况下运行：
-
-```powershell
-python -B -m yiyuan_accord verify-development --json
-python -B -m yiyuan_accord verify --root . --json
-python -B -m yiyuan_accord host-check --adapter codex --root . --json
-```
-
-只有 `python3` 时替换启动器即可。CI 覆盖 Linux、Windows、macOS 上的 Python 3.10–3.14，并使用 Node 24 检查 Hook。这是维护工具验证，不是跨宿主行为验收，也不是用户必须安装 Python 的要求。
-
-发布要求更新日志、提交推送的版本内变更、必要功能/生命周期/净影响证据、独立评审与托管检查相符，再按已绑定的人工授权发布同一提交并核验公共后态。冻结候选不是发布凭证。
-
-参与方式见 [CONTRIBUTING.md](CONTRIBUTING.md)、[SECURITY.md](SECURITY.md)和 [SUPPORT.md](SUPPORT.md)。[报告问题](https://github.com/yiheng8023/YIYUAN-Accord/issues)时说明期望与实际结果、精确版本、宿主入口、相关自定义因素和人工介入，不提交凭据或私密会话原文。
-
----
+开发、评估和维护检查见[贡献指南](CONTRIBUTING.md)；遇到问题可以先用自己的话说明期望和实际结果，见[支持说明](SUPPORT.md#支持说明)。请勿公开凭据或私密会话原文，安全问题按[安全政策](SECURITY.md)报告。
 
 ## 愿景与共创
 
 **宣言：助力每一个梦想。**
 
-易元联创（YIYUAN NEXUS）将持续探索人机协作及其相关领域。YIYUAN Accord 并不以永久存在为目标：它会随前沿智能、人类与机器能力及协作方式的变化而演进。前沿智能的进步既为 Accord 提供新的能力，也持续检验其必要性、边界与实际价值；当使命已经完成、被更好的机制承接，或不再需要时，项目也应能够负责任地有序谢幕。
+项目开源，不以盈利为目标，以工业/商业生产级质量为建设方向，追求平权、普惠和用户自主。项目决策以用户权益、可验证价值和可持续维护为依据；商业资助和平台关系不改变供应商中立原则。
 
-易元联创目前仅有一名作者兼维护者，能力、精力和资源有限。我们期待与社区联合创作、协同前行。在现实能力与资源边界内，Accord 将持续维护和演进，逐步增加更多宿主适配。路线方向不代表当前已经支持，也不构成发布时间或兼容性承诺。
+易元联创（YIYUAN NEXUS）将持续探索人机协作及相关领域。Accord 会随前沿智能、人与机器能力及协作方式演进；当使命完成、被更好的机制承接或不再需要时，也应能负责任地有序谢幕。
 
-参与方式见 [`CONTRIBUTING.md`](CONTRIBUTING.md)；问题与建议可通过 [GitHub Issues](https://github.com/yiheng8023/YIYUAN-Accord/issues) 提交。
+目前仅有一名作者兼维护者，能力、精力和资源有限。欢迎社区联合创作、协同前行；更多宿主适配等方向会持续评估，不预设未来版本号、日期或兼容性承诺。
 
----
+感谢所有[贡献者](https://github.com/yiheng8023/YIYUAN-Accord/graphs/contributors)。[问题与建议](https://github.com/yiheng8023/YIYUAN-Accord/issues) · [Star 增长趋势](https://www.star-history.com/#yiheng8023/YIYUAN-Accord&Date)
 
-## 社区
+## 许可与支持
 
-### 贡献者
+由 [yiheng8023](https://github.com/yiheng8023) 维护的独立社区项目，采用 [Apache-2.0](LICENSE)，按“原样”提供；不是宿主厂商的产品或官方背书。名称、商标及第三方声明见 [NOTICE](NOTICE)、[许可政策](docs/license-policy.md)与[第三方声明](THIRD_PARTY_NOTICES.md)。用户仍需审查输出并遵守适用规则，正式发布不保证特定用途的适用性或生产安全。
 
-诚挚感谢所有贡献代码、评审、文档、问题报告与证据的参与者。
-
-<p align="center">
-  <a href="https://github.com/yiheng8023/YIYUAN-Accord/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=yiheng8023/YIYUAN-Accord" alt="YIYUAN Accord 贡献者">
-  </a>
-</p>
-
-### Star 增长趋势
-
-[![YIYUAN Accord Star History](https://api.star-history.com/svg?repos=yiheng8023/YIYUAN-Accord&type=Date)](https://star-history.com/#yiheng8023/YIYUAN-Accord&Date)
-
----
-
-## 项目支持与法律
-
-### 项目与许可
-
-公开项目与网站是 [github.com/yiheng8023/YIYUAN-Accord](https://github.com/yiheng8023/YIYUAN-Accord)。
-
-发布者是 [yiheng8023](https://github.com/yiheng8023)。
-
-YIYUAN Accord 采用 Apache-2.0 许可证。
-
-该许可证允许商用、修改与再分发，但不允许把修改版或再分发版冒充为官方版本，或暗示其受到官方赞助与背书。
-
-本仓库是规范公开来源；官方版本由相互匹配的 Git tag 与 GitHub Release 记录识别。独立安装后，当前分发插件包内也会保留各自的 `LICENSE` 与 `NOTICE`。
-
-YIYUAN Accord、YIYUAN NEXUS 名称与图形商标保持独立，详见 [`NOTICE`](NOTICE)、[`docs/license-policy.md`](docs/license-policy.md) 与 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
-
-社区支持按 [`SUPPORT.md`](SUPPORT.md) 所述尽力提供。
-
-### 自愿赞助与支持
-
-赞助完全自愿。
-
-赞助不购买支持 SLA、处理优先级、发布权限、安全保证、治理例外、功能承诺或对技术决策的影响力。
-
-如果 Accord 对你有所帮助，可以通过仓库所有者的[公开 PayPal 页面](https://www.paypal.com/ncp/payment/LNTF8KXGJXMZY)支持维护。
-
-<table>
-  <tr>
-    <th width="300">微信支付（人民币）</th>
-    <th width="300">支付宝（人民币）</th>
-  </tr>
-  <tr>
-    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/wechat-pay.png" alt="微信支付自愿赞助收款码" width="260"></td>
-    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/alipay.png" alt="支付宝自愿赞助收款码" width="260"></td>
-  </tr>
-</table>
-
-付款前请核对收款方。完整条款见 [`SPONSORING.zh-CN.md`](SPONSORING.zh-CN.md)。
-
-### 免责声明与合规说明
-
-YIYUAN Accord 是独立的社区开源项目。
-
-它不是 OpenAI、Codex 或 GitHub 的产品，也不代表这些组织的赞助或背书。
-
-第三方名称与商标归各自权利人所有。
-
-用户仍需审查 Agent 输出，并遵守适用法律、合同、宿主条款、许可证和组织政策。
-
-本软件按 Apache-2.0 许可证以“原样”方式提供，不附带任何保证或条件，详见 [`LICENSE`](LICENSE)。
-
-正式发布不证明生产安全，也不证明对特定用途的适用性。
+[自愿赞助与支持](SPONSORING.zh-CN.md)包含公开渠道及收款码。赞助不购买服务等级、优先级、功能承诺或技术决策影响力；社区支持按 [SUPPORT.md](SUPPORT.md) 尽力提供。

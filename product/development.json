@@ -178,6 +178,7 @@
       "README.zh-CN.md",
       "docs/architecture.md",
       "docs/task-state-clients.md",
+      "docs/user-guide.md",
       "docs/operations/ACCEPTANCE-v3.3.md",
       "docs/operations/BASELINE-v3.3.md",
       "docs/operations/CONTINUATION.md",
@@ -6436,8 +6437,8 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "The native MCP test maintenance is verified at exact0d2081c6cc24b6fc7990a5ab56af1fde5a7ac1d8: CI40762210176/#1032 completed successfully on its first attempt with all11 jobs at2026-10-28T21:56:15Z. Thirteen local regressions, Windows native rejection/scoped-Hook checks and four retained macOS/Ubuntu MCP paths preserve source, identity, original, natural-release and applicable retirement/cleanup checks. CI40754294884/#1031 remains a failure with10 successful jobs and the original macOS Hook-discovery Git-descendant release failure; its Git arguments remain unknown. Release e58 to8c3 changed only documentation/projection; the0d2 fix changed only the MCP fixture and documentation. Release427086138/v3.3.4 and its tag still targete58; all30 package files match the current source and local installation. Independent impact review found no demonstrated product regression requiring withdrawal, replacement release or reinstall. The prior3.3.4 text task and revision13 retirement remain closed. Final documentation records the verified engineering subject; future work follows actual user goals and the retained version-free directions.",
-    "requires": "Preserve published3.3.0/3.3.1/3.3.2/3.3.3/3.3.4 identities, original failures and evidence scopes. The controlled catalogue result does not retroactively pass the default external-network condition or establish that upstream background-task shutdown is fixed. Retain that compatibility limitation and the original macOS Git-argument unknown; no universal unaffected-user claim follows. Current maintenance acceptance has its exact hosted and independent evidence; final factual documentation needs only its affected source checks and verified repository/resource closeout. Product package bytes are unchanged, so no new publication or installation obligation is introduced. Reopen affected evidence on a material later change, without replaying closed business cases or granting a new host, account, trust, promotion or unrelated write."
+    "work": "The user-approved current work is a bilingual README restructure for external readers, with a discoverable user guide, a simpler equivalent overview, explicit plugin enablement and first-use Hook trust, vendor-independent design separated from the current Codex adaptation, and preparation of a fair enabled/disabled comparison protocol. Current official IDE-native plugin and cloud-orchestrated plugin-Hook limitations are disclosed without invalidating version-bound historical observations. Verify source facts, bilingual meaning, local links, rendered diagrams and affected static checks, then synchronize only documentation. No comparison run, benefit figure, new communication asset, package modification, trust/configuration update or new release is included.",
+    "requires": "Preserve published3.3.0/3.3.1/3.3.2/3.3.3/3.3.4 identities, all original failures and evidence scopes. CI40762210176/#1032 remains successful11/11 at engineering0d2081c6; CI40754294884/#1031 remains a failure with the original macOS Git-descendant release issue and unknown Git arguments. Controlled catalogue success does not qualify default external-network shutdown. Documentation must preserve user control, current host/Hook prerequisites, local input privacy and unknown effects, with clear links to detailed evidence. Existing qualification and hosted CI do not prove incremental ordinary-use benefit. Fair comparison is preparation only and retains adequate native baselines, automation/quality and total cost. No new package publication or installation obligation follows. Actual documentation validation, repository state and resource closure must be observed before closeout; protocol state does not prove them."
   },
   "claimCeiling": {
     "localContractOnly": true,
@@ -6465,7 +6466,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r56",
+    "revision": "r57",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

@@ -4,9 +4,6 @@
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/github/actions/workflow/status/yiheng8023/YIYUAN-Accord/validate.yml?branch=main&amp;label=CI&amp;logo=github" alt="CI status"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/releases/latest"><img src="https://img.shields.io/github/v/release/yiheng8023/YIYUAN-Accord?color=blue&amp;label=Release" alt="Latest release"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/stargazers"><img src="https://img.shields.io/github/stars/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=ffaa00" alt="GitHub stars"></a>
-  <a href="https://github.com/yiheng8023/YIYUAN-Accord/network/members"><img src="https://img.shields.io/github/forks/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=grey" alt="GitHub forks"></a>
-  <img src="https://img.shields.io/badge/Python-3.10%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10 through 3.14 CI">
-  <img src="https://img.shields.io/badge/CI-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="CI on Linux, Windows, and macOS">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/yiheng8023/YIYUAN-Accord?color=green" alt="Apache-2.0 license"></a>
 </p>
 
@@ -16,247 +13,75 @@
 
 **Make tools adapt to people, rather than making people adapt to tools.**
 
-Version 3.3 includes the [English translation of the meta-guidance](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)
-as its value and judgment foundation. Supported, enabled and trusted entry hooks
-deliver it with task coordination without editing your AGENTS.md. Installation
-and actual loading still need verification; this does not override host priority
-or establish coverage of every host, execution mode or subagent path.
+YIYUAN Accord is an open-source human–AI collaboration system. Its goal is to let you describe what you want to achieve while the AI assistant and its host work together to understand the request, choose capabilities, carry out the task and check the result. You should not have to study the host's settings, options, models, tools and workflows before coordinating them yourself.
 
-The [Chinese source](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.zh-CN.md)
-is the semantic basis for the translation. Entry hooks load the English version;
-the Chinese version is available for reading as needed.
-
-**Plugin participation requires** the target host entry to permit plugin use,
-Accord to be installed and enabled in that scope, and the used Hooks/MCP to meet
-required trust/permissions and actually load. In the ChatGPT desktop app, the
-General setting that allows installed plugins is one global use gate; installation
-alone is insufficient. Users control it. An inactive plugin cannot enable itself.
-
-Subagents are optional capabilities, not an Accord prerequisite. Check current
-user choices and effective availability/permissions; use an adequate single-agent
-route when delegation is disabled, retaining any necessary independent-review gap.
-Ultra permits proactive delegation in supported host modes, but that does not
-replace enablement and authority checks. Defaults vary by entry/version. See the
-[official subagent guidance](https://learn.chatgpt.com/docs/agent-configuration/subagents).
-
-See the [project glossary](GLOSSARY.md) for terms concerning objectives, authority, responsibility and evidence.
-
-YIYUAN Accord is a vendor-neutral human–Agent collaboration system designed to support reliable long-term human–AI collaboration. Its goal is for the Agent to clarify a user's requirements, assess feasibility, establish necessary conditions, and own authorized execution, correction, recovery and result verification. Users should not need to learn tool coordination, configuration, model routing or task handoff first; experienced users retain control over their own actions and changes of direction.
-
-The project is open source and not driven by profit. It aims for industrial and commercial production quality, equitable access and user autonomy. Project decisions are guided by user interests, verifiable value and sustainable maintenance. Commercial funding and platform relationships do not change its supplier independence. Its general collaboration design is separate from host adapters; native and mature external capabilities are used according to their actual value.
-
-> **Version 3.3 scope and evidence.** The selected local OpenAI execution paths are CLI, SDK, Codex Desktop and VS Code. Work Local is a local execution mode on the shared backend; Remote desktop/mobile reuses a selected local host as an interaction and control channel, and mobile is not an independent execution environment. Valid shared-mechanism evidence can be reused; actual applicability and material differences still require acceptance. Independent ordinary Chat, web Chat, JetBrains and Xcode are deferred, with their capabilities still unknown. Linux/macOS CLI and shared continuity remain. Claude is outside 3.3 distribution; vendor independence is unchanged.
->
-> The [3.3 consensus node and plan](docs/operations/PLAN-v3.3.md) is the current entry for design, the system diagram, historical disposition, outstanding work and completion criteria. [v3.2.1](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.2.1) remains a historical release baseline; its exact tag defines its scope and evidence, not 3.3 support.
-
-[YIYUAN Accord 3.3.2](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.2) was released on 2026-10-28 from commit `ef8bde2a`. Its bound 18-case, 17-scope, 52-duty qualification and [all 11 CI checks](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40644847135) passed. See the [release review](research/reviews/2026-10-21-functional-realization-release-audit.md) for evidence and limits. Versions 3.3.0 and 3.3.1 retain their historical identities; later documentation commits do not change the 3.3.2 release.
-
-[Patch 3.3.3](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.3) was released on 2026-10-28 from exact commit `1d965e79`, with [all 11 CI checks](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40679555642) successful. It fixes input verification incorrectly rejecting newer Codex root rollouts with a UUID suffix. Thread isolation, input receipts and recovery checks remain enforced. If an older version reports `capacity-retry-subagent-rollout`, verify the actual session identity and update the compatible package; do not rewrite receipts or state manually. Verify actual loading and task recovery after updating. See [current continuation](docs/operations/CONTINUATION.md#当前事实) and the [changelog](CHANGELOG.md) for local adoption status.
-
-Accord preserves task responsibility, recovery and handoff within the normal host interaction. Development-only Stop auto-continuation is excluded from version 3.3; it does not add conversation turns. Long-running controls such as the host's Goal mode remain the user's explicit choice.
+Accord's general design is independent of any model vendor or host. **The current release provides a Codex adaptation for OpenAI environments.** Other host integrations remain future work; this does not imply support for every host or every OpenAI entry.
 
 ## What problem it addresses
 
-An Agent may do substantial work while losing the goal, overlooking part of a message, dropping unfinished responsibilities after interruption, or treating local test success as completed delivery. Users then become tool coordinators and recovery operators.
+- **Many tools, but you have to coordinate them.** Let the assistant discover and coordinate host, Accord and third-party capabilities, including necessary settings and dependencies. Ask you only for a decision, authorization or action that actually needs you.
+- **Requirements change, but earlier work does not follow.** Incorporate additions and changes, correct affected work, and preserve requirements and results that remain valid.
+- **An interruption means explaining everything again.** Preserve goals, progress and unfinished work for recovery through supported host workflows.
+- **Much activity, but no clear completion.** Check the agreed result, actual effects and cleanup, and explain what remains.
 
-Accord aims to return those duties to the Agent: interpret continuous input, research and establish feasible conditions, compose host, Accord and external capabilities when needed, correct affected earlier judgments and artifacts, and verify outcomes and resource state. Explain only decisions, authorization or personal actions that actually require the user.
+These goals need continuing validation on real tasks. A fair enabled/disabled comparison is being prepared, covering result quality, human intervention, time and usage; **no measured benefit figures are offered yet**. See the [comparison protocol](docs/operations/LAUNCH-v3.3.md#启用与未启用对照准备).
 
-These are goals to verify continuously. World-class quality is an ambition; actual maturity depends on ordinary-use results, reliability, user burden and total cost.
+## Get started
+
+The current release is [3.3.4](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.4). Use a Codex CLI or desktop entry that supports plugins, with a compatible Node executable available to that host; Node 24 is the current tested recommendation. Ordinary use does not require Python.
+
+1. **Install.** Install YIYUAN Accord from this repository's marketplace source. To register that source from the CLI:
+
+   ```sh
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.4
+   ```
+
+2. **Enable plugins and Accord.** Allow plugin use in the host and enable Accord in the scope you actually use. In CLI `/plugins`, select the marketplace, install, and press `Space` on the installed plugin to turn it on or off.
+3. **Review and trust the Hooks on first use.** Hooks are plugin scripts run at task events. Installation or enablement does not trust them automatically. In CLI `/hooks`, review and trust Accord's current definitions. The installation executor must verify the supported desktop method for your version; see the user guide.
+4. **Start a new task and describe the goal.** For example: “Help me complete this task. If conditions change, correct the affected work and check the result before delivery.”
+
+**Installation, enablement, Hook trust and actual loading are all necessary.** See the [user guide](docs/user-guide.md#english-user-guide) for complete steps, an installation request template and troubleshooting. Current official documentation does not support native plugins in the Codex IDE extension; running CLI in an editor terminal is a different route. See [entry limitations](docs/user-guide.md#current-entries-and-runtime).
 
 ## How it works
 
 ```mermaid
 flowchart TD
-    U["User ideas, additions and changes"] --> T["Goal, constraints and authority<br/>Acceptance criteria"]
-    T --> C["Assess feasibility<br/>Establish necessary conditions"]
-    H["Host, Accord and ecosystem capabilities<br/>Reuse, compose or build as needed"] <--> C
-    C --> E["Agent execution and observation<br/>Correction and recovery"]
-    E --> V["Verify results and system effects<br/>Completeness, weak points and net value"]
-    V -->|Gaps remain| C
-    V -->|Goal or constraints change| T
-    V -->|Criteria met| R["Delivery and resource state<br/>Remaining and follow-up responsibilities"]
-    S["Continuous state<br/>Goal, sources, dependencies and decisions<br/>Evidence and unfinished responsibilities"] --- T
-    S --- C
-    S --- E
-    S --- V
+    U["Your goal, additions and changes"] --> A["Accord and the host AI assistant cooperate<br/>Understand the request, choose capabilities and settings"]
+    A --> E["Execute and preserve progress<br/>Handle changes, failures and unfinished work"]
+    E --> V["Check the agreed result and actual effects"]
+    V -->|Correction or recovery needed| A
+    V -->|Criteria met| R["Deliver, explain unfinished work<br/>Release task-owned resources"]
 ```
 
-This overview shows Accord's coordination duties and their feedback relationships. The [detailed system view](docs/operations/PLAN-v3.3.md#稳定关系与动态方法) and [development dependencies](docs/operations/PLAN-v3.3.md#工序与依赖) remain in the consensus plan. Implementation and acceptance progress are described under [current evidence](#capability-limits-and-current-evidence).
+The host supplies models, tools and execution; Accord adds coordination, continuity and verification mechanisms. Real work can run in parallel, nest or return to an earlier step. This is a responsibility overview; see the [user guide](docs/user-guide.md#principles-and-further-reading), [architecture](docs/architecture.md) and [detailed system diagram](docs/operations/PLAN-v3.3.md#稳定关系与动态方法) for the full relationships.
 
-Starting conditions, process and results form relationships that can run in parallel, nest and feed back. Semantics explains changes, events trigger relevant reassessment, and negative boundaries protect goals, authority and evidence. Routes remain task-dependent. Deterministic local procedures can be standardized without prescribing one fixed end-to-end SOP.
+## Before you use it
 
-A plugin is the delivery form for a particular host. Accord's responsibilities span user intent, the host and surrounding capabilities, and actual results. Important decisions, state changes and feedback need working connections, without requiring every call to pass through one proxy or granting authority above the user or host. Confirm the intended outcome when a user action has material consequences and ambiguous intent; respect clear choices and do not silently restore user settings.
+- Your chosen models, reasoning effort and usage limits remain in force. Accord cannot bypass host permissions or enable features you have disabled, and does not require resetting your environment. Subagents are optional.
+- Accord does not train models, enlarge context windows or add conversation turns automatically. Long-running work still uses host capabilities under your choices.
+- With the input Hook enabled, root-task input is retained locally for recovery and may contain sensitive text; ending a session does not necessarily delete it immediately. See [input retention and privacy](docs/user-guide.md#input-retention-and-privacy).
+- Coordination may add context, latency and compute overhead. Existing qualification and CI have bounded scopes and do not replace a comparison of ordinary-use benefits. See [versions and evidence](docs/user-guide.md#versions-and-evidence).
 
-Your explicit choices of model and reasoning effort, and your usage restrictions, should remain in force; an adequate configuration should stay stable. Subtask delegation does not itself authorize changing the main model. If a change is not already covered by your authorization, the Agent should explain its impact and obtain the necessary decision before acting. This includes changing a pinned choice or crossing boundaries involving providers, accounts, data access or significant cost. Existing explicit authorization does not require repeated confirmation.
+## Learn more and participate
 
-Adaptation addresses the environment actually encountered. Accord should use the host's existing authorized capabilities to establish missing conditions, verify that they work and provide recovery paths: a host-assisted bootstrap. Users should not have to reset to default settings. Development isolation helps identify causes; adaptation and bootstrap still require evidence from real tasks.
+[User guide](docs/user-guide.md#english-user-guide) · [Design and current plan](docs/operations/PLAN-v3.3.md) · [Acceptance criteria](docs/operations/ACCEPTANCE-v3.3.md) · [Current continuation](docs/operations/CONTINUATION.md) · [Changelog](CHANGELOG.md)
 
-Knowing its own conditions, maintaining coherence, governing its work, learning, correcting errors, recovering, providing verifiable evidence and improving over time are supporting capability dimensions. Cognitive monitoring and adjustment need working execution, feedback and recovery; engineering bootstrap does not require subjective consciousness. Experience must be validated before reuse, judgments and results remain open to counterevidence, and improvements must detect regressions and allow harmful changes to be reversed. These are [design and acceptance directions](docs/operations/PLAN-v3.3.md#自举的能力维度与证据), not a claim that all eight are implemented.
-
-The 3.3 package uses one concise entry Skill, four specialist Skills, native event hints and optional task-state mechanisms; repository tools check contracts and evidence. Visibility, invocation, execution and reliable effects are separate. Component count, runtime needs and implementation form follow demonstrated gaps and lifecycle costs.
-
-Users do not need to create or replace `AGENTS.md` to supply Accord's entry duties. Existing user and project instructions remain external conditions to respect and reconcile; earlier Skills can contribute particular responsibilities without defining the entire collaboration chain.
-
-The three task-state MCP tools inspect saved root-task state, assess a bounded work span, retrieve captured input, and manage necessary checkpoints. The lifecycle tool binds, pauses or retires Accord's own task state; it does not write business files or change host modes. Updates require the observed input and revision, and the current native turn; lifting a user pause or cancelling the task still requires the actual user decision. These tools reuse one host-managed Node process and the existing state store. Captured input is not complete history or new authorization. Call metadata and reasons do not grant permission; descendant/shared-session state is not adopted. These state tools do not replay input or dispatch handoff. Their shared handler may protectively stop an existing owned execution and retain operation evidence when its source becomes invalid.
-
-The 3.3.2 Codex package adds a separate `coordinate_task_execution` tool for native Skill inventory, deliberate Skill input preparation and a bounded fresh target under the current root task. A transfer requires current authority, source quiescence, scoped writer ownership and independent review of actual intake, continuation, results and closure. Its default is read-only; a declared workspace-write scope also requires verified effective native restrictions before writing. It does not control an existing GUI thread or automatically replace the root Agent. Implementation checks are not ordinary-use acceptance. See the packaged [capability interface](plugins/yiyuan-accord-codex/skills/coordinate-capabilities/references/native-capabilities.md) and [handoff interface](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md#ordinary-root-task-through-the-mcp-execution-interface).
-
-When its input Hook is enabled, the 3.3 package retains root-task native input text in the existing local receipt for recovery. Subagent inputs use their own native task state and do not update the root checkpoint; independent subagent checkpoints are not provided by this helper. Each receipt is bounded to 8 MiB; text is read on demand and follows the receipt's task lifecycle. Interrupted input remains available for recovery even when no checkpoint was created; session exit alone does not remove it. This local copy may contain sensitive text. It is not a complete conversation or progress record, and does not establish new authority. See the [architecture](docs/architecture.md#current-candidate-and-scoped-connections) for retention and failure boundaries.
-
-Host buttons, menus, shortcuts, settings, task and project operations, models, permissions, memory, automations, execution environments and extensions all belong in discovery. The currently exposed tool list is not its boundary. The Agent assesses each capability's purpose and conditions, activates it when useful, and verifies effects and exit state. Coverage does not require enabling everything; unknown is not covered.
-
-Coverage claims are limited to selected entry roles and a justified set of sources, with dates, known versions and limitations. Those sources must account for required responsibilities, known interfaces, contradictions and counterexamples; a convenient tool list is insufficient. Unresolved facts that affect a necessary result block that claim. Other unobservable details remain stated limitations, not verified facts. Remote clients control a connected host; compatible host evidence may be reused without claiming that every current or hidden client interface has been certified.
-
-Managing the ecosystem is also a core duty: plugins, Apps, Skills and MCP capabilities have combinations, dependencies, conflicts and lifecycles. Check installation, context exposure, connections and running resources separately; choose suitable scope, activate and reuse when needed, and retire unnecessary exposure or activity instead of accumulating global residency. Reduce dependencies that add no practical value, while reusing capable host features, tools and mature implementations instead of treating in-house construction as the default. Preserve user choices and dependencies still serving other tasks, and verify actual release. Uninstalling does not establish that content already loaded into context has disappeared.
-
-## Capability limits and current evidence
-
-### Task state and ordinary interaction
-
-Accord does not register a Stop auto-continuation hook in version 3.3. Task state preserves unmet duties, pauses and source observations without adding user turns. The Agent executes and verifies within the normal host task flow, and uses recovery or handoff when justified. A historical development Hook marked blocked is not a current product requirement or a completion verdict.
-
-Qualification evidence is bound to its exact version, entry, environment and conditions. Individual function cases and separate tasks do not establish combined acceptance, whole-entry delivery or lifecycle, system integration, or complete independent impact assessment. Consult the [acceptance view](docs/operations/ACCEPTANCE-v3.3.md) and [current continuation](docs/operations/CONTINUATION.md) for the applicable results and unfinished duties. Historical failures and unknowns remain addressable. Shared mechanisms may support reuse after relevant differences and current applicability are checked; an entry, version or configuration label alone does not establish another environment. Development scripts, controller assistance and explicit prompts alone do not demonstrate ordinary autonomous use.
-
-Accord does not train models, expand native context windows or bypass host permissions and interfaces. The Agent investigates feasible alternatives and missing conditions; real limits must still be reported with unfinished responsibilities preserved. A reference core or prompt alone cannot guarantee execution or enforce permissions.
-
-Version 3.3 uses the host's existing models, supported tools and Accord components for task-specific judgment and verification. Decision implementations are optional capabilities, selected by actual need, availability, authority and benefit; no separate model integration is scheduled. Users are not required to deploy an extra model, open an evaluation-model account or accept default extra API calls. A platform API becoming available does not establish its use by the current host. Developer experiments do not automatically become user-side defaults. Existing ecosystem capabilities remain available for appropriate reuse. The host's normal requirements and costs still apply.
-
-Intervention can add context load, latency, compute cost, instruction conflict and maintenance burden. Assess net effects on real outcomes; prefer lower burden for equivalent results, narrowing, replacing or retiring intervention when warranted. Necessary automation does not promise zero tokens, CPU time or elapsed time. Trace and correct effects already caused by a faulty component.
-
-See the [consensus node](docs/operations/PLAN-v3.3.md) for outstanding work, the [acceptance view](docs/operations/ACCEPTANCE-v3.3.md) for criteria and the [historical trial record](docs/operations/PROCEDURE-v3.3.md) for qualified observations. The [changelog](CHANGELOG.md) and versioned releases preserve history; old PASS results do not validate changed bytes.
-
-## Installation and maintenance
-
-The [post-release plan](docs/operations/PLAN-v3.3.md#发布后的部署传播与治理) covers host installation, revised communication materials and project governance. The OpenAI public plugin directory remains an optional channel; whether to submit will be decided from its value, compatibility, user burden and maintenance cost. No submission commitment or completed listing is implied. Long-term administration should rest with the project or an organization, rather than depend on a personal account as the sole point of control.
-
-For installation, verify the exact version against its matching GitHub Release and immutable tag. A frozen candidate or changing development branch alone is not an accepted distribution or publication receipt.
-
-An Agent with suitable capabilities can own installation:
-
-> Verify an accepted exact version and the current host conditions, preserve unrelated configuration and plugins, install within my authority and verify actual participation. Prepare any necessary trust decision or personal action before asking me.
-
-Check registration, installed bytes, visibility in the actual task, participation and effects separately. Hooks require their runtime, native events and host trust. Update, rollback and removal need a healthy executor and recovery path; loaded context, installed state and runtime resources have distinct lifecycles. Historical commands and boundaries remain in the [v3.2.1 README](https://github.com/yiheng8023/YIYUAN-Accord/blob/v3.2.1/README.md); recheck current host support before execution.
-
-The current package starts its Hooks and state MCP with `node`. The executor must verify that the actual host process can find and run a compatible Node executable; availability in a separate terminal or inside a host installation does not establish that. Reuse a suitable existing runtime; obtain any required authorization before adding one. Maintained Node 24 releases are the current tested recommendation: CI uses Node 24, and bounded local checks cover 24.19.0 and 24.21.0. Other major versions and the minimum compatible version remain unverified; this does not claim every 24.x patch was tested. See the [runtime assessment](research/reviews/2026-10-09-node-runtime-compatibility.md) for evidence and limits. The ordinary entry has no Python or third-party npm dependency and does not require additional third-party Skills or MCP servers; a particular task may still need other tools or access. Scoped transfer in the Codex package and the optional SDK recorder require Node's built-in `node:sqlite.DatabaseSync`; entry loading, state reads and Skill inventory do not open that recorder.
-
-The maintainer `host-check` command below checks static package conformance, not runtime availability in a user's host. Actual Hook participation and MCP connection still need verification through the selected entry.
-
-Treat prerequisites as ordinary shared dependencies. Reuse a compatible existing Node installation; otherwise install a maintained Node 24 release from the tested recommendation and ensure the target host can run `node --version`. Reopen the host when needed to pick up its environment, then verify actual Hook/MCP participation. The ordinary entry needs no Python, extra npm packages or third-party Skills. Users retain control of permissions, plugin enablement and trust.
-
-Use an ordinary installation request or explicitly select the lifecycle Skill for guidance. The package also retains the optional native `onboardingSkill` declaration. The current client does not show a dedicated Setup button; repeated searches or reinstalls are unnecessary. Parsed metadata does not prove that UI path. Automatic preparation without Node, one-click setup and private runtime packaging are outside the 3.3 release critical path; necessary compatibility and outcome checks remain.
-
-Runtime compatibility must also match the selected host entry and backend, supported Hook/MCP interfaces, OS/architecture and effective permissions. Accord's current Hook/MCP commands start a separate Node process; its version need not equal the host's internal Node version. If a component shares the host's interpreter, satisfy both sets of requirements. Host-bundled runtime availability and SDK or npm-launcher version requirements do not by themselves establish Accord compatibility; preserve host-managed components and verify the actual combination.
-
-Before switching versions, the executor should check unfinished work and any Hooks that will start later. Already loaded components continuing to work does not prove that a later Hook can still find its executable files. Use a healthy executor independent of the plugin being changed, at a safe time the host supports and the executor can verify. If that boundary is unknown, keep the prepared update pending. An independent backup preserves the original package; actual recovery also requires usable tools, authority and verification of the resulting state.
-
-The executor handles these checks and coordination. Users should only need to supply a necessary decision, authorization or personal action, with its concrete impact explained; existing clear authorization need not be requested again. Fresh-process discovery and isolated checks do not establish that existing sessions or a previously failed real Hook have recovered.
-
-## Develop, evaluate or contribute
-
-For this branch, start with the [consensus node and plan](docs/operations/PLAN-v3.3.md) and [continuation](docs/operations/CONTINUATION.md); consult the [machine projection](product/development.json) and [architecture](docs/architecture.md) as needed. Frozen 3.1 authority and Golden Tasks are historical inputs, not current development acceptance.
-
-Maintainer checks do not require plugin installation:
-
-```powershell
-python -B -m yiyuan_accord verify-development --json
-python -B -m yiyuan_accord verify --root . --json
-python -B -m yiyuan_accord host-check --adapter codex --root . --json
-```
-
-Use `python3` where that is the available launcher. CI exercises Python 3.10–3.14 across Linux, Windows and macOS, with Node 24 for Hook checks. That is maintainer validation, not cross-host behavior acceptance or an end-user Python requirement.
-
-Publication requires matching release notes, committed and pushed in-scope changes, necessary functional/lifecycle/impact evidence, independent review and hosted checks, followed by publication and public verification of the same commit under the bound human authorization. A frozen candidate is not a release receipt.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md) and [SUPPORT.md](SUPPORT.md). In an [issue](https://github.com/yiheng8023/YIYUAN-Accord/issues), describe the desired and observed result, exact version, host/entry, relevant customization and human intervention. Never upload credentials or private raw transcripts.
-
----
+See [Contributing](CONTRIBUTING.md) for development, evaluation and maintainer checks. For help, start with what you expected and what happened in your own words; see [Support](SUPPORT.md). Do not publish credentials or private raw transcripts. Report security issues under the [security policy](SECURITY.md).
 
 ## Vision and collaboration
 
 **Our declaration: Empower every dream.**
 
-YIYUAN NEXUS will continue to explore human-machine collaboration and related fields. YIYUAN Accord is not intended to exist forever: it will evolve as frontier intelligence, human and machine capabilities, and patterns of collaboration change. Progress in frontier intelligence both gives Accord new capabilities and continually tests its necessity, boundaries, and real-world value. When its mission has been fulfilled, carried forward by better mechanisms, or is no longer needed, the project should be able to conclude responsibly and in an orderly way.
+The project is open source and not driven by profit. It aims for industrial and commercial production quality, equitable access and user autonomy. Decisions follow user interests, verifiable value and sustainable maintenance; funding and platform relationships do not change vendor independence.
 
-YIYUAN NEXUS currently has one author-maintainer, with limited capacity, time, and resources. We welcome the community to create and advance it together. Within those practical limits, Accord will continue to be maintained and evolved, with progressively broader host adaptation as an ongoing direction. A roadmap direction is not a claim of current support or a commitment to a release date or compatibility outcome.
+YIYUAN NEXUS will continue exploring human–machine collaboration and related fields. Accord evolves with frontier intelligence, human and machine capabilities, and ways of working together. When its mission is fulfilled, carried forward by better mechanisms or no longer needed, it should be able to conclude responsibly and in an orderly way.
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) to participate. Submit problems and suggestions through [GitHub Issues](https://github.com/yiheng8023/YIYUAN-Accord/issues).
+There is currently one author-maintainer, with limited capacity, time and resources. Community collaboration is welcome. More host integrations and other directions will be evaluated without promising future version numbers, dates or compatibility outcomes.
 
----
+Thank you to all [contributors](https://github.com/yiheng8023/YIYUAN-Accord/graphs/contributors). [Issues and suggestions](https://github.com/yiheng8023/YIYUAN-Accord/issues) · [Star history](https://www.star-history.com/#yiheng8023/YIYUAN-Accord&Date)
 
-## Community
+## License and support
 
-### Contributors
+An independent community project maintained by [yiheng8023](https://github.com/yiheng8023), licensed under [Apache-2.0](LICENSE) and provided “AS IS”; it is not a host vendor's product or endorsement. See [NOTICE](NOTICE), the [license policy](docs/license-policy.md) and [third-party notices](THIRD_PARTY_NOTICES.md) for names, marks and attribution. Users remain responsible for reviewing outputs and following applicable rules. A release does not establish production safety or fitness for a particular purpose.
 
-Thank you to everyone who contributes code, reviews, documentation, issue reports, and evidence.
-
-<p align="center">
-  <a href="https://github.com/yiheng8023/YIYUAN-Accord/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=yiheng8023/YIYUAN-Accord" alt="YIYUAN Accord contributors">
-  </a>
-</p>
-
-### Star history
-
-[![YIYUAN Accord Star History](https://api.star-history.com/svg?repos=yiheng8023/YIYUAN-Accord&type=Date)](https://star-history.com/#yiheng8023/YIYUAN-Accord&Date)
-
----
-
-## Project support and legal
-
-### Project and license
-
-The public project and website are [github.com/yiheng8023/YIYUAN-Accord](https://github.com/yiheng8023/YIYUAN-Accord).
-
-The publisher is [yiheng8023](https://github.com/yiheng8023).
-
-YIYUAN Accord is licensed under Apache-2.0.
-
-Commercial use, modification, and redistribution are permitted under that
-license; they do not grant permission to present a modified or redistributed
-version as official, sponsored, or endorsed.
-
-The canonical public source is this repository. Official versions are
-identified by matching Git tags and GitHub Release records, and each standalone
-distributed plugin package carries its own `LICENSE` and `NOTICE` after
-installation.
-
-The YIYUAN Accord and YIYUAN NEXUS names and symbols remain separate
-trademarks. See [`NOTICE`](NOTICE), [`docs/license-policy.md`](docs/license-policy.md),
-and [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
-
-Community help is provided on a best-effort basis under [`SUPPORT.md`](SUPPORT.md).
-
-### Voluntary sponsorship and support
-
-Sponsorship is optional.
-
-It does not purchase a support SLA, priority, release authority, safety guarantee, governance exception, feature commitment, or influence over technical decisions.
-
-If Accord is useful, you may support maintenance through the repository owner's [published PayPal page](https://www.paypal.com/ncp/payment/LNTF8KXGJXMZY).
-
-<table>
-  <tr>
-    <th width="300">WeChat Pay (CNY)</th>
-    <th width="300">Alipay (CNY)</th>
-  </tr>
-  <tr>
-    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/wechat-pay.png" alt="WeChat Pay voluntary sponsorship QR code" width="260"></td>
-    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/alipay.png" alt="Alipay voluntary sponsorship QR code" width="260"></td>
-  </tr>
-</table>
-
-Verify the recipient before paying. See [`SPONSORING.md`](SPONSORING.md) for the complete terms.
-
-### Disclaimer and compliance
-
-YIYUAN Accord is an independent community open-source project.
-
-It is not an OpenAI, Codex, or GitHub product. Those parties do not sponsor or endorse it.
-
-Third-party names and marks belong to their respective owners.
-
-Users remain responsible for reviewing Agent outputs and complying with applicable laws, contracts, host terms, licenses, and organizational policies.
-
-The software is provided under Apache-2.0 on an “AS IS” basis, without warranties or conditions. See [`LICENSE`](LICENSE).
-
-A full project release does not establish production safety or fitness for a particular purpose.
+[Voluntary sponsorship](SPONSORING.md) lists the published payment channels and QR codes. Sponsorship does not purchase a service level, priority, feature commitment or influence over technical decisions. Community support is best-effort under [SUPPORT.md](SUPPORT.md).

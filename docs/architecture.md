@@ -9,6 +9,14 @@ is the machine validation projection. Version 3.3 distributes only the applicabl
 OpenAI adaptation. Earlier releases and host observations keep their historical
 identities; current implementation or documentation does not grant publication.
 
+The reader-facing overview is in the [README](../README.md#how-it-works).
+The [user guide](user-guide.md#english-user-guide) carries installation, Hook
+trust, privacy and current upstream entry limits. In particular, current upstream
+documentation excludes native plugins in the Codex IDE extension and plugin
+Hooks in cloud-orchestrated Work; historical version-bound observations and
+backend tests do not establish support in those current surfaces. This clarifies
+entry applicability without changing the portable duties or past evidence.
+
 The portable outcome and authority contracts do not require Codex events or
 protocols. `runtime/native-state-mcp.cjs` forwards to the packaged Codex adapter;
 `runtime/task-checkpoint.cjs` and its byte-checked packaged mirror are this
