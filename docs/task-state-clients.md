@@ -50,6 +50,14 @@ Codex multi-agent v2 的根会话文件也可能带第二个 UUID 后缀，子�
 
 无既有回执、输入 basis 或可信原生来源定位的工具冷启动不由此分支解决。不能伪造用户输入、移动旧 anchor 或清除失败水印来补齐它；独立核实真实指令后已获授权的只读工作，与依赖绑定的写入分别处置。
 
+## Goal 运行时上下文与自动续轮
+
+3.3.5候选适配已观察的`goal.internal_context`来源形状：同轮次、单文本/单kind、完整`source="goal"`包装及明确由宿主生成且非Hook的来源。仅文本相似、错误身份、缺失或混合形状不进入该分支；真实用户的`user.goal`、`user.goal.omitted`也不能据此当作内部背景跳过。会话格式不是上游稳定接口，本适配不声称覆盖所有Goal、模型变化或未知启动路径。
+
+Goal记录完整进入来源顺序、原字节摘要和pending列表，标为`sourceCategory=goal-runtime-context`、`controlDisposition=requires-review`；不消耗人类Hook匹配顺序，不替换最新用户输入摘要。显式reconcile保存这些来源说明，输入分页可读回。`requires-review`表示调用者的解释责任，不是新的暂停状态、已理解证明或自动解除条件。继续、预算停止和目标更新共用同一kind，必须读取实际内容与已有用户决定；对账不授予新权限，不能忽略已知预算停止或真实暂停。
+
+自动Goal续轮另核原执行正常完成、`turn_trigger=goal`、parent/root关系、上下文与当前调用身份。与人工续轮组合时，复用同一来源快照中的更短前驱证明；临时已证明执行只作内部参数，不新增回执权限。连续Goal链和递归均有界，未知控制、缺失结束、错身份、倒序或漂移继续拒绝；保留原capacity/App/human校验、暂停和恢复要求。成功后仍须新epoch下审查完整合同并显式bind。Goal状态、计量和派发由宿主管理，Accord不注册Stop续轮或另建Goal控制器。
+
 ## bind：每次完整绑定当前合同
 
 五字段每次必填且不默认继承：`result` 是当前受托、待实现的完整目标及范围；`inputs` 是完整受保护输入列表（无保护输入时 `[]` 合法）；`outputs` 是完整非空输出谓词列表；`nextAction` 是具体下一动作；`canContinue` 兼容保留为当前安全且已授权工作是否仍可进行的判断记录，不触发新回合或执行。输入与输出合计最多 100 项；path-only 输出仅检查文件，精确要求用 sha256 或 JSON Pointer 值谓词表达。[schema](../plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs#L102)、[bind guard](../plugins/yiyuan-accord-codex/runtime/native-state-mcp.cjs#L392)。

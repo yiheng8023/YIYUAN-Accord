@@ -208,6 +208,8 @@ function readNativeInput(request, input) {
     const content = characters.slice(offset, offset + remaining);
     result.entries.push({index, epoch: entry.epoch, turnId: entry.turnId, source: entry.source,
       ...(Object.hasOwn(entry, 'recoveryEpoch') ? {recoveryEpoch: entry.recoveryEpoch} : {}),
+      ...(entry.nativeEvidence?.sourceCategory ? {sourceCategory: entry.nativeEvidence.sourceCategory,
+        controlDisposition: entry.nativeEvidence.controlDisposition} : {}),
       promptSha256: entry.promptSha256, totalChars: characters.length, offset, text: content.join('')});
     remaining -= content.length;
     offset += content.length;
@@ -539,7 +541,8 @@ function inputEvidence(input, request, expectedCursor = null, readPart = null, s
   return nativeInputReader(basis.source, {anchorHash: basis.promptSha256,
     captured: entries.slice(start).filter(item => item.source !== 'retained-native-replay')
       .map(item => ({promptSha256: item.promptSha256, turnId: item.turnId,
-        recordSha256: item.nativeEvidence?.recordSha256, sourceRef: item.nativeEvidence?.sourceRef})),
+        recordSha256: item.nativeEvidence?.recordSha256, sourceRef: item.nativeEvidence?.sourceRef,
+        ...(item.nativeEvidence?.sourceCategory ? {sourceCategory: item.nativeEvidence.sourceCategory} : {})})),
     host: request.currentHost, expectedTurnId: request.nativeTurnId, expectedCursor,
     retainedCursor: retainedOriginCursor(input, request, state),
     recoveredControl: input.nativeControlRecovery, resumeControl,
@@ -1073,8 +1076,8 @@ function operate(request) {
         if (canonical(readInput(where)) !== canonical(after)) fail('latest-user-input-not-reconciled');
         // Receipt append order is not source chronology: a gap before a later
         // Hook must not replace the latest real input summary.
-        const epoch = crypto.randomUUID(), last = checked.pendingInputs.find(item =>
-          item.recordOffset === checked.records.at(-1)?.recordOffset);
+        const epoch = crypto.randomUUID(), latestNonGoal = checked.records.findLast(item => item.sourceCategory !== 'goal-runtime-context');
+        const last = checked.pendingInputs.find(item => item.recordOffset === latestNonGoal?.recordOffset);
         const receipt = {...raw, epoch,
           ...(last ? {inputSource: 'reconciled-native-input', promptSha256: last.promptSha256, turnId: last.turnId} : {}),
           nativeInputBasis: inputBasis(raw),
@@ -1084,7 +1087,9 @@ function operate(request) {
               ({recordOffset, recordSha256, sourceRef, parts}))},
           nativeInputs: [...retainedInputs(raw), ...checked.pendingInputs.map(item => ({epoch, turnId: item.turnId,
             source: 'reconciled-native-input', prompt: item.prompt, promptSha256: item.promptSha256,
-            nativeEvidence: {sourceRef: item.sourceRef, recordSha256: item.recordSha256, itemId: item.itemId, parts: item.parts}}))]};
+            nativeEvidence: {sourceRef: item.sourceRef, recordSha256: item.recordSha256, itemId: item.itemId, parts: item.parts,
+              ...(item.sourceCategory ? {sourceCategory: item.sourceCategory,
+                controlDisposition: item.controlDisposition} : {})}}))]};
         for (const flag of ['needsNativeReplay', 'needsResumeReconciliation', 'interrupted']) {
           if (after[flag] === true) receipt[flag] = true;
         }
@@ -1605,11 +1610,11 @@ const HELP = {
       expectedReceiptEpoch: 'from-preview', sourcePart: {evidenceCursor: 'exact preview cursor',
         recordOffset: 'from records', recordSha256: 'from records', partIndex: 'from ordered parts'},
       currentHost: 'actual native call metadata; no caller paths'},
-    effect: 'Review actual source content as needed, explicitly reconcile pending records or enrich original structured-media coverage, then bind the reviewed full contract under the new epoch. Initial enrichment does not add an input or change Hook provenance. Only byte/record summaries persist; no base64 cache, read-count gate or understood flag. Plain text and the observed four-part inline PNG shape are supported; strict canonical base64/PNG signature decoding is bounded by the existing 8 MiB input budget. This is not a PNG pixel parser or Agent-understanding verdict. One sourcePart may return a text page or transient MCP image content; wrapper paths and remote URLs are never read/fetched. Original basis/history, pause and watermarks remain; recovery is separate. Cursor permits benign append but rejects changed old bytes/input/control. An anchor unavailable within the 16 MiB search window, unknown shape/media or unverified content holds applicable effects; no unlimited continuity claim or human authority inferred.',
+    effect: 'Review actual source content as needed, explicitly reconcile pending records or enrich original structured-media coverage, then bind the reviewed full contract under the new epoch. Typed Goal runtime context is preserved separately with sourceCategory=goal-runtime-context and controlDisposition=requires-review, including complete budget/objective notices. It consumes no human Hook match and does not replace the latest user-input summary; classification is not interpretation, authorization or cleared control. Initial enrichment does not add an input or change Hook provenance. Only byte/record summaries persist; no base64 cache, read-count gate or understood flag. Plain text and the observed four-part inline PNG shape are supported; strict canonical base64/PNG signature decoding is bounded by the existing 8 MiB input budget. This is not a PNG pixel parser or Agent-understanding verdict. One sourcePart may return a text page or transient MCP image content; wrapper paths and remote URLs are never read/fetched. Original basis/history, pause and watermarks remain; recovery is separate. Cursor permits benign append but rejects changed old bytes/input/control. An anchor unavailable within the 16 MiB search window, unknown shape/media or unverified content holds applicable effects; no unlimited continuity claim or human authority inferred.',
   },
   nativeContext: {
     read: {op: 'observe-context', session_id: 'native-session-id', cwd: 'absolute-workspace', maxAgeMs: 30000},
-    source: 'Only the native transcript binding retained from a root UserPromptSubmit event is read; request-supplied paths are ignored. Reads are bounded to that file and do not scan other task history. Missing, stale, changing or unbound metadata is unknown. recordedHostVersion is session metadata, not live identity. For current host conditions pass currentHost {threadId, turnId, model, hostVersion, sourceRef} from an actual native observation, or use MCP includeContext. A different turn requires proved capacity-recovery or host-attributed app-message continuation proof from the original input hash within the same bounded snapshot used for counters; it changes no receipt or authority. Without currentHost conditions.hostVersion stays null; caller data is not authentication.',
+    source: 'Only the native transcript binding retained from a root UserPromptSubmit event is read; request-supplied paths are ignored. Reads are bounded to that file and do not scan other task history. Missing, stale, changing or unbound metadata is unknown. recordedHostVersion is session metadata, not live identity. For current host conditions pass currentHost {threadId, turnId, model, hostVersion, sourceRef} from an actual native observation, or use MCP includeContext. A different turn requires proved capacity recovery, host-attributed App messages or explicitly source-reconciled human/Goal execution lineage from the original input basis within the same bounded snapshot used for counters. Typed Goal runtime context retains its source and caller review duty; it is not human permission or a Goal state/dispatch controller. These observations change no receipt or authority. Without currentHost conditions.hostVersion stays null; caller data is not authentication.',
     assessment: 'Use assess-context with nativeContext=true, the same independently sourced currentHost and chosen maxAgeMs, current epoch/revision, observation.conditions and your inspected integrity/time/estimate claims. Provide estimates.contextTailUpperBoundTokens for unaccounted history after the latest response, plus nextWorkTokens/handoffTokens/recoveryTokens/safetyMarginTokens and sourceRef. The operation reads counters within that age limit and derives contextUpperBoundTokens from lastResponseTokens plus the tail estimate; normal response growth does not force an observe/assess retry loop. Changed model/turn/context generation still requires reassessment. Returned observationId/nativeSourceRef identify the facts actually used.',
     limit: 'Native last usage is a recent response-boundary basis, cumulative usage is not occupancy, and neither proves inheritance integrity or authority. Existing pauses, input recovery, forecast and ownership checks remain; no automatic mode activation, dispatch or source release.'
   },

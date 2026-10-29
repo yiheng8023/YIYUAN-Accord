@@ -155,6 +155,25 @@ function typedAmbient(payload, turnId) {
     metadata.content_item_kinds.length === 1 && metadata.content_item_kinds[0] === 'additional_content.codex_apps_open_page';
 }
 
+// Runtime context is a source classification, never human authorization or a
+// disposition of its continuation/budget/update meaning. Keep every raw record.
+// requires-review names caller interpretation duty, not a new stop/clear state.
+function goalRuntimeContext(payload, turnId) {
+  const metadata = payload?.internal_chat_message_metadata_passthrough;
+  const content = payload?.content, kinds = metadata?.content_item_kinds;
+  const attribution = metadata?.content_item_metadata;
+  if (payload?.type !== 'message' || payload.role !== 'user' || metadata?.turn_id !== turnId ||
+      !Array.isArray(content) || content.length !== 1 || content[0]?.type !== 'input_text' ||
+      typeof content[0].text !== 'string' || !Array.isArray(kinds) || kinds.length !== 1 ||
+      kinds[0] !== 'goal.internal_context' || !Array.isArray(attribution) || attribution.length !== 1 ||
+      canonical(attribution[0]?.provenance) !== canonical({type: 'harness', hook: false})) return false;
+  const opening = '<codex_internal_context source="goal">', closing = '</codex_internal_context>';
+  const value = content[0].text;
+  if (!value.startsWith(opening) || !value.endsWith(closing)) return false;
+  const body = value.slice(opening.length, -closing.length);
+  return Boolean(body.trim()) && !/<\/?codex_internal_context\b/u.test(body);
+}
+
 // Resolve only an already captured input, not a global host flattening rule.
 // A candidate text projection must match the bound Hook/source hash exactly.
 function multipartText(payload, binding, expectedHash) {
@@ -268,7 +287,8 @@ function retryOrigin(rows, binding, promptHash) {
       if (candidate?.type === 'response_item' && candidate.payload?.type === 'message' &&
           candidate.payload.role === 'developer') continue;
       if (candidate?.type === 'response_item' && candidate.payload?.type === 'message' &&
-          candidate.payload.role === 'user' && typedAmbient(candidate.payload, binding.turnId)) continue;
+          candidate.payload.role === 'user' && (typedAmbient(candidate.payload, binding.turnId) ||
+            goalRuntimeContext(candidate.payload, binding.turnId))) continue;
       if (candidate?.type === 'event_msg' && candidate.payload?.type === 'token_count' &&
           (!Object.hasOwn(candidate.payload, 'turn_id') || candidate.payload.turn_id === binding.turnId) ||
           candidate?.type === 'token_usage_record' && candidate.payload?.turn_id === binding.turnId) continue;
@@ -511,6 +531,119 @@ function continuationAssociation(rows, binding, host, promptHash, sourceRef, cap
   return appToolContinuation(rows, binding, host, promptHash, sourceRef, captured, accepted, recovered);
 }
 
+// Prove only the native execution edge. The source context remains pending
+// until explicit reconciliation; its meaning/authority is still caller review.
+// This edge is neither a human composer turn nor a capacity failure retry.
+function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
+  const reject = () => empty('native-goal-continuation-unproven');
+  if (!scan || scan.state !== 'observed' || !scan.latestInputReconciled) return reject();
+  const execution = accepted || binding;
+  const start = rows.findIndex(row => {
+    const line = parseRow(row), p = line?.payload;
+    return line?.type === 'turn_context' && p.turn_id === execution.turnId && p.model === execution.model;
+  });
+  if (start < 0) return reject();
+  const priorStart = rows.slice(0, start).map(parseRow).findLast(line =>
+    line?.type === 'event_msg' && line.payload?.type === 'task_started' && line.payload.turn_id === execution.turnId);
+  const root = priorStart?.payload.root_turn_id || execution.turnId;
+  if (!boundedText(root, 200)) return reject();
+  let turn = execution.turnId, model = execution.model, boundary = Date.parse(parseRow(rows[start]).timestamp);
+  let completed = null, pending = null, needsGoal = false, edges = 0, edgeOffset = null;
+  const visited = new Set([turn]);
+  if (!integer(boundary)) return reject();
+  for (let index = start; index < rows.length; index++) {
+    const row = rows[index], line = parseRow(row), p = line?.payload;
+    if (!line) return reject();
+    const at = Date.parse(line.timestamp);
+    if (line.type === 'turn_context') {
+      if (p?.turn_id !== (pending?.turn || turn) || p.model !== model || !text(p.cwd) ||
+          !samePath(p.cwd, binding.cwd) || !integer(at) || at < boundary || completed !== null ||
+          Object.hasOwn(p, 'source') || Object.hasOwn(p, 'root_turn_id') && p.root_turn_id !== root) return reject();
+      if (pending) { turn = pending.turn; pending = null; needsGoal = true; }
+      boundary = at;
+      continue;
+    }
+    if (line.type === 'event_msg' && p?.type === 'task_complete') {
+      if (pending || needsGoal || completed !== null || p.turn_id !== turn || p.root_turn_id !== root ||
+          p.error != null || !integer(at) || at < boundary) return reject();
+      completed = at;
+      continue;
+    }
+    if (line.type === 'event_msg' && p?.type === 'task_started') {
+      const a = p.turn_attribution, next = p.turn_id;
+      if (completed === null || pending || !boundedText(next, 200) || visited.has(next) ||
+          p.root_turn_id !== root || a?.turn_id !== next || a.root_turn_id !== root ||
+          a.turn_trigger !== 'goal' || a.parent_turn_id !== turn || a.initiating_agent_path !== null ||
+          !integer(at) || at < completed || ++edges > 64) return reject();
+      pending = {turn: next}; visited.add(next); completed = null; boundary = at; edgeOffset = row.offset;
+      continue;
+    }
+    // Nothing with effects may intervene between completion/start/context.
+    if (completed !== null || pending) return reject();
+    if (line.type === 'response_item' && p?.role === 'user') {
+      const record = scan.records.find(item => item.recordOffset === row.offset && item.turnId === turn && item.supported);
+      if (!record || edges && !goalRuntimeContext(p, turn)) return reject();
+      if (edges) needsGoal = false;
+      continue;
+    }
+    if (needsGoal && !(line.type === 'response_item' && p?.type === 'message' && p.role === 'developer')) return reject();
+    if (line.type === 'response_item' && p?.type === 'message' && p.role === 'developer' ||
+        completedCompaction(line, binding.sessionId, turn) ||
+        lateOriginOutput(row, {...binding, turnId: turn})) continue;
+    return reject();
+  }
+  if (!edges || pending || completed !== null || needsGoal || turn !== host.turnId || model !== host.model) return reject();
+  return {state: 'observed', reason: 'native-goal-continuation',
+    conditions: {threadId: binding.sessionId, turnId: turn, model, hostVersion: host.hostVersion},
+    sourceRef: `${sourceRef}#byte=${edgeOffset}`, hostSourceRef: host.sourceRef,
+    claimLimit: 'native-execution-attribution-only; Goal context meaning and authority require review'};
+}
+
+function typedHumanInput(payload, turnId) {
+  const meta = payload?.internal_chat_message_metadata_passthrough;
+  return boundedText(turnId, 200) && payload?.type === 'message' && payload.role === 'user' && boundedText(payload.id, 200) &&
+    meta?.turn_id === turnId && Array.isArray(payload.content) && payload.content.length > 0 &&
+    payload.content.every(item => item?.type === 'input_text') && Array.isArray(meta.content_item_kinds) &&
+    meta.content_item_kinds.length === payload.content.length && meta.content_item_kinds.every(kind => kind === 'user.text') &&
+    Array.isArray(meta.content_item_metadata) && meta.content_item_metadata.length === payload.content.length &&
+    meta.content_item_metadata.every(item => item?.provenance?.type === 'user');
+}
+
+// Compose only an independently proved earlier human execution with the same
+// strict Goal-chain verifier. Prefixes shrink and share the human proof limit;
+// the temporary accepted execution is never persisted as a separate decision.
+function goalContinuation(rows, binding, host, hash, sourceRef, scan, accepted = null, recovered = [], depth = 0) {
+  const reject = () => empty('native-goal-continuation-unproven');
+  if (depth >= 64 || !scan || scan.state !== 'observed' || !scan.latestInputReconciled) return reject();
+  const direct = goalChain(rows, binding, host, sourceRef, scan, accepted);
+  if (direct.state === 'observed') return direct;
+  const target = rows.findIndex(row => {
+    const line = parseRow(row);
+    return line?.type === 'turn_context' && line.payload?.turn_id === host.turnId;
+  });
+  if (target < 0) return reject();
+  const humanIndex = rows.findLastIndex((row, index) => {
+    const line = index < target ? parseRow(row) : null, p = line?.payload;
+    return line?.type === 'response_item' && typedHumanInput(p, p?.internal_chat_message_metadata_passthrough?.turn_id);
+  });
+  if (humanIndex < 0) return reject();
+  const human = parseRow(rows[humanIndex]).payload.internal_chat_message_metadata_passthrough.turn_id;
+  if (human === (accepted || binding).turnId || human === host.turnId) return reject();
+  const previous = rows.slice(0, humanIndex).map(parseRow).findLast(line =>
+    line?.type === 'turn_context' && line.payload?.turn_id === human)?.payload;
+  if (!previous) return reject();
+  const completed = rows.findIndex((row, index) => {
+    const line = index > humanIndex && index < target ? parseRow(row) : null;
+    return line?.type === 'event_msg' && line.payload?.type === 'task_complete' &&
+      line.payload.turn_id === human && line.payload.error == null;
+  });
+  if (completed < 0) return reject();
+  const proof = nativeHumanContinuation(rows.slice(0, completed), binding,
+    {...host, turnId: human, model: previous.model}, hash, sourceRef, scan, accepted, recovered, depth + 1);
+  return proof.state === 'observed'
+    ? goalChain(rows, binding, host, sourceRef, scan, {turnId: human, model: previous.model}) : reject();
+}
+
 // Only explicit source reconciliation supplies this checked scan. A later human
 // cannot erase an unproved execution between the saved accepted turn and itself.
 function nativeHumanContinuation(rows, binding, host, hash, sourceRef, scan, accepted, recovered, depth = 0, closedBefore = null) {
@@ -525,35 +658,33 @@ function nativeHumanContinuation(rows, binding, host, hash, sourceRef, scan, acc
     line?.payload?.type === 'task_started' && line.payload.turn_id === prior.turn_id)?.payload.root_turn_id || prior.turn_id;
   let human = null;
   for (const row of rows.slice(at)) {
-    const line = parseRow(row), p = line?.payload, meta = p?.internal_chat_message_metadata_passthrough;
+    const line = parseRow(row), p = line?.payload;
     if (line?.type === 'turn_context' && (p.turn_id !== host.turnId || p.model !== host.model ||
         !samePath(p.cwd, binding.cwd) || Object.hasOwn(p, 'source') ||
         Object.hasOwn(p, 'root_turn_id') && p.root_turn_id !== host.turnId)) return reject();
     if (line?.type === 'event_msg' && ['task_started', 'task_complete'].includes(p?.type)) return reject();
-    if (line?.type === 'response_item' && p?.type === 'message' && p.role === 'user' &&
-        boundedText(p.id, 200) && meta?.turn_id === host.turnId && Array.isArray(p.content) && p.content.length &&
-        p.content.every(item => item?.type === 'input_text') && Array.isArray(meta.content_item_kinds) &&
-        meta.content_item_kinds.length === p.content.length && meta.content_item_kinds.every(kind => kind === 'user.text') &&
-        Array.isArray(meta.content_item_metadata) && meta.content_item_metadata.length === p.content.length &&
-        meta.content_item_metadata.every(item => item?.provenance?.type === 'user')) {
+    if (line?.type === 'response_item' && typedHumanInput(p, host.turnId)) {
       human = scan.records.find(item => item.recordOffset === row.offset && item.turnId === host.turnId && item.supported);
     }
   }
   if (!human || closedBefore !== null && scan.records.some(item =>
       item.turnId === host.turnId && item.recordOffset >= closedBefore)) return reject();
   let completions = 0, starts = 0, invalidBoundary = false, completionOffset = null;
+  let completionAt = null, humanStartAt = null;
   const before = prefix.filter(row => {
     const line = parseRow(row), p = line?.payload;
     if (line?.type !== 'event_msg') return true;
     if (p?.type === 'task_started' && p.turn_id === host.turnId) {
       const a = p.turn_attribution;
       if (row.offset > previous.offset && ['composer', 'send_user_message_async_question'].includes(a?.turn_trigger) && a.turn_id === host.turnId && a.root_turn_id === host.turnId &&
-          p.root_turn_id === host.turnId && a.parent_turn_id === null && a.initiating_agent_path === null) { starts++; return false; }
+          p.root_turn_id === host.turnId && a.parent_turn_id === null && a.initiating_agent_path === null) {
+        starts++; humanStartAt = Date.parse(line.timestamp); return false;
+      }
     }
     if (row.offset > previous.offset && p?.type === 'task_complete' && p.turn_id === prior.turn_id &&
         p.root_turn_id === root && p.error == null) {
       if (starts) invalidBoundary = true;
-      completions++; completionOffset = row.offset; return false;
+      completions++; completionOffset = row.offset; completionAt = Date.parse(line.timestamp); return false;
     }
     return true;
   });
@@ -566,6 +697,15 @@ function nativeHumanContinuation(rows, binding, host, hash, sourceRef, scan, acc
   if (proof.state !== 'observed') proof = capacityRetry(before, binding,
     {...host, turnId: prior.turn_id, model: prior.model}, hash, sourceRef,
     scan.records.filter(item => item.recordOffset < rows[at].offset).map(item => item.promptSha256), accepted, recovered, true);
+  // A Goal predecessor needs its full normal-close/human-start boundary.
+  // This does not relax the existing human or capacity continuation policies.
+  const previousAt = Date.parse(parseRow(previous).timestamp), humanContextAt = Date.parse(parseRow(rows[at]).timestamp);
+  if (proof.state !== 'observed' && completions === 1 && starts === 1 &&
+      [previousAt, completionAt, humanStartAt, humanContextAt].every(integer) &&
+      previousAt <= completionAt && completionAt <= humanStartAt && humanStartAt <= humanContextAt) {
+    proof = goalContinuation(before, binding, {...host, turnId: prior.turn_id, model: prior.model},
+      hash, sourceRef, scan, accepted, recovered, depth + 1);
+  }
   // Prove each earlier native human turn; retain the original accepted basis.
   // Carry its terminal offset so filtering cannot revive input after completion.
   if (proof.state !== 'observed') proof = nativeHumanContinuation(before, binding,
@@ -640,28 +780,37 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
         (!item.turnId || item.turnId === turn));
       if (sourceIndex >= 0 && matchedSources.has(sourceIndex)) return empty('native-captured-input-prefix-mismatch');
       const sourceMatch = sourceIndex >= 0;
+      const goal = goalRuntimeContext(payload, turn);
       const ambient = typedAmbient(payload, turn);
+      const hostContext = ambient || goal;
+      const kinds = payload?.internal_chat_message_metadata_passthrough?.content_item_kinds;
+      const claimedGoal = Array.isArray(kinds) && kinds.includes('goal.internal_context');
+      if (sourceMatch && sourced[sourceIndex].sourceCategory &&
+          sourced[sourceIndex].sourceCategory !== (goal ? 'goal-runtime-context' : null)) {
+        return empty('native-captured-input-prefix-mismatch');
+      }
       const expected = hooks[inputIndex];
       const capturedHash = sourceMatch ? sourced[sourceIndex].promptSha256 : expected?.promptSha256;
       const promptHash = inputHash(line, {...binding, turnId: turn}, capturedHash);
-      const hookMatch = !sourceMatch && !ambient && expected && expected.promptSha256 === promptHash &&
+      const hookMatch = !sourceMatch && !hostContext && expected && expected.promptSha256 === promptHash &&
         (!expected.turnId || expected.turnId === turn);
       if (sourceMatch) matchedSources.add(sourceIndex);
       else if (hookMatch) inputIndex++;
-      else if (expected && !ambient) return empty('native-captured-input-prefix-mismatch');
+      else if (expected && !hostContext) return empty('native-captured-input-prefix-mismatch');
       const content = contentEvidence(payload, {...binding, turnId: turn}, capturedHash);
       const record = {turnId: turn, sourceRef: sourceRefAtRow, recordOffset: row.offset,
         recordSha256: digest, promptSha256: promptHash, itemId: payload.id ?? null, captured: Boolean(sourceMatch || hookMatch),
-        supported: content.supported, parts: content.parts};
+        supported: content.supported && (!claimedGoal || goal), parts: content.parts,
+        ...(goal ? {sourceCategory: 'goal-runtime-context', controlDisposition: 'requires-review'} : {})};
       records.push(record);
       if (record.captured) {
-        if (!content.supported || (content.parts.length > 1) && !scan.coverage?.some(item =>
+        if (!record.supported || (content.parts.length > 1) && !scan.coverage?.some(item =>
             item.recordOffset === row.offset && item.recordSha256 === digest && canonical(item.parts) === canonical(content.parts))) {
           enrichments.push(record);
         }
       } else {
         pendingInputs.push({...record,
-          ...(content.supported ? {prompt: content.prompt, promptSha256: promptHash} : {})});
+          ...(record.supported ? {prompt: content.prompt, promptSha256: promptHash} : {})});
       }
       if (scan.readPart?.recordOffset === row.offset && scan.readPart.recordSha256 === digest) {
         const descriptor = content.parts.find(part => part.partIndex === scan.readPart.partIndex);
@@ -958,6 +1107,11 @@ function readNativeTranscript(binding, options = {}, snapshot = null) {
   }
   let association = retry ? continuationAssociation(tailRows, binding, liveHost.host, options.retryInputSha256,
     `codex-rollout:${relative.split(path.sep).join('/')}`, options.capturedInputHashes, accepted, recoveredInterruptOffsets) : null;
+  if (retry && inputProof && association.state !== 'observed') {
+    const goal = goalContinuation(tailRows, binding, liveHost.host, options.retryInputSha256,
+      `codex-rollout:${relative.split(path.sep).join('/')}`, inputProof, accepted, recoveredInterruptOffsets);
+    if (goal.state === 'observed') association = goal;
+  }
   if (retry && inputProof && association.state !== 'observed') {
     const human = nativeHumanContinuation(tailRows, binding, liveHost.host, options.retryInputSha256,
       `codex-rollout:${relative.split(path.sep).join('/')}`, inputProof, accepted, recoveredInterruptOffsets);

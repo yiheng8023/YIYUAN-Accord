@@ -370,7 +370,129 @@ def _identity_token(value):
     )
 
 
-def _python_ref(source, module, exact_tokens=()):
+# ContentItemProvenance::Harness, serde snake_case, hook: bool.
+# https://github.com/openai/codex/blob/360319d8dee62d87e2d59fc0c21805d79519cfed/codex-rs/protocol/src/models/item_metadata.rs
+# Source SHA256: 636a1911e21e6fa543133b9ef14094b5b973dfd968ee5afcf20b418a827f4ec3
+# Bind the actual official enum, never any caller-selected retired module word.
+_CODEX_PROVENANCE_ENUM_SHA256 = '49f756463ad9dcfb9b6ade54d7d6f15476e7214f46a65b4b0c55d46845b12f70'
+_CODEX_PROVENANCE_TEST = 'tests/product/test_native_state_mcp.py'
+
+
+def _codex_provenance_text(source, locator, module):
+    if (locator != 'plugins/yiyuan-accord-codex/runtime/codex-context.cjs'
+            or sha256(module.encode('utf-8')).hexdigest() != _CODEX_PROVENANCE_ENUM_SHA256):
+        return source
+    literal = repr(module)
+    expression = ('canonical(attribution[0]?.provenance) !== canonical({type: '
+                  + literal + ', hook: false})')
+    matches = {match.start() for match in re.finditer(re.escape(expression), source)
+               if match.start() == 0 or source[match.start() - 1] in ' \t\r\n('}
+    # Recognize only normal code, never a quoted/comment/template/regexp copy.
+    # Ambiguous slash syntax is conservatively opaque, not a general JS parser.
+    admitted, index = [], 0
+    while matches and index < len(source):
+        if index in matches:
+            admitted.append(index)
+            matches.remove(index)
+        char = source[index]
+        if char in '\'"`':
+            quote, index = char, index + 1
+            while index < len(source):
+                char = source[index]
+                index += 1
+                if char == '\\':
+                    index += 1
+                elif char == quote:
+                    break
+        elif source.startswith('//', index):
+            end = source.find('\n', index + 2)
+            index = len(source) if end < 0 else end + 1
+        elif source.startswith('/*', index):
+            end = source.find('*/', index + 2)
+            index = len(source) if end < 0 else end + 2
+        elif char == '/':
+            index += 1
+            in_class = False
+            while index < len(source):
+                char = source[index]
+                index += 1
+                if char == '\\':
+                    index += 1
+                elif char == '[':
+                    in_class = True
+                elif char == ']':
+                    in_class = False
+                elif char == '/' and not in_class:
+                    break
+        else:
+            index += 1
+    if not admitted:
+        return source
+    value_offset = expression.index(literal) + 1
+    characters = list(source)
+    for start in admitted:
+        start += value_offset
+        characters[start:start + len(module)] = ' ' * len(module)
+    return ''.join(characters)
+
+
+def _codex_provenance_data_context(metadata, ancestors):
+    current, update = metadata, False
+    while ancestors:
+        parent, ancestors = ancestors
+        if isinstance(parent, ast.Dict):
+            if not any(key is not None and value is current
+                       for key, value in zip(parent.keys, parent.values)):
+                return False
+        elif isinstance(parent, (ast.List, ast.Tuple)):
+            if not any(value is current for value in parent.elts):
+                return False
+        elif isinstance(parent, (ast.Assign, ast.AnnAssign, ast.Return)):
+            return parent.value is current
+        elif isinstance(parent, ast.keyword):
+            if (parent.arg != 'content_item_metadata' or parent.value is not current
+                    or not isinstance(current, ast.List)
+                    or not any(value is metadata for value in current.elts) or not ancestors):
+                return False
+            call, ancestors = ancestors
+            if (not isinstance(call, ast.Call) or not isinstance(call.func, ast.Attribute)
+                    or call.func.attr != 'update' or call.args or call.keywords != [parent]):
+                return False
+            current, update = call, True
+            continue
+        elif isinstance(parent, ast.Lambda) and update and parent.body is current:
+            pass
+        elif isinstance(parent, ast.Expr) and update and parent.value is current:
+            return True
+        else:
+            # Subscript/BinOp/Call and other computations consume the data;
+            # a familiar keyword cannot make the consumed enum a fixture.
+            return False
+        current = parent
+    return False
+
+
+def _codex_provenance_literal(source, node, ancestors, module, locator):
+    parent = ancestors[0] if ancestors else None
+    above = ancestors[1] if ancestors else None
+    grandparent = above[0] if above else None
+    if (locator != _CODEX_PROVENANCE_TEST
+            or sha256(module.encode('utf-8')).hexdigest() != _CODEX_PROVENANCE_ENUM_SHA256
+            or not isinstance(node, ast.Constant) or node.value != module
+            or ast.get_source_segment(source, node) not in (repr(module), '"' + module + '"')
+            or not isinstance(parent, ast.Dict) or len(parent.keys) != 2
+            or not isinstance(grandparent, ast.Dict) or len(grandparent.keys) != 1):
+        return False
+    fields = {key.value: value for key, value in zip(parent.keys, parent.values)
+              if isinstance(key, ast.Constant) and isinstance(key.value, str)}
+    return (set(fields) == {'type', 'hook'} and fields['type'] is node
+            and isinstance(fields['hook'], ast.Constant) and type(fields['hook'].value) is bool
+            and isinstance(grandparent.keys[0], ast.Constant)
+            and grandparent.keys[0].value == 'provenance' and grandparent.values[0] is parent
+            and _codex_provenance_data_context(grandparent, above[1]))
+
+
+def _python_ref(source, module, exact_tokens=(), *, locator=None):
     if len(source) > _SCAN_LIMIT:
         raise _IdentityScanUnknown("Python identity surface exceeds scan budget")
     target = _identity_word(module)
@@ -397,19 +519,24 @@ def _python_ref(source, module, exact_tokens=()):
             "Python source is outside the shared 3.10 grammar"
         ) from exc
 
-    pending, nodes = [tree], []
+    pending, nodes = [(tree, None)], []
     while pending:
         if len(nodes) >= _PYTHON_AST_NODE_LIMIT:
             raise _IdentityScanUnknown("Python AST exceeds scan budget")
-        current = pending.pop()
+        current, ancestors = pending.pop()
         nodes.append(current)
-        pending.extend(ast.iter_child_nodes(current))
+        parent_link = (current, ancestors)
+        pending.extend((child, parent_link) for child in ast.iter_child_nodes(current))
 
         for _field, value in ast.iter_fields(current):
             candidates = value if isinstance(value, (list, tuple)) else (value,)
             for candidate in candidates:
                 visible = text_value(candidate)
                 if visible is not None and mentions(visible):
+                    if (_codex_provenance_literal(source, current, ancestors, module, locator)
+                            and not any(matcher.search(_folded_visible_text(visible))
+                                        for matcher in exact_matchers)):
+                        continue
                     return True
 
     static = {}
@@ -850,11 +977,12 @@ def active_tree_errors(
             folded_text = _folded_visible_text(text)
             if is_python:
                 identity_present = _python_ref(
-                    text, module, exact_tokens
+                    text, module, exact_tokens, locator=locator
                 )
             else:
                 module_text = (_external_module_reference_text(text, locator, external_product_references)
                                if external_product_references else text)
+                module_text = _codex_provenance_text(module_text, locator, module)
                 module_folded = _folded_visible_text(module_text)
                 identity_present = (
                     any(matcher.search(folded_text) or matcher.search(module_folded)

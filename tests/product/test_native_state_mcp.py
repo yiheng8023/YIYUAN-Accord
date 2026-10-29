@@ -10,7 +10,7 @@ import sys
 import tempfile
 import threading
 import queue
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import unittest
 from unittest import mock
 import time
@@ -6281,6 +6281,878 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
                     self.assertFalse(value['diagnostic']['observations'][-1]['gates']['noPendingInputs'])
 
 
+
+    def goal_context_record(self, text='Synthetic Goal control.', turn=None):
+        return {
+            'type': 'response_item',
+            'payload': {
+                'type': 'message',
+                'role': 'user',
+                'id': 'synthetic-goal',
+                'content': [{
+                    'type': 'input_text',
+                    'text': '<codex_internal_context source="goal">\n' + text + '\n</codex_internal_context>',
+                }],
+                'internal_chat_message_metadata_passthrough': {
+                    'turn_id': turn or self.params['_meta']['x-codex-turn-metadata']['turn_id'],
+                    'content_item_kinds': ['goal.internal_context'],
+                    'content_item_metadata': [{'provenance': {'type': 'harness', 'hook': False}}],
+                },
+            },
+        }
+
+    def goal_setup_source(self):
+        self.native_context(v2=True)
+        self.transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        self.rows = [json.loads(s) for s in self.transcript.read_text(encoding='utf-8').splitlines()]
+
+    def goal_write_source(self):
+        for i, row in enumerate(self.rows):
+            row['timestamp'] = (datetime(2026, 10, 30, tzinfo=timezone.utc) + timedelta(milliseconds=i)).isoformat()
+        self.transcript.write_text(''.join((json.dumps(r) + '\n' for r in self.rows)), encoding='utf-8')
+
+    def goal_receipt(self):
+        return json.loads(next(self.state.glob('*.input.json')).read_bytes())
+
+    def goal_preview(self):
+        before = self.files()
+        s = self.native_input_preview()
+        self.assertEqual(self.files(), before)
+        return s
+
+    def goal_reconcile(self, s):
+        return self.manage(
+            action='reconcile-input',
+            epoch=s['epoch'],
+            expectedRevision=s['revision'],
+            evidenceCursor=s['nativeInputEvidence']['cursor'],
+        )
+
+    def test_goal_origin_and_source_retention(self):
+        self.goal_setup_source()
+        original = self.goal_receipt()
+        g = self.goal_context_record()
+        self.rows.insert(3, g)
+        self.goal_write_source()
+        s = self.goal_preview()
+        e = s['nativeInputEvidence']
+        self.assertEqual(e['state'], 'observed', e)
+        pending = e['pendingInputs']
+        self.assertEqual(len(pending), 1)
+        self.assertEqual(pending[0]['sourceCategory'], 'goal-runtime-context')
+        self.assertEqual(pending[0]['controlDisposition'], 'requires-review')
+        raw = self.transcript.read_bytes()
+        cur = e['cursor']
+        self.assertEqual(
+            hashlib.sha256(raw[cur['anchorOffset']:cur['endOffset']]).hexdigest(),
+            cur['prefixSha256'],
+        )
+        self.assertEqual(
+            e['records'][0]['promptSha256'],
+            hashlib.sha256(g['payload']['content'][0]['text'].encode()).hexdigest(),
+        )
+        r = self.goal_reconcile(s)
+        self.assertFalse(r['isError'], r)
+        saved = self.goal_receipt()
+        self.assertEqual(saved['promptSha256'], original['promptSha256'])
+        self.assertEqual(saved['turnId'], original['turnId'])
+        self.assertEqual(saved['nativeInputs'][:1], original['nativeInputs'])
+        self.assertEqual(
+            saved['nativeInputs'][-1]['nativeEvidence']['sourceCategory'],
+            'goal-runtime-context',
+        )
+        self.assertEqual(saved['nativeInputs'][-1]['prompt'], g['payload']['content'][0]['text'])
+        read = self.read_input()
+        self.assertIn('goal-runtime-context', json.dumps(read))
+        self.assertIn('requires-review', json.dumps(read))
+        again = self.goal_preview()['nativeInputEvidence']
+        self.assertEqual(again['state'], 'observed', again)
+        self.assertEqual(again['pendingInputs'], [])
+        self.assertEqual(again['records'][0]['sourceCategory'], 'goal-runtime-context')
+
+    def goal_auto_source(self, change=None, paused=False):
+        self.goal_setup_source()
+        old = self.params['_meta']['x-codex-turn-metadata']['turn_id']
+        session = self.params['_meta']['x-codex-turn-metadata']['thread_id']
+        new = 'synthetic-goal-turn'
+        self.goal_write_source()
+        s = self.goal_preview()
+        r = self.manage(
+            action='bind',
+            epoch=s['epoch'],
+            expectedRevision=0,
+            result='Synthetic bound outcome',
+            inputs=[],
+            outputs=[{'path': 'result.txt'}],
+            nextAction='Review source',
+            canContinue=False,
+        )
+        self.assertFalse(r['isError'], r)
+        if paused:
+            self.assertFalse(self.manage(
+                action='pause',
+                epoch=s['epoch'],
+                expectedRevision=1,
+                reason='Synthetic explicit pause',
+            )['isError'])
+        complete = {
+            'type': 'event_msg',
+            'payload': {'type': 'task_complete', 'turn_id': old, 'root_turn_id': old, 'error': None},
+        }
+        start = {
+            'type': 'event_msg',
+            'payload': {
+                'type': 'task_started',
+                'turn_id': new,
+                'root_turn_id': old,
+                'turn_attribution': {
+                    'turn_id': new,
+                    'root_turn_id': old,
+                    'turn_trigger': 'goal',
+                    'parent_turn_id': old,
+                    'initiating_agent_path': None,
+                },
+            },
+        }
+        context = {
+            'type': 'turn_context',
+            'payload': {'turn_id': new, 'cwd': str(self.work), 'model': 'observed-model'},
+        }
+        g = self.goal_context_record(turn=new)
+        edge = [complete, start, context, g]
+        if change:
+            change(edge)
+        self.rows.extend(edge)
+        self.params['_meta']['x-codex-turn-metadata']['turn_id'] = new
+        self.goal_write_source()
+
+    def test_goal_auto_continuity_and_recheck(self):
+        self.goal_auto_source()
+        original = self.goal_receipt()
+        s = self.goal_preview()
+        self.assertEqual(s['nativeInputEvidence']['state'], 'observed')
+        r = self.goal_reconcile(s)
+        self.assertFalse(r['isError'], r)
+        saved = self.goal_receipt()
+        self.assertEqual(saved['promptSha256'], original['promptSha256'])
+        self.assertEqual(saved['turnId'], original['turnId'])
+        self.assertEqual(saved['nativeInputReconciliation']['turnId'], 'synthetic-goal-turn')
+        self.assertEqual(
+            saved['nativeInputs'][-1]['nativeEvidence']['sourceCategory'],
+            'goal-runtime-context',
+        )
+        again = self.goal_preview()
+        self.assertEqual(again['nativeInputEvidence']['state'], 'observed')
+        self.assertEqual(again['nativeInputEvidence']['pendingInputs'], [])
+        bound = self.manage(
+            action='bind',
+            epoch=again['epoch'],
+            expectedRevision=again['revision'],
+            result='Synthetic bound outcome',
+            inputs=[],
+            outputs=[{'path': 'result.txt'}],
+            nextAction='Review Goal source controls; no permission inferred',
+            canContinue=False,
+        )
+        self.assertFalse(bound['isError'], bound)
+
+    def test_goal_shapes_reject_untrusted_prefixes(self):
+        mutations = {
+            'kind-only': lambda p: p['content'][0].update(text='Synthetic bare text'),
+            'wrong-source': lambda p: p['content'][0].update(text='<codex_internal_context source="other">x</codex_internal_context>'),
+            'outside-text': lambda p: p['content'][0].update(text='outside' + p['content'][0]['text']),
+            'duplicate-wrapper': lambda p: p['content'][0].update(text=p['content'][0]['text'] * 2),
+            'wrong-turn': lambda p: p['internal_chat_message_metadata_passthrough'].update(turn_id='foreign'),
+            'no-metadata': lambda p: p.pop('internal_chat_message_metadata_passthrough'),
+            'mixed-kinds': lambda p: p['internal_chat_message_metadata_passthrough'].update(content_item_kinds=['goal.internal_context', 'user.text']),
+            'mixed-parts': lambda p: p['content'].append({'type': 'input_text', 'text': 'extra'}),
+            'missing-provenance': lambda p: p['internal_chat_message_metadata_passthrough'].pop('content_item_metadata'),
+            'user-provenance': lambda p: p['internal_chat_message_metadata_passthrough'].update(content_item_metadata=[{'provenance': {'type': 'user'}}]),
+            'hook-provenance': lambda p: p['internal_chat_message_metadata_passthrough'].update(content_item_metadata=[{'provenance': {'type': 'harness', 'hook': True}}]),
+            'wrapper-only-human': lambda p: p['internal_chat_message_metadata_passthrough'].update(
+                content_item_kinds=['user.text'],
+                content_item_metadata=[{'provenance': {'type': 'user'}}],
+            ),
+            'user-goal-class': lambda p: p['internal_chat_message_metadata_passthrough'].update(content_item_kinds=['user.goal']),
+        }
+        for name, mutate in mutations.items():
+            with self.subTest(name=name):
+                self.setUp()
+                self.goal_setup_source()
+                g = self.goal_context_record()
+                mutate(g['payload'])
+                self.rows.insert(3, g)
+                self.goal_write_source()
+                e = self.goal_preview()['nativeInputEvidence']
+                self.assertEqual(e['state'], 'unknown', e)
+
+    def test_goal_never_consumes_same_hash_human_hook(self):
+        self.goal_setup_source()
+        g = self.goal_context_record()
+        text = g['payload']['content'][0]['text']
+        self.rows[3]['payload']['content'][0]['text'] = text
+        self.goal_write_source()
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        self.state_input = next(self.state.glob('*.input.json'))
+        self.state_input.unlink()
+        self.helper(
+            {
+                'hook_event_name': 'UserPromptSubmit',
+                'prompt': text,
+                'turn_id': meta['turn_id'],
+                'model': meta['model'],
+                'transcript_path': str(self.transcript),
+            },
+            session=meta['thread_id'],
+            hook='UserPromptSubmit',
+        )
+        self.rows.insert(3, g)
+        self.goal_write_source()
+        e = self.goal_preview()['nativeInputEvidence']
+        self.assertEqual(e['state'], 'observed', e)
+        self.assertFalse(e['records'][0]['captured'])
+        self.assertTrue(e['records'][1]['captured'])
+        self.assertEqual(len(e['pendingInputs']), 1)
+
+    def test_goal_last_and_between_hooks_preserve_human_and_control_text(self):
+        for placement in ('last', 'between'):
+            with self.subTest(placement=placement):
+                self.setUp()
+                self.goal_setup_source()
+                g = self.goal_context_record('Synthetic budget limit or objective update remains caller review.')
+                self.rows.append(g)
+                self.goal_write_source()
+                if placement == 'between':
+                    self.rows.append({
+                        'type': 'response_item',
+                        'payload': {
+                            'type': 'message',
+                            'role': 'user',
+                            'content': [{'type': 'input_text', 'text': 'Second synthetic human.'}],
+                        },
+                    })
+                    self.goal_write_source()
+                    m = self.params['_meta']['x-codex-turn-metadata']
+                    self.helper(
+                        {
+                            'hook_event_name': 'UserPromptSubmit',
+                            'prompt': 'Second synthetic human.',
+                            'turn_id': m['turn_id'],
+                            'model': m['model'],
+                            'transcript_path': str(self.transcript),
+                        },
+                        session=m['thread_id'],
+                        hook='UserPromptSubmit',
+                    )
+                original = self.goal_receipt()
+                s = self.goal_preview()
+                self.assertEqual(s['nativeInputEvidence']['state'], 'observed')
+                r = self.goal_reconcile(s)
+                self.assertFalse(r['isError'], r)
+                saved = self.goal_receipt()
+                self.assertEqual(saved['promptSha256'], original['promptSha256'])
+                self.assertEqual(saved['nativeInputs'][-1]['prompt'], g['payload']['content'][0]['text'])
+                self.assertEqual(
+                    saved['nativeInputs'][-1]['nativeEvidence']['controlDisposition'],
+                    'requires-review',
+                )
+                self.assertEqual(self.goal_preview()['nativeInputEvidence']['pendingInputs'], [])
+
+    def test_goal_cursor_and_read_part_keep_raw_source(self):
+        self.goal_setup_source()
+        self.rows.append(self.goal_context_record())
+        self.goal_write_source()
+        s = self.goal_preview()
+        g = s['nativeInputEvidence']['pendingInputs'][0]
+        read = self.read_input(
+            sourcePart={
+                'evidenceCursor': s['nativeInputEvidence']['cursor'],
+                'recordOffset': g['recordOffset'],
+                'recordSha256': g['recordSha256'],
+                'partIndex': 0,
+            },
+            expectedReceiptEpoch=s['epoch'],
+        )
+        self.assertFalse(read['isError'], read)
+        self.assertIn('Synthetic Goal control.', json.dumps(read))
+        self.assertIn('goal-runtime-context', json.dumps(read))
+        self.assertEqual(g['parts'][0]['type'], 'text')
+        self.assertIn('codex_internal_context', g['textPreview'])
+        self.rows[-1]['payload']['content'][0]['text'] = self.rows[-1]['payload']['content'][0]['text'].replace('Synthetic', 'Changed')
+        self.goal_write_source()
+        before = self.files()
+        r = self.goal_reconcile(s)
+        self.assertTrue(r['isError'])
+        self.assertEqual(self.files(), before)
+
+    def test_goal_auto_edge_rejects_unproved_chain(self):
+        variants = {
+            'missing-complete': lambda e: e.pop(0),
+            'failed-complete': lambda e: e[0]['payload'].update(error={
+                'codex_error_info': 'server_overloaded',
+                'message': 'Selected model is at capacity. Please try a different model.',
+            }),
+            'wrong-parent': lambda e: e[1]['payload']['turn_attribution'].update(parent_turn_id='foreign'),
+            'wrong-root': lambda e: e[1]['payload'].update(root_turn_id='foreign'),
+            'wrong-attribution-root': lambda e: e[1]['payload']['turn_attribution'].update(root_turn_id='foreign'),
+            'wrong-trigger': lambda e: e[1]['payload']['turn_attribution'].update(turn_trigger='composer'),
+            'initiating-agent': lambda e: e[1]['payload']['turn_attribution'].update(initiating_agent_path='/root/child'),
+            'wrong-context-model': lambda e: e[2]['payload'].update(model='foreign'),
+            'wrong-context-turn': lambda e: e[2]['payload'].update(turn_id='foreign'),
+            'untyped-goal': lambda e: e[3]['payload'].pop('internal_chat_message_metadata_passthrough'),
+            'human-same-text': lambda e: e[3]['payload']['internal_chat_message_metadata_passthrough'].update(
+                content_item_kinds=['user.text'],
+                content_item_metadata=[{'provenance': {'type': 'user'}}],
+            ),
+            'unknown-control': lambda e: e.insert(3, {'type': 'event_msg', 'payload': {'type': 'task_new_control'}}),
+            'unknown-event': lambda e: e.insert(
+                3,
+                {'type': 'event_msg', 'payload': {'type': 'new_semantic_control'}},
+            ),
+            'interrupt': lambda e: e.insert(
+                3,
+                {
+                    'type': 'event_msg',
+                    'payload': {'type': 'task_interrupted', 'turn_id': 'synthetic-goal-turn'},
+                },
+            ),
+            'goal-before-context': lambda e: e.__setitem__(slice(2, 4), [e[3], e[2]]),
+        }
+        for name, change in variants.items():
+            with self.subTest(name=name):
+                self.setUp()
+                self.goal_auto_source(change)
+                s = self.goal_preview()
+                before = self.files()
+                if s['nativeInputEvidence']['state'] == 'observed':
+                    self.assertTrue(self.goal_reconcile(s)['isError'], name)
+                else:
+                    self.assertEqual(s['nativeInputEvidence']['state'], 'unknown')
+                self.assertEqual(self.files(), before)
+
+    def test_goal_auto_second_edge_and_same_turn_human(self):
+        self.goal_auto_source()
+        s = self.goal_preview()
+        self.assertFalse(self.goal_reconcile(s)['isError'])
+        s = self.goal_preview()
+        self.assertFalse(self.manage(
+            action='bind',
+            epoch=s['epoch'],
+            expectedRevision=s['revision'],
+            result='Synthetic bound outcome',
+            inputs=[],
+            outputs=[{'path': 'result.txt'}],
+            nextAction='Review controls',
+            canContinue=False,
+        )['isError'])
+        old = 'synthetic-goal-turn'
+        new = 'synthetic-goal-turn-2'
+        root = 'current-turn'
+        self.rows.extend([
+            {
+                'type': 'event_msg',
+                'payload': {'type': 'task_complete', 'turn_id': old, 'root_turn_id': root, 'error': None},
+            },
+            {
+                'type': 'event_msg',
+                'payload': {
+                    'type': 'task_started',
+                    'turn_id': new,
+                    'root_turn_id': root,
+                    'turn_attribution': {
+                        'turn_id': new,
+                        'root_turn_id': root,
+                        'turn_trigger': 'goal',
+                        'parent_turn_id': old,
+                        'initiating_agent_path': None,
+                    },
+                },
+            },
+            {
+                'type': 'turn_context',
+                'payload': {'turn_id': new, 'cwd': str(self.work), 'model': 'observed-model'},
+            },
+            self.goal_context_record('Second synthetic continuation.', turn=new),
+        ])
+        self.params['_meta']['x-codex-turn-metadata']['turn_id'] = new
+        self.goal_write_source()
+        s = self.goal_preview()
+        r = self.goal_reconcile(s)
+        self.assertFalse(r['isError'], r)
+        self.rows.append({
+            'type': 'response_item',
+            'payload': {
+                'type': 'message',
+                'role': 'user',
+                'content': [{'type': 'input_text', 'text': 'Later synthetic human.'}],
+            },
+        })
+        self.goal_write_source()
+        m = self.params['_meta']['x-codex-turn-metadata']
+        self.helper(
+            {
+                'hook_event_name': 'UserPromptSubmit',
+                'prompt': 'Later synthetic human.',
+                'turn_id': new,
+                'model': m['model'],
+                'transcript_path': str(self.transcript),
+            },
+            session=m['thread_id'],
+            hook='UserPromptSubmit',
+        )
+        receipt = self.goal_receipt()
+        s = self.goal_preview()
+        self.assertEqual(s['nativeInputEvidence']['state'], 'observed', s)
+        self.assertEqual(receipt['nativeInputs'][-1]['prompt'], 'Later synthetic human.')
+
+    def test_goal_pause_and_recovery_are_not_cleared(self):
+        self.goal_setup_source()
+        self.goal_write_source()
+        s = self.goal_preview()
+        r = self.manage(
+            action='bind',
+            epoch=s['epoch'],
+            expectedRevision=0,
+            result='Synthetic outcome',
+            inputs=[],
+            outputs=[{'path': 'result.txt'}],
+            nextAction='Wait',
+            canContinue=False,
+        )
+        self.assertFalse(r['isError'])
+        self.assertFalse(self.manage(
+            action='pause',
+            epoch=s['epoch'],
+            expectedRevision=1,
+            reason='Explicit synthetic pause',
+        )['isError'])
+        self.rows.append(self.goal_context_record('Budget limit remains a control.'))
+        self.goal_write_source()
+        s = self.goal_preview()
+        self.assertFalse(self.goal_reconcile(s)['isError'])
+        state = json.loads(next(self.state.glob('*.state.json')).read_bytes())
+        self.assertEqual(state['mode'], 'paused')
+        self.assertFalse(state['canContinue'])
+        s = self.goal_preview()
+        m = self.params['_meta']['x-codex-turn-metadata']
+        self.helper(
+            {'hook_event_name': 'Interrupt', 'turn_id': m['turn_id']},
+            session=m['thread_id'],
+            hook='Interrupt',
+        )
+        before = self.files()
+        self.assertTrue(self.goal_reconcile(s)['isError'])
+        self.assertEqual(self.files(), before)
+
+    def test_goal_legacy_receipt_classification_is_rederived(self):
+        self.goal_setup_source()
+        self.rows.append(self.goal_context_record())
+        self.goal_write_source()
+        s = self.goal_preview()
+        self.assertFalse(self.goal_reconcile(s)['isError'])
+        p = next(self.state.glob('*.input.json'))
+        receipt = json.loads(p.read_bytes())
+        ev = receipt['nativeInputs'][-1]['nativeEvidence']
+        ev.pop('sourceCategory')
+        ev.pop('controlDisposition')
+        p.write_text(json.dumps(receipt), encoding='utf-8')
+        s = self.goal_preview()
+        self.assertEqual(s['nativeInputEvidence']['state'], 'observed')
+        self.assertEqual(s['nativeInputEvidence']['records'][-1]['sourceCategory'], 'goal-runtime-context')
+
+    def test_goal_three_control_variants_remain_uninterpreted_and_complete(self):
+        for name in ('continuation', 'budget_limit', 'objective_updated'):
+            with self.subTest(name=name):
+                self.setUp()
+                self.goal_setup_source()
+                body = {
+                    'continuation': 'Continue the existing synthetic goal; the objective remains user data.',
+                    'budget_limit': 'Synthetic Goal budget is exhausted; stop new substantive work and preserve unfinished duties.',
+                    'objective_updated': 'Synthetic Goal objective changed; verify the accepted source before changing authorized scope.',
+                }[name]
+                g = self.goal_context_record(body)
+                self.rows.append(g)
+                self.goal_write_source()
+                original = self.goal_receipt()
+                s = self.goal_preview()
+                self.assertEqual(s['nativeInputEvidence']['state'], 'observed')
+                self.assertFalse(self.goal_reconcile(s)['isError'])
+                saved = self.goal_receipt()
+                self.assertEqual(saved['promptSha256'], original['promptSha256'])
+                self.assertEqual(saved['nativeInputs'][-1]['prompt'], g['payload']['content'][0]['text'])
+                self.assertEqual(
+                    saved['nativeInputs'][-1]['nativeEvidence']['controlDisposition'],
+                    'requires-review',
+                )
+                self.assertEqual(self.goal_preview()['nativeInputEvidence']['pendingInputs'], [])
+
+    def test_goal_source_and_native_caller_identity_still_required(self):
+        for change in ('missing-receipt', 'foreign-thread', 'source-root', 'missing-call-turn'):
+            with self.subTest(change=change):
+                self.setUp()
+                self.goal_setup_source()
+                self.rows.insert(3, self.goal_context_record())
+                self.goal_write_source()
+                if change == 'missing-receipt':
+                    next(self.state.glob('*.input.json')).unlink()
+                elif change == 'foreign-thread':
+                    self.params['_meta']['x-codex-turn-metadata']['thread_id'] = 'foreign'
+                elif change == 'source-root':
+                    self.rows[0]['payload']['session_id'] = 'foreign'
+                    self.goal_write_source()
+                else:
+                    self.params['_meta']['x-codex-turn-metadata'].pop('turn_id')
+                before = self.files()
+                r = self.inspect({
+                    **self.params,
+                    'arguments': {'cwd': str(self.work), 'includeNativeInputs': True},
+                })
+                self.assertEqual(self.files(), before)
+                e = r.get('value', {}).get('checkpoint', {}).get('snapshot', {}).get('nativeInputEvidence', {})
+                self.assertNotEqual(e.get('state'), 'observed')
+
+    def test_goal_auto_paused_acknowledgement_is_not_resume(self):
+        self.goal_auto_source(paused=True)
+        s = self.goal_preview()
+        self.assertFalse(self.goal_reconcile(s)['isError'])
+        s = self.goal_preview()
+        state = json.loads(next(self.state.glob('*.state.json')).read_bytes())
+        self.assertEqual(state['mode'], 'paused')
+        before = self.files()
+        r = self.manage(
+            action='bind',
+            epoch=s['epoch'],
+            expectedRevision=s['revision'],
+            result='Synthetic bound outcome',
+            inputs=[],
+            outputs=[{'path': 'result.txt'}],
+            nextAction='No implicit resume',
+            canContinue=True,
+        )
+        self.assertFalse(r['isError'], r)
+        state = json.loads(next(self.state.glob('*.state.json')).read_bytes())
+        self.assertEqual(state['mode'], 'paused')
+        self.assertEqual(state['reason'], 'Synthetic explicit pause')
+        self.assertIsNone(state['resumeReason'])
+        self.assertTrue(self.manage(
+            action='retire',
+            epoch=state['epoch'],
+            expectedRevision=state['revision'],
+        )['isError'])
+
+    def test_goal_auto_time_and_final_source_change_rejected(self):
+        for change in ('start-before-completion', 'goal-change-after-preview'):
+            with self.subTest(change=change):
+                self.setUp()
+                self.goal_auto_source()
+                if change == 'start-before-completion':
+                    self.rows[-3]['timestamp'] = '2026-10-29T00:00:00Z'
+                    self.transcript.write_text(''.join((json.dumps(r) + '\n' for r in self.rows)), encoding='utf-8')
+                s = self.goal_preview()
+                self.assertEqual(s['nativeInputEvidence']['state'], 'observed')
+                if change == 'goal-change-after-preview':
+                    self.rows[-1]['payload']['content'][0]['text'] = self.rows[-1]['payload']['content'][0]['text'].replace('Synthetic', 'Changed')
+                    self.goal_write_source()
+                before = self.files()
+                self.assertTrue(self.goal_reconcile(s)['isError'])
+                self.assertEqual(self.files(), before)
+
+    def goal_then_human_source(self, change=None):
+        self.goal_auto_source()
+        goal = 'synthetic-goal-turn'
+        human = 'synthetic-human-turn'
+        old = 'current-turn'
+        edge = [
+            {
+                'type': 'event_msg',
+                'payload': {'type': 'task_complete', 'turn_id': goal, 'root_turn_id': old, 'error': None},
+            },
+            {
+                'type': 'event_msg',
+                'payload': {
+                    'type': 'task_started',
+                    'turn_id': human,
+                    'root_turn_id': human,
+                    'turn_attribution': {
+                        'turn_id': human,
+                        'root_turn_id': human,
+                        'turn_trigger': 'composer',
+                        'parent_turn_id': None,
+                        'initiating_agent_path': None,
+                    },
+                },
+            },
+            {
+                'type': 'turn_context',
+                'payload': {'turn_id': human, 'cwd': str(self.work), 'model': 'observed-model'},
+            },
+            {
+                'type': 'response_item',
+                'payload': {
+                    'type': 'message',
+                    'role': 'user',
+                    'id': 'synthetic-human',
+                    'content': [{'type': 'input_text', 'text': 'Synthetic later human input.'}],
+                    'internal_chat_message_metadata_passthrough': {
+                        'turn_id': human,
+                        'content_item_kinds': ['user.text'],
+                        'content_item_metadata': [{'provenance': {'type': 'user'}}],
+                    },
+                },
+            },
+        ]
+        if change:
+            change(edge)
+        self.rows.extend(edge)
+        self.params['_meta']['x-codex-turn-metadata']['turn_id'] = human
+        self.goal_write_source()
+
+    def test_goal_then_human_without_intermediate_receipt(self):
+        self.goal_then_human_source()
+        original = self.goal_receipt()
+        s = self.goal_preview()
+        self.assertEqual(s['nativeInputEvidence']['state'], 'observed')
+        self.assertEqual(len(s['nativeInputEvidence']['pendingInputs']), 2)
+        r = self.goal_reconcile(s)
+        self.assertFalse(r['isError'], r)
+        saved = self.goal_receipt()
+        self.assertEqual(saved['nativeInputs'][:1], original['nativeInputs'])
+        self.assertEqual(
+            saved['nativeInputs'][-2]['nativeEvidence']['sourceCategory'],
+            'goal-runtime-context',
+        )
+        self.assertEqual(saved['nativeInputs'][-2]['nativeEvidence']['controlDisposition'], 'requires-review')
+        self.assertEqual(saved['nativeInputs'][-1]['prompt'], 'Synthetic later human input.')
+        self.assertEqual(saved['promptSha256'], saved['nativeInputs'][-1]['promptSha256'])
+        self.assertEqual(saved['turnId'], 'synthetic-human-turn')
+        s = self.goal_preview()
+        self.assertEqual(s['nativeInputEvidence']['state'], 'observed')
+        self.assertEqual(s['nativeInputEvidence']['pendingInputs'], [])
+
+    def test_goal_then_human_rejects_incomplete_boundary(self):
+        variants = {
+            'missing-goal-complete': lambda e: e.pop(0),
+            'error-goal-complete': lambda e: e[0]['payload'].update(error={'codex_error_info': 'unknown', 'message': 'synthetic error'}),
+            'missing-human-start': lambda e: e.pop(1),
+            'wrong-human-parent': lambda e: e[1]['payload']['turn_attribution'].update(parent_turn_id='foreign'),
+            'wrong-human-root': lambda e: e[1]['payload'].update(root_turn_id='foreign'),
+            'start-before-complete': lambda e: e.__setitem__(slice(0, 2), [e[1], e[0]]),
+            'human-provenance-is-host': lambda e: e[3]['payload']['internal_chat_message_metadata_passthrough'].update(content_item_metadata=[{'provenance': {'type': 'harness', 'hook': False}}]),
+        }
+        for name, change in variants.items():
+            with self.subTest(name=name):
+                self.setUp()
+                self.goal_then_human_source(change)
+                s = self.goal_preview()
+                before = self.files()
+                if s['nativeInputEvidence']['state'] == 'observed':
+                    self.assertTrue(self.goal_reconcile(s)['isError'], name)
+                else:
+                    self.assertEqual(s['nativeInputEvidence']['state'], 'unknown')
+                self.assertEqual(self.files(), before)
+        for index in (-4, -3, -2):
+            with self.subTest(backdated_index=index):
+                self.setUp()
+                self.goal_then_human_source()
+                self.rows[index]['timestamp'] = '2026-10-29T00:00:00Z'
+                self.transcript.write_text(''.join((json.dumps(r) + '\n' for r in self.rows)), encoding='utf-8')
+                s = self.goal_preview()
+                before = self.files()
+                self.assertTrue(self.goal_reconcile(s)['isError'])
+                self.assertEqual(self.files(), before)
+
+    def goal_human_goal_source(self, change=None):
+        self.goal_then_human_source()
+        human = 'synthetic-human-turn'
+        goal = 'synthetic-final-goal'
+        edge = [
+            {
+                'type': 'event_msg',
+                'payload': {'type': 'task_complete', 'turn_id': human, 'root_turn_id': human, 'error': None},
+            },
+            {
+                'type': 'event_msg',
+                'payload': {
+                    'type': 'task_started',
+                    'turn_id': goal,
+                    'root_turn_id': human,
+                    'turn_attribution': {
+                        'turn_id': goal,
+                        'root_turn_id': human,
+                        'turn_trigger': 'goal',
+                        'parent_turn_id': human,
+                        'initiating_agent_path': None,
+                    },
+                },
+            },
+            {
+                'type': 'turn_context',
+                'payload': {'turn_id': goal, 'cwd': str(self.work), 'model': 'observed-model'},
+            },
+            self.goal_context_record(turn=goal),
+        ]
+        if change:
+            change(edge)
+        self.rows.extend(edge)
+        self.params['_meta']['x-codex-turn-metadata']['turn_id'] = goal
+        self.goal_write_source()
+
+    def test_goal_human_goal_composes_without_receipt_writes_between(self):
+        self.goal_human_goal_source()
+        s = self.goal_preview()
+        original = self.goal_receipt()
+        self.assertEqual(s['nativeInputEvidence']['state'], 'observed')
+        self.assertEqual(len(s['nativeInputEvidence']['pendingInputs']), 3)
+        r = self.goal_reconcile(s)
+        self.assertFalse(r['isError'], r)
+        saved = self.goal_receipt()
+        self.assertEqual(saved['nativeInputs'][:1], original['nativeInputs'])
+        self.assertEqual(saved['nativeInputReconciliation']['turnId'], 'synthetic-final-goal')
+        self.assertEqual(saved['turnId'], 'synthetic-human-turn')
+        self.assertEqual(saved['promptSha256'], saved['nativeInputs'][-2]['promptSha256'])
+        self.assertEqual(saved['nativeInputs'][-2]['prompt'], 'Synthetic later human input.')
+        self.assertEqual(
+            [e['nativeEvidence']['sourceCategory'] for e in saved['nativeInputs'] if e.get('nativeEvidence', {}).get('sourceCategory')],
+            ['goal-runtime-context', 'goal-runtime-context'],
+        )
+        s = self.goal_preview()
+        self.assertEqual(s['nativeInputEvidence']['state'], 'observed')
+        self.assertEqual(s['nativeInputEvidence']['pendingInputs'], [])
+
+    def test_goal_human_goal_does_not_hide_bad_edges_or_late_input(self):
+        variants = {
+            'missing-human-complete': lambda e: e.pop(0),
+            'failed-human-complete': lambda e: e[0]['payload'].update(error={'message': 'synthetic failure'}),
+            'wrong-final-parent': lambda e: e[1]['payload']['turn_attribution'].update(parent_turn_id='foreign'),
+            'unknown-control': lambda e: e.insert(
+                1,
+                {'type': 'event_msg', 'payload': {'type': 'task_unknown_control'}},
+            ),
+            'late-human': lambda e: e.insert(
+                1,
+                {
+                    'type': 'response_item',
+                    'payload': {
+                        'type': 'message',
+                        'role': 'user',
+                        'content': [{'type': 'input_text', 'text': 'Late input after completion.'}],
+                    },
+                },
+            ),
+        }
+        for name, change in variants.items():
+            with self.subTest(name=name):
+                self.setUp()
+                self.goal_human_goal_source(change)
+                s = self.goal_preview()
+                before = self.files()
+                if s['nativeInputEvidence']['state'] == 'observed':
+                    self.assertTrue(self.goal_reconcile(s)['isError'], name)
+                else:
+                    self.assertEqual(s['nativeInputEvidence']['state'], 'unknown')
+                self.assertEqual(self.files(), before)
+
+    def test_goal_human_shared_recursion_limit_and_shorter_prefix(self):
+        for count in (2, 35):
+            with self.subTest(extra_pairs=count):
+                self.setUp()
+                self.goal_human_goal_source()
+                prior_goal = 'synthetic-final-goal'
+                prior_root = 'synthetic-human-turn'
+                for index in range(count):
+                    human = f'extra-human-{index}'
+                    goal = f'extra-goal-{index}'
+                    self.rows.extend([
+                        {
+                            'type': 'event_msg',
+                            'payload': {
+                                'type': 'task_complete',
+                                'turn_id': prior_goal,
+                                'root_turn_id': prior_root,
+                                'error': None,
+                            },
+                        },
+                        {
+                            'type': 'event_msg',
+                            'payload': {
+                                'type': 'task_started',
+                                'turn_id': human,
+                                'root_turn_id': human,
+                                'turn_attribution': {
+                                    'turn_id': human,
+                                    'root_turn_id': human,
+                                    'turn_trigger': 'composer',
+                                    'parent_turn_id': None,
+                                    'initiating_agent_path': None,
+                                },
+                            },
+                        },
+                        {
+                            'type': 'turn_context',
+                            'payload': {'turn_id': human, 'cwd': str(self.work), 'model': 'observed-model'},
+                        },
+                        {
+                            'type': 'response_item',
+                            'payload': {
+                                'type': 'message',
+                                'role': 'user',
+                                'id': human,
+                                'content': [{'type': 'input_text', 'text': f'Synthetic human {index}.'}],
+                                'internal_chat_message_metadata_passthrough': {
+                                    'turn_id': human,
+                                    'content_item_kinds': ['user.text'],
+                                    'content_item_metadata': [{'provenance': {'type': 'user'}}],
+                                },
+                            },
+                        },
+                        {
+                            'type': 'event_msg',
+                            'payload': {
+                                'type': 'task_complete',
+                                'turn_id': human,
+                                'root_turn_id': human,
+                                'error': None,
+                            },
+                        },
+                        {
+                            'type': 'event_msg',
+                            'payload': {
+                                'type': 'task_started',
+                                'turn_id': goal,
+                                'root_turn_id': human,
+                                'turn_attribution': {
+                                    'turn_id': goal,
+                                    'root_turn_id': human,
+                                    'turn_trigger': 'goal',
+                                    'parent_turn_id': human,
+                                    'initiating_agent_path': None,
+                                },
+                            },
+                        },
+                        {
+                            'type': 'turn_context',
+                            'payload': {'turn_id': goal, 'cwd': str(self.work), 'model': 'observed-model'},
+                        },
+                        self.goal_context_record(turn=goal),
+                    ])
+                    prior_goal = goal
+                    prior_root = human
+                self.params['_meta']['x-codex-turn-metadata']['turn_id'] = prior_goal
+                self.goal_write_source()
+                s = self.goal_preview()
+                self.assertEqual(s['nativeInputEvidence']['state'], 'observed')
+                before = self.files()
+                r = self.goal_reconcile(s)
+                if count == 2:
+                    self.assertFalse(r['isError'], r)
+                    self.assertEqual(self.goal_receipt()['nativeInputReconciliation']['turnId'], prior_goal)
+                else:
+                    self.assertTrue(r['isError'])
+                    self.assertEqual(r['value']['reason'], 'native-call-turn-conflict')
+                    self.assertEqual(self.files(), before)
+
+
+
 def _prepare_native_startup_catalogue(manifest, env, host, deadline):
     """Keep this MCP fixture's unrelated curated Git startup off the public network."""
     root = Path(manifest['evidence'])
@@ -6699,6 +7571,185 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, s
     _finish_native_integration(result, root, host, manifest, original, scoped_hook=scoped_hook)
     print(json.dumps({'status':result['status'],'providerRequests':len(fixture.requests),
                       'realModelCalls':0,'resources':result['resources']},ensure_ascii=False))
+
+
+class GoalProtocolIdentityTests(unittest.TestCase):
+    """Identity retirement and an independently sourced protocol enum coexist."""
+
+    @staticmethod
+    def protocol_metadata(hook=False):
+        # Codex 360319d8, protocol/src/models/item_metadata.rs; this is source data.
+        metadata = {'provenance': {'type': 'harness', 'hook': False}}
+        metadata['provenance']['hook'] = hook
+        return metadata
+
+    def scan(self, body, locator='tests/product/test_native_state_mcp.py', module=None):
+        from yiyuan_accord.identity import active_tree_errors
+        enum = self.protocol_metadata()['provenance']['type']
+        history = {'productId': 'retired-product', 'authority': {
+            'executableVerifier': 'python -B -m ' + (enum if module is None else module)}}
+        with tempfile.TemporaryDirectory(prefix='protocol-identity-') as temporary:
+            root = Path(temporary)
+            target = root / locator
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(body, encoding='utf-8')
+            with mock.patch('yiyuan_accord.identity._bounded_git_bytes', side_effect=[
+                    json.dumps(history).encode(), b'# Retired Product\n']):
+                return active_tree_errors(root, [locator], '0' * 40)
+
+    def test_protocol_enum_python_keeps_true_and_false_fixture_data(self):
+        for hook in (False, True):
+            with self.subTest(hook=hook):
+                self.assertEqual(self.scan('metadata = ' + repr(self.protocol_metadata(hook)) + '\n'), [])
+
+    def cjs_comparison(self):
+        value = self.protocol_metadata()['provenance']['type']
+        return "canonical(attribution[0]?.provenance) !== canonical({type: " + repr(value) + ", hook: false})"
+
+    def test_protocol_enum_cjs_exact_comparison_is_not_a_retired_import(self):
+        self.assertEqual(self.scan('if (' + self.cjs_comparison() + ') return false;\n',
+                                   'plugins/yiyuan-accord-codex/runtime/codex-context.cjs'), [])
+
+    def test_protocol_enum_does_not_hide_python_imports_commands_or_other_identity(self):
+        value = self.protocol_metadata()['provenance']['type']
+        protocol = 'metadata = ' + repr(self.protocol_metadata()) + '\n'
+        payloads = [
+            'import ' + value, 'from ' + value + ' import item', value + ' = 1',
+            '__import__(' + repr(value) + ')', 'command = ' + repr('python -m ' + value),
+            'standalone = ' + repr(value), 'title = "Retired Product"',
+            'slug = "retired-product"', 'value = ' + repr(value[:3]) + ' + ' + repr(value[3:]),
+        ]
+        for payload in payloads:
+            with self.subTest(payload=payload):
+                self.assertTrue(any('superseded identity' in e for e in self.scan(protocol + payload + '\n')))
+
+    def test_protocol_enum_python_scope_and_structure_are_not_generic_allowances(self):
+        value = self.protocol_metadata()['provenance']['type']
+        cases = [
+            ('sample.py', self.protocol_metadata()),
+            ('tests/product/test_native_state_mcp.py', {'other': {'type': value, 'hook': False}}),
+            ('tests/product/test_native_state_mcp.py', {'provenance': {'name': value, 'hook': False}}),
+            ('tests/product/test_native_state_mcp.py', {'provenance': {'type': value}}),
+            ('tests/product/test_native_state_mcp.py', {'provenance': {'type': value, 'hook': False, 'other': 1}}),
+        ]
+        for locator, metadata in cases:
+            with self.subTest(locator=locator, metadata=metadata):
+                self.assertTrue(self.scan('metadata = ' + repr(metadata) + '\n', locator))
+        other = {'provenance': {'type': 'retired_module', 'hook': False}}
+        self.assertTrue(self.scan('metadata = ' + repr(other) + '\n', module='retired_module'))
+
+    def test_protocol_enum_embedded_in_an_import_call_is_not_fixture_data(self):
+        body = '__import__(' + repr(self.protocol_metadata()) + "['provenance']['type'])\n"
+        self.assertTrue(self.scan(body))
+
+    def test_protocol_enum_direct_expression_consumers_remain_retired_identity(self):
+        metadata = repr(self.protocol_metadata())
+        lookup = metadata + "['provenance']['type']"
+        cases = {
+            'direct-command-subscript': "command = 'python -m ' + " + lookup,
+            'direct-path-subscript': 'path = ' + lookup + " + '/__main__.py'",
+            'update-indexed-string': 'target.update(content_item_metadata=' + lookup + ')',
+        }
+        for name, body in cases.items():
+            with self.subTest(case=name):
+                self.assertTrue(self.scan(body + '\n'))
+
+    def test_protocol_enum_actual_return_and_lambda_fixture_shapes_are_data(self):
+        for hook in (False, True):
+            metadata = repr(self.protocol_metadata(hook))
+            bodies = [
+                "def record():\n    return {'payload': {'internal_chat_message_metadata_passthrough': "
+                + "{'content_item_metadata': [" + metadata + ']}}}\n',
+                "variants = {'hook-provenance': lambda p: p.update(content_item_metadata=[" + metadata + '])}\n',
+                "variants = {'human-provenance-is-host': lambda e: e[3]['payload']"
+                + "['internal_chat_message_metadata_passthrough'].update(content_item_metadata=[" + metadata + '])}\n',
+            ]
+            for body in bodies:
+                with self.subTest(hook=hook, body=body):
+                    self.assertEqual(self.scan(body), [])
+
+    def test_protocol_enum_metadata_update_requires_the_original_dict_in_a_plain_list(self):
+        metadata = repr(self.protocol_metadata())
+        values = [metadata, '[' + metadata + '][0]', "[{'other': " + metadata + '}]',
+                  '(' + metadata + ',)', '[' + metadata + '] + []']
+        for value in values:
+            with self.subTest(value=value):
+                self.assertTrue(self.scan('target.update(content_item_metadata=' + value + ')\n'))
+
+    def test_protocol_enum_metadata_update_keyword_is_the_only_call_data_shape(self):
+        for hook in (False, True):
+            fixture = '[' + repr(self.protocol_metadata(hook)) + ']'
+            self.assertEqual(self.scan('target.update(content_item_metadata=' + fixture + ')\n'), [])
+            self.assertTrue(self.scan('target.update(other=' + fixture + ')\n'))
+            self.assertTrue(self.scan('__import__(target.update(content_item_metadata=' + fixture + '))\n'))
+
+    def test_protocol_enum_python_literal_must_remain_plain_source(self):
+        value = self.protocol_metadata()['provenance']['type']
+        literal = repr(value)
+        replacements = [
+            "'\\x%02x%s'" % (ord(value[0]), value[1:]),
+            repr(value[:3]) + ' ' + repr(value[3:]),
+            'r' + literal, 'f' + literal, 'b' + literal,
+            repr(''.join(chr(ord(c) + 0xfee0) for c in value)),
+        ]
+        for replacement in replacements:
+            with self.subTest(literal=replacement):
+                body = 'metadata = ' + repr(self.protocol_metadata()).replace(literal, replacement) + '\n'
+                self.assertTrue(self.scan(body))
+
+    def test_protocol_enum_does_not_hide_cjs_commands_or_copied_expressions(self):
+        value = self.protocol_metadata()['provenance']['type']
+        expression = self.cjs_comparison()
+        locator = 'plugins/yiyuan-accord-codex/runtime/codex-context.cjs'
+        for extra in ['require(' + repr(value) + ');', 'const name = ' + repr(value) + ';',
+                      'const command = ' + repr('python -m ' + value) + ';',
+                      'const title = "Retired Product";', 'const id = "retired-product";']:
+            with self.subTest(extra=extra):
+                self.assertTrue(self.scan('if (' + expression + ') return false;\n' + extra, locator))
+        for copied in ['// ' + expression, '/* ' + expression + ' */',
+                       'const text = ' + json.dumps(expression) + ';',
+                       'const text = `' + expression + '`;', 'const pattern = /' + expression + '/;']:
+            with self.subTest(copied=copied):
+                self.assertTrue(self.scan(copied, locator))
+        self.assertTrue(self.scan('if (' + expression + ') return false;\n', 'sample.cjs'))
+
+    def test_protocol_enum_cjs_requires_the_exact_function_token(self):
+        locator = 'plugins/yiyuan-accord-codex/runtime/codex-context.cjs'
+        for prefix in ('not', 'obj.', '前缀'):
+            with self.subTest(prefix=prefix):
+                self.assertTrue(self.scan(prefix + self.cjs_comparison() + ';\n', locator))
+
+    def test_protocol_enum_does_not_exempt_product_tokens_or_retired_paths(self):
+        value = self.protocol_metadata()['provenance']['type']
+        self.assertTrue(self.scan('metadata = ' + repr(self.protocol_metadata()) + '\n',
+                                  value + '/sample.py'))
+        from yiyuan_accord.identity import active_tree_errors
+        for token in ('id', 'title'):
+            with self.subTest(token=token), tempfile.TemporaryDirectory(prefix='protocol-id-token-') as temporary:
+                root = Path(temporary)
+                locator = 'tests/product/test_native_state_mcp.py'
+                target = root / locator
+                target.parent.mkdir(parents=True)
+                target.write_text('metadata = ' + repr(self.protocol_metadata()) + '\n', encoding='utf-8')
+                history = {'productId': value if token == 'id' else 'retired-product',
+                           'authority': {'executableVerifier': 'python -B -m ' + value}}
+                readme = '# ' + (value if token == 'title' else 'Retired Product') + '\n'
+                with mock.patch('yiyuan_accord.identity._bounded_git_bytes',
+                                side_effect=[json.dumps(history).encode(), readme.encode()]):
+                    self.assertTrue(active_tree_errors(root, [locator], '0' * 40))
+
+    def test_protocol_enum_actual_cjs_source_passes_without_file_exemption(self):
+        source = (ROOT / 'plugins/yiyuan-accord-codex/runtime/codex-context.cjs').read_text(encoding='utf-8')
+        self.assertEqual(self.scan(source, 'plugins/yiyuan-accord-codex/runtime/codex-context.cjs'), [])
+
+    def test_protocol_enum_current_consumers_keep_real_historical_identity_boundary(self):
+        from yiyuan_accord.identity import active_tree_errors
+        program = json.loads((ROOT / 'product/program.json').read_text(encoding='utf-8'))
+        revision = next(row['revision'] for row in program['inputEvidence']
+                        if row['kind'] == 'historical-release-and-counterevidence-boundary')
+        locators = ['plugins/yiyuan-accord-codex/runtime/codex-context.cjs',
+                    'tests/product/test_native_state_mcp.py']
+        self.assertEqual(active_tree_errors(ROOT, locators, revision), [])
 
 
 if __name__ == '__main__':

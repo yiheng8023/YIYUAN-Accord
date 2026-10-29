@@ -133,6 +133,8 @@ The [3.3.2 release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.
 and its bound qualification retain their exact `ef8bde2a` subject; earlier releases
 also remain immutable. Version declarations and candidate validation alone do not
 establish publication or adoption by another task or entry.
+The current source targets a 3.3.5 Goal compatibility patch; publication and adoption remain pending until separately verified. It retains typed Goal runtime context as source evidence rather than human authority, and composes proved Goal/human execution lineage without owning Goal state or dispatch. The transcript adapter is bounded to observed shapes, not a stable upstream protocol or blanket Goal support. See the [state-client contract](task-state-clients.md#goal-运行时上下文与自动续轮).
+
 The package exposes one brief coordinator and four independently discoverable specialist
 Skills for capabilities, continuity, verification and plugin lifecycle. Native
 SessionStart and SubagentStart supply the English meta-guidance translation and the same
