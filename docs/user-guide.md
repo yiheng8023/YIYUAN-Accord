@@ -10,7 +10,7 @@
 
 Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发为 OpenAI 环境下的 Codex 适配。其它宿主的资料和历史包不代表本版提供相应支持。
 
-以下入口说明于 **2026-10-29** 核对当前[官方插件文档](https://learn.chatgpt.com/docs/plugins#use-plugins-from-a-supported-surface)与[Hook 文档](https://learn.chatgpt.com/docs/hooks)。产品与上游会变化，安装执行者须核对具体版本和有效设置。
+以下入口说明于 **2026-10-30** 核对当前[官方插件文档](https://learn.chatgpt.com/docs/plugins#use-plugins-from-a-supported-surface)与[Hook 文档](https://learn.chatgpt.com/docs/hooks)。产品与上游会变化，安装执行者须核对具体版本和有效设置。
 
 | 入口 | 当前使用说明 |
 |---|---|
@@ -20,6 +20,8 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
 | 云端编排的 Work、Synced Work | 当前官方文档不支持插件 Hook；Synced Work 的管理员 MCP Hook 不等同于本包的本机命令 Hook，不作为本包的替代安装路线。 |
 | Remote 桌面或手机 | 可作为已选本地宿主的交互控制通道；须核主机实际参与及控制端差异，手机不是独立运行本包的环境。 |
 | SDK、普通 Chat、网页 Chat、其它 IDE | SDK 的版本绑定后端验证不产生通用安装界面；普通 Chat 独立用途、网页 Chat、JetBrains 与 Xcode 未纳入当前适配承诺。按具体路线的证据判断。 |
+
+当前[Work说明](https://learn.chatgpt.com/docs/get-started-with-work#continue-work-across-devices)中的“Local computer access with Work Cloud”由云端协调并连接本机执行；能访问本地文件不表示它等同本地Work。安装执行者应先识别具体模式及Hook支持，旧任务也不会仅因启用同步而自动变更模式。
 
 当前 Hook 和状态 MCP 通过独立的 `node` 命令运行。安装执行者应确认**实际宿主进程**能找到兼容 Node；另一个终端能运行，或宿主内部自带 Node，都不能替代该核验。
 
@@ -41,7 +43,7 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
    这条命令只登记来源。CLI 在 `/plugins` 中切到该来源，查看并安装 YIYUAN Accord；桌面使用实际可用的插件目录与来源入口。本项目来源不等于已被官方公共目录收录。
 3. 确认宿主或组织允许使用插件，再在目标作用域启用 Accord。CLI 可对 `/plugins` 内已安装项按 `Space` 启停；桌面的全局插件使用开关和单插件启用分别核对，具体界面以所用版本为准。
 4. **首次使用前审阅并信任 Accord 的当前 Hook 定义。** CLI 输入 `/hooks`。桌面的具体审阅/信任方式尚未跨版本统一核实，由安装执行者核对当前版本的受支持路径；没有可用路径时明确报告限制，不据安装成功声称已生效，也不把另一 CLI 的信任状态直接外推到桌面。安装、启用不会自动授予 Hook 信任；定义变化后需重新审阅。不要用手工修改信任摘要或全量放行代替审阅。当前[官方信任规则](https://learn.chatgpt.com/docs/hooks#plugin-bundled-hooks)说明未获信任的插件 Hook 会被跳过，CLI 操作见[审阅与信任](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks)。
-5. 按宿主要求新建会话，让执行者核对实际 Hook 参与、MCP 连接、插件来源和版本。已加载的旧会话、目录中可见的 Skill、静态 `host-check` 都不能单独证明这些结果。
+5. 让执行者核对实际 Hook 参与、MCP 连接、插件来源和版本。首次安装按所用版本完成会话初始化；后续升级或回退可在支持[热刷新](https://github.com/openai/codex/releases/tag/rust-v0.154.0)的宿主中由既有会话采用，仅在实际版本要求时新建会话或重载。已加载的旧会话、目录中可见的 Skill、静态 `host-check` 都不能单独证明生效。
 
 如果已有具备相应权限的 AI 助手，可以直接交给它：
 
@@ -118,7 +120,7 @@ This guide carries the installation, use, privacy and mechanism details behind t
 
 Accord's general design is separate from vendor-specific adapters. The current distribution provides a Codex adaptation for OpenAI environments; historical packages and research on other hosts do not establish current support.
 
-The following entry limits were checked on **2026-10-29** against the current official [plugin](https://learn.chatgpt.com/docs/plugins#use-plugins-from-a-supported-surface) and [Hook](https://learn.chatgpt.com/docs/hooks) documentation. The installation executor must recheck the actual version and effective settings as both projects evolve.
+The following entry limits were checked on **2026-10-30** against the current official [plugin](https://learn.chatgpt.com/docs/plugins#use-plugins-from-a-supported-surface) and [Hook](https://learn.chatgpt.com/docs/hooks) documentation. The installation executor must recheck the actual version and effective settings as both projects evolve.
 
 | Entry | Current use |
 |---|---|
@@ -128,6 +130,8 @@ The following entry limits were checked on **2026-10-29** against the current of
 | Cloud-orchestrated Work and Synced Work | Plugin Hooks are not supported in the current official documentation. Administrator MCP Hooks in Synced Work do not replace this package's local command Hooks. |
 | Remote desktop or mobile | May control a selected local host, subject to actual host participation and material client differences. Mobile is not an independent environment running this package. |
 | SDK, ordinary Chat, web Chat and other IDEs | Backend-specific SDK evidence creates no universal installation UI. Independent ordinary Chat, web Chat, JetBrains and Xcode are outside current adaptation commitments; assess the exact route. |
+
+The current [Work guide](https://learn.chatgpt.com/docs/get-started-with-work#continue-work-across-devices) says Local computer access with Work Cloud uses cloud coordination and a connected computer for local execution. Local file access does not make it local Work. Check the actual mode and Hook support; enabling sync does not automatically convert existing tasks.
 
 The current Hooks and state MCP launch a separate `node` executable. The executor must check that the **actual host process** can find and run compatible Node; another terminal or a host's internal Node installation is insufficient evidence.
 
@@ -149,7 +153,7 @@ Complete **installation, enablement and Hook trust** separately, then verify act
    This registers the source only. In CLI `/plugins`, select it, inspect and install YIYUAN Accord. On desktop use the actual plugin directory/source entry. A repository marketplace is not a listing in the official public directory.
 3. Confirm that the host or organization permits plugins and enable Accord in the intended scope. CLI `/plugins` uses `Space` to toggle an installed item. On desktop check global plugin use and the individual plugin separately; labels vary by version.
 4. **Before first use, review and trust Accord's current Hook definitions.** Use CLI `/hooks`. A desktop review/trust method has not been uniformly verified across versions; the installation executor must check the supported route in the actual version. If none is available, report that limitation rather than treating installation as participation or extrapolating another CLI's trust state to desktop. Installation or enablement does not trust Hooks automatically; changed definitions require fresh review. Do not substitute manually edited trust hashes or blanket approval. The official [trust rule](https://learn.chatgpt.com/docs/hooks#plugin-bundled-hooks) says untrusted plugin Hooks are skipped; see [review and trust](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks) for CLI operations.
-5. Start a new session as required by the host. The executor checks actual Hook participation, MCP connection, source and version. An old loaded session, visible Skill or static `host-check` result cannot establish these facts alone.
+5. Have the executor verify actual Hook participation, MCP connection, source and version. Complete session initialization as required by the version for a first installation. For later upgrades or rollbacks, hosts supporting [hot refresh](https://github.com/openai/codex/releases/tag/rust-v0.154.0) can adopt updates in an existing session; start a new session or reload only when the actual version requires it. An old loaded session, visible Skill or static `host-check` result cannot prove these effects.
 
 You can ask an existing assistant with suitable authority:
 
