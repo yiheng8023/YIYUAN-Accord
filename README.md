@@ -14,7 +14,7 @@
   <a href="README.md">English</a> | <a href="README.zh-CN.md">简体中文</a>
 </p>
 
-**Our declaration: Empower every dream.**
+**Make tools adapt to people, rather than making people adapt to tools.**
 
 Version 3.3 includes the [English translation of the meta-guidance](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)
 as its value and judgment foundation. Supported, enabled and trusted entry hooks
@@ -172,6 +172,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md) and [SUPPORT.
 ---
 
 ## Vision and collaboration
+
+**Our declaration: Empower every dream.**
 
 YIYUAN NEXUS will continue to explore human-machine collaboration and related fields. YIYUAN Accord is not intended to exist forever: it will evolve as frontier intelligence, human and machine capabilities, and patterns of collaboration change. Progress in frontier intelligence both gives Accord new capabilities and continually tests its necessity, boundaries, and real-world value. When its mission has been fulfilled, carried forward by better mechanisms, or is no longer needed, the project should be able to conclude responsibly and in an orderly way.
 

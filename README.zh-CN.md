@@ -14,7 +14,7 @@
   <a href="README.zh-CN.md">简体中文</a> | <a href="README.md">English</a>
 </p>
 
-**宣言：助力每一个梦想。**
+**让工具适应人，而非人适应工具。**
 
 3.3内置[中文元指导原文](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.zh-CN.md)及其[英文译文](plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)，以中文为语义基准。受支持、已启用且可信的入口Hook加载英文版，连同任务协调指导传入；中文版按需阅读，保持用户AGENTS.md独立。安装和实际加载仍需核验；它不提高宿主指令优先级，也不证明所有宿主、其它未选环境模式或子代理路径都已覆盖。
 
@@ -155,6 +155,8 @@ python -B -m yiyuan_accord host-check --adapter codex --root . --json
 ---
 
 ## 愿景与共创
+
+**宣言：助力每一个梦想。**
 
 易元联创（YIYUAN NEXUS）将持续探索人机协作及其相关领域。YIYUAN Accord 并不以永久存在为目标：它会随前沿智能、人类与机器能力及协作方式的变化而演进。前沿智能的进步既为 Accord 提供新的能力，也持续检验其必要性、边界与实际价值；当使命已经完成、被更好的机制承接，或不再需要时，项目也应能够负责任地有序谢幕。
 
