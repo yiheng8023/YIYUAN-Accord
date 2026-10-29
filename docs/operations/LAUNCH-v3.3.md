@@ -154,7 +154,7 @@ This checklist serves first-use copy and the existing release work; it grants no
 
 ## 启用与未启用对照准备
 
-2026-10-29：本节承接用户确认的 README 与传播方向。用户随后同意建立对照初版，并要求软件工程评价与有限重塑作为后续主线；具体任务、判分校准、记录口径与限制见[评价初版](../../research/evaluations/accord-toggle-v1.md)。**当前为材料和方法校准，尚未运行真实双组对照或形成收益结论**。版本发布、功能验收、CI、安装和增量价值分别判断；不预设正收益，也不为传播挑选弱基线。
+2026-10-30：本节承接用户确认的 README 与传播方向。用户同意建立对照初版，并要求软件工程评价与有限重塑作为后续主线；具体任务、判分校准、记录口径与限制见[评价初版](../../research/evaluations/accord-toggle-v1.md)。**首轮两对真实合成任务试行已完成，两组交付均正确，启用组用量和耗时更高；尚无可推广的收益或性能结论**。原失败、实际条件与未测成本见[试行记录](../../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行)。版本发布、功能验收、CI、安装和增量价值分别判断；不预设正收益，也不为传播挑选弱基线。
 
 目标：在相同可用条件下，比较启用与未启用 Accord 对完整交付、变化处理、恢复、用户负担及总成本的实际影响。必要自动化与质量保持，合理额外开销不等于失败。
 
@@ -166,7 +166,7 @@ This checklist serves first-use copy and the existing release work; it grants no
 | 输入与人工介入 | 用相同初始需求、预定变化和恢复输入；运行前冻结救援规则。分别记录必要授权/本人动作与可避免的催促、纠错和救场，不给任一组隐藏辅导，也不抹去安装与首次信任成本。 |
 | 判据与成本 | 先核可独立检查的成品、原件保护、要求完整性和真实效果，再报告人工次数/时间、端到端时间、模型/工具用量、冷/热加载、缓存、并发及退出成本。不可取得的字段保留未知；账户配额不是本任务费用。 |
 
-首轮可选三类同材料、同交付要求的真实任务；具体材料、预算、触发节点、重复次数和判据在实际派发前冻结，不由下表自动授予执行或新增费用：
+候选覆盖包含以下三类同材料、同交付要求的真实任务；本轮只执行了简单任务与需求变化各一对，中断恢复仍未由本批验证。后续材料、预算、触发节点、重复次数和判据在实际派发前冻结，不由下表自动授予执行或新增费用：
 
 | 类别 | 真实触发 | 主要核验 |
 |---|---|---|
@@ -182,13 +182,13 @@ This checklist serves first-use copy and the existing release work; it grants no
 
 ### Comparison protocol in English
 
-Status: **method and material calibration; no native paired trials or measured benefits yet**. The user authorized a [calibration kit](../../research/evaluations/accord-toggle-v1.md), software-engineering quality mapping and a roadmap centered on consolidation and bounded reshaping. Compare enabled and disabled Accord against the same required deliverable, quality and automation level. Version qualification, CI, installation and incremental value remain separate findings.
+Status on 2026-10-30: **two native pairs of synthetic tasks completed; both arms produced correct outputs, while the enabled arm used more tokens and time. No general benefit or performance conclusion follows.** See the [pilot record](../../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行) for original failures, conditions and unmeasured costs. The user authorized a [calibration kit](../../research/evaluations/accord-toggle-v1.md), software-engineering quality mapping and a roadmap centered on consolidation and bounded reshaping. Compare enabled and disabled Accord against the same required deliverable, quality and automation level. Version qualification, CI, installation and incremental value remain separate findings.
 
 Before dispatch, freeze paired host/backend/package versions and hashes, OS, main model/effort, available submodels, native and external tools, permissions, resource limits and task materials. Toggle only Accord in the target scope, preserving other plugins and both groups' native scheduling/recovery capabilities. Record actual allocation rather than forcing identical tool paths. Check current entry and Hook support.
 
 Use fresh sessions and equal neutral workspaces. Inspect effective user/project instructions, memory, loaded Skills and state; this product repository's Accord instructions would contaminate a disabled baseline. Disabling or uninstalling does not erase loaded context. Give both arms the same initial request, scheduled change and recovery input, with a rescue policy set in advance. Separate necessary authorization/personal actions from avoidable prompting, correction and rescue. Include setup and first-use trust costs; give neither arm hidden coaching.
 
-Start with three task types: an added requirement affecting earlier output; interruption and native recovery at the same semantic milestone; and a simple one-prompt task without an artificial fault. Check the actual deliverable, complete requirements, protected originals, corrected effects, retained goals/pauses/authority, no duplicate actions and resource exit. Record human effort, full elapsed time, model/tool use, cold/warm loading, caching, concurrency and recovery/exit costs. Unknown costs stay unknown; account quota is not task cost. Reasonable overhead does not excuse missing automation or quality, nor imply failure by itself.
+Candidate coverage includes three task types: an added requirement affecting earlier output; interruption and native recovery at the same semantic milestone; and a simple one-prompt task without an artificial fault. This pilot ran one simple-task pair and one requirement-change pair; it did not test interrupted recovery. Check the actual deliverable, complete requirements, protected originals, corrected effects, retained goals/pauses/authority, no duplicate actions and resource exit. Record human effort, full elapsed time, model/tool use, cold/warm loading, caching, concurrency and recovery/exit costs. Unknown costs stay unknown; account quota is not task cost. Reasonable overhead does not excuse missing automation or quality, nor imply failure by itself.
 
 A possible pilot uses two independent pairs per type, counterbalancing order: twelve runs. This is not a power calculation; calibrate tasks and grading, then freeze the sample count from the question, task coverage and observed variability. Different material variants are not repeated trials of the same task. Freeze budget, milestones and criteria before execution. Such a pilot supports bounded observations, not statistical significance, all-task gains or cross-entry claims. Do not name Accord or its Skills in ordinary task prompts. Material upstream/model/configuration drift holds the affected pair for reconciliation; original failures and effects remain recorded.
 

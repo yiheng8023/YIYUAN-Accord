@@ -24,7 +24,7 @@ Accord's general design is independent of any model vendor or host. **The curren
 - **An interruption means explaining everything again.** Preserve goals, progress and unfinished work for recovery through supported host workflows.
 - **Much activity, but no clear completion.** Check the agreed result, actual effects and cleanup, and explain what remains.
 
-These goals need continuing validation on real tasks. A fair enabled/disabled comparison is being prepared, covering result quality, human intervention, time and usage; **no measured benefit figures are offered yet**. See the [comparison protocol](docs/operations/LAUNCH-v3.3.md#启用与未启用对照准备).
+These goals need continuing validation. An initial two-pair pilot produced correct outputs in both arms; the enabled arm used more tokens and time. **This small sample does not establish general benefits or performance differences.** See the [pilot results and conditions](research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行).
 
 ## Get started
 

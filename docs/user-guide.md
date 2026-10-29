@@ -88,7 +88,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 
 Accord 不训练模型、不扩大上下文、不越过宿主权限，也不注册 Stop 自动续轮或自动增加对话回合。长程控制由用户选择宿主的相应能力。参考指导、接口可用或人工救援不能代替普通任务中的实际效果；必要条件不足时保留限制和未完事项。
 
-协调可能增加上下文、延迟、计算、指令冲突与维护负担。增量价值需要公平对照并同时考虑质量、自动化程度、人工协调和总成本；合理额外开销不等于失败，“省用量但仍需用户盯着”也不能替代必要自动化。当前[对照方案](operations/LAUNCH-v3.3.md#启用与未启用对照准备)仅作准备，尚不提供实测收益或统计结论。
+协调可能增加上下文、延迟、计算、指令冲突与维护负担。增量价值需要公平对照并同时考虑质量、自动化程度、人工协调和总成本；合理额外开销不等于失败，“省用量但仍需用户盯着”也不能替代必要自动化。首轮[两对有限试行](../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行)已完成：两组交付均正确，启用组报告用量和耗时更高；这不构成普遍收益、性能或统计结论。
 
 ### 原理与进阶阅读
 
@@ -196,7 +196,7 @@ Original failures, versions, environments and conditions retain their identities
 
 Accord does not train models, enlarge context or bypass host permissions. It registers no Stop auto-continuation and adds no conversation turns. Users select the host's long-running controls. Guidance, interface availability or evaluator rescue does not establish ordinary-use outcomes; preserve real limitations and unfinished work when conditions are insufficient.
 
-Coordination may add context, latency, compute, instruction conflicts and maintenance. Incremental value needs a fair comparison accounting for quality, automation, human coordination and total cost. Reasonable extra cost is not failure; lower usage that still leaves the user supervising cannot replace necessary automation. The [comparison protocol](operations/LAUNCH-v3.3.md#启用与未启用对照准备) is preparation only, with no measured benefit or statistical conclusion yet.
+Coordination may add context, latency, compute, instruction conflicts and maintenance. Incremental value needs a fair comparison accounting for quality, automation, human coordination and total cost. Reasonable extra cost is not failure; lower usage that still leaves the user supervising cannot replace necessary automation. The initial [two-pair pilot](../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行) is complete: both arms produced correct outputs, while the enabled arm used more reported tokens and time. This establishes no general benefit, performance or statistical conclusion.
 
 ### Principles and further reading
 
