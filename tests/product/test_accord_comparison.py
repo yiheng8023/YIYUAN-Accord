@@ -17,7 +17,9 @@ class ComparisonCalibrationTests(unittest.TestCase):
         self.suite, self.sha = grading.load_suite()
         self.temporary = tempfile.TemporaryDirectory(prefix="accord-grader-")
         self.addCleanup(self.temporary.cleanup)
-        self.parent = Path(self.temporary.name)
+        # macOS temp roots may traverse /var -> /private/var. Bind the fixture's
+        # concrete parent; the grader must still reject links supplied as data.
+        self.parent = Path(self.temporary.name).resolve()
 
     def workspace(self, case_id="S1A", name="work"):
         case = grading.select_case(self.suite, case_id)

@@ -77,6 +77,7 @@ jobs:
         run: >-
           python -B -m unittest -v
           tests.product.test_codex_session_native
+          tests.product.test_accord_comparison
           tests.product.test_codex_entry.EntryTests.test_native_goal_readback_binds_persisted_thread_and_releases_reader
           tests.product.test_codex_entry.EntryTests.test_persistent_preparation_preserves_multiline_prompt_bytes
           tests.product.test_codex_entry.EntryTests.test_failure_after_agent_popen_keeps_native_execution_phase
