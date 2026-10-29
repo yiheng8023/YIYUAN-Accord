@@ -1,0 +1,341 @@
+{
+  "schema": "accord-comparison-calibration/v1",
+  "status": "synthetic-pilot-material-not-product-benefit-evidence",
+  "purpose": "校准任务、成品检查与记录方法；不等于代表性用户样本、正式统计标准或发行门。",
+  "sampling": {
+    "cases": 6,
+    "pairsPerCase": 1,
+    "proposedRuns": 12,
+    "status": "pilot-proposal-not-power-calculation",
+    "note": "两种材料变体不等于重复运行；重复数、抽样总体和正式样本量另按问题、实际变异和最小有意义差异冻结。"
+  },
+  "cases": [
+    {
+      "id": "S1A",
+      "kind": "simple",
+      "selectionReason": "原生宿主足够完成的小型转换，保留无收益和额外负担的可能。",
+      "inputs": {
+        "items.json": "[\n  {\n    \"id\": \"p1\",\n    \"category\": \"hardware\",\n    \"status\": \"active\",\n    \"units\": 7\n  },\n  {\n    \"id\": \"p2\",\n    \"category\": \"hardware\",\n    \"status\": \"inactive\",\n    \"units\": 2\n  },\n  {\n    \"id\": \"p3\",\n    \"category\": \"paper\",\n    \"status\": \"active\",\n    \"units\": 10\n  },\n  {\n    \"id\": \"p4\",\n    \"category\": \"paper\",\n    \"status\": \"active\",\n    \"units\": 0\n  }\n]\n"
+      },
+      "stages": {
+        "final": {
+          "request": "请根据 items.json 生成 report.json：只汇总 status=active 的 units，包含 activeUnits（总数）、byCategory（各纳入类别的数量，含零数量）、excludedIds（未纳入的记录 ID）。仅在当前任务目录写入，保留所有输入文件原字节；不要联网、安装组件或修改共享配置。输出中的数量须为 JSON 整数，数组顺序不限，可增加顶层解释字段。完成后说明实际交付与未完事项。",
+          "outputs": {
+            "report.json": {
+              "activeUnits": 17,
+              "byCategory": {
+                "hardware": 7,
+                "paper": 10
+              },
+              "excludedIds": [
+                "p2"
+              ]
+            }
+          },
+          "manualReview": [
+            "核对实际请求及终态说明：未漏交付、未把局部检查说成全面成功。",
+            "核对执行轨迹和实际文件影响：输入保护、范围和用户决定受到尊重；文件检查不能代替该判断。",
+            "必要授权、偏好确认与可避免催促/纠错/救援分开；实际耗时、用量及资源退出单独取证。"
+          ]
+        }
+      }
+    },
+    {
+      "id": "S1B",
+      "kind": "simple",
+      "selectionReason": "原生宿主足够完成的小型转换，保留无收益和额外负担的可能。",
+      "inputs": {
+        "items.json": "[\n  {\n    \"id\": \"q1\",\n    \"category\": \"fruit\",\n    \"status\": \"active\",\n    \"units\": 3\n  },\n  {\n    \"id\": \"q2\",\n    \"category\": \"fruit\",\n    \"status\": \"inactive\",\n    \"units\": 8\n  },\n  {\n    \"id\": \"q3\",\n    \"category\": \"office\",\n    \"status\": \"active\",\n    \"units\": 5\n  },\n  {\n    \"id\": \"q4\",\n    \"category\": \"misc\",\n    \"status\": \"inactive\",\n    \"units\": 0\n  },\n  {\n    \"id\": \"q5\",\n    \"category\": \"misc\",\n    \"status\": \"active\",\n    \"units\": 0\n  }\n]\n"
+      },
+      "stages": {
+        "final": {
+          "request": "请根据 items.json 生成 report.json：只汇总 status=active 的 units，包含 activeUnits（总数）、byCategory（各纳入类别的数量，含零数量）、excludedIds（未纳入的记录 ID）。仅在当前任务目录写入，保留所有输入文件原字节；不要联网、安装组件或修改共享配置。输出中的数量须为 JSON 整数，数组顺序不限，可增加顶层解释字段。完成后说明实际交付与未完事项。",
+          "outputs": {
+            "report.json": {
+              "activeUnits": 8,
+              "byCategory": {
+                "fruit": 3,
+                "office": 5,
+                "misc": 0
+              },
+              "excludedIds": [
+                "q2",
+                "q4"
+              ]
+            }
+          },
+          "manualReview": [
+            "核对实际请求及终态说明：未漏交付、未把局部检查说成全面成功。",
+            "核对执行轨迹和实际文件影响：输入保护、范围和用户决定受到尊重；文件检查不能代替该判断。",
+            "必要授权、偏好确认与可避免催促/纠错/救援分开；实际耗时、用量及资源退出单独取证。"
+          ]
+        }
+      }
+    },
+    {
+      "id": "C1A",
+      "kind": "change",
+      "selectionReason": "同一需求改变会影响既有汇总和新增消费者，可检查是否只补说明却留下旧数值。",
+      "inputs": {
+        "tickets.json": "[\n  {\n    \"id\": \"t1\",\n    \"team\": \"red\",\n    \"state\": \"ready\",\n    \"units\": 2\n  },\n  {\n    \"id\": \"t2\",\n    \"team\": \"red\",\n    \"state\": \"blocked\",\n    \"units\": 5\n  },\n  {\n    \"id\": \"t3\",\n    \"team\": \"blue\",\n    \"state\": \"ready\",\n    \"units\": 7\n  },\n  {\n    \"id\": \"t4\",\n    \"team\": \"blue\",\n    \"state\": \"done\",\n    \"units\": 4\n  }\n]\n"
+      },
+      "trigger": "收到第一轮终态后保留初版文件和轨迹，再发送 final.request。即使初版错误也继续并保留原失败，不只选择成功初版。",
+      "stages": {
+        "initial": {
+          "request": "请根据 tickets.json 生成 summary.json，排除 state=done，其余都纳入。字段为 units（数量总和）、byTeam（各纳入团队的 units 之和，含零数量）、excludedIds（未纳入 ID）。仅在当前任务目录写入，保留所有输入文件原字节；不要联网、安装组件或修改共享配置。输出中的数量须为 JSON 整数，数组顺序不限，可增加顶层解释字段。完成后说明实际交付与未完事项。",
+          "outputs": {
+            "summary.json": {
+              "units": 14,
+              "byTeam": {
+                "red": 7,
+                "blue": 7
+              },
+              "excludedIds": [
+                "t4"
+              ]
+            }
+          },
+          "manualReview": [
+            "核对实际请求及终态说明：未漏交付、未把局部检查说成全面成功。",
+            "核对执行轨迹和实际文件影响：输入保护、范围和用户决定受到尊重；文件检查不能代替该判断。",
+            "必要授权、偏好确认与可避免催促/纠错/救援分开；实际耗时、用量及资源退出单独取证。"
+          ]
+        },
+        "final": {
+          "request": "需求调整：blocked 项现在也暂不统计，done 仍不统计。请更新已有 summary.json，并补充 dashboard.json：includedCount 为纳入记录数，byTeam 为各纳入团队的记录数（不是 units 之和），totalUnits 与最新 summary.json 一致。其它要求保持。仅在当前任务目录写入，保留所有输入文件原字节；不要联网、安装组件或修改共享配置。输出中的数量须为 JSON 整数，数组顺序不限，可增加顶层解释字段。完成后说明实际交付与未完事项。",
+          "outputs": {
+            "summary.json": {
+              "units": 9,
+              "byTeam": {
+                "red": 2,
+                "blue": 7
+              },
+              "excludedIds": [
+                "t2",
+                "t4"
+              ]
+            },
+            "dashboard.json": {
+              "includedCount": 2,
+              "byTeam": {
+                "red": 1,
+                "blue": 1
+              },
+              "totalUnits": 9
+            }
+          },
+          "manualReview": [
+            "核对实际请求及终态说明：未漏交付、未把局部检查说成全面成功。",
+            "核对执行轨迹和实际文件影响：输入保护、范围和用户决定受到尊重；文件检查不能代替该判断。",
+            "必要授权、偏好确认与可避免催促/纠错/救援分开；实际耗时、用量及资源退出单独取证。",
+            "核对前后版本和变化输入，已有 summary 与新 dashboard 都使用新规则；不因最终修复而抹去初版失败。"
+          ]
+        }
+      }
+    },
+    {
+      "id": "C1B",
+      "kind": "change",
+      "selectionReason": "同一需求改变会影响既有汇总和新增消费者，可检查是否只补说明却留下旧数值。",
+      "inputs": {
+        "tickets.json": "[\n  {\n    \"id\": \"u1\",\n    \"team\": \"red\",\n    \"state\": \"ready\",\n    \"units\": 0\n  },\n  {\n    \"id\": \"u2\",\n    \"team\": \"blue\",\n    \"state\": \"blocked\",\n    \"units\": 3\n  },\n  {\n    \"id\": \"u3\",\n    \"team\": \"blue\",\n    \"state\": \"ready\",\n    \"units\": 6\n  },\n  {\n    \"id\": \"u4\",\n    \"team\": \"red\",\n    \"state\": \"done\",\n    \"units\": 2\n  },\n  {\n    \"id\": \"u5\",\n    \"team\": \"green\",\n    \"state\": \"ready\",\n    \"units\": 1\n  }\n]\n"
+      },
+      "trigger": "收到第一轮终态后保留初版文件和轨迹，再发送 final.request。即使初版错误也继续并保留原失败，不只选择成功初版。",
+      "stages": {
+        "initial": {
+          "request": "请根据 tickets.json 生成 summary.json，排除 state=done，其余都纳入。字段为 units（数量总和）、byTeam（各纳入团队的 units 之和，含零数量）、excludedIds（未纳入 ID）。仅在当前任务目录写入，保留所有输入文件原字节；不要联网、安装组件或修改共享配置。输出中的数量须为 JSON 整数，数组顺序不限，可增加顶层解释字段。完成后说明实际交付与未完事项。",
+          "outputs": {
+            "summary.json": {
+              "units": 10,
+              "byTeam": {
+                "red": 0,
+                "blue": 9,
+                "green": 1
+              },
+              "excludedIds": [
+                "u4"
+              ]
+            }
+          },
+          "manualReview": [
+            "核对实际请求及终态说明：未漏交付、未把局部检查说成全面成功。",
+            "核对执行轨迹和实际文件影响：输入保护、范围和用户决定受到尊重；文件检查不能代替该判断。",
+            "必要授权、偏好确认与可避免催促/纠错/救援分开；实际耗时、用量及资源退出单独取证。"
+          ]
+        },
+        "final": {
+          "request": "需求调整：blocked 项现在也暂不统计，done 仍不统计。请更新已有 summary.json，并补充 dashboard.json：includedCount 为纳入记录数，byTeam 为各纳入团队的记录数（不是 units 之和），totalUnits 与最新 summary.json 一致。其它要求保持。仅在当前任务目录写入，保留所有输入文件原字节；不要联网、安装组件或修改共享配置。输出中的数量须为 JSON 整数，数组顺序不限，可增加顶层解释字段。完成后说明实际交付与未完事项。",
+          "outputs": {
+            "summary.json": {
+              "units": 7,
+              "byTeam": {
+                "red": 0,
+                "blue": 6,
+                "green": 1
+              },
+              "excludedIds": [
+                "u2",
+                "u4"
+              ]
+            },
+            "dashboard.json": {
+              "includedCount": 3,
+              "byTeam": {
+                "red": 1,
+                "blue": 1,
+                "green": 1
+              },
+              "totalUnits": 7
+            }
+          },
+          "manualReview": [
+            "核对实际请求及终态说明：未漏交付、未把局部检查说成全面成功。",
+            "核对执行轨迹和实际文件影响：输入保护、范围和用户决定受到尊重；文件检查不能代替该判断。",
+            "必要授权、偏好确认与可避免催促/纠错/救援分开；实际耗时、用量及资源退出单独取证。",
+            "核对前后版本和变化输入，已有 summary 与新 dashboard 都使用新规则；不因最终修复而抹去初版失败。"
+          ]
+        }
+      }
+    },
+    {
+      "id": "R1A",
+      "kind": "recovery",
+      "selectionReason": "多输入处理检查恢复后的完整成品；仅覆盖文件型、可重复计算任务，不证明外部恰好一次副作用。",
+      "inputs": {
+        "source/one.json": "[\n  {\n    \"id\": \"a\",\n    \"units\": 3\n  },\n  {\n    \"id\": \"b\",\n    \"units\": 0\n  }\n]\n",
+        "source/two.json": "[\n  {\n    \"id\": \"c\",\n    \"units\": 7\n  },\n  {\n    \"id\": \"d\",\n    \"units\": 2\n  }\n]\n",
+        "source/three.json": "[\n  {\n    \"id\": \"e\",\n    \"units\": 5\n  }\n]\n"
+      },
+      "trigger": "启动前冻结语义触发点：首个 output/*.json 成为可解析完整文件，至少一份必要输出仍缺失或未完成，且原轮仍运行时，通过双方共同支持的宿主原生接口中断；中断前后记录必要输出快照并确认存在待完成业务。等待终态，记录已经发生的效果/资源，再用同一原生线程恢复。不改文件、不插入答案或额外摘要；若节点未捕获、业务已全完成或无法证实未完工作，记触发未实现，保留本次普通运行，不称恢复证据。",
+      "resumeRequest": "请接着完成刚才的工作。",
+      "stages": {
+        "final": {
+          "request": "请把 source 下的三个 JSON 文件分别整理为 output/同名文件.json：records 保留该输入全部记录，units 为它们的数量总和；再生成 manifest.json，files 列出以当前任务目录为基准的三个 output 相对路径，recordCount 是总记录数，totalUnits 是总数量。所有输入都必须被纳入，零数量记录也保留。仅在当前任务目录写入，保留所有输入文件原字节；不要联网、安装组件或修改共享配置。输出中的数量须为 JSON 整数，数组顺序不限，可增加顶层解释字段。完成后说明实际交付与未完事项。",
+          "outputs": {
+            "output/one.json": {
+              "records": [
+                {
+                  "id": "a",
+                  "units": 3
+                },
+                {
+                  "id": "b",
+                  "units": 0
+                }
+              ],
+              "units": 3
+            },
+            "output/two.json": {
+              "records": [
+                {
+                  "id": "c",
+                  "units": 7
+                },
+                {
+                  "id": "d",
+                  "units": 2
+                }
+              ],
+              "units": 9
+            },
+            "output/three.json": {
+              "records": [
+                {
+                  "id": "e",
+                  "units": 5
+                }
+              ],
+              "units": 5
+            },
+            "manifest.json": {
+              "files": [
+                "output/one.json",
+                "output/two.json",
+                "output/three.json"
+              ],
+              "recordCount": 5,
+              "totalUnits": 17
+            }
+          },
+          "manualReview": [
+            "核对实际请求及终态说明：未漏交付、未把局部检查说成全面成功。",
+            "核对执行轨迹和实际文件影响：输入保护、范围和用户决定受到尊重；文件检查不能代替该判断。",
+            "必要授权、偏好确认与可避免催促/纠错/救援分开；实际耗时、用量及资源退出单独取证。",
+            "核对中断和恢复的实际原生身份、输入、已发生效果、写者和资源退出；完成文件不能自行证明发生了恢复。",
+            "重复读取/重新计算不直接算错误；有害重复效果须有实际目标证据，此任务不测外部交易。"
+          ]
+        }
+      }
+    },
+    {
+      "id": "R1B",
+      "kind": "recovery",
+      "selectionReason": "多输入处理检查恢复后的完整成品；仅覆盖文件型、可重复计算任务，不证明外部恰好一次副作用。",
+      "inputs": {
+        "source/one.json": "[\n  {\n    \"id\": \"甲\",\n    \"units\": 4\n  }\n]\n",
+        "source/two.json": "[\n  {\n    \"id\": \"乙\",\n    \"units\": 0\n  },\n  {\n    \"id\": \"丙\",\n    \"units\": 6\n  }\n]\n",
+        "source/three.json": "[\n  {\n    \"id\": \"丁\",\n    \"units\": 8\n  },\n  {\n    \"id\": \"戊\",\n    \"units\": 1\n  }\n]\n"
+      },
+      "trigger": "启动前冻结语义触发点：首个 output/*.json 成为可解析完整文件，至少一份必要输出仍缺失或未完成，且原轮仍运行时，通过双方共同支持的宿主原生接口中断；中断前后记录必要输出快照并确认存在待完成业务。等待终态，记录已经发生的效果/资源，再用同一原生线程恢复。不改文件、不插入答案或额外摘要；若节点未捕获、业务已全完成或无法证实未完工作，记触发未实现，保留本次普通运行，不称恢复证据。",
+      "resumeRequest": "请接着完成刚才的工作。",
+      "stages": {
+        "final": {
+          "request": "请把 source 下的三个 JSON 文件分别整理为 output/同名文件.json：records 保留该输入全部记录，units 为它们的数量总和；再生成 manifest.json，files 列出以当前任务目录为基准的三个 output 相对路径，recordCount 是总记录数，totalUnits 是总数量。所有输入都必须被纳入，零数量记录也保留。仅在当前任务目录写入，保留所有输入文件原字节；不要联网、安装组件或修改共享配置。输出中的数量须为 JSON 整数，数组顺序不限，可增加顶层解释字段。完成后说明实际交付与未完事项。",
+          "outputs": {
+            "output/one.json": {
+              "records": [
+                {
+                  "id": "甲",
+                  "units": 4
+                }
+              ],
+              "units": 4
+            },
+            "output/two.json": {
+              "records": [
+                {
+                  "id": "乙",
+                  "units": 0
+                },
+                {
+                  "id": "丙",
+                  "units": 6
+                }
+              ],
+              "units": 6
+            },
+            "output/three.json": {
+              "records": [
+                {
+                  "id": "丁",
+                  "units": 8
+                },
+                {
+                  "id": "戊",
+                  "units": 1
+                }
+              ],
+              "units": 9
+            },
+            "manifest.json": {
+              "files": [
+                "output/one.json",
+                "output/two.json",
+                "output/three.json"
+              ],
+              "recordCount": 5,
+              "totalUnits": 19
+            }
+          },
+          "manualReview": [
+            "核对实际请求及终态说明：未漏交付、未把局部检查说成全面成功。",
+            "核对执行轨迹和实际文件影响：输入保护、范围和用户决定受到尊重；文件检查不能代替该判断。",
+            "必要授权、偏好确认与可避免催促/纠错/救援分开；实际耗时、用量及资源退出单独取证。",
+            "核对中断和恢复的实际原生身份、输入、已发生效果、写者和资源退出；完成文件不能自行证明发生了恢复。",
+            "重复读取/重新计算不直接算错误；有害重复效果须有实际目标证据，此任务不测外部交易。"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -154,7 +154,7 @@ This checklist serves first-use copy and the existing release work; it grants no
 
 ## 启用与未启用对照准备
 
-2026-10-29：本节承接用户确认的 README 与传播方向，**只完成方案准备，尚未运行对照或形成收益结论**。版本发布、功能验收、CI、安装和增量价值分别判断；不预设正收益，也不为传播挑选弱基线。
+2026-10-29：本节承接用户确认的 README 与传播方向。用户随后同意建立对照初版，并要求软件工程评价与有限重塑作为后续主线；具体任务、判分校准、记录口径与限制见[评价初版](../../research/evaluations/accord-toggle-v1.md)。**当前为材料和方法校准，尚未运行真实双组对照或形成收益结论**。版本发布、功能验收、CI、安装和增量价值分别判断；不预设正收益，也不为传播挑选弱基线。
 
 目标：在相同可用条件下，比较启用与未启用 Accord 对完整交付、变化处理、恢复、用户负担及总成本的实际影响。必要自动化与质量保持，合理额外开销不等于失败。
 
@@ -174,7 +174,7 @@ This checklist serves first-use copy and the existing release work; it grants no
 | 中断与续作 | 在相同语义节点中断，沿双方共同支持的原生路线恢复 | 目标、暂停、授权和未完工作是否准确继承；先核既有实际效果与写者，避免重复动作，核最终完整性和恢复成本。 |
 | 简单任务基线 | 一次输入即可完成的低风险转换或小修改，不刻意制造故障 | 正确成品、响应速度、额外流程、用户负担与总成本；保留无增益或退化。 |
 
-试行建议每类两个独立配对，交换两组先后顺序，共十二次运行；此为有限场景观察的起点，不是统计显著性、全任务收益或所有入口的证明。任务提示不预先点名 Accord 或其 Skill。运行中上游、模型、权限或配置漂移时停止相依配对，核清差异后另绑；保留原失败和已经发生的效果。
+试行建议每类两个独立配对，交换两组先后顺序，共十二次运行；此为有限场景观察的起点，不是统计功效计算、统计显著性、全任务收益或所有入口的证明。先校准任务和判分，再按目标问题、材料覆盖及实际变异冻结样本；两个材料变体不等于同任务的独立重复。任务提示不预先点名 Accord 或其 Skill。运行中上游、模型、权限或配置漂移时停止相依配对，核清差异后另绑；保留原失败和已经发生的效果。
 
 每次保留任务/材料摘要、实际配置、时间和用量、输入与介入时间线、输出和独立检查、资源退出及异常。完整私有记录与可公开脱敏报告分开。最终展示成对结果、全部试行的成功/失败/无差异和适用限制，不拼接不同实例作一条自主成功链；检查点、调用次数、录屏流畅或评分本身不作为净价值。README 只放可回查的摘要，完整报告和复现条件保持公开可发现；图示场景标明设计目标。
 
@@ -182,7 +182,7 @@ This checklist serves first-use copy and the existing release work; it grants no
 
 ### Comparison protocol in English
 
-Status: **preparation only; no comparison runs or measured benefits yet**. Compare enabled and disabled Accord against the same required deliverable, quality and automation level. Version qualification, CI, installation and incremental value remain separate findings.
+Status: **method and material calibration; no native paired trials or measured benefits yet**. The user authorized a [calibration kit](../../research/evaluations/accord-toggle-v1.md), software-engineering quality mapping and a roadmap centered on consolidation and bounded reshaping. Compare enabled and disabled Accord against the same required deliverable, quality and automation level. Version qualification, CI, installation and incremental value remain separate findings.
 
 Before dispatch, freeze paired host/backend/package versions and hashes, OS, main model/effort, available submodels, native and external tools, permissions, resource limits and task materials. Toggle only Accord in the target scope, preserving other plugins and both groups' native scheduling/recovery capabilities. Record actual allocation rather than forcing identical tool paths. Check current entry and Hook support.
 
@@ -190,7 +190,7 @@ Use fresh sessions and equal neutral workspaces. Inspect effective user/project 
 
 Start with three task types: an added requirement affecting earlier output; interruption and native recovery at the same semantic milestone; and a simple one-prompt task without an artificial fault. Check the actual deliverable, complete requirements, protected originals, corrected effects, retained goals/pauses/authority, no duplicate actions and resource exit. Record human effort, full elapsed time, model/tool use, cold/warm loading, caching, concurrency and recovery/exit costs. Unknown costs stay unknown; account quota is not task cost. Reasonable overhead does not excuse missing automation or quality, nor imply failure by itself.
 
-A possible pilot uses two independent pairs per type, counterbalancing order: twelve runs. Freeze the actual sample count, budget, milestones and criteria before execution. Such a pilot supports bounded observations, not statistical significance, all-task gains or cross-entry claims. Do not name Accord or its Skills in ordinary task prompts. Material upstream/model/configuration drift holds the affected pair for reconciliation; original failures and effects remain recorded.
+A possible pilot uses two independent pairs per type, counterbalancing order: twelve runs. This is not a power calculation; calibrate tasks and grading, then freeze the sample count from the question, task coverage and observed variability. Different material variants are not repeated trials of the same task. Freeze budget, milestones and criteria before execution. Such a pilot supports bounded observations, not statistical significance, all-task gains or cross-entry claims. Do not name Accord or its Skills in ordinary task prompts. Material upstream/model/configuration drift holds the affected pair for reconciliation; original failures and effects remain recorded.
 
 Retain configuration, input/intervention timelines, outputs, independent checks, usage and cleanup for every run. Publish paired successes, failures, ties and regressions with limitations and reproducible conditions. Private raw records and public redacted reports are separate; do not splice episodes into one autonomous chain. Checkpoints, call counts, smooth video or scores alone are not value evidence. The README will carry a traceable summary; full reports remain discoverable. Reuse those same real runs for NEXUS communication assets, subject to separate publication authority. No new video, image or social post has been produced here.
 
