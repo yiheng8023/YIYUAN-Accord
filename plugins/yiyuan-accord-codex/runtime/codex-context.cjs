@@ -282,6 +282,10 @@ function retryOrigin(rows, binding, promptHash) {
   for (let index = 0; index + 1 < rows.length; index++) {
     const line = parseRow(rows[index]);
     if (line?.type !== 'turn_context' || line.payload?.turn_id !== binding.turnId) continue;
+    const prior = rows.slice(0, index).map(parseRow).findLast(item =>
+      item?.type === 'event_msg' && item.payload?.type === 'task_started' && item.payload.turn_id === binding.turnId);
+    const root = prior?.payload.root_turn_id || line.payload.root_turn_id;
+    const contextAt = Date.parse(line.timestamp);
     for (let next = index + 1; next < rows.length; next++) {
       const candidate = parseRow(rows[next]);
       if (candidate?.type === 'response_item' && candidate.payload?.type === 'message' &&
@@ -302,6 +306,13 @@ function retryOrigin(rows, binding, promptHash) {
           text(settings?.model) && settings.model === line.payload.model &&
           text(settings.cwd) && path.isAbsolute(settings.cwd) && samePath(settings.cwd, binding.cwd)) continue;
       if (inputHash(candidate, binding, promptHash) === promptHash) return index;
+      // Same-turn history before the first Hook input is still source-bound.
+      // No human match is supplied: this cannot skip an uncovered UI input.
+      const at = Date.parse(candidate?.timestamp);
+      if (boundedText(root, 200) && (!Object.hasOwn(line.payload, 'root_turn_id') || line.payload.root_turn_id === root) &&
+          integer(contextAt) && integer(at) && at >= contextAt &&
+          nativeExecutionRecord(candidate, binding, binding.turnId, root, line.payload.model,
+            prior?.payload.turn_attribution, null, !prior && line.payload.root_turn_id === root)) continue;
       if (lateOriginOutput(rows[next], binding)) continue;
       if (candidate?.type === 'turn_context' && candidate.payload?.turn_id === binding.turnId &&
           candidate.payload.model === line.payload.model && text(candidate.payload.cwd) && text(line.payload.cwd) &&
@@ -534,6 +545,72 @@ function continuationAssociation(rows, binding, host, promptHash, sourceRef, cap
 // Prove only the native execution edge. The source context remains pending
 // until explicit reconciliation; its meaning/authority is still caller review.
 // This edge is neither a human composer turn nor a capacity failure retry.
+// Recognize recorded host data inside a same-execution origin or Goal proof.
+// These snapshots/output records do not grant permission, restore a turn, or
+// enter the global benign-append policy. Source bytes remain cursor-bound.
+function nativeExecutionRecord(line, binding, turn, root, model, attribution, human, anchor) {
+  const p = line.payload;
+  if (!p || typeof p !== 'object' || Array.isArray(p)) return false;
+  if (Object.hasOwn(p, 'thread_id') && p.thread_id !== binding.sessionId ||
+      Object.hasOwn(p, 'turn_id') && p.turn_id !== turn ||
+      Object.hasOwn(p, 'root_turn_id') && p.root_turn_id !== root ||
+      Object.hasOwn(p, 'session_id') && p.session_id !== binding.sessionId) return false;
+  const object = value => value && typeof value === 'object' && !Array.isArray(value);
+  const sameExecution = p.thread_id === binding.sessionId && p.turn_id === turn;
+  if (line.type === 'token_usage_record') {
+    const keys = ['input_tokens', 'cached_input_tokens', 'cache_write_input_tokens',
+      'output_tokens', 'reasoning_output_tokens', 'total_tokens'];
+    const counts = value => object(value) && Object.keys(value).length === keys.length &&
+      keys.every(key => integer(value[key]) && value[key] >= 0);
+    return sameExecution && p.session_id === binding.sessionId && p.root_turn_id === root &&
+      boundedText(p.response_id, 200) && counts(p.usage) && counts(p.turn_token_usage) && counts(p.thread_token_usage);
+  }
+  if (line.type === 'event_msg' && p.type === 'thread_settings_applied') {
+    const settings = p.thread_settings;
+    // Other settings are recorded environment changes, never Accord authority.
+    return p.thread_id === binding.sessionId && (!Object.hasOwn(p, 'turn_id') || p.turn_id === turn) &&
+      object(settings) && settings.model === model && text(settings.cwd) && samePath(settings.cwd, binding.cwd);
+  }
+  if (line.type === 'compacted') {
+    const resume = p.resume_metadata, a = resume?.turn_attribution;
+    // A retained anchor can omit the earlier start. Reuse only its already
+    // accepted execution and explicit context root; do not invent an edge.
+    const anchorMatch = anchor && a?.turn_id === turn && a.root_turn_id === root &&
+      a.initiating_agent_path === null && (root === turn
+        ? a.parent_turn_id === null && ['composer', 'send_user_message_async_question'].includes(a.turn_trigger)
+        : a.turn_trigger === 'goal' && boundedText(a.parent_turn_id, 200) && a.parent_turn_id !== turn);
+    // Explicit null/missing resume identity is not evidence of this execution.
+    // Replacement history is preserved data, not a new input or recovery source.
+    return object(resume) && resume.multi_agent_version === 'v2' && resume.last_started_turn_id === turn &&
+      (attribution ? canonical(a) === canonical(attribution) : anchorMatch) &&
+      resume.previous_turn_settings?.model === model && Array.isArray(p.replacement_history) &&
+      Array.isArray(p.replacement_history_metadata) &&
+      p.replacement_history.length === p.replacement_history_metadata.length && object(p.retained_context);
+  }
+  if (line.type === 'world_state') {
+    // Full snapshots may also be initial context, not just compaction output.
+    const state = p.state, local = state?.environments?.environments?.local;
+    return p.full === true && object(state) && state.model?.model === model && object(local) &&
+      text(local.cwd) && samePath(local.cwd, binding.cwd);
+  }
+  if (line.type !== 'event_msg' || p.type !== 'item_completed' || !sameExecution ||
+      !boundedText(p.item?.id, 200) || !integer(p.started_at_ms) || !integer(p.completed_at_ms) ||
+      p.completed_at_ms < p.started_at_ms) return false;
+  const item = p.item;
+  if (item.type === 'UserMessage') {
+    // UI item IDs differ from source IDs. Require the nearest covered typed
+    // input in this turn, exact text parts, and one consumption before reset.
+    return human && Array.isArray(item.content) && item.content.length === human.content.length &&
+      item.content.every((part, index) => part?.type === 'text' && typeof part.text === 'string' &&
+        part.text === human.content[index].text && Array.isArray(part.text_elements) && part.text_elements.length === 0);
+  }
+  if (item.type === 'CollabAgentToolCall') return item.tool === 'wait' && item.status === 'completed' &&
+    item.sender_thread_id === binding.sessionId && Array.isArray(item.receiver_thread_ids) && Array.isArray(item.receiver_agents);
+  if (item.type !== 'Extension') return false;
+  return item.kind === 'clock.sleep' ? integer(item.durationMs) && item.durationMs >= 0
+    : item.kind === 'web.search' && ['search', 'openPage', 'findInPage'].includes(item.action?.type);
+}
+
 function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
   const reject = () => empty('native-goal-continuation-unproven');
   if (!scan || scan.state !== 'observed' || !scan.latestInputReconciled) return reject();
@@ -545,10 +622,14 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
   if (start < 0) return reject();
   const priorStart = rows.slice(0, start).map(parseRow).findLast(line =>
     line?.type === 'event_msg' && line.payload?.type === 'task_started' && line.payload.turn_id === execution.turnId);
-  const root = priorStart?.payload.root_turn_id || execution.turnId;
+  const contextRoot = parseRow(rows[start]).payload.root_turn_id;
+  const anchorRoot = !priorStart && execution.turnId === binding.turnId &&
+    scan.cursor?.anchorOffset === rows[start].offset && boundedText(contextRoot, 200) ? contextRoot : null;
+  const root = priorStart?.payload.root_turn_id || anchorRoot || execution.turnId;
   if (!boundedText(root, 200)) return reject();
   let turn = execution.turnId, model = execution.model, boundary = Date.parse(parseRow(rows[start]).timestamp);
   let completed = null, pending = null, needsGoal = false, edges = 0, edgeOffset = null;
+  let attribution = priorStart?.payload.turn_attribution, human = null;
   const visited = new Set([turn]);
   if (!integer(boundary)) return reject();
   for (let index = start; index < rows.length; index++) {
@@ -559,7 +640,7 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
       if (p?.turn_id !== (pending?.turn || turn) || p.model !== model || !text(p.cwd) ||
           !samePath(p.cwd, binding.cwd) || !integer(at) || at < boundary || completed !== null ||
           Object.hasOwn(p, 'source') || Object.hasOwn(p, 'root_turn_id') && p.root_turn_id !== root) return reject();
-      if (pending) { turn = pending.turn; pending = null; needsGoal = true; }
+      if (pending) { turn = pending.turn; attribution = pending.attribution; pending = null; needsGoal = true; human = null; }
       boundary = at;
       continue;
     }
@@ -575,7 +656,7 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
           p.root_turn_id !== root || a?.turn_id !== next || a.root_turn_id !== root ||
           a.turn_trigger !== 'goal' || a.parent_turn_id !== turn || a.initiating_agent_path !== null ||
           !integer(at) || at < completed || ++edges > 64) return reject();
-      pending = {turn: next}; visited.add(next); completed = null; boundary = at; edgeOffset = row.offset;
+      pending = {turn: next, attribution: a}; visited.add(next); completed = null; boundary = at; edgeOffset = row.offset;
       continue;
     }
     // Nothing with effects may intervene between completion/start/context.
@@ -583,10 +664,16 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
     if (line.type === 'response_item' && p?.role === 'user') {
       const record = scan.records.find(item => item.recordOffset === row.offset && item.turnId === turn && item.supported);
       if (!record || edges && !goalRuntimeContext(p, turn)) return reject();
+      human = typedHumanInput(p, turn) ? p : null;
       if (edges) needsGoal = false;
       continue;
     }
     if (needsGoal && !(line.type === 'response_item' && p?.type === 'message' && p.role === 'developer')) return reject();
+    if (integer(at) && at >= boundary && nativeExecutionRecord(line, binding, turn, root, model, attribution, human,
+        anchorRoot !== null && turn === execution.turnId)) {
+      if (line.type === 'compacted' || p?.item?.type === 'UserMessage') human = null;
+      continue;
+    }
     if (line.type === 'response_item' && p?.type === 'message' && p.role === 'developer' ||
         completedCompaction(line, binding.sessionId, turn) ||
         lateOriginOutput(row, {...binding, turnId: turn})) continue;

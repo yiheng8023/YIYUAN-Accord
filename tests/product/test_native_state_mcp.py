@@ -6282,6 +6282,389 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
 
 
 
+    def test_goal_record_token_usage_keeps_native_execution(self):
+        self.goal_auto_source()
+        old = self.rows[2]['payload']['turn_id']
+        session = self.params['_meta']['x-codex-turn-metadata']['thread_id']
+        counts = dict.fromkeys(('input_tokens', 'cached_input_tokens', 'cache_write_input_tokens',
+                               'output_tokens', 'reasoning_output_tokens', 'total_tokens'), 1)
+        record = {'type': 'token_usage_record', 'payload': {
+            'thread_id': session, 'turn_id': old, 'session_id': session, 'root_turn_id': old,
+            'response_id': 'synthetic-response', 'usage': counts,
+            'turn_token_usage': counts, 'thread_token_usage': counts,
+        }}
+        self.rows.insert(5, record)
+        self.goal_write_source()
+        before = self.files()
+        preview = self.goal_preview()
+        self.assertEqual(preview['nativeInputEvidence']['state'], 'observed')
+        self.assertEqual(self.files(), before)
+        result = self.goal_reconcile(preview)
+        self.assertFalse(result['isError'], result)
+        self.assertEqual(self.goal_receipt()['nativeInputReconciliation']['turnId'], 'synthetic-goal-turn')
+
+    def goal_record_fixture(self, kind):
+        old = self.rows[2]['payload']['turn_id']
+        session = self.params['_meta']['x-codex-turn-metadata']['thread_id']
+        if kind == 'token':
+            keys = ('input_tokens', 'cached_input_tokens', 'cache_write_input_tokens',
+                    'output_tokens', 'reasoning_output_tokens', 'total_tokens')
+            counts = dict.fromkeys(keys, 1)
+            return {'type': 'token_usage_record', 'payload': {
+                'thread_id': session, 'turn_id': old, 'session_id': session, 'root_turn_id': old,
+                'response_id': 'synthetic-response', 'usage': counts,
+                'turn_token_usage': dict(counts), 'thread_token_usage': dict(counts),
+            }}
+        if kind == 'settings':
+            return {'type': 'event_msg', 'payload': {
+                'type': 'thread_settings_applied', 'thread_id': session,
+                'thread_settings': {'model': 'observed-model', 'cwd': str(self.work),
+                                    'approval_policy': 'synthetic-changed-policy'},
+            }}
+        if kind == 'world':
+            return {'type': 'world_state', 'payload': {'full': True, 'state': {
+                'model': {'model': 'observed-model', 'instructions': 'Synthetic baseline.'},
+                'environments': {'environments': {'local': {'cwd': str(self.work), 'shell': 'synthetic'}}},
+                'permissions': {'description': 'Synthetic snapshot is not an authorization.'},
+            }}}
+        if kind == 'compaction':
+            return {'type': 'compacted', 'payload': {
+                'message': 'Synthetic summary is not a new instruction.',
+                'replacement_history': [{'type': 'message', 'role': 'assistant', 'content': []}],
+                'replacement_history_metadata': [{'client_authored': False}],
+                'retained_context': {'user_messages': [], 'incomplete': True},
+                'resume_metadata': {'multi_agent_version': 'v2', 'last_started_turn_id': old,
+                    'turn_attribution': dict(self.rows[1]['payload']['turn_attribution']),
+                    'previous_turn_settings': {'model': 'observed-model', 'realtime_active': False}},
+            }}
+        items = {
+            'clock': {'type': 'Extension', 'kind': 'clock.sleep', 'durationMs': 2},
+            'web': {'type': 'Extension', 'kind': 'web.search', 'action': {'type': 'search'}, 'results': []},
+            'collab': {'type': 'CollabAgentToolCall', 'tool': 'wait', 'status': 'completed',
+                       'sender_thread_id': session, 'receiver_thread_ids': [], 'receiver_agents': []},
+            'user': {'type': 'UserMessage', 'client_id': 'synthetic-client',
+                     'content': [{'type': 'text', 'text': 'Continue this work.', 'text_elements': []}]},
+        }
+        item = {'id': 'synthetic-ui-id-not-source-id', **items[kind]}
+        if kind == 'user':
+            self.goal_record_source = {'type': 'response_item', 'payload': {
+                'type': 'message', 'role': 'user', 'id': 'synthetic-source-id',
+                'content': [{'type': 'input_text', 'text': 'Continue this work.'}],
+                'internal_chat_message_metadata_passthrough': {
+                    'turn_id': old, 'content_item_kinds': ['user.text'],
+                    'content_item_metadata': [{'provenance': {'type': 'user'}}],
+                },
+            }}
+        return {'type': 'event_msg', 'payload': {
+            'type': 'item_completed', 'thread_id': session, 'turn_id': old,
+            'started_at_ms': 1, 'completed_at_ms': 2, 'item': item,
+        }}
+
+    def goal_record_check(self, records, *, accepted, insertion=5, public_proposal=False):
+        source = self.__dict__.pop('goal_record_source', None)
+        if source:
+            self.rows.insert(5, source)
+            insertion += 1
+        self.rows[insertion:insertion] = records
+        self.goal_write_source()
+        preview = self.goal_preview()
+        self.assertEqual(preview['nativeInputEvidence']['state'], 'observed', preview)
+        before = self.files()
+        if public_proposal:
+            code = '''const fs=require('node:fs'),m=require(process.argv[1]);
+const a=JSON.parse(fs.readFileSync(0,'utf8')),i=a.input,b=i.nativeInputBasis;
+const from=i.nativeInputs.findIndex(x=>x.epoch===b.anchorEpoch);
+const captured=i.nativeInputs.slice(from).map(x=>({promptSha256:x.promptSha256,turnId:x.turnId,
+recordSha256:x.nativeEvidence?.recordSha256,sourceRef:x.nativeEvidence?.sourceRef}));
+const e=m.inspectNativeInputs(b.source,{anchorHash:b.promptSha256,captured,host:a.host,expectedTurnId:a.host.turnId});
+if(e.state!=='observed')throw Error(e.reason);
+const scan={anchorHash:b.promptSha256,expectedCursor:e.cursor,
+captured:e.records.map(({promptSha256,turnId,recordSha256,sourceRef})=>({promptSha256,turnId,recordSha256,sourceRef}))};
+const accepted={turnId:i.nativeContextSource.turnId,model:i.nativeContextSource.model};
+console.log(JSON.stringify(m.associateNativeTurn({...b.source,model:b.source.model||e.originModel},a.host,
+b.promptSha256,e.records.map(r=>r.promptSha256),accepted,scan)));'''
+            meta = self.params['_meta']['x-codex-turn-metadata']
+            host = {'threadId': meta['thread_id'], 'turnId': meta['turn_id'], 'model': meta['model'],
+                    'hostVersion': meta['codex_version'], 'sourceRef': 'synthetic-native-call'}
+            process = subprocess.run([self.node, '-e', code, str(BRIDGE.with_name('codex-context.cjs'))],
+                input=json.dumps({'input': self.goal_receipt(), 'host': host}),
+                capture_output=True, text=True, encoding='utf-8', env=self.env, timeout=10)
+            self.assertEqual(process.returncode, 0, process.stderr)
+            result = json.loads(process.stdout)
+            self.assertEqual(result['state'], 'observed' if accepted else 'unknown', result)
+            self.assertEqual(self.files(), before)
+            return
+        result = self.goal_reconcile(preview)
+        self.assertEqual(not result['isError'], accepted, result)
+        if accepted:
+            saved = self.goal_receipt()
+            self.assertEqual(saved['nativeInputReconciliation']['turnId'], 'synthetic-goal-turn')
+            self.assertFalse(saved.get('interrupted', False))
+            self.assertEqual(self.goal_preview()['nativeInputEvidence']['pendingInputs'], [])
+        else:
+            self.assertEqual(result['value']['reason'], 'native-call-turn-conflict')
+            self.assertEqual(self.files(), before)
+
+    def test_goal_record_host_shapes_keep_native_attribution(self):
+        for kind in ('token', 'settings', 'world', 'compaction', 'clock', 'web', 'collab', 'user'):
+            with self.subTest(kind=kind):
+                self.setUp()
+                self.goal_auto_source()
+                record = self.goal_record_fixture(kind)
+                if kind == 'compaction':
+                    record['payload']['resume_metadata'].update(
+                        last_started_turn_id='synthetic-goal-turn',
+                        turn_attribution=dict(self.rows[-3]['payload']['turn_attribution']))
+                self.goal_record_check([record], accepted=True,
+                                       insertion=len(self.rows) if kind == 'compaction' else 5)
+
+    def test_goal_record_identity_shape_and_control_negatives(self):
+        cases = [
+            ('token-thread', 'token', lambda p: p.update(thread_id='foreign')),
+            ('token-turn', 'token', lambda p: p.update(turn_id='foreign')),
+            ('token-root', 'token', lambda p: p.update(root_turn_id='foreign')),
+            ('token-session', 'token', lambda p: p.update(session_id='foreign')),
+            ('token-count', 'token', lambda p: p['usage'].update(total_tokens=-1)),
+            ('settings-thread', 'settings', lambda p: p.update(thread_id='foreign')),
+            ('settings-model', 'settings', lambda p: p['thread_settings'].update(model='foreign')),
+            ('settings-cwd', 'settings', lambda p: p['thread_settings'].update(cwd='C:/foreign')),
+            ('world-model', 'world', lambda p: p['state']['model'].update(model='foreign')),
+            ('world-cwd', 'world', lambda p: p['state']['environments']['environments']['local'].update(cwd='C:/foreign')),
+            ('compaction-null', 'compaction', lambda p: p.update(resume_metadata=None)),
+            ('compaction-turn', 'compaction', lambda p: p['resume_metadata'].update(last_started_turn_id=None)),
+            ('compaction-parent', 'compaction', lambda p: p['resume_metadata']['turn_attribution'].update(parent_turn_id='foreign')),
+            ('compaction-model', 'compaction', lambda p: p['resume_metadata']['previous_turn_settings'].update(model='foreign')),
+            ('compaction-metadata', 'compaction', lambda p: p.update(replacement_history_metadata=[])),
+            ('clock-unknown', 'clock', lambda p: p['item'].update(kind='unknown.control')),
+            ('clock-time', 'clock', lambda p: p.update(completed_at_ms=0)),
+            ('web-action', 'web', lambda p: p['item']['action'].update(type='unknown')),
+            ('collab-sender', 'collab', lambda p: p['item'].update(sender_thread_id='foreign')),
+            ('collab-tool', 'collab', lambda p: p['item'].update(tool='unknown')),
+            ('user-text', 'user', lambda p: p['item']['content'][0].update(text='Uncovered source')),
+            ('user-parts', 'user', lambda p: p['item']['content'].append({'type': 'text', 'text': 'extra', 'text_elements': []})),
+        ]
+        for name, kind, mutate in cases:
+            with self.subTest(case=name):
+                self.setUp()
+                self.goal_auto_source()
+                record = self.goal_record_fixture(kind)
+                if kind == 'compaction':
+                    record['payload']['resume_metadata'].update(
+                        last_started_turn_id='synthetic-goal-turn',
+                        turn_attribution=dict(self.rows[-3]['payload']['turn_attribution']))
+                mutate(record['payload'])
+                self.goal_record_check([record], accepted=False,
+                                       insertion=len(self.rows) if kind == 'compaction' else 5)
+
+    def test_goal_record_user_echo_cannot_reuse_or_cross_source_boundaries(self):
+        for mode in ('duplicate', 'compacted', 'untyped', 'newer-source'):
+            with self.subTest(mode=mode):
+                self.setUp()
+                self.goal_auto_source()
+                user = self.goal_record_fixture('user')
+                records = [user]
+                if mode == 'duplicate':
+                    records.append(json.loads(json.dumps(user)))
+                elif mode == 'compacted':
+                    records.insert(0, self.goal_record_fixture('compaction'))
+                elif mode == 'untyped':
+                    self.goal_record_source['payload'].pop('internal_chat_message_metadata_passthrough')
+                else:
+                    records.insert(0, self.goal_context_record(turn=self.rows[2]['payload']['turn_id']))
+                self.goal_record_check(records, accepted=False, public_proposal=mode == 'compacted')
+
+    def test_goal_record_does_not_bridge_completion_or_missing_goal(self):
+        for kind in ('token', 'settings', 'world', 'compaction', 'clock', 'web', 'collab', 'user'):
+            for position in ('completed', 'needs-goal'):
+                with self.subTest(kind=kind, position=position):
+                    self.setUp()
+                    self.goal_auto_source()
+                    record = self.goal_record_fixture(kind)
+                    self.goal_record_check([record], accepted=False,
+                                           insertion=6 if position == 'completed' else 8)
+
+    def test_goal_record_current_turn_snapshots_reconcile_then_bind(self):
+        self.goal_auto_source()
+        new = self.params['_meta']['x-codex-turn-metadata']['turn_id']
+        attribution = dict(self.rows[-3]['payload']['turn_attribution'])
+        records = []
+        for kind in ('token', 'compaction', 'world', 'settings', 'clock', 'web', 'collab'):
+            record = self.goal_record_fixture(kind)
+            payload = record['payload']
+            if 'turn_id' in payload:
+                payload['turn_id'] = new
+            if kind == 'compaction':
+                payload['resume_metadata'].update(last_started_turn_id=new, turn_attribution=attribution)
+            records.append(record)
+        self.goal_record_check(records, accepted=True, insertion=len(self.rows))
+        preview = self.goal_preview()
+        result = self.manage(
+            action='bind', epoch=preview['epoch'], expectedRevision=preview['revision'],
+            result='Synthetic snapshot association only', inputs=[], outputs=[{'path': 'result.txt'}],
+            nextAction='Review current permission independently', canContinue=False,
+        )
+        self.assertFalse(result['isError'], result)
+        self.assertFalse(self.goal_preview()['checkpoint']['canContinue'])
+
+    def test_goal_record_compaction_requires_available_attribution(self):
+        for public_proposal in (False, True):
+            with self.subTest(public_proposal=public_proposal):
+                self.setUp()
+                self.goal_auto_source()
+                record = self.goal_record_fixture('compaction')
+                self.goal_record_check([record], accepted=public_proposal, public_proposal=public_proposal)
+
+    def goal_record_anchor_source(self, *, child=False):
+        original_helper = self.helper
+        anchor = {}
+
+        def capture_with_root(operation, **kwargs):
+            if kwargs.get('hook') == 'UserPromptSubmit':
+                transcript = Path(operation['transcript_path'])
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                old = operation['turn_id']
+                root = 'synthetic-root' if child else old
+                anchor.update(turn=old, root=root)
+                rows[2]['payload']['root_turn_id'] = root
+                if child:
+                    start = rows[1]['payload']
+                    start['root_turn_id'] = root
+                    start['turn_attribution'].update(root_turn_id=root, parent_turn_id=root, turn_trigger='goal')
+                transcript.write_text(''.join(json.dumps(row) + '\n' for row in rows), encoding='utf-8')
+            return original_helper(operation, **kwargs)
+
+        def edge_with_root(edge):
+            edge[0]['payload']['root_turn_id'] = anchor['root']
+            edge[1]['payload']['root_turn_id'] = anchor['root']
+            edge[1]['payload']['turn_attribution']['root_turn_id'] = anchor['root']
+            edge[2]['payload']['root_turn_id'] = anchor['root']
+
+        with mock.patch.object(self, 'helper', side_effect=capture_with_root):
+            self.goal_auto_source(change=edge_with_root)
+
+    def test_goal_record_retained_anchor_compaction(self):
+        for child in (False, True):
+            with self.subTest(child=child):
+                self.setUp()
+                self.goal_record_anchor_source(child=child)
+                self.goal_record_check([self.goal_record_fixture('compaction')], accepted=True)
+
+    def test_goal_record_retained_anchor_rejects_missing_or_conflicting_identity(self):
+        cases = {
+            'none-last-turn': lambda r: r.update(last_started_turn_id=None),
+            'wrong-last-turn': lambda r: r.update(last_started_turn_id='foreign'),
+            'none-attribution': lambda r: r.update(turn_attribution=None),
+            'wrong-turn': lambda r: r['turn_attribution'].update(turn_id='foreign'),
+            'wrong-root': lambda r: r['turn_attribution'].update(root_turn_id='foreign'),
+            'none-root': lambda r: r['turn_attribution'].update(root_turn_id=None),
+            'self-parent': lambda r: r['turn_attribution'].update(parent_turn_id=r['last_started_turn_id']),
+            'unknown-trigger': lambda r: r['turn_attribution'].update(turn_trigger='unknown'),
+            'agent-path': lambda r: r['turn_attribution'].update(initiating_agent_path='/child'),
+        }
+        for name, mutate in cases.items():
+            with self.subTest(case=name):
+                self.setUp()
+                self.goal_record_anchor_source()
+                record = self.goal_record_fixture('compaction')
+                mutate(record['payload']['resume_metadata'])
+                self.goal_record_check([record], accepted=False)
+
+    def test_goal_record_rejects_explicit_foreign_snapshot_identity(self):
+        for kind in ('world', 'compaction'):
+            for field in ('thread_id', 'turn_id', 'root_turn_id', 'session_id'):
+                with self.subTest(kind=kind, field=field):
+                    self.setUp()
+                    self.goal_auto_source()
+                    record = self.goal_record_fixture(kind)
+                    if kind == 'compaction':
+                        record['payload']['resume_metadata'].update(
+                            last_started_turn_id='synthetic-goal-turn',
+                            turn_attribution=dict(self.rows[-3]['payload']['turn_attribution']))
+                    record['payload'][field] = 'foreign'
+                    self.goal_record_check([record], accepted=False, insertion=len(self.rows))
+
+    def goal_late_human_source(self, kind, mutation=None):
+        self.goal_auto_source()
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        turn = meta['turn_id']
+        self.rows[-2]['payload']['root_turn_id'] = self.rows[-3]['payload']['root_turn_id']
+        record = self.goal_record_fixture(kind)
+        payload = record['payload']
+        if 'turn_id' in payload:
+            payload['turn_id'] = turn
+        if kind == 'compaction':
+            payload['resume_metadata'].update(last_started_turn_id=turn,
+                turn_attribution=dict(self.rows[-3]['payload']['turn_attribution']))
+        if mutation:
+            mutation(payload)
+        self.rows.append(record)
+        prompt = 'Synthetic late human input.'
+        user = {'type': 'response_item', 'payload': {
+            'type': 'message', 'role': 'user', 'id': 'synthetic-late-human',
+            'content': [{'type': 'input_text', 'text': prompt}],
+            'internal_chat_message_metadata_passthrough': {
+                'turn_id': turn, 'content_item_kinds': ['user.text'],
+                'content_item_metadata': [{'provenance': {'type': 'user'}}],
+            },
+        }}
+        self.rows.append(user)
+        self.goal_write_source()
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt, 'turn_id': turn,
+                     'model': meta['model'], 'transcript_path': str(self.transcript)},
+                    session=meta['thread_id'], hook='UserPromptSubmit')
+        return user
+
+    def test_goal_late_human_origin_reuses_same_execution_records(self):
+        for kind in ('token', 'compaction', 'world', 'settings', 'clock', 'web', 'collab'):
+            with self.subTest(kind=kind):
+                self.setUp()
+                user = self.goal_late_human_source(kind)
+                before = self.files()
+                preview = self.goal_preview()
+                evidence = preview['nativeInputEvidence']
+                self.assertEqual(evidence['state'], 'observed', evidence)
+                self.assertEqual(evidence['records'][-1]['promptSha256'],
+                                 hashlib.sha256(user['payload']['content'][0]['text'].encode()).hexdigest())
+                self.assertEqual(len(evidence['pendingInputs']), 1)
+                self.assertEqual(evidence['pendingInputs'][0]['sourceCategory'], 'goal-runtime-context')
+                self.assertEqual(self.files(), before)
+                self.assertFalse(self.goal_reconcile(preview)['isError'])
+                after = self.goal_preview()
+                self.assertEqual(after['nativeInputEvidence']['pendingInputs'], [])
+                result = self.manage(
+                    action='bind', epoch=after['epoch'], expectedRevision=after['revision'],
+                    result='Synthetic late human accepted', inputs=[], outputs=[{'path': 'result.txt'}],
+                    nextAction='Respect source and permission boundaries', canContinue=False,
+                )
+                self.assertFalse(result['isError'], result)
+
+    def test_goal_late_human_origin_does_not_skip_conflicts_or_earlier_input(self):
+        variants = ('foreign', 'unknown-item', 'unknown-row', 'earlier-human', 'bad-goal', 'interrupted', 'context-root')
+        for mode in variants:
+            with self.subTest(mode=mode):
+                self.setUp()
+                mutate = (lambda p: p.update(turn_id='foreign')) if mode == 'foreign' else None
+                self.goal_late_human_source('collab', mutate)
+                if mode == 'unknown-item':
+                    self.rows[-2]['payload']['item']['type'] = 'UnknownRecord'
+                elif mode == 'unknown-row':
+                    self.rows[-2] = {'type': 'unknown_control', 'payload': {}}
+                elif mode == 'earlier-human':
+                    earlier = json.loads(json.dumps(self.rows[-1]))
+                    earlier['payload']['content'][0]['text'] = 'Uncovered earlier human input.'
+                    self.rows.insert(-1, earlier)
+                elif mode == 'bad-goal':
+                    self.rows[-3]['payload']['content'][0]['text'] = 'Unwrapped claimed Goal control.'
+                elif mode == 'interrupted':
+                    self.rows.insert(-1, {'type': 'event_msg', 'payload': {'type': 'task_interrupted'}})
+                elif mode == 'context-root':
+                    self.rows[-4]['payload']['root_turn_id'] = 'foreign'
+                self.goal_write_source()
+                before = self.files()
+                preview = self.goal_preview()
+                self.assertEqual(preview['nativeInputEvidence']['state'], 'unknown', preview)
+                self.assertEqual(self.files(), before)
+
     def goal_context_record(self, text='Synthetic Goal control.', turn=None):
         return {
             'type': 'response_item',
