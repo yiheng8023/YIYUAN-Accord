@@ -46,11 +46,11 @@ The current release is [3.3.4](https://github.com/yiheng8023/YIYUAN-Accord/relea
 
 ```mermaid
 flowchart TD
-    U["Your goal, additions and changes"] --> A["Accord and the host AI assistant cooperate<br/>Understand the request, choose capabilities and settings"]
-    A --> E["Execute and preserve progress<br/>Handle changes, failures and unfinished work"]
-    E --> V["Check the agreed result and actual effects"]
-    V -->|Correction or recovery needed| A
-    V -->|Criteria met| R["Deliver, explain unfinished work<br/>Release task-owned resources"]
+    U["Your goal and changes"] --> A["Accord + host assistant<br/>Choose capabilities and settings"]
+    A --> E["Execute and retain progress"]
+    E --> V["Check results and effects"]
+    V -->|Adjust or recover| A
+    V -->|Criteria met| R["Deliver; note what remains<br/>Release task resources"]
 ```
 
 The host supplies models, tools and execution; Accord adds coordination, continuity and verification mechanisms. Real work can run in parallel, nest or return to an earlier step. This is a responsibility overview; see the [user guide](docs/user-guide.md#principles-and-further-reading), [architecture](docs/architecture.md) and [detailed system diagram](docs/operations/PLAN-v3.3.md#稳定关系与动态方法) for the full relationships.
