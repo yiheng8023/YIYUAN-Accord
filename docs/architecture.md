@@ -856,6 +856,12 @@ accepted case. Existing exploration mode remains available. Old cases lacking
 the structured execution binding are rejected by this opt-in, never backfilled
 from their historical results; formal observe/recheck and review are still needed.
 
+An ordinary, non-linked workspace parent does not establish that an external
+reviewer can read files created by a different sandbox identity. Preserve a
+failed readback separately from the agent's own successful read. For the bounded
+Windows comparison, directory preparation was a material condition; see the
+[calibration protocol](../research/evaluations/accord-toggle-v1.md#校准和使用).
+
 Resource sampling retains every normal backend sample in order. Small records
 keep inline samples; larger records use ordinary bounded chunk files with exact
 relative names, SHA-256, byte counts and row counts. Persistent receipts/results,

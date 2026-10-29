@@ -53,7 +53,7 @@
 
 真正派发前，仍须核实际两臂加载、其它有效条件一致和中立目录信任；缺少这些观察时保留未决，不启动伪对照。关闭插件不会撤回其它来源中的相同指导，源码标签与本机版本字符串也不单独证明构建身份。优先扩展已有适用观察器的期望状态和参数绑定，复用原生进程控制/记录/清理，不为评价再建常驻控制层。
 
-初次预检已遇到远程 Skill 清单的启动时序差异；有界延后复读才观察到两组相同的306项非目标 Skill及正文摘要。原生无业务模型探测另确认两组均会加载包含项目历史的个人记忆；共同的进程级禁用记忆已核无记忆注入，用户元指导和其它组件保持。这限定为该受控条件下的插件增量，不能称默认配置或完全无相关指导。首个业务尝试的独立产物读取被拒绝，尚未形成有效配对；实际状态见[当前接续](../../docs/operations/CONTINUATION.md#目标与当前写者)。观察器读取失败和产品任务失败应分别记录，不能删除尝试或用执行者自述补齐独立成品证据。
+初次预检已遇到远程 Skill 清单的启动时序差异；有界延后复读才观察到两组相同的306项非目标 Skill及正文摘要。原生无业务模型探测另确认两组均会加载包含项目历史的个人记忆；共同的进程级禁用记忆已核无记忆注入，用户元指导和其它组件保持。这限定为该受控条件下的插件增量，不能称默认配置或完全无相关指导。首个业务尝试的独立产物读取被拒绝，未形成有效配对；原失败与之后独立批次分别保留，见下文及[当前接续](../../docs/operations/CONTINUATION.md#目标与当前写者)。观察器读取失败和产品任务失败应分别记录，不能删除尝试或用执行者自述补齐独立成品证据。
 
 原始资料与期望答案分开。执行者只得到准备目录内的输入和同等任务请求，不给评分源码、答案或 Accord 提示。公开的合成题属于校准/开发集；应记录答案可访问性和潜在训练污染，不能作为保密的正式测试集。正式评价另取未用于优化的新任务材料和适用的真实任务。
 
@@ -74,6 +74,8 @@
 ## 校准和使用
 
 以下命令只准备任务输入或读取结果，不调用模型、不安装/启用插件、不改信任与配置。`prepare` 只接受不存在的新目录，其父目录须已存在。选择属于该次试验的中立位置；示例中的占位路径需换成实际路径，不能用 Accord 源码仓库作基线目录。
+
+准备目录也是有效条件。2026-10-30的本机 Windows/Python3.14.8/CLI0.165 无模型预检中，`tempfile.mkdtemp`根下的沙箱新建文件无法被外层读回；同一 Temp 父目录下新建普通继承目录后，相同命令的新文件可在退出前后读回，两次均自然退出且保护配置未变。Python在Windows对`0o700`的[特殊权限处理](https://docs.python.org/3.14/library/os.html#os.mkdir)与该现象吻合，但未读取旧产物的实际ACL，不能宣称所有权限问题已解释。后续独立试行仅调整双方合成业务目录的准备方式，保留原失败，不改ACL、沙箱或共享设置；私有状态和同身份测试的临时目录不作全局替换。普通目录检查、执行者自读和原生轮次完成均不替代独立产物读回。
 
 ```powershell
 python -B scripts/grade_accord_comparison.py prepare --case S1A --workspace C:/comparison-work/S1A-on
@@ -105,6 +107,23 @@ python -B -m unittest tests.product.test_accord_comparison
 
 ## 从评价进入有限重塑
 
+### 2026-10-30 首轮有限试行
+
+`pilot-02`只覆盖S1A简单汇总和C1A两轮需求修订：各一对、四次运行、六个业务阶段，顺序为S1关闭→启用、C1启用→关闭。主体为本机Windows、CLI0.165.0、Accord3.3.4、原生报告的`gpt-6.1-sol/medium`；两组使用相同公开材料、workspace-write、approval never、无人工救援和进程级关闭记忆，共同用户元指导及其它组件保留。执行前冻结包、材料、判分器、观察器与运行条件，每轮重核非目标Skill来源；这不是默认配置全景或未公开测试集。实际宿主权限允许网络，任务请求禁止主动联网；模型工具轨迹未见网络、安装或共享配置命令，不等于宿主/MCP后台零通信。前述无模型文件探测单独使用networkAccess=false，未假称它与正式业务的全部环境相同。
+
+| 任务 | Accord | 文件阶段检查 | 端到端秒 | 原生累计输入token | 其中缓存输入 | 输出token |
+|---|---|---|---:|---:|---:|---:|
+| S1A | 关闭 | 1/1通过 | 42.22 | 107,256 | 93,440 | 738 |
+| S1A | 启用 | 1/1通过 | 48.29 | 122,536 | 104,192 | 861 |
+| C1A | 启用 | 2/2通过 | 68.87 | 253,836 | 233,472 | 1,961 |
+| C1A | 关闭 | 2/2通过 | 65.89 | 191,408 | 176,384 | 1,537 |
+
+两个分开的AI评审对匿名随机排列成品独立验算，四份最终成品和C1中间成果均符合相应请求；这是开发者控制的试验与代理评审，不是独立用户评价。初次材料未提供S1执行前输入参照，原件保持先记未知，补入冻结材料派生字节与原prepare摘要后，交付端输入与执行前绑定摘要一致。补证不是补造执行前快照，也不证明运行中从未改后恢复。另一代理按实际请求、配置、工具和退出记录完成非盲过程复核，未见使这两对限定观察作废的新问题；文件通过不自动升级为全面验收。
+
+时间覆盖工作区准备、能力就绪观察、模型轮次、成品检查和退出；token来自每个原生线程最后的累计报告，包含重复上下文和缓存，不能当成独立信息量或费用。另有首次`pilot-01`未配对失败：41.33秒、原生累计80,702token；四次无业务加载探测累计117,864token，均单独保留，不塞进有效配对，也不从总投入中抹去。人工主动时间、账单费用、连续资源峰值及整个开发工程成本未完整测量。
+
+**这批小任务未显示成品收益差异，启用组两次均使用更多报告token和时间。** 只有每类一对，模型随机性、缓存与运行顺序仍限制因果解释；不能推断普遍性能劣化，也不能证明更复杂任务的收益。启用组两次主动读取了验证Skill，这提供了研究简单任务指导成本的具体线索，但尚不支持仅凭两例删改运行机制。中断恢复、交接、跨宿主与第三方业务协同未由本批验证，后续应使用新材料检验必要机制及轻量任务负担，不为证明价值选择性加码或隐去平局。
+
 审查从目的和用户结果开始，沿设计预期 → 通用职责 → 宿主适配与生态协作 → 具体实现 → 验证与运维向下展开；修改后的证据沿实际依赖向上核验。所有既有设计和实现均可质疑，但是否更改由问题、收益、风险及证据决定，不因项目经过数月就假定必须重写。
 
 优先核三个问题：宿主更新后哪些职责已有更好原生路径；Accord 的补充是否仍必要且不与宿主/第三方争抢状态或生命周期；预期能力是否经正常入口实际发生并改善结果。仓库顶层的 `runtime/task-checkpoint.cjs` 实际依赖 Codex 输入读取，不能按目录名称把它当成通用层；代码重复、模块位置或旧计划本身都不是缺陷证明。
@@ -124,6 +143,8 @@ python -B -m unittest tests.product.test_accord_comparison
 ## English summary
 
 This is a developer calibration kit, not measured product value or a release gate. Six synthetic data tasks cover a simple baseline, a later requirement change and interrupted file processing. They calibrate input/output checks; they are not a representative user sample or a power analysis. The preparer exports inputs only. The read-only grader checks listed file facts and keeps run validity, task outcome and incremental value unverified. Review behavior, actual host isolation, human effort, total costs and resource exit separately.
+
+The first bounded native pilot completed two pairs (four runs, six stages) on Windows with Codex 0.165.0 and Accord 3.3.4. Both arms met the file requirements; the enabled arm used more reported tokens and time in these two cases. Separate AI artifact reviews and a non-blind process review support this limited observation, not independent user research or a general benefit/performance claim. Retain the earlier unreadable-output attempt and all preparation costs. Memory was disabled in both processes, shared user guidance remained, and directory preparation was corrected without changing sandbox permissions; this is not a default-configuration benchmark.
 
 Keep non-compensable requirements, raw measurements and optional stakeholder preferences distinct. No composite score is prescribed. Preserve failures, ties, unknowns, valid alternative output forms and evaluator disagreements. Inspect effective configuration and guidance before native paired trials; a global plugin-disable switch is not a fair Accord-only control. Public calibration material must not be represented as an unseen test set.
 
