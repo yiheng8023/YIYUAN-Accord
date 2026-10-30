@@ -1,6 +1,6 @@
 ---
 name: verify-and-close-outcome
-description: Verify results, correct affected work and close owned resources. Use for consequential checks, changed dependencies, obsolete active conditions or guidance, useful lessons or cleanup gaps; preserve source evidence and domain-specific validation.
+description: Verify results, correct affected work and close owned resources. Use for consequential checks, changed dependencies, stalled attempts, obsolete active conditions, useful lessons or cleanup gaps; preserve source evidence and domain-specific validation.
 ---
 
 # Verify and close the outcome
@@ -37,25 +37,41 @@ demand. An ended instance does not close an unverified goal; age alone does not
 justify deletion. End this correction when affected work is verified and remaining
 risks and duties are accounted for, without reopening unrelated historical debt.
 
-Generalize a lesson only when its traceable cause, applicable scope, distinguishing
-counterexample and expected reuse justify upkeep. Put stable invariants, conditional
-guidance and reusable checks in the sufficient existing layer; one-off findings may
-remain task evidence. Respect authority for cross-task persistence, verify the
-changed behavior and revise or retire the lesson when later evidence invalidates
-it. Accumulating experience does not require a new component or a fixed sequence
-of every workflow on every turn.
+When prior experience could change the next decision, retrieve relevant lessons
+from already authorized host/task records. Check sources, applicability,
+counterexamples and invalidating changes before reuse; uncertain causes remain
+hypotheses. Generalize only when a traceable cause, distinguishing counterexample
+and expected reuse justify upkeep. Put stable invariants, conditional guidance
+and deterministic checks in sufficient existing layers; one-off findings may
+remain task evidence. Respect authority for cross-task persistence and verify
+changed behavior. Revise or retire invalidated lessons; claim useful reuse only
+after observed later adoption.
 
 After failure, inspect actual effects and partial artifacts before selecting a
 supported recovery. Distinguish missing evidence from an earlier prerequisite that
 never held: later verification cannot retroactively satisfy it. Preserve the failed
 sequence, reuse valid effects and bind further checks to their actual conditions.
+For material repeated attempts or recovery, retain source-linked host/task records
+sufficient to recover conditions, distinguishing expectations, observed results,
+known or unknown effects and the next decision. Use sufficient existing records;
+this does not require a new log or a checkpoint for every call.
+
+Assess progress by necessary outcomes, reduced uncertainty or established
+prerequisites. Error counts, elapsed time or file changes alone do not decide it.
+Preserve informative negative checks, necessary verification, and transient retries
+or waits with a plausible changing condition. Before repeating an approach, identify
+the changed premise or discriminating check. Outside justified retries or changing
+wait conditions, end repeated attempts that establish none of those forms of
+progress and choose an evidenced change to the premise, work unit or capability. Preserve the goal, authority, quality and
+independent safe work; inspect unknown effects before replay or compensation.
+This Skill guides the Agent; it does not itself observe every tool or cancel an
+execution.
 When the requested artifact reports completion, encountered issues or final state,
 its claims depend on subsequent verification, recovery and resource observations.
 Reopen and correct affected claims in that artifact when later facts change the
 account; a conversation update does not amend a saved report. Include material
 resolved problems and their handling, distinguish current blockers and expected
-continuation events, and omit irrelevant debugging detail. Repeat an attempt only
-for a changed premise or a discriminating check.
+continuation events, and omit irrelevant debugging detail.
 Execute and verify the correction while independent safe work continues.
 
 ## Verify the required result

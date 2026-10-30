@@ -99,6 +99,8 @@ Accord 不训练模型、不扩大上下文、不越过宿主权限，也不注�
 
 协调可能增加上下文、延迟、计算、指令冲突与维护负担。增量价值需要公平对照并同时考虑质量、自动化程度、人工协调和总成本；合理额外开销不等于失败，“省用量但仍需用户盯着”也不能替代必要自动化。首轮[两对有限试行](../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行)已完成：两组交付均正确，启用组报告用量和耗时更高；这不构成普遍收益、性能或统计结论。
 
+未发布开发修订补强了经验复用与无进展处置指导：只在可能影响下一步时取回相关的获准记录，先核适用条件；重复尝试看成果、信息增量或必要前提，保留合理重试与等待。普通入口是否正确采用及实际收益仍需观察，不能据此声称已具有跨项目经验库、全工具停滞监控或任意执行取消。当前正式发行仍为3.3.8，开发修订的安装与实际采用另核。
+
 ### 原理与进阶阅读
 
 当前包通过一个协调入口 Skill、四个专用 Skill、原生事件 Hook 与可选状态机制参与工作。入口采用[英文元指导](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)，以[中文原文](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.zh-CN.md)为语义基准；它不改变宿主优先级，也不要求用户创建或替换 `AGENTS.md`。
@@ -215,6 +217,8 @@ Original failures, versions, environments and conditions retain their identities
 Accord does not train models, enlarge context or bypass host permissions. It registers no Stop auto-continuation and adds no conversation turns. Users select the host's long-running controls. Guidance, interface availability or evaluator rescue does not establish ordinary-use outcomes; preserve real limitations and unfinished work when conditions are insufficient.
 
 Coordination may add context, latency, compute, instruction conflicts and maintenance. Incremental value needs a fair comparison accounting for quality, automation, human coordination and total cost. Reasonable extra cost is not failure; lower usage that still leaves the user supervising cannot replace necessary automation. The initial [two-pair pilot](../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行) is complete: both arms produced correct outputs, while the enabled arm used more reported tokens and time. This establishes no general benefit, performance or statistical conclusion.
+
+The unpublished development revision strengthens guidance for retrieving relevant authorized experience and reviewing stalled attempts. It checks applicability and useful progress while preserving justified retries and changing wait conditions. Correct normal-entry adoption and actual benefits still need observation; this does not establish a cross-project memory service, all-tool stagnation monitoring or arbitrary execution cancellation. The current release remains3.3.8; installation and actual adoption of the revision are separate.
 
 ### Principles and further reading
 
