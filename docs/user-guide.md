@@ -73,6 +73,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 
 | 现象 | 由执行者优先核对 |
 |---|---|
+| 看不到 Accord 标记或 MCP 调用 | 核对指导是否进入、适用 Skill 或原生操作是否实际发生、必要结果是否成立。Skill 读取可能显示为普通命令；MCP 按需调用，次数不代表参与程度。展示或读取本身也不证明全部职责落实或收益。 |
 | 安装后看不到或不参与 | 入口是否支持插件、组织与全局开关、目标作用域内的启用状态、新会话是否加载。 |
 | Skill 可见，协调或恢复未发生 | 当前 Hook 是否启用、定义是否获信任、宿主是否能运行 Node、实际事件回执与 MCP 连接。 |
 | 显示旧版本或更新后无变化 | 安装来源与精确包、当前加载进程/会话；新进程成功不证明已有会话已恢复。 |
@@ -189,6 +190,7 @@ This is not complete conversation history or a progress record, and grants no ne
 
 | Symptom | Executor's first checks |
 |---|---|
+| No Accord label or MCP call is visible | Check delivered guidance, actual relevant Skill reads or native actions, and required outcomes. A Skill read may appear as an ordinary command; MCP calls are demand-driven and their count does not measure participation. Visibility or reading alone does not prove full compliance or benefit. |
 | Installed but invisible or inactive | Entry support, organization/global gates, enablement in the intended scope, and a newly loaded session. |
 | Skill visible but coordination or recovery absent | Hook enablement and trust of the current definition, host access to Node, actual event receipts and MCP connection. |
 | Old version shown or update has no effect | Exact source/package and actually loaded process/session; fresh-process success does not prove an existing session recovered. |
