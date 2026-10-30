@@ -2,7 +2,7 @@
 
 ## 3.3.6
 
-当前为宿主接续兼容修正候选，正式发行仍为3.3.5；验证和采用状态见[当前接续](docs/operations/CONTINUATION.md#目标与当前写者)。
+[3.3.6](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.6)已于2026-10-30正式发布，精确提交为`fc30f8e6`；[CI #1040](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41015677485)全11项终态成功。发布、本机安装、实际加载与完整重绑分别记录于[当前接续](docs/operations/CONTINUATION.md#目标与当前写者)。
 
 - 识别已核宿主来源的持久推理设置记录，修复其阻断用户输入定位的问题；保留原序、完整摘要及独立设置观察，不作为用户输入或权限。
 - 将设置变化纳入控制信号，拒绝继续使用变化前的核验游标；保留未知形状、身份、暂停、恢复及全局追加守卫。

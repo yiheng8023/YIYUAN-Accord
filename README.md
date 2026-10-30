@@ -28,12 +28,12 @@ These goals need continuing validation. An initial two-pair pilot produced corre
 
 ## Get started
 
-The current release is [3.3.5](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.5). Use a Codex CLI or desktop entry that supports plugins, with a compatible Node executable available to that host; Node 24 is the current tested recommendation. Ordinary use does not require Python.
+The current release is [3.3.6](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.6). Use a Codex CLI or desktop entry that supports plugins, with a compatible Node executable available to that host; Node 24 is the current tested recommendation. Ordinary use does not require Python.
 
 1. **Install.** Install YIYUAN Accord from this repository's marketplace source. To register that source from the CLI:
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.5
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.6
    ```
 
 2. **Enable plugins and Accord.** Allow plugin use in the host and enable Accord in the scope you actually use. In CLI `/plugins`, select the marketplace, install, and press `Space` on the installed plugin to turn it on or off.
