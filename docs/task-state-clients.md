@@ -167,6 +167,8 @@ function pauseParams(latest, absoluteWorkspace, verifiedPauseReason) {
 
 显式用户取消另需已核实的取消决定，并提交 `disposition: "user-cancelled"` 与非空 reason；字段仍是调用者声明。无 checkpoint 时只退役 receipt：先确认 snapshot.mode=unbound、revision=0、`needsNativeReplay=false`、`needsResumeReconciliation=false`，当前输入已协调，再提供非空 reason。只移除本任务 checkpoint/receipt 状态，不写业务输出。[退役实现](../runtime/task-checkpoint.cjs)、[限制](../runtime/task-checkpoint.cjs)。
 
+基于3.3.8的未发布开发修订另保存每会话的最小 `retired-input-ack.json`，只包含已经确认的失败generation，不保留原输入、目标或会话正文；后续输入成功发布后移除。共享失败水位继续保留，新generation、其它会话及未确认失败仍需恢复，旧运行时不识别该确认，不能保证混合版本采用。退役后的无当前输入状态可能返回 `native-user-input-receipt-missing`；这不要求重建已完成任务，后续正常输入由宿主入口进入。确认写入、删除或后置校验失败须补偿原确认及缺失文件；补偿失败保留持久隔离，隔离也无法写入则保留输入锁。`recover-lock(input)`仍须证明原所有者已退出；没有收据时也要先发布新会话失败水位，成功后才能释放锁，随后使用fresh status的实际token恢复，不能假定为null。代码、合成验证和实际安装采用分开核验。
+
 ```js
 function retireParams(latest, absoluteWorkspace) {
   const snapshot = latest.checkpoint.snapshot;

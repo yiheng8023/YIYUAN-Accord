@@ -1,6 +1,6 @@
 {
   "name": "yiyuan-accord-codex",
-  "version": "3.3.8",
+  "version": "3.3.8-dev.1",
   "description": "Helps agents pursue user outcomes by assessing feasibility, coordinating capabilities, correcting work and verifying results within the user's authority.",
   "author": {
     "name": "yiheng8023",

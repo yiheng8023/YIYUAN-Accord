@@ -65,6 +65,8 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 
 启用输入 Hook 后，根任务的原生输入文字保留在本机既有回执中，用于恢复；每份回执上限为 **8 MiB**。显式审阅和对账也会保留受支持的宿主上下文、目标控制文字及相应状态原文；结构化媒体保留字节与记录摘要，不缓存base64正文。其中可能含敏感信息，中断时即使没有检查点也可能保留，结束会话不保证立即删除。状态按任务生命周期处理，清理前须确认未完工作和恢复依据。
 
+基于3.3.8的未发布开发修订还会在必要时保留每会话的最小失败确认记录，防止已确认的旧失败在退役后再次触发隔离；其中没有原输入或会话正文，后续输入成功保存后移除。当前3.3.8发行包未因此改变，新修订的验证和采用另核。
+
 这不是完整对话或进度记录，也不产生新授权。子代理使用宿主自己的任务状态，不承接根检查点。请勿公开上传原始回执、凭据或私人会话；报告问题可先描述现象，由执行者选取必要且脱敏的证据。保留、退役及失败边界见[架构](architecture.md#current-release-and-scoped-connections)与[状态调用指南](task-state-clients.md)。
 
 ### 排查、更新与退出
@@ -178,6 +180,8 @@ Starting conditions, work and results may feed back, run in parallel and nest. C
 ### Input retention and privacy
 
 With the input Hook enabled, root-task native input text is retained in an existing local receipt for recovery, bounded to **8 MiB per receipt**. Explicit review and reconciliation also retain supported host context, goal-control text and the corresponding state text; structured media keeps byte and record summaries without caching base64 content. The receipt may contain sensitive information and survive interruption even without a checkpoint. Session exit does not guarantee immediate deletion. Follow the task lifecycle and check unfinished work and recovery needs before cleanup.
+
+The unpublished development revision based on3.3.8 also retains a minimal session-specific failure acknowledgment when needed, so an already acknowledged failure does not trigger quarantine again after retirement. It contains no original input or conversation text and is removed after a subsequent input is successfully saved. The released3.3.8 package is unchanged; verification and actual adoption of the revision remain separate.
 
 This is not complete conversation history or a progress record, and grants no new authority. Subagents use their native task state rather than adopting the root checkpoint. Do not publish raw receipts, credentials or private transcripts; describe the problem first and let the executor select necessary redacted evidence. See the [architecture](architecture.md#current-release-and-scoped-connections) and [state-client guide](task-state-clients.md) for retention, retirement and failure boundaries.
 

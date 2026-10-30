@@ -85,7 +85,7 @@ function jsonObject(bytes) {
 const readJson = (file, limit = 128 * 1024) => jsonObject(regular(file, limit));
 
 function atomic(file, value, limit = 128 * 1024) {
-  const encoded = JSON.stringify(value);
+  const encoded = Buffer.isBuffer(value) ? value : JSON.stringify(value);
   if (Buffer.byteLength(encoded) > limit) fail('oversize-state-object');
   const temporary = `${file}.${crypto.randomUUID()}.tmp`;
   let descriptor = null;
@@ -113,7 +113,7 @@ function location(session, cwd, create = false) {
     if (!present(base)) return false;
     if (!samePath(fs.realpathSync(base), base) || fs.lstatSync(base).isSymbolicLink()) fail('unsafe-state-directory');
     return [`${id}.input.json`, `${id}.input.json.lock`, `${id}.state.json`, `${id}.lock`, `${id}.lock.recovery`,
-            `${id}.input-failure.json`, `${workspaceId}.workspace-input-failure.json`]
+            `${id}.input-failure.json`, `${id}.retired-input-ack.json`, `${workspaceId}.workspace-input-failure.json`]
       .some((name) => present(path.join(base, name)));
   };
   const override = process.env.YIYUAN_ACCORD_TASK_STATE_DIR;
@@ -143,6 +143,7 @@ function location(session, cwd, create = false) {
   return {root, input: path.join(base, `${id}.input.json`),
           state: path.join(base, `${id}.state.json`), lock: path.join(base, `${id}.lock`),
           failure: path.join(base, `${id}.input-failure.json`),
+           retiredAck: path.join(base, `${id}.retired-input-ack.json`),
           workspaceFailure: path.join(base, `${workspaceId}.workspace-input-failure.json`),
           storage: {path: base, kind}};
 }
@@ -155,8 +156,7 @@ function markInputFailure(where, workspace = false) {
          {schema: 1, generation: crypto.randomUUID()});
 }
 
-function readInput(where, read = readJson, exists = fs.existsSync) {
-  const input = exists(where.input) ? read(where.input, INPUT_RECEIPT_LIMIT) : null;
+function inputFailures(where, read = readJson, exists = fs.existsSync) {
   const failures = {};
   for (const [key, file] of [['session', where.failure], ['workspace', where.workspaceFailure]]) {
     if (exists(file)) {
@@ -165,7 +165,23 @@ function readInput(where, read = readJson, exists = fs.existsSync) {
       failures[key] = marker.generation;
     }
   }
-  if (!input && Object.keys(failures).length === 0) return null;
+  return failures;
+}
+function retiredFailures(where, read = readJson, exists = fs.existsSync) {
+  if (!exists(where.retiredAck)) return {};
+  const ack = read(where.retiredAck);
+  if (ack.schema !== 1 || !ack.failures || typeof ack.failures !== 'object' || Array.isArray(ack.failures) ||
+      Object.keys(ack.failures).some(k => !['session', 'workspace'].includes(k) || !text(ack.failures[k])))
+    fail('invalid-retired-input-ack');
+  return ack.failures;
+}
+function readInput(where, read = readJson, exists = fs.existsSync) {
+  const input = exists(where.input) ? read(where.input, INPUT_RECEIPT_LIMIT) : null;
+  const failures = inputFailures(where, read, exists);
+  if (!input) {
+    if (Object.keys(failures).length === 0) return null;
+    if (canonical(retiredFailures(where, read, exists)) === canonical(failures)) return null;
+  }
   if (canonical(input?.failures || {}) === canonical(failures)) return input;
   // The recovery token changes even if no receipt could be written. A stale
   // replay cannot acknowledge a later loss merely because the old epoch stayed.
@@ -472,7 +488,10 @@ function locked(where, callback, wait = false, retainOnFailure = false) {
 const inputLocked = (where, callback, retainOnFailure = false) =>
   locked({...where, lock: where.input + '.lock'}, callback, true, retainOnFailure);
 function publishInput(where, input) {
-  try { atomic(where.input, input, INPUT_RECEIPT_LIMIT); }
+  try {
+    atomic(where.input, input, INPUT_RECEIPT_LIMIT);
+    if (fs.existsSync(where.retiredAck)) fs.unlinkSync(where.retiredAck);
+  }
   catch (error) { error.inputPublicationFailed = true; throw error; }
 }
 function inputBasis(input) {
@@ -635,22 +654,47 @@ function retireFiles(where, epoch, prior = null, request = null, expectedInput =
     if (sourceGuard && !sourceGuard(input)) return;
     const receipt = fs.existsSync(where.input) ? readJson(where.input, INPUT_RECEIPT_LIMIT) : null;
     const files = [[where.state, prior], [where.input, receipt]].filter(([, value]) => value !== null);
+    const priorAck = fs.existsSync(where.retiredAck) ? regular(where.retiredAck, 128 * 1024) : null;
+    let ackAttempted = false;
     try {
       for (const [file] of files) fs.unlinkSync(file);
-      // Input failures publish outside this lock. Keep the recovery context if
-      // one arrives during deletion; an acknowledged old watermark is harmless.
-      if (canonical(readInput(where)?.failures || {}) !== canonical(input.failures || {})) {
+      // Publish only the confirmed generations, without retained input text.
+      // A crash before this point remains quarantined; a later failure differs.
+      if (!input.needsNativeReplay && Object.keys(input.failures || {}).length) {
+        ackAttempted = true;
+        atomic(where.retiredAck, {schema: 1, failures: input.failures});
+      }
+      // Failure markers publish outside this lock and must still match.
+      if (canonical(inputFailures(where)) !== canonical(input.failures || {})) {
         fail('latest-user-input-not-reconciled');
       }
     } catch (error) {
-      // Both locks are still held; restore only our missing checkpoint files,
-      // never erase failure watermarks. Storage failure still requires a caller.
-      for (const [file, value] of files) if (!fs.existsSync(file)) {
-        atomic(file, value, file === where.input ? INPUT_RECEIPT_LIMIT : 128 * 1024);
+      // Restore the exact prior acknowledgment and missing files while locked.
+      // Any failed compensation invalidates this session; shared markers remain.
+      let compensationFailed = false;
+      if (ackAttempted) {
+        try {
+          if (priorAck === null) { if (fs.existsSync(where.retiredAck)) fs.unlinkSync(where.retiredAck); }
+          else atomic(where.retiredAck, priorAck);
+        } catch (_) { compensationFailed = true; }
+      }
+      for (const [file, value] of files) {
+        try {
+          if (!fs.existsSync(file)) atomic(file, value, file === where.input ? INPUT_RECEIPT_LIMIT : 128 * 1024);
+        } catch (_) { compensationFailed = true; }
+      }
+      if (compensationFailed) {
+        try { markInputFailure(where); }
+        catch (_) {
+          // A durable failure marker could not be published. Keep the input
+          // lock for explicit dead-owner recovery instead of claiming freshness.
+          error.inputPublicationFailed = true;
+          error.message += ':compensation-failed-input-lock-retained';
+        }
       }
       throw error;
     }
-  });
+  }, true);
 }
 
 // Consume only a caller-owned connection's structured notification envelopes.
@@ -999,6 +1043,10 @@ function operate(request) {
     // current native event. Do not invent a receipt when none ever existed.
     if (inputRecovery && fs.existsSync(where.input)) {
       publishInput(where, {...readJson(where.input, INPUT_RECEIPT_LIMIT), epoch: crypto.randomUUID(), needsNativeReplay: true});
+    } else if (inputRecovery) {
+      // A retired acknowledgment might match old markers even though input was lost.
+      // Publish a new session generation before releasing the dead input lock.
+      markInputFailure(where);
     }
     fs.unlinkSync(file);
     return {recovered: true, scope: inputRecovery ? 'dead-input-lock-and-receipt-invalidation'
@@ -1288,7 +1336,8 @@ function hint(event, where, currentInput, prior = null) {
 // mid-read version; compare every complete source and detect overlapping locks.
 function recoveryBasis(where, project = (basis) => basis) {
   const sources = [[where.input, INPUT_RECEIPT_LIMIT, 'input'], [where.state, 128 * 1024, 'checkpoint'],
-    [where.failure, 128 * 1024, 'input-failure'], [where.workspaceFailure, 128 * 1024, 'workspace-input-failure']];
+    [where.failure, 128 * 1024, 'input-failure'], [where.workspaceFailure, 128 * 1024, 'workspace-input-failure'],
+    [where.retiredAck, 128 * 1024, 'retired-input-ack']];
   const idle = () => {
     if ([where.lock, where.input + '.lock', where.lock + '.recovery'].some((file) => present(file))) {
       fail('recovery-read-busy');
@@ -1504,7 +1553,7 @@ function handleHook(event) {
     // derivation replaces epoch/needsNativeReplay and must not hide corruption.
     if (quarantined) validateRecoveryIdentity(event, where, storedInput, null);
     const input = {schema: 1, epoch: crypto.randomUUID(), promptSha256: sha(event.prompt),
-      turnId: event.turn_id || null, continuation: null, failures: previous?.failures || {},
+      turnId: event.turn_id || null, continuation: null, failures: previous?.failures || retiredFailures(where),
       inputSource: 'native-input-event', hostObservation: observeNativeHost(event, previous),
       nativeContextSource: nativeContextSource(event)};
     if (Array.isArray(previous?.stopContinuationHistory)) input.stopContinuationHistory = previous.stopContinuationHistory;
@@ -1660,8 +1709,8 @@ const HELP = {
   revisions: {op: 'bind', rules: 'bind rechecks inputs; changed output checks require revisionReason. Changed or removed existing inputs additionally require inputRevisions, one {path, observed, reason} per affected input. observed must exactly match its current status.inspection.inputs[].current fingerprint; for a removed reference it may be {present:false}. No extra or duplicate dispositions; each reason is nonempty and at most 2048 characters. Initial binding and added protections need no inputRevisions. Explicit dispositions are caller claims, not human authorization: check the actual user decision and affected scope first. The latest accepted dispositions, including prior fingerprints and their input epoch, remain in status.checkpoint.inputRevisions; this is not full revision history. Failed or drifting revisions preserve the prior checkpoint. Older helpers may silently rebaseline inputs. Pause and its reason survive rebinding unless an authorized resumeReason (nonempty, at most 2048 characters) explicitly lifts it. bind returns mode; status.checkpoint exposes resumeReason, not proof of authority. Inspect the installed interface.'},
   unresolved: 'Optional bind.unresolved is a list of up to 32 distinct nonempty strings, each at most 2048 characters, describing known unmet result or fact conditions. Omission inherits existing conditions; an explicit list replaces them, and removing or rewording a prior condition requires revisionReason. status.checkpoint and inspection expose them independently of matched files; any remaining condition prevents verified-local and successful retirement. canContinue means safe authorized work remains, not that the gap is resolved; use canContinue:false for a necessary external wait; use pause only for an actual authorized pause. Existing pause and input freshness protections still apply; no automatic turn is requested. The caller must verify the evidence or authorized scope change behind a disposition; a reason is not proof. This neither discovers undeclared gaps nor validates semantics. Older helpers do not enforce this field; retain the compatible executor for unfinished state.',
   pause: 'op=pause with current epoch/revision and reason; preserve pending work without continuation.',
-  retire: 'op=retire requires verified local predicates and a resolved pause, or explicit user-cancelled disposition plus reason. Without a checkpoint, use current epoch, expectedRevision=0 and reason to retire only the receipt, including after verified exit without an end Hook. Removes only this task\'s checkpoint and input-receipt files; failure watermarks remain. It does not prove task completion.',
-  recovery: 'op=recover-lock with lock=state or input requires a provably dead owner. Input recovery invalidates an existing receipt because native input may have been lost. A surviving caller must replay the actual current native input before binding or continuation; do not ask for repeated user input when the host retains it. Uncertain or live ownership is preserved. Cooperating recovery callers share a .lock.recovery gate; all copies recovering the same session must honor it, or the caller must establish exclusive maintenance. A leftover gate is not automatically reclaimed, even with a dead PID: preserve it until a caller establishes quiescence and bounded maintenance authority. Normal task operations do not acquire this recovery gate.',
+  retire: 'op=retire requires verified local predicates and a resolved pause, or explicit user-cancelled disposition plus reason. Without a checkpoint, use current epoch, expectedRevision=0 and reason to retire only the receipt, including after verified exit without an end Hook. Removes only this task\'s checkpoint and input-receipt files; failure watermarks remain. A session-scoped, text-free acknowledgment of confirmed generations may remain until the next input is published. It does not prove task completion.',
+  recovery: 'op=recover-lock with lock=state or input requires a provably dead owner. Input recovery invalidates a present receipt or publishes a new session failure watermark when it is missing; persistence must succeed before lock release. A surviving caller must replay the actual current native input before binding or continuation; do not ask for repeated user input when the host retains it. Uncertain or live ownership is preserved. Cooperating recovery callers share a .lock.recovery gate; all copies recovering the same session must honor it, or the caller must establish exclusive maintenance. A leftover gate is not automatically reclaimed, even with a dead PID: preserve it until a caller establishes quiescence and bounded maintenance authority. Normal task operations do not acquire this recovery gate.',
   resume: 'SessionStart/resume sets needsResumeReconciliation without changing the contract or pause state. New native user input enters normally; absent new input, the native caller may replay actual current retained input with recovery_epoch. Neither route resumes paused work or reconciles the saved binding automatically. Existing needsNativeReplay quarantine from real input loss remains strict. Inspect current authority, effects and writer ownership before binding. No cross-task adoption, writer lock or host permission enforcement.',
   replay: 'After input failure or recovery, replay the actual current UserPromptSubmit event through --hook UserPromptSubmit with recovery_epoch from status. The derived token binds the receipt and failure watermarks, including a missing receipt. Use null only when no receipt or failure watermark exists. A later uncaptured native input changes the token; ordinary inputs cannot silently clear quarantine. Never reconstruct missing human intent from the old checkpoint. Source-bound interrupted recovery verifies the unchanged retained input and exact interrupted-turn/root-resume/context sequence; unknown intervening activity holds. Retained byte-prefix proof covers only that historical control, not new input, control, permission or unknown effects; saved pauses remain.',
   inputFailure: 'Input loss is conservatively latched outside the input lock. Unidentified input transport failure invalidates helper freshness only in the native caller working directory. Recovery acknowledges it per session. Small failure watermarks remain until the owning state directory is safely retired. If the watermark itself cannot persist, cross-process protection is unknown and the native caller must hold continuation; this helper is not a host permission barrier.',

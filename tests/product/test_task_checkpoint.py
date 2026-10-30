@@ -3969,9 +3969,11 @@ catch (error) { process.stdout.write(error.message); }
         Path(str(input_path) + '.lock').write_text(json.dumps({'pid': int(dead)}), encoding='utf-8')
         self.assertTrue(self.invoke({'op': 'recover-lock', 'lock': 'input'})['needsNativeReplay'])
         self.assertFalse(input_path.exists())
-        self.assertIn('receipt-missing', self.invoke({'op': 'status'}, success=False))
+        missing = self.status()
+        self.assertTrue(missing['needsNativeReplay'])
+        self.assertEqual(missing['inputSource'], 'missing-stored-input-receipt')
         self.assertEqual(self.event('Stop'), {})
-        self.event('UserPromptSubmit', prompt='Replay the observed native input.', recovery_epoch=None)
+        self.event('UserPromptSubmit', prompt='Replay the observed native input.', recovery_epoch=missing['epoch'])
         self.event('UserPromptSubmit', prompt='A newer actual native input.')
         current = self.status()
         for expected in (None, current['epoch']):
@@ -4010,10 +4012,179 @@ fs.renameSync = function(from, to) {
         current = self.status()
         self.invoke({'op': 'retire', 'epoch': current['epoch'], 'expectedRevision': current['revision'],
                      'disposition': 'user-cancelled', 'reason': 'Replayed the actual native cancellation.'})
-        self.assertEqual(list(self.state.iterdir()), list(self.state.glob('*.input-failure.json')))
-        self.assertEqual(len(list(self.state.iterdir())), 1,
-                         'keep the failure watermark until its owning state directory is safely retired')
+        self.assertEqual(len(list(self.state.glob('*.input-failure.json'))), 1)
+        self.assertEqual(len(list(self.state.glob('*.retired-input-ack.json'))), 1)
+        self.assertEqual(len(list(self.state.iterdir())), 2,
+                         'retain the failure watermark and text-free session acknowledgment')
         self.assertFalse((self.work / 'summary.json').exists())
+
+
+
+    def seed_retirement_failure(self):
+        receipt = next(self.state.glob('*.input.json'))
+        marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        marker.write_text('{"schema":1,"generation":"old"}', encoding='utf-8')
+        self.event('UserPromptSubmit', prompt='recover', recovery_epoch=self.status()['epoch'])
+        return receipt, marker, self.status()
+
+    def test_retired_ack_is_private_per_session_and_invalidated_by_new_failure(self):
+        key = str(self.work).lower() if os.name == 'nt' else str(self.work)
+        marker = self.state / (hashlib.sha256(key.encode()).hexdigest() + '.workspace-input-failure.json')
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'old-loss'}), encoding='utf-8')
+        old = self.status()
+        self.event('UserPromptSubmit', prompt='Private old content', recovery_epoch=old['epoch'])
+        current = self.status()
+        self.invoke({'op': 'retire', 'epoch': current['epoch'], 'expectedRevision': 0,
+                     'reason': 'Synthetic completed input'})
+        ack = next(self.state.glob('*.retired-input-ack.json'))
+        self.assertEqual(json.loads(ack.read_text()), {'schema': 1, 'failures': {'workspace': 'old-loss'}})
+        self.assertNotIn('Private old content', ack.read_text())
+        self.event('UserPromptSubmit', prompt='Fresh input')
+        current = self.status()
+        self.assertFalse(current['needsNativeReplay'])
+        self.assertEqual(current['inputSource'], 'native-input-event')
+        self.assertFalse(ack.exists())
+        other = self.invoke({'op': 'status', 'session_id': 'other'})
+        self.assertTrue(other['needsNativeReplay'])
+
+    def test_retired_ack_does_not_mask_new_failure_before_next_input(self):
+        receipt, marker, current = self.seed_retirement_failure()
+        self.invoke({'op': 'retire', 'epoch': current['epoch'], 'expectedRevision': 0, 'reason': 'fixture'})
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'new'}), encoding='utf-8')
+        self.event('UserPromptSubmit', prompt='later genuine input')
+        self.assertEqual(self.status()['inputSource'], 'quarantined-native-input')
+        self.assertTrue(self.status()['needsNativeReplay'])
+
+    def test_invalid_retired_ack_fails_closed(self):
+        receipt = next(self.state.glob('*.input.json'))
+        marker = receipt.with_name(receipt.name.replace('.input.json', '.input-failure.json'))
+        receipt.unlink()
+        marker.write_text(json.dumps({'schema': 1, 'generation': 'actual-loss'}), encoding='utf-8')
+        ack = receipt.with_name(receipt.name.replace('.input.json', '.retired-input-ack.json'))
+        ack.write_text(json.dumps({'schema': 1, 'failures': {'workspace': 5}}), encoding='utf-8')
+        self.assertIn('invalid-retired-input-ack', self.invoke({'op': 'status'}, success=False))
+        ack.unlink()
+        self.assertTrue(self.status()['needsNativeReplay'])
+
+
+    def test_failure_arriving_during_fresh_capture_is_not_acknowledged(self):
+        receipt, marker, current = self.seed_retirement_failure()
+        self.invoke({'op': 'retire', 'epoch': current['epoch'], 'expectedRevision': 0, 'reason': 'fixture'})
+        self.preload = self.root / 'capture-race.cjs'
+        self.preload.write_text("""
+const fs=require('fs'), read=fs.readFileSync; let changed=false;
+fs.readFileSync=function(file,...args) {
+ const value=read.call(this,file,...args);
+ if (!changed && String(file).endsWith('.retired-input-ack.json')) {
+  changed=true; fs.writeFileSync(process.env.TEST_MARKER, '{"schema":1,"generation":"new"}');
+ } return value;
+};
+""", encoding='utf-8')
+        self.environment['TEST_MARKER'] = str(marker)
+        self.event('UserPromptSubmit', prompt='fresh')
+        del self.preload
+        self.assertTrue(self.status()['needsNativeReplay'])
+
+    def test_retirement_ack_write_failure_restores_receipt(self):
+        receipt, marker, current = self.seed_retirement_failure()
+        before = receipt.read_bytes()
+        self.preload = self.root / 'ack-failure.cjs'
+        self.preload.write_text("""
+const fs=require('fs'), rename=fs.renameSync;
+fs.renameSync=function(a,b) {
+ if (String(b).endsWith('.retired-input-ack.json')) throw Error('injected-ack-failure');
+ return rename.apply(this,arguments);
+};
+""", encoding='utf-8')
+        self.assertIn('injected-ack-failure', self.invoke({'op': 'retire', 'epoch': current['epoch'],
+            'expectedRevision': 0, 'reason': 'fixture'}, success=False))
+        del self.preload
+        self.assertEqual(receipt.read_bytes(), before)
+        self.assertFalse(list(self.state.glob('*.retired-input-ack.json')))
+        self.assertFalse(self.status()['needsNativeReplay'])
+
+
+    def retirement_fault_fixture(self, mode):
+        receipt, marker, current = self.seed_retirement_failure()
+        ack = receipt.with_name(receipt.name.replace('.input.json', '.retired-input-ack.json'))
+        self.preload = self.root / 'retire-fault.cjs'
+        self.preload.write_text("""
+const fs = require('fs'), rename = fs.renameSync, read = fs.readFileSync, unlink = fs.unlinkSync; let wrote = false, failed = false;
+fs.unlinkSync = function(file) {
+  if (wrote && process.env.FAIL_ACK === '1' && String(file).endsWith('.retired-input-ack.json')) throw new Error('ack-unlink-failure');
+  return unlink.apply(this, arguments);
+};
+fs.renameSync = function(a,b) {
+  if (wrote && process.env.FAIL_RESTORE === '1' && String(b).endsWith('.input.json')) throw new Error('restore-failure');
+  if ((wrote && process.env.FAIL_MARKER === '1' || process.env.FAIL_RECOVERY === '1') && String(b).endsWith('.input-failure.json')) throw new Error('marker-failure');
+  const result = rename.apply(this, arguments);
+  if (String(b).endsWith('.retired-input-ack.json')) wrote = true; return result;
+};
+fs.readFileSync = function(file, ...args) {
+  if (wrote && !failed && String(file).endsWith('.input-failure.json')) {
+    failed = true; throw new Error('post-ack-read-failure');
+  }
+  return read.call(this, file, ...args);
+};
+""", encoding='utf-8')
+        self.environment.update(FAIL_RESTORE='1' if mode else '0', FAIL_MARKER='1' if mode >= 2 else '0',
+                                FAIL_ACK='1' if mode == 3 else '0', FAIL_RECOVERY='0')
+        return receipt, marker, ack, current
+
+    def failed_retire(self, current):
+        return self.invoke({'op': 'retire', 'epoch': current['epoch'], 'expectedRevision': 0,
+                            'reason': 'fixture'}, success=False)
+
+    def test_failed_retire_after_ack_restores_original_ack_and_receipt(self):
+        receipt, marker, ack, current = self.retirement_fault_fixture(0)
+        before = receipt.read_bytes()
+        for prior in (None, b'{ "schema": 1, "failures": {"session": "previous"} }'):
+            if prior is not None: ack.write_bytes(prior)
+            self.assertIn('post-ack-read-failure', self.failed_retire(current))
+            self.assertEqual(receipt.read_bytes(), before)
+            self.assertEqual(ack.read_bytes() if ack.exists() else None, prior)
+        del self.preload
+        self.assertFalse(self.status()['needsNativeReplay'])
+        receipt.unlink()
+        self.assertTrue(self.status()['needsNativeReplay'])
+
+    def test_failed_retire_restore_failure_publishes_loss(self):
+        receipt, marker, ack, current = self.retirement_fault_fixture(1)
+        self.assertIn('post-ack-read-failure', self.failed_retire(current))
+        del self.preload
+        self.assertFalse(receipt.exists())
+        self.assertFalse(ack.exists())
+        self.assertNotEqual(json.loads(marker.read_text())['generation'], 'old')
+        self.assertTrue(self.status()['needsNativeReplay'])
+
+    def test_failed_compensation_and_marker_publication_retains_input_lock(self):
+        for mode in (2, 3):
+            with self.subTest(mode=mode):
+                if mode == 3:
+                    self.tearDown()
+                    self.doCleanups()
+                    self.setUp()
+                receipt, marker, ack, current = self.retirement_fault_fixture(mode)
+                self.assertIn('compensation-failed-input-lock-retained', self.failed_retire(current))
+                self.assertEqual(ack.exists(), mode == 3)
+                self.assertFalse(receipt.exists())
+                self.assertTrue(list(self.state.glob('*.input.json.lock')))
+                del self.preload
+                self.assertIn('recovery-read-busy', self.invoke({'op': 'status'}, success=False))
+                if mode == 3:
+                    self.preload = self.root / 'retire-fault.cjs'
+                    self.environment['FAIL_RECOVERY'] = '1'
+                    self.assertIn('marker-failure', self.invoke({'op': 'recover-lock', 'lock': 'input'}, success=False))
+                    self.assertTrue(list(self.state.glob('*.input.json.lock')))
+                    del self.preload
+                    self.environment['FAIL_RECOVERY'] = '0'
+                self.assertTrue(self.invoke({'op': 'recover-lock', 'lock': 'input'})['needsNativeReplay'])
+                self.event('UserPromptSubmit', prompt='new current input')
+                status = self.status()
+                self.assertTrue(status['needsNativeReplay'])
+                self.assertEqual(status['inputSource'], 'quarantined-native-input')
+                self.event('UserPromptSubmit', prompt='new current input', recovery_epoch=status['epoch'])
+                self.assertFalse(self.status()['needsNativeReplay'])
 
 
 if __name__ == "__main__":
