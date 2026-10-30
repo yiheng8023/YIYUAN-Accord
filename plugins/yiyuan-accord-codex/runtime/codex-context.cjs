@@ -252,10 +252,28 @@ function completedCompaction(line, sessionId, turnId) {
     boundedText(payload.item.id, 200);
 }
 
+// RFC 7386 tools-only delta: the directory is observation, not permission.
+function toolsDelta(line) {
+  const p = line?.payload, state = p?.state, tools = state?.tools;
+  const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+  return line?.type === 'world_state' && object(p) && p.full === false &&
+    Object.keys(p).sort().join(',') === 'full,state' && object(state) &&
+    Object.keys(state).join(',') === 'tools' && (tools === null || object(tools) &&
+      Object.values(tools).every(value => value === null || typeof value === 'string'));
+}
+
+function environmentDelta(line) {
+  const p = line?.payload, state = p?.state, env = state?.environments;
+  return line?.type === 'world_state' && p?.full === false &&
+    Object.keys(p).sort().join(',') === 'full,state' && state &&
+    Object.keys(state).join(',') === 'environments' && env && typeof env === 'object' && !Array.isArray(env);
+}
+
 // Historical output before a late first input stays inside the verified prefix.
 // This is not the benign-append policy: metadata here grants no new authority.
 function lateOriginOutput(row, binding) {
   const line = parseRow(row), value = line?.payload;
+  if (toolsDelta(line)) return true;
   if (Object.hasOwn(value || {}, 'turn_id') && value.turn_id !== binding.turnId ||
       Object.hasOwn(value || {}, 'thread_id') && value.thread_id !== binding.sessionId) return false;
   if (retryRecordIsBenign(row)) return true;
@@ -272,10 +290,7 @@ function lateOriginOutput(row, binding) {
     value.content.every(item => ['input_text', 'encrypted_content'].includes(item?.type));
   if (line?.type === 'inter_agent_communication_metadata') return value?.trigger_turn === false &&
     Object.keys(value).join(',') === 'trigger_turn';
-  return line?.type === 'world_state' && value?.full === false &&
-    Object.keys(value).sort().join(',') === 'full,state' &&
-    value.state && Object.keys(value.state).join(',') === 'environments' &&
-    value.state.environments && typeof value.state.environments === 'object' && !Array.isArray(value.state.environments);
+  return environmentDelta(line);
 }
 
 // Only the verified host-authored reasoning control is supported. It is
@@ -330,7 +345,8 @@ function retryOrigin(rows, binding, promptHash) {
           integer(contextAt) && integer(at) && at >= contextAt &&
           nativeExecutionRecord(candidate, binding, binding.turnId, root, line.payload.model,
             prior?.payload.turn_attribution, null, !prior && line.payload.root_turn_id === root)) continue;
-      if (lateOriginOutput(rows[next], binding)) continue;
+      if ((!toolsDelta(candidate) || integer(contextAt) && integer(at) && at >= contextAt) &&
+          lateOriginOutput(rows[next], binding)) continue;
       if (candidate?.type === 'turn_context' && candidate.payload?.turn_id === binding.turnId &&
           candidate.payload.model === line.payload.model && text(candidate.payload.cwd) && text(line.payload.cwd) &&
           samePath(candidate.payload.cwd, line.payload.cwd)) continue;
@@ -568,6 +584,7 @@ function continuationAssociation(rows, binding, host, promptHash, sourceRef, cap
 function nativeExecutionRecord(line, binding, turn, root, model, attribution, human, anchor) {
   const p = line.payload;
   if (configurationUpdate(line)) return true;
+  if (toolsDelta(line)) return true;
   if (!p || typeof p !== 'object' || Array.isArray(p)) return false;
   if (Object.hasOwn(p, 'thread_id') && p.thread_id !== binding.sessionId ||
       Object.hasOwn(p, 'turn_id') && p.turn_id !== turn ||
@@ -643,12 +660,12 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
   const contextRoot = parseRow(rows[start]).payload.root_turn_id;
   const anchorRoot = !priorStart && execution.turnId === binding.turnId &&
     scan.cursor?.anchorOffset === rows[start].offset && boundedText(contextRoot, 200) ? contextRoot : null;
-  const root = priorStart?.payload.root_turn_id || anchorRoot || execution.turnId;
+  let root = priorStart?.payload.root_turn_id || anchorRoot || execution.turnId;
   if (!boundedText(root, 200)) return reject();
   let turn = execution.turnId, model = execution.model, boundary = Date.parse(parseRow(rows[start]).timestamp);
-  let completed = null, pending = null, needsGoal = false, edges = 0, edgeOffset = null;
+  let completed = null, pending = null, needsGoal = false, needsRootGoal = false, edges = 0, edgeOffset = null, rootEdge = false;
   let attribution = priorStart?.payload.turn_attribution, human = null;
-  const visited = new Set([turn]);
+  const visited = new Set([turn, root]);
   if (!integer(boundary)) return reject();
   for (let index = start; index < rows.length; index++) {
     const row = rows[index], line = parseRow(row), p = line?.payload;
@@ -657,8 +674,10 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
     if (line.type === 'turn_context') {
       if (p?.turn_id !== (pending?.turn || turn) || p.model !== model || !text(p.cwd) ||
           !samePath(p.cwd, binding.cwd) || !integer(at) || at < boundary || completed !== null ||
-          Object.hasOwn(p, 'source') || Object.hasOwn(p, 'root_turn_id') && p.root_turn_id !== root) return reject();
-      if (pending) { turn = pending.turn; attribution = pending.attribution; pending = null; needsGoal = true; human = null; }
+          Object.hasOwn(p, 'source') || pending?.newRoot && p.root_turn_id !== pending.root ||
+          Object.hasOwn(p, 'root_turn_id') && p.root_turn_id !== (pending?.root || root)) return reject();
+      if (pending) { turn = pending.turn; root = pending.root; attribution = pending.attribution;
+        needsRootGoal = pending.newRoot; pending = null; needsGoal = true; human = null; }
       boundary = at;
       continue;
     }
@@ -670,24 +689,27 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
     }
     if (line.type === 'event_msg' && p?.type === 'task_started') {
       const a = p.turn_attribution, next = p.turn_id;
+      const child = p.root_turn_id === root && a?.root_turn_id === root && a?.parent_turn_id === turn;
+      const newRoot = p.root_turn_id === next && a?.root_turn_id === next && a?.parent_turn_id === null;
       if (completed === null || pending || !boundedText(next, 200) || visited.has(next) ||
-          p.root_turn_id !== root || a?.turn_id !== next || a.root_turn_id !== root ||
-          a.turn_trigger !== 'goal' || a.parent_turn_id !== turn || a.initiating_agent_path !== null ||
+          !(child || newRoot) || a?.turn_id !== next ||
+          a.turn_trigger !== 'goal' || a.initiating_agent_path !== null ||
           !integer(at) || at < completed || ++edges > 64) return reject();
-      pending = {turn: next, attribution: a}; visited.add(next); completed = null; boundary = at; edgeOffset = row.offset;
+      pending = {turn: next, root: newRoot ? next : root, attribution: a, newRoot};
+      rootEdge ||= newRoot; visited.add(next); completed = null; boundary = at; edgeOffset = row.offset;
       continue;
     }
     // Nothing with effects may intervene between completion/start/context.
     if (completed !== null || pending) return reject();
     if (line.type === 'response_item' && p?.role === 'user') {
       const record = scan.records.find(item => item.recordOffset === row.offset && item.turnId === turn && item.supported);
-      if (!record || edges && !goalRuntimeContext(p, turn)) return reject();
+      if (!record || edges && !goalRuntimeContext(p, turn) || needsRootGoal && (!integer(at) || at < boundary)) return reject();
       human = typedHumanInput(p, turn) ? p : null;
-      if (edges) needsGoal = false;
+      if (edges) { needsGoal = false; needsRootGoal = false; }
       continue;
     }
     if (needsGoal && !(line.type === 'response_item' && p?.type === 'message' && p.role === 'developer') &&
-        !(configurationUpdate(line) && integer(at) && at >= boundary)) return reject();
+        !((configurationUpdate(line) || toolsDelta(line)) && integer(at) && at >= boundary)) return reject();
     if (integer(at) && at >= boundary && nativeExecutionRecord(line, binding, turn, root, model, attribution, human,
         anchorRoot !== null && turn === execution.turnId)) {
       if (line.type === 'compacted' || p?.item?.type === 'UserMessage') human = null;
@@ -695,14 +717,15 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
     }
     if (line.type === 'response_item' && p?.type === 'message' && p.role === 'developer' ||
         completedCompaction(line, binding.sessionId, turn) ||
-        lateOriginOutput(row, {...binding, turnId: turn})) continue;
+        (!toolsDelta(line) || integer(at) && at >= boundary) && lateOriginOutput(row, {...binding, turnId: turn})) continue;
     return reject();
   }
   if (!edges || pending || completed !== null || needsGoal || turn !== host.turnId || model !== host.model) return reject();
-  return {state: 'observed', reason: 'native-goal-continuation',
+  return {state: 'observed', reason: rootEdge ? 'native-root-goal-execution-continuation' : 'native-goal-continuation',
     conditions: {threadId: binding.sessionId, turnId: turn, model, hostVersion: host.hostVersion},
     sourceRef: `${sourceRef}#byte=${edgeOffset}`, hostSourceRef: host.sourceRef,
-    claimLimit: 'native-execution-attribution-only; Goal context meaning and authority require review'};
+    claimLimit: rootEdge ? 'native-root-goal-execution-association-only; no same goal_id or parent-child claim; Goal context meaning and authority require review'
+      : 'native-execution-attribution-only; Goal context meaning and authority require review'};
 }
 
 function typedHumanInput(payload, turnId) {
@@ -884,6 +907,17 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       controls.push({turnId: turn, sourceRef: `${sourceRef}#byte=${row.offset}`, recordOffset: row.offset,
         recordSha256: digest, type: 'configuration_update', reasoningEffort: payload.reasoning.effort,
         controlDisposition: 'host-control-not-human-or-permission'});
+    }
+    if (line.type === 'world_state' && payload?.full !== true &&
+        !toolsDelta(line) && !environmentDelta(line))
+      return empty('native-input-control-unrecognized');
+    if (toolsDelta(line)) {
+      if (!integer(contextAt) || !integer(Date.parse(line.timestamp)) || Date.parse(line.timestamp) < contextAt)
+        return empty('native-input-control-unrecognized');
+      signals.push([row.offset, digest]);
+      controls.push({turnId: turn, sourceRef: `${sourceRef}#byte=${row.offset}`, recordOffset: row.offset,
+        recordSha256: digest, type: 'world_state', section: 'tools',
+        controlDisposition: 'host-tool-directory-not-permission-or-invocation'});
     }
     if (line.type === 'response_item' && nativeTaskOutput(payload)) signals.push([row.offset, digest]);
     const user = line.type === 'response_item' && payload?.role === 'user';

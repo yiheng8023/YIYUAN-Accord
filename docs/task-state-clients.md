@@ -60,11 +60,19 @@ Goal记录完整进入来源顺序、原字节摘要和pending列表，标为`so
 
 对已观察的晚到首次人类输入，候选在输入起点定位和Goal执行链中复用同身份记录校验；限定用量、完成投影、压缩及宿主快照等已证形状，原始记录继续受来源游标约束。起点定位不凭显示UserMessage代替未覆盖用户输入，不扩全局追加白名单或读取窗口。来源定位成功只说明限定来源段可核，不产生新权限、Goal派发或恢复资格；执行关联、对账及完整合同重绑仍分别核验。
 
+3.3.6候选另识别官方可能产生的新根Goal：正常结束后，`task_started`的turn/root均为新的轮次、trigger为goal、parent及initiating为空；随后真实context须显式匹配root、model与cwd，可信Goal正文仍不可缺失。原子边界、时序和已知执行/root身份防重用继续成立，与原child路径共用visited及64边上限。返回`native-root-goal-execution-continuation`只证明同线程新根执行关联，不证明旧父子关系或相同Goal数据库ID；目标、预算和权限仍由完整原文与用户决定核对。
+
 ## 宿主推理设置控制
 
 3.3.6候选支持已核来源形状的`response_item.configuration_update`：外层metadata恰含`client_authored=false`及`harness_authored_configuration=true`，payload仅type/reasoning，reasoning仅effort。effort按官方可含custom的字符串语义保留原值，并受200个UTF-16代码单元的本地读取界限约束；观察到值不证明当前模型支持该值，也不代表Agent已经理解或批准其影响。空白、控制字符、错类型、超界值、额外控制字段、缺失或伪造外层来源保持未决。
 
 原记录进入完整控制signals，返回独立`controls`观察：sourceRef、recordOffset、recordSha256、当前来源上下文关联的turnId、reasoningEffort及非人类/非权限说明。turnId不是该记录自带身份。设置不进入人类输入序列或替换输入摘要；后到或改写设置使旧cursor失效。响应过大时省略controls详情并给出数量及既有只读helper入口，不能把省略当无设置。调用者仍须理解实际设置及Goal/预算，保留暂停、恢复和权限；对账与绑定依旧分别执行。
+
+## 宿主工具目录增量
+
+3.3.6候选识别`world_state`中payload仅含full/state、full为false、state仅含tools的已核合并补丁。tools可为动态namespace到string/null的对象，或整体null；null表示相应删除，缺字段不表示其它宿主状态清空。描述是数据，当前producer的250字符展示策略不作为协议封闭上限；错误值类型、额外控制或未知混合section保持未决。
+
+完整记录加入signals和独立controls，保留sourceRef、offset、摘要、所属来源上下文及tools段标识；后到变更使旧cursor失效，不进入全局benign追加规则或人类输入序列。无需另建工具状态镜像；这不证明目录已完整恢复、工具已可调用或取得新权限。有界结果沿已有controls数量与只读回读入口处理。
 
 ## bind：每次完整绑定当前合同
 

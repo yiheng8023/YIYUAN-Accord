@@ -6401,6 +6401,159 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
 
 
 
+    def test_tools_delta_goal_proof(self):
+        self.goal_auto_source()
+        row = {'type': 'world_state', 'payload': {'full': False, 'state': {
+            'tools': {'dynamic.namespace': 'description', 'removed': None}}}}
+        self.goal_record_check([row], accepted=True)
+
+    def test_root_goal_child_anchor_cannot_reuse_known_root(self):
+        for reuse in (False, True):
+            with self.subTest(reuse=reuse):
+                self.setUp(); self.goal_record_anchor_source(child=True)
+                known_root = self.rows[2]['payload']['root_turn_id']
+                new = known_root if reuse else 'synthetic-fresh-root'
+                start = self.rows[-3]['payload']
+                start.update(turn_id=new, root_turn_id=new)
+                start['turn_attribution'].update(turn_id=new, root_turn_id=new, parent_turn_id=None)
+                self.rows[-2]['payload'].update(turn_id=new, root_turn_id=new)
+                self.rows[-1] = self.goal_context_record(turn=new)
+                self.params['_meta']['x-codex-turn-metadata']['turn_id'] = new
+                self.goal_write_source()
+                result = self.goal_reconcile(self.goal_preview())
+                self.assertEqual(result['isError'], reuse, result)
+
+    def test_root_goal_transition_proof(self):
+        def root(edge):
+            start = edge[1]['payload']
+            start['root_turn_id'] = start['turn_id']
+            start['turn_attribution'].update(root_turn_id=start['turn_id'], parent_turn_id=None)
+            edge[2]['payload']['root_turn_id'] = start['turn_id']
+        self.goal_auto_source(change=root)
+        result = self.goal_reconcile(self.goal_preview())
+        self.assertFalse(result['isError'], result)
+
+    def test_tools_delta_origin_shape_and_cursor_pause(self):
+        for placement in ('early', 'late'):
+            for kind in ('map', 'null', 'mixed', 'value', 'array', 'extra', 'permission', 'wrong-full', 'missing-state', 'old-time'):
+                with self.subTest(placement=placement, kind=kind):
+                    self.setUp(); self.native_context()
+                    transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                    rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                    state = {'tools': {'arbitrary.namespace': 'x' * 251, 'removed': None}}
+                    if kind == 'null': state['tools'] = None
+                    if kind == 'mixed': state['permissions'] = {}
+                    if kind == 'value': state['tools']['bad'] = 1
+                    if kind == 'array': state['tools'] = []
+                    if kind == 'permission': state = {'permissions': {}}
+                    row = {'timestamp': rows[1]['timestamp'], 'type': 'world_state',
+                           'payload': {'full': False, 'state': state}}
+                    if kind == 'extra': row['payload']['permission'] = 'allow'
+                    if kind == 'wrong-full': row['payload']['full'] = 'false'
+                    if kind == 'missing-state': row['payload'].pop('state')
+                    if kind == 'old-time': row['timestamp'] = '2000-01-01T00:00:00Z'
+                    rows.insert(2 if placement == 'early' else len(rows), row)
+                    transcript.write_text(''.join(json.dumps(x)+'\n' for x in rows), encoding='utf-8')
+                    evidence = self.native_input_preview()['nativeInputEvidence']
+                    if kind in ('map', 'null'):
+                        self.assertEqual(evidence['state'], 'observed', evidence)
+                        control = evidence['controls'][0]
+                        self.assertEqual((control['section'], control['recordSha256']),
+                            ('tools', hashlib.sha256(json.dumps(row).encode()).hexdigest()))
+                        self.assertEqual(control['recordOffset'], int(control['sourceRef'].split('#byte=')[1]))
+                    else: self.assertEqual(evidence['state'], 'unknown', evidence)
+        self.setUp(); self.native_context()
+        preview = self.native_input_preview()
+        self.assertFalse(self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0,
+            result='Paused', inputs=[], outputs=[{'path': 'report.txt'}], nextAction='Wait', canContinue=False)['isError'])
+        self.assertFalse(self.manage(action='pause', epoch=preview['epoch'], expectedRevision=1, reason='Pause')['isError'])
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        row = {'timestamp': datetime.now(timezone.utc).isoformat(), 'type': 'world_state',
+               'payload': {'full': False, 'state': {'tools': None}}}
+        with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(row)+'\n')
+        now = self.native_input_preview()['nativeInputEvidence']
+        self.assertNotEqual(now['cursor']['signalsSha256'], preview['nativeInputEvidence']['cursor']['signalsSha256'])
+        rejected = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=2,
+                               evidenceCursor=preview['nativeInputEvidence']['cursor'])
+        self.assertTrue(rejected['isError'])
+        self.assertEqual(rejected['value']['reason'], 'native-input-evidence-changed')
+        self.assertEqual(self.helper({'op': 'status'}, session=self.params['_meta']['x-codex-turn-metadata']['thread_id'])['mode'], 'paused')
+
+    def test_root_goal_guards_and_controls(self):
+        for kind in ('valid', 'control-before-goal', 'no-complete', 'error', 'foreign-root', 'mixed-root',
+                     'parent', 'initiating', 'no-goal', 'no-context-root', 'foreign-context-root',
+                     'insert-before-start', 'insert-before-context', 'pause'):
+            with self.subTest(kind=kind):
+                self.setUp()
+                def change(edge):
+                    start = edge[1]['payload']; new = start['turn_id']
+                    start['root_turn_id'] = new
+                    start['turn_attribution'].update(root_turn_id=new, parent_turn_id=None)
+                    edge[2]['payload']['root_turn_id'] = new
+                    if kind == 'no-complete': edge.pop(0)
+                    if kind == 'error': edge[0]['payload']['error'] = 'failure'
+                    if kind == 'foreign-root': start['root_turn_id'] = 'foreign'
+                    if kind == 'mixed-root': start['turn_attribution']['root_turn_id'] = 'foreign'
+                    if kind == 'parent': start['turn_attribution']['parent_turn_id'] = 'foreign'
+                    if kind == 'initiating': start['turn_attribution']['initiating_agent_path'] = 'foreign'
+                    if kind == 'no-context-root': edge[2]['payload'].pop('root_turn_id')
+                    if kind == 'foreign-context-root': edge[2]['payload']['root_turn_id'] = 'foreign'
+                    if kind == 'no-goal': edge.pop()
+                    control = {'type': 'world_state', 'payload': {'full': False, 'state': {'tools': None}}}
+                    if kind == 'control-before-goal': edge.insert(3, control)
+                    if kind == 'insert-before-start': edge.insert(1, control)
+                    if kind == 'insert-before-context': edge.insert(2, control)
+                    if kind == 'pause': edge.insert(3, {'type': 'event_msg', 'payload': {'type': 'task_interrupted'}})
+                self.goal_auto_source(change, paused=kind == 'pause')
+                preview = self.goal_preview(); before = self.files()
+                if preview['nativeInputEvidence']['state'] == 'observed':
+                    result = self.goal_reconcile(preview)
+                    self.assertEqual(not result['isError'], kind in ('valid', 'control-before-goal'), result)
+                    if result['isError']: self.assertEqual(self.files(), before)
+                else: self.assertNotIn(kind, ('valid', 'control-before-goal'), preview)
+
+    def test_root_child_combinations(self):
+        for first, corrupt in (('root', False), ('child', False), ('root', True), ('child', True)):
+            with self.subTest(first=first, corrupt=corrupt):
+                self.setUp()
+                def change(edge):
+                    old = edge[0]['payload']['turn_id']; one = edge[1]['payload']['turn_id']; two = 'second-goal-turn'
+                    root = one if first == 'root' else old
+                    if first == 'root':
+                        edge[1]['payload']['root_turn_id'] = one
+                        edge[1]['payload']['turn_attribution'].update(root_turn_id=one, parent_turn_id=None)
+                        edge[2]['payload']['root_turn_id'] = one
+                    nextroot = root if first == 'root' else two
+                    edge.extend([{'type': 'event_msg', 'payload': {'type': 'task_complete', 'turn_id': one, 'root_turn_id': root, 'error': None}},
+                        {'type': 'event_msg', 'payload': {'type': 'task_started', 'turn_id': two, 'root_turn_id': nextroot,
+                         'turn_attribution': {'turn_id': two, 'root_turn_id': nextroot, 'turn_trigger': 'goal',
+                                              'parent_turn_id': one if first == 'root' else None, 'initiating_agent_path': None}}},
+                        {'type': 'turn_context', 'payload': {'turn_id': two, 'root_turn_id': nextroot, 'cwd': str(self.work), 'model': 'observed-model'}},
+                        self.goal_context_record(turn=two)])
+                    if corrupt: edge[-3]['payload']['turn_attribution']['parent_turn_id'] = 'foreign'
+                self.goal_auto_source(change)
+                self.params['_meta']['x-codex-turn-metadata']['turn_id'] = 'second-goal-turn'
+                result = self.goal_reconcile(self.goal_preview())
+                self.assertEqual(result['isError'], corrupt, result)
+
+    def test_root_goal_control_and_input_timestamps_cannot_precede_context(self):
+        for kind in ('control', 'goal'):
+            with self.subTest(kind=kind):
+                self.setUp()
+                def change(edge):
+                    start = edge[1]['payload']; new = start['turn_id']
+                    start['root_turn_id'] = new
+                    start['turn_attribution'].update(root_turn_id=new, parent_turn_id=None)
+                    edge[2]['payload']['root_turn_id'] = new
+                    if kind == 'control': edge.insert(3, {'type': 'world_state', 'payload': {'full': False, 'state': {'tools': None}}})
+                self.goal_auto_source(change)
+                self.rows[-2 if kind == 'control' else -1]['timestamp'] = self.rows[3]['timestamp']
+                self.transcript.write_text(''.join(json.dumps(x)+'\n' for x in self.rows), encoding='utf-8')
+                preview = self.goal_preview()
+                if preview['nativeInputEvidence']['state'] == 'observed':
+                    self.assertTrue(self.goal_reconcile(preview)['isError'])
+                else: self.assertEqual(preview['nativeInputEvidence']['state'], 'unknown')
+
     def test_goal_record_token_usage_keeps_native_execution(self):
         self.goal_auto_source()
         old = self.rows[2]['payload']['turn_id']
