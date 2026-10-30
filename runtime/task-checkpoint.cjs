@@ -209,7 +209,9 @@ function readNativeInput(request, input) {
     result.entries.push({index, epoch: entry.epoch, turnId: entry.turnId, source: entry.source,
       ...(Object.hasOwn(entry, 'recoveryEpoch') ? {recoveryEpoch: entry.recoveryEpoch} : {}),
       ...(entry.nativeEvidence?.sourceCategory ? {sourceCategory: entry.nativeEvidence.sourceCategory,
-        controlDisposition: entry.nativeEvidence.controlDisposition} : {}),
+        controlDisposition: entry.nativeEvidence.controlDisposition,
+        ...(entry.nativeEvidence.sourceContextId ? {sourceContextId: entry.nativeEvidence.sourceContextId} : {}),
+        ...(Number.isSafeInteger(entry.nativeEvidence.userInputOrder) ? {userInputOrder: entry.nativeEvidence.userInputOrder} : {})} : {}),
       promptSha256: entry.promptSha256, totalChars: characters.length, offset, text: content.join('')});
     remaining -= content.length;
     offset += content.length;
@@ -578,13 +580,14 @@ function turnProofBasis(input, request, evidence, state = null) {
   if (start < 0) return null;
   return {binding: {...basis.source, model: basis.source.model || evidence.originModel},
     promptHash: basis.promptSha256,
-    captured: evidence.records.map(item => item.promptSha256),
+    captured: evidence.records.filter(item => !['user-goal-control', 'goal-state-observation'].includes(item.sourceCategory))
+      .map(item => item.promptSha256),
     sourceScan: {anchorHash: basis.promptSha256, expectedCursor: evidence.cursor,
       retainedCursor: retainedOriginCursor(input, request, state),
       recoveredControl: input.nativeControlRecovery,
       coverage: input.nativeInputReconciliation?.recordCoverage,
-      captured: evidence.records.map(({promptSha256, turnId, recordSha256, sourceRef}) =>
-        ({promptSha256, turnId, recordSha256, sourceRef}))},
+      captured: evidence.records.map(({promptSha256, turnId, recordSha256, sourceRef, sourceCategory}) =>
+        ({promptSha256, turnId, recordSha256, sourceRef, ...(sourceCategory ? {sourceCategory} : {})}))},
     acceptedExecution: {turnId: execution.turnId, model: execution.model}};
 }
 function associateCurrentTurn(input, request, state = null, stage = 'initial-validation') {
@@ -1076,7 +1079,8 @@ function operate(request) {
         if (canonical(readInput(where)) !== canonical(after)) fail('latest-user-input-not-reconciled');
         // Receipt append order is not source chronology: a gap before a later
         // Hook must not replace the latest real input summary.
-        const epoch = crypto.randomUUID(), latestNonGoal = checked.records.findLast(item => item.sourceCategory !== 'goal-runtime-context');
+        const epoch = crypto.randomUUID(), latestNonGoal = checked.records.findLast(item =>
+          !['goal-runtime-context', 'user-goal-control', 'goal-state-observation'].includes(item.sourceCategory));
         const last = checked.pendingInputs.find(item => item.recordOffset === latestNonGoal?.recordOffset);
         const receipt = {...raw, epoch,
           ...(last ? {inputSource: 'reconciled-native-input', promptSha256: last.promptSha256, turnId: last.turnId} : {}),
@@ -1089,7 +1093,13 @@ function operate(request) {
             source: 'reconciled-native-input', prompt: item.prompt, promptSha256: item.promptSha256,
             nativeEvidence: {sourceRef: item.sourceRef, recordSha256: item.recordSha256, itemId: item.itemId, parts: item.parts,
               ...(item.sourceCategory ? {sourceCategory: item.sourceCategory,
-                controlDisposition: item.controlDisposition} : {})}}))]};
+                controlDisposition: item.controlDisposition,
+                ...(item.sourceContextId ? {sourceContextId: item.sourceContextId} : {}),
+                ...(Number.isSafeInteger(item.userInputOrder) ? {userInputOrder: item.userInputOrder} : {}),
+                ...(item.sourceMetadata ? {sourceMetadata: item.sourceMetadata} : {}),
+                ...(Number.isSafeInteger(item.sourceOrdinal) ? {sourceOrdinal: item.sourceOrdinal} : {}),
+                ...(item.goalControl ? {goalControl: item.goalControl} : {}),
+                ...(item.goalState ? {goalState: item.goalState} : {})} : {})}}))]};
         for (const flag of ['needsNativeReplay', 'needsResumeReconciliation', 'interrupted']) {
           if (after[flag] === true) receipt[flag] = true;
         }
@@ -1610,7 +1620,7 @@ const HELP = {
       expectedReceiptEpoch: 'from-preview', sourcePart: {evidenceCursor: 'exact preview cursor',
         recordOffset: 'from records', recordSha256: 'from records', partIndex: 'from ordered parts'},
       currentHost: 'actual native call metadata; no caller paths'},
-    effect: 'Review actual source content as needed, explicitly reconcile pending records or enrich original structured-media coverage, then bind the reviewed full contract under the new epoch. Typed Goal runtime context is preserved separately with sourceCategory=goal-runtime-context and controlDisposition=requires-review, including complete budget/objective notices. It consumes no human Hook match and does not replace the latest user-input summary; classification is not interpretation, authorization or cleared control. Initial enrichment does not add an input or change Hook provenance. Only byte/record summaries persist; no base64 cache, read-count gate or understood flag. Plain text and the observed four-part inline PNG shape are supported; strict canonical base64/PNG signature decoding is bounded by the existing 8 MiB input budget. This is not a PNG pixel parser or Agent-understanding verdict. One sourcePart may return a text page or transient MCP image content; wrapper paths and remote URLs are never read/fetched. Original basis/history, pause and watermarks remain; recovery is separate. Cursor permits benign append but rejects changed old bytes/input/control. An anchor unavailable within the 16 MiB search window, unknown shape/media or unverified content holds applicable effects; no unlimited continuity claim or human authority inferred.',
+    effect: 'Review actual source content as needed, explicitly reconcile pending records or enrich original structured-media coverage, then bind the reviewed full contract under the new epoch. Typed Goal runtime context is preserved separately with sourceCategory=goal-runtime-context and controlDisposition=requires-review, including complete budget/objective notices. Explicit user Goal Set/Clear instructions use user-goal-control; complete objective JSON, omitted-objective evidence, status and original inject context/reserved input order remain distinct. Goal state events use goal-state-observation and a control-json text part containing the original JSON row; state alone proves neither user origin nor a new objective. Both require explicit source reconciliation, including controls-only observations; neither lifts local pause/recovery or grants execution, completion or publication authority. These controls consume no human Hook match and do not replace the latest user-input summary; classification is not interpretation, authorization or cleared control. Initial enrichment does not add an input or change Hook provenance. Text and control text remain in the receipt; structured media keeps byte/record summaries with no base64 cache, read-count gate or understood flag. Plain text and the observed four-part inline PNG shape are supported; strict canonical base64/PNG signature decoding is bounded by the existing 8 MiB input budget. This is not a PNG pixel parser or Agent-understanding verdict. One sourcePart may return a text page or transient MCP image content; wrapper paths and remote URLs are never read/fetched. Original basis/history, pause and watermarks remain; recovery is separate. Cursor permits benign append but rejects changed old bytes/input/control. An anchor unavailable within the 16 MiB search window, unknown shape/media or unverified content holds applicable effects; no unlimited continuity claim or human authority inferred.',
   },
   nativeContext: {
     read: {op: 'observe-context', session_id: 'native-session-id', cwd: 'absolute-workspace', maxAgeMs: 30000},

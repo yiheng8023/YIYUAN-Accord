@@ -174,6 +174,118 @@ function goalRuntimeContext(payload, turnId) {
   return Boolean(body.trim()) && !/<\/?codex_internal_context\b/u.test(body);
 }
 
+const GOAL_STATUSES = ['active', 'paused', 'blocked', 'usageLimited', 'budgetLimited', 'complete'];
+
+// Local producer shape, not a schema for arbitrary Codex messages. A Goal
+// control must not hide a foreign root, inherited authorization or extra
+// configuration/tool semantics behind otherwise valid text/provenance.
+function goalProducerKeys(value, required, optional = []) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value) &&
+    required.every(key => Object.hasOwn(value, key)) &&
+    Object.keys(value).every(key => required.includes(key) || optional.includes(key));
+}
+
+// Rust producer Strings are valid UTF-8. JSON.parse can additionally create
+// lone UTF-16 surrogates; do not silently replace those with U+FFFD in hashes
+// or complete-objective evidence. This check changes no source text.
+function goalUtf8Text(value) {
+  return typeof value === 'string' && Buffer.from(value, 'utf8').toString('utf8') === value;
+}
+
+// Pinned UserGoalUpdate producer grammar, distinct from runtime steering and
+// Hook input. The trusted rollout/thread, annotation, provenance, order, time
+// and exact expression are checked together; an inject-ID prefix proves none
+// of these alone. Keep its context ID distinct from the execution turn.
+function userGoalControl(line, binding, turnId, contextAt) {
+  const p = line?.payload, m = p?.internal_chat_message_metadata_passthrough;
+  const kinds = m?.content_item_kinds, content = p?.content, attribution = m?.content_item_metadata;
+  // record_user_goal_update builds fresh default host metadata and a fresh
+  // contextual Message. The formatter sets these optional message fields to
+  // None; only a neutral null is accepted if an older envelope includes them.
+  // Goal stamping may supply creation time and rollout may supply ordinal.
+  if (!goalProducerKeys(line, ['type', 'payload', 'timestamp', 'metadata'], ['ordinal']) ||
+      typeof line.timestamp !== 'string' ||
+      Object.hasOwn(line, 'ordinal') && !integer(line.ordinal) ||
+      !goalProducerKeys(line.metadata, ['client_authored', 'user_input_order']) ||
+      !goalProducerKeys(p, ['type', 'role', 'id', 'content', 'internal_chat_message_metadata_passthrough'],
+        ['status', 'encrypted_content', 'phase']) ||
+      ['status', 'encrypted_content', 'phase'].some(key => Object.hasOwn(p, key) && p[key] !== null) ||
+      !goalProducerKeys(m, ['turn_id', 'content_item_kinds', 'content_item_metadata'], ['create_time']) ||
+      Object.hasOwn(m, 'create_time') && (typeof m.create_time !== 'number' || !Number.isFinite(m.create_time) || m.create_time < 0)) return null;
+  if (line?.type !== 'response_item' || p?.type !== 'message' || p.role !== 'user' ||
+      !boundedText(p.id, 200) || !goalUtf8Text(p.id) || line.metadata?.client_authored !== false ||
+      !Array.isArray(kinds) || kinds.length !== 1 || !['user.goal', 'user.goal.omitted'].includes(kinds[0]) ||
+      !Array.isArray(content) || content.length !== 1 || content[0]?.type !== 'input_text' ||
+      !goalProducerKeys(content[0], ['type', 'text']) ||
+      typeof content[0].text !== 'string' || !Array.isArray(attribution) ||
+      attribution.length !== 1 ||
+      !goalProducerKeys(attribution[0], ['provenance']) ||
+      canonical(attribution[0]?.provenance) !== canonical({type: 'harness', hook: false}) ||
+      !integer(line.metadata.user_input_order) || !boundedText(m.turn_id, 200) || !goalUtf8Text(m.turn_id) ||
+      m.turn_id !== turnId && !/^auto-compact-(?:0|[1-9]\d*)$/u.test(m.turn_id) ||
+      !integer(contextAt) || !integer(Date.parse(line.timestamp)) || Date.parse(line.timestamp) < contextAt) return null;
+  for (const object of [line, p, m, line.metadata]) {
+    for (const key of ['thread_id', 'threadId', 'session_id'])
+      if (Object.hasOwn(object, key) && object[key] !== binding.sessionId) return null;
+  }
+  for (const object of [line, p, line.metadata])
+    for (const key of ['turn_id', 'turnId'])
+      if (Object.hasOwn(object, key) && object[key] !== turnId) return null;
+  const value = content[0].text;
+  const opening = '<codex_internal_context source="user_goal">\n', closing = '</codex_internal_context>';
+  if (!value.startsWith(opening) || !value.endsWith(closing)) return null;
+  let body = value.slice(opening.length, -closing.length), objective = null, status = null;
+  const omitted = kinds[0] === 'user.goal.omitted';
+  if (body === 'User cleared the goal.\n') return omitted ? null :
+    {operation: 'clear', objectiveEvidence: 'not-supplied', sourceContextId: m.turn_id, userInputOrder: line.metadata.user_input_order};
+  if (body.startsWith('User set the goal: ')) {
+    const end = body.indexOf('\n');
+    if (end < 0) return null;
+    const encoded = body.slice('User set the goal: '.length, end);
+    if (omitted) {
+      if (encoded !== '[objective omitted; exceeds the evidence limit].') return null;
+    } else {
+      try { objective = JSON.parse(encoded); } catch (_) { return null; }
+      if (!goalUtf8Text(objective) || JSON.stringify(objective) !== encoded || Buffer.byteLength(encoded) > 700) return null;
+    }
+    body = body.slice(end + 1);
+  } else if (omitted) return null;
+  if (body) {
+    const match = /^User set goal status: "(active|paused|blocked|usageLimited|budgetLimited|complete)"\.\n$/u.exec(body);
+    if (!match) return null;
+    status = match[1];
+  }
+  if (objective === null && !omitted && status === null) return null;
+  return {operation: 'set', objectiveEvidence: omitted ? 'omitted' : objective === null ? 'not-supplied' : 'complete',
+    ...(status === null ? {} : {status}), sourceContextId: m.turn_id, userInputOrder: line.metadata.user_input_order};
+}
+
+// Protocol ThreadGoalUpdatedEvent is a snapshot, including automatic/budget
+// changes. No user origin or instruction/event mutation association is inferred.
+// No rollout cleared event is defined by the pinned protocol: keep it unknown.
+function goalStateObservation(line, binding, turnId, contextAt) {
+  const p = line?.payload, g = p?.goal;
+  if (!goalProducerKeys(line, ['type', 'payload', 'timestamp'], ['ordinal']) ||
+      typeof line.timestamp !== 'string' ||
+      Object.hasOwn(line, 'ordinal') && !integer(line.ordinal) ||
+      line?.type !== 'event_msg' || p?.type !== 'thread_goal_updated' ||
+      !['goal,threadId,type', 'goal,threadId,turnId,type'].includes(Object.keys(p).sort().join(',')) ||
+      p.threadId !== binding.sessionId || Object.hasOwn(p, 'turnId') && p.turnId !== turnId ||
+      !g || typeof g !== 'object' || Array.isArray(g) ||
+      !['createdAt,objective,status,threadId,timeUsedSeconds,tokensUsed,updatedAt',
+        'createdAt,objective,status,threadId,timeUsedSeconds,tokenBudget,tokensUsed,updatedAt'].includes(Object.keys(g).sort().join(',')) ||
+      g.threadId !== binding.sessionId || !goalUtf8Text(g.objective) || !g.objective.length ||
+      [...g.objective].length > 4000 || !GOAL_STATUSES.includes(g.status) ||
+      !['createdAt', 'updatedAt', 'tokensUsed', 'timeUsedSeconds'].every(key => integer(g[key])) ||
+      Object.hasOwn(g, 'tokenBudget') && g.tokenBudget !== null && !integer(g.tokenBudget) ||
+      !integer(contextAt) || !integer(Date.parse(line.timestamp)) || Date.parse(line.timestamp) < contextAt) return null;
+  return {status: g.status, userOrigin: 'unproven', instructionAssociation: 'unproven', objectiveEvidence: 'state-snapshot-only'};
+}
+
+function goalSourceControl(line, binding, turnId, contextAt) {
+  return userGoalControl(line, binding, turnId, contextAt) || goalStateObservation(line, binding, turnId, contextAt);
+}
+
 // Resolve only an already captured input, not a global host flattening rule.
 // A candidate text projection must match the bound Hook/source hash exactly.
 function multipartText(payload, binding, expectedHash) {
@@ -318,6 +430,7 @@ function retryOrigin(rows, binding, promptHash) {
     const contextAt = Date.parse(line.timestamp);
     for (let next = index + 1; next < rows.length; next++) {
       const candidate = parseRow(rows[next]);
+      if (goalSourceControl(candidate, binding, binding.turnId, contextAt)) continue;
       if (candidate?.type === 'response_item' && candidate.payload?.type === 'message' &&
           candidate.payload.role === 'developer') continue;
       if (candidate?.type === 'response_item' && candidate.payload?.type === 'message' &&
@@ -379,10 +492,12 @@ function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [p
   let retryOffset = null;
   const visited = new Set([turn]);
   let inputIndex = 0;
+  let inputContextAt = Date.parse(parseRow(rows[origin]).timestamp);
   for (let index = origin; index < rows.length; index++) {
     const line = parseRow(rows[index]);
     if (!line) return empty('invalid-complete-tail-record');
     const payload = line.payload;
+    if (goalSourceControl(line, binding, inputTurn, inputContextAt)) continue;
     if (line.type === 'response_item' && payload?.role === 'user') {
       if (inputHash(line, {...binding, turnId: inputTurn}, captured[inputIndex]) !== captured[inputIndex++]) return empty('capacity-retry-input-or-interruption-conflict');
       continue;
@@ -399,6 +514,7 @@ function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [p
       }
       if (index === origin && payload.model !== binding.model) return empty('capacity-retry-context-mismatch');
       inputTurn = payload.turn_id;
+      inputContextAt = Date.parse(line.timestamp);
       if (index < start) continue;
       if (index === start && payload.model !== execution.model ||
           payload.turn_id !== (pending || turn) || completedAt !== null) {
@@ -490,9 +606,11 @@ function appToolContinuation(rows, binding, host, promptHash, sourceRef, capture
   let needsMessage = false, messageSeen = false, edges = 0, tools = 0, retries = 0, firstToolOffset = null;
   let boundaryAt = Date.parse(parseRow(rows[start]).timestamp);
   const visited = new Set([turn]), messageIds = new Set();
+  let inputContextAt = Date.parse(parseRow(rows[origin]).timestamp);
   for (let index = origin; index < rows.length; index++) {
     const row = rows[index], line = parseRow(row), value = line?.payload;
     if (!line) return reject();
+    if (goalSourceControl(line, binding, inputTurn, inputContextAt)) continue;
     if (line.type === 'response_item' && value?.role === 'user') {
       if (inputHash(line, {...binding, turnId: inputTurn}, captured[inputIndex]) !== captured[inputIndex++]) return reject();
       continue;
@@ -506,6 +624,7 @@ function appToolContinuation(rows, binding, host, promptHash, sourceRef, capture
       if (!text(value?.turn_id) || !text(value.model) || !text(value.cwd) ||
           !samePath(value.cwd, binding.cwd) || !integer(Date.parse(line.timestamp))) return reject();
       inputTurn = value.turn_id;
+      inputContextAt = Date.parse(line.timestamp);
       if (index < start) continue;
       if (index === start && value.model !== execution.model ||
           value.turn_id !== (pending?.turnId || turn) || completed !== null ||
@@ -699,7 +818,15 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
       rootEdge ||= newRoot; visited.add(next); completed = null; boundary = at; edgeOffset = row.offset;
       continue;
     }
-    // Nothing with effects may intervene between completion/start/context.
+    // A scoped control neither satisfies Goal steering nor creates/reuses a
+    // UserMessage proof. Its independent inject context may occur between
+    // execution boundaries; do not clear or manufacture either boundary.
+    if (goalSourceControl(line, binding, turn, boundary)) {
+      if (!scan.records.some(item => item.recordOffset === row.offset && item.supported &&
+          ['user-goal-control', 'goal-state-observation'].includes(item.sourceCategory))) return reject();
+      continue;
+    }
+    // Execution effects still cannot intervene between completion/start/context.
     if (completed !== null || pending) return reject();
     if (line.type === 'response_item' && p?.role === 'user') {
       const record = scan.records.find(item => item.recordOffset === row.offset && item.turnId === turn && item.supported);
@@ -797,7 +924,8 @@ function nativeHumanContinuation(rows, binding, host, hash, sourceRef, scan, acc
     }
   }
   if (!human || closedBefore !== null && scan.records.some(item =>
-      item.turnId === host.turnId && item.recordOffset >= closedBefore)) return reject();
+      item.turnId === host.turnId && item.recordOffset >= closedBefore &&
+      !['user-goal-control', 'goal-state-observation'].includes(item.sourceCategory))) return reject();
   let completions = 0, starts = 0, invalidBoundary = false, completionOffset = null;
   let completionAt = null, humanStartAt = null;
   const before = prefix.filter(row => {
@@ -819,13 +947,16 @@ function nativeHumanContinuation(rows, binding, host, hash, sourceRef, scan, acc
   });
   if (invalidBoundary || completions > 1 || starts > 1 ||
       completionOffset !== null && scan.records.some(item =>
-        item.turnId === prior.turn_id && item.recordOffset >= completionOffset)) return reject();
+        item.turnId === prior.turn_id && item.recordOffset >= completionOffset &&
+        !['user-goal-control', 'goal-state-observation'].includes(item.sourceCategory))) return reject();
   let proof = continuationAssociation(before, binding, {...host, turnId: prior.turn_id, model: prior.model}, hash,
-    sourceRef, scan.records.filter(item => item.recordOffset < rows[at].offset).map(item => item.promptSha256), accepted, recovered);
+    sourceRef, scan.records.filter(item => item.recordOffset < rows[at].offset &&
+      !['user-goal-control', 'goal-state-observation'].includes(item.sourceCategory)).map(item => item.promptSha256), accepted, recovered);
   // The previous execution may have stayed on its already accepted turn.
   if (proof.state !== 'observed') proof = capacityRetry(before, binding,
     {...host, turnId: prior.turn_id, model: prior.model}, hash, sourceRef,
-    scan.records.filter(item => item.recordOffset < rows[at].offset).map(item => item.promptSha256), accepted, recovered, true);
+    scan.records.filter(item => item.recordOffset < rows[at].offset &&
+      !['user-goal-control', 'goal-state-observation'].includes(item.sourceCategory)).map(item => item.promptSha256), accepted, recovered, true);
   // A Goal predecessor needs its full normal-close/human-start boundary.
   // This does not relax the existing human or capacity continuation policies.
   const previousAt = Date.parse(parseRow(previous).timestamp), humanContextAt = Date.parse(parseRow(rows[at]).timestamp);
@@ -922,7 +1053,9 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
     if (line.type === 'response_item' && nativeTaskOutput(payload)) signals.push([row.offset, digest]);
     const user = line.type === 'response_item' && payload?.role === 'user';
     const event = line.type === 'event_msg' ? payload?.type : null;
-    if (user) {
+    const stateGoal = event === 'thread_goal_updated' ? goalStateObservation(line, binding, turn, contextAt) : null;
+    if (event?.startsWith('thread_goal_') && !stateGoal) return empty('native-input-control-unrecognized');
+    if (user || stateGoal) {
       signals.push([row.offset, digest]);
       const sourceRefAtRow = `${sourceRef}#byte=${row.offset}`;
       const sourceIndex = sourced.findIndex(item => item.recordSha256 === digest && item.sourceRef === sourceRefAtRow &&
@@ -930,28 +1063,43 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       if (sourceIndex >= 0 && matchedSources.has(sourceIndex)) return empty('native-captured-input-prefix-mismatch');
       const sourceMatch = sourceIndex >= 0;
       const goal = goalRuntimeContext(payload, turn);
+      const userGoal = userGoalControl(line, binding, turn, contextAt);
       const ambient = typedAmbient(payload, turn);
-      const hostContext = ambient || goal;
+      const hostContext = ambient || goal || userGoal || stateGoal;
+      const sourceCategory = userGoal ? 'user-goal-control' : stateGoal ? 'goal-state-observation' : goal ? 'goal-runtime-context' : null;
       const kinds = payload?.internal_chat_message_metadata_passthrough?.content_item_kinds;
       const claimedGoal = Array.isArray(kinds) && kinds.includes('goal.internal_context');
+      const claimedUserGoal = Array.isArray(kinds) && kinds.some(kind => /^user\.goal(?:\.|$)/u.test(kind));
+      if (claimedUserGoal && !userGoal) return empty('native-input-control-unrecognized');
       if (sourceMatch && sourced[sourceIndex].sourceCategory &&
-          sourced[sourceIndex].sourceCategory !== (goal ? 'goal-runtime-context' : null)) {
+          sourced[sourceIndex].sourceCategory !== sourceCategory) {
         return empty('native-captured-input-prefix-mismatch');
       }
       const expected = hooks[inputIndex];
       const capturedHash = sourceMatch ? sourced[sourceIndex].promptSha256 : expected?.promptSha256;
-      const promptHash = inputHash(line, {...binding, turnId: turn}, capturedHash);
+      const promptHash = stateGoal ? digest : inputHash(line, {...binding, turnId: turn}, capturedHash);
       const hookMatch = !sourceMatch && !hostContext && expected && expected.promptSha256 === promptHash &&
         (!expected.turnId || expected.turnId === turn);
       if (sourceMatch) matchedSources.add(sourceIndex);
       else if (hookMatch) inputIndex++;
       else if (expected && !hostContext) return empty('native-captured-input-prefix-mismatch');
-      const content = contentEvidence(payload, {...binding, turnId: turn}, capturedHash);
+      const rawJson = stateGoal ? row.bytes.toString('utf8') : null;
+      const content = stateGoal ? {supported: true, prompt: rawJson, parts: [{partIndex: 0, type: 'text',
+        format: 'control-json', textChars: [...rawJson].length, sha256: digest}]} :
+        contentEvidence(payload, {...binding, turnId: turn}, capturedHash);
+      const metadata = payload?.internal_chat_message_metadata_passthrough;
       const record = {turnId: turn, sourceRef: sourceRefAtRow, recordOffset: row.offset,
         recordSha256: digest, promptSha256: promptHash, itemId: payload.id ?? null, captured: Boolean(sourceMatch || hookMatch),
         supported: content.supported && (!claimedGoal || goal), parts: content.parts,
-        ...(goal ? {sourceCategory: 'goal-runtime-context', controlDisposition: 'requires-review'} : {})};
+        timestamp: line.timestamp, physicalOrderWithinAnchor: index - start,
+        ...(integer(line.ordinal) ? {sourceOrdinal: line.ordinal} : {}),
+        ...(boundedText(metadata?.turn_id, 200) ? {sourceContextId: metadata.turn_id} : {}),
+        ...(integer(line.metadata?.user_input_order) ? {userInputOrder: line.metadata.user_input_order} : {}),
+        ...(sourceCategory ? {sourceCategory, controlDisposition: 'requires-review'} : {}),
+        ...(userGoal ? {goalControl: userGoal,
+          sourceMetadata: {record: line.metadata, passthrough: metadata}} : stateGoal ? {goalState: stateGoal} : {})};
       records.push(record);
+      if (userGoal || stateGoal) controls.push({...record, type: stateGoal ? event : 'user_goal_update'});
       if (record.captured) {
         if (!record.supported || (content.parts.length > 1) && !scan.coverage?.some(item =>
             item.recordOffset === row.offset && item.recordSha256 === digest && canonical(item.parts) === canonical(content.parts))) {
@@ -964,7 +1112,7 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       if (scan.readPart?.recordOffset === row.offset && scan.readPart.recordSha256 === digest) {
         const descriptor = content.parts.find(part => part.partIndex === scan.readPart.partIndex);
         if (!content.supported || !descriptor) return empty('native-source-part-unsupported');
-        const item = payload.content[scan.readPart.partIndex];
+        const item = stateGoal ? {text: rawJson} : payload.content[scan.readPart.partIndex];
         selectedPart = descriptor.type === 'text' ? {...descriptor, text: item.text, record}
           : {...descriptor, image: {type: 'image', mimeType: 'image/png', data: pngData(item.image_url).data}, record};
       }

@@ -60,11 +60,19 @@ Goal记录完整进入来源顺序、原字节摘要和pending列表，标为`so
 
 对已观察的晚到首次人类输入，候选在输入起点定位和Goal执行链中复用同身份记录校验；限定用量、完成投影、压缩及宿主快照等已证形状，原始记录继续受来源游标约束。起点定位不凭显示UserMessage代替未覆盖用户输入，不扩全局追加白名单或读取窗口。来源定位成功只说明限定来源段可核，不产生新权限、Goal派发或恢复资格；执行关联、对账及完整合同重绑仍分别核验。
 
-3.3.6候选另识别官方可能产生的新根Goal：正常结束后，`task_started`的turn/root均为新的轮次、trigger为goal、parent及initiating为空；随后真实context须显式匹配root、model与cwd，可信Goal正文仍不可缺失。原子边界、时序和已知执行/root身份防重用继续成立，与原child路径共用visited及64边上限。返回`native-root-goal-execution-continuation`只证明同线程新根执行关联，不证明旧父子关系或相同Goal数据库ID；目标、预算和权限仍由完整原文与用户决定核对。
+3.3.6另识别官方可能产生的新根Goal：正常结束后，`task_started`的turn/root均为新的轮次、trigger为goal、parent及initiating为空；随后真实context须显式匹配root、model与cwd，可信Goal正文仍不可缺失。原子边界、时序和已知执行/root身份防重用继续成立，与原child路径共用visited及64边上限。返回`native-root-goal-execution-continuation`只证明同线程新根执行关联，不证明旧父子关系或相同Goal数据库ID；目标、预算和权限仍由完整原文与用户决定核对。
+
+## 用户目标变更与状态观察（3.3.7修复候选）
+
+在已核官方来源形状内，`user.goal`与`user.goal.omitted`作为独立`user-goal-control`保存，不能当环境背景或普通人工输入跳过。指令可更换目标、改变状态或清除目标；原注入上下文、物理顺序、保留输入顺序、完整文本及摘要各自保留。目标JSON正文在宿主700字节界限内完整保留；`omitted`明确表示正文不可由该指令取得，不从相邻状态快照补造用户决定。身份、局部producer字段、类型、时间及文本编码不符时保持未决，`auto-compact`前缀本身不证明身份。
+
+独立的`thread_goal_updated`标为`goal-state-observation`，原JSON行可通过`sourcePart`的`control-json`文本页完整读取。它可能来自自动计量、预算或其它状态变化，不能单独证明用户意图，也不与相邻指令推定一一关联。未核实的清除通知不会被虚构成同名rollout事件。
+
+两类记录均进入变化信号与显式审阅；即使只有控制变化，也须先对账，再按当前条件审查完整合同。后到记录使旧游标失效；控制不消耗人类Hook匹配、不替换最新人工输入摘要，也不充当Goal执行启动或人工续轮的证明。`active`不会自动解除本地暂停或恢复隔离，`complete`不会代替任务验收，清除不等于删除历史证据。对账保留相应文字或原JSON，仍受本机回执容量与生命周期边界约束。本段描述开发候选；当前正式发行及实际采用见[接续](operations/CONTINUATION.md#目标与当前写者)。
 
 ## 宿主推理设置控制
 
-3.3.6候选支持已核来源形状的`response_item.configuration_update`：外层metadata恰含`client_authored=false`及`harness_authored_configuration=true`，payload仅type/reasoning，reasoning仅effort。effort按官方可含custom的字符串语义保留原值，并受200个UTF-16代码单元的本地读取界限约束；观察到值不证明当前模型支持该值，也不代表Agent已经理解或批准其影响。空白、控制字符、错类型、超界值、额外控制字段、缺失或伪造外层来源保持未决。
+3.3.6支持已核来源形状的`response_item.configuration_update`：外层metadata恰含`client_authored=false`及`harness_authored_configuration=true`，payload仅type/reasoning，reasoning仅effort。effort按官方可含custom的字符串语义保留原值，并受200个UTF-16代码单元的本地读取界限约束；观察到值不证明当前模型支持该值，也不代表Agent已经理解或批准其影响。空白、控制字符、错类型、超界值、额外控制字段、缺失或伪造外层来源保持未决。
 
 原记录进入完整控制signals，返回独立`controls`观察：sourceRef、recordOffset、recordSha256、当前来源上下文关联的turnId、reasoningEffort及非人类/非权限说明。turnId不是该记录自带身份。设置不进入人类输入序列或替换输入摘要；后到或改写设置使旧cursor失效。响应过大时省略controls详情并给出数量及既有只读helper入口，不能把省略当无设置。调用者仍须理解实际设置及Goal/预算，保留暂停、恢复和权限；对账与绑定依旧分别执行。
 

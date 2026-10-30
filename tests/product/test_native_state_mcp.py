@@ -7808,6 +7808,449 @@ b.promptSha256,e.records.map(r=>r.promptSha256),accepted,scan)));'''
 
 
 
+    def user_goal_record(self, *, objective=None, status='active', clear=False, omitted=False):
+        body = 'User cleared the goal.\n' if clear else (
+            (('User set the goal: [objective omitted; exceeds the evidence limit].' if omitted
+              else 'User set the goal: ' + json.dumps(objective, ensure_ascii=False)) + '\n'
+             if objective is not None or omitted else '') +
+            ('User set goal status: ' + json.dumps(status) + '.\n' if status is not None else ''))
+        return {'type': 'response_item', 'ordinal': 42,
+            'metadata': {'client_authored': False, 'user_input_order': 2705}, 'payload': {
+            'type': 'message', 'role': 'user', 'id': 'synthetic-user-goal',
+            'content': [{'type': 'input_text', 'text':
+                '<codex_internal_context source="user_goal">\n' + body + '</codex_internal_context>'}],
+            'internal_chat_message_metadata_passthrough': {'turn_id': 'auto-compact-2',
+                'create_time': 1793350278.5, 'content_item_kinds': ['user.goal.omitted' if omitted else 'user.goal'],
+                'content_item_metadata': [{'provenance': {'type': 'harness', 'hook': False}}]}}}
+
+    def user_goal_state(self, status='active'):
+        thread = self.params['_meta']['x-codex-turn-metadata']['thread_id']
+        return {'type': 'event_msg', 'payload': {'type': 'thread_goal_updated', 'threadId': thread,
+            'goal': {'threadId': thread, 'objective': 'Snapshot is not a user objective update.',
+                'status': status, 'tokensUsed': 12, 'timeUsedSeconds': 3,
+                'createdAt': 1793318400, 'updatedAt': 1793318401}}}
+
+    def user_goal_source(self):
+        self.goal_setup_source()
+        human = next(r for r in self.rows if r['type'] == 'response_item' and r['payload'].get('role') == 'user')
+        human['payload']['internal_chat_message_metadata_passthrough'] = {
+            'turn_id': self.params['_meta']['x-codex-turn-metadata']['turn_id'],
+            'content_item_kinds': ['user.text'],
+            'content_item_metadata': [{'provenance': {'type': 'user'}}]}
+        human['metadata'] = {'client_authored': True, 'user_input_order': 2704}
+        at = self.rows.index(human)
+        self.rows[at:at] = [self.user_goal_record(), self.user_goal_state()]
+        self.goal_write_source()
+
+    def test_user_goal_actual_inject_origin_and_review(self):
+        self.user_goal_source()
+        original = self.goal_receipt()
+        s = self.goal_preview(); e = s['nativeInputEvidence']
+        self.assertEqual(e['state'], 'observed', e)
+        self.assertFalse(e['latestInputReconciled'])
+        self.assertEqual([r.get('sourceCategory') for r in e['records']],
+                         ['user-goal-control', 'goal-state-observation', None])
+        control, event, human = e['records']
+        self.assertEqual(control['sourceContextId'], 'auto-compact-2')
+        self.assertEqual(control['userInputOrder'], 2705)
+        self.assertEqual(control['sourceOrdinal'], 42)
+        self.assertEqual(control['sourceMetadata']['record'], self.user_goal_record()['metadata'])
+        self.assertEqual(control['sourceMetadata']['passthrough'],
+                         self.user_goal_record()['payload']['internal_chat_message_metadata_passthrough'])
+        self.assertEqual(human['userInputOrder'], 2704)
+        self.assertEqual([r['recordOffset'] for r in e['records']], sorted(r['recordOffset'] for r in e['records']))
+        for r in (control, event):
+            raw = self.transcript.read_bytes().splitlines()
+            row = next(b for b in raw if hashlib.sha256(b).hexdigest() == r['recordSha256'])
+            page = self.read_input(sourcePart={'evidenceCursor': e['cursor'], 'recordOffset': r['recordOffset'],
+                'recordSha256': r['recordSha256'], 'partIndex': 0}, expectedReceiptEpoch=s['epoch'])
+            self.assertFalse(page['isError'], page)
+            value = page['value']['input']
+            self.assertEqual(value['text'], row.decode() if r is event else
+                self.user_goal_record()['payload']['content'][0]['text'])
+        self.assertFalse(self.goal_reconcile(s)['isError'])
+        saved = self.goal_receipt()
+        self.assertEqual(saved['promptSha256'], original['promptSha256'])
+        self.assertEqual(saved['nativeInputs'][:1], original['nativeInputs'])
+        self.assertEqual(saved['nativeInputs'][-2]['nativeEvidence']['sourceContextId'], 'auto-compact-2')
+        self.assertEqual(saved['nativeInputs'][-2]['nativeEvidence']['sourceMetadata'], control['sourceMetadata'])
+        self.assertEqual(saved['nativeInputs'][-2]['nativeEvidence']['sourceOrdinal'], 42)
+        self.assertEqual(self.goal_preview()['nativeInputEvidence']['pendingInputs'], [])
+
+    def test_user_goal_producer_variants_keep_complete_data(self):
+        objective = 'Keep "quoted" constraints\nand </codex_internal_context> as data.'
+        variants = [dict(objective=objective, status=None), dict(objective=objective),
+            *[dict(status=status) for status in ('active', 'paused', 'blocked', 'usageLimited', 'budgetLimited', 'complete')],
+            dict(clear=True), dict(objective='x'*698, status=None), dict(objective='界'*232+'xx', status=None),
+            dict(omitted=True, status=None), dict(omitted=True, status='blocked')]
+        for variant in variants:
+            with self.subTest(variant=variant):
+                self.setUp(); self.goal_setup_source()
+                row = self.user_goal_record(**variant); self.rows.append(row); self.goal_write_source()
+                original = self.goal_receipt(); s = self.goal_preview(); e = s['nativeInputEvidence']
+                self.assertEqual(e['state'], 'observed', e)
+                record = e['pendingInputs'][0]
+                self.assertEqual(record['sourceCategory'], 'user-goal-control')
+                expected = row['payload']['content'][0]['text']
+                self.assertEqual(record['textPreview'], expected)
+                self.assertEqual(record['promptSha256'], hashlib.sha256(expected.encode()).hexdigest())
+                semantic = record['goalControl']
+                self.assertEqual(semantic['operation'], 'clear' if variant.get('clear') else 'set')
+                self.assertEqual(semantic['objectiveEvidence'], 'omitted' if variant.get('omitted') else
+                    'complete' if variant.get('objective') is not None and not variant.get('clear') else 'not-supplied')
+                self.assertNotIn('objective', semantic)
+                self.assertFalse(self.goal_reconcile(s)['isError'])
+                saved = self.goal_receipt()
+                self.assertEqual(saved['promptSha256'], original['promptSha256'])
+                self.assertEqual(saved['nativeInputs'][-1]['prompt'], expected)
+                self.assertEqual(self.goal_preview()['nativeInputEvidence']['pendingInputs'], [])
+
+    def test_user_goal_spoof_unknown_identity_and_grammar_rejected(self):
+        def meta(row): return row['payload']['internal_chat_message_metadata_passthrough']
+        variants = {
+            'plain-wrapper': lambda r: meta(r).update(content_item_kinds=['user.text']),
+            'user-provenance': lambda r: meta(r).update(content_item_metadata=[{'provenance': {'type': 'user'}}]),
+            'hook-provenance': lambda r: meta(r).update(content_item_metadata=[{'provenance': {'type': 'harness', 'hook': True}}]),
+            'client-authored': lambda r: r['metadata'].update(client_authored=True),
+            'missing-annotation': lambda r: r.pop('metadata'),
+            'mixed-kinds': lambda r: meta(r).update(content_item_kinds=['user.goal', 'user.text']),
+            'mixed-parts': lambda r: r['payload']['content'].append({'type': 'input_text', 'text': 'extra'}),
+            'unknown-kind': lambda r: meta(r).update(content_item_kinds=['user.goal.unknown']),
+            'foreign-thread': lambda r: meta(r).update(thread_id='foreign-thread'),
+            'foreign-execution': lambda r: r['payload'].update(turn_id='foreign-execution'),
+            'unknown-inject': lambda r: meta(r).update(turn_id='unknown-context'),
+            'only-prefix': lambda r: r['payload']['content'][0].update(text='unrecognized'),
+            'missing-order': lambda r: r['metadata'].pop('user_input_order'),
+            'unknown-status': lambda r: r['payload']['content'][0].update(text=r['payload']['content'][0]['text'].replace('active','completed')),
+            'empty-set': lambda r: r['payload']['content'][0].update(text='<codex_internal_context source="user_goal">\n</codex_internal_context>'),
+            'clear-plus-status': lambda r: r['payload']['content'][0].update(text=r['payload']['content'][0]['text'].replace('User set goal status:', 'User cleared the goal.\nUser set goal status:')),
+            'oversized-json': lambda r: r.update(self.user_goal_record(objective='界'*233)),
+            'wrong-omission-kind': lambda r: meta(r).update(content_item_kinds=['user.goal.omitted']),
+        }
+        for name, alter in variants.items():
+            with self.subTest(variant=name):
+                self.setUp(); self.user_goal_source()
+                row = next(r for r in self.rows if r['payload'].get('id') == 'synthetic-user-goal')
+                alter(row); self.goal_write_source(); before = self.files()
+                e = self.goal_preview()['nativeInputEvidence']
+                self.assertEqual(e['state'], 'unknown', e)
+                self.assertEqual(e['reason'], 'native-input-origin-unavailable', e)
+                # A later repeated context cannot conceal the rejected control.
+                self.rows.extend([dict(self.rows[2]), self.rows[-1]])
+                self.goal_write_source()
+                before = self.files()
+                self.assertEqual(self.goal_preview()['nativeInputEvidence']['state'], 'unknown')
+                self.assertEqual(self.files(), before)
+
+    def test_user_goal_state_only_requires_review_and_raw_json_paging(self):
+        self.goal_setup_source(); state = self.user_goal_state('usageLimited')
+        state['payload']['goal']['objective'] = 'Snapshot "data"\n' + '界'*2500
+        state['payload']['goal']['tokenBudget'] = 100
+        self.rows.append(state); self.goal_write_source(); original = self.goal_receipt()
+        s = self.goal_preview(); e = s['nativeInputEvidence']
+        self.assertEqual(e['state'], 'observed', e)
+        self.assertFalse(e['latestInputReconciled'])
+        record = e['pendingInputs'][0]
+        self.assertEqual(record['goalState']['userOrigin'], 'unproven')
+        self.assertEqual(record['goalState']['instructionAssociation'], 'unproven')
+        self.assertFalse(record['textComplete'])
+        self.assertEqual(record['parts'][0]['format'], 'control-json')
+        selection = dict(sourcePart={'evidenceCursor': e['cursor'], 'recordOffset': record['recordOffset'],
+            'recordSha256': record['recordSha256'], 'partIndex': 0}, expectedReceiptEpoch=s['epoch'], maxChars=701)
+        pages = []; before = self.files()
+        while selection:
+            page = self.read_input(**selection); self.assertFalse(page['isError'], page)
+            pages.append(page['value']['input']['text']); selection = page['value']['input']['next']
+        raw = self.transcript.read_bytes()[record['recordOffset']:].splitlines()[0]
+        self.assertEqual(''.join(pages), raw.decode())
+        self.assertEqual(hashlib.sha256(''.join(pages).encode()).hexdigest(), record['recordSha256'])
+        self.assertEqual(self.files(), before)
+        blocked = self.manage(action='bind', epoch=s['epoch'], expectedRevision=0, result='Outcome',
+            inputs=[], outputs=[{'path':'result.txt'}], nextAction='Review', canContinue=False)
+        self.assertTrue(blocked['isError']); self.assertIn('reconciliation-required', blocked['value']['reason'])
+        self.assertFalse(self.goal_reconcile(s)['isError'])
+        saved = self.goal_receipt()
+        self.assertEqual(saved['promptSha256'], original['promptSha256'])
+        self.assertEqual(saved['nativeInputs'][-1]['prompt'], raw.decode())
+        self.assertTrue(self.goal_preview()['nativeInputEvidence']['latestInputReconciled'])
+
+    def test_user_goal_event_missing_unpaired_and_contradictory_are_separate(self):
+        for variant in ('missing-event', 'state-only', 'contradictory', 'nonadjacent'):
+            with self.subTest(variant=variant):
+                self.setUp(); self.goal_setup_source()
+                if variant != 'state-only': self.rows.append(self.user_goal_record(status='paused'))
+                if variant == 'nonadjacent':
+                    self.rows.append({'type':'response_item','payload':{'type':'message','role':'developer',
+                        'content':[{'type':'input_text','text':'Synthetic independent injected context.'}]}})
+                if variant != 'missing-event': self.rows.append(self.user_goal_state('active'))
+                self.goal_write_source(); e = self.goal_preview()['nativeInputEvidence']
+                self.assertEqual(e['state'], 'observed', e)
+                self.assertEqual(len(e['pendingInputs']), 1 if variant in ('missing-event','state-only') else 2)
+                self.assertFalse(e['latestInputReconciled'])
+                for record in e['records']:
+                    if 'goalState' in record: self.assertEqual(record['goalState']['instructionAssociation'], 'unproven')
+                    if 'goalControl' in record: self.assertEqual(record['goalControl']['status'], 'paused')
+
+    def test_user_goal_state_unknown_shapes_and_foreign_identity_rejected(self):
+        variants = {
+            'wrong-thread': lambda p: p.update(threadId='foreign'),
+            'wrong-nested-thread': lambda p: p['goal'].update(threadId='foreign'),
+            'wrong-turn': lambda p: p.update(turnId='foreign'),
+            'goal-null': lambda p: p.update(goal=None),
+            'unknown-status': lambda p: p['goal'].update(status='cancelled'),
+            'unknown-field': lambda p: p.update(origin='user'),
+            'cleared-not-rollout-protocol': lambda p: p.update(type='thread_goal_cleared'),
+        }
+        for name, alter in variants.items():
+            with self.subTest(variant=name):
+                self.setUp(); self.goal_setup_source(); row = self.user_goal_state()
+                alter(row['payload']); self.rows.append(row); self.goal_write_source(); before = self.files()
+                e = self.goal_preview()['nativeInputEvidence']
+                self.assertEqual(e['state'], 'unknown', e)
+                self.assertEqual(e['reason'], 'native-input-control-unrecognized', e)
+                self.assertEqual(self.files(), before)
+
+    def test_user_goal_each_late_control_invalidates_cursor_and_epoch(self):
+        for kind in ('status', 'objective', 'omitted', 'clear', 'state'):
+            with self.subTest(kind=kind):
+                self.setUp(); self.goal_setup_source(); self.rows.append(self.user_goal_record())
+                self.goal_write_source(); s = self.goal_preview(); record = s['nativeInputEvidence']['pendingInputs'][0]
+                row = self.user_goal_state() if kind == 'state' else self.user_goal_record(
+                    **({'objective':'Changed complete objective.'} if kind == 'objective' else
+                       {'omitted':True} if kind == 'omitted' else {'clear':True} if kind == 'clear' else {'status':'paused'}))
+                self.rows.append(row); self.goal_write_source(); before = self.files()
+                self.assertTrue(self.goal_reconcile(s)['isError'])
+                stale = self.read_input(sourcePart={'evidenceCursor':s['nativeInputEvidence']['cursor'],
+                    'recordOffset':record['recordOffset'],'recordSha256':record['recordSha256'],'partIndex':0},
+                    expectedReceiptEpoch=s['epoch'])
+                self.assertTrue(stale['isError']); self.assertEqual(self.files(), before)
+                fresh = self.goal_preview(); self.assertFalse(self.goal_reconcile(fresh)['isError'])
+                self.assertTrue(self.goal_reconcile(fresh)['isError'])
+                self.assertTrue(self.read_input(expectedReceiptEpoch=fresh['epoch'])['isError'])
+
+    def test_user_goal_active_reconcile_preserves_pause_and_recovery(self):
+        self.goal_setup_source(); self.goal_write_source(); s = self.goal_preview()
+        self.assertFalse(self.manage(action='bind', epoch=s['epoch'], expectedRevision=0,
+            result='Protected incomplete outcome', inputs=[], outputs=[{'path':'result.txt'}],
+            nextAction='Wait for explicit resume', canContinue=False)['isError'])
+        self.assertFalse(self.manage(action='pause', epoch=s['epoch'], expectedRevision=1,
+            reason='Local user pause remains')['isError'])
+        prior = next(self.state.glob('*.state.json')).read_bytes()
+        for row in (self.user_goal_record(), self.user_goal_record(status='complete'), self.user_goal_record(clear=True)):
+            self.rows.append(row); self.goal_write_source(); seen = self.goal_preview()
+            self.assertFalse(self.goal_reconcile(seen)['isError'])
+            self.assertEqual(next(self.state.glob('*.state.json')).read_bytes(), prior)
+            self.assertEqual(self.goal_preview()['mode'], 'paused')
+        self.helper({'hook_event_name':'Interrupt'}, hook='Interrupt')
+        seen = self.goal_preview(); before = self.files()
+        self.assertTrue(self.goal_reconcile(seen)['isError'])
+        self.assertEqual(self.files(), before)
+
+    def test_user_goal_classification_rederived_and_caller_flags_cannot_spoof(self):
+        self.user_goal_source(); s = self.goal_preview(); self.assertFalse(self.goal_reconcile(s)['isError'])
+        p = next(self.state.glob('*.input.json')); saved = json.loads(p.read_bytes())
+        saved['nativeInputs'][-2]['nativeEvidence'].pop('sourceCategory')
+        p.write_text(json.dumps(saved), encoding='utf-8')
+        e = self.goal_preview()['nativeInputEvidence']; self.assertEqual(e['state'], 'observed', e)
+        self.assertEqual(e['records'][0]['sourceCategory'], 'user-goal-control')
+        saved['nativeInputs'][-2]['nativeEvidence']['sourceCategory'] = 'goal-runtime-context'
+        p.write_text(json.dumps(saved), encoding='utf-8'); before = self.files()
+        self.assertEqual(self.goal_preview()['nativeInputEvidence']['state'], 'unknown')
+        self.assertEqual(self.files(), before)
+
+    def test_user_goal_controls_compose_with_goal_and_human_callers(self):
+        for kind in ('child', 'root', 'human', 'mixed', 'between-close-start', 'needs-goal', 'human-proof'):
+            with self.subTest(kind=kind):
+                self.setUp()
+                if kind == 'human': self.goal_then_human_source()
+                elif kind == 'mixed': self.goal_human_goal_source()
+                else:
+                    def edge(rows):
+                        if kind == 'root':
+                            new = rows[1]['payload']['turn_id']
+                            rows[1]['payload']['root_turn_id'] = new
+                            rows[1]['payload']['turn_attribution'].update(root_turn_id=new, parent_turn_id=None)
+                            rows[2]['payload']['root_turn_id'] = new
+                        if kind == 'between-close-start':
+                            rows[1:1] = [self.user_goal_record(), self.user_goal_state()]
+                    self.goal_auto_source(change=edge)
+                if kind == 'needs-goal': self.rows[-1] = self.user_goal_record()
+                elif kind == 'human-proof':
+                    self.rows.extend([self.user_goal_record(), self.goal_record_fixture('user')])
+                else: self.rows.extend([self.user_goal_record(), self.user_goal_state()])
+                self.goal_write_source(); s = self.goal_preview(); e = s['nativeInputEvidence']
+                self.assertEqual(e['state'], 'observed', e)
+                before = self.files(); result = self.goal_reconcile(s)
+                self.assertEqual(result['isError'], kind in ('needs-goal','human-proof'), result)
+                if result['isError']: self.assertEqual(self.files(), before)
+                else:
+                    self.assertTrue(self.goal_preview()['nativeInputEvidence']['latestInputReconciled'])
+                    self.append_context_usage(4500)
+                    self.params['arguments']['includeContext'] = True
+                    context = self.inspect()['value']['context']
+                    self.assertEqual(context['state'], 'observed', context)
+
+    def test_user_goal_controls_preserve_capacity_and_app_human_index(self):
+        for kind in ('capacity', 'app'):
+            with self.subTest(kind=kind):
+                self.setUp(); self.user_goal_source(); s = self.goal_preview()
+                self.assertFalse(self.goal_reconcile(s)['isError'])
+                if kind == 'capacity': self.automatic_capacity_retry()
+                else:
+                    self.append_app_message_edge('app-user-goal-turn')
+                self.transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                self.rows = [json.loads(line) for line in self.transcript.read_text(encoding='utf-8').splitlines()]
+                # Append source controls within the proved current execution;
+                # keep the old origin row bytes untouched after reconciliation.
+                stamp = datetime.now(timezone.utc).isoformat()
+                with self.transcript.open('a',encoding='utf-8') as stream:
+                    for row in (self.user_goal_record(), self.user_goal_state()):
+                        stream.write(json.dumps({'timestamp':stamp,**row})+'\n')
+                s = self.goal_preview(); e = s['nativeInputEvidence']
+                self.assertEqual(e['state'], 'observed', e)
+                self.assertFalse(self.goal_reconcile(s)['isError'])
+                self.append_context_usage(4500)
+                self.params['arguments']['includeContext'] = True
+                observed = self.inspect()['value']['context']
+                self.assertEqual(observed['state'], 'observed', observed)
+
+    def test_user_goal_same_text_does_not_consume_human_and_time_stays_bound(self):
+        self.goal_setup_source(); control = self.user_goal_record()
+        text = control['payload']['content'][0]['text']
+        self.rows[3]['payload']['content'][0]['text'] = text
+        self.goal_write_source(); m = self.params['_meta']['x-codex-turn-metadata']
+        next(self.state.glob('*.input.json')).unlink()
+        self.helper({'hook_event_name':'UserPromptSubmit','prompt':text,'turn_id':m['turn_id'],
+            'model':m['model'],'transcript_path':str(self.transcript)}, session=m['thread_id'], hook='UserPromptSubmit')
+        self.rows.insert(3, control); self.goal_write_source()
+        s = self.goal_preview(); e = s['nativeInputEvidence']
+        self.assertEqual(e['state'], 'observed', e)
+        self.assertFalse(e['records'][0]['captured']); self.assertTrue(e['records'][1]['captured'])
+        self.assertEqual(len(e['pendingInputs']), 1)
+        # The same annotation before its execution context is not source proof.
+        self.rows[3]['timestamp'] = '2026-10-29T00:00:00Z'
+        self.transcript.write_text(''.join(json.dumps(r)+'\n' for r in self.rows),encoding='utf-8')
+        self.assertEqual(self.goal_preview()['nativeInputEvidence']['state'], 'unknown')
+
+    def test_user_goal_final_recheck_rejects_each_late_control(self):
+        for kind in ('instruction','state'):
+            with self.subTest(kind=kind):
+                self.setUp(); self.goal_setup_source(); self.rows.append(self.user_goal_record())
+                self.goal_write_source(); s = self.goal_preview()
+                receipt = next(self.state.glob('*.input.json')); original = receipt.read_bytes()
+                params = {**self.params, 'name':'manage_task_state','arguments': {
+                    'cwd':str(self.work),'action':'reconcile-input','epoch':s['epoch'],
+                    'expectedRevision':0,'evidenceCursor':s['nativeInputEvidence']['cursor']}}
+                late = self.user_goal_record(clear=True) if kind == 'instruction' else self.user_goal_state('paused')
+                late['timestamp'] = datetime.now(timezone.utc).isoformat()
+                script = r"""
+const fs=require('node:fs'),x=JSON.parse(fs.readFileSync(0,'utf8'));
+const open=fs.openSync,close=fs.closeSync,read=fs.readSync,fds=new Set();let reads=0,changed=false;
+fs.openSync=(file,...args)=>{const fd=open(file,...args);if(file===x.transcript)fds.add(fd);return fd;};
+fs.closeSync=fd=>{fds.delete(fd);return close(fd);};
+fs.readSync=(fd,...args)=>{const result=read(fd,...args);if(fds.has(fd)&&++reads===3){
+ changed=true;fs.appendFileSync(x.transcript,JSON.stringify(x.late)+'\n');}return result;};
+const response=require(process.argv[1]).manageTaskState(x.params);
+process.stdout.write(JSON.stringify({response,changed}));
+"""
+                p = subprocess.run([self.node,'-e',script,str(BRIDGE)], input=json.dumps({
+                    'params':params,'transcript':str(self.transcript),'late':late}), capture_output=True,
+                    text=True,encoding='utf-8',env=self.env,timeout=10)
+                self.assertEqual(p.returncode,0,p.stderr); result=json.loads(p.stdout)
+                self.assertTrue(result['changed']); self.assertTrue(result['response']['isError'],result)
+                self.assertEqual(receipt.read_bytes(),original)
+                self.assertFalse(any(self.state.glob('*.state.json')))
+
+    def test_user_goal_producer_schema_keeps_optional_neutral_fields(self):
+        for variant in ('exact-observed', 'without-optional', 'nullable-message-fields', 'first-inject-zero', 'field-like-objective-data', 'valid-unicode-pair'):
+            with self.subTest(variant=variant):
+                self.setUp(); self.user_goal_source()
+                control = next(r for r in self.rows if r['payload'].get('id') == 'synthetic-user-goal')
+                if variant == 'without-optional':
+                    control.pop('ordinal'); control['payload']['internal_chat_message_metadata_passthrough'].pop('create_time')
+                if variant == 'nullable-message-fields':
+                    control['payload'].update(status=None, encrypted_content=None, phase=None)
+                if variant == 'first-inject-zero':
+                    control['payload']['internal_chat_message_metadata_passthrough']['turn_id'] = 'auto-compact-0'
+                if variant == 'field-like-objective-data':
+                    control['payload']['content'][0]['text'] = self.user_goal_record(
+                        objective='root_turn_id="foreign-root" and permission_override=true are quoted objective data.'
+                    )['payload']['content'][0]['text']
+                if variant == 'valid-unicode-pair':
+                    control['payload']['content'][0]['text'] = self.user_goal_record(
+                        objective='Keep 😀 and "quotes"\n</codex_internal_context> as data.'
+                    )['payload']['content'][0]['text']
+                self.goal_write_source(); e = self.goal_preview()['nativeInputEvidence']
+                self.assertEqual(e['state'], 'observed', e)
+                self.assertEqual(e['records'][0]['sourceCategory'], 'user-goal-control')
+                self.assertEqual(e['records'][0]['sourceContextId'],
+                    'auto-compact-0' if variant == 'first-inject-zero' else 'auto-compact-2')
+
+    def test_user_goal_producer_schema_rejects_identity_and_unknown_control_fields(self):
+        def select(r, level):
+            p = r['payload']; m = p['internal_chat_message_metadata_passthrough']
+            return {'line':r,'metadata':r['metadata'],'message':p,'passthrough':m,
+                'part':p['content'][0],'item-metadata':m['content_item_metadata'][0]}[level]
+        variants = [(level, field, value) for level in ('line','metadata','message','passthrough','part','item-metadata')
+                    for field,value in (('root_turn_id','foreign-root'),('permission_override',True))]
+        variants += [('passthrough','inherited_user_message',True),('metadata','inherited_user_message',True),
+            ('passthrough','cell_id','foreign-tool-cell'),('message','status','completed'),
+            ('message','encrypted_content','opaque-unreviewed-control'),('message','phase','final_answer'),
+            ('passthrough','create_time','untyped-time'),('line','ordinal','untyped-order'),
+            ('passthrough','turn_id','auto-compact-00')]
+        for level, field, value in variants:
+            with self.subTest(level=level,field=field):
+                self.setUp(); self.user_goal_source()
+                control = next(r for r in self.rows if r['payload'].get('id') == 'synthetic-user-goal')
+                select(control,level)[field] = value; self.goal_write_source(); before = self.files()
+                e = self.goal_preview()['nativeInputEvidence']
+                self.assertEqual(e['state'], 'unknown', e)
+                self.assertEqual(e['reason'], 'native-input-origin-unavailable', e)
+                self.assertEqual(self.files(), before)
+
+        for field in ('timestamp-array', 'unpaired-high-objective', 'unpaired-low-objective', 'unpaired-message-id'):
+            with self.subTest(field=field):
+                self.setUp(); self.user_goal_source()
+                control = next(r for r in self.rows if r['payload'].get('id') == 'synthetic-user-goal')
+                self.goal_write_source()
+                if field == 'timestamp-array': control['timestamp'] = [control['timestamp']]
+                elif field == 'unpaired-message-id': control['payload']['id'] = '\ud800'
+                else:
+                    encoded = json.dumps('\ud800' if field == 'unpaired-high-objective' else '\udc00')
+                    control['payload']['content'][0]['text'] = (
+                        '<codex_internal_context source="user_goal">\nUser set the goal: ' + encoded +
+                        '\n</codex_internal_context>')
+                self.transcript.write_text(''.join(json.dumps(r)+'\n' for r in self.rows),encoding='utf-8')
+                before=self.files(); e=self.goal_preview()['nativeInputEvidence']
+                self.assertEqual(e['state'],'unknown',e)
+                self.assertEqual(e['reason'],'native-input-origin-unavailable',e)
+                self.assertEqual(self.files(),before)
+
+    def test_user_goal_state_envelope_cannot_hide_root_or_control_fields(self):
+        for before_human in (False, True):
+            for field in ('root_turn_id','permission_override','metadata'):
+                with self.subTest(before_human=before_human,field=field):
+                    self.setUp(); self.goal_setup_source(); event=self.user_goal_state()
+                    event[field] = {'client_authored':False} if field == 'metadata' else 'foreign-control'
+                    self.rows.insert(3,event) if before_human else self.rows.append(event)
+                    self.goal_write_source(); before=self.files(); e=self.goal_preview()['nativeInputEvidence']
+                    self.assertEqual(e['state'],'unknown',e)
+                    self.assertEqual(e['reason'], 'native-input-origin-unavailable' if before_human else
+                        'native-input-control-unrecognized',e)
+                    self.assertEqual(self.files(),before)
+        for field in ('timestamp-array','unpaired-objective'):
+            with self.subTest(field=field):
+                self.setUp(); self.goal_setup_source(); event=self.user_goal_state()
+                self.rows.append(event); self.goal_write_source()
+                if field == 'timestamp-array': event['timestamp']=[event['timestamp']]
+                else: event['payload']['goal']['objective']='\ud800'
+                self.transcript.write_text(''.join(json.dumps(r)+'\n' for r in self.rows),encoding='utf-8')
+                before=self.files();e=self.goal_preview()['nativeInputEvidence']
+                self.assertEqual(e['state'],'unknown',e)
+                self.assertEqual(e['reason'],'native-input-control-unrecognized',e)
+                self.assertEqual(self.files(),before)
+
+
 def _prepare_native_startup_catalogue(manifest, env, host, deadline):
     """Keep this MCP fixture's unrelated curated Git startup off the public network."""
     root = Path(manifest['evidence'])
@@ -8226,6 +8669,8 @@ def native_integration(codex, evidence, *, preapprove_owned_manage_tool=False, s
     _finish_native_integration(result, root, host, manifest, original, scoped_hook=scoped_hook)
     print(json.dumps({'status':result['status'],'providerRequests':len(fixture.requests),
                       'realModelCalls':0,'resources':result['resources']},ensure_ascii=False))
+
+
 
 
 class GoalProtocolIdentityTests(unittest.TestCase):
