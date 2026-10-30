@@ -1,6 +1,6 @@
 # Accord 启用与未启用：评价初版
 
-2026-10-29。本文、[六份合成任务材料](../../evals/comparisons/accord-toggle-v1.json)、[文件检查工具](../../scripts/grade_accord_comparison.py)及其[校准反例](../../tests/product/test_accord_comparison.py)共同构成开发期初版。它们用来校准任务、判分和记录方式；**尚无真实双组运行或产品增益结论**。工程与产品主线见[当前计划](../../docs/operations/PLAN-v3.3.md#后续候选适配与对照展示)。
+2026-10-29初版。本文、[六份合成任务材料](../../evals/comparisons/accord-toggle-v1.json)、[文件检查工具](../../scripts/grade_accord_comparison.py)及其[校准反例](../../tests/product/test_accord_comparison.py)共同构成开发期初版，用来校准任务、判分和记录方式。初版建立时尚未执行真实双组运行；随后已完成[2026-10-30首轮有限试行](#2026-10-30-首轮有限试行)。**两对小样本不支持普遍产品增益结论**。工程与产品主线见[当前计划](../../docs/operations/PLAN-v3.3.md#后续候选适配与对照展示)。
 
 ## 回答什么问题
 

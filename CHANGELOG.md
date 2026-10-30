@@ -2,7 +2,7 @@
 
 ## 3.3.8
 
-[3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8)于北京时间2026-10-31 01:11:25（UTC2026-10-30T17:11:25Z）正式发布，Release429293534，标签与发行目标均为精确`213dbea2ae0946b5beec3054ece6513792010bc2`。[CI #1046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41081944936)全11项终态成功；30成员包SHA为`2c33c8b3adb2684859feaf5edb77f7b3e2221f3ffff79337ea3e5d14bdf982e2`。本机更新已核，当前聊天加载及最终恢复见[接续](docs/operations/CONTINUATION.md#目标与当前写者)。
+[3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8)于北京时间2026-10-31 01:11:25（UTC2026-10-30T17:11:25Z）正式发布，Release429293534，标签与发行目标均为精确`213dbea2ae0946b5beec3054ece6513792010bc2`。[CI #1046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41081944936)全11项终态成功；30成员包SHA为`2c33c8b3adb2684859feaf5edb77f7b3e2221f3ffff79337ea3e5d14bdf982e2`。本机更新、3.3.8实际加载和当前完整合同恢复已核，剩余收尾见[接续](docs/operations/CONTINUATION.md#目标与当前写者)。
 
 - 修复 Skill 目录增量阻断来源读取的问题，覆盖已核的三个目录及其部分字段、增删记录和已有环境/工具目录组合；目录观察不代表启用、调用或授权。
 - 将完整宿主快照纳入来源变化检测，防止追加快照后继续使用旧校验游标。保留旧持久游标对精确原前缀的摘要算法兼容；当前调用仍须重新观察并显式对账，不放宽来源、身份、权限或暂停校验。
