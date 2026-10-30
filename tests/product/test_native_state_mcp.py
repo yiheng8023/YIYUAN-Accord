@@ -2129,7 +2129,10 @@ process.stdout.write(JSON.stringify({result,changed}));
     def test_large_native_evidence_preserves_large_paused_contract(self):
         self.check_large_native_evidence(paused=True)
 
-    def check_large_native_evidence(self, paused=False):
+    def test_large_native_evidence_preserves_configuration_control(self):
+        self.check_large_native_evidence(control=True)
+
+    def check_large_native_evidence(self, paused=False, control=False):
         self.native_context()
         initial = self.native_input_preview()
         revision = 0
@@ -2141,6 +2144,11 @@ process.stdout.write(JSON.stringify({result,changed}));
             self.assertFalse(self.manage(action='pause', epoch=initial['epoch'], expectedRevision=1,
                                         reason='Real pause')['isError'])
             revision = 2
+        if control:
+            transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+            entry = self.configuration_control()
+            entry['timestamp'] = datetime.now(timezone.utc).isoformat()
+            with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(entry)+'\n')
         for index in range(300):
             self.append_native_message(text='Follow next authorized step', id=f'ordinary-{index}')
         before = self.files()
@@ -2151,8 +2159,8 @@ process.stdout.write(JSON.stringify({result,changed}));
         snapshot = result['value']['checkpoint']['snapshot']
         evidence = snapshot['nativeInputEvidence']
         self.assertEqual(evidence['details'], 'omitted-bounded-result')
-        self.assertEqual(evidence['counts'], {'records': 301, 'pendingInputs': 300, 'enrichments': 0})
-        for key in ('records', 'pendingInputs', 'enrichments', 'cursor'):
+        self.assertEqual(evidence['counts'], {'records': 301, 'pendingInputs': 300, 'enrichments': 0, **({'controls': 1} if control else {})})
+        for key in ('records', 'pendingInputs', 'enrichments', 'controls', 'cursor'):
             self.assertNotIn(key, evidence)
         fallback = evidence['detailRead']
         self.assertEqual(fallback['request']['op'], 'status')
@@ -2174,6 +2182,7 @@ process.stdout.write(JSON.stringify({result,changed}));
             self.assertEqual(evidence[key], full_evidence[key])
         self.assertFalse(evidence['latestInputReconciled'])
         self.assertEqual(len(full_evidence['pendingInputs']), 300)
+        self.assertEqual(len(full_evidence['controls']), 1 if control else 0)
         self.assertEqual(self.files(), before)
         self.assertTrue(self.manage(action='reconcile-input', epoch=snapshot['epoch'],
                                     expectedRevision=revision)['isError'])
@@ -2182,7 +2191,7 @@ process.stdout.write(JSON.stringify({result,changed}));
         self.assertFalse(accepted['isError'], accepted)
         before = self.files()
         captured = self.native_input_preview()['nativeInputEvidence']
-        self.assertEqual(captured['counts'], {'records': 301, 'pendingInputs': 0, 'enrichments': 0})
+        self.assertEqual(captured['counts'], {'records': 301, 'pendingInputs': 0, 'enrichments': 0, **({'controls': 1} if control else {})})
         self.assertTrue(captured['latestInputReconciled'])
         self.assertNotIn('cursor', captured)
         self.assertEqual(self.files(), before)
@@ -2387,6 +2396,116 @@ process.stdout.write(JSON.stringify({result,changed}));
                     outputs=[{'path': 'report.txt'}], nextAction='Continue safely', canContinue=False)
                 self.assertFalse(bound['isError'], bound)
                 shutil.rmtree(self.state)
+
+    def configuration_control(self, effort='xhigh'):
+        return {'type': 'response_item', 'metadata': {'client_authored': False,
+            'harness_authored_configuration': True}, 'payload': {
+            'type': 'configuration_update', 'reasoning': {'effort': effort}}}
+
+    def test_configuration_control_origin_and_rejection(self):
+        for kind in ('valid', 'other-effort', 'extra', 'nested-extra', 'metadata-extra', 'missing', 'empty', 'wrong-type', 'custom', 'persistent', 'disabled', 'max-length', 'over-length', 'untrusted', 'foreign-turn', 'pause'):
+            with self.subTest(kind=kind):
+                self.setUp()
+                self.native_context()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                control = self.configuration_control('medium' if kind == 'other-effort' else 'xhigh')
+                control['timestamp'] = rows[1]['timestamp']
+                if kind == 'extra': control['payload']['permission'] = 'allow'
+                if kind == 'nested-extra': control['payload']['reasoning']['other'] = True
+                if kind == 'metadata-extra': control['metadata']['other'] = True
+                if kind == 'missing': control['payload'].pop('reasoning')
+                if kind == 'empty': control['payload']['reasoning']['effort'] = ''
+                if kind == 'wrong-type': control['payload']['reasoning']['effort'] = 5
+                if kind == 'custom': control['payload']['reasoning']['effort'] = 'future-custom'
+                if kind in ('persistent', 'disabled'): control['payload']['reasoning']['effort'] = kind
+                if kind in ('max-length', 'over-length'):
+                    control['payload']['reasoning']['effort'] = 'x' * (200 if kind == 'max-length' else 201)
+                if kind == 'untrusted': control['metadata']['harness_authored_configuration'] = False
+                if kind == 'foreign-turn': control['payload']['turn_id'] = 'foreign'
+                inserts = [control]
+                if kind == 'pause': inserts.append({'type': 'event_msg', 'payload': {'type': 'task_interrupted'}})
+                rows[2:2] = inserts
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                before = self.files()
+                evidence = self.native_input_preview()['nativeInputEvidence']
+                self.assertEqual(self.files(), before)
+                if kind in ('valid', 'other-effort', 'custom', 'persistent', 'disabled', 'max-length'):
+                    self.assertEqual(evidence['state'], 'observed', evidence)
+                    self.assertTrue(evidence['latestNativeInputsComplete'])
+                    self.assertEqual(len(evidence['records']), 1)
+                    self.assertEqual(evidence['controls'][0]['reasoningEffort'], control['payload']['reasoning']['effort'])
+                    self.assertEqual(evidence['controls'][0]['controlDisposition'], 'host-control-not-human-or-permission')
+                else:
+                    self.assertEqual(evidence['state'], 'unknown', evidence)
+
+    def test_configuration_control_unknown_after_input_is_not_silently_ignored(self):
+        for kind in ('extra', 'untrusted', 'wrong-type'):
+            with self.subTest(kind=kind):
+                self.setUp()
+                self.native_context()
+                preview = self.native_input_preview()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                control = self.configuration_control()
+                control['timestamp'] = datetime.now(timezone.utc).isoformat()
+                if kind == 'extra': control['payload']['permission'] = 'allow'
+                if kind == 'untrusted': control['metadata']['harness_authored_configuration'] = False
+                if kind == 'wrong-type': control['payload']['reasoning']['effort'] = False
+                with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(control)+'\n')
+                before = self.files()
+                evidence = self.native_input_preview()['nativeInputEvidence']
+                self.assertEqual((evidence['state'], evidence['reason']),
+                    ('unknown', 'native-input-control-unrecognized'))
+                result = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                    evidenceCursor=preview['nativeInputEvidence']['cursor'])
+                self.assertTrue(result['isError'])
+                self.assertEqual(self.files(), before)
+
+    def test_configuration_control_invalidates_cursor_and_preserves_pause(self):
+        self.native_context()
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        preview = self.native_input_preview()
+        contract = dict(result='Preserve paused work', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Wait for the user', canContinue=False)
+        self.assertFalse(self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0, **contract)['isError'])
+        self.assertFalse(self.manage(action='pause', epoch=preview['epoch'], expectedRevision=1,
+            reason='Explicit pause')['isError'])
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        control = self.configuration_control('future-custom')
+        control['timestamp'] = datetime.now(timezone.utc).isoformat()
+        with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(control)+'\n')
+        before = self.files()
+        now = self.native_input_preview()['nativeInputEvidence']
+        self.assertEqual(now['controls'][0]['reasoningEffort'], 'future-custom')
+        self.assertNotEqual(now['cursor']['signalsSha256'], preview['nativeInputEvidence']['cursor']['signalsSha256'])
+        rejected = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=2,
+            evidenceCursor=preview['nativeInputEvidence']['cursor'])
+        self.assertTrue(rejected['isError'])
+        self.assertEqual(rejected['value']['reason'], 'native-input-evidence-changed')
+        self.assertEqual(self.files(), before)
+        self.assertEqual(self.helper({'op': 'status'}, session=meta['thread_id'])['mode'], 'paused')
+
+    def test_configuration_control_goal_edge_and_identity(self):
+        for kind in ('valid', 'identity', 'pause'):
+            with self.subTest(kind=kind):
+                self.setUp()
+                def change(edge):
+                    edge.insert(3, self.configuration_control())
+                    if kind == 'identity': edge[1]['payload']['turn_attribution']['parent_turn_id'] = 'foreign'
+                    if kind == 'pause': edge.insert(4, {'type': 'event_msg', 'payload': {'type': 'task_interrupted'}})
+                self.goal_auto_source(change, paused=kind == 'pause')
+                preview = self.goal_preview()
+                before = self.files()
+                if kind == 'valid':
+                    self.assertEqual(preview['nativeInputEvidence']['state'], 'observed')
+                    self.assertEqual(preview['nativeInputEvidence']['controls'][0]['reasoningEffort'], 'xhigh')
+                    self.assertFalse(self.goal_reconcile(preview)['isError'])
+                elif preview['nativeInputEvidence']['state'] == 'observed':
+                    self.assertTrue(self.goal_reconcile(preview)['isError'])
+                    self.assertEqual(self.files(), before)
+                else:
+                    self.assertEqual(preview['nativeInputEvidence']['state'], 'unknown')
+                    self.assertEqual(self.files(), before)
 
     def test_native_origin_skips_usage_without_hiding_input_or_control(self):
         for kind in ('count', 'usage', 'both', 'foreign-count', 'foreign-usage', 'human', 'interrupt'):

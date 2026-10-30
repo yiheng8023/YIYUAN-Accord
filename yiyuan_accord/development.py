@@ -167,7 +167,7 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "lifecycle": "host-start-reload-and-close; releases-plugin-cache-cwd-before-serving; pins-available-context-reader-code-at-runtime-load; process-exits-on-stdin-end; no-listener-or-daemon",
                 "limits": "no-identity-storage-or-arbitrary-operation-override; no-input-replay-or-lock-recovery-tool; no-authority-or-whole-completion-claim; no-app-server-control-or-handoff-dispatch",
             }
-            if package_baseline in ("3.3.2", "3.3.3", "3.3.4", "3.3.5"):
+            if package_baseline in ("3.3.2", "3.3.3", "3.3.4", "3.3.5", "3.3.6"):
                 contract["nativeTaskStateMcp"].update({
                     "executionTool": "coordinate_task_execution",
                     "transportConfiguration": {
@@ -278,7 +278,7 @@ def delivery_adapter_contract(adapter_id, package_id, *, development_schema=None
                 "additionalContextLimit": 4000,
                 "limits": "host-priority-and-user-authority-preserved; enabled-trusted-host-support-required; injection-is-not-behavior-or-all-surface-coverage",
             }
-            if package_baseline in ("3.3.1", "3.3.2", "3.3.3", "3.3.4", "3.3.5"):
+            if package_baseline in ("3.3.1", "3.3.2", "3.3.3", "3.3.4", "3.3.5", "3.3.6"):
                 contract["ordinaryInputParticipation"]["metaGuidance"].update({
                     "sourceSha256": "14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026",
                     "sourceBytes": 4656,
@@ -413,7 +413,7 @@ def development_contract_errors(contract, golden_task_ids):
                                    "conditional-existing-accord-upgrade-after-v3.2-release"})
         granted.update({"chatgpt-codex-functional-development", "conditional-v3.3-release"})
     release = authority.get("conditionalRelease")
-    require(isinstance(release, dict) and release.get("target") in (("3.3.0", "3.3.1", "3.3.2", "3.3.3", "3.3.4", "3.3.5") if successor else ("3.2.0", "3.2.1"))
+    require(isinstance(release, dict) and release.get("target") in (("3.3.0", "3.3.1", "3.3.2", "3.3.3", "3.3.4", "3.3.5", "3.3.6") if successor else ("3.2.0", "3.2.1"))
             and release.get("decision") in (("not-authorized", "user-authorized-after-acceptance")
                                             if successor else ("user-authorized-after-acceptance",))
             and release.get("ready") is False
@@ -429,7 +429,7 @@ def development_contract_errors(contract, golden_task_ids):
                                               "final-candidate-not-publication-proof"),
             "a declared version is not publication evidence")
     if successor:
-        require(cycle.get("targetVersion") in ("3.3.0", "3.3.1", "3.3.2", "3.3.3", "3.3.4", "3.3.5")
+        require(cycle.get("targetVersion") in ("3.3.0", "3.3.1", "3.3.2", "3.3.3", "3.3.4", "3.3.5", "3.3.6")
                 and (contract.get("status") != "candidate-frozen"
                      or isinstance(release, dict)
                      and release.get("decision") == "user-authorized-after-acceptance"),
@@ -440,7 +440,7 @@ def development_contract_errors(contract, golden_task_ids):
         candidates = cycle.get("futureAdaptationCandidates", [])
         candidate_errors = external_product_references_errors(candidates)
         require(not candidate_errors, "future adaptation candidates must have bounded source references")
-        unversioned_future = cycle.get("targetVersion") in ("3.3.4", "3.3.5")
+        unversioned_future = cycle.get("targetVersion") in ("3.3.4", "3.3.5", "3.3.6")
         require(not candidates and "futureAdaptationVersion" not in cycle
                 or cycle.get("futureAdaptationVersion") == ("undecided" if unversioned_future else "3.4"),
                 "future candidates must retain their version-bound planning status, not current delivery")

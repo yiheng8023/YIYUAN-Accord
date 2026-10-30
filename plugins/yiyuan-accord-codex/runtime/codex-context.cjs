@@ -278,6 +278,21 @@ function lateOriginOutput(row, binding) {
     value.state.environments && typeof value.state.environments === 'object' && !Array.isArray(value.state.environments);
 }
 
+// Only the verified host-authored reasoning control is supported. It is
+// ordered source evidence, never a human instruction or authority to act.
+// The 200-character bound is local; callers must review custom value semantics.
+function configurationUpdate(line) {
+  const p = line?.payload, m = line?.metadata;
+  return line?.type === 'response_item' && p?.type === 'configuration_update' &&
+    Object.keys(p).sort().join(',') === 'reasoning,type' &&
+    p.reasoning && typeof p.reasoning === 'object' && !Array.isArray(p.reasoning) &&
+    Object.keys(p.reasoning).join(',') === 'effort' &&
+    boundedText(p.reasoning.effort, 200) &&
+    m && typeof m === 'object' && !Array.isArray(m) &&
+    Object.keys(m).sort().join(',') === 'client_authored,harness_authored_configuration' &&
+    m.client_authored === false && m.harness_authored_configuration === true;
+}
+
 function retryOrigin(rows, binding, promptHash) {
   for (let index = 0; index + 1 < rows.length; index++) {
     const line = parseRow(rows[index]);
@@ -297,6 +312,8 @@ function retryOrigin(rows, binding, promptHash) {
           (!Object.hasOwn(candidate.payload, 'turn_id') || candidate.payload.turn_id === binding.turnId) ||
           candidate?.type === 'token_usage_record' && candidate.payload?.turn_id === binding.turnId) continue;
       if (completedCompaction(candidate, binding.sessionId, binding.turnId)) continue;
+      if (configurationUpdate(candidate) && integer(contextAt) &&
+          integer(Date.parse(candidate.timestamp)) && Date.parse(candidate.timestamp) >= contextAt) continue;
       // Initial settings may precede the first input. Locate only within this
       // bound thread/context; the input scan still retains the full control digest.
       const settings = candidate?.payload?.thread_settings;
@@ -550,6 +567,7 @@ function continuationAssociation(rows, binding, host, promptHash, sourceRef, cap
 // enter the global benign-append policy. Source bytes remain cursor-bound.
 function nativeExecutionRecord(line, binding, turn, root, model, attribution, human, anchor) {
   const p = line.payload;
+  if (configurationUpdate(line)) return true;
   if (!p || typeof p !== 'object' || Array.isArray(p)) return false;
   if (Object.hasOwn(p, 'thread_id') && p.thread_id !== binding.sessionId ||
       Object.hasOwn(p, 'turn_id') && p.turn_id !== turn ||
@@ -668,7 +686,8 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
       if (edges) needsGoal = false;
       continue;
     }
-    if (needsGoal && !(line.type === 'response_item' && p?.type === 'message' && p.role === 'developer')) return reject();
+    if (needsGoal && !(line.type === 'response_item' && p?.type === 'message' && p.role === 'developer') &&
+        !(configurationUpdate(line) && integer(at) && at >= boundary)) return reject();
     if (integer(at) && at >= boundary && nativeExecutionRecord(line, binding, turn, root, model, attribution, human,
         anchorRoot !== null && turn === execution.turnId)) {
       if (line.type === 'compacted' || p?.item?.type === 'UserMessage') human = null;
@@ -817,7 +836,8 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
   if (start < 0) return empty('native-input-origin-unavailable');
   const anchorOffset = rows[start].offset;
   let turn = binding.turnId, model = null, originModel = null, inputIndex = 0;
-  const signals = [], pendingInputs = [], records = [], enrichments = [];
+  const signals = [], pendingInputs = [], records = [], enrichments = [], controls = [];
+  let contextAt = null;
   const hooks = scan.captured.filter(item => !item.recordSha256);
   const sourced = scan.captured.filter(item => item.recordSha256);
   const matchedSources = new Set();
@@ -853,9 +873,17 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
         }
         resumeIndex++; pendingResume = null;
       }
-      turn = payload.turn_id; model = payload.model;
+      turn = payload.turn_id; model = payload.model; contextAt = Date.parse(line.timestamp);
       if (index === start) originModel = model;
       signals.push([row.offset, digest]);
+    }
+    if (line.type === 'response_item' && payload?.type === 'configuration_update') {
+      if (!configurationUpdate(line) || !integer(contextAt) || !integer(Date.parse(line.timestamp)) ||
+          Date.parse(line.timestamp) < contextAt) return empty('native-input-control-unrecognized');
+      signals.push([row.offset, digest]);
+      controls.push({turnId: turn, sourceRef: `${sourceRef}#byte=${row.offset}`, recordOffset: row.offset,
+        recordSha256: digest, type: 'configuration_update', reasoningEffort: payload.reasoning.effort,
+        controlDisposition: 'host-control-not-human-or-permission'});
     }
     if (line.type === 'response_item' && nativeTaskOutput(payload)) signals.push([row.offset, digest]);
     const user = line.type === 'response_item' && payload?.role === 'user';
@@ -964,7 +992,7 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
   }
   if (scan.readPart && !selectedPart) return empty('native-source-record-unavailable');
   const supported = records.every(record => record.supported);
-  return {state: 'observed', reason: 'bound-native-input-prefix', cursor, pendingInputs, records, enrichments,
+  return {state: 'observed', reason: 'bound-native-input-prefix', cursor, pendingInputs, records, enrichments, controls,
     ...(resumes.length ? {recoveredControl: {resumes, cursor}, recoveredInterruptOffsets} : {}),
     ...(selectedPart ? {selectedPart} : {}),
     capturedPrefixMatched: true, latestInputReconciled: pendingInputs.length === 0,

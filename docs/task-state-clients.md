@@ -52,13 +52,19 @@ Codex multi-agent v2 的根会话文件也可能带第二个 UUID 后缀，子�
 
 ## Goal 运行时上下文与自动续轮
 
-3.3.5候选适配已观察的`goal.internal_context`来源形状：同轮次、单文本/单kind、完整`source="goal"`包装及明确由宿主生成且非Hook的来源。仅文本相似、错误身份、缺失或混合形状不进入该分支；真实用户的`user.goal`、`user.goal.omitted`也不能据此当作内部背景跳过。会话格式不是上游稳定接口，本适配不声称覆盖所有Goal、模型变化或未知启动路径。
+3.3.5适配已观察的`goal.internal_context`来源形状：同轮次、单文本/单kind、完整`source="goal"`包装及明确由宿主生成且非Hook的来源。仅文本相似、错误身份、缺失或混合形状不进入该分支；真实用户的`user.goal`、`user.goal.omitted`也不能据此当作内部背景跳过。会话格式不是上游稳定接口，本适配不声称覆盖所有Goal、模型变化或未知启动路径。
 
 Goal记录完整进入来源顺序、原字节摘要和pending列表，标为`sourceCategory=goal-runtime-context`、`controlDisposition=requires-review`；不消耗人类Hook匹配顺序，不替换最新用户输入摘要。显式reconcile保存这些来源说明，输入分页可读回。`requires-review`表示调用者的解释责任，不是新的暂停状态、已理解证明或自动解除条件。继续、预算停止和目标更新共用同一kind，必须读取实际内容与已有用户决定；对账不授予新权限，不能忽略已知预算停止或真实暂停。
 
 自动Goal续轮另核原执行正常完成、`turn_trigger=goal`、parent/root关系、上下文与当前调用身份。与人工续轮组合时，复用同一来源快照中的更短前驱证明；临时已证明执行只作内部参数，不新增回执权限。连续Goal链和递归均有界，未知控制、缺失结束、错身份、倒序或漂移继续拒绝；保留原capacity/App/human校验、暂停和恢复要求。本结论仅证明原生执行关联，不证明历史/当前权限不变或完整恢复，不从settings、world-state或compaction快照导入授权。成功后仍须新epoch下审查完整合同并显式bind。Goal状态、计量和派发由宿主管理，Accord不注册Stop续轮或另建Goal控制器。
 
 对已观察的晚到首次人类输入，候选在输入起点定位和Goal执行链中复用同身份记录校验；限定用量、完成投影、压缩及宿主快照等已证形状，原始记录继续受来源游标约束。起点定位不凭显示UserMessage代替未覆盖用户输入，不扩全局追加白名单或读取窗口。来源定位成功只说明限定来源段可核，不产生新权限、Goal派发或恢复资格；执行关联、对账及完整合同重绑仍分别核验。
+
+## 宿主推理设置控制
+
+3.3.6候选支持已核来源形状的`response_item.configuration_update`：外层metadata恰含`client_authored=false`及`harness_authored_configuration=true`，payload仅type/reasoning，reasoning仅effort。effort按官方可含custom的字符串语义保留原值，并受200个UTF-16代码单元的本地读取界限约束；观察到值不证明当前模型支持该值，也不代表Agent已经理解或批准其影响。空白、控制字符、错类型、超界值、额外控制字段、缺失或伪造外层来源保持未决。
+
+原记录进入完整控制signals，返回独立`controls`观察：sourceRef、recordOffset、recordSha256、当前来源上下文关联的turnId、reasoningEffort及非人类/非权限说明。turnId不是该记录自带身份。设置不进入人类输入序列或替换输入摘要；后到或改写设置使旧cursor失效。响应过大时省略controls详情并给出数量及既有只读helper入口，不能把省略当无设置。调用者仍须理解实际设置及Goal/预算，保留暂停、恢复和权限；对账与绑定依旧分别执行。
 
 ## bind：每次完整绑定当前合同
 

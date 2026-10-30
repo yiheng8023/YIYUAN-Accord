@@ -300,11 +300,11 @@ function inspectNativeState(params, serverVersion = null) {
     if (evidence && Array.isArray(evidence.records)) {
       // Keep the observation and all recovery gates; missing detail is not an
       // empty input set. The existing helper can read the complete evidence.
-      const {records, pendingInputs, enrichments, cursor, ...summary} = evidence;
+      const {records, pendingInputs, enrichments, controls, cursor, ...summary} = evidence;
       value.checkpoint.snapshot.nativeInputEvidence = {...summary,
         details: 'omitted-bounded-result',
         counts: {records: records.length, pendingInputs: pendingInputs?.length ?? 0,
-          enrichments: enrichments?.length ?? 0},
+          enrichments: enrichments?.length ?? 0, ...(controls?.length ? {controls: controls.length} : {})},
         detailRead: {helperPath: path.join(__dirname, 'task-checkpoint.cjs'),
           request: {op: 'status', session_id: source.sessionTreeId, cwd: workspace.cwd,
             nativeInputEvidence: true, ...(currentHost ? {currentHost} : {})},
