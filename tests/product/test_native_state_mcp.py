@@ -6401,6 +6401,197 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
 
 
 
+    def test_full_snapshot_retained_cursor_upgrade(self):
+        self.native_context()
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        ident = json.dumps(['authority', 'package', 'skill'])
+        full = {'timestamp': datetime.now(timezone.utc).isoformat(), 'type': 'world_state',
+                'payload': {'full': True, 'state': {'model': {'model': 'observed-model'},
+                    'environments': {'environments': {'local': {'cwd': str(self.work)}}},
+                    'host_skills': {'entries': {ident: {'fingerprint': 'a' * 64, 'shown': False}}}}}}
+        with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(full)+'\n')
+        self.append_native_message(id='old-pending')
+        preview = self.native_input_preview(); old = preview['nativeInputEvidence']
+        self.assertEqual(old['state'], 'observed')
+        self.assertFalse(self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+            evidenceCursor=old['cursor'])['isError'])
+        receipt = next(self.state.glob('*.input.json')); source = transcript.read_bytes()
+        # Recreate the previous algorithm's signal list for this controlled fixture.
+        offset, legacy_signals = 0, []
+        for raw in source.splitlines(keepends=True):
+            line = raw.rstrip(b'\r\n'); record = json.loads(line)
+            if record['type'] == 'turn_context' or (record['type'] == 'response_item' and record['payload'].get('role') == 'user'):
+                legacy_signals.append([offset, hashlib.sha256(line).hexdigest()])
+            offset += len(raw)
+        data = json.loads(receipt.read_bytes())
+        data['nativeInputReconciliation']['cursor']['signalsSha256'] = hashlib.sha256(
+            json.dumps(legacy_signals, separators=(',', ':')).encode()).hexdigest()
+        receipt.write_text(json.dumps(data), encoding='utf-8'); before = receipt.read_bytes()
+        old['cursor'] = data['nativeInputReconciliation']['cursor']
+        now = self.native_input_preview(); self.assertEqual(now['nativeInputEvidence']['state'], 'observed', now)
+        self.assertEqual(receipt.read_bytes(), before)
+        data = json.loads(before); data['nativeInputReconciliation']['cursor']['signalsSha256'] = '0' * 64
+        receipt.write_text(json.dumps(data), encoding='utf-8')
+        self.assertEqual(self.native_input_preview()['nativeInputEvidence']['reason'], 'native-input-evidence-changed')
+        receipt.write_bytes(before)
+        transcript.write_bytes(source.replace(b'"shown": false', b'"shown": true ', 1))
+        self.assertEqual(self.native_input_preview()['nativeInputEvidence']['reason'], 'native-input-evidence-changed')
+        transcript.write_bytes(source)
+        self.append_native_message(id='new-pending', text='New reviewed input')
+        fresh = self.native_input_preview(); self.assertEqual(len(fresh['nativeInputEvidence']['pendingInputs']), 1)
+        rejected = self.manage(action='reconcile-input', epoch=fresh['epoch'], expectedRevision=0, evidenceCursor=old['cursor'])
+        self.assertTrue(rejected['isError']); self.assertEqual(rejected['value']['reason'], 'native-input-evidence-changed')
+        cursor = fresh['nativeInputEvidence']['cursor']
+        with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(full)+'\n')
+        rejected = self.manage(action='reconcile-input', epoch=fresh['epoch'], expectedRevision=0, evidenceCursor=cursor)
+        self.assertTrue(rejected['isError']); self.assertEqual(rejected['value']['reason'], 'native-input-evidence-changed')
+        latest = self.native_input_preview(); self.assertEqual(latest['nativeInputEvidence']['state'], 'observed')
+        accepted = self.manage(action='reconcile-input', epoch=latest['epoch'], expectedRevision=0,
+                               evidenceCursor=latest['nativeInputEvidence']['cursor'])
+        self.assertFalse(accepted['isError'], accepted)
+        post = self.native_input_preview(); self.assertTrue(post['nativeInputEvidence']['latestInputReconciled'])
+        bound = self.manage(action='bind', epoch=post['epoch'], expectedRevision=0,
+            result='Synthetic', inputs=[], outputs=[{'path': 'report.txt'}], nextAction='Review', canContinue=False)
+        self.assertFalse(bound['isError'], bound)
+
+    def test_full_snapshot_cursor_invalidation(self):
+        for kind in ('partial-append', 'prefix-change', 'append'):
+            with self.subTest(kind=kind):
+                self.setUp(); self.native_context()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                ident = json.dumps(['authority', 'package', 'skill'])
+                row = {'timestamp': datetime.now(timezone.utc).isoformat(), 'type': 'world_state',
+                       'payload': {'full': True, 'state': {
+                           'model': {'model': 'observed-model', 'instructions': 'synthetic'},
+                           'environments': {'environments': {'local': {'cwd': str(self.work), 'shell': 'synthetic'}}},
+                           'host_skills': {'version': 1, 'entries': {ident: {'fingerprint': 'a' * 64, 'shown': False}},
+                               'roots': {}, 'usage': {'tokens': 1, 'characters': 2},
+                               'instructionsSent': True, 'omitDescriptions': False}}}}
+                if kind == 'partial-append':
+                    row['payload'] = {'full': False, 'state': {'host_skills': {'entries': {ident: {'shown': True}}}}}
+                if kind == 'prefix-change':
+                    with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(row)+'\n')
+                before = self.native_input_preview()
+                self.assertEqual(before['nativeInputEvidence']['state'], 'observed')
+                self.assertFalse(self.manage(action='bind', epoch=before['epoch'], expectedRevision=0,
+                    result='Synthetic', inputs=[], outputs=[{'path': 'report.txt'}], nextAction='Wait', canContinue=False)['isError'])
+                self.assertFalse(self.manage(action='pause', epoch=before['epoch'], expectedRevision=1, reason='Pause')['isError'])
+                with transcript.open('a', encoding='utf-8') as stream:
+                    stream.write(json.dumps({'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+                        'id': 'synthetic-pending', 'content': [{'type': 'input_text', 'text': 'Pending input for review'}]}})+'\n')
+                preview = self.native_input_preview(); cursor = preview['nativeInputEvidence']['cursor']
+                self.assertEqual(len(preview['nativeInputEvidence']['pendingInputs']), 1)
+                if kind in ('append', 'partial-append'):
+                    with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(row)+'\n')
+                else:
+                    rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                    next(r for r in rows if r.get('type') == 'world_state')['payload']['state']['host_skills']['entries'][ident]['shown'] = True
+                    transcript.write_text(''.join(json.dumps(x)+'\n' for x in rows), encoding='utf-8')
+                after = self.native_input_preview()['nativeInputEvidence']
+                result = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=2, evidenceCursor=cursor)
+                self.assertEqual(self.helper({'op': 'status'}, session=self.params['_meta']['x-codex-turn-metadata']['thread_id'])['mode'], 'paused')
+                self.assertTrue(result['isError'], result)
+                self.assertEqual(result['value']['reason'], 'native-input-evidence-changed')
+
+    def test_skill_directory_delta_shape_origin_and_cursor(self):
+        ident = json.dumps(['authority', 'package', 'skill'])
+        valid = [
+            {'host_skills': {'entries': {ident: {'fingerprint': 'a' * 64, 'shown': False}}}},
+            {'skills': {'entries': {ident: {'shown': True}}}},
+            {'cloud_skills': {'entries': {ident: {'fingerprint': 'b' * 64}}}},
+            {'tools': {'gone': None, 'tool': 'description'}, 'host_skills': {'entries': {ident: None}}},
+            {'skills': {'entries': {ident: {'shown': False}}}, 'cloud_skills': {'entries': {ident: None}}},
+            {'host_skills': {'version': 1, 'roots': {'alias': None, 'other': 'root'},
+                'usage': {'tokens': 4}, 'instructionsSent': True, 'omitDescriptions': False,
+                'allocation': {'totalBudget': {'tokens': None, 'characters': 300}, 'cloudLimit': 3,
+                               'cloudCatalogFingerprint': [4] * 32}}},
+            {'skills': {'allocation': None}},
+            {'environments': {'environments': {'local': {'cwd': 'synthetic'}}},
+                'host_skills': {'entries': {ident: {'shown': True}}}, 'tools': {'x': 'description'}},
+            {'cloud_skills': {'version': 1, 'entries': {ident: {'fingerprint': 'c' * 64, 'shown': True}},
+                'roots': {}, 'usage': {'tokens': 1, 'characters': 2}, 'instructionsSent': True,
+                'omitDescriptions': False, 'allocation': {'totalBudget': {'tokens': 20},
+                'cloudLimit': 10, 'cloudCatalogFingerprint': [0] * 32}}},
+        ]
+        invalid = [
+            {'environments': {}, 'host_skills': {'entries': {}}, 'permissions': {}},
+            {'environments': [], 'host_skills': {'entries': {}}},
+            {'host_skills': {'version': 2}},
+            {'host_skills': {'usage': {'tokens': -1}}},
+            {'host_skills': {'allocation': {'totalBudget': {'tokens': 1, 'characters': 2}}}},
+            {'host_skills': {'allocation': {'cloudCatalogFingerprint': [256] * 32}}},
+            {'host_skills': {'allocation': {'permission': True}}},
+            {'host_skills': {'entries': {'not-an-identity': {'shown': True}}}},
+            {'host_skills': {'entries': {ident: {'fingerprint': 'abc'}}}},
+            {'host_skills': {'entries': {ident: {'shown': 'false'}}}},
+            {'host_skills': {'entries': {ident: {'fingerprint': False}}}},
+            {'host_skills': {'entries': {ident: {'fingerprint': None}}}},
+            {'host_skills': {'entries': {ident: {'shown': None}}}},
+            {'host_skills': {'entries': {ident: {'shown': False, 'permission': 'allow'}}}},
+            {'host_skills': {'entries': {ident: {}}}},
+            {'host_skills': {'entries': {ident: []}}},
+            {'host_skills': {'entries': None}},
+            {'host_skills': {'entries': {}, 'unknown': 1}},
+            {'host_skills': {'entries': {}}, 'permissions': {}},
+            {'host_skills': {'entries': {}}, 'model': {}},
+            {'host_skills': {'entries': {}}, 'tools': {'bad': 1}},
+        ]
+        for placement in ('early', 'late'):
+            for state, allowed in [(v, True) for v in valid] + [(v, False) for v in invalid]:
+                with self.subTest(placement=placement, state=state):
+                    self.setUp(); self.native_context()
+                    transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                    rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                    row = {'timestamp': rows[1]['timestamp'], 'type': 'world_state',
+                           'payload': {'full': False, 'state': state}}
+                    rows.insert(2 if placement == 'early' else len(rows), row)
+                    transcript.write_text(''.join(json.dumps(x)+'\n' for x in rows), encoding='utf-8')
+                    evidence = self.native_input_preview()['nativeInputEvidence']
+                    self.assertEqual(evidence['state'], 'observed' if allowed else 'unknown', evidence)
+                    if allowed:
+                        control = evidence['controls'][0]
+                        self.assertEqual(control['recordSha256'], hashlib.sha256(json.dumps(row).encode()).hexdigest())
+                        self.assertEqual(control['recordOffset'], int(control['sourceRef'].split('#byte=')[1]))
+
+        for kind in ('old-time', 'wrong-full', 'extra'):
+            with self.subTest(kind=kind):
+                self.setUp(); self.native_context()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                row = {'timestamp': rows[1]['timestamp'], 'type': 'world_state',
+                       'payload': {'full': False, 'state': valid[0]}}
+                if kind == 'old-time': row['timestamp'] = '2000-01-01T00:00:00Z'
+                if kind == 'wrong-full': row['payload']['full'] = 'false'
+                if kind == 'extra': row['payload']['permission'] = 'allow'
+                rows.append(row)
+                transcript.write_text(''.join(json.dumps(x)+'\n' for x in rows), encoding='utf-8')
+                self.assertEqual(self.native_input_preview()['nativeInputEvidence']['state'], 'unknown')
+
+        self.setUp(); self.native_context()
+        preview = self.native_input_preview()
+        self.assertFalse(self.manage(action='bind', epoch=preview['epoch'], expectedRevision=0,
+            result='Paused', inputs=[], outputs=[{'path': 'report.txt'}], nextAction='Wait', canContinue=False)['isError'])
+        self.assertFalse(self.manage(action='pause', epoch=preview['epoch'], expectedRevision=1, reason='Pause')['isError'])
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        row = {'timestamp': datetime.now(timezone.utc).isoformat(), 'type': 'world_state',
+               'payload': {'full': False, 'state': valid[0]}}
+        with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(row)+'\n')
+        now = self.native_input_preview()['nativeInputEvidence']
+        self.assertNotEqual(now['cursor']['signalsSha256'], preview['nativeInputEvidence']['cursor']['signalsSha256'])
+        rejected = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=2,
+                               evidenceCursor=preview['nativeInputEvidence']['cursor'])
+        self.assertTrue(rejected['isError'])
+        self.assertEqual(rejected['value']['reason'], 'native-input-evidence-changed')
+        self.assertEqual(self.helper({'op': 'status'}, session=self.params['_meta']['x-codex-turn-metadata']['thread_id'])['mode'], 'paused')
+
+    def test_skill_directory_goal_association_and_guards(self):
+        ident = json.dumps(['authority', 'package', 'skill'])
+        for section in ('skills', 'cloud_skills', 'host_skills'):
+            with self.subTest(section=section):
+                self.setUp(); self.goal_auto_source()
+                self.goal_record_check([{'type': 'world_state', 'payload': {'full': False, 'state': {
+                    section: {'entries': {ident: {'shown': False}}}}}}], accepted=True)
+
     def test_tools_delta_goal_proof(self):
         self.goal_auto_source()
         row = {'type': 'world_state', 'payload': {'full': False, 'state': {

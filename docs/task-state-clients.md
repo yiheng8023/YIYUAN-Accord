@@ -78,9 +78,13 @@ Goal记录完整进入来源顺序、原字节摘要和pending列表，标为`so
 
 ## 宿主工具目录增量
 
-3.3.6候选识别`world_state`中payload仅含full/state、full为false、state仅含tools的已核合并补丁。tools可为动态namespace到string/null的对象，或整体null；null表示相应删除，缺字段不表示其它宿主状态清空。描述是数据，当前producer的250字符展示策略不作为协议封闭上限；错误值类型、额外控制或未知混合section保持未决。
+3.3.6阶段识别`world_state`中payload仅含full/state、full为false、state仅含tools的已核合并补丁。tools可为动态namespace到string/null的对象，或整体null；null表示相应删除，缺字段不表示其它宿主状态清空。描述是数据，当前producer的250字符展示策略不作为协议封闭上限；错误值类型、额外控制或未知混合section保持未决。
 
 完整记录加入signals和独立controls，保留sourceRef、offset、摘要、所属来源上下文及tools段标识；后到变更使旧cursor失效，不进入全局benign追加规则或人类输入序列。无需另建工具状态镜像；这不证明目录已完整恢复、工具已可调用或取得新权限。有界结果沿已有controls数量与只读回读入口处理。
+
+3.3.8候选将同一分类器贯通输入定位、晚到输入、执行关联与最终扫描，识别已核`skills`、`cloud_skills`、`host_skills`目录的递归局部字段，并允许与已支持的tools/environments组合。目录条目身份、fingerprint/shown、roots、usage和allocation分别按固定producer类型核验；路径字符串不会触发文件读取。未知目录schema、额外model/permissions段仍拒绝，不能把一般合并补丁语义当作所有形状的兼容保证。
+
+完整`world_state`快照的原始offset/digest也计入变化信号；这不新增对其权限或内容的资格判断。已有持久retained/recovered游标仅在来源身份和原前缀字节逐项匹配时，可接受该精确前缀按旧算法或新算法重算的信号摘要。当前调用传入的expectedCursor只认完整新信号；后到完整快照、目录或输入仍使其失效，须重新观察、审阅并显式对账。只读兼容不会重写旧回执，也不自动解除暂停或完成任务。
 
 ## bind：每次完整绑定当前合同
 

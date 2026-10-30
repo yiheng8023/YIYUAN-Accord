@@ -364,14 +364,42 @@ function completedCompaction(line, sessionId, turnId) {
     boundedText(payload.item.id, 200);
 }
 
-// RFC 7386 tools-only delta: the directory is observation, not permission.
-function toolsDelta(line) {
-  const p = line?.payload, state = p?.state, tools = state?.tools;
+// Typed directory merge patches are source evidence, never permission or invocation.
+function directoryDelta(line) {
+  const p = line?.payload, state = p?.state;
   const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
-  return line?.type === 'world_state' && object(p) && p.full === false &&
-    Object.keys(p).sort().join(',') === 'full,state' && object(state) &&
-    Object.keys(state).join(',') === 'tools' && (tools === null || object(tools) &&
-      Object.values(tools).every(value => value === null || typeof value === 'string'));
+  if (line?.type !== 'world_state' || !object(p) || p.full !== false ||
+      Object.keys(p).sort().join(',') !== 'full,state' || !object(state) || !Object.keys(state).length) return false;
+  const natural = value => Number.isSafeInteger(value) && value >= 0;
+  const fields = (value, validators) => object(value) && Object.keys(value).length > 0 &&
+    Object.entries(value).every(([key, item]) => Object.hasOwn(validators, key) && validators[key](item));
+  const budget = value => fields(value, {tokens: item => item === null || natural(item),
+    characters: item => item === null || natural(item)}) &&
+    Object.values(value).filter(natural).length === 1;
+  const identity = key => {
+    try { const id = JSON.parse(key); return Array.isArray(id) && id.length === 3 &&
+      id.every(part => typeof part === 'string'); } catch { return false; }
+  };
+  const entry = value => value === null || fields(value, {
+    fingerprint: item => typeof item === 'string' && /^[0-9a-f]{64}$/u.test(item),
+    shown: item => typeof item === 'boolean'});
+  const catalog = value => fields(value, {
+    version: item => item === 1,
+    entries: item => object(item) && Object.entries(item).every(([key, entryValue]) => identity(key) && entry(entryValue)),
+    roots: item => object(item) && Object.values(item).every(root => root === null || typeof root === 'string'),
+    usage: item => fields(item, {tokens: natural, characters: natural}),
+    instructionsSent: item => typeof item === 'boolean', omitDescriptions: item => typeof item === 'boolean',
+    allocation: item => item === null || fields(item, {
+      totalBudget: budget, cloudLimit: natural,
+      cloudCatalogFingerprint: fingerprint => Array.isArray(fingerprint) && fingerprint.length === 32 &&
+        fingerprint.every(byte => natural(byte) && byte <= 255)})
+  });
+  return Object.entries(state).every(([section, value]) => {
+    if (section === 'tools') return value === null || object(value) &&
+      Object.values(value).every(item => item === null || typeof item === 'string');
+    if (section === 'environments') return Object.keys(state).length > 1 && object(value);
+    return ['skills', 'cloud_skills', 'host_skills'].includes(section) && catalog(value);
+  });
 }
 
 function environmentDelta(line) {
@@ -385,7 +413,7 @@ function environmentDelta(line) {
 // This is not the benign-append policy: metadata here grants no new authority.
 function lateOriginOutput(row, binding) {
   const line = parseRow(row), value = line?.payload;
-  if (toolsDelta(line)) return true;
+  if (directoryDelta(line)) return true;
   if (Object.hasOwn(value || {}, 'turn_id') && value.turn_id !== binding.turnId ||
       Object.hasOwn(value || {}, 'thread_id') && value.thread_id !== binding.sessionId) return false;
   if (retryRecordIsBenign(row)) return true;
@@ -458,7 +486,7 @@ function retryOrigin(rows, binding, promptHash) {
           integer(contextAt) && integer(at) && at >= contextAt &&
           nativeExecutionRecord(candidate, binding, binding.turnId, root, line.payload.model,
             prior?.payload.turn_attribution, null, !prior && line.payload.root_turn_id === root)) continue;
-      if ((!toolsDelta(candidate) || integer(contextAt) && integer(at) && at >= contextAt) &&
+      if ((!directoryDelta(candidate) || integer(contextAt) && integer(at) && at >= contextAt) &&
           lateOriginOutput(rows[next], binding)) continue;
       if (candidate?.type === 'turn_context' && candidate.payload?.turn_id === binding.turnId &&
           candidate.payload.model === line.payload.model && text(candidate.payload.cwd) && text(line.payload.cwd) &&
@@ -703,7 +731,7 @@ function continuationAssociation(rows, binding, host, promptHash, sourceRef, cap
 function nativeExecutionRecord(line, binding, turn, root, model, attribution, human, anchor) {
   const p = line.payload;
   if (configurationUpdate(line)) return true;
-  if (toolsDelta(line)) return true;
+  if (directoryDelta(line)) return true;
   if (!p || typeof p !== 'object' || Array.isArray(p)) return false;
   if (Object.hasOwn(p, 'thread_id') && p.thread_id !== binding.sessionId ||
       Object.hasOwn(p, 'turn_id') && p.turn_id !== turn ||
@@ -836,7 +864,7 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
       continue;
     }
     if (needsGoal && !(line.type === 'response_item' && p?.type === 'message' && p.role === 'developer') &&
-        !((configurationUpdate(line) || toolsDelta(line)) && integer(at) && at >= boundary)) return reject();
+        !((configurationUpdate(line) || directoryDelta(line)) && integer(at) && at >= boundary)) return reject();
     if (integer(at) && at >= boundary && nativeExecutionRecord(line, binding, turn, root, model, attribution, human,
         anchorRoot !== null && turn === execution.turnId)) {
       if (line.type === 'compacted' || p?.item?.type === 'UserMessage') human = null;
@@ -844,7 +872,7 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
     }
     if (line.type === 'response_item' && p?.type === 'message' && p.role === 'developer' ||
         completedCompaction(line, binding.sessionId, turn) ||
-        (!toolsDelta(line) || integer(at) && at >= boundary) && lateOriginOutput(row, {...binding, turnId: turn})) continue;
+        (!directoryDelta(line) || integer(at) && at >= boundary) && lateOriginOutput(row, {...binding, turnId: turn})) continue;
     return reject();
   }
   if (!edges || pending || completed !== null || needsGoal || turn !== host.turnId || model !== host.model) return reject();
@@ -990,7 +1018,7 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
   if (start < 0) return empty('native-input-origin-unavailable');
   const anchorOffset = rows[start].offset;
   let turn = binding.turnId, model = null, originModel = null, inputIndex = 0;
-  const signals = [], pendingInputs = [], records = [], enrichments = [], controls = [];
+  const signals = [], fullOffsets = new Set(), pendingInputs = [], records = [], enrichments = [], controls = [];
   let contextAt = null;
   const hooks = scan.captured.filter(item => !item.recordSha256);
   const sourced = scan.captured.filter(item => item.recordSha256);
@@ -1039,16 +1067,23 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
         recordSha256: digest, type: 'configuration_update', reasoningEffort: payload.reasoning.effort,
         controlDisposition: 'host-control-not-human-or-permission'});
     }
+    // A full snapshot can replace catalog state; its bytes change the reviewed
+    // basis without proving identity, permission, execution, or recovery.
+    if (line.type === 'world_state' && payload?.full === true) {
+      signals.push([row.offset, digest]); fullOffsets.add(row.offset);
+    }
     if (line.type === 'world_state' && payload?.full !== true &&
-        !toolsDelta(line) && !environmentDelta(line))
+        !directoryDelta(line) && !environmentDelta(line))
       return empty('native-input-control-unrecognized');
-    if (toolsDelta(line)) {
+    if (directoryDelta(line)) {
       if (!integer(contextAt) || !integer(Date.parse(line.timestamp)) || Date.parse(line.timestamp) < contextAt)
         return empty('native-input-control-unrecognized');
       signals.push([row.offset, digest]);
       controls.push({turnId: turn, sourceRef: `${sourceRef}#byte=${row.offset}`, recordOffset: row.offset,
-        recordSha256: digest, type: 'world_state', section: 'tools',
-        controlDisposition: 'host-tool-directory-not-permission-or-invocation'});
+        recordSha256: digest, type: 'world_state', section: Object.keys(payload.state).length === 1
+          ? Object.keys(payload.state)[0] : 'directories',
+        controlDisposition: Object.keys(payload.state).join(',') === 'tools'
+          ? 'host-tool-directory-not-permission-or-invocation' : 'host-directory-not-permission-or-invocation'});
     }
     if (line.type === 'response_item' && nativeTaskOutput(payload)) signals.push([row.offset, digest]);
     const user = line.type === 'response_item' && payload?.role === 'user';
@@ -1164,10 +1199,15 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       .update(tail.subarray(anchorOffset - tailOffset)).digest('hex'), signalsSha256: sha(signals)};
   for (const expected of [scan.retainedCursor, scan.expectedCursor, recovered?.cursor].filter(Boolean)) {
     const prefix = tail.subarray(anchorOffset - tailOffset, expected.endOffset - tailOffset);
+    const retained = expected !== scan.expectedCursor;
+    const scoped = retained ? signals.filter(([offset]) => offset < expected.endOffset) : signals;
+    // Old retained receipts predate full-snapshot signals. Accept only the exact
+    // old digest for the already byte-verified prefix, never for a caller cursor.
+    const legacy = retained && scoped.some(([offset]) => fullOffsets.has(offset)) &&
+      expected.signalsSha256 === sha(scoped.filter(([offset]) => !fullOffsets.has(offset)));
     if (expected.sourceId !== cursor.sourceId || expected.headSha256 !== cursor.headSha256 ||
         expected.anchorOffset !== anchorOffset || expected.endOffset > cursor.endOffset ||
-        expected.endOffset < anchorOffset || expected === scan.expectedCursor && expected.signalsSha256 !== cursor.signalsSha256 ||
-        expected !== scan.expectedCursor && expected.signalsSha256 !== sha(signals.filter(([offset]) => offset < expected.endOffset)) ||
+        expected.endOffset < anchorOffset || expected.signalsSha256 !== sha(scoped) && !legacy ||
         expected.prefixSha256 !== crypto.createHash('sha256').update(prefix).digest('hex')) {
       return empty('native-input-evidence-changed');
     }
