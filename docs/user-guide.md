@@ -33,11 +33,11 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
 
 三个动作分别完成：**安装插件、启用插件、信任 Hook**。还需确认实际加载，不能只看“已安装”。
 
-1. 核对当前宿主、运行时、已有配置和插件，以及正式发行的精确 tag。当前版本为 [v3.3.6](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.6)，插件 ID 为 `yiyuan-accord-codex`，来源名为 `yiyuan-accord`。
+1. 核对当前宿主、运行时、已有配置和插件，以及正式发行的精确 tag。当前版本为 [v3.3.7](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.7)，插件 ID 为 `yiyuan-accord-codex`，来源名为 `yiyuan-accord`。
 2. 在需要登记来源时，可采用[官方 marketplace 命令](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)：
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.6
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.7
    ```
 
    这条命令只登记来源。CLI 在 `/plugins` 中切到该来源，查看并安装 YIYUAN Accord；桌面使用实际可用的插件目录与来源入口。本项目来源不等于已被官方公共目录收录。
@@ -87,6 +87,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 | 3.3.4 | `e58f016a` 的文字与维护说明补丁，发行和 CI 记录见[更新日志](../CHANGELOG.md)及[当前接续](operations/CONTINUATION.md#当前事实)。 |
 | 3.3.5 | `9825f03f` 的 Goal 来源与续轮兼容补丁，保留身份、暂停与恢复校验；精确 CI 全11项通过。发行、本机采用及未完恢复条件分别见[当前接续](operations/CONTINUATION.md#目标与当前写者)。 |
 | 3.3.6 | `fc30f8e6` 的推理设置、工具目录增量与新根Goal接续兼容补丁；精确CI #1040全11项成功，正式发行标签为[v3.3.6](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.6)。发布、本机安装、实际加载与完整重绑分别见[当前接续](operations/CONTINUATION.md#目标与当前写者)。 |
+| 3.3.7 | `d972da27` 的用户目标设置/清除、正文省略及独立状态观察兼容修正；精确CI #1043全11项成功，正式标签为[v3.3.7](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.7)。发布、安装、实际加载与完整重绑分别见[当前接续](operations/CONTINUATION.md#目标与当前写者)。 |
 
 原始失败、版本、环境和条件保持原身份；后续文档不移动发行标签，也不把旧通过直接当作新版本通过。CLI、SDK、桌面、IDE、Work 与 Remote 之间，仅在核对适用性和差异后复用相应机制证据；历史入口观察不能覆盖现行官方已知限制。
 
@@ -145,11 +146,11 @@ The current Hooks and state MCP launch a separate `node` executable. The executo
 
 Complete **installation, enablement and Hook trust** separately, then verify actual loading. An installed label is insufficient.
 
-1. Check the host, runtime, existing configuration/plugins and exact official release tag. The current release is [v3.3.6](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.6); the plugin ID is `yiyuan-accord-codex`, in the `yiyuan-accord` marketplace.
+1. Check the host, runtime, existing configuration/plugins and exact official release tag. The current release is [v3.3.7](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.7); the plugin ID is `yiyuan-accord-codex`, in the `yiyuan-accord` marketplace.
 2. Where source registration is needed, use the official [marketplace command](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli):
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.6
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.7
    ```
 
    This registers the source only. In CLI `/plugins`, select it, inspect and install YIYUAN Accord. On desktop use the actual plugin directory/source entry. A repository marketplace is not a listing in the official public directory.
@@ -199,6 +200,7 @@ Before update, rollback or removal, use a healthy executor independent of the pl
 | 3.3.4 | Wording and maintenance guidance at `e58f016a`; release and CI records are in the [changelog](../CHANGELOG.md) and [current continuation](operations/CONTINUATION.md#当前事实). |
 | 3.3.5 | Goal source and continuation compatibility at `9825f03f`, preserving identity, pause and recovery checks; all 11 exact-commit CI jobs passed. Release, local adoption and remaining recovery conditions are recorded separately in [current continuation](operations/CONTINUATION.md#目标与当前写者). |
 | 3.3.6 | Reasoning configuration, tool-directory delta and native root-Goal continuation compatibility at `fc30f8e6`; all 11 exact CI #1040 jobs passed, with official tag [v3.3.6](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.6). Publication, installation, actual loading and full state rebinding remain separate in [current continuation](operations/CONTINUATION.md#目标与当前写者). |
+| 3.3.7 | User Goal Set/Clear, omitted body and separate state-observation compatibility at `d972da27`; all 11 exact CI #1043 jobs passed, with official tag [v3.3.7](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.7). Publication, installation, actual loading and full state rebinding remain separate in [current continuation](operations/CONTINUATION.md#目标与当前写者). |
 
 Original failures, versions, environments and conditions retain their identities. Later documentation does not move release tags or validate changed versions through an old PASS. Reuse common-mechanism evidence across CLI, SDK, desktop, IDE, Work or Remote only after checking applicability and differences. Historical observations do not override known current upstream limitations.
 
