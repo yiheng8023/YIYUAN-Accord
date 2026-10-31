@@ -1,6 +1,6 @@
-# Native capability discovery and Skill input
+# Native capabilities, Skill input and delegation evidence
 
-Read for native inventory or deliberate coordination of an installed Skill.
+Read for native inventory, deliberate Skill input or missing delegation receipts.
 Use the current task's authority, manager, enabled choices and source restrictions.
 This interface supplies metadata and a prepared input; the coordinator still owns
 workflow fit, target control, execution, verification and resource closure.
@@ -61,3 +61,24 @@ gap or plausible benefit. This local query is not an ecosystem search, enablemen
 or installation. The [official Skill policy](https://learn.chatgpt.com/docs/build-skills)
 distinguishes implicit matching from explicit invocation; actual dispatch and
 support remain bound to the current host version and task authority.
+
+## Retrieve delegation evidence
+
+When dispatch returns a name or path, retain that handle and check supported host
+history before declaring execution records unavailable. In Codex Desktop, when
+`read_thread` is available, inspect the owning thread's structured
+`subAgentActivity` for the matching `agentPath` and `agentThreadId`. Use that exact
+thread ID to read the child's commands and results; an activity ID, agent name or
+path is not its thread ID. Bound history reads to the relevant turn and fields.
+
+Check command status, exit code, output truncation and source identity for the
+claimed action. Retrieve needed missing output before dependent conclusions.
+Host-reported settings establish their stated scope; requested settings and
+self-reports do not substitute for observations. Missing metadata stays unknown.
+Source retrieval, understanding, adoption and causal value need distinct evidence.
+
+For execution with retained operation/evidence IDs and deadline/recovery controls,
+use the existing [native execution interface](../../deliver-demand-driven-outcome/references/native-handoff.md#ordinary-root-task-through-the-mcp-execution-interface).
+Check its actual control scope: a child deadline does not mechanically bound the
+coordinator's later verification or closeout. Preserve the original timing result
+when later evidence or corrective cleanup becomes available.

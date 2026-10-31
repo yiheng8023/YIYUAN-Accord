@@ -29,7 +29,8 @@ Existing scoped delegation needs no repeated approval. Read or wrap content only
 through an authorized route. If unavailable, choose a suitable permitted alternative
 or surface the missing condition. Check workflow fit and verify effects; selection
 is not delivery. Use the [native interface](references/native-capabilities.md) for
-inventory and deliberate input preparation; reuse still-current source observations.
+inventory, deliberate input preparation or missing delegation receipts; reuse
+still-current source observations.
 
 Bind a selected capability to its current managed source and applicable scope,
 not its display name alone. Compare responsibilities and effects: identical
