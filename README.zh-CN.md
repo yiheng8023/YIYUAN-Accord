@@ -4,6 +4,9 @@
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/github/actions/workflow/status/yiheng8023/YIYUAN-Accord/validate.yml?branch=main&amp;label=CI&amp;logo=github" alt="CI 状态"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/releases/latest"><img src="https://img.shields.io/github/v/release/yiheng8023/YIYUAN-Accord?color=blue&amp;label=Release" alt="最新发布版本"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/stargazers"><img src="https://img.shields.io/github/stars/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=ffaa00" alt="GitHub Stars"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/network/members"><img src="https://img.shields.io/github/forks/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=grey" alt="GitHub Forks"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/badge/Python_CI-3.10%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10–3.14 CI 测试版本"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/badge/CI-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="Linux、Windows、macOS CI 平台"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/yiheng8023/YIYUAN-Accord?color=green" alt="Apache-2.0 许可证"></a>
 </p>
 
@@ -78,10 +81,47 @@ flowchart TD
 
 目前仅有一名作者兼维护者，能力、精力和资源有限。欢迎社区联合创作、协同前行；更多宿主适配等方向会持续评估，不预设未来版本号、日期或兼容性承诺。
 
-感谢所有[贡献者](https://github.com/yiheng8023/YIYUAN-Accord/graphs/contributors)。[问题与建议](https://github.com/yiheng8023/YIYUAN-Accord/issues) · [Star 增长趋势](https://www.star-history.com/#yiheng8023/YIYUAN-Accord&Date)
+## 社区
+
+[贡献指南](CONTRIBUTING.md) · [问题与建议](https://github.com/yiheng8023/YIYUAN-Accord/issues)
+
+### 贡献者
+
+诚挚感谢所有贡献代码、评审、文档、问题报告与证据的参与者。
+
+<p align="center">
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=yiheng8023/YIYUAN-Accord" alt="YIYUAN Accord 贡献者">
+  </a>
+</p>
+
+### Star 增长趋势
+
+[![YIYUAN Accord Star History](https://api.star-history.com/svg?repos=yiheng8023/YIYUAN-Accord&type=Date)](https://star-history.com/#yiheng8023/YIYUAN-Accord&Date)
+
+## 自愿赞助与支持
+
+赞助完全自愿。
+
+赞助不购买支持 SLA、处理优先级、发布权限、安全保证、治理例外、功能承诺或对技术决策的影响力。
+
+如果 Accord 对你有所帮助，可以通过仓库所有者的[公开 PayPal 页面](https://www.paypal.com/ncp/payment/LNTF8KXGJXMZY)支持维护。
+
+<table>
+  <tr>
+    <th width="300">微信支付（人民币）</th>
+    <th width="300">支付宝（人民币）</th>
+  </tr>
+  <tr>
+    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/wechat-pay.png" alt="微信支付自愿赞助收款码" width="260"></td>
+    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/alipay.png" alt="支付宝自愿赞助收款码" width="260"></td>
+  </tr>
+</table>
+
+付款前请核对收款方。完整条款见 [`SPONSORING.zh-CN.md`](SPONSORING.zh-CN.md)。
 
 ## 许可与支持
 
 由 [yiheng8023](https://github.com/yiheng8023) 维护的独立社区项目，采用 [Apache-2.0](LICENSE)，按“原样”提供；不是宿主厂商的产品或官方背书。名称、商标及第三方声明见 [NOTICE](NOTICE)、[许可政策](docs/license-policy.md)与[第三方声明](THIRD_PARTY_NOTICES.md)。用户仍需审查输出并遵守适用规则，正式发布不保证特定用途的适用性或生产安全。
 
-[自愿赞助与支持](SPONSORING.zh-CN.md)包含公开渠道及收款码。赞助不购买服务等级、优先级、功能承诺或技术决策影响力；社区支持按 [SUPPORT.md](SUPPORT.md) 尽力提供。
+社区支持按 [SUPPORT.md](SUPPORT.md) 尽力提供。

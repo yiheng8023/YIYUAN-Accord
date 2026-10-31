@@ -4,6 +4,9 @@
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/github/actions/workflow/status/yiheng8023/YIYUAN-Accord/validate.yml?branch=main&amp;label=CI&amp;logo=github" alt="CI status"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/releases/latest"><img src="https://img.shields.io/github/v/release/yiheng8023/YIYUAN-Accord?color=blue&amp;label=Release" alt="Latest release"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/stargazers"><img src="https://img.shields.io/github/stars/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=ffaa00" alt="GitHub stars"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/network/members"><img src="https://img.shields.io/github/forks/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=grey" alt="GitHub forks"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/badge/Python_CI-3.10%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10 through 3.14 CI"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/badge/CI-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="CI on Linux, Windows, and macOS"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/yiheng8023/YIYUAN-Accord?color=green" alt="Apache-2.0 license"></a>
 </p>
 
@@ -78,10 +81,47 @@ YIYUAN NEXUS will continue exploring human–machine collaboration and related f
 
 There is currently one author-maintainer, with limited capacity, time and resources. Community collaboration is welcome. More host integrations and other directions will be evaluated without promising future version numbers, dates or compatibility outcomes.
 
-Thank you to all [contributors](https://github.com/yiheng8023/YIYUAN-Accord/graphs/contributors). [Issues and suggestions](https://github.com/yiheng8023/YIYUAN-Accord/issues) · [Star history](https://www.star-history.com/#yiheng8023/YIYUAN-Accord&Date)
+## Community
+
+[Contributing](CONTRIBUTING.md) · [Issues and suggestions](https://github.com/yiheng8023/YIYUAN-Accord/issues)
+
+### Contributors
+
+Thank you to everyone who contributes code, reviews, documentation, issue reports, and evidence.
+
+<p align="center">
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=yiheng8023/YIYUAN-Accord" alt="YIYUAN Accord contributors">
+  </a>
+</p>
+
+### Star history
+
+[![YIYUAN Accord Star History](https://api.star-history.com/svg?repos=yiheng8023/YIYUAN-Accord&type=Date)](https://star-history.com/#yiheng8023/YIYUAN-Accord&Date)
+
+## Voluntary sponsorship and support
+
+Sponsorship is optional.
+
+It does not purchase a support SLA, priority, release authority, safety guarantee, governance exception, feature commitment, or influence over technical decisions.
+
+If Accord is useful, you may support maintenance through the repository owner's [published PayPal page](https://www.paypal.com/ncp/payment/LNTF8KXGJXMZY).
+
+<table>
+  <tr>
+    <th width="300">WeChat Pay (CNY)</th>
+    <th width="300">Alipay (CNY)</th>
+  </tr>
+  <tr>
+    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/wechat-pay.png" alt="WeChat Pay voluntary sponsorship QR code" width="260"></td>
+    <td align="center" valign="middle" width="300" height="430"><img src="docs/assets/sponsoring/alipay.png" alt="Alipay voluntary sponsorship QR code" width="260"></td>
+  </tr>
+</table>
+
+Verify the recipient before paying. See [`SPONSORING.md`](SPONSORING.md) for the complete terms.
 
 ## License and support
 
 An independent community project maintained by [yiheng8023](https://github.com/yiheng8023), licensed under [Apache-2.0](LICENSE) and provided “AS IS”; it is not a host vendor's product or endorsement. See [NOTICE](NOTICE), the [license policy](docs/license-policy.md) and [third-party notices](THIRD_PARTY_NOTICES.md) for names, marks and attribution. Users remain responsible for reviewing outputs and following applicable rules. A release does not establish production safety or fitness for a particular purpose.
 
-[Voluntary sponsorship](SPONSORING.md) lists the published payment channels and QR codes. Sponsorship does not purchase a service level, priority, feature commitment or influence over technical decisions. Community support is best-effort under [SUPPORT.md](SUPPORT.md).
+Community support is best-effort under [SUPPORT.md](SUPPORT.md).
