@@ -1587,6 +1587,7 @@ async function reconcileFailedTransfer(rawInput, dependencies) {
         if (saved.threadId !== targetId || observed.id !== saved.turnId || !terminal.has(observed.status) ||
             typeof saved.input !== 'string' || saved.inputDigest !== digest(saved.input) ||
             (i === 0 && saved.input !== plan.handoffText) || messages.length !== 1 ||
+            ![undefined, 'full'].includes(observed.itemsView) ||
             (canonical(messages[0].content) !== canonical([{type: 'text', text: saved.input}]) &&
              canonical(messages[0].content) !== canonical([{type: 'text', text: saved.input, text_elements: []}]))) {
           reject('RECOVERY_NATIVE_MISMATCH', 'native intake identity, input or terminal differs');
@@ -1778,7 +1779,8 @@ async function reconcileContinuation(rawInput, dependencies) {
     }
     const observedTurn = thread.turns[thread.turns.length - 1];
     const inputs = Array.isArray(observedTurn.items) ? observedTurn.items.filter(i => i.type === 'userMessage') : [];
-    if (inputs.length !== 1 || inputs[0].content?.length !== 1 || inputs[0].content[0]?.type !== 'text' ||
+    if (![undefined, 'full'].includes(observedTurn.itemsView) ||
+        inputs.length !== 1 || inputs[0].content?.length !== 1 || inputs[0].content[0]?.type !== 'text' ||
         inputs[0].content[0].text !== plan.continuation.input) {
       reject('RECOVERY_NATIVE_MISMATCH', 'native continuation input does not match the bound action');
     }

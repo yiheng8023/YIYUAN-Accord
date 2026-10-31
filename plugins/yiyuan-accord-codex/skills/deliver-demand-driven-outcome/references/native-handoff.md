@@ -765,6 +765,14 @@ with `text_elements` either absent or an empty array. Text bytes remain exact;
 nonempty annotations, unknown fields and additional content or messages stay
 held. This wire-shape compatibility does not replace the other recovery checks.
 
+Failed-transfer intake and continuation reconciliation hold an explicitly
+non-full `itemsView` on an input-bearing turn. Omitted legacy metadata remains
+compatible but proves no completeness; `full` covers that turn's items only.
+The caller must establish the required turn set and item coverage, using supported
+native history pages when existing observations are insufficient. Independent
+authority/effect verification remains necessary. Existing reconciled records are
+not retroactively revalidated by this input-view guard.
+
 `verify('failed-transfer-reconcile', facts, deadline)` receives the immutable
 input, exact `ledger`, original/current connection identities, `sourceRead` and
 `targetRead` (null only in the pre-creation window). It must independently verify

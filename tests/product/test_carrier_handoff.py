@@ -115,6 +115,7 @@ if(['empty-elements','empty-denied','nonempty-elements','null-elements','wrong-e
   if(mode==='trimmed-input')item.content[0].text=text.trim();
 }
 
+if(['full','summary','notLoaded','invalid-view'].includes(mode))native.target.turns[0].itemsView=mode;
 if(mode==='source-active')native.source.status.type='active';
 if(mode==='source-ephemeral')native.source.ephemeral=true;
 if(mode==='pending'||mode==='target-writer') {
@@ -249,7 +250,7 @@ class FailedTransferRecoveryTests(unittest.TestCase):
                                  result['baseline']['original']['state']['pendingEffect'])
 
     def test_recovery_accepts_only_exact_plain_input_shapes(self):
-        for mode in ('success', 'empty-elements'):
+        for mode in ('success', 'empty-elements', 'full'):
             with self.subTest(mode=mode):
                 result = self.run_case(mode=mode)
                 self.assertIsNone(result['error'])
@@ -257,7 +258,7 @@ class FailedTransferRecoveryTests(unittest.TestCase):
                 self.assertEqual(result['attempted'], 1)
                 self.assertEqual(result['sql']['settled'], 1)
                 self.assertEqual(result['restored']['status'], 'ready')
-        for mode in ('nonempty-elements', 'null-elements', 'wrong-elements-type', 'wrong-input',
+        for mode in ('summary', 'notLoaded', 'invalid-view', 'nonempty-elements', 'null-elements', 'wrong-elements-type', 'wrong-input',
                      'unknown-field', 'extra-content', 'non-text', 'extra-message', 'trimmed-input'):
             with self.subTest(mode=mode):
                 result = self.run_case(mode=mode)
@@ -404,7 +405,7 @@ class CarrierHandoffTests(unittest.TestCase):
 
     def test_recovery_holds_conflicting_identity_current_state_and_missing_verification(self):
         modes=['foreign-request','foreign-response','foreign-scope','wrong-writer','wrong-phase',
-               'altered-plan','intake-reused','extra-turn','wrong-input','failed-turn','active-target',
+               'altered-plan','intake-reused','extra-turn','wrong-input','failed-turn','active-target','summary','notLoaded','invalid-view',
                'effectsVerified','priorAttemptQuiesced','receiptVerified','reconciliationAuthorized','binding-drift']
         for mode in modes:
             with self.subTest(mode=mode):

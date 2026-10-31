@@ -633,6 +633,8 @@ async function run(config) {
       }
       const turns=[...state.intakeTurns.map(t=>({id:t.turnId,status:'completed',items:[]})),
         {id:'turn-2',status:'completed',items:[{type:'userMessage',content:[{type:'text',text:plan.continuation.input}]}]}];
+      turns.forEach(t=>t.itemsView='full');
+      if(['summary','notLoaded','invalid-view'].includes(mode))turns[turns.length-1].itemsView=mode;
       if(mode==='extra-turn')turns.push({id:'other-turn',status:'completed',items:[]});
       if(mode==='wrong-input')turns[turns.length-1].items[0].content[0].text='Another action';
       if(mode==='empty-elements')turns[turns.length-1].items[0].content[0].text_elements=[];
