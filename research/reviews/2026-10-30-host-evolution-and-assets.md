@@ -75,3 +75,12 @@ Goal正文修订已准备；通过公开App Server接口读取同一活动Goal�
 官方正文、109条索引、载体摘要、资产消费者明细和Goal操作前后记录私有保存在`.tmp/host-asset-baseline-20261030-01/`，不发布原生对话或用户路径。主日志本次缓存SHA为`ca0f90b1eae95019887e74faf55a82388c030fc1b5b924e843dac790d177a30d`。独立研究、载体与资产盘点由不同审阅者完成，Root负责交叉核对和共享文件唯一写入。
 
 仍缺IDE独立版本史、所有预发行/平台部署历史以及Work/Remote当前执行证据；按实际依赖继续补核，不能宣称全覆盖。旧#1033失败和#1034后继CI各保主体，终态见[接续](../../docs/operations/CONTINUATION.md#目标与当前写者)。CI全绿也只关闭对应工程核验，不结束本轮宿主与资产演进责任。本报告本身不授予发行、目录提交、传播或新信任权限。
+
+
+## 2026-10-31 后续补核：实际载体与历史接口
+
+本节补充10-30快照，保留上文原载体身份。本机独立CLI现为0.166.0，二进制SHA256 `9d563ee4e0441ff9d59d612013e0460ddf8e5709735c2d9f6b98b7ef8ca4eb42`；本聊天原生MCP调用报告hostVersion为0.166.0-alpha.5.1，实际加载Accord338。该调用元数据不单独证明协调位置，或全部Desktop文件、IDE、Work等入口均已更新。
+
+上游约定补核（2026-10-31）：固定官方0.166 tag所指commit `6ff1e1ca`的[完整读取兼容实现](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/app-server/src/request_processors/thread_processor.rs#L3185-L3218)与[分页展开](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/app-server/src/request_processors/thread_processor.rs#L3540-L3608)表明，includeTurns=true仍展开turn与item页至nextCursor结束；paginated会发弃用提醒，并非该版本已移除完整读取。两份公开类型与本机二进制生成的ThreadReadParams/Turn逐字节相同，实机单turn的76item与5页回读一致；这支持继续复用该兼容接口，不据此新增一套分页组件。两个类型相同不是完整binary构建证明；多turn、变化中一致性及其它载体运行验收仍保持其实际范围。
+
+本次直接原生读/页操作只针对已完成的自有研究线程，未启动模型、resume、interrupt或重放业务；接口读可能维护宿主的历史投影，不能笼统等同于磁盘零写。已有恢复仍保身份、原文、暂停、未知效果及独立验证。源码契约、实机单样本、当前候选b2b3的本地工程检查和应用验收各自保其身份；没有以该源码补核升级正式安装或扩展宿主范围。

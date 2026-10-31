@@ -173,6 +173,12 @@ python -B -m unittest tests.product.test_accord_comparison
 
 产物提供了当前维护线索：真实回读的空`text_elements`与失败交接恢复的精确形状比较存在误拒，已另经公开入口mock区别复现；分页/完整视图与来源投影仍需逐项核实。这些是工程输入，不是替换实现或证明普遍收益的结论；本次338观察不资格化f050或后续候选。后续零模型核对中，已完成研究线程的76个item与5页分页逐ID一致，turns/list的summary只含2项；不能以summary/full单字段判定整个历史。公开mock另证恢复core会接受显式summary并交独立verify决定，随后最小修正对该标记前置持有，私有新测试在旧runtime失败、候选通过。该工程修正没有改签原研究或证明真实接管；完整turn集与真正未完业务恢复的范围继续独立保留。
 
+### 0.166 约定与自然恢复材料的后续核对
+
+上游约定补核（2026-10-31）：固定官方0.166 tag所指commit `6ff1e1ca`的[完整读取兼容实现](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/app-server/src/request_processors/thread_processor.rs#L3185-L3218)与[分页展开](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/app-server/src/request_processors/thread_processor.rs#L3540-L3608)表明，includeTurns=true仍展开turn与item页至nextCursor结束；paginated会发弃用提醒，并非该版本已移除完整读取。两份公开类型与本机二进制生成的ThreadReadParams/Turn逐字节相同，实机单turn的76item与5页回读一致；这支持继续复用该兼容接口，不据此新增一套分页组件。两个类型相同不是完整binary构建证明；多turn、变化中一致性及其它载体运行验收仍保持其实际范围。
+
+自然压缩后的开发观察（2026-10-31）：原生日志记录05:01:29.915Z的compacted事件，之后同一Root线程/turn/epoch及7保护输入经来源核对仍匹配。压缩前兼容代码和151项/三静态执行已完成；真正待交的是父子用量限定、原失败、文档与资源后态。压缩后448750e6补齐这些必要限定并关闭中立目录，随后继续了新守卫开发。独审支持“开发期同聊天压缩后连续推进”的有界观察，不构成应用侧中断恢复验收、跨聊天接管、全环境无其它写者或Accord因果收益；无预注册对照、完整人工/费用总账。它不要求普通用户维护项目接续文件，也不替代计划中真正未完应用任务的恢复观察。
+
 ## 方法参考与限制
 
 2026-10-29核查：[OpenAI 的评价方法说明](https://openai.com/index/trustworthy-third-party-evaluations-foundations/)强调受测声明与运行条件；[Anthropic 的 Agent 评测说明](https://www.anthropic.com/research/demystifying-evals-for-ai-agents)区分真实结果与轨迹，并讨论判分校准。这里只借鉴方法，不依赖某厂商产品或把它们视为 Accord 的评价权威。
