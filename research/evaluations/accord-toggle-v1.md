@@ -179,6 +179,18 @@ python -B -m unittest tests.product.test_accord_comparison
 
 自然压缩后的开发观察（2026-10-31）：原生日志记录05:01:29.915Z的compacted事件，之后同一Root线程/turn/epoch及7保护输入经来源核对仍匹配。压缩前兼容代码和151项/三静态执行已完成；真正待交的是父子用量限定、原失败、文档与资源后态。压缩后448750e6补齐这些必要限定并关闭中立目录，随后继续了新守卫开发。独审支持“开发期同聊天压缩后连续推进”的有界观察，不构成应用侧中断恢复验收、跨聊天接管、全环境无其它写者或Accord因果收益；无预注册对照、完整人工/费用总账。它不要求普通用户维护项目接续文件，也不替代计划中真正未完应用任务的恢复观察。
 
+### 2026-10-31 真实未完应用的安全接续观察
+
+用户选定一个已有Codex应用聊天，并明确授权一次“两条协调消息”的安全结束后继续验证。原Agent继续负责原工作区、实际修复与原发行；观察者没有接管文件、原生状态、设置或发布，也没有改模型、迁移工作区或再次重放业务。安全点确有尚未完成的P1修复、相关验证和两个原发行目标，之后实际续作与发布已回读。执行的是正式3.3.8；应用产品并非新增适配宿主，私有来源和配置仅保留在本地证据中。
+
+本次观察不具备完整恢复资格。安全结束约在首消息派发后361.390秒，超过预冻180秒窗；即从外层调用返回计算也为201.220秒。仓库快照距原生结束153.739秒、距观察者首次收到完成117.715秒，120秒完整审阅的起终点未单独预绑，不能挑选较短值签通过。新轮次比第二条协调消息早40.136秒，故不能把续作归因于它，亦不签受控恢复的300秒及时性。准备、工具往返、审阅和追加业务均有成本，完整人工主动时间、用量与费用仍未知，没有关闭组。
+
+源Accord检查点仍未绑定，普通接续文件与原任务继续不代原生恢复。首批错误发生在控制消息之前：一次参数名错误、一次额外字段拒绝、一次把未知读取的空待核列表误当就绪而漏传游标，均与一次传回原完整游标后发生的证据变化分开。页面元数据原本已被识别，仍需审阅；不能以此自动忽略元数据或解除隔离。固定读关闭追加的独立复现另证两类0.166非控制记录覆盖缺口，支持小修正，不能证明此前实时变化的唯一成因。
+
+续作中一次环境调整引入新问题，用户反馈后纠正；原Agent又在请求用户界面操作时仍占用Computer Use，妨碍用户操作及回复，随后报告交还并继续核验。保留图片/手动反馈、人工动作及交还失误；工具终止和源自述不等于观察者证明全机控制释放。原一次无执行步骤的CI失败、另一目标成功，以及用户随后追加业务和各自提交的新CI成功均各保主体，后来的成功不回写原失败，标签也不因HEAD前进而移动。
+
+因此只确认“真实未完任务继续”的有界事实；及时性、受控消息因果、完整原生恢复、零人工救援及Accord增益均不成立或未证。确定性修正进入现有读取回归，未知读取/完整游标与交还人类交互控制的经验进入原有两个Skill分支；保原18案/17scope/52义务，不新增正式案例。无需为改善分数重复已完成的应用工作。
+
 ## 方法参考与限制
 
 2026-10-29核查：[OpenAI 的评价方法说明](https://openai.com/index/trustworthy-third-party-evaluations-foundations/)强调受测声明与运行条件；[Anthropic 的 Agent 评测说明](https://www.anthropic.com/research/demystifying-evals-for-ai-agents)区分真实结果与轨迹，并讨论判分校准。这里只借鉴方法，不依赖某厂商产品或把它们视为 Accord 的评价权威。
@@ -192,6 +204,8 @@ This is a developer calibration kit, not measured product value or a release gat
 The first bounded native pilot completed two pairs (four runs, six stages) on Windows with Codex 0.165.0 and Accord 3.3.4. Both arms met the file requirements; the enabled arm used more reported tokens and time in these two cases. Separate AI artifact reviews and a non-blind process review support this limited observation, not independent user research or a general benefit/performance claim. Retain the earlier unreadable-output attempt and all preparation costs. Memory was disabled in both processes, shared user guidance remained, and directory preparation was corrected without changing sandbox permissions; this is not a default-configuration benchmark.
 
 A later real maintenance-research pair used installed3.3.8/CLI0.166 with controlled shared settings. Both reports passed the bounded anonymous static review; only the enabled execution ended naturally. The disabled run reached its original360second limit and has only a last-response usage counter. Each arm also used one completed child agent. Parent and child counters are reported separately without claiming a reconciled whole-run cost. Preserve the failure, failed commands and unknown tail; this single pair proves neither general value nor qualification of the unpublished source snapshot or its successors. A later zero-model read matched all76items against five pages in the one completed research turn. A separate mocked consumer distinction justified holding explicit partial input views before verification; neither observation establishes arbitrary history completeness or real recovery. Genuine unfinished-business recovery remains separate.
+
+A user-selected actual unfinished application task later continued under its original Agent and reached its original publication targets. The one authorized two-message observation missed its180second yield window; the source checkpoint remained unbound, and its new turn preceded the second observer message. Preserve later regressions, human feedback/manual interaction, the obstructing Computer Use handover and original CI failure separately from later user-added work and new successes. This supports bounded actual continuation, not timely controlled recovery, full native restoration or causal value. Anonymous public notes and small existing-layer corrections do not add formal acceptance cases.
 
 Keep non-compensable requirements, raw measurements and optional stakeholder preferences distinct. No composite score is prescribed. Preserve failures, ties, unknowns, valid alternative output forms and evaluator disagreements. Inspect effective configuration and guidance before native paired trials; a global plugin-disable switch is not a fair Accord-only control. Public calibration material must not be represented as an unseen test set.
 

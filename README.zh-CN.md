@@ -28,12 +28,12 @@ Accord 的通用设计不绑定某一家模型厂商或宿主。**当前发行�
 
 ## 开始使用
 
-当前正式版为 [3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8)。请选择支持插件的 Codex CLI 或桌面入口，并确保该宿主能运行兼容 Node（当前受测推荐为 Node 24）。普通使用不需要 Python。
+正式版本见 [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest)。请选择支持插件的 Codex CLI 或桌面入口，并确保该宿主能运行兼容 Node（当前受测推荐为 Node 24）。普通使用不需要 Python。
 
 1. **安装。** 从本项目来源安装 YIYUAN Accord；CLI 登记来源可使用：
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.8
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.9
    ```
 
 2. **启用插件。** 确认宿主允许使用插件，并在实际使用范围内启用 Accord。CLI 在 `/plugins` 中选择来源、安装，并对已安装项按 `Space` 启停。

@@ -1242,6 +1242,36 @@ function retryRecordIsBenign(row) {
       'custom_tool_call_output'].includes(value?.type);
 }
 
+
+// Only these bound telemetry shapes extend coherent read retry. Their contents
+// remain data; this grants no input authority, capture, recovery or completion.
+function retryNonControlAppend(row, binding) {
+  if (retryRecordIsBenign(row)) return true;
+  const line = parseRow(row), p = line?.payload;
+  if (!goalProducerKeys(line, ['timestamp', 'type', 'payload'], ['ordinal']) ||
+      typeof line.timestamp !== 'string' || !integer(Date.parse(line.timestamp)) ||
+      Object.hasOwn(line, 'ordinal') && !integer(line.ordinal)) return false;
+  if (line.type === 'token_usage_record') {
+    return goalProducerKeys(p, ['thread_id', 'turn_id', 'session_id', 'root_turn_id',
+      'response_id', 'usage', 'turn_token_usage', 'thread_token_usage']) &&
+      nativeExecutionRecord(line, binding, binding.turnId, binding.turnId);
+  }
+  if (line.type !== 'event_msg' || !goalProducerKeys(p,
+      ['type', 'thread_id', 'turn_id', 'item', 'started_at_ms', 'completed_at_ms']) ||
+      p.type !== 'item_completed' || p.thread_id !== binding.sessionId || p.turn_id !== binding.turnId ||
+      !integer(p.started_at_ms) || !integer(p.completed_at_ms) || p.completed_at_ms < p.started_at_ms) return false;
+  const item = p.item;
+  return goalProducerKeys(item, ['type', 'id', 'process_id', 'command', 'cwd', 'parsed_cmd',
+    'source', 'status', 'aggregated_output', 'exit_code', 'duration']) &&
+    item.type === 'CommandExecution' && boundedText(item.id, 200) && boundedText(item.process_id, 200) &&
+    Array.isArray(item.command) && item.command.length > 0 && item.command.every(text) &&
+    text(item.cwd) && samePath(item.cwd, binding.cwd) && Array.isArray(item.parsed_cmd) &&
+    item.source === 'unified_exec_startup' && item.status === 'completed' &&
+    typeof item.aggregated_output === 'string' && Number.isSafeInteger(item.exit_code) &&
+    goalProducerKeys(item.duration, ['secs', 'nanos']) && integer(item.duration.secs) &&
+    integer(item.duration.nanos) && item.duration.nanos < 1000000000;
+}
+
 function observeNativeTranscript(binding, options = {}) {
   const prior = {};
   const first = readNativeTranscript(binding, options, prior);
@@ -1262,7 +1292,7 @@ function observeNativeTranscript(binding, options = {}) {
         prior.tailOffset - next.tailOffset + prior.tail.length).equals(prior.tail)) return first;
   const appended = completeLines(next.tail.subarray(prior.size - next.tailOffset), prior.size, false);
   if (!appended.length || hasUnterminatedRecord(next.tail) ||
-      !appended.every(retryRecordIsBenign) || !next.sourceUnchanged()) return first;
+      !appended.every(row => retryNonControlAppend(row, binding)) || !next.sourceUnchanged()) return first;
   return second;
 }
 

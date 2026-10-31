@@ -33,11 +33,11 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
 
 三个动作分别完成：**安装插件、启用插件、信任 Hook**。还需确认实际加载，不能只看“已安装”。
 
-1. 核对当前宿主、运行时、已有配置和插件，以及正式发行的精确 tag。当前版本为 [v3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8)，插件 ID 为 `yiyuan-accord-codex`，来源名为 `yiyuan-accord`。
+1. 核对当前宿主、运行时、已有配置和插件，以及正式发行的精确 tag。正式版本见 [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest)，插件 ID 为 `yiyuan-accord-codex`，来源名为 `yiyuan-accord`。
 2. 在需要登记来源时，可采用[官方 marketplace 命令](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)：
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.8
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.9
    ```
 
    这条命令只登记来源。CLI 在 `/plugins` 中切到该来源，查看并安装 YIYUAN Accord；桌面使用实际可用的插件目录与来源入口。本项目来源不等于已被官方公共目录收录。
@@ -65,7 +65,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 
 启用输入 Hook 后，根任务的原生输入文字保留在本机既有回执中，用于恢复；每份回执上限为 **8 MiB**。显式审阅和对账也会保留受支持的宿主上下文、目标控制文字及相应状态原文；结构化媒体保留字节与记录摘要，不缓存base64正文。其中可能含敏感信息，中断时即使没有检查点也可能保留，结束会话不保证立即删除。状态按任务生命周期处理，清理前须确认未完工作和恢复依据。
 
-基于3.3.8的未发布开发修订还会在必要时保留每会话的最小失败确认记录，防止已确认的旧失败在退役后再次触发隔离；其中没有原输入或会话正文，后续输入成功保存后移除。当前3.3.8发行包未因此改变，新修订的验证和采用另核。
+3.3.9会在必要时保留每会话的最小失败确认记录，防止已确认的旧失败在退役后再次触发隔离；其中没有原输入或会话正文，后续输入成功保存后移除。原3.3.8发行包保持；当前发行、验证和实际采用分别见[接续](operations/CONTINUATION.md#目标与当前写者)。
 
 这不是完整对话或进度记录，也不产生新授权。子代理使用宿主自己的任务状态，不承接根检查点。请勿公开上传原始回执、凭据或私人会话；报告问题可先描述现象，由执行者选取必要且脱敏的证据。保留、退役及失败边界见[架构](architecture.md#current-release-and-scoped-connections)与[状态调用指南](task-state-clients.md)。
 
@@ -92,6 +92,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 | 3.3.6 | `fc30f8e6` 的推理设置、工具目录增量与新根Goal接续兼容补丁；精确CI #1040全11项成功，正式发行标签为[v3.3.6](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.6)。发布、本机安装、实际加载与完整重绑分别见[当前接续](operations/CONTINUATION.md#目标与当前写者)。 |
 | 3.3.7 | `d972da27` 的用户目标设置/清除、正文省略及独立状态观察兼容修正；精确CI #1043全11项成功，正式标签为[v3.3.7](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.7)。发布、安装、实际加载与完整重绑分别见[当前接续](operations/CONTINUATION.md#目标与当前写者)。 |
 | 3.3.8 | `213dbea2` 的Skill目录、环境组合与完整快照变化检测修正；[CI #1046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41081944936)全11项成功，正式标签为[v3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8)。发布、本机更新和实际加载见[接续](operations/CONTINUATION.md#目标与当前写者)。 |
+| 3.3.9 | 退役确认、精确文本/部分输入视图、有限并发读取及既有经验/接续/交互控制指导修正；发行、CI和实际采用见[接续](operations/CONTINUATION.md#目标与当前写者)，原失败及证据限制保持。 |
 
 原始失败、版本、环境和条件保持原身份；后续文档不移动发行标签，也不把旧通过直接当作新版本通过。CLI、SDK、桌面、IDE、Work 与 Remote 之间，仅在核对适用性和差异后复用相应机制证据；历史入口观察不能覆盖现行官方已知限制。
 
@@ -99,7 +100,7 @@ Accord 不训练模型、不扩大上下文、不越过宿主权限，也不注�
 
 协调可能增加上下文、延迟、计算、指令冲突与维护负担。增量价值需要公平对照并同时考虑质量、自动化程度、人工协调和总成本；合理额外开销不等于失败，“省用量但仍需用户盯着”也不能替代必要自动化。首轮[两对有限试行](../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行)已完成：两组交付均正确，启用组报告用量和耗时更高；这不构成普遍收益、性能或统计结论。
 
-未发布开发修订补强了经验复用与无进展处置指导：只在可能影响下一步时取回相关的获准记录，先核适用条件；重复尝试看成果、信息增量或必要前提，保留合理重试与等待。普通入口是否正确采用及实际收益仍需观察，不能据此声称已具有跨项目经验库、全工具停滞监控或任意执行取消。当前正式发行仍为3.3.8，开发修订的安装与实际采用另核。
+3.3.9补强了经验复用与无进展处置指导：只在可能影响下一步时取回相关的获准记录，先核适用条件；重复尝试看成果、信息增量或必要前提，保留合理重试与等待。普通入口是否正确采用及实际收益仍需观察，不能据此声称已具有跨项目经验库、全工具停滞监控或任意执行取消。发行状态、安装与实际采用分别核验，见[接续](operations/CONTINUATION.md#目标与当前写者)。
 
 ### 原理与进阶阅读
 
@@ -152,11 +153,11 @@ The current Hooks and state MCP launch a separate `node` executable. The executo
 
 Complete **installation, enablement and Hook trust** separately, then verify actual loading. An installed label is insufficient.
 
-1. Check the host, runtime, existing configuration/plugins and exact official release tag. The current release is [v3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8); the plugin ID is `yiyuan-accord-codex`, in the `yiyuan-accord` marketplace.
+1. Check the host, runtime, existing configuration/plugins and exact official release tag. Published versions are listed in [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest); the plugin ID is `yiyuan-accord-codex`, in the `yiyuan-accord` marketplace.
 2. Where source registration is needed, use the official [marketplace command](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli):
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.8
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.9
    ```
 
    This registers the source only. In CLI `/plugins`, select it, inspect and install YIYUAN Accord. On desktop use the actual plugin directory/source entry. A repository marketplace is not a listing in the official public directory.
@@ -184,7 +185,7 @@ Starting conditions, work and results may feed back, run in parallel and nest. C
 
 With the input Hook enabled, root-task native input text is retained in an existing local receipt for recovery, bounded to **8 MiB per receipt**. Explicit review and reconciliation also retain supported host context, goal-control text and the corresponding state text; structured media keeps byte and record summaries without caching base64 content. The receipt may contain sensitive information and survive interruption even without a checkpoint. Session exit does not guarantee immediate deletion. Follow the task lifecycle and check unfinished work and recovery needs before cleanup.
 
-The unpublished development revision based on3.3.8 also retains a minimal session-specific failure acknowledgment when needed, so an already acknowledged failure does not trigger quarantine again after retirement. It contains no original input or conversation text and is removed after a subsequent input is successfully saved. The released3.3.8 package is unchanged; verification and actual adoption of the revision remain separate.
+The 3.3.9 implementation also retains a minimal session-specific failure acknowledgment when needed, so an already acknowledged failure does not trigger quarantine again after retirement. It contains no original input or conversation text and is removed after a subsequent input is successfully saved. The earlier3.3.8 package remains unchanged; current publication, verification and actual adoption are recorded separately in [continuation](operations/CONTINUATION.md#目标与当前写者).
 
 This is not complete conversation history or a progress record, and grants no new authority. Subagents use their native task state rather than adopting the root checkpoint. Do not publish raw receipts, credentials or private transcripts; describe the problem first and let the executor select necessary redacted evidence. See the [architecture](architecture.md#current-release-and-scoped-connections) and [state-client guide](task-state-clients.md) for retention, retirement and failure boundaries.
 
@@ -211,6 +212,7 @@ Before update, rollback or removal, use a healthy executor independent of the pl
 | 3.3.6 | Reasoning configuration, tool-directory delta and native root-Goal continuation compatibility at `fc30f8e6`; all 11 exact CI #1040 jobs passed, with official tag [v3.3.6](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.6). Publication, installation, actual loading and full state rebinding remain separate in [current continuation](operations/CONTINUATION.md#目标与当前写者). |
 | 3.3.7 | User Goal Set/Clear, omitted body and separate state-observation compatibility at `d972da27`; all 11 exact CI #1043 jobs passed, with official tag [v3.3.7](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.7). Publication, installation, actual loading and full state rebinding remain separate in [current continuation](operations/CONTINUATION.md#目标与当前写者). |
 | 3.3.8 | Skill directories, environment combinations and full-snapshot change detection at `213dbea2`; all 11 [CI #1046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41081944936) jobs passed. Official tag: [v3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8). Publication, local update and actual loading are recorded in [continuation](operations/CONTINUATION.md#目标与当前写者). |
+| 3.3.9 | Retirement acknowledgment, exact-text/partial-input-view and bounded concurrent-read compatibility, plus existing learning/continuity/human-control guidance. Publication, CI and actual adoption are separate in [continuation](operations/CONTINUATION.md#目标与当前写者); original failures and evidence limits remain. |
 
 Original failures, versions, environments and conditions retain their identities. Later documentation does not move release tags or validate changed versions through an old PASS. Reuse common-mechanism evidence across CLI, SDK, desktop, IDE, Work or Remote only after checking applicability and differences. Historical observations do not override known current upstream limitations.
 
@@ -218,7 +220,7 @@ Accord does not train models, enlarge context or bypass host permissions. It reg
 
 Coordination may add context, latency, compute, instruction conflicts and maintenance. Incremental value needs a fair comparison accounting for quality, automation, human coordination and total cost. Reasonable extra cost is not failure; lower usage that still leaves the user supervising cannot replace necessary automation. The initial [two-pair pilot](../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行) is complete: both arms produced correct outputs, while the enabled arm used more reported tokens and time. This establishes no general benefit, performance or statistical conclusion.
 
-The unpublished development revision strengthens guidance for retrieving relevant authorized experience and reviewing stalled attempts. It checks applicability and useful progress while preserving justified retries and changing wait conditions. Correct normal-entry adoption and actual benefits still need observation; this does not establish a cross-project memory service, all-tool stagnation monitoring or arbitrary execution cancellation. The current release remains3.3.8; installation and actual adoption of the revision are separate.
+The 3.3.9 implementation strengthens guidance for retrieving relevant authorized experience and reviewing stalled attempts. It checks applicability and useful progress while preserving justified retries and changing wait conditions. Correct normal-entry adoption and actual benefits still need observation; this does not establish a cross-project memory service, all-tool stagnation monitoring or arbitrary execution cancellation. Publication status, installation and actual adoption are checked separately in [continuation](operations/CONTINUATION.md#目标与当前写者).
 
 ### Principles and further reading
 

@@ -280,7 +280,7 @@ class SkillReferencePackageTests(unittest.TestCase):
                          '14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026')
         self.assertEqual(translated['originalSourceSha256'],
                          '9f9019523491d9e41f7d3e41ee5bd3c783b0a1049fb280242959198fb88a439a')
-        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8'):
+        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9'):
             with self.subTest(version=version):
                 self.assertEqual(foundation(version), translated)
 
@@ -305,6 +305,8 @@ class SkillReferencePackageTests(unittest.TestCase):
             package_version='3.3.6', **options), current)
         self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
             package_version='3.3.8', **options), current)
+        self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
+            package_version='3.3.9', **options), current)
         execution = current['nativeTaskStateMcp']
         self.assertEqual(execution['executionTool'], 'coordinate_task_execution')
         self.assertEqual(execution['execution']['entry'], 'runtime/native-task-execution.cjs')
@@ -1144,7 +1146,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertFalse(candidate['claimCeiling']['functionalCompletion'])
         self.assertFalse(candidate['claimCeiling']['candidateEligible'])
         for kind in ('missing-authority', 'unauthorized', 'wrong-authority', 'ready', 'complete', 'eligible',
-                     'target', 'published', 'state', 'status', 'dev-version', 'final-build', 'projection'):
+                     'target', 'unselected-patch', 'published', 'state', 'status', 'dev-version', 'final-build', 'projection'):
             altered = copy.deepcopy(candidate)
             release = altered['authority']['conditionalRelease']
             if kind == 'missing-authority': altered['authority'].pop('conditionalRelease')
@@ -1153,7 +1155,11 @@ class SuccessorDevelopmentTests(unittest.TestCase):
             elif kind == 'ready': release['ready'] = True
             elif kind == 'complete': altered['claimCeiling']['functionalCompletion'] = True
             elif kind == 'eligible': altered['claimCeiling']['candidateEligible'] = True
-            elif kind == 'target': altered['cycle']['targetVersion'] = release['target'] = '3.4.0'
+            elif kind in ('target', 'unselected-patch'):
+                target = '3.4.0' if kind == 'target' else '3.3.10'
+                altered['cycle']['targetVersion'] = release['target'] = target
+                altered['delivery']['version'] = target
+                altered['delivery']['hostProjections'][0]['packageVersion'] = target
             elif kind == 'published': altered['cycle']['versionState'] = 'published'
             elif kind == 'state': altered['cycle']['versionState'] = 'development-target-not-published'
             elif kind == 'status': altered['status'] = 'in-development'
@@ -1161,7 +1167,12 @@ class SuccessorDevelopmentTests(unittest.TestCase):
             elif kind == 'final-build': altered['delivery']['version'] = '3.3.0+codex.20261021000000'
             else: altered['delivery']['hostProjections'][0]['packageVersion'] = '3.3.0-dev.1'
             with self.subTest(kind=kind):
-                self.assertTrue(self.errors(altered))
+                errors = self.errors(altered)
+                self.assertTrue(errors)
+                if kind in ('target', 'unselected-patch'):
+                    for error in ('conditional publication authority is not present readiness',
+                                  '3.3 candidate freezing requires the bound conditional release authority'):
+                        self.assertIn(error, errors)
 
     def test_native_codex_source_accepts_help_center_without_promoting_effect(self):
         altered = copy.deepcopy(self.contract)
@@ -1202,7 +1213,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertEqual(self.contract["authority"]["conditionalRelease"]["decision"],
                          "user-authorized-after-acceptance")
         self.assertFalse(self.contract["authority"]["conditionalRelease"]["ready"])
-        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.8")
+        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.9")
         self.assertEqual(self.contract["predecessorSnapshot"], old["predecessorSnapshot"])
         self.assertEqual({p["id"] for p in self.contract["delivery"]["hostProjections"]}, {"codex"})
         self.assertEqual({p["id"] for p in old["delivery"]["hostProjections"]}, {"codex", "claude-code"})

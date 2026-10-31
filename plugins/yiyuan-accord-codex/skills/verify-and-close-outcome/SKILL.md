@@ -112,6 +112,10 @@ disabling, uninstalling and retiring. For uncertain reuse, prefer reversible
 inactivity and weigh actual reuse, expiry and upkeep before authorized retirement.
 Completion grants no permission to remove user-selected tools or other components.
 
+Before requesting a user's action, safely finish or suspend any owned interactive
+control that would obstruct that action or reply. Return control through the
+supported interface and verify the handover; retain a failed handover as unresolved.
+
 For a bound window, assign preparation through review and closeout to actual
 owners with verification/save time. Check time on return and before dependent
 work; close at the reserve boundary. Local success leaves tail duties intact.

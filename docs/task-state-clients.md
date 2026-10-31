@@ -24,6 +24,8 @@ Codex multi-agent v2 的根会话文件也可能带第二个 UUID 后缀，子�
 
 `includeNativeInputs:true` 的证据摘要过大时，`nativeInputEvidence.details` 为 `omitted-bounded-result`，保留真实来源、完整性和恢复标志，并给出各列表的 `counts`；列表和对账 cursor 被省略，不表示空输入或已读完。按其 `detailRead` 使用可用、兼容的现有 helper 执行只读 `status` 请求，保持相同的宿主环境和状态存储选择。核对返回的 storage、epoch、revision 及原生来源/宿主，再读取完整证据与需要的源部件；任何变化或不可用仍待核。只有取得并审查完整来源后，才使用其新鲜 cursor 对账。回退不安装组件、不改共享配置、不写状态，也不授予新的权限；helper 路径不可用时保留未决并寻找已获授权的兼容入口。
 
+对账须有 `nativeInputEvidence.state === "observed"` 及完整的返回游标；`unknown` 同时返回空 `pendingInputs` 不证明无待核输入。保留诊断，仅持有依赖动作，不提交缺失或自行补出的游标。有限重读仅兼容已核的同身份非控制追加；用量与命令输出仍是数据，不授予权限、解除暂停或证明任务完成。
+
 `needsNativeReplay=true` 表示助手的输入基准尚不能用于绑定或续轮，不单独证明本轮正文漏收。先区分 `inputReceipt.present`、`failureWatermarkScopes` 和 `inputSource`，再将捕获文本与实际当前任务的原生输入、身份及轮次核对。完整捕获可以与 `quarantined-native-input` 同时存在；这既不是恢复成功，也不是输入必然缺失。
 
 未能确定会话归属的工作区故障标记会影响同工作区尚未确认该标记的会话。旧标记只含 generation 时，文件时间不能补出原事件、原会话或丢失内容。不得因新会话、标记较旧或当前正文完整便删除共享标记、设置自动过期或宣称旧责任已恢复。
@@ -167,7 +169,7 @@ function pauseParams(latest, absoluteWorkspace, verifiedPauseReason) {
 
 显式用户取消另需已核实的取消决定，并提交 `disposition: "user-cancelled"` 与非空 reason；字段仍是调用者声明。无 checkpoint 时只退役 receipt：先确认 snapshot.mode=unbound、revision=0、`needsNativeReplay=false`、`needsResumeReconciliation=false`，当前输入已协调，再提供非空 reason。只移除本任务 checkpoint/receipt 状态，不写业务输出。[退役实现](../runtime/task-checkpoint.cjs)、[限制](../runtime/task-checkpoint.cjs)。
 
-基于3.3.8的未发布开发修订另保存每会话的最小 `retired-input-ack.json`，只包含已经确认的失败generation，不保留原输入、目标或会话正文；后续输入成功发布后移除。共享失败水位继续保留，新generation、其它会话及未确认失败仍需恢复，旧运行时不识别该确认，不能保证混合版本采用。退役后的无当前输入状态可能返回 `native-user-input-receipt-missing`；这不要求重建已完成任务，后续正常输入由宿主入口进入。确认写入、删除或后置校验失败须补偿原确认及缺失文件；补偿失败保留持久隔离，隔离也无法写入则保留输入锁。`recover-lock(input)`仍须证明原所有者已退出；没有收据时也要先发布新会话失败水位，成功后才能释放锁，随后使用fresh status的实际token恢复，不能假定为null。代码、合成验证和实际安装采用分开核验。
+3.3.9修订另保存每会话的最小 `retired-input-ack.json`，只包含已经确认的失败generation，不保留原输入、目标或会话正文；后续输入成功发布后移除。共享失败水位继续保留，新generation、其它会话及未确认失败仍需恢复，旧运行时不识别该确认，不能保证混合版本采用。退役后的无当前输入状态可能返回 `native-user-input-receipt-missing`；这不要求重建已完成任务，后续正常输入由宿主入口进入。确认写入、删除或后置校验失败须补偿原确认及缺失文件；补偿失败保留持久隔离，隔离也无法写入则保留输入锁。`recover-lock(input)`仍须证明原所有者已退出；没有收据时也要先发布新会话失败水位，成功后才能释放锁，随后使用fresh status的实际token恢复，不能假定为null。代码、合成验证和实际安装采用分开核验。
 
 ```js
 function retireParams(latest, absoluteWorkspace) {

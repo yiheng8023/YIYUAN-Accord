@@ -66,6 +66,9 @@ returned `next` cursor with its `expectedReceiptEpoch`; reconcile changed receip
 instead of joining pages. Reading clears no input-loss, resume or interruption
 flags. When required, replay only host-retained current input through the helper
 using the status recovery token. A hash cannot reconstruct missing text.
+For native-input reconciliation, require an observed read and its complete returned
+evidence cursor. An unknown read with an empty pending list proves no absence;
+preserve the diagnostic and hold the dependent operation until evidence is sufficient.
 Prove dead ownership before lock recovery; preserve other sessions and failure
 watermarks. Missing/incompatible storage holds dependent effects until a surviving
 authorized host route restores sufficient evidence.
