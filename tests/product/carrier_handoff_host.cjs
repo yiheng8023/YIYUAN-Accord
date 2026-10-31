@@ -635,6 +635,7 @@ async function run(config) {
         {id:'turn-2',status:'completed',items:[{type:'userMessage',content:[{type:'text',text:plan.continuation.input}]}]}];
       if(mode==='extra-turn')turns.push({id:'other-turn',status:'completed',items:[]});
       if(mode==='wrong-input')turns[turns.length-1].items[0].content[0].text='Another action';
+      if(mode==='empty-elements')turns[turns.length-1].items[0].content[0].text_elements=[];
       if(mode==='failed-turn')turns[turns.length-1].status='failed';
       const target=params.threadId===state.target?.threadId;
       return {thread:{id:params.threadId,

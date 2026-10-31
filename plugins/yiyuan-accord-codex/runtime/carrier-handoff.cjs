@@ -1587,7 +1587,8 @@ async function reconcileFailedTransfer(rawInput, dependencies) {
         if (saved.threadId !== targetId || observed.id !== saved.turnId || !terminal.has(observed.status) ||
             typeof saved.input !== 'string' || saved.inputDigest !== digest(saved.input) ||
             (i === 0 && saved.input !== plan.handoffText) || messages.length !== 1 ||
-            canonical(messages[0].content) !== canonical([{type: 'text', text: saved.input}])) {
+            (canonical(messages[0].content) !== canonical([{type: 'text', text: saved.input}]) &&
+             canonical(messages[0].content) !== canonical([{type: 'text', text: saved.input, text_elements: []}]))) {
           reject('RECOVERY_NATIVE_MISMATCH', 'native intake identity, input or terminal differs');
         }
       }

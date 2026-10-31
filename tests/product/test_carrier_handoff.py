@@ -46,7 +46,7 @@ const calls = [], receipts = [];
 let returned = false, resumed = false;
 const plan = {transferId:'failed-transfer',scopeRef:'failed-scope',authorityRef:'authority',stateRef:'state',
   source:{threadId:'source'},target:{cwd:'/fixture',model:'fixture-model',
-    dynamicTools:[core.HANDOFF_PROPOSAL_TOOL,CONTEXT_OBSERVATION_TOOL]},handoffText:'Retain the bound task.',
+    dynamicTools:[core.HANDOFF_PROPOSAL_TOOL,CONTEXT_OBSERVATION_TOOL]},handoffText:'  Retain the bound task.\n',
   continuation:{input:'Continue only after takeover.',sandboxPolicy:{type:'readOnly'}},
   deadlineMs:Date.now()+5000,recoveryDeadlineMs:Date.now()+6000};
 const transport = {connectionId:'old-controller',hostVersion:'fixture-host',
@@ -100,6 +100,21 @@ let stale=null;
 if(mode==='active-target')native.target.status.type='active';
 if(mode==='extra-turn')native.target.turns.push({id:'foreign',status:'completed',items:[]});
 if(mode==='wrong-input')native.target.turns[0].items[0].content=[{type:'text',text:'unbound input'}];
+if(['empty-elements','empty-denied','nonempty-elements','null-elements','wrong-elements-type','unknown-field',
+    'extra-content','non-text','extra-message','trimmed-input'].includes(mode)) {
+  const item=native.target.turns[0].items[0], text=plan.handoffText;
+  item.content=[{type:'text',text}];
+  if(['empty-elements','empty-denied'].includes(mode))item.content[0].text_elements=[];
+  if(mode==='nonempty-elements')item.content[0].text_elements=[{}];
+  if(mode==='null-elements')item.content[0].text_elements=null;
+  if(mode==='wrong-elements-type')item.content[0].text_elements={};
+  if(mode==='unknown-field')item.content[0].extra=[];
+  if(mode==='extra-content')item.content.push({type:'text',text});
+  if(mode==='non-text')item.content[0].type='image';
+  if(mode==='extra-message')native.target.turns[0].items.push({type:'userMessage',content:[{type:'text',text}]});
+  if(mode==='trimmed-input')item.content[0].text=text.trim();
+}
+
 if(mode==='source-active')native.source.status.type='active';
 if(mode==='source-ephemeral')native.source.ephemeral=true;
 if(mode==='pending'||mode==='target-writer') {
@@ -134,7 +149,7 @@ const verifier = async(stage,facts,deadline)=>{
   if(mode==='binding-drift')connection.transport.connectionId='replaced';
   if(mode==='native-race')native.target.status.type='active';
   if(mode==='late-verifier')Object.defineProperty(performance,'now',{value:()=>deadline+1,configurable:true});
-  return {decision:mode==='denied'?'hold':'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
+  return {decision:['denied','empty-denied'].includes(mode)?'hold':'allow',scopeRef:plan.scopeRef,authorityRef:plan.authorityRef,stateRef:plan.stateRef,
     sourceRef:'fixture:effect-audit',pauseStateVerified:mode!=='pause-unknown',priorAttemptQuiesced:mode!=='owner-active',
     pendingEffectsReconciled:mode!=='pending-unreconciled',sourceRecoveryReady:mode!=='recovery-unavailable',
     singleWriter:true,effectsVerified:mode!=='effects-unverified',reconciliationAuthorized:true,
@@ -232,6 +247,31 @@ class FailedTransferRecoveryTests(unittest.TestCase):
                 self.assertEqual(result['after']['state'], result['reopened']['state'])
                 self.assertEqual(result['sql']['state']['failedReconciliation']['originalPendingEffect'],
                                  result['baseline']['original']['state']['pendingEffect'])
+
+    def test_recovery_accepts_only_exact_plain_input_shapes(self):
+        for mode in ('success', 'empty-elements'):
+            with self.subTest(mode=mode):
+                result = self.run_case(mode=mode)
+                self.assertIsNone(result['error'])
+                self.assertEqual(result['result']['status'], 'failed-transfer-reconciled')
+                self.assertEqual(result['attempted'], 1)
+                self.assertEqual(result['sql']['settled'], 1)
+                self.assertEqual(result['restored']['status'], 'ready')
+        for mode in ('nonempty-elements', 'null-elements', 'wrong-elements-type', 'wrong-input',
+                     'unknown-field', 'extra-content', 'non-text', 'extra-message', 'trimmed-input'):
+            with self.subTest(mode=mode):
+                result = self.run_case(mode=mode)
+                self.assertEqual(result['error']['code'], 'RECOVERY_NATIVE_MISMATCH')
+                self.assertIsNone(result['result'])
+                self.assertEqual(result['attempted'], 0)
+                self.assertEqual(result['after'], result['basis'])
+                self.assertEqual(result['sql']['settled'], 0)
+                self.assertEqual(result['scope']['activeTransferId'], 'failed-transfer')
+        for mode in ('denied', 'empty-denied'):
+            denied = self.run_case(mode=mode)
+            self.assertEqual(denied['error']['code'], 'VERIFICATION_DENIED')
+            self.assertEqual(denied['attempted'], 0)
+            self.assertEqual(denied['sql']['settled'], 0)
 
     def test_unknown_effects_and_changed_recovery_basis_cannot_close_the_transfer(self):
         cases = ('active-target', 'extra-turn', 'wrong-input', 'source-active', 'source-ephemeral',
@@ -342,6 +382,11 @@ class CarrierHandoffTests(unittest.TestCase):
                 self.assertEqual(r['finalized']['first']['error']['code'], 'SOURCE_PERSISTENCE_CHANGED')
                 self.assertFalse(any(c['method'] == 'thread/unsubscribe' for c in r['calls']))
                 self.assertEqual(r['state']['failure'], r['originalState']['failure'])
+
+    def test_continuation_already_accepts_empty_text_elements(self):
+        r = self.recovery_case('empty-elements')
+        self.assertEqual(r['first']['result']['status'], 'continuation-reconciled')
+        self.assertEqual((r['commits'], r['checks']), (1, 1))
 
     def test_recovery_reconciles_one_completed_effect_and_retains_failure_evidence(self):
         r=self.recovery_case('success')

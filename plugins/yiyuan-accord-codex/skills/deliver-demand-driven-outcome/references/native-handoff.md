@@ -760,6 +760,11 @@ held. A null pending field, an idle thread or an RPC error alone proves no
 absence of effects. A budget expiry that left no durable failure record is also
 outside this entry; retain its original materials for owner reconciliation.
 
+Plain-text intake readback accepts the exact original `type`/`text` content,
+with `text_elements` either absent or an empty array. Text bytes remain exact;
+nonempty annotations, unknown fields and additional content or messages stay
+held. This wire-shape compatibility does not replace the other recovery checks.
+
 `verify('failed-transfer-reconcile', facts, deadline)` receives the immutable
 input, exact `ledger`, original/current connection identities, `sourceRead` and
 `targetRead` (null only in the pre-creation window). It must independently verify

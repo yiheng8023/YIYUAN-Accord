@@ -147,6 +147,32 @@ python -B -m unittest tests.product.test_accord_comparison
 
 缓存输入差分别为10,752和57,088，输出差分别为123和424。原顺序、缓存内容/命中条件和随机波动未被分离；报告总token不等于同比账单费用、计算量或时延。这些结果仍只属于3.3.4/CLI0.165.0的原两对任务，不评价当前开发修订性能，也不为求正向结论补跑旧任务。后续只对新材料中会改变方案选择的问题取证。
 
+### 2026-10-31 新的普通维护研究
+
+这是一项有实际维护用途的研究：用真实运行时代码和当前二进制生成的协议类型，判断结构化接口覆盖与仍需保留的来源义务。它不是前述六份合成数据题的重跑，也不新增正式验收case。语料快照为`a5b303ff`/未发布f050，执行条件为正式3.3.8/2c33、CLI0.166.0、同一ChatGPT CLI账户与Sol/high；模型/effort由宿主记录，后端未独立证明。
+
+单项开关先在零模型下核验：77条非目标本地插件元数据、67条其它Skill记录相同，Accord启用Skill为0/5，均无加载错误、自然退出/Job0；该数不是已安装插件数，不证明所有动态组件或缓存字节相同。正式运行使用同一目录、原请求、11份真实runtime及146份协议类型的引用闭包，只改变进程级目标开关；记忆关闭、私有写沙箱/网络关闭、共同祖先指导是两组共同实验条件，不代表默认配置。两组实际请求字节及共同指导正文分别同hash，输入/配置/338包保持；冻结随机顺序为开启→关闭，各仅运行一次，未向执行者补答案或延长窗口。
+
+| 观察 | 开启 | 关闭 |
+|---|---:|---:|
+| 原执行及资源终态 | 自然exit0、Job0 | 触360秒后强制停止、Job0；原生interrupted |
+| 执行至关闭，秒 | 336.985 | 360.174 |
+| 父线程报告输入token | 2,875,478 | 3,120,634* |
+| 父线程其中缓存输入 | 2,728,448 | 2,987,776* |
+| 父线程报告输出token | 12,730 | 13,226* |
+| 父线程输入＋输出 | 2,888,208 | 3,133,860* |
+| 子线程末次累计输入token | 1,642,353 | 2,219,713 |
+| 子线程其中缓存输入 | 1,532,288 | 2,087,936 |
+| 子线程末次累计输出token | 8,466 | 6,491 |
+| 子线程输入＋输出 | 1,650,819 | 2,226,204 |
+| 匿名成品静态审阅 | 所核关键事实无阻断错误 | 所核关键事实无阻断错误 |
+
+\*关闭组父线程无`turn.completed`终态用量，只列最后完整响应边界的累计counter，不包含未知中断尾部。每组均自行调用一个子代理，表中按线程保留宿主报告的counter；尚未独立核对跨线程计数与账单归属，故不相加、不把父线程用量当作整组总成本。缓存输入是输入子集，推理输出不重复相加。此处时间是父执行至关闭的墙钟，不累加重叠的子任务时间，也不包括准备和后续独审；完整账单、人工总负担、缓存/顺序/随机性及并行环境影响未分离，不能把两列直接当作完成同等执行的总成本。
+
+开启组的原生developer入口、连续性/能力/核验Skill读取及研究Skill读取有记录；所核父、子线程的MCP调用均为0，不能据此判断未参与。关闭组未见该Accord入口。两次核验Skill文件读取中存在组合输出截断，不能仅凭同文件名判断冗余。开启组对子代理显式选择`Sol/high`，关闭组未指定模型与强度；两次均选择不继承聊天历史，宿主最终报告均为`Sol/high`，不代后端证明或选择机制的因果收益。两个子线程均完成，35条命令均已终态，其中开启/关闭各3/1条失败记录保留，文件写入均已结束；没有再派生子代理。参与、读取、遵守及因果收益仍分开。两份AI匿名静态审阅保留各一处非阻断定位补强，未回填原报告，也不代表独立用户研究或运行验收。关闭组报告虽可用，原执行失败不改签；它没有证成真正尚有必要业务未交的恢复案例，故不充当原计划的真实恢复观察。
+
+产物提供了当前维护线索：真实回读的空`text_elements`与失败交接恢复的精确形状比较存在误拒，已另经公开入口mock区别复现；分页/完整视图与来源投影仍需逐项核实。这些是工程输入，不是替换实现或证明普遍收益的结论；本次338观察不资格化f050或后续候选。
+
 ## 方法参考与限制
 
 2026-10-29核查：[OpenAI 的评价方法说明](https://openai.com/index/trustworthy-third-party-evaluations-foundations/)强调受测声明与运行条件；[Anthropic 的 Agent 评测说明](https://www.anthropic.com/research/demystifying-evals-for-ai-agents)区分真实结果与轨迹，并讨论判分校准。这里只借鉴方法，不依赖某厂商产品或把它们视为 Accord 的评价权威。
@@ -158,6 +184,8 @@ python -B -m unittest tests.product.test_accord_comparison
 This is a developer calibration kit, not measured product value or a release gate. Six synthetic data tasks cover a simple baseline, a later requirement change and interrupted file processing. They calibrate input/output checks; they are not a representative user sample or a power analysis. The preparer exports inputs only. The read-only grader checks listed file facts and keeps run validity, task outcome and incremental value unverified. Review behavior, actual host isolation, human effort, total costs and resource exit separately.
 
 The first bounded native pilot completed two pairs (four runs, six stages) on Windows with Codex 0.165.0 and Accord 3.3.4. Both arms met the file requirements; the enabled arm used more reported tokens and time in these two cases. Separate AI artifact reviews and a non-blind process review support this limited observation, not independent user research or a general benefit/performance claim. Retain the earlier unreadable-output attempt and all preparation costs. Memory was disabled in both processes, shared user guidance remained, and directory preparation was corrected without changing sandbox permissions; this is not a default-configuration benchmark.
+
+A later real maintenance-research pair used installed3.3.8/CLI0.166 with controlled shared settings. Both reports passed the bounded anonymous static review; only the enabled execution ended naturally. The disabled run reached its original360second limit and has only a last-response usage counter. Each arm also used one completed child agent. Parent and child counters are reported separately without claiming a reconciled whole-run cost. Preserve the failure, failed commands and unknown tail; this single pair proves neither general value nor qualification of the unpublished source snapshot or its successors. Genuine unfinished-business recovery remains separate.
 
 Keep non-compensable requirements, raw measurements and optional stakeholder preferences distinct. No composite score is prescribed. Preserve failures, ties, unknowns, valid alternative output forms and evaluator disagreements. Inspect effective configuration and guidance before native paired trials; a global plugin-disable switch is not a fair Accord-only control. Public calibration material must not be represented as an unseen test set.
 
