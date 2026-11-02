@@ -2,7 +2,7 @@
 
 ## 3.3.10
 
-- 2026-11-02正式发布，标签与Release均指向`e2be58f61a9dda9d9b64245d98ddf921ed597579`，30成员插件包SHA256为`603bde3cff75bd2ef928c966902fe4feafe89023155fedb6a5b72158e82c216f`。[CI #1054](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41456800897)全11项成功；标签触发的同提交#1055另跟踪。本机包与持久来源已更新，原生回读六项已有Hook可信、五项Skill及新MCP进程为3.3.10；当前聊天仍加载3.3.9，重启后的实际采用尚待核验。[发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.10)与[接续](docs/operations/CONTINUATION.md#目标与当前写者)分别保留发布、安装、加载及恢复边界。
+- 2026-11-02正式发布，标签与Release均指向`e2be58f61a9dda9d9b64245d98ddf921ed597579`，30成员插件包SHA256为`603bde3cff75bd2ef928c966902fe4feafe89023155fedb6a5b72158e82c216f`。[CI #1054](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41456800897)全11项成功；标签触发的同提交#1055另跟踪。本机包与持久来源已更新，原生回读六项已有Hook可信、五项Skill及新MCP进程为3.3.10；2026-11-03正常重启后，当前聊天已实际加载3.3.10，本轮输入对账完成；#1055终态另核。[发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.10)与[接续](docs/operations/CONTINUATION.md#目标与当前写者)分别保留发布、安装、加载及恢复边界。
 
 - 修复原生交接对工具完成项可选生命周期时间字段的误拒，保留调用身份、参数、结果、成功终态与事件顺序校验。兼容缺省、null及原生i64经JavaScript解析后的整数表示；不将时间元数据用于授权或排序。
 - 根handoff入口复用包内实现，补齐精确摘要、缺件、篡改及执行快照依赖守卫；修正原生测试核验器对Windows普通／扩展路径表示的比较，保持目录、链接及来源检查。
