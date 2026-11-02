@@ -535,9 +535,20 @@ def activation_mechanism_errors(
                 delivered = repository_relative_path(root, locator)
                 canonical = repository_relative_path(root, f"runtime/{name}.cjs")
                 if (adapter_id != "codex" or delivered is None or canonical is None
-                        or delivered.is_symlink() or canonical.is_symlink()
-                        or _owned_bytes(delivered) != _owned_bytes(canonical)):
+                        or delivered.is_symlink() or canonical.is_symlink()):
                     errors.append(f"{prefix} {name} module differs from canonical bytes")
+                else:
+                    implementation = _owned_bytes(delivered)
+                    accepted = (implementation,)
+                    if name == "carrier-recorder":
+                        # Bind the repository facade to the unchanged package;
+                        # retain historical full-copy source compatibility.
+                        facade = ("'use strict';\n// Packaged implementation SHA256: "
+                                  + sha256(implementation).hexdigest()
+                                  + "\nmodule.exports = require('../plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs');\n").encode()
+                        accepted = (*accepted, facade)
+                    if _owned_bytes(canonical) not in accepted:
+                        errors.append(f"{prefix} {name} module differs from canonical bytes")
             except OSError:
                 errors.append(f"{prefix} {name} module is unreadable")
     if native_state_mcp:

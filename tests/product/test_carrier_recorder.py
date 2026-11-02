@@ -709,14 +709,18 @@ process.stdout.write(JSON.stringify({guidancePresent: Boolean(guidance), entrySq
         self.assertEqual(json.loads(result.stdout)["code"], "DATABASE_PATH_UNSAFE")
         self.assertEqual(hashlib.sha256(self.db.read_bytes()).digest(), before)
 
-    def test_create_is_exclusive_and_distribution_copy_is_identical(self):
+    def test_create_is_exclusive_and_root_shares_packaged_implementation(self):
         self.create()
         result = self.request(
             "create", check=False, path=str(self.db), scopeRef="scope-a",
             writerThreadId="source",
         )
         self.assertEqual(json.loads(result.stdout)["code"], "DATABASE_EXISTS")
-        self.assertEqual(RECORDER.read_bytes(), PLUGIN_RECORDER.read_bytes())
+        subprocess.run([
+            "node", "-e",
+            "if (require(process.argv[1]) !== require(process.argv[2])) process.exit(1);",
+            str(RECORDER), str(PLUGIN_RECORDER),
+        ], check=True, capture_output=True, text=True, timeout=10)
 
 
 class ExternalTargetSettlementTests(unittest.TestCase):

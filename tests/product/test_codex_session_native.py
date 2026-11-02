@@ -45,6 +45,7 @@ SOURCE_FILES = (
     "runtime/carrier-handoff.cjs",
     "runtime/codex-connection.cjs",
     "runtime/carrier-recorder.cjs",
+    "plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs",
     "runtime/task-checkpoint.cjs",
     "runtime/codex-context.cjs",
     "plugins/yiyuan-accord-codex/runtime/codex-context.cjs",

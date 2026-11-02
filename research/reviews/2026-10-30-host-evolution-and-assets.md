@@ -46,6 +46,24 @@
 
 当前Accord MCP响应器实际报告3.3.4，来源为本机3.3.4包；这是该响应器观测，不证明所有Hook或未打开入口已采用。发行包30成员相对e58无差分；本轮未安装、更新信任或修改全局配置。
 
+### 2026-11-02 结构化来源与剩余耦合
+
+本节是后续有限观察，以上2026-10-30主体保持。实际执行文件分别回读为npm CLI `0.166.0`（SHA256 `9d563ee4e0441ff9d59d612013e0460ddf8e5709735c2d9f6b98b7ef8ca4eb42`）及Desktop包内后端`0.166.0-alpha.5.1`（SHA256 `3097c909fb6d5cd63510d44aceb1d42df9f6e85722a3e447e477def1ecf60e16`），后者所在Appx为`26.1027.3384.0`。当前原生调用报告同一后端版本，但未绑定其连接PID；版本一致不代入口验收。
+
+分别执行两文件的`app-server generate-json-schema`，默认／包含实验字段各一组，四命令均exit0。CLI输出321／467文件，Desktop输出320／466文件；同模式下选定的7个v2 schema（read、turns/items分页的参数与响应、tokenUsage通知）逐字相同，未据此判断整个协议相同。`--experimental`仅扩大生成内容，没有启用运行特性；未启动App Server、读取真实聊天或调用模型。
+
+官方[Hook说明](https://learn.chatgpt.com/docs/hooks#common-input-fields)仍将transcript格式列为不稳定接口；[App Server说明](https://learn.chatgpt.com/docs/app-server#threads)提供独立读取与分页接口。所查schema保留`includeTurns`，但对分页线程不宜把整段hydration视为未来稳定替代；`Turn.itemsView=full`仅描述该turn持久items，不能代完整线程、输入来源或授权。`Thread.sessionId`为会话树身份，不能一概当作`Thread.id`。含实验字段的`readState`是未读位置／修订信息，不是容量或输入完整性证明。
+
+| 职责 | 当前实际消费者 | 可替代边界 |
+|---|---|---|
+| 容量与新鲜度 | checkpoint的`observeContext`及connection/session回调；普通MCP另调用rollout reader | 已有同连接通知路径消费`last`、可选window和模型／压缩事件。`total`不当占用；普通MCP没有等价的完整事件流输入，不能仅凭schema存在迁移。 |
+| 输入与控制完整性 | `scanNativeInputs`、分页取回／对账及bind／pause／retire前后检查 | 原文和媒体coverage、Hook／行hash、来源注解、字节前缀和未知控制须保留；结构化当前turn结果不等价。 |
+| 执行关联与恢复 | turn关联、目标读回及独立verifier | root／parent／trigger关系、原写者停止、暂停和未知效果分别核验；容量、idle或notLoaded都不提供这些结论。 |
+
+所查四份通知schema均声明标准`item/completed + functionCallOutput`，未在其通知集合列出`rawResponseItem/completed`；这不证明宿主永不发送额外事件。原remaining正例主要构造旧原始形状，产品已有标准decoder。本轮补2项标准通知回归：第三方namespace不冒充核心容量来源，后续可见item、新usage或unknown输出不沿用旧remaining；保持响应边界占用、效率未知及不授予release。补审发现fixture遗漏必填`completedAtMs`，补齐后核对四schema的必要字段与标量类型，并以缺字段反例校准；不是通用schema符合性评价。相关10项checkpoint检查与完整26项connection检查共36项成功，原先的字段投影结果另保留。固定输出文案不是schema保证，也未观察真实宿主发送。
+
+`error.willRetry`及`thread/environment/disconnected`仍需其实际语义证据；环境断开不等于传输EOF，当前未据此新设拒绝条件。下一步若普通MCP能取得无需新接管的同聊天通知流，再核连接／turn／model／压缩代际、journal淘汰、时间及断连；此前保留已受守卫的rollout路径，复用现有SDK路径，不新增常驻桥接服务。
+
 ## 资产、消费者与初步处置
 
 起点224个跟踪文件；以下计数用于定位，不表示完备性或有效性。私有运行证据、安装缓存、NEXUS不计入该总数。新增本报告后为225文件；首项兼容修正、3.3.5发行及安装阶段的宿主变化见[当前接续](../../docs/operations/CONTINUATION.md#目标与当前写者)，不把原盘点改写为225份逐行全审。

@@ -20,6 +20,7 @@ DRIVER = Path(__file__).with_name('carrier_handoff_host.cjs')
 PROPOSAL_TOOL = 'accord_request_handoff'
 CARRIER_EXECUTION_SOURCES = frozenset({
     'runtime/carrier-handoff.cjs', 'runtime/carrier-recorder.cjs',
+    'plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs',
     'runtime/codex-connection.cjs', 'runtime/codex-context.cjs',
     'runtime/task-checkpoint.cjs', 'tests/product/carrier_handoff_host.cjs',
     'plugins/yiyuan-accord-codex/runtime/codex-context.cjs',
@@ -1740,6 +1741,7 @@ def native_release_recovery_integration(codex, evidence):
     sources = [ROOT/'runtime'/name for name in ('carrier-handoff.cjs', 'carrier-recorder.cjs',
         'codex-connection.cjs', 'task-checkpoint.cjs', 'codex-context.cjs')]
     sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/codex-context.cjs')
+    sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs')
     sources += [DRIVER, Path(__file__), ROOT/'scripts/observe_codex_lifecycle.py',
                 ROOT/'scripts/observe_codex_entry.py', ROOT/'scripts/codex_rpc.py', ROOT/'scripts/inspect_native_resources.py']
     manifest = {'scenario': 'release-recovery', 'evidence': str(root), 'sourceRoot': str(ROOT),
@@ -2171,6 +2173,7 @@ class SyntheticReleaseRecoveryOracleTests(unittest.TestCase):
     """
     SOURCES = (
         'runtime/carrier-handoff.cjs', 'runtime/carrier-recorder.cjs',
+        'plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs',
         'runtime/codex-connection.cjs', 'runtime/codex-context.cjs',
         'plugins/yiyuan-accord-codex/runtime/codex-context.cjs',
         'runtime/task-checkpoint.cjs', 'tests/product/carrier_handoff_host.cjs',
@@ -2757,6 +2760,7 @@ def native_integration(codex, evidence, scenario=None):
         sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/codex-context.cjs')
     if 'finalize-receipt' in scenarios:
         sources.append(ROOT/'runtime/carrier-recorder.cjs')
+        sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs')
     manifest['sourceHashes']={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}
     if scenarios==('finalize-receipt',):
         manifest.update(scenario='finalize-receipt',sourceRoot=str(ROOT),

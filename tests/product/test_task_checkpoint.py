@@ -2372,6 +2372,53 @@ console.log(JSON.stringify({context,locators,root,base,readError}));
         self.assertEqual(self.signals(request)["state"], "unknown")
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
 
+    def append_standard_remaining(self, request, tokens, namespace=None):
+        output = (f"You have {tokens} tokens left in this context window."
+                  if tokens is not None else "You have unknown tokens left in this context window.")
+        item = {"type": "functionCallOutput", "id": f"remaining-output-{len(request['events'])}",
+                "name": "get_context_remaining", "output": output}
+        if namespace is not None:
+            item["namespace"] = namespace
+        at = request["events"][-1]["receivedAtMs"]
+        request["events"].append(dict(receivedAtMs=at,
+            event={"method": "item/completed", "params": {
+                "threadId": "thread", "turnId": "turn", "completedAtMs": at - 1, "item": item}}))
+
+    def test_standard_remaining_output_preserves_namespace_and_observation_scope(self):
+        before = {p.name: p.read_bytes() for p in self.state.iterdir()}
+        for namespace, expected in ((None, 3500), ("third_party", None)):
+            with self.subTest(namespace=namespace):
+                request = self.signal_request()
+                self.append_standard_remaining(request, 3500, namespace)
+                result = self.signals(request)
+                self.assertEqual(result["state"], "window-observed")
+                self.assertEqual(result["remainingTokens"], expected)
+                self.assertEqual(result["occupancy"], 4000)
+                self.assertEqual(result["occupancyScope"], "last-response-boundary")
+                self.assertIsNone(result["efficiency"])
+                self.assertFalse(result["sourceReleaseAllowed"])
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.iterdir()})
+
+    def test_standard_remaining_is_invalidated_by_later_item_usage_or_unknown_output(self):
+        for change, expected_occupancy in (("item", 4000), ("usage", 4500), ("unknown", 4000)):
+            with self.subTest(change=change):
+                request = self.signal_request()
+                self.append_standard_remaining(request, 3500)
+                self.assertEqual(self.signals(request)["remainingTokens"], 3500)
+                if change == "unknown":
+                    self.append_standard_remaining(request, None)
+                elif change == "item":
+                    self.append_standard_remaining(request, 2500, "third_party")
+                else:
+                    event = copy.deepcopy(request["events"][1])
+                    event["event"]["params"]["tokenUsage"]["last"]["totalTokens"] = 4500
+                    request["events"].append(event)
+                result = self.signals(request)
+                self.assertEqual(result["state"], "window-observed")
+                self.assertIsNone(result["remainingTokens"])
+                self.assertEqual(result["occupancy"], expected_occupancy)
+                self.assertFalse(result["sourceReleaseAllowed"])
+
     def append_native_remaining(self, request, tokens):
         output = (f"You have {tokens} tokens left in this context window."
                   if tokens is not None else "You have unknown tokens left in this context window.")

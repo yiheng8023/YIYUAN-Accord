@@ -729,6 +729,23 @@ tools and native Skill inventory do not open it; the new MCP transfer route and
 an SDK controller using this recorder do require it. Node must provide `node:sqlite`
 `DatabaseSync`; the owner retains connection, database and process shutdown.
 
+The repository-root recorder entry forwards to the packaged implementation;
+development verification binds its exact target and implementation SHA256.
+The source-binding guard also accepts historical full-copy entries; overall
+admission still enforces current complexity and authority conditions.
+Independent execution snapshots
+retain both the facade and its packaged dependency so that a snapshot never
+silently resolves against the working checkout. This removes a maintenance copy;
+it does not add runtime integrity enforcement or change the shipped recorder.
+
+The test inspectors require their own exact execution-source set. Current
+restore fixtures do not automatically select a historical frozen verifier:
+`--restore-from` and `--restore-source-from` reject an older full-copy manifest
+that lacks the packaged dependency. Read that evidence with its original frozen
+verifier and source list; a current-source refusal does not mark the old data
+corrupt or revoke its original qualification. Cross-source-set fixture recovery
+would require a separate precise compatibility path.
+
 These shipped components close source registration, event pumping and storage
 assembly gaps for an authorized SDK controller. They do not give an ordinary GUI
 plugin a control connection, provide universal semantic verification or qualify

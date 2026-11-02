@@ -2049,6 +2049,27 @@ class DevelopmentDeliveryTests(unittest.TestCase):
                 self.assertFalse(report["valid"])
                 self.assertTrue(any(fragment in error for error in report["errors"]), report["errors"])
 
+    def test_recorder_facade_is_bound_and_full_copy_source_compatibility_is_retained(self):
+        locator = "runtime/carrier-recorder.cjs"
+        original = (self.root / locator).read_bytes()
+        implementation = (self.root / "plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs").read_bytes()
+        self.assertTrue(self.report()["valid"])
+        with self.changed(locator, implementation):
+            # Source-form compatibility does not waive the current complexity
+            # budget. Whole-product admission of the facade is checked above.
+            legacy = self.report()["hostChecks"]["codex"]
+            self.assertTrue(legacy["staticReady"], legacy["errors"])
+        for altered in (
+            original.replace(b"plugins/yiyuan-accord-codex", b"plugins/unbound-adapter"),
+            original.replace(b"SHA256: ", b"SHA256: 0"),
+            original + b"process.exit(0);\n",
+        ):
+            with self.subTest(altered=altered[-60:]), self.changed(locator, altered):
+                report = self.report()
+                self.assertFalse(report["valid"])
+                self.assertTrue(any("carrier-recorder module differs from canonical bytes" in error
+                                    for error in report["errors"]), report["errors"])
+
     def test_native_mcp_shared_entry_is_exact_and_preserves_source_binding(self):
         locator = "runtime/native-state-mcp.cjs"
         original = (self.root / locator).read_bytes().replace(b"\r\n", b"\n")
