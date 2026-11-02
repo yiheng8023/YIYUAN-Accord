@@ -511,9 +511,17 @@ def activation_mechanism_errors(
             handoff_path = repository_relative_path(root, handoff_locator)
             canonical_handoff = repository_relative_path(root, "runtime/carrier-handoff.cjs")
             if (adapter_id != "codex" or handoff_path is None or canonical_handoff is None
-                    or handoff_path.is_symlink() or canonical_handoff.is_symlink()
-                    or _owned_bytes(handoff_path) != _owned_bytes(canonical_handoff)):
+                    or handoff_path.is_symlink() or canonical_handoff.is_symlink()):
                 errors.append(f"{prefix} carrier-handoff module differs from canonical bytes")
+            else:
+                implementation = _owned_bytes(handoff_path)
+                facade = ("'use strict';\n// Packaged implementation SHA256: "
+                          + sha256(implementation).hexdigest()
+                          + "\nmodule.exports = require('../plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs');\n").encode()
+                # Preserve original full-copy source compatibility and bind the
+                # repository entry to the exact independently shipped module.
+                if _owned_bytes(canonical_handoff) not in (implementation, facade):
+                    errors.append(f"{prefix} carrier-handoff module differs from canonical bytes")
         except OSError:
             errors.append(f"{prefix} carrier-handoff module is unreadable")
         connection_locator = f"plugins/yiyuan-accord-{package}/runtime/codex-connection.cjs"

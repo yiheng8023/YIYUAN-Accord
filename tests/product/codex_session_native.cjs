@@ -65,9 +65,14 @@ function readJsonLines(file, limit = 32 * 1024 * 1024) {
   return fs.readFileSync(file, 'utf8').split(/\r?\n/).filter(Boolean).map(line => JSON.parse(line));
 }
 
+function relativeNativePath(root, value) {
+  return path.relative(path.toNamespacedPath(path.resolve(root)),
+    path.toNamespacedPath(path.resolve(value)));
+}
+
 function existingInside(root, value, name) {
   const resolved = path.resolve(text(value, name));
-  const relative = path.relative(root, resolved);
+  const relative = relativeNativePath(root, resolved);
   if (!relative || relative.startsWith('..') || path.isAbsolute(relative) ||
       !fs.statSync(resolved).isFile() || fs.lstatSync(resolved).isSymbolicLink() ||
       fs.realpathSync(resolved) !== resolved) throw new TypeError(`${name} must be an ordinary file inside its root`);
@@ -176,7 +181,7 @@ function sessionFileEvidence(file, sessionsRoot, threadId) {
   if (meta.length !== 1) throw new Error('native session metadata identity differs');
   const contexts = rows.filter(row => row?.type === 'turn_context' && row.payload?.turn_id);
   const tools = dynamicNames(meta[0].payload.dynamic_tools);
-  return {path: resolved, relativePath: path.relative(sessionsRoot, resolved).replace(/\\/g, '/'),
+  return {path: resolved, relativePath: relativeNativePath(sessionsRoot, resolved).replace(/\\/g, '/'),
     meta: meta[0], contexts, rowCount: rows.length, tools};
 }
 

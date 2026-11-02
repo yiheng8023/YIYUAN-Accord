@@ -375,7 +375,17 @@ function validateProposalDispatch(value, plan, proposalRequest, response, transf
     'dispatch.toolCompleted.params');
   const item = completed.params.item;
   exactKeys(item, ['type', 'id', 'tool', 'status', 'contentItems', 'success'],
-    ['namespace', 'arguments', 'durationMs'], 'dispatch.toolCompleted.params.item');
+    ['namespace', 'arguments', 'durationMs', 'startedAtMs', 'completedAtMs'],
+    'dispatch.toolCompleted.params.item');
+  // ThreadItem flattens optional i64 lifecycle times into the payload. JSON
+  // numbers can round i64::MAX to 2**63; these fields remain metadata, never
+  // identity, authority or event-order evidence.
+  for (const field of ['startedAtMs', 'completedAtMs']) {
+    if (Object.hasOwn(item, field) && item[field] !== null &&
+        (!Number.isInteger(item[field]) || item[field] < -(2 ** 63) || item[field] > 2 ** 63)) {
+      throw new TypeError(`dispatch.toolCompleted.params.item.${field} must be an integer timestamp or null`);
+    }
+  }
   const requestParams = proposalRequest.params;
   const namespace = Object.hasOwn(requestParams, 'namespace') ? requestParams.namespace : null;
   const completedNamespace = Object.hasOwn(item, 'namespace') ? item.namespace : null;

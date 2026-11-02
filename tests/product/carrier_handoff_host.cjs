@@ -529,6 +529,7 @@ async function run(config) {
             const tool = envelope({method:'item/completed',params:{threadId:plan.source.threadId,turnId:plan.source.turnId,
               item:{type:'dynamicToolCall',id:nativeRequest.params.callId,tool:HANDOFF_PROPOSAL_TOOL.name,
                 namespace:null,status:'completed',success:true,contentItems:response.result.contentItems}}});
+            Object.assign(tool.params.item, config.proposalItemMetadata || {});
             const terminal = envelope({method:'turn/completed',params:{threadId:plan.source.threadId,
               turn:{id:plan.source.turnId,status:'completed'}}});
             const foreign=clone(tool); foreign.params.threadId='foreign';
@@ -573,6 +574,7 @@ async function run(config) {
         current: {scopeRef: plan.scopeRef, authorityRef: plan.authorityRef, stateRef: plan.stateRef,
           writerThreadId: plan.source.threadId},
       };
+      Object.assign(readiness.toolCompleted.params.item, config.proposalItemMetadata || {});
       if (scenario === 'proposal-wrong-tool') readiness.toolCompleted.params.item.id = 'unrelated-call';
       if (scenario === 'proposal-wrong-turn') readiness.sourceTerminal.params.turn.id = 'unrelated-turn';
       if (scenario === 'proposal-failed-tool') readiness.toolCompleted.params.item.success = false;

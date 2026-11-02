@@ -37,7 +37,7 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
 2. 在需要登记来源时，可采用[官方 marketplace 命令](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)：
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.9
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.10
    ```
 
    这条命令只登记来源。CLI 在 `/plugins` 中切到该来源，查看并安装 YIYUAN Accord；桌面使用实际可用的插件目录与来源入口。本项目来源不等于已被官方公共目录收录。
@@ -93,6 +93,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 | 3.3.7 | `d972da27` 的用户目标设置/清除、正文省略及独立状态观察兼容修正；精确CI #1043全11项成功，正式标签为[v3.3.7](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.7)。发布、安装、实际加载与完整重绑分别见[当前接续](operations/CONTINUATION.md#目标与当前写者)。 |
 | 3.3.8 | `213dbea2` 的Skill目录、环境组合与完整快照变化检测修正；[CI #1046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41081944936)全11项成功，正式标签为[v3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8)。发布、本机更新和实际加载见[接续](operations/CONTINUATION.md#目标与当前写者)。 |
 | 3.3.9 | 退役确认、精确文本/部分输入视图、有限并发读取及既有经验/接续/交互控制指导修正；发行、CI和实际采用见[接续](operations/CONTINUATION.md#目标与当前写者)，原失败及证据限制保持。 |
+| 3.3.10 | 原生交接可选时间字段兼容、仓库转发与测试路径核验修正；验证、发行与实际采用状态见[接续](operations/CONTINUATION.md#目标与当前写者)，不扩大实际恢复或收益承诺。 |
 
 原始失败、版本、环境和条件保持原身份；后续文档不移动发行标签，也不把旧通过直接当作新版本通过。CLI、SDK、桌面、IDE、Work 与 Remote 之间，仅在核对适用性和差异后复用相应机制证据；历史入口观察不能覆盖现行官方已知限制。
 
@@ -157,7 +158,7 @@ Complete **installation, enablement and Hook trust** separately, then verify act
 2. Where source registration is needed, use the official [marketplace command](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli):
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.9
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.10
    ```
 
    This registers the source only. In CLI `/plugins`, select it, inspect and install YIYUAN Accord. On desktop use the actual plugin directory/source entry. A repository marketplace is not a listing in the official public directory.
@@ -213,6 +214,7 @@ Before update, rollback or removal, use a healthy executor independent of the pl
 | 3.3.7 | User Goal Set/Clear, omitted body and separate state-observation compatibility at `d972da27`; all 11 exact CI #1043 jobs passed, with official tag [v3.3.7](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.7). Publication, installation, actual loading and full state rebinding remain separate in [current continuation](operations/CONTINUATION.md#目标与当前写者). |
 | 3.3.8 | Skill directories, environment combinations and full-snapshot change detection at `213dbea2`; all 11 [CI #1046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41081944936) jobs passed. Official tag: [v3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8). Publication, local update and actual loading are recorded in [continuation](operations/CONTINUATION.md#目标与当前写者). |
 | 3.3.9 | Retirement acknowledgment, exact-text/partial-input-view and bounded concurrent-read compatibility, plus existing learning/continuity/human-control guidance. Publication, CI and actual adoption are separate in [continuation](operations/CONTINUATION.md#目标与当前写者); original failures and evidence limits remain. |
+| 3.3.10 | Optional lifecycle-field compatibility in native handoff, repository facade and test-path verification corrections. See [continuation](operations/CONTINUATION.md#目标与当前写者) for checks, publication and actual adoption; broader recovery and value claims remain unproven. |
 
 Original failures, versions, environments and conditions retain their identities. Later documentation does not move release tags or validate changed versions through an old PASS. Reuse common-mechanism evidence across CLI, SDK, desktop, IDE, Work or Remote only after checking applicability and differences. Historical observations do not override known current upstream limitations.
 

@@ -280,7 +280,7 @@ class SkillReferencePackageTests(unittest.TestCase):
                          '14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026')
         self.assertEqual(translated['originalSourceSha256'],
                          '9f9019523491d9e41f7d3e41ee5bd3c783b0a1049fb280242959198fb88a439a')
-        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9'):
+        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9', '3.3.10'):
             with self.subTest(version=version):
                 self.assertEqual(foundation(version), translated)
 
@@ -307,6 +307,8 @@ class SkillReferencePackageTests(unittest.TestCase):
             package_version='3.3.8', **options), current)
         self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
             package_version='3.3.9', **options), current)
+        self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
+            package_version='3.3.10', **options), current)
         execution = current['nativeTaskStateMcp']
         self.assertEqual(execution['executionTool'], 'coordinate_task_execution')
         self.assertEqual(execution['execution']['entry'], 'runtime/native-task-execution.cjs')
@@ -1156,7 +1158,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
             elif kind == 'complete': altered['claimCeiling']['functionalCompletion'] = True
             elif kind == 'eligible': altered['claimCeiling']['candidateEligible'] = True
             elif kind in ('target', 'unselected-patch'):
-                target = '3.4.0' if kind == 'target' else '3.3.10'
+                target = '3.4.0' if kind == 'target' else '3.3.11'
                 altered['cycle']['targetVersion'] = release['target'] = target
                 altered['delivery']['version'] = target
                 altered['delivery']['hostProjections'][0]['packageVersion'] = target
@@ -1213,7 +1215,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertEqual(self.contract["authority"]["conditionalRelease"]["decision"],
                          "user-authorized-after-acceptance")
         self.assertFalse(self.contract["authority"]["conditionalRelease"]["ready"])
-        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.9")
+        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.10")
         self.assertEqual(self.contract["predecessorSnapshot"], old["predecessorSnapshot"])
         self.assertEqual({p["id"] for p in self.contract["delivery"]["hostProjections"]}, {"codex"})
         self.assertEqual({p["id"] for p in old["delivery"]["hostProjections"]}, {"codex", "claude-code"})
@@ -2068,6 +2070,27 @@ class DevelopmentDeliveryTests(unittest.TestCase):
                 report = self.report()
                 self.assertFalse(report["valid"])
                 self.assertTrue(any("carrier-recorder module differs from canonical bytes" in error
+                                    for error in report["errors"]), report["errors"])
+
+    def test_handoff_facade_preserves_source_compatibility_and_rejects_tampering(self):
+        locator = "runtime/carrier-handoff.cjs"
+        original = (self.root / locator).read_bytes()
+        implementation = (self.root / "plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs").read_bytes()
+        self.assertTrue(self.report()["valid"])
+        with self.changed(locator, implementation):
+            # Old full copies retain source compatibility, not a waiver of
+            # current whole-product complexity or release requirements.
+            legacy = self.report()["hostChecks"]["codex"]
+            self.assertTrue(legacy["staticReady"], legacy["errors"])
+        for altered in (
+            original.replace(b"plugins/yiyuan-accord-codex", b"plugins/unbound-adapter"),
+            original.replace(b"SHA256: ", b"SHA256: 0"),
+            original + b"process.exit(0);\n",
+        ):
+            with self.subTest(altered=altered[-60:]), self.changed(locator, altered):
+                report = self.report()
+                self.assertFalse(report["valid"])
+                self.assertTrue(any("carrier-handoff module differs from canonical bytes" in error
                                     for error in report["errors"]), report["errors"])
 
     def test_native_mcp_shared_entry_is_exact_and_preserves_source_binding(self):

@@ -4,7 +4,9 @@
 
 ## 下一阶段案例与拍摄准备（2026-11-02）
 
-没有新的自然任务时，先准备以下结构，不制造业务需求或录制伪装为真实结果的成功演示。现有试行绑定各自受测版本，失败、救援、耗时和成本未知须同屏说明；不改签为当前版本收益。
+材料尚未到位时可先准备以下结构，不制造业务需求或录制伪装为真实结果的成功演示。当前已取得自然维护及配置材料，按各自证据范围使用；恢复与价值材料仍另核。现有试行绑定各自受测版本，失败、救援、耗时和成本未知须同屏说明；不改签为当前版本收益。
+
+本项目开发同样可作为真实案例：已有[原失败纠正被后续改动采用的记录](../../research/evaluations/accord-toggle-v1.md#2026-11-02-本项目真实开发中的经验采用)，可以讲清具体问题、取回来源、做法变化与验证结果。应标注维护者回顾／调优背景；其中固定响应和故障注入仍是工程检查，不包装成自然事故、普通模型行为或独立收益对照。素材准备不必等待其它项目的新任务。
 
 | 候选片段 | 可以先备的素材 | 取得实际材料后再填写 |
 |---|---|---|
@@ -13,6 +15,20 @@
 | 宿主及第三方能力协作 | 接口、启用／信任条件、能力选择的解释图 | 实际采用、组合结果、额外负担及可复现条件 |
 
 对照保留宿主正常能力和既有用户选择，预先冻结问题与判据，不用调用次数、更多自动化或单个总分代替价值。可以展示有益、无差异、额外负担及未知。此表是准备材料，不授权发布、增加宿主支持或建立新的产品验收。
+
+### 已有材料讲解稿（2026-11-02，未拍摄）
+
+主题：**说出目标，理解不同工具的实际用法。** 取材于[真实配置与正常澄清记录](../../research/evaluations/accord-toggle-v1.md#2026-11-02-真实配置任务与正常澄清)，讲解用户怎样表达目标、助手怎样处理入口差异，以及能核实到什么。原过程没有同步录像；以下是基于记录的讲解稿。如后续用图示复述，须标注“记录复述”，保留先后关系，不包装为原生连续录屏。
+
+| 片段 | 中文旁白工作稿 | English narration draft | 配图／来源要求 |
+|---|---|---|---|
+| 用户目标 | 我想把这款工具配置好、确认能用，也想知道怎样开始；保留官方源码。 | Configure this tool, check that it works, and explain how to start, while preserving official source code. | 匿名复述需求，不显示账号、凭据或其它聊天 |
+| 工具差异 | 不同工具的终端入口可以不同。首轮已经给了入口示例，后来对无参数入口的追问属于正常澄清。 | Terminal entry points differ. The first reply included entry examples; the later question clarified the bare-command behavior. | 同时保留首轮正确示例及后续问题，不能只截报错制造失败叙事 |
+| 结果与核对 | 助手报告完成配置和验证；独立读回确认了保存说明、两份验证文件和一次端口后态，全部功能仍是另一个验收范围。 | The assistant reported configuration and checks. Independent readback confirmed the saved guide, two verification files and one port observation; full functional acceptance is a separate question. | 使用脱敏资料；文件存在不能冒充全功能或官方源码完整审计 |
+| Accord参与 | 没有独立调用标签，不等于没收到指导。这里核到了工具调用前完整指导送达，实际采用和效果还要另证。 | No separate call label does not mean guidance was absent. Delivery before the first tool call was verified; adoption and impact need separate evidence. | 展示3.3.9及原生记录的匿名证据卡，不展示私人回执 |
+| 收尾 | 这段材料说明使用过程和核验边界；收益比较要等公平对照。 | This material explains the workflow and verification limits. Benefit claims await a fair comparison. | 明示无未启用组，不标省时百分比、性能优势或完整恢复 |
+
+这是讲解与素材准备，不是已制作视频、对外发布或Accord对该第三方应用作为新宿主的支持承诺。公开范围和脱敏仍须在实际制作／发布前核对；现有失败、正常追问和成本未知继续保留。
 
 ## 文案底稿
 
@@ -175,7 +191,7 @@ This checklist serves first-use copy and the existing release work; it grants no
 | 版本与入口 | 绑定宿主、后端、OS、插件包和精确版本/摘要。只切换目标作用域内 Accord 的启用状态，不用全局禁插件开关顺便移除其它能力。核对当前入口的实际 Hook 支持。 |
 | 模型与工具 | 两组保有相同的主模型/推理选择、可用子模型、原生和第三方工具、权限及资源上限。保留各组获准调度与恢复能力，记录实际选择、并发和切换，不能强制对照组走较弱路线。 |
 | 指令、记忆与材料 | 两组用新会话、相同中立目录和材料快照。核对实际生效的用户/项目指令、记忆、已加载 Skill 和状态。当前产品仓库本身含 Accord 指导，不直接拿来作为未启用基线；禁用或卸载不能清除已经进入上下文的指导。 |
-| 输入与人工介入 | 用相同初始需求、预定变化和恢复输入；运行前冻结救援规则。分别记录必要授权/本人动作与可避免的催促、纠错和救场，不给任一组隐藏辅导，也不抹去安装与首次信任成本。 |
+| 输入与人工介入 | 用相同初始需求、预定变化和恢复输入；运行前冻结救援规则。正常追问/确认、必要授权/本人动作、新需求，以及已证纠错/救援和可避免性分别记录；续轮本身不算失败。不给任一组隐藏辅导，也不抹去安装与首次信任成本。 |
 | 判据与成本 | 先核可独立检查的成品、原件保护、要求完整性和真实效果，再报告人工次数/时间、端到端时间、模型/工具用量、冷/热加载、缓存、并发及退出成本。不可取得的字段保留未知；账户配额不是本任务费用。 |
 
 候选覆盖包含以下三类同材料、同交付要求的真实任务；本轮只执行了简单任务与需求变化各一对，中断恢复仍未由本批验证。后续材料、预算、触发节点、重复次数和判据在实际派发前冻结，不由下表自动授予执行或新增费用：
@@ -198,7 +214,7 @@ Status on 2026-10-30: **two native pairs of synthetic tasks completed; both arms
 
 Before dispatch, freeze paired host/backend/package versions and hashes, OS, main model/effort, available submodels, native and external tools, permissions, resource limits and task materials. Toggle only Accord in the target scope, preserving other plugins and both groups' native scheduling/recovery capabilities. Record actual allocation rather than forcing identical tool paths. Check current entry and Hook support.
 
-Use fresh sessions and equal neutral workspaces. Inspect effective user/project instructions, memory, loaded Skills and state; this product repository's Accord instructions would contaminate a disabled baseline. Disabling or uninstalling does not erase loaded context. Give both arms the same initial request, scheduled change and recovery input, with a rescue policy set in advance. Separate necessary authorization/personal actions from avoidable prompting, correction and rescue. Include setup and first-use trust costs; give neither arm hidden coaching.
+Use fresh sessions and equal neutral workspaces. Inspect effective user/project instructions, memory, loaded Skills and state; this product repository's Accord instructions would contaminate a disabled baseline. Disabling or uninstalling does not erase loaded context. Give both arms the same initial request, scheduled change and recovery input, with a rescue policy set in advance. Record normal questions and confirmations, necessary authorization/personal actions, new requirements, and demonstrated correction/rescue separately; assess avoidability from evidence. An extra turn alone is not failure. Include setup and first-use trust costs; give neither arm hidden coaching.
 
 Candidate coverage includes three task types: an added requirement affecting earlier output; interruption and native recovery at the same semantic milestone; and a simple one-prompt task without an artificial fault. This pilot ran one simple-task pair and one requirement-change pair; it did not test interrupted recovery. Check the actual deliverable, complete requirements, protected originals, corrected effects, retained goals/pauses/authority, no duplicate actions and resource exit. Record human effort, full elapsed time, model/tool use, cold/warm loading, caching, concurrency and recovery/exit costs. Unknown costs stay unknown; account quota is not task cost. Reasonable overhead does not excuse missing automation or quality, nor imply failure by itself.
 
@@ -223,7 +239,7 @@ Retain configuration, input/intervention timelines, outputs, independent checks,
 |---|---|---|
 | 精确发行与更新日志 | 以当前接续和精确版本公开记录核对 | 验收、候选审查、已有适用发布授权及其条件、同版本公开后态成立 |
 | README整体修订 | 入口分层由双语 README 与[用户指南](../user-guide.md)承接 | 每次改动按实际成品复核中英文定位、能力及限制、安装使用、图示与链接，不能仅沿用开发期文案 |
-| 安装与使用入口 | 以3.3.4精确发行、当前支持入口、启用和首次 Hook 信任说明为基准 | 新用户能取得精确包，按真实支持条件完成安装和使用；市场收录不冒充必需前提，指南不代验每位用户的实际加载 |
+| 安装与使用入口 | 以[当前接续](CONTINUATION.md)所列精确发行、实际支持入口、启用和首次 Hook 信任说明为基准 | 新用户能取得精确包，按真实支持条件完成安装和使用；市场收录不冒充必需前提，指南不代验每位用户的实际加载 |
 | 演示及效果说明 | 已有局部试验，不是完整演示 | 同版本真实完整任务、可复验成品、参与边界及限制 |
 | 发布页面 | 本文仅底稿 | 更新文案、缩略图、截图、视频、关联工具致谢和可用链接；在实际发布表单重新检查限制 |
 

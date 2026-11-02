@@ -43,6 +43,7 @@ SOURCE_FILES = (
     "scripts/inspect_native_resources.py",
     "runtime/codex-session.cjs",
     "runtime/carrier-handoff.cjs",
+    "plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs",
     "runtime/codex-connection.cjs",
     "runtime/carrier-recorder.cjs",
     "plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs",
@@ -101,6 +102,24 @@ def _recorded_relative(value, manifest: dict):
     candidate = pure(value)
     if not recorded_root.is_absolute() or not candidate.is_absolute():
         raise ValueError("recorded native path is not absolute")
+    if ".." in recorded_root.parts or ".." in candidate.parts:
+        raise ValueError("recorded native path contains parent traversal")
+    if pure is PureWindowsPath:
+        def ordinary(path):
+            drive = path.drive
+            if drive.startswith("\\\\.\\"):
+                raise ValueError("recorded native device path is unsupported")
+            if drive.startswith("\\\\?\\"):
+                suffix = drive[4:]
+                if suffix.lower().startswith("unc\\"):
+                    drive = "\\\\" + suffix[4:]
+                elif len(suffix) == 2 and suffix[0].isascii() and suffix[0].isalpha() and suffix[1] == ":":
+                    drive = suffix
+                else:
+                    raise ValueError("recorded native device namespace is unsupported")
+                path = PureWindowsPath(drive + "\\", *path.parts[1:])
+            return path
+        recorded_root, candidate = ordinary(recorded_root), ordinary(candidate)
     try:
         relative = candidate.relative_to(recorded_root)
     except ValueError:
@@ -1649,6 +1668,58 @@ class CodexSessionNativeOfflineTests(unittest.TestCase):
                          ("retained", "carrier.sqlite"))
         with self.assertRaisesRegex(ValueError, "outside"):
             _recorded_relative(r"D:\foreign\one.jsonl", windows)
+
+    def test_recorded_windows_namespace_paths_preserve_root_boundaries(self):
+        ordinary = r"C:\old\evidence"
+        extended = "\\\\?\\" + ordinary
+        for root in (ordinary, extended):
+            manifest = {"resourceController": "windows-job-object", "evidence": root}
+            for candidate in (ordinary, extended):
+                self.assertEqual(_recorded_relative(candidate + r"\home\sessions\one.jsonl", manifest),
+                                 ("home", "sessions", "one.jsonl"))
+            for invalid in (r"\\?\D:\foreign\one.jsonl", r"\\?\C:\old\evidence-other\one.jsonl",
+                            r"\\.\C:\old\evidence\one.jsonl", r"\\?\GLOBALROOT\Device\HarddiskVolume1\file", ordinary,
+                            ordinary + r"\home\..\..\outside.jsonl"):
+                with self.subTest(root=root, invalid=invalid), self.assertRaises(ValueError):
+                    _recorded_relative(invalid, manifest)
+        unc = {"resourceController": "windows-job-object", "evidence": r"\\server\share\evidence"}
+        self.assertEqual(_recorded_relative(r"\\?\UNC\server\share\evidence\file", unc), ("file",))
+        with self.assertRaises(ValueError):
+            _recorded_relative(r"\\?\UNC\foreign\share\evidence\file", unc)
+        with self.assertRaises(ValueError):
+            _recorded_relative(r"\\?\UNC\server\other-share\evidence\file", unc)
+        with self.assertRaises(ValueError):
+            _recorded_relative("/old/evidence/../outside", {
+                "resourceController": "posix-session-process-group", "evidence": "/old/evidence"})
+
+    def test_native_caller_accepts_namespace_alias_without_relaxing_file_checks(self):
+        import subprocess
+        script = r'''
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path').win32;
+const source = fs.readFileSync(process.argv[1], 'utf8');
+let file = true, symlink = false, redirected = false;
+const checked = {statSync: () => ({isFile: () => file}),
+  lstatSync: () => ({isSymbolicLink: () => symlink}),
+  realpathSync: value => redirected ? 'C:\\outside\\file' : value};
+const helpers = new Function('fs', 'path',
+  source.slice(source.indexOf('function plain('), source.indexOf('function completed(')) +
+  ';return {existingInside, relativeNativePath: typeof relativeNativePath === "function" ? relativeNativePath : null};')(checked, path);
+const root = 'C:\\evidence\\sessions';
+const native = '\\\\?\\C:\\evidence\\sessions\\one.jsonl';
+assert.equal(helpers.existingInside(root, native, 'test'), native);
+assert.equal(helpers.relativeNativePath(root, native), 'one.jsonl');
+for (const invalid of ['\\\\?\\D:\\foreign\\file', '\\\\?\\C:\\evidence\\other\\file', root]) {
+  assert.throws(() => helpers.existingInside(root, invalid, 'test'));
+}
+file = false; assert.throws(() => helpers.existingInside(root, native, 'test')); file = true;
+symlink = true; assert.throws(() => helpers.existingInside(root, native, 'test')); symlink = false;
+redirected = true; assert.throws(() => helpers.existingInside(root, native, 'test'));
+'''
+        result = subprocess.run([shutil.which('node'), '-e', script,
+            str(ROOT / 'tests/product/codex_session_native.cjs')], capture_output=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
 
 
 if __name__ == "__main__":

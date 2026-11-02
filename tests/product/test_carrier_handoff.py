@@ -20,6 +20,7 @@ DRIVER = Path(__file__).with_name('carrier_handoff_host.cjs')
 PROPOSAL_TOOL = 'accord_request_handoff'
 CARRIER_EXECUTION_SOURCES = frozenset({
     'runtime/carrier-handoff.cjs', 'runtime/carrier-recorder.cjs',
+    'plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs',
     'plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs',
     'runtime/codex-connection.cjs', 'runtime/codex-context.cjs',
     'runtime/task-checkpoint.cjs', 'tests/product/carrier_handoff_host.cjs',
@@ -1112,9 +1113,23 @@ async function observe(requestId, corruption) {
         self.assertEqual(sum(c['method']=='turn/start' for c in r['calls']),1)
         self.assertFalse(any(c['method']=='thread/unsubscribe' for c in r['calls']))
 
-    def test_distributed_adapter_matches_canonical_source(self):
-        self.assertEqual((ROOT/'runtime/carrier-handoff.cjs').read_bytes(),
-                         (ROOT/'plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs').read_bytes())
+    def test_repository_entry_loads_the_same_independent_packaged_handoff(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            snapshot = Path(temporary)
+            entry = snapshot/'runtime/carrier-handoff.cjs'
+            package = snapshot/'plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs'
+            for target in (entry, package):
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes((ROOT/target.relative_to(snapshot)).read_bytes())
+            run = subprocess.run([shutil.which('node'), '-e',
+                "require('node:assert/strict').equal(require(process.argv[1]),require(process.argv[2]));",
+                str(entry), str(package)], cwd=snapshot, capture_output=True, timeout=10)
+            self.assertEqual(run.returncode, 0, run.stderr)
+            package.unlink()
+            missing = subprocess.run([shutil.which('node'), '-e', 'require(process.argv[1]);',
+                str(entry)], cwd=snapshot, capture_output=True, timeout=10)
+            self.assertNotEqual(missing.returncode, 0)
+            self.assertIn(b'MODULE_NOT_FOUND', missing.stderr)
 
     def test_proposal_only_records_before_response_and_reuses_one_transfer(self):
         r = self.run_case('proposal-success')
@@ -1148,6 +1163,39 @@ async function observe(requestId, corruption) {
         self.assertIsNone(r['error'])
         self.assertTrue(r['proposal']['duplicateError'])
         self.assertEqual(r['proposal']['callsAfterDuplicate'], 0)
+
+    def test_proposal_accepts_optional_native_item_lifecycle_metadata(self):
+        for scenario in ('proposal-success', 'proposal-event-success'):
+            for metadata in ({}, {'startedAtMs': None, 'completedAtMs': None},
+                             {'startedAtMs': 1793615521000, 'completedAtMs': 1793615521001},
+                             {'startedAtMs': -1}, {'completedAtMs': 0},
+                             {'startedAtMs': 10, 'completedAtMs': 9},
+                             {'startedAtMs': -(2**63), 'completedAtMs': 2**63-1}):
+                with self.subTest(scenario=scenario, metadata=metadata):
+                    r = self.run_case(scenario, proposalItemMetadata=metadata)
+                    self.assertIsNone(r['error'])
+                    self.assertEqual(r['result']['status'], 'handed-off')
+
+    def test_proposal_rejects_invalid_lifecycle_metadata_and_unknown_item_fields(self):
+        for field in ('startedAtMs', 'completedAtMs'):
+            for value in (True, '1793615521000', [], {}, 1.5, 2**64, -(2**64)):
+                with self.subTest(field=field, value=value):
+                    r = self.run_case('proposal-event-success', proposalItemMetadata={field: value})
+                    self.assertIsNotNone(r['error'])
+                    self.assertFalse(any(c['method']=='thread/start' for c in r['calls']))
+        r = self.run_case('proposal-success', proposalItemMetadata={'unrecognizedTime': 0})
+        self.assertIsNotNone(r['error'])
+        self.assertEqual(r['calls'], [])
+
+    def test_native_item_times_do_not_replace_identity_result_or_event_order_guards(self):
+        for scenario in ('proposal-wrong-tool', 'proposal-wrong-turn',
+                         'proposal-wrong-response', 'proposal-failed-tool',
+                         'proposal-failed-source', 'proposal-event-early-terminal'):
+            with self.subTest(scenario=scenario):
+                r = self.run_case(scenario, proposalItemMetadata={
+                    'startedAtMs': 1793615521000, 'completedAtMs': 1793615521001})
+                self.assertIsNotNone(r['error'])
+                self.assertFalse(any(c['method']=='thread/start' for c in r['calls']))
 
 
 def proposal_fixture_item(body, ordinal, state):
@@ -1740,6 +1788,7 @@ def native_release_recovery_integration(codex, evidence):
     original = digest(keep)
     sources = [ROOT/'runtime'/name for name in ('carrier-handoff.cjs', 'carrier-recorder.cjs',
         'codex-connection.cjs', 'task-checkpoint.cjs', 'codex-context.cjs')]
+    sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs')
     sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/codex-context.cjs')
     sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs')
     sources += [DRIVER, Path(__file__), ROOT/'scripts/observe_codex_lifecycle.py',
@@ -2173,6 +2222,7 @@ class SyntheticReleaseRecoveryOracleTests(unittest.TestCase):
     """
     SOURCES = (
         'runtime/carrier-handoff.cjs', 'runtime/carrier-recorder.cjs',
+        'plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs',
         'plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs',
         'runtime/codex-connection.cjs', 'runtime/codex-context.cjs',
         'plugins/yiyuan-accord-codex/runtime/codex-context.cjs',
@@ -2755,6 +2805,7 @@ def native_integration(codex, evidence, scenario=None):
         manifest['limits']['providerRequests']=4
     sources=[ROOT/'runtime/carrier-handoff.cjs',DRIVER,Path(__file__),ROOT/'scripts/observe_codex_lifecycle.py',
              ROOT/'scripts/observe_codex_entry.py',ROOT/'scripts/codex_rpc.py',ROOT/'scripts/inspect_native_resources.py']
+    sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs')
     if any(s in ('owned-connection','source-context','websocket-connection','recover-receipt','finalize-receipt') for s in scenarios):
         sources.extend(ROOT/'runtime'/name for name in ('codex-connection.cjs','task-checkpoint.cjs','codex-context.cjs'))
         sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/codex-context.cjs')
