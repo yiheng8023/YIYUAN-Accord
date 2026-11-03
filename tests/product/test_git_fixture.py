@@ -13,6 +13,185 @@ from tests.product import test_product_control as fixtures
 from tests.product.git_fixture import owned_git_environment
 
 
+class SnapshotCheckTests(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory(prefix='accord-static-snapshot-')
+        self.addCleanup(self.temporary.cleanup)
+        self.base = Path(self.temporary.name).resolve()
+        self.root = self.base / 'source'
+        GitFixtureIsolationTests().repository(self.root)
+        declaration = self.root / 'product/development.json'
+        declaration.parent.mkdir()
+        declaration.write_text('{"schema":"yiyuan-accord-development/v5"}', encoding='utf-8')
+        for args in (['add', '.'], ['-c', 'user.name=Fixture',
+                     '-c', 'user.email=fixture@example.invalid', 'commit',
+                     '--quiet', '-m', 'Current development fixture']):
+            subprocess.run(['git', '-C', str(self.root), *args],
+                           env=owned_git_environment(), check=True, capture_output=True)
+        self.head = subprocess.check_output(['git', '-C', str(self.root), 'rev-parse', 'HEAD'],
+                                            env=owned_git_environment()).decode().strip()
+        self.work = self.base / 'result'
+
+    def run_check(self, *, checks=None, archive=False, work=None, head=None):
+        from yiyuan_accord import __main__ as cli
+        good = lambda *args: {'valid': True, 'errors': []}
+        checks = checks or (good, good, good)
+        with patch.object(cli, 'verify_development', side_effect=checks[0]), \
+                patch.object(cli, 'verify_product', side_effect=checks[1]), \
+                patch.object(cli, 'host_check', side_effect=checks[2]):
+            return cli.check_snapshot(self.root, work or self.work,
+                                      head or self.head, 'codex', archive)
+
+    def test_snapshot_checks_working_bytes_preserves_index_and_archives_on_request(self):
+        import zipfile
+        from yiyuan_accord import __main__ as cli
+        (self.root / 'keep.txt').write_text('staged', encoding='utf-8')
+        subprocess.run(['git', '-C', str(self.root), 'add', 'keep.txt'],
+                       env=owned_git_environment(), check=True)
+        (self.root / 'keep.txt').write_bytes('working\n中文'.encode('utf-8'))
+        before = GitFixtureIsolationTests().protected_bytes(self.root)
+        calls = []
+        def check(label):
+            def run(root, *args):
+                self.assertEqual((root / 'keep.txt').read_bytes(), 'working\n中文'.encode())
+                calls.append((label, args))
+                return {'valid': True, 'errors': []}
+            return run
+        report = self.run_check(checks=tuple(check(x) for x in ('development', 'product', 'host')),
+                                archive=True)
+        self.assertTrue(report['valid'], report)
+        self.assertEqual(calls, [('development', ()), ('product', ()), ('host', ('codex',))])
+        self.assertEqual(report['cleanup'], 'removed')
+        self.assertFalse((self.work / 'repo').exists())
+        self.assertEqual(GitFixtureIsolationTests().protected_bytes(self.root), before)
+        with zipfile.ZipFile(self.work / 'source.zip') as saved:
+            self.assertEqual(saved.namelist(), ['keep.txt', 'product/development.json'])
+            self.assertEqual(saved.read('keep.txt'), (self.root / 'keep.txt').read_bytes())
+        self.assertEqual(json.loads((self.work / 'result.json').read_text())['valid'], True)
+
+    def test_snapshot_ignores_foreign_git_routes(self):
+        from yiyuan_accord.identity import _bounded_git_bytes
+        foreign = self.base / 'foreign'
+        GitFixtureIsolationTests().repository(foreign)
+        before = GitFixtureIsolationTests().protected_bytes(foreign)
+        (self.root / 'keep.txt').write_bytes(b'working update')
+        def real_history_check(root, *args):
+            self.assertEqual(_bounded_git_bytes(root, ('show', 'HEAD:keep.txt')), b'source')
+            self.assertIn(b'keep.txt', _bounded_git_bytes(root, ('diff', '--name-only')))
+            return {'valid': True, 'errors': []}
+        routes = {'GIT_DIR': str(foreign / '.git'), 'GIT_WORK_TREE': str(foreign),
+                  'GIT_INDEX_FILE': str(foreign / '.git/index')}
+        with patch.dict(os.environ, routes):
+            report = self.run_check(checks=(real_history_check,
+                                          lambda *a: {'valid': True, 'errors': []},
+                                          lambda *a: {'valid': True, 'errors': []}))
+        self.assertEqual(GitFixtureIsolationTests().protected_bytes(foreign), before)
+        self.assertTrue(report['valid'], report)
+
+    def test_snapshot_rejects_out_of_scope_declarations_before_checks_or_writes(self):
+        declaration = self.root / 'product/development.json'
+        for index, data in enumerate((b'{}', b'{"schema":"yiyuan-accord-development/v4"}',
+                                      b'[]', b'{', None,
+                                      b'{"schema":"x","schema":"yiyuan-accord-development/v5"}')):
+            with self.subTest(data=data):
+                if data is None:
+                    declaration.unlink()
+                else:
+                    declaration.write_bytes(data)
+                calls = []
+                def check(*args):
+                    calls.append(args)
+                    return {'valid': True, 'errors': []}
+                work = self.base / ('scope-' + str(index))
+                report = self.run_check(work=work, checks=(check, check, check))
+                self.assertFalse(report['valid'], report)
+                self.assertEqual(calls, [])
+                self.assertFalse(work.exists())
+
+    def test_snapshot_rejects_wrong_head_existing_overlap_and_untracked_source(self):
+        existing = self.base / 'existing';existing.mkdir()
+        (existing / 'keep').write_text('protected')
+        for arguments in ({'head': '0' * 40}, {'work': existing},
+                          {'work': self.root / 'nested'}, {'work': self.base / 'absent/child'}):
+            with self.subTest(arguments=arguments):
+                report = self.run_check(**arguments)
+                self.assertFalse(report['valid'], report)
+        self.assertEqual((existing / 'keep').read_text(), 'protected')
+        (self.root / 'untracked.txt').write_text('input')
+        self.assertFalse(self.run_check()['valid'])
+        self.assertFalse(self.work.exists())
+
+    def test_snapshot_rejects_deleted_hidden_and_new_index_paths(self):
+        subprocess.run(['git', '-C', str(self.root), 'update-index', '--assume-unchanged', 'keep.txt'],
+                       env=owned_git_environment(), check=True)
+        self.assertFalse(self.run_check()['valid'])
+        subprocess.run(['git', '-C', str(self.root), 'update-index', '--no-assume-unchanged', 'keep.txt'],
+                       env=owned_git_environment(), check=True)
+        data = (self.root / 'keep.txt').read_bytes();(self.root / 'keep.txt').unlink()
+        self.assertFalse(self.run_check()['valid'])
+        (self.root / 'keep.txt').write_bytes(data)
+        (self.root / 'added.txt').write_text('new')
+        subprocess.run(['git', '-C', str(self.root), 'add', 'added.txt'],
+                       env=owned_git_environment(), check=True)
+        self.assertFalse(self.run_check()['valid'])
+        self.assertFalse(self.work.exists())
+
+    def test_snapshot_rejects_nonregular_git_mode_and_reparse_path(self):
+        from types import SimpleNamespace
+        from yiyuan_accord import __main__ as cli
+        blob = subprocess.check_output(['git', '-C', str(self.root), 'rev-parse', 'HEAD:keep.txt'],
+                                       env=owned_git_environment()).decode().strip()
+        subprocess.run(['git', '-C', str(self.root), 'update-index', '--cacheinfo',
+                        '120000,' + blob + ',keep.txt'], env=owned_git_environment(), check=True)
+        self.assertFalse(self.run_check()['valid'])
+        self.assertFalse(self.work.exists())
+        with patch.object(Path, 'lstat', return_value=SimpleNamespace(st_mode=0o100644,
+                                                                    st_file_attributes=1024)):
+            with self.assertRaisesRegex(ValueError, 'reparse'):
+                cli._snapshot_plain_path(self.root)
+
+    def test_snapshot_keeps_failed_check_and_cleanup_evidence(self):
+        from yiyuan_accord import __main__ as cli
+        for index, failure in enumerate(({'valid': False, 'errors': ['original']},
+                                          {'valid': 'true', 'errors': []},
+                                          {'valid': True, 'errors': ['contradiction']})):
+            with self.subTest(failure=failure):
+                work = self.base / ('failure-' + str(index))
+                report = self.run_check(work=work, checks=(lambda *a: failure,
+                                                         lambda *a: {'valid': True, 'errors': []},
+                                                         lambda *a: {'valid': True, 'errors': []}))
+                self.assertFalse(report['valid'])
+                self.assertTrue((work / 'repo/keep.txt').is_file())
+                self.assertEqual(json.loads((work / 'development.json').read_text()), failure)
+        with patch.object(cli.shutil, 'rmtree', side_effect=OSError('controlled cleanup refusal')):
+            report = self.run_check()
+        self.assertFalse(report['valid'])
+        self.assertTrue((self.work / 'repo').is_dir())
+        self.assertIn('controlled cleanup refusal', str(report['errors']))
+
+    def test_snapshot_keeps_checker_exception_and_observed_drift(self):
+        def broken(*args):raise RuntimeError('controlled checker failure')
+        report = self.run_check(checks=(broken, broken, broken))
+        self.assertFalse(report['valid'])
+        self.assertIn('RuntimeError', str(report['errors']))
+        self.assertTrue((self.work / 'result.json').is_file())
+        def change_source(*args):
+            (self.root / 'keep.txt').write_text('changed during check')
+            return {'valid': True, 'errors': []}
+        report = self.run_check(work=self.base / 'source-drift',
+                                checks=(change_source, lambda *a: {'valid': True, 'errors': []},
+                                        lambda *a: {'valid': True, 'errors': []}))
+        self.assertFalse(report['valid']);self.assertFalse(report['sourceStable'])
+        self.assertEqual((self.root / 'keep.txt').read_text(), 'changed during check')
+        def change_copy(root, *args):
+            (root / 'keep.txt').write_text('changed copy')
+            return {'valid': True, 'errors': []}
+        report = self.run_check(work=self.base / 'snapshot-drift',
+                                checks=(change_copy, lambda *a: {'valid': True, 'errors': []},
+                                        lambda *a: {'valid': True, 'errors': []}))
+        self.assertFalse(report['valid']);self.assertFalse(report['snapshotStable'])
+
+
 class GitFixtureIsolationTests(unittest.TestCase):
     def test_pinned_history_reads_ignore_an_unrelated_repository_route(self):
         from tests.product import test_codex_lifecycle as lifecycle_tests

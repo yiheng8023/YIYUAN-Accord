@@ -188,6 +188,17 @@ def _safe_https_locator(value):
     )
 
 
+def _git_read_environment():
+    """Bind repository reads to the explicit root without foreign Git routing."""
+    environment = {key: value for key, value in os.environ.items()
+                   if not key.startswith('GIT_')}
+    environment.update(GIT_CONFIG_NOSYSTEM='1', GIT_CONFIG_GLOBAL=os.devnull,
+                       GIT_CONFIG_SYSTEM=os.devnull, GIT_OPTIONAL_LOCKS='0',
+                       GIT_CONFIG_COUNT='1', GIT_CONFIG_KEY_0='core.fsmonitor',
+                       GIT_CONFIG_VALUE_0='false')
+    return environment
+
+
 def _bounded_git_bytes(root, arguments, limit=_GIT_CAPTURE_LIMIT, input_bytes=None):
     if input_bytes is not None and (
         not isinstance(input_bytes, bytes) or len(input_bytes) > limit
@@ -201,6 +212,7 @@ def _bounded_git_bytes(root, arguments, limit=_GIT_CAPTURE_LIMIT, input_bytes=No
             ["git", "-C", str(root), *arguments], stdout=output,
             stderr=subprocess.DEVNULL,
             stdin=input_file if input_bytes is not None else subprocess.DEVNULL,
+            env=_git_read_environment(),
         )
         try:
             deadline = time.monotonic() + 10

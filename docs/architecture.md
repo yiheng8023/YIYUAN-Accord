@@ -25,6 +25,58 @@ Their repository location does not make those interfaces universal requirements.
 Keep host formats, observations and controls within the applicable adaptation;
 replace them by evidenced equivalents when adapting another host.
 
+### Future host adaptation: isolation and reuse
+
+This is a design direction for later host decisions, not a second active adapter
+or a universal runtime. The current distribution has one Codex adaptation;
+multi-host coexistence, independent upgrades and state migration remain untested.
+The user clarified on 2026-11-03 that additional host adaptation is outside the
+current phase: discuss options and retain the design only. No candidate interface,
+adapter package, host installation or cross-host execution is being implemented.
+Group a host family by evidenced protocol, state and control semantics. A vendor
+name or shared backend alone does not establish equivalent entry capabilities.
+
+| Responsibility | Shared meaning and implementation | Host-owned implementation and isolation |
+|---|---|---|
+| Outcome contract | Goals, authority, evidence, pauses, unknown effects, handoff and completion semantics | Native identity, control and event translation with original provenance |
+| Reusable logic | Small host-independent logic with actual consumers; one maintained source and contract tests | Host-specific formats, SDKs, parsers, settings and error semantics stay in their adapter |
+| Entry capabilities | Common representation of supported, conditional, unsupported and unknown capabilities | Actual CLI/Desktop/IDE/cloud/remote entry support, prerequisites and effective availability |
+| State and effects | Portable ownership and continuity obligations | Host/entry/task/workspace namespace, format version, leases, writer fencing and scoped resource ownership; account scope only where justified and authorized |
+| Permissions and lifecycle | User authority and explicit recovery duties | Credentials, trust, enablement, installation, refresh, rollback and removal are separately owned; discovery transfers none of them |
+| Delivery and validation | Shared-source provenance and common semantic contract checks | Independent adapter packages and compatibility evidence; shared changes recheck affected consumers without extending one-host evidence to others |
+
+Adapters depend on the portable contract and applicable shared libraries. Portable
+code must not import a concrete adapter's event types or make that host's settings
+mandatory. Common code can be included at build time in independent packages with
+exact source/version provenance. Repeated distribution bytes do not require
+repeated source maintenance. A shared resident service introduces its own
+availability, authority and recovery duties and is not the default reuse method.
+Across languages or incompatible runtimes, reuse semantics, data contracts and
+verification before forcing a common runtime dependency. Extract common code
+only when real consumers justify the interface and continued upkeep.
+
+An adapter may expose its host's additional capabilities without weakening common
+quality floors. A missing capability requires an evidenced equivalent or an
+explicit unmet condition. Keep capability discovery separate from execution
+authority. Share experience only after checking source host/entry, applicable
+versions, prerequisites and invalidators; a host-specific lesson cannot silently
+become a global rule or permission.
+
+Namespaces prevent accidental state mixing; they are not OS access control.
+Choose separate processes for incompatible dependencies or lifecycle/failure
+containment, and stronger OS accounts, sandboxes or containers when the effect
+and threat require them and the actual host supports their enforcement. A path
+allowlist or a separate folder alone cannot prove arbitrary tool isolation.
+Keep cross-host handoff explicit: select authorized data, reconcile identity,
+pauses and uncertain effects, verify the target's acceptance and one writer, and
+retain a usable recovery actor outside anything being replaced or removed.
+
+Before admitting a second adapter, check at least same-looking task IDs in both
+hosts, overlapping workspaces, unsupported/unknown capabilities, failed updates,
+old/new state formats, removal during unfinished work and shared-library changes.
+Bind each verdict to its host, entry, version and conditions. This direction
+does not prebuild empty candidate interfaces or schedule another adaptation.
+
 The current 3.3 foundation is the [English translation](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.md)
 of the [Chinese source](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/meta-guidance.zh-CN.md).
 The Chinese text is the semantic basis; its translation and source are pinned
@@ -124,18 +176,19 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current release and scoped connections
 
-The latest published Codex package is [3.3.4](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.4),
-released from exact commit `e58f016a` after all 11 required CI checks passed.
-It aligns product and development descriptions; executable guards remain unchanged.
+The current published Codex package is [3.3.10](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.10),
+from exact commit `e2be58f61a9dda9d9b64245d98ddf921ed597579`. Both bound CI runs
+passed all 11 jobs; local installation and this chat adoption were separately
+verified. Earlier package descriptions retain their historical versions.
 Publication, local installation and actual adoption are recorded separately in
 [current continuation](operations/CONTINUATION.md#当前事实).
 The [3.3.2 release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.2)
 and its bound qualification retain their exact `ef8bde2a` subject; earlier releases
 also remain immutable. Version declarations and candidate validation alone do not
 establish publication or adoption by another task or entry.
-Version3.3.5 is released; the current3.3.6 candidate adds bounded support for host-authored reasoning configuration records, tools-only world-state merge patches and native Goal starts with a new execution root. Settings and tool-directory changes retain ordered control digests and independent observations; they are not human input, invocation or permission. New-root association retains normal completion, source identity, timing, trusted Goal context and known-root non-reuse checks; it makes no old parent-child or same Goal database ID claim. Current publication, loading and recovery evidence is tracked in the [continuation record](operations/CONTINUATION.md#目标与当前写者). It retains typed Goal runtime context as source evidence rather than human authority, and composes proved Goal/human execution lineage without owning Goal state or dispatch. Execution attribution does not establish unchanged permissions or complete recovery, and persisted host snapshots do not grant Accord new authority. The transcript adapter is bounded to observed shapes, not a stable upstream protocol or blanket Goal support. See the [state-client contract](task-state-clients.md#goal-运行时上下文与自动续轮).
+The historical3.3.6 slice, following3.3.5, added bounded support for host-authored reasoning configuration records, tools-only world-state merge patches and native Goal starts with a new execution root. Settings and tool-directory changes retain ordered control digests and independent observations; they are not human input, invocation or permission. New-root association retains normal completion, source identity, timing, trusted Goal context and known-root non-reuse checks; it makes no old parent-child or same Goal database ID claim. Current publication, loading and recovery evidence is tracked in the [continuation record](operations/CONTINUATION.md#目标与当前写者). It retains typed Goal runtime context as source evidence rather than human authority, and composes proved Goal/human execution lineage without owning Goal state or dispatch. Execution attribution does not establish unchanged permissions or complete recovery, and persisted host snapshots do not grant Accord new authority. The transcript adapter is bounded to observed shapes, not a stable upstream protocol or blanket Goal support. See the [state-client contract](task-state-clients.md#goal-运行时上下文与自动续轮).
 
-The candidate reuses source-bound record validation for a same-execution late-input origin and Goal-chain attribution. This lookup neither skips uncovered human input nor changes read windows, permissions, Goal dispatch or recovery eligibility. A readable source segment is separate from execution attribution, reconciliation and complete recovery.
+That retained implementation reuses source-bound record validation for a same-execution late-input origin and Goal-chain attribution. This lookup neither skips uncovered human input nor changes read windows, permissions, Goal dispatch or recovery eligibility. A readable source segment is separate from execution attribution, reconciliation and complete recovery.
 
 The package exposes one brief coordinator and four independently discoverable specialist
 Skills for capabilities, continuity, verification and plugin lifecycle. Native
@@ -829,6 +882,12 @@ Run `verify-development` for source conformance. CLI `verify` and
 unchanged predecessor, declared package identity, namespace/legal carriage,
 hint transport, complexity and bounded changed paths. Their PASS does not
 establish functionality, value or candidate eligibility.
+
+For a current v5 tracked working-tree snapshot, maintainers may use the narrow
+[`check-snapshot` entry](../CONTRIBUTING.md#verification-and-publication) to reuse
+these statics in an isolated full-history checkout. It preserves source bytes,
+records drift and owns only that disposable checkout, not test/model execution,
+release or installation. A successful static report keeps the same claim limits.
 
 The current package `packageSha256` is a tree digest, not an archive digest.
 For each exact distributed member in sorted repository-relative path order,

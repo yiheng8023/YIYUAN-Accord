@@ -10,6 +10,29 @@
 
 ## 官方变化及其影响
 
+### 2026-11-03 技能发现快照与描述预算
+
+本次固定官方CLI0.166来源`6ff1e1ca3b30fc8b914720681fcf5fe62e95f856`，与本机载体版本、现有业务轨迹和新的零业务模型观察分开核对。源码契约不等于本机二进制逐字构建证明；旧alpha来源只用于定位，必要函数已回核固定提交。
+
+- API `skills/list`与业务使用同一HostSkillsService，输入和捕获时点不同：API按cwd读取最新配置／默认环境，业务采用per-turn配置／环境。[API调用链](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/app-server/src/request_processors/catalog_processor.rs#L527-L588)、[业务调用链](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/core/src/session/turn_context.rs#L1308-L1339)。官方[App Server说明](https://learn.chatgpt.com/docs/app-server)也区分缓存查询与`forceReload`；强制刷新改变缓存，不是被动ready查询。
+- 业务`host_skills.instructions`展示已捕获的HostSkillsSnapshot。显示路径可改用discovery path，且提示会筛除不启用／不允许隐式使用的技能；不能仅按绝对路径字符串把同源别名算成不同能力。[host provider](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/ext/skills/src/provider/host.rs#L122-L167)。原两业务共有43项与API盘点按当前realpath及内容摘要全部对应，先前16项路径差是同源别名。API另24项的当前邻接策略均为`allow_implicit_invocation=false`，与隐式筛选机制相容；未保留历史策略快照，不能补签旧筛选原因，更不因此改动用户选择。
+- 插件manager使用匹配身份的远端安装快照；缺失或不匹配时可为空，后台刷新发布后失效已加载缓存并通知变化。它并不等待全部后台发现工作完成才提供每次查询。[快照与加载](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/core-plugins/src/manager.rs#L831-L937)、[快照缺省](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/core-plugins/src/manager.rs#L1123-L1138)、[后台刷新](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/core-plugins/src/manager.rs#L3162-L3238)。`plugin/list`、`plugin/installed`本身还可能安排刷新／同步，不能混入被动前后观察后再称未介入。
+- host采用完整description策略；超预算时轮转分配字符，截取无省略号的前缀，只有最小条目也放不下才省略技能。[渲染与分配](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/ext/skills/src/render.rs#L380-L507)。预算按未扣预留的模型窗口计算；`resolved_context_window`与95%后的`usable_context_window`不同，不能把原生475,000直接推成9,500技能预算。[窗口定义](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/protocol/src/openai_models.rs#L522-L531)。
+
+新的两个短寿命App Server各只初始化、读取配置并间隔8秒查询两次`skills/list(forceReload:false)`，不创建thread／turn，不夹入插件控制查询。关闭组67→307、开启组72→312，各增240项curated-remote技能，已有条目和描述未变；两组晚期非目标307项逐项相同。规范化配置、三项受保护配置／指导及Accord包保持；已选plugin.json清单摘要保持只覆盖这些manifest，不能扩大为缓存／bundle全量不变。两进程自然退出、Job活动进程0、读线程停止。启动仍可触发宿主既有后台缓存／包同步，不称全程无副作用。
+
+这复现了一个能使前置盘点失效的实际变化机制；不是原业务174／43差异的逐事件回放。原业务的目录先于模型活动及Accord指导消息，不能归因为模型先遵循指导采取了工具动作；插件／Hook前置时序仍未被排除。原始远端刷新和运行态身份关联不足，同类403／MCP错误也没有建立对应因果。本次不据此新增运行组件、全局就绪等待或宿主故障认定。完整度量及重建限制见[评价记录](../evaluations/accord-toggle-v1.md#2026-11-03-当前版本简单任务与实际上下文差异)。
+
+### 2026-11-03 入口触发口径补核
+
+沿同进程材料继续核轻任务指导，发现协调入口的普通结果审阅指针比核验Skill简介更宽，现仅校准为有实质后果的结果核验／对账。一般任务核验和其它失败、依赖、经验、收益及资源分支保持；根与包内helper都动态读取同一Skill源码，不需要另改运行层。六项已有入口回归及两处源码读回通过，见[适用性与限制](../evaluations/accord-toggle-v1.md#2026-11-03-轻任务指导触发的口径校准)。这是候选文字一致性修正，未改本机宿主／安装、未重做模型业务，不由它签实际减负或扩大宿主支持。
+
+### 2026-11-03 同进程业务补核
+
+后继新材料将每臂准备和唯一业务turn保留在同一进程。实际非目标目录175／175、末次API非目标307／307、九类共同前导及完整工具定义均匹配；目标条目0／5。140份共同描述在开启后缩短，所用175／180份源字节均匹配执行时摘要，固定6ff的10,000预算算法逐项重建吻合；没有旧版本来源替代。这使本对能够保留目标预算中介并做限定的总开关观察，不追认原174／43业务的具体刷新事件。
+
+继承中立cwd避免显式目录触发信任注册，实际回执、权限及保护配置保持；原生请求拒绝从初始化起生效，通知可先于turn确认到达，恢复和关闭共用单一30秒截止。两业务均正确完成，两Job自然退出且活动进程0。固定观察窗口只属于本次维护者测量，没有加入普通任务运行层。模型请求、所报告条件与有效后端身份分别判断，完整度量及负担边界见[有限对照](../evaluations/accord-toggle-v1.md#2026-11-03-同进程新材料的有限对照)。未发现需要新增就绪服务或宿主适配组件的依据。
+
 ### 2026-11-02 原生工具完成事件的生命周期字段
 
 本地CLI0.166.0固定响应集成在第一次handoff派发拒绝item层`startedAtMs`／`completedAtMs`；原HEAD完整副本与包实现一致，确认严格白名单存在兼容缺口。原3/11响应失败保留，不归咎于模型或新转发入口。官方固定提交`6ff1e1ca3b30fc8b914720681fcf5fe62e95f856`的[ThreadItem序列化](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/app-server-protocol/src/protocol/v2/item.rs#L234)展平payload并声明两个可缺省的`Option<i64>`字段；[完成事件](https://github.com/openai/codex/blob/6ff1e1ca3b30fc8b914720681fcf5fe62e95f856/codex-rs/app-server-protocol/src/protocol/v2/item.rs#L1501)的item使用该类型。仅查看payload schema会漏掉外层展平字段，不能把其中没有声明当作实际事件不携带。
@@ -128,3 +151,13 @@ Goal正文修订已准备；通过公开App Server接口读取同一活动Goal�
 本次直接原生读/页操作只针对已完成的自有研究线程，未启动模型、resume、interrupt或重放业务；接口读可能维护宿主的历史投影，不能笼统等同于磁盘零写。已有恢复仍保身份、原文、暂停、未知效果及独立验证。源码契约、实机单样本、当前候选b2b3的本地工程检查和应用验收各自保其身份；没有以该源码补核升级正式安装或扩展宿主范围。
 
 现有读取器补核（2026-10-31）：固定读关闭追加时，旧token_count允许有限重读，而实际0.166的token_usage_record与命令型item_completed会得到未知，随后稳定读取又正常。独立复现仅支持这个两形状的覆盖缺口；已接入严格同身份、同turn、完整封套/终态的小修正，保持原前缀及真实用户、暂停、压缩、未知控制拒绝。与应用中一次正确cursor后的实时证据变化成因分别保留；不因空待核列表推断未知来源已就绪，也不自动忽略已识别的页面元数据。两条现有Skill分别补完整cursor/unknown分支与人类操作前的控制交还；未发布工作包b0645f44已完成518项适用回归及三静态（原213项代码字节不变复用、新305项整套分批），首次整套300秒超时保留；当前3.3.9元数据候选继续精确核验，正式安装338未变。应用现场的原失败与人工介入见[评价记录](../evaluations/accord-toggle-v1.md#2026-10-31-真实未完应用的安全接续观察)，不将普通续作改签完整原生恢复。
+
+## 2026-11-03 官方入口边界复核
+
+本轮核对当前公开文档及已固定0.166来源，供新候选的有限来源与职责判断；动态网页的读取日不是功能发布日期。独立CLI0.166.0、Desktop调用报告0.166.0-alpha.5.1和旧SDK／IDE观察保持各自主体，源码或文档不证明本机账号已启用相应功能。
+
+[Plugins](https://learn.chatgpt.com/docs/plugins)仍明确IDE不支持插件；云端编排Work不运行插件Hook，网页安装也不部署本机脚本。因而当前Skills／MCP可见性不能代替Accord的Hook、原生输入来源、权限与恢复条件。现有插件manifest仍可按原合同使用，不为追随文档改名而迁移包；普通Chat及其它延期范围没有由此转为支持。
+
+[Work](https://learn.chatgpt.com/docs/get-started-with-work)与[Remote](https://learn.chatgpt.com/docs/remote-connections)现说明可选同步由云协调、获准本机承担本地步骤；既有任务保留原模式，新模式需新建任务。设备在新turn开始时不可用时，符合条件的任务可去无本机资源的云容器；不在turn中途切换，停用同步会中断运行turn。这是需另核的协调／执行边界，不是旧Work-local观察覆盖了新组合。Remote另有移动或按rollout开放的桌面控制端，使用主机权限与工具；连接停止不证明全部效果取消。旧未观察到额外桌面控制actor、移动证据来自不同线程／日期等限制继续保留。
+
+[0.166发行说明](https://github.com/openai/codex/releases/tag/rust-v0.166.0)包含恢复／fork权限、App Server启停竞态及离线退出修正。旧恢复、实际采用或退出事实只按原版本贡献；新的当前声明须对受影响角色、输入／权限／writer及资源后态取证。公开说明支持复核机制与选择理由，不替代实际载体效果，也不要求为本次源码判断启动所有入口或重跑历史业务。12月整合仍按独立上游事项跟踪，本轮不新增适配或正式支持范围。

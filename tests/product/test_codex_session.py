@@ -103,6 +103,11 @@ function handle(frame) {
   sent.push(frame);
   if (!frame.method) {
     serverResponses.push(frame);
+    if (mode === 'retry-success' && frame.id === 101) {
+      queueMicrotask(() => emit({method:'turn/completed', params:{threadId:'source-1',
+        turn:{id:'source-turn-1', status:'completed', items:[]}}}));
+      return;
+    }
     if (['decline-send-loss', 'handoff-source-send-loss'].includes(mode) && frame.id === 102)
       throw new Error('decline response send outcome is unknown');
     if (frame.id === 100) queueMicrotask(() => serverRequest(101, 'approval/request', {
@@ -202,6 +207,15 @@ function handle(frame) {
         emit({method:'thread/tokenUsage/updated', params:{threadId:'source-1',
           turnId:id, tokenUsage:{modelContextWindow:1000,
             last:{totalTokens:100}}}});
+        if (mode.startsWith('retry-')) {
+          emit({method:'error',params:{threadId:'source-1',turnId:id,
+            willRetry:mode==='retry-success',error:{message:'fixture error'}}});
+          if (mode === 'retry-success') serverRequest(101,'approval/request',
+            {threadId:'source-1',turnId:id,reason:'owner decision after retry'});
+          else emit({method:'turn/completed',params:{threadId:'source-1',
+            turn:{id,status:'failed',items:[],error:{message:'fixture error'}}}});
+          return;
+        }
         if (mode === 'concurrent' || mode === 'scope-after-terminal' ||
             mode === 'decline' && sourceTurn > 1) emit({method:'turn/completed', params:{threadId:'source-1',
           turn:{id, status:'completed', items:[]}}});
@@ -422,6 +436,8 @@ const session = createCodexSourceSession({connection, recorder:sessionRecorder, 
             dynamicTools:[{type:'function',name:'accord_inspect_context'}]},
           planResolver(){},verify(){},current(){},ownerRequest(){}});
       } catch (error) { result.conflict = error.message; }
+    } else if (mode === 'retry-success') {
+      result.first = await session.run({input:'retry fixture', deadlineMs:Date.now()+3000});
     } else if (mode === 'concurrent') {
       const first = session.run({input:'one ordinary turn', deadlineMs:Date.now()+3000});
       try { await session.run({input:'must be rejected', deadlineMs:Date.now()+3000}); }
@@ -670,6 +686,19 @@ class CodexSourceSessionTests(unittest.TestCase):
                                        encoding="utf-8", timeout=50 if mode == "adopt-chain" else 30)
             self.assertEqual(completed.returncode, 0, completed.stderr)
             return json.loads(completed.stdout)
+
+    def test_retry_notification_continues_but_failed_terminal_locks_without_replay(self):
+        result = self.run_case('retry-success')
+        self.assertEqual(result['first']['status'], 'completed')
+        self.assertEqual(result['ownerCalls'], 1)
+        self.assertEqual([f['id'] for f in result['serverResponses']], [101])
+        self.assertEqual(sum(f.get('method') == 'turn/start' for f in result['sent']), 1)
+        self.assertEqual(result['snapshot']['turnCount'], 1)
+        failed = self.run_case('retry-failed')
+        self.assertEqual(failed['error']['code'], 'TURN_NOT_COMPLETED')
+        self.assertEqual(failed['snapshot']['status'], 'failed')
+        self.assertEqual(failed['second'], 'SESSION_FAILED')
+        self.assertEqual(sum(f.get('method') == 'turn/start' for f in failed['sent']), 1)
 
     def restore_case(self, mode, *, slow_record_ms=0):
         with tempfile.TemporaryDirectory() as temp:

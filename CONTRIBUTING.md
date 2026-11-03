@@ -101,6 +101,29 @@ python -B -m yiyuan_accord host-check --adapter codex --root . --json
 python -B -X utf8 -m unittest discover -s tests/product -v
 ~~~
 
+For the current v5 development contract, `check-snapshot` runs the three static
+checks on tracked working-tree bytes in a new directory outside the source.
+Use a verified full commit SHA and an existing parent for the new work directory:
+
+~~~powershell
+python -B -m yiyuan_accord check-snapshot --root . --work-dir C:/accord-checks/new-check --expected-head <full-commit-sha> --adapter codex --archive --json
+~~~
+
+The source must have full local Git history and regular tracked files. Unsupported
+index additions/deletions, hidden entries, links and non-ignored untracked sources
+are rejected. The index is recorded, while working-file bytes are checked; ignored
+local evidence is excluded. Exclude concurrent writers before running it. Observed
+drift causes failure; this command does not lock the source. Git reads use the
+explicit repository rather than inherited `GIT_*` routing. This scope covers the
+current development static path, not every historical verification branch.
+
+Reports, source hashes and the optional source ZIP remain in the work directory.
+`cleanup=removed` means only the disposable `repo` checkout was removed. A failed
+check retains it for diagnosis; review ownership and retained evidence before
+cleanup. The command runs no test suite, model, CI, release or installation, and
+does not replace their necessary checks or authority. Review reports for private
+paths and context before sharing them.
+
 Keep source and package identity stable while a dependent check reads them.
 Finish edits and candidate sealing first; parallel work must be independent of
 those inputs. If a change crosses a running check, retain that result and rerun

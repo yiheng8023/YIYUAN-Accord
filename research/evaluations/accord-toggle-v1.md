@@ -10,6 +10,96 @@
 
 功能验收、工程质量、实际使用价值与发行分别判断。已有 A01–A08、质量底线和历史失败保持；本初版不改写其通过记录，也不成为日常用户的新流程。3.3.2 保留为发展节点，初版阶段的 3.3.4 发行包和标签独立保存；当前状态以项目接续及精确发行记录为准。评价材料本身不要求新发版；若发现真实缺陷，则按受影响对象、兼容性、风险和修复验证决定维护或发版。
 
+### 2026-11-03 轻任务指导触发的口径校准
+
+下文开启臂在读输入后、写产物前读取现有核验Skill；这提供一个有范围的问题，并不证明读取不必要、由某短语引起或造成全部用量差额。源码核对发现：入口路由“Reviewing or reconciling results”无条件覆盖普通结果核对，而目标简介写“consequential checks”，正文也要求按后果选择和复用充分指导。Root仅将入口首分支校准为“Consequential result verification or reconciliation”，没有删减实际核验义务或其它触发。
+
+| 条件 | 原有职责及候选指针的适用性 |
+|---|---|
+| 一次性、低后果、已有指导充分的汇总 | 直接核输入字节、计算、输出及必要后态；这不单独要求再读专门Skill。 |
+| 小文件将用于付款、下游导入或重要决定 | 实质后果足以进入专门核验，不按文件大小、用时或任务名豁免。 |
+| 依赖变化、失败／停滞、经验适用性或效果未知 | 其它并列触发及纠偏、原件／授权／未知效果守卫保持。 |
+| 准备声称收益或关闭仍有资源未明的任务 | 核验主张、成本及资源后态的原职责保持。 |
+| 用户显式指定Skill | 遵守上位调用要求，候选不构成跳过授权指示的理由。 |
+
+两位独审支持这处范围校准；它是源码一致性判断，不是受控行为实验。六项已有入口／基础原文／路径及长度／fork恢复／通知复用回归通过；两处源码factory读到完整修正，除helper定位外一致，且保留一般核验和其它分支。私有核验器的路径拼写与换行误拒分别保留并纠正，产品不为满足这些断言改变。未新增测试实现、运行机制、普通用户流程或正式验收案例；指导净增19字节，代码／测试不增。
+
+当前修改位于开发候选，本机3.3.10及既有对照轨迹保持，尚未安装或在业务中重测。可以说明已消除这处入口歧义；不能宣称实际调用减少、tokens下降、可靠性改善或省时。后续沿适用新材料观察选择与完整成本，不重演本题筛结果，也不由单次用量上升取消充分核验。候选摘要`b67bf0bd70d4a24c56158ef632c270f5e38b09406f50b8cbf8e684136203ff56`绑定本次文字修正，原18案／17范围／52义务及F/A不变。
+
+包内文字变动也改变当前开发包身份。首次产品／宿主静态正确拒绝旧摘要，原失败保留；独立按30成员的路径与字节重算，仅此Skill变化，将当前开发投影绑定到新聚合摘要。旧发布／安装身份、冻结program和原验收不动，没有修改校验器以得到通过；精确字节登记本身也不是功能或收益证明。
+
+### 2026-11-03 同进程新材料的有限对照
+
+本对承接下文追查，另用八记录订单汇总材料，不重跑旧题。输入、期望、关闭→开启顺序、Sol／high请求及180秒工作／统一30秒恢复在派发前冻结；v2仅澄清“只在任务目录写入”，保留普通指导读取，没有根据结果改题。私有准备者不派发，Root接收独立执行副本并完成13项纯离线检查后，实际只派发两次主业务turn。它是开发者已知的合成校准题，不是盲测、自然用户样本或完整验收。
+
+每臂同一App Server先被动查询再启动一份新线程和唯一业务turn，保留非目标插件和原用户选择。0／12／20秒观察中均出现集合增长，最后两次非目标307项逐项相同；观察上限24秒且不重置，并非宿主完整ready屏障。请求继承已绑定的中立cwd，没有新增信任、动态工具、Accord SDK注入、强制刷新或业务重放。两臂native均报告CLI0.166.0、Sol／high，保护配置和安装包保持；所选54份plugin.json清单保持只证明这些manifest，启动后台活动及有效模型后端身份仍非完整可观测。
+
+实际模型前导的比较成立于这一有限范围：
+
+- 非目标Skill身份均175项，没有增删；开启另有五项目标条目。九类共同前导（含请求）和完整additional_tools按序摘要一致，后者含四个namespace、13个叶工具。逐条来源摘要与执行时捕获的元数据吻合。
+- 35份共同描述相同，140份为开启臂的精确短前缀。固定`6ff1e1ca3b30fc8b914720681fcf5fe62e95f856`算法在10,000描述元数据预算下吻合175／175及180／180，alias开销449／473；当前全部来源可读且无替代。这是固定源码重建与实际前导的吻合，不是对二进制内部的独立证明。
+- 本题研究匹配发现能力／原始元数据条件下的目标开关总效果。目标条目占用相同预算导致的描述缩短属于应保留的中介及成本，不能补虚拟文字或移除第三方去抹平。若有未解释的身份、原始元数据、其它共同指令或工具变化，归因仍不成立。
+- 开启臂完整协调正文和当前输入回执先于模型工作，并读取现有`verify-and-close-outcome`；关闭臂未见目标正文／条目。三次业务工具调用各自可见，两臂均未操作Accord MCP；注入、读取、实际采用与增益分别判断，不能从调用界面直接签参与程度或收益。
+
+Root与独审均从原件重新计算，结果同为5单、15 units，alpha／beta／gamma为9／0／6，跳过oB／oD／oG；整数类型和输入字节保持均核准。已审业务命令仅写summary.json，没有联网、安装或改共享设置的指令。两臂均为同身份completed加非空final，没有失败救援或成绩筛选。
+
+| 本对所观察度量 | 关闭 | 开启 |
+|---|---:|---:|
+| 正确成果／输入保持 | 通过 | 通过 |
+| 唯一模型response ID | 4 | 4 |
+| 报告input tokens（跨响应累计） | 106,640 | 123,029 |
+| 其中cached input | 92,800 | 104,448 |
+| 报告output tokens | 685 | 1,299 |
+| 报告total tokens | 107,325 | 124,328 |
+| 实验总时长，秒 | 68.47 | 67.55 |
+| 所属Job累计进程数 | 70 | 79 |
+
+用量按response ID去重，并与最后一份thread累计、token_count事件及App Server累计镜像交叉核对；不再累加镜像，reasoning子项不另加到output。上下文占用、价格及完整成本未知。实验时长包含启动、被动观察、记录核验和回收，不能当作日常生产延迟或省时证据；进程数也不直接等于收益或负担。每臂Job均自然exit0、未强杀、活动进程0、读线程结束，恢复无观测超期；原生历史及成果保留，九个空控制目录在核准后移除。
+
+本对可以报告正确成果、匹配的共同条件和开启组较高的报告用量；不能推出一般净收益、普通任务必然负担、某次Skill读取造成全部差值、真实死循环干预、跨任务记忆或完整恢复。共享缓存及随机生成／顺序效应没有因一个配对而消失。下一具体问题是轻任务中完整指导与核验Skill读取是否必要、是否存在安全减负空间；应先核义务与实际采用，不为取得正向数字再跑本题，也不放松结果核验。
+
+输入材料SHA256为`bd853c1c06f3dcc2e9fa92cfa53ef52db72c7f08fd642203d3b27578d2ffabcd`；两份原生副本为`9436a9751d3c4f73c0b4edf6deb43605f46112647ff1dd5684a6bd22936e1afa`、`2281bc08956d53a710ee6369d67133848b0f464dd673513043690b6794f31ae7`。私有原报告及离线断言／包装读取纠正分别留存，不改签业务；原两组174／43的具体刷新触发仍未知，旧业务不因本题补签。当前没有新增产品代码、正式验收案例、提交、推送、CI、发行、安装或其它宿主工作。
+
+### 2026-11-03 当前版本简单任务与实际上下文差异
+
+本轮按事先冻结的顺序启用→关闭，各执行一次全新五记录汇总材料，不要求读取Accord、调用特定Skill或提及其术语。两臂为Windows／CLI0.166.0、已发布3.3.10、原生报告`gpt-6.1-sol`／high、同一中立工作目录、请求、输入与输出判据；共同禁用记忆和项目文档读取，保留同一已有账户认证位置及非目标组件，进程级只切换目标插件。它是显式受控条件，不是默认环境或代表用户分布的盲测；真实模型后端身份不能仅由请求值独立证明。
+
+派发前九次零业务模型查询核到有效配置和67项共同Skill文件摘要一致，目标Hook为6／0、目标Skill为5／0，已有信任不变；没有修改共享配置、安装或新信任。原生业务前导的独立核对却发现，两臂**实际模型可见的非目标Skill目录为174／43**。展开各自alias后，关闭组43项均在启用组同名、同完整路径存在；启用组另有131项，来自22个远程非security包。共同43项中10项描述相同，33项的启用描述为关闭描述的精确短前缀。差异包含实际目录范围和正文长度，不能用alias编号变化解释，库存相同也不能证明实际上下文相同。
+
+首个启用臂成品正确且自然退出，但私有观察器以文本读取归一化CRLF，将原生11,927字符指导误比成11,845字符，报告入口未成立并停止依赖配对。Root随后按原文件UTF-8字节与原生前导独立核对，确认82处CRLF差异、完整指导及输入先于模型活动；这修正的是观察器判断，不是产品或宿主格式缺陷。原失败不改签，也未重跑启用臂。保留其原成品并独立绑定后，只执行原预算中尚未运行的关闭臂；合计仍为两次业务运行，尾段与原结果分别保留。
+
+两臂实际产物一致且符合独立验算：有效记录总量12，分类blue／amber／green分别6／0／6，排除r2；输入字节保持。两次CLI均退出码0、所属Job活动进程为0，没有强杀或业务救援。按每个响应ID去重后的用量之和与末条累计镜像一致，镜像不再次相加：
+
+| 臂 | CLI执行窗口（秒） | 输入token | 其中缓存输入 | 输出token | 总token |
+|---|---:|---:|---:|---:|---:|
+| 启用 | 47.146 | 122,420 | 104,064 | 1,275 | 123,695 |
+| 关闭 | 32.197 | 79,987 | 72,960 | 935 | 80,922 |
+
+输出中的推理子计数分别299／79，已包含在输出中。两臂墙钟窗口分别47.818／33.445秒；这些窗口不含前置查询、人工审阅、观察器纠偏及两臂间的等待，不是完整用户成本。账单、完整人工主动时间、全部动态工具目录及峰值资源均未知。模型确实各有3次`exec`调用，但相同工具名或次数不能排除上下文差异。
+
+本对保留为**两份正确完成的实际任务观察；公平归因条件尚未成立**。目标开关可能间接改变宿主发现／呈现，也可能存在远端加载、缓存或其它漂移；前者可能是整体开关效果的一部分，后者可能是混杂，本轮不能区分。不能把时间或token差额归于Accord本身、下结论“读取Skill导致负担”，或反向签普遍收益。下一片先核这一隔离条件，具备条件后再冻结新鲜材料；不重复本题筛选结果，不以全局停用其它插件造基线。原始轨迹、原失败、Root核准与逐项语义对比保留在私有开发证据中，公开仅使用上述脱敏事实与限制；本题现已公开，后续不称未见材料。
+
+同一真实开发过程中，观察器失败后先回到原生字节与实际成品、改变错误解释再继续尚未执行的工作，可计入任务内纠偏观察。维护者快照入口也已在本项目实际使用；入口存在、受控反例或这一次采用，都不能证明跨任务自主记忆、实际死循环打断、完整恢复或净收益，不增加正式验收案例。
+
+#### 同日后续追查：异步集合变化与预算截断
+
+冻结原件的离线重放稳定返回174／43、仅启用131项及共同描述差33项；同一原件作两臂控制则一致。原生工具定义（13叶工具）及其它共同前导指令摘要相同；当前realpath与内容摘要也确认共有43项全部对应API盘点，先前16项显示路径差为同源别名。API盘点与实际提示并非同一时点／同一展示，不能把路径别名或未列入CORE提示直接判为能力缺失。
+
+为区分变化机制，另用两个新App Server，分别保持目标关闭／开启，各在初始化后立即及8秒后查询相同cwd的`skills/list(forceReload:false)`。请求只有初始化、config/read和这两次技能查询，没有新增业务轮次或模型运行：
+
+| 固定插件状态 | 早期API技能数 | 后期API技能数 | 新增 | 后期非目标技能 |
+|---|---:|---:|---:|---:|
+| 关闭 | 67 | 307 | 240 | 307 |
+| 开启 | 72 | 312 | 240 | 307 |
+
+各新增240项全部来自curated-remote，已有条目及描述未变，后期两组非目标逐项相同。规范化配置相同，受保护配置／指导和Accord包摘要保持；所选plugin.json清单也相同，但不据此宣称其它缓存／bundle字节未变。两进程均自然退出，所属Job活动进程0、读取线程结束。没有强制刷新或夹入可能触发同步的plugin/list／installed；正常启动本身仍可触发宿主既有后台工作。**同一进程、同一开关状态下确有发现／缓存集合变化**，因此单次或跨进程盘点相等不足以证明实际业务上下文相等；本次后期相等也不等于所有后台工作ready。
+
+固定源码另解释描述缩短这一层：host用完整description，预算不足时按字符轮转分配。按原生实际条目与alias的记账公式，原启用提示元数据恰为10,000预算单位，关闭为3,529。以固定分配算法、原顺序／locator和当前有界元数据作离线重建，10,000预算分别匹配179／179和43／43条描述；9,500不能复现启用提示。两份原EW0.6.3元数据在当前已升级为0.7.1，重建显式记录了这两个当前来源替代，不能冒充原始完整元数据或二进制执行回执。当前模型缓存的500,000原窗口／95%可用窗口与此机制一致，也不是旧两臂的预算回执。详见[固定宿主来源](../reviews/2026-10-30-host-evolution-and-assets.md#2026-11-03-技能发现快照与描述预算)。
+
+当前能核定的是失效环节和可复现机制：前置配置／库存检查没有约束后来捕获的远端集合，集合扩大又可压缩共同描述。原两臂约16分钟间隔中的远端刷新、身份和前置时序没有对应日志，仍不能追认它们各自为何落在该状态；Accord前置时序影响也未排除。原时间／token差额不重新归因，原观察器错误和失败不改签，不重复已完成业务题求相等或正收益。
+
+后继对照应尽量在每臂同一原生进程内完成准备和业务派发，记录观察窗口、有效选择及实际模型前导，再比较规范化的共同指令／工具／技能语义。连续相同查询只是观测窗口，不作完整ready或后续不变保证；出现漂移保留正常任务成品，仅限制依赖隔离的效果主张。适当的新鲜任务与完整成本另按既有协议冻结。这是开发评价条件，不给普通用户任务添加固定等待、全量重复查询或新的配置负担。
+
 ### 本项目开发与真实任务的关系
 
 Accord自身的开发、排错、验证、文档维护和接续都是有实际目标与后果的真实任务，也属于Accord在开发场景中的实际使用。不能因它发生在本项目，或由维护者参与，就排除其经验采用、正常交互及未完工作恢复证据。暂缺其它项目的新任务不构成推进阻塞。
@@ -333,6 +423,27 @@ python -B -m unittest tests.product.test_accord_comparison
 当前文件检查不能证明宿主有效隔离、真实使用效果、安全覆盖、长期成本或统计显著性。可用的评价方法和工程质量要继续校准，未知不是零分、完成或默认通过。
 
 ## English summary
+
+The 2026-11-03 simple-task observation used published3.3.10 and CLI0.166.0,
+with one enabled run followed by one disabled run. Both outputs were correct,
+but the actual non-target Skill catalogs differed:174 versus43, with33 common
+descriptions shortened in the enabled arm. Equal preflight inventory did not
+establish equal model-visible context. Preserve the original observer's CRLF
+comparison failure and its separate byte-based reconciliation; the completed
+enabled arm was not rerun. Reported time/token differences are not attributable
+to Accord alone, and full costs and the cause of the catalog difference remain
+unknown. This is task evidence and evaluator correction, not a clean causal
+comparison, general product value or autonomous cross-task learning.
+
+A separate pair of zero-business-model App Server observations later found
+67 to307 skills with Accord disabled and72 to312 with it enabled in the same
+respective process. Each gained240 remote entries; the later307 non-target
+projections matched. Fixed-source budget reconstruction also matched the
+description shortening, using explicitly identified current metadata. These
+observations establish changing discovery state and an applicable rendering
+mechanism, not the original runs' exact refresh timing, complete readiness or
+Accord's causal contribution. Keep setup and business in the same process where
+possible, then verify actual model-facing conditions separately.
 
 This is a developer calibration kit, not measured product value or a release gate. Six synthetic data tasks cover a simple baseline, a later requirement change and interrupted file processing. They calibrate input/output checks; they are not a representative user sample or a power analysis. The preparer exports inputs only. The read-only grader checks listed file facts and keeps run validity, task outcome and incremental value unverified. Review behavior, actual host isolation, human effort, total costs and resource exit separately.
 

@@ -87,7 +87,7 @@ native Hook events. This list specifies responsibilities, not invocation order.
 - Large reads or long work; context/host/model changes; modes, checkpoints,
   interruption, recovery or handoff:
   [Maintain continuity](../maintain-task-continuity/SKILL.md).
-- Reviewing or reconciling results; changed dependencies, partial failure,
+- Consequential result verification or reconciliation; changed dependencies, partial failure,
   stalled attempts, obsolete active conditions, useful lessons, consequential verification gaps,
   reusable checks, claimed benefits or uncertain cleanup:
   [Verify and close](../verify-and-close-outcome/SKILL.md).

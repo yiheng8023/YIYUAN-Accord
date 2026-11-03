@@ -152,6 +152,18 @@ const terminal=(turnId='u')=>({method:'turn/completed',params:{threadId:'t',turn
  }else if(mode==='timeout'){
   try{await c.receiveTurnActivity('t','u',until(5))}catch(e){r.timeout=e.message}
   emit(req(1));r.next=await c.receiveRequest(()=>true,until());
+ }else if(mode.startsWith('retry-')){
+  emit({method:'error',params:{threadId:'t',turnId:'u',willRetry:true,error:{message:'transient'}}});
+  emit({method:'turn/completed',params:{threadId:'other',turn:{id:'u',status:'completed'}}});
+  emit(terminal('other'));
+  if(mode==='retry-request'){
+   emit(req(1));r.request=await c.receiveTurnActivity('t','u',until());
+   await c.respondRequest(r.request.request,{result:{decision:'decline'}},until());
+   emit(terminal());r.terminal=await c.receiveTurnActivity('t','u',until());r.writes=writes;
+  }else{
+   if(mode==='retry-eof')out.end();
+   try{r.unexpected=await c.receiveTurnActivity('t','u',until(25))}catch(e){r.error=e.message}
+  }
  }else if(mode==='close'){
   const p=c.receiveTurnActivity('t','u',until(60000)).catch(e=>e.message);c.close();r.error=await p;
  }else if(mode==='reply'){
@@ -182,6 +194,17 @@ class CodexConnectionTests(unittest.TestCase):
                                 capture_output=True, text=True, encoding='utf-8', timeout=5)
         self.assertEqual(result.returncode, 0, result.stderr)
         return json.loads(result.stdout)
+
+    def test_retry_notification_keeps_activity_open_and_foreign_terminals_do_not_complete(self):
+        result = self.activity_case('retry-request')
+        self.assertEqual(result['request']['request']['id'], 1)
+        self.assertEqual(result['writes'], [{'jsonrpc': '2.0', 'id': 1, 'result': {'decision': 'decline'}}])
+        self.assertEqual(result['terminal']['terminal']['params']['turn']['id'], 'u')
+        for mode in ('retry-eof', 'retry-deadline'):
+            with self.subTest(mode=mode):
+                failed = self.activity_case(mode)
+                self.assertNotIn('unexpected', failed)
+                self.assertIn('error', failed)
 
     def test_activity_waiter_releases_both_alternatives_and_preserves_later_requests(self):
         result = self.activity_case('terminal-wins')
