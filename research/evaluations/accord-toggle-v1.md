@@ -2,6 +2,8 @@
 
 2026-10-29初版。本文、[六份合成任务材料](../../evals/comparisons/accord-toggle-v1.json)、[文件检查工具](../../scripts/grade_accord_comparison.py)及其[校准反例](../../tests/product/test_accord_comparison.py)共同构成开发期初版，用来校准任务、判分和记录方式。初版建立时尚未执行真实双组运行；随后已完成[2026-10-30首轮有限试行](#2026-10-30-首轮有限试行)。**两对小样本不支持普遍产品增益结论**。工程与产品主线见[当前计划](../../docs/operations/PLAN-v3.3.md#后续候选适配与对照展示)。
 
+当前发行与资格导航：[3.3.11](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.11)的精确源码资格、[CI #1056](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41615570280)及本机采用边界见[当前接续](../../docs/operations/CONTINUATION.md#目标与当前写者)。本文各试行仍绑定原受测版本、材料、成本和失败；3.3.11的发布或指导更新不改签原对照，也不证明实际调用减少或普遍收益。以下“当前修改位于开发候选”等叙述保留其观察时点。
+
 ## 回答什么问题
 
 在某个明确的宿主、模型、环境和任务范围内，启用 Accord 对完整交付、可靠性、可避免的人工作业以及总成本带来了什么变化？何时有益、无差异或有负担？先回答这些问题，再决定改进和传播内容。

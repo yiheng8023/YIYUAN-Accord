@@ -37,7 +37,7 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
 2. 在需要登记来源时，可采用[官方 marketplace 命令](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)：
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.10
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 3a39ed9815a36885262fd9bdeb802da9fb2aea13
    ```
 
    这条命令只登记来源。CLI 在 `/plugins` 中切到该来源，查看并安装 YIYUAN Accord；桌面使用实际可用的插件目录与来源入口。本项目来源不等于已被官方公共目录收录。
@@ -158,7 +158,7 @@ Complete **installation, enablement and Hook trust** separately, then verify act
 2. Where source registration is needed, use the official [marketplace command](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli):
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref v3.3.10
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 3a39ed9815a36885262fd9bdeb802da9fb2aea13
    ```
 
    This registers the source only. In CLI `/plugins`, select it, inspect and install YIYUAN Accord. On desktop use the actual plugin directory/source entry. A repository marketplace is not a listing in the official public directory.
