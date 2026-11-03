@@ -113,6 +113,27 @@ introduced. This boundary preserves
 ordinary ecosystem reuse and does not prescribe a fixed model sequence or claim
 superiority over specialized models.
 
+### Post-3.3.11 shared safeguards review
+
+The [current preparation scope](operations/PLAN-v3.3.md#基于-3311-的下一阶段准备2026-11-03)
+reviews the existing responsibility chain, rather than adding a universal runtime.
+For each applicable guarantee, identify the actual provider, interface, authority,
+failure window, observable consequence and recovery/exit owner. Direct host reuse,
+shared host controls and a suitable third-party composition can supply the effect;
+Accord supplements a demonstrated gap. Host availability does not establish that
+the selected task or entry adopted the control. Third-party capability is general;
+Matt Skills are one example, not a dedicated integration dependency.
+
+Existing connection/session time bounds, conditional retry handling, broken-state
+rejection, writer rechecks and scoped independent recovery retain their measured
+limits. A timeout or an AbortSignal is not proof that an uncooperative callback or
+an external effect stopped. Assess late effects, missing acknowledgements, changed
+authority/writers and surviving recovery ownership before retry or compensation.
+Choose needed redundancy and failure containment by the relevant fault and
+consequence; do not require every component to own a circuit breaker. Reuse the
+following allocation and evidence rules before adding, replacing or retiring code.
+Preparation itself adds no new component, host or verified behavioral guarantee.
+
 ### Responsibility before packaging
 
 The inherited duties are coverage indexes, not thirteen modules or a fixed

@@ -14,6 +14,13 @@ the machine validation projection, not a competing source of user decisions.
 current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks;
 their old criteria and workflow prescriptions do not govern this successor.
 
+The next stage starts from the released and locally adopted **3.3.11** baseline.
+Its [current preparation scope](docs/operations/PLAN-v3.3.md#基于-3311-的下一阶段准备2026-11-03)
+extends the existing three priorities through design/host/consumer review and
+general ecosystem cooperation; it does not select another release version.
+Frozen delivery identifiers describe that baseline, not a stop on this preparation.
+Use the existing result and acceptance views; do not add parallel governance.
+
 These project documents govern Accord development and evidence review. Ordinary
 application tasks use sufficient host state and necessary continuity support;
 users do not maintain this repository's plans or continuation log. Keep one
