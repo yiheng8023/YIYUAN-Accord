@@ -116,7 +116,17 @@ historical incident's cause or prove arbitrary host recovery.
 Current input/control changes stop dependent dispatch. Read retained evidence and
 actual effects before recovery; `cancel` preserves responsibility and requests
 closure, rather than proving it. Unknown effects or unverified process closure stay
-held. A new scope identifier cannot evade an unresolved lease. Completion applies
+held. The owned startup path forwards cancellation/deadline signals through the
+version query and initialization, including a recovery reader. After the old
+read-only peer closes, cancellation is checked before a replacement is started.
+For normal startup, read `nativeStartFailure` from the evidence located by
+`stateEvidence`. For recovery-reader
+startup, read `failure` plus `targetRecoveryResource.startupFailure` and `.process`
+for the stop reason, prior error/request and closure diagnostics. An absent prior
+error code remains null. A late callback's final facts need
+an existing inspect/save observation; they are not immediate durability proof.
+None of these observations clears pending effects, returns a writer or settles a
+lease automatically. A new scope identifier cannot evade an unresolved lease. Completion applies
 only to the independently verified scope; it does not close the root's whole goal.
 If preparation fails before registration, no `operationId` exists. Inspect any
 `preparationCleanup` alongside the original failure: `removed-empty` applies only

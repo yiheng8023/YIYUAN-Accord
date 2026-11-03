@@ -13,11 +13,15 @@ const historyPath = logPath + '.turns.json';
 const history = () => fs.existsSync(historyPath) ? JSON.parse(fs.readFileSync(historyPath, 'utf8')) : [];
 const send = value => process.stdout.write(JSON.stringify(value) + '\n');
 const rl = readline.createInterface({input: process.stdin});
+let lateWrite = null;
 rl.on('line', line => {
   const request = JSON.parse(line);
   fs.appendFileSync(logPath, JSON.stringify({id: request.id ?? null, method: request.method,
     threadId: request.params?.threadId ?? null, params: request.params}) + '\n');
-  if (request.method === 'initialize') return send({id: request.id, result: {platformFamily: 'fixture'}});
+  if (request.method === 'initialize') {
+    if (mode === 'reader-start-cancel') { fs.writeFileSync(logPath + '.reader-initializing', 'entered'); return; }
+    return send({id: request.id, result: {platformFamily: 'fixture'}});
+  }
   if (request.method === 'initialized') return;
   if (request.method === 'thread/start') return send({id: request.id, result: {
     thread: {id: 'wire-target', ephemeral: false, status: {type: 'idle'}},
@@ -41,6 +45,9 @@ rl.on('line', line => {
     }
     if (mode === 'write-ack-loss' && turn === 2) return;
     send({id: request.id, result: {turn: {id: turnId}}});
+    if (mode === 'late-write-on-close' && request.params.sandboxPolicy?.type === 'workspaceWrite') {
+      lateWrite = {id: turnId, turn}; return; // ACK received, real file effect deliberately still pending.
+    }
     const bytes = Buffer.from(JSON.stringify({method: 'item/completed', params: {
       threadId: 'wire-target', turnId, item: {id: 'item-' + turn, type: 'agentMessage', text: '固定协议测试：未调用模型。'}}}) + '\n');
     // Split inside the first Chinese codepoint, across separate stream writes.
@@ -57,6 +64,12 @@ rl.on('line', line => {
   send({id: request.id, error: {code: -32601, message: 'unsupported fixture method'}});
 });
 rl.on('close', () => {
+  if (lateWrite) {
+    fs.writeFileSync(require('node:path').join(process.cwd(), 'review.json'),
+      JSON.stringify({fixture: true, turn: lateWrite.turn, timing: 'after-stdin-close'}));
+    fs.writeFileSync(historyPath, JSON.stringify([...history(), {id: lateWrite.id, status: 'interrupted'}]));
+    fs.appendFileSync(logPath, JSON.stringify({method: 'fixture/late-effect', turnId: lateWrite.id}) + '\n');
+  }
   if (mode === 'exited-parent') process.exit(0);
   if (mode === 'hang-on-eof' || mode === 'owned-tree') setInterval(() => {}, 1000);
 });

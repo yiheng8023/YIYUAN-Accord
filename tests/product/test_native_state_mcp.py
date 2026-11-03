@@ -4467,7 +4467,7 @@ process.stdout.write(JSON.stringify({originalVersion,before,after,expectedDiagno
         return subprocess.run([self.node, str(BRIDGE)], input=data, capture_output=True,
             env=self.env, cwd=self.work, timeout=10)
 
-    def start_execution_wire(self, capability_cli=None, direct=False, peer_mode=None, state_delay_ms=None):
+    def start_execution_wire(self, capability_cli=None, direct=False, peer_mode=None, state_delay_ms=None, contain=False):
         host = ROOT / 'tests/product/native_execution_mcp_host.cjs'
         command = [self.node, str(BRIDGE)] if direct else [self.node, str(host), str(self.root / 'native-wire.jsonl')]
         if capability_cli is not None and not direct:
@@ -4483,9 +4483,13 @@ process.stdout.write(JSON.stringify({originalVersion,before,after,expectedDiagno
                 ");let delayed=true;bridge.serve(process.stdin,process.stdout,'fixed-delayed-state',{readState(request){const result=operate(request);if(delayed){delayed=false;Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,"+
                 str(state_delay_ms)+");}return result;}}).catch(()=>{process.exitCode=1;});", encoding='utf-8')
             command = [self.node, str(delayed)]
-        process = subprocess.Popen(command,
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-            text=True, encoding='utf-8', env=self.env, cwd=self.work)
+        options = dict(stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                       text=True, encoding='utf-8', env=self.env, cwd=self.work)
+        if contain:
+            from tests.product.test_codex_capabilities import owned_process
+            process = self.enterContext(owned_process(command, **options))
+        else:
+            process = subprocess.Popen(command, **options)
         responses = queue.Queue()
         def receive():
             for line in process.stdout:
@@ -4571,6 +4575,115 @@ process.stdout.write(JSON.stringify({originalVersion,before,after,expectedDiagno
         inventory = responses.get(timeout=5)
         self.assertEqual(inventory['id'], inventory_id)
         self.assertTrue(inventory['result']['structuredContent']['fixture'])
+
+    def test_execution_default_factory_cancel_reaches_version_and_initialize(self):
+        contract = self.execution_contract()
+        for stage in ('version', 'initialize'):
+            with self.subTest(stage=stage):
+                marker = self.work/('startup-'+stage+'.json')
+                cli = self.work/('startup-'+stage+'.cjs')
+                cli.write_text("const fs=require('node:fs');const marker="+json.dumps(str(marker))+";"+
+                    "if(process.argv.includes('--version')){"+
+                    ("fs.writeFileSync(marker,JSON.stringify({phase:'version'}));setInterval(()=>{},1000);"
+                     if stage=='version' else "console.log('codex-cli fixed-fixture');")+
+                    "}else{const rl=require('node:readline').createInterface({input:process.stdin});"+
+                    "rl.on('line',line=>{const frame=JSON.parse(line);fs.writeFileSync(marker,JSON.stringify({phase:frame.method}));});}",
+                    encoding='utf-8')
+                self.env['CODEX_CLI_PATH'] = str(cli)
+                process, _, _, call = self.start_execution_wire(direct=True, contain=True)
+                reply = call('prepare', **{**contract, 'scopeRef': 'startup-'+stage})
+                self.assertFalse(reply['isError'], reply)
+                operation_id = reply['structuredContent']['operationId']
+                self.execution_accept(call, operation_id, 'prepare')
+                deadline = time.monotonic()+5
+                while not marker.exists() and time.monotonic() < deadline:
+                    time.sleep(0.01)
+                self.assertTrue(marker.exists())
+                self.assertEqual(json.loads(marker.read_text())['phase'], 'version' if stage=='version' else 'initialize')
+                stopped = call('cancel', operationId=operation_id, reason='Cancel owned startup before its response')['structuredContent']
+                self.assertEqual(stopped['phase'], 'cancelled-held')
+                self.assertFalse(stopped['busy'])
+                self.assertEqual(stopped['failure'], 'CANCELLED')
+                self.assertEqual(stopped['writer'], 'source')
+                self.assertIsNone(stopped['reconciliationBasis'])
+                state = json.loads(next(self.state.rglob(stopped['stateEvidence']['sha256']+'.json')).read_text(encoding='utf-8'))
+                failure = state['nativeStartFailure']
+                self.assertEqual(failure['code'], 'CANCELLED')
+                self.assertTrue(failure['process']['exitObserved'])
+                self.assertTrue(failure['process']['closeObserved'])
+                self.assertEqual(state['turnStarts'], 0)
+                self.assertEqual(state['pendingEffect']['kind'], 'owned-native-start')
+                if stage == 'initialize':
+                    self.assertTrue(failure['process']['closed'])
+                    self.assertFalse(failure['process']['forced'])
+                    self.assertEqual(failure['priorFailure']['request']['method'], 'initialize')
+                else:
+                    self.assertTrue(failure['process']['forced'])
+                process.stdin.close(); process.wait(timeout=5)
+        self.env.pop('CODEX_CLI_PATH', None)
+
+    def test_execution_default_factory_deadline_stops_initializing_owner(self):
+        contract = self.execution_contract()
+        contract['deadlineMs'] = int(time.time()*1000)+5000
+        marker = self.work/'deadline-initialize.json'
+        cli = self.work/'deadline-initialize.cjs'
+        cli.write_text("const fs=require('node:fs');if(process.argv.includes('--version')){console.log('codex-cli fixed-fixture');}"
+            "else{const rl=require('node:readline').createInterface({input:process.stdin});"
+            "rl.on('line',line=>fs.writeFileSync("+json.dumps(str(marker))+",line));}", encoding='utf-8')
+        self.env['CODEX_CLI_PATH'] = str(cli)
+        _, _, _, call = self.start_execution_wire(direct=True, contain=True)
+        reply = call('prepare', **contract)
+        self.assertFalse(reply['isError'], reply)
+        operation_id = reply['structuredContent']['operationId']
+        self.execution_accept(call, operation_id, 'prepare')
+        deadline = time.monotonic()+4
+        while not marker.exists() and time.monotonic() < deadline:
+            time.sleep(0.01)
+        self.assertTrue(marker.exists(), 'fixture did not enter initialize before expiry')
+        self.assertEqual(json.loads(marker.read_text())['method'], 'initialize')
+        def owner_returned(value):
+            if value['phase'] != 'held' or value['busy']:
+                return False
+            evidence = json.loads(next(self.state.rglob(value['stateEvidence']['sha256']+'.json')).read_text(encoding='utf-8'))
+            return evidence.get('nativeStartPending') is False
+        stopped = self.execution_until(call, operation_id, owner_returned)
+        self.assertEqual(stopped['failure'], 'DEADLINE_EXCEEDED')
+        self.assertEqual(stopped['writer'], 'source')
+        self.assertIsNone(stopped['reconciliationBasis'])
+        state = json.loads(next(self.state.rglob(stopped['stateEvidence']['sha256']+'.json')).read_text(encoding='utf-8'))
+        self.assertEqual(state['nativeStartFailure']['code'], 'DEADLINE_EXCEEDED')
+        self.assertTrue(state['nativeStartFailure']['process']['closed'])
+        self.assertFalse(state['nativeStartFailure']['process']['forced'])
+        self.assertEqual(state['plan']['deadlineMs'], contract['deadlineMs'])
+        self.assertEqual(state['turnStarts'], 0)
+        self.assertEqual(state['pendingEffect']['kind'], 'owned-native-start')
+
+    def test_default_launcher_stop_preserves_reason_and_owned_exit(self):
+        script = r'''
+const fs=require('node:fs'),vm=require('node:vm'),{createRequire}=require('node:module');
+const file=process.argv[1],box={module:{exports:{}},exports:{},require:createRequire(file),process,Buffer,
+ TextDecoder,AbortSignal,AbortController,setTimeout,clearTimeout};
+vm.runInNewContext(fs.readFileSync(file,'utf8')+'\nmodule.exports.versionProbe=launcherVersion;',box,{filename:file});
+(async()=>{const rows=[];
+ for(const reason of ['CANCELLED','DEADLINE_EXCEEDED','reconciliation-cancelled']){
+  const controller=new AbortController(),pending=box.module.exports.versionProbe({executable:process.execPath,
+   prefix:['-e','setInterval(()=>{},1000)','--']},process.cwd(),controller.signal);
+  controller.abort(Object.assign(Error(reason),{code:reason}));
+  try{await pending;throw Error('stop unexpectedly passed');}catch(e){rows.push({reason,code:e.code,process:e.processState});}
+ }
+ console.log(JSON.stringify(rows));
+})().catch(e=>{console.error(e);process.exitCode=1});
+'''
+        from tests.product.test_codex_capabilities import owned_run
+        result = owned_run([self.node, '-e', script, str(BRIDGE.with_name('native-task-execution.cjs'))],
+                           cwd=self.work, env=self.env, text=True, encoding='utf-8', timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        for row in json.loads(result.stdout):
+            with self.subTest(reason=row['reason']):
+                self.assertEqual(row['code'], row['reason'])
+                self.assertTrue(row['process']['exitObserved'])
+                self.assertTrue(row['process']['closeObserved'])
+                self.assertTrue(row['process']['forced'])
 
     def delayed_capability_fixture(self):
         fixture = self.work / 'selected-cli.cjs'
@@ -4730,7 +4843,7 @@ const boom=code=>Object.assign(Error(code),{code}),forbid=()=>{throw boom('NATIV
  const snapshot={mode:'active',epoch:'e',revision:1,checkpoint:{canContinue:true},checkpointSource:{sha256:digest},inputReceipt:{present:true},hostObservationCurrent:true,currentInputReconciled:true,
  nativeInputEvidence:{state:'observed',latestInputReconciled:true,latestNativeInputsComplete:true,pendingInputs:[]},inspection:{inputs:[]}};
  const maps=[],OwnedMap=class extends Map{constructor(){super();maps.push(this);}};
- const box={module:{exports:{}},process,Buffer,TextDecoder,Map:OwnedMap,setTimeout,clearTimeout,
+ const box={module:{exports:{}},process,Buffer,TextDecoder,AbortController,Map:OwnedMap,setTimeout,clearTimeout,
  require:n=>n==='node:fs'?disk:n==='node:child_process'?{spawn:forbid,spawnSync:forbid}:n==='./carrier-recorder.cjs'?{openCarrierRecorder:open}:n.startsWith('./')?{}:require(n)};
  vm.runInNewContext(raw,box,{filename:file});const e=box.module.exports.createNativeTaskExecution({sourceOf:()=>source,readState:()=>snapshot,storageRoot:store,nativeFactory:forbid});
  const old={id,dir,cwd,source,stateEvidence:{evidenceId:digest,sha256:digest},recorderClosed:true,recorder:{close(){}},engine:{inspect:()=>state}};maps[0].set(id,old);
@@ -5454,6 +5567,15 @@ const boom=code=>Object.assign(Error(code),{code}),forbid=()=>{throw boom('NATIV
     def test_target_effect_reconciliation_returns_same_scope_to_current_source(self):
         self.check_target_effect_reconciliation('source-current')
 
+    def test_real_effect_during_cancel_requires_target_reconciliation(self):
+        self.check_target_effect_reconciliation('late-effect')
+
+    def test_real_effect_during_cancel_stays_held_without_effect_review(self):
+        self.check_target_effect_reconciliation('late-effect-unknown')
+
+    def test_reconciliation_cancel_reaches_initializing_reader(self):
+        self.check_target_effect_reconciliation('source-intake-reader-start-cancel')
+
     def test_target_effect_reconciliation_retains_ack_loss_without_replaying(self):
         self.check_target_effect_reconciliation('ack-loss')
 
@@ -5570,6 +5692,7 @@ const boom=code=>Object.assign(Error(code),{code}),forbid=()=>{throw boom('NATIV
 
     def check_target_effect_reconciliation(self, mode):
         contract = self.execution_write_contract()
+        late_effect = mode.startswith('late-effect')
         capacity = mode.startswith('source-intake-capacity')
         # Full-capacity filesystem verification has a separate prospective fixture budget.
         phase_timeout = 30 if capacity else 8
@@ -5592,7 +5715,9 @@ const boom=code=>Object.assign(Error(code),{code}),forbid=()=>{throw boom('NATIV
                        'source-policy-commit-denied': 'workspace-write',
                        'source-policy-reader-prior-connection': 'policy-readonly'}.get(mode)
         source_intake = mode.startswith('source-intake') or policy_mode is not None
-        process, _, _, call = self.start_execution_wire(peer_mode=policy_mode or ('normal' if source_intake else 'write-ack-loss' if mode=='ack-loss' else 'write-interrupted'))
+        process, _, _, call = self.start_execution_wire(peer_mode=policy_mode or ('normal' if source_intake else
+            'late-write-on-close' if late_effect else 'write-ack-loss' if mode=='ack-loss' else 'write-interrupted'),
+            contain=late_effect or mode=='source-intake-reader-start-cancel')
         operation_id = self.execution_intake(call, contract, timeout=phase_timeout)
         if policy_mode:
             call('commit', operationId=operation_id)
@@ -5610,6 +5735,16 @@ const boom=code=>Object.assign(Error(code),{code}),forbid=()=>{throw boom('NATIV
                 self.execution_accept(call, operation_id, stage, timeout=phase_timeout)
         if source_intake and not policy_mode:
             old = call('cancel', operationId=operation_id, reason='Actual user pause after read-only intake')['structuredContent']
+        elif late_effect:
+            self.execution_until(call, operation_id, lambda x: x['writer']=='target' and x['pendingEffect']
+                and x['pendingEffect']['kind']=='native-turn', timeout=phase_timeout)
+            self.assertFalse((self.work/'review.json').exists(), 'fixture effect occurred before cancellation')
+            old = call('cancel', operationId=operation_id, reason='Cancel before the gated real file effect')['structuredContent']
+            self.assertEqual(json.loads((self.work/'review.json').read_text())['timing'], 'after-stdin-close')
+            self.assertEqual(old['phase'], 'cancelled-held')
+            self.assertEqual(old['pendingEffect']['kind'], 'native-turn')
+            self.assertIsNone(old['reconciliationBasis'])
+            self.assertTrue(old['nativeClosed']['closed'])
         elif mode == 'ack-loss':
             self.execution_until(call, operation_id, lambda x: x['writer']=='target' and x['pendingEffect']
                 and x['pendingEffect']['method']=='turn/start' and x['pendingEffect']['requestRef'], timeout=phase_timeout)
@@ -5644,7 +5779,8 @@ const boom=code=>Object.assign(Error(code),{code}),forbid=()=>{throw boom('NATIV
                 else: turns[0]['status'] = 'inProgress'
                 history.write_text(json.dumps(turns), encoding='utf-8')
         _, _, _, fresh = self.start_execution_wire(peer_mode='reader-'+reader_mode if reader_mode else
-            'target-still-active' if mode=='active-target' else None)
+            'target-still-active' if mode=='active-target' else None,
+            contain=late_effect or reader_mode=='start-cancel')
         self.env.pop('ACCORD_TEST_READER_CONNECTION_ID', None)
         old = fresh('inspect', operationId=operation_id)['structuredContent']
         basis = old.get('targetReconciliationBasis')
@@ -5654,8 +5790,9 @@ const boom=code=>Object.assign(Error(code),{code}),forbid=()=>{throw boom('NATIV
         effect.write_text(json.dumps({'kind': 'external-target-effects/v1', 'operationId': operation_id,
             'recordSha256': basis['recordSha256'], 'actorSourceRef': 'fixed-old-peer-natural-close-and-exclusive-owner',
             'authoritySourceRef': 'new-current-fixture-input',
-            'effects': [{'disposition': 'partial-effects-reviewed', 'sourceRef': 'independent-fixed-review.json-bytes'}],
-            'unresolved': ['external-service-effect-still-unknown'] if mode=='unknown' else []}), encoding='utf-8')
+            'effects': [{'disposition': 'applied-verified' if late_effect else 'partial-effects-reviewed',
+                'sourceRef': 'review.json:sha256:'+hashlib.sha256(old_bytes).hexdigest() if late_effect else 'independent-fixed-review.json-bytes'}],
+            'unresolved': ['effect-not-yet-reviewed'] if mode in ('unknown', 'late-effect-unknown') else []}), encoding='utf-8')
         if mode == 'source-intake-capacity-effect-escape':
             (self.root/'effects.json').write_bytes(effect.read_bytes())
             effect_ref = '../effects.json'
@@ -5702,13 +5839,13 @@ const boom=code=>Object.assign(Error(code),{code}),forbid=()=>{throw boom('NATIV
                 reason='Fixture user has not authorized resumption.')['isError'])
         before_turns = sum(json.loads(line)['method']=='turn/start' for line in (self.root/'native-wire.jsonl').read_text().splitlines())
         reply = fresh('reconcile-target', **args)
-        if mode in ('stale', 'unknown', 'paused', 'input-change', 'source-intake-grant-target',
+        if mode in ('stale', 'unknown', 'late-effect-unknown', 'paused', 'input-change', 'source-intake-grant-target',
                     'source-intake-capacity-input-change', 'source-intake-capacity-output-change',
                     'source-intake-capacity-effect-escape', 'source-intake-capacity-effect-symlink',
                     'source-intake-capacity-effect-hardlink'):
             self.assertTrue(reply['isError'], reply)
             self.assertEqual(reply['structuredContent']['reason'], {'stale': 'stopped-record-basis-changed',
-                'unknown': 'target-effects-unresolved', 'paused': 'current-source-not-executable',
+                'unknown': 'target-effects-unresolved', 'late-effect-unknown': 'target-effects-unresolved', 'paused': 'current-source-not-executable',
                 'input-change': 'original-input-invariants-changed',
                 'source-intake-grant-target': 'source-writer-must-remain-current',
                 'source-intake-capacity-input-change': 'original-input-invariants-changed',
@@ -5719,6 +5856,33 @@ const boom=code=>Object.assign(Error(code),{code}),forbid=()=>{throw boom('NATIV
             self.assertEqual(fresh('inspect', operationId=operation_id)['structuredContent']['writer'], original_writer)
             return
         self.assertFalse(reply['isError'], reply)
+        if reader_mode == 'start-cancel':
+            marker = self.root/'native-wire.jsonl.reader-initializing'
+            deadline = time.monotonic()+5
+            while not marker.exists() and time.monotonic() < deadline:
+                time.sleep(0.01)
+            self.assertTrue(marker.exists())
+            stopped = fresh('cancel', operationId=operation_id, reason='Cancel recovery reader initialization')['structuredContent']
+            self.assertEqual(stopped['writer'], original_writer)
+            self.assertFalse(stopped['busy'])
+            self.assertEqual(stopped['failure'], 'reconciliation-cancelled')
+            self.assertIsNone(stopped['reviewRequest'])
+            self.assertTrue(stopped['targetRecoveryResource']['process']['closed'])
+            self.assertEqual(stopped['targetRecoveryResource']['state'], 'unverified')
+            prior = stopped['targetRecoveryResource']['startupFailure']
+            self.assertIn('code', prior)
+            self.assertTrue(prior['message'])
+            self.assertEqual(prior['request']['method'], 'initialize')
+            self.assertEqual(prior['request']['hostVersion'], 'fixed-native-fixture-next')
+            self.assertNotEqual(prior['request']['connectionId'], old_state['connection']['connectionId'])
+            persisted = next(p for p in self.state.rglob('status.json')
+                             if json.loads(p.read_text())['operationId'] == operation_id)
+            self.assertEqual(json.loads(persisted.read_text())['targetRecoveryResource'],
+                             stopped['targetRecoveryResource'])
+            wire = [json.loads(line) for line in (self.root/'native-wire.jsonl').read_text().splitlines()]
+            self.assertFalse(any(row['method']=='thread/read' for row in wire))
+            self.assertEqual(sum(row['method']=='turn/start' for row in wire), before_turns)
+            return
         waiting = self.execution_until(fresh, operation_id, lambda x: x['reviewRequest'] is not None or
             x['phase'] in ('held', 'cancelled-held') and not x['busy'], timeout=phase_timeout)
         if reader_mode in ('empty', 'old-connection', 'prior-connection', 'bad-ref', 'missing', 'wrong', 'duplicate', 'extra', 'nonterminal'):

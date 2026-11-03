@@ -15,10 +15,12 @@ current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks
 their old criteria and workflow prescriptions do not govern this successor.
 
 The next stage starts from the released and locally adopted **3.3.11** baseline.
-Its [current preparation scope](docs/operations/PLAN-v3.3.md#基于-3311-的下一阶段准备2026-11-03)
+Its [current bounded work](docs/operations/PLAN-v3.3.md#3312-最终候选与统一验证2026-11-04)
 extends the existing three priorities through design/host/consumer review and
-general ecosystem cooperation; it does not select another release version.
-Frozen delivery identifiers describe that baseline, not a stop on this preparation.
+general ecosystem cooperation. Confirmed owned-start cancellation repairs use
+**3.3.12** as the final candidate after **3.3.12-dev.1** development; a candidate
+declaration is not a published package, roadmap promise or release date. The installed 3.3.11 and its evidence
+remain separate. Consolidate this stage before hosted verification and any release.
 Use the existing result and acceptance views; do not add parallel governance.
 
 These project documents govern Accord development and evidence review. Ordinary

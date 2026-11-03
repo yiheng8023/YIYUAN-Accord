@@ -2,6 +2,8 @@
 
 本文的三个状态工具与3.3.2包另加的 `coordinate_task_execution` 分工不同。后者用于原生Skill库存、受托输入准备及有限新目标执行；最终`ef8bde2a`已完成原绑定18案/17scope/52义务及A01–A08来源消费、Root采用和精确11/11 CI。公开发行与本机实际参与后态见[当前接续](operations/CONTINUATION.md#当前事实)；旧案例、源码声明或缓存存在均不证明所有入口完成。按需读取包内[能力接口](../plugins/yiyuan-accord-codex/skills/coordinate-capabilities/references/native-capabilities.md)或[接管接口](../plugins/yiyuan-accord-codex/skills/deliver-demand-driven-outcome/references/native-handoff.md#ordinary-root-task-through-the-mcp-execution-interface)，不能把下文状态参数模板用于派发执行。
 
+所属启动取消首片见[计划记录](operations/PLAN-v3.3.md#r79-首片所属启动取消与迟到效果核查2026-11-04)。执行接口的取消／期限信号覆盖所属版本查询与初始化等待，恢复reader同样接线；旧peer关闭后取消不再启动替换peer。`cancel`回执仍不等于效果全部停止。普通启动按`stateEvidence`定位并读取证据正文中的`nativeStartFailure`；恢复reader读`failure`及`targetRecoveryResource`中的`startupFailure`／`process`，分别核停止原因、先前错误及initialize请求关联和真实关闭事实。先前错误码缺省时保留null，不能补造；未返还owner／未审效果的原pending及租约保留，不自动重试或归还writer。该内部接线不增加用户状态参数或应用接续文档要求。
+
 适用对象：维护者、原生 MCP 接入者及消费此指南的 Agent。原调用模板依据源码 `315e2476e4818545d0dbb6a2c241be72b01ceae4`；输入隔离补充依据 `73120669` 与2026-10-06原生回执对账。
 
 状态及输入读取本身不写检查点或业务文件、不派发新任务；共享 MCP 处理器仍会核对本进程已有所属执行，来源失效时可保护性停止它并保留操作证据。因此两个读取工具不声明为全环境只读；直接 helper 的 `status` 仍是只读查询。

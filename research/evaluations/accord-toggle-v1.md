@@ -12,6 +12,25 @@
 
 功能验收、工程质量、实际使用价值与发行分别判断。已有 A01–A08、质量底线和历史失败保持；本初版不改写其通过记录，也不成为日常用户的新流程。3.3.2 保留为发展节点，初版阶段的 3.3.4 发行包和标签独立保存；当前状态以项目接续及精确发行记录为准。评价材料本身不要求新发版；若发现真实缺陷，则按受影响对象、兼容性、风险和修复验证决定维护或发版。
 
+### 2026-11-04 既有对照的共同条件、观测者与完整成本
+
+本片复用已完成记录，没有新业务、模型对照或旧题重放。原结论未发现需要改签的过度归因，也未确认新的运行机制缺陷；需要把分散的条件与成本边界集中说明。以下各批次分别判断，不能合并成当前版本的性能趋势或一般收益：
+
+| 既有观察 | 可保留的共同条件与结果 | 仍限制解释的条件 |
+|---|---|---|
+| [10月30日两对试行](#2026-10-30-首轮有限试行) | 每类一对，同材料及冻结运行设置，成品与各阶段检查通过；原顺序、共享指导及禁用记忆条件保留。 | 不是默认环境或独立用户样本；不能由配置／来源盘点追认所有实际前导相同，缓存、顺序及随机性未分离。 |
+| [10月31日真实维护研究](#2026-10-31-新的普通维护研究) | 原请求、代码／协议材料与共同控制有来源，两份成品的有界静态审阅保留。 | 关闭臂超时，完成程度不同；子代理选择方式不同，父子计数归属与中断尾部未核齐，不能按等量交付比较总成本。 |
+| [11月3日五记录题](#2026-11-03-当前版本简单任务与实际上下文差异) | 两份成品正确，原字节核验、失败与后续观察器纠正保留。 | 实际非目标目录174／43，公平归因未成立；后来的来源重建不能追认原刷新时序或唯一原因。 |
+| [11月3日八记录同进程题](#2026-11-03-同进程新材料的有限对照) | 175项共同非目标身份／原始元数据及所核共同指令／工具匹配，两份成品正确。 | 140份描述因目标条目占用预算而缩短，是已解释的目标中介及成本；保留它，不补虚拟文字抹平。后端、共享缓存及顺序效应仍未独立分离。 |
+
+**共同观察器也是实验条件。** 同进程题两臂都有0／12／20秒有界查询、记录保留、入口与成品核对及所属资源关闭；第二臂还多做与首臂来源／配置的比较。所核原生用户请求没有额外评测提示或定向读取要求，开启指导来自目标入口。共同观测不会证明无观测影响，差异化比对也不能默认为产品成本；不能跨越首轮强制刷新与后继被动观察等不同条件比较“插件耗时趋势”。定向读取、受邀评审、Root纠偏、业务救援及自然续作按各自身份与时序保留，不能互相代签。
+
+**成本按覆盖窗口解释，缺账保持未知。** 业务执行、实验观测、事前准备、事后独审／纠偏及维护投入分开；共同成本不能未经测量整项相减，未配对失败和无业务探测也不从总投入中删除。首轮端到端时间含准备、就绪、执行、检查和退出；维护研究的父执行窗口不含准备／后审；五记录题的CLI／墙钟不含前置查询和观察器纠正；八记录题实验总时长含启动至记录核验及回收，不含先前准备者、Root的13项离线检查和随后独审的完整投入。不同窗口不能直接合计。八记录题所属Job CPU为关闭29.609375／开启31.75秒，仅覆盖该Job；它与墙钟、并行子任务或累计进程数不可相加为全机器成本，少量资源快照也不是持续峰值。
+
+本片直接按响应ID去重读取六份原始用量轨迹，独立复算首轮两对与八记录题，已公布输入／缓存／输出／总量均吻合；不导入原聚合助手，不累加线程镜像、缓存或推理子项。八记录题报告总量关闭107325／开启124328，差17003，可记账分解为缓存输入11648、未缓存输入4741与输出614的差；这不是因果分摊、费用或上下文占用。人工主动时间、全部准备／独审／恢复及账单成本仍未完整计量，不补零、不假设价格，也不宣布已知完整净成本。
+
+本片只收敛评价解释与开发记录，不新增统一分数、正式案例、观测服务或普通用户步骤。后续有适用的新任务时，复用已有宿主轨迹与产物，保留实际条件、观察介入及成本窗口；出现未解释漂移只限制依赖它的归因，不抹掉正确成品或有据工程贡献。阶段统一验证和必要发行仍待原三线收敛，不由这次方法复核提前触发。
+
 ### 2026-11-03 轻任务指导触发的口径校准
 
 下文开启臂在读输入后、写产物前读取现有核验Skill；这提供一个有范围的问题，并不证明读取不必要、由某短语引起或造成全部用量差额。源码核对发现：入口路由“Reviewing or reconciling results”无条件覆盖普通结果核对，而目标简介写“consequential checks”，正文也要求按后果选择和复用充分指导。Root仅将入口首分支校准为“Consequential result verification or reconciliation”，没有删减实际核验义务或其它触发。
@@ -425,6 +444,18 @@ python -B -m unittest tests.product.test_accord_comparison
 当前文件检查不能证明宿主有效隔离、真实使用效果、安全覆盖、长期成本或统计显著性。可用的评价方法和工程质量要继续校准，未知不是零分、完成或默认通过。
 
 ## English summary
+
+The 2026-11-04 review reused existing evidence without new business runs.
+Independent response-ID-based recomputation of six original token traces matched
+the published counters. Preserve unexplained catalog drift separately from the
+later pair's verified budget-mediated description shortening. Shared observers
+are controlled conditions, not proof of no observer effect; the second arm also
+performed cross-arm source/configuration checks. Experiment wall time, Job CPU,
+business execution, preparation and subsequent review have different scopes.
+Complete human, recovery, preparation/review and billing costs remain unknown;
+do not subtract shared observers without measurement, sum overlapping counters,
+or turn these observations into causal net value or a cross-version trend.
+No new runtime defect, formal case or user workflow was established.
 
 The 2026-11-03 simple-task observation used published3.3.10 and CLI0.166.0,
 with one enabled run followed by one disabled run. Both outputs were correct,

@@ -17,6 +17,9 @@ const text = value => typeof value === 'string' && value.trim() && value.length 
 const samePath = (a, b) => typeof a === 'string' && typeof b === 'string' &&
   (process.platform === 'win32' ? path.resolve(a).toLowerCase() === path.resolve(b).toLowerCase() : path.resolve(a) === path.resolve(b));
 function reject(code) { throw Object.assign(new Error(code), {code}); }
+function checkStartSignal(signal) {
+  if (signal?.aborted) reject(typeof signal.reason?.code === 'string' ? signal.reason.code : 'CANCELLED');
+}
 function remaining(deadline) { const value = deadline - performance.now(); if (value <= 0) reject('DEADLINE_EXCEEDED'); return value; }
 async function bounded(callback, deadline) {
   const wait = remaining(deadline);
@@ -45,6 +48,7 @@ function createExternalHandoff(options) {
   let activeTurn = null, recordCertain = true, sequence = 0, stopping = false;
   let deadlineTimer = null, nativeStartPending = false, lateNativeClosed = null;
   let skillPreparationPending = false;
+  const startCancellation = new AbortController();
   const seenTurns = new Set();
   const inspect = () => copy({...state, revision, busy, cancelRequested: cancelled,
     nativeStartPending, lateNativeClosed, skillPreparationPending,
@@ -177,16 +181,22 @@ function createExternalHandoff(options) {
     return copy(await closePromise);
   }
   async function startNative() {
+    live();
     record({pendingEffect: {kind: 'owned-native-start'}, nativeClosed: null});
     native = await bounded(async () => {
       try {
+        live();
         nativeStartPending = true;
-        const owned = await nativeFactory({cwd: plan.cwd, deadlineMs: plan.deadlineMs});
+        const owned = await nativeFactory({cwd: plan.cwd, deadlineMs: plan.deadlineMs, signal: startCancellation.signal});
         if (stopping || cancelled || performance.now() >= deadline) {
           if (owned && typeof owned.close === 'function') lateNativeClosed = copy(await owned.close());
           reject('NATIVE_START_EXPIRED');
         }
         return owned;
+      } catch (error) {
+        state = {...state, nativeStartFailure: {code: error.code || 'NATIVE_START_FAILED',
+          priorFailure: copy(error.startupFailure || null), process: copy(error.processState || null)}};
+        throw error;
       } finally { nativeStartPending = false; }
     }, deadline);
     if (!native || !text(native.connectionId) || !text(native.hostVersion) || ['request', 'waitTurn', 'close'].some(key => typeof native[key] !== 'function')) reject('NATIVE_OWNER_INVALID');
@@ -204,6 +214,7 @@ function createExternalHandoff(options) {
         closed.exitCode !== 0 || closed.forced !== false || closed.signal !== null) reject('NATIVE_CLOSE_UNVERIFIED');
     record({priorNative: {connection: priorConnection, closure: closed, intakeReceipt: state.lastNativeReceipt}, pendingEffect: null,
       verification: {...state.verification, writePrepare: evidenceRef}});
+    live(); // Preserve the old closure; do not spawn its replacement after cancellation.
     native = null; closePromise = null;
     await startNative();
     if (native.hostVersion !== priorConnection.hostVersion || native.connectionId === priorConnection.connectionId) reject('NATIVE_REPLACEMENT_MISMATCH');
@@ -230,6 +241,7 @@ function createExternalHandoff(options) {
   }
   async function hold(error) {
     stopping = true;
+    startCancellation.abort(error);
     clearTimeout(deadlineTimer);
     let closure = null, closureError = null;
     try { closure = await closeNative(); } catch (e) { closureError = e.code || 'NATIVE_CLOSE_UNVERIFIED'; }
@@ -261,9 +273,11 @@ function createExternalHandoff(options) {
     plan = Object.freeze(copy(raw)); deadline = performance.now() + plan.deadlineMs - Date.now();
     deadlineTimer = setTimeout(async () => {
       stopping = true;
+      const expired = Object.assign(new Error('DEADLINE_EXCEEDED'), {code: 'DEADLINE_EXCEEDED'});
+      startCancellation.abort(expired);
       try { await closeNative(); } catch (_) {}
       if (busy && running) { try { await running; } catch (_) {} }
-      else if (state.phase !== 'completed') await hold(Object.assign(new Error('DEADLINE_EXCEEDED'), {code: 'DEADLINE_EXCEEDED'}));
+      else if (state.phase !== 'completed') await hold(expired);
     }, remaining(deadline));
     return execute(async () => {
       state = {...state, phase: 'preparing'};
@@ -337,6 +351,7 @@ function createExternalHandoff(options) {
     if (!text(reason)) reject('CANCEL_REASON_REQUIRED');
     if (state.phase === 'completed') return inspect();
     cancelled = true; cancelReason = reason;
+    startCancellation.abort(Object.assign(new Error('CANCELLED'), {code: 'CANCELLED'}));
     clearTimeout(deadlineTimer);
     // Only this executor's process is closed; no source, daemon or foreign PID.
     try { await closeNative(); } catch (_) {}
@@ -352,6 +367,9 @@ function createExternalHandoff(options) {
 // connection remains the sole RPC requester, responder and request-queue consumer.
 async function createOwnedNativeRunner(options) {
   if (!path.isAbsolute(options.executable || '') || !path.isAbsolute(options.cwd || '') || !text(options.hostVersion)) reject('NATIVE_START_CONFIGURATION_REQUIRED');
+  const signal = options.signal;
+  if (signal !== undefined && !(signal instanceof AbortSignal)) reject('INVALID_START_SIGNAL');
+  checkStartSignal(signal);
   const timeoutMs = options.cleanupTimeoutMs ?? 5000;
   if (!Number.isInteger(timeoutMs) || timeoutMs < 100 || timeoutMs > 30000) reject('INVALID_CLEANUP_TIMEOUT');
   const nativeArgs = options.args ?? ['app-server', '--listen', 'stdio://'];
@@ -449,11 +467,28 @@ async function createOwnedNativeRunner(options) {
     })();
     return closedPromise;
   }
+  // While initialization owns the process but has not returned its handle, use
+  // the same bounded owner closure. Abort requests no rollback or foreign stop.
+  const abortStart = () => { connection.close(); close().catch(() => {}); };
+  signal?.addEventListener('abort', abortStart, {once: true});
   try {
+    if (signal?.aborted) abortStart();
+    checkStartSignal(signal);
     const deadline = performance.now() + Math.max(1, options.deadlineMs - Date.now());
     await connection.transport.request('initialize', {clientInfo: {name: 'yiyuan_accord_external_handoff', version: '1'}}, deadline);
+    checkStartSignal(signal);
     await connection.transport.notify('initialized', {}, deadline);
-  } catch (error) { error.processState = await close(); throw error; }
+    checkStartSignal(signal);
+  } catch (error) {
+    try { checkStartSignal(signal); } catch (cancelled) {
+      cancelled.startupFailure = {code: error.code || null, message: String(error.message || '').slice(0, 256),
+        request: copy(error.rpcRequest || null)};
+      error = cancelled;
+    }
+    try { error.processState = await close(); }
+    catch (closureError) { error.processState = {closed: false, recoveryRequired: true, closureError: closureError.code || 'NATIVE_CLOSE_UNVERIFIED'}; }
+    throw error;
+  } finally { signal?.removeEventListener('abort', abortStart); }
   return Object.freeze({connectionId, hostVersion: options.hostVersion,
     async request(method, params, deadline, beforeSend) {
       if (armed) reject('NATIVE_REQUEST_BUSY');

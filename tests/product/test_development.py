@@ -280,7 +280,7 @@ class SkillReferencePackageTests(unittest.TestCase):
                          '14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026')
         self.assertEqual(translated['originalSourceSha256'],
                          '9f9019523491d9e41f7d3e41ee5bd3c783b0a1049fb280242959198fb88a439a')
-        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9', '3.3.10', '3.3.11', '3.3.11-dev.1'):
+        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9', '3.3.10', '3.3.11', '3.3.11-dev.1', '3.3.12', '3.3.12-dev.1'):
             with self.subTest(version=version):
                 self.assertEqual(foundation(version), translated)
 
@@ -313,6 +313,9 @@ class SkillReferencePackageTests(unittest.TestCase):
             package_version='3.3.11', **options), current)
         self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
             package_version='3.3.11-dev.1', **options), current)
+        for version in ('3.3.12', '3.3.12-dev.1'):
+            self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
+                package_version=version, **options), current)
         execution = current['nativeTaskStateMcp']
         self.assertEqual(execution['executionTool'], 'coordinate_task_execution')
         self.assertEqual(execution['execution']['entry'], 'runtime/native-task-execution.cjs')
@@ -1162,7 +1165,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
             elif kind == 'complete': altered['claimCeiling']['functionalCompletion'] = True
             elif kind == 'eligible': altered['claimCeiling']['candidateEligible'] = True
             elif kind in ('target', 'unselected-patch'):
-                target = '3.4.0' if kind == 'target' else '3.3.12'
+                target = '3.4.0' if kind == 'target' else '3.3.13'
                 altered['cycle']['targetVersion'] = release['target'] = target
                 altered['delivery']['version'] = target
                 altered['delivery']['hostProjections'][0]['packageVersion'] = target
@@ -1179,6 +1182,17 @@ class SuccessorDevelopmentTests(unittest.TestCase):
                     for error in ('conditional publication authority is not present readiness',
                                   '3.3 candidate freezing requires the bound conditional release authority'):
                         self.assertIn(error, errors)
+
+    def test_unselected_development_target_is_not_admitted(self):
+        for target in ('3.3.13', '3.4.0'):
+            with self.subTest(target=target):
+                altered = copy.deepcopy(self.contract)
+                altered['status'] = 'in-development'
+                altered['cycle']['versionState'] = 'development-target-not-published'
+                altered['cycle']['targetVersion'] = altered['authority']['conditionalRelease']['target'] = target
+                altered['delivery']['version'] = target+'-dev.1'
+                altered['delivery']['hostProjections'][0]['packageVersion'] = target+'-dev.1'
+                self.assertIn('conditional publication authority is not present readiness', self.errors(altered))
 
     def test_native_codex_source_accepts_help_center_without_promoting_effect(self):
         altered = copy.deepcopy(self.contract)
@@ -1198,16 +1212,28 @@ class SuccessorDevelopmentTests(unittest.TestCase):
                               self.errors(altered))
 
     def test_cli_reports_unicode_as_utf8_under_legacy_output_encoding(self):
+        # Exercise the real CLI/stream boundary without coupling an encoding
+        # assertion to task evidence or unknown residue in the source checkout.
+        # Whole-source validity is checked separately on an exact clean snapshot.
         for options in ([], ['--json']):
-            with self.subTest(options=options):
-                result = subprocess.run(
-                    [sys.executable, '-B', '-m', 'yiyuan_accord', 'verify', *options],
-                    cwd=ROOT, env={**os.environ, 'PYTHONIOENCODING': 'cp1252'},
-                    capture_output=True, timeout=30)
-                self.assertEqual(result.returncode, 0, result.stderr.decode('utf-8', errors='replace'))
-                output = result.stdout.decode('utf-8')
-                self.assertIn('纳入开发', output)
-                self.assertTrue(json.loads(output)['valid'])
+            for valid in (True, False):
+                with self.subTest(options=options, valid=valid):
+                    script = ("from unittest.mock import patch\n"
+                              "from yiyuan_accord.__main__ import main\n"
+                              "with patch('yiyuan_accord.__main__.verify_product', return_value="
+                              + repr({'valid': valid, 'message': '纳入开发'}) + ") as producer:\n"
+                              "    status = main()\n"
+                              "    producer.assert_called_once()\n"
+                              "    raise SystemExit(status)\n")
+                    result = subprocess.run(
+                        [sys.executable, '-B', '-c', script, 'verify', *options],
+                        cwd=ROOT, env={**os.environ, 'PYTHONIOENCODING': 'cp1252'},
+                        capture_output=True, timeout=30)
+                    self.assertEqual(result.returncode, 0 if valid else 1,
+                                     result.stderr.decode('utf-8', errors='replace'))
+                    output = result.stdout.decode('utf-8')
+                    self.assertIn('纳入开发', output)
+                    self.assertIs(json.loads(output)['valid'], valid)
 
     def test_current_and_historical_contracts_keep_separate_authority(self):
         self.assertEqual(self.errors(self.contract), [])
@@ -1219,7 +1245,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertEqual(self.contract["authority"]["conditionalRelease"]["decision"],
                          "user-authorized-after-acceptance")
         self.assertFalse(self.contract["authority"]["conditionalRelease"]["ready"])
-        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.11")
+        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.12")
         self.assertEqual(self.contract["predecessorSnapshot"], old["predecessorSnapshot"])
         self.assertEqual({p["id"] for p in self.contract["delivery"]["hostProjections"]}, {"codex"})
         self.assertEqual({p["id"] for p in old["delivery"]["hostProjections"]}, {"codex", "claude-code"})

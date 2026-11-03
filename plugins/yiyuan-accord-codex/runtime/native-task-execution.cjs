@@ -60,7 +60,10 @@ function atomic(file, value) {
     fs.renameSync(temporary, file);
   } finally { if (fs.existsSync(temporary)) fs.unlinkSync(temporary); }
 }
-async function launcherVersion(launch, cwd) {
+async function launcherVersion(launch, cwd, signal) {
+  if (signal !== undefined && !(signal instanceof AbortSignal)) fail('INVALID_START_SIGNAL');
+  const stopReason = () => typeof signal?.reason?.code === 'string' ? signal.reason.code : 'CANCELLED';
+  if (signal?.aborted) fail(stopReason());
   const child = spawn(launch.executable, [...launch.prefix, '--version'], {cwd,
     windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], detached: process.platform !== 'win32'});
   const ownedPid = child.pid ?? null;
@@ -88,15 +91,22 @@ async function launcherVersion(launch, cwd) {
     child.once('exit', code => { exited = true; exitCode = code; });
     child.once('close', code => { closeObserved = true; resolve(code); });
   });
-  let timer, recoveryTimer, code;
-  const timeout = new Promise(resolve => { timer = setTimeout(() => {
+  let timer, recoveryTimer, code, resolveStop;
+  const stopping = new Promise(resolve => { resolveStop = resolve; });
+  const stop = () => {
+    if (stopped) return;
     stopped = true; stopOwnedVersion();
-    recoveryTimer = setTimeout(() => resolve(null), 1000);
-  }, 3000); });
-  try { code = await Promise.race([closed, timeout]); } finally { clearTimeout(timer); clearTimeout(recoveryTimer); }
+    recoveryTimer = setTimeout(() => resolveStop(null), 1000);
+  };
+  timer = setTimeout(stop, 3000);
+  signal?.addEventListener('abort', stop, {once: true});
+  if (signal?.aborted) stop();
+  try { code = await Promise.race([closed, stopping]); }
+  finally { clearTimeout(timer); clearTimeout(recoveryTimer); signal?.removeEventListener('abort', stop); }
   if (stopped || tooLarge || spawnFailed || code !== 0 || !/^codex-cli [\w.\-]+\s*$/.test(output)) {
     if (code === null) { child.stdout.destroy(); child.stderr.destroy(); child.unref(); }
-    throw Object.assign(new Error('native-cli-version-unavailable'), {code: 'native-cli-version-unavailable',
+    const reason = signal?.aborted ? stopReason() : 'native-cli-version-unavailable';
+    throw Object.assign(new Error(reason), {code: reason,
       processState: {pid: ownedPid, exitObserved: exited, closeObserved, exitCode, forced: stopped || tooLarge,
         terminationAttempt, descendantVerification: 'not-independently-observed', recoveryRequired: true}});
   }
@@ -136,12 +146,12 @@ const TOOL = Object.freeze({name: 'coordinate_task_execution',
 function createNativeTaskExecution(options) {
   const sourceOf = options.sourceOf, readState = options.readState || operate;
   const capability = options.capabilities || capabilities;
-  const factory = options.nativeFactory || (async ({cwd, deadlineMs}) => {
+  const factory = options.nativeFactory || (async ({cwd, deadlineMs, signal}) => {
     const launch = capabilities.launcher(process.env.CODEX_CLI_PATH || undefined);
-    const hostVersion = await launcherVersion(launch, cwd);
+    const hostVersion = await launcherVersion(launch, cwd, signal);
     return createOwnedNativeRunner({executable: launch.executable,
       args: [...launch.prefix, 'app-server', '--listen', 'stdio://'], cwd, deadlineMs,
-      hostVersion});
+      hostVersion, signal});
   });
   const slots = new Map(), capabilitiesPending = new Set(), requestOperations = new Map();
   const pendingRecorderClosures = new Map();
@@ -319,7 +329,7 @@ function createNativeTaskExecution(options) {
     const currentObserved = currentState(source, slot.cwd, args), current = currentObserved.facts;
     if (target && (!text(args.effectSourceRef) || !['source-current', 'target-retained'].includes(args.writerDisposition))) fail('invalid-target-reconciliation');
     if (target && original.record.state.writer === 'source' && args.writerDisposition !== 'source-current') fail('source-writer-must-remain-current');
-    const recovery = {original, current, target, args: clone(args), deadlineMs: args.deadlineMs,
+    const recovery = {original, current, target, args: clone(args), deadlineMs: args.deadlineMs, startCancellation: new AbortController(),
       view: {...original.record.state, phase: target ? 'reading-stopped-target' : 'awaiting-stopped-review'}};
     const fresh = {...slot, saved: null, engine: null, source: original.record.state.source,
       caller: source, recovery, recorderClosed: false, failure: null,
@@ -356,7 +366,8 @@ function createNativeTaskExecution(options) {
       if (target) fresh.running = prepareTargetReview(fresh).catch(async error => {
         retainSourceFailure(fresh, error);
         fresh.failure ||= safeCode(error); recovery.view = original.record.state;
-        if (!recovery.reader) fresh.targetRecoveryResource = {state: 'unverified', process: error.processState || null};
+        if (!recovery.reader) fresh.targetRecoveryResource = {state: 'unverified',
+          startupFailure: clone(error.startupFailure || null), process: error.processState || null};
         try { await closeTargetReader(fresh); } finally { fresh.recorder.close(); fresh.recorderClosed = true; }
       }).finally(() => { recovery.reading = false; save(fresh); if (fresh.recorderClosed) releaseRequests(fresh); });
       return summary;
@@ -458,7 +469,7 @@ function createNativeTaskExecution(options) {
     const recovery = slot.recovery;
     slot.current(); slot.targetRecoveryResource = {state: 'starting'}; save(slot);
     recovery.reader = await factory({cwd: slot.cwd, source: slot.caller,
-      deadlineMs: Math.min(recovery.deadlineMs, Date.now() + 10000)});
+      deadlineMs: Math.min(recovery.deadlineMs, Date.now() + 10000), signal: recovery.startCancellation.signal});
     slot.targetRecoveryResource = {state: 'open', connectionId: recovery.reader.connectionId, hostVersion: recovery.reader.hostVersion}; save(slot);
     slot.current();
     if (!text(recovery.reader.connectionId) || recovery.reader.connectionId === recovery.original.record.state.connection.connectionId ||
@@ -614,6 +625,7 @@ function createNativeTaskExecution(options) {
       clearTimeout(slot.recovery.timer);
       if (slot.recovery.target) {
         slot.recovery.cancelled = true;
+        slot.recovery.startCancellation.abort(Object.assign(new Error('reconciliation-cancelled'), {code: 'reconciliation-cancelled'}));
         await closeTargetReader(slot);
         if (slot.running) { try { await slot.running; } catch (_) {} }
         if (slot.recovery.view.phase !== 'external-target-reconciled') slot.recovery.view = slot.recovery.original.record.state;

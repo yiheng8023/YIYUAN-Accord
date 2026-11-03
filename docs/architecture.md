@@ -115,7 +115,7 @@ superiority over specialized models.
 
 ### Post-3.3.11 shared safeguards review
 
-The [current preparation scope](operations/PLAN-v3.3.md#基于-3311-的下一阶段准备2026-11-03)
+The [current bounded development scope](operations/PLAN-v3.3.md#3312-最终候选与统一验证2026-11-04)
 reviews the existing responsibility chain, rather than adding a universal runtime.
 For each applicable guarantee, identify the actual provider, interface, authority,
 failure window, observable consequence and recovery/exit owner. Direct host reuse,
@@ -132,7 +132,12 @@ authority/writers and surviving recovery ownership before retry or compensation.
 Choose needed redundancy and failure containment by the relevant fault and
 consequence; do not require every component to own a circuit breaker. Reuse the
 following allocation and evidence rules before adding, replacing or retiring code.
-Preparation itself adds no new component, host or verified behavioral guarantee.
+The earlier preparation added no runtime guarantee; subsequent confirmed repairs retain separate source and behavioral evidence.
+The [bounded adoption review](../research/reviews/2026-10-30-host-evolution-and-assets.md#2026-11-04-普通任务能力采用与纠偏的有界复核)
+uses existing host history to distinguish source reading, actual method adoption,
+peer-feedback corrections and later verification. It introduces no new router,
+watchdog or per-task ceremony. A file read is not a typed Skill-call receipt;
+observed adoption is not a counterfactual measure of Accord's contribution.
 
 ### Responsibility before packaging
 
@@ -648,6 +653,20 @@ Exact record/lease settlement rotates the fence and explicitly retains the targe
 writer or returns the same public scope to the current root. It preserves the old
 failure and acknowledgment loss; it does not resume the target or replay an old turn.
 Unknown effects, pause, active actors and uncertain settlement remain held.
+During owned startup, the engine passes its AbortSignal through the default
+factory, version query and runner initialization; a recovery reader has its own
+signal. Before replacement startup, cancellation is checked while the old peer's
+closure receipt is still retained. Initialization cancellation closes the owned
+connection and invokes the existing bounded process owner; successful startup
+removes that listener and returns closure responsibility to its caller.
+Normal startup reads `nativeStartFailure` from the evidence located by
+`stateEvidence`. Recovery-reader startup
+uses `failure` and `targetRecoveryResource.startupFailure` / `.process` for the stop
+reason, prior error/request and process diagnostics. An absent prior error code
+remains null. A late callback remains inspectable
+through the existing save path, not an immediate durability or shutdown-survival
+guarantee. These facts do not clear a pending effect, settle a lease or authorize
+retry; descendants and local/external effects still need independent verification.
 This scoped route supplies no existing GUI control, parent checkpoint transfer,
 shutdown survival or automatic timing. Protocol tests do not qualify autonomous need
 detection or complete ordinary-use continuity.

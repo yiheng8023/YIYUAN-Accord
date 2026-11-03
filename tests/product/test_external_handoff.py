@@ -39,14 +39,15 @@ if(['late-factory','idle-deadline'].includes(mode)){
 }
 let factoryEntered,returnFactory;
 const entered=new Promise(r=>factoryEntered=r),factoryGate=new Promise(r=>returnFactory=r);
-let turn=0,closed=false,operation,factoryStarted=false,closeCount=0,beforeFactoryReturn=null;
+let turn=0,closed=false,operation,factoryStarted=false,factoryCount=0,closeCount=0,beforeFactoryReturn=null,cancellation=null;
 const native={connectionId:'fixture-connection',hostVersion:'fixture-no-model',
  async request(method,params,deadline,beforeSend){
   const requestRef={connectionId:this.connectionId,hostVersion:this.hostVersion,
    requestId:'native-'+(calls.length+1),method};
   if(beforeSend && mode!=='missing-request-ref')beforeSend(requestRef);
   calls.push({method,params});
-  if(method==='thread/start')return {thread:{id:'fresh-target',ephemeral:false,status:{type:'idle'}}};
+  if(method==='thread/start')return {thread:{id:'fresh-target',ephemeral:false,status:{type:'idle'}},
+   cwd:process.cwd(),approvalPolicy:'never',sandbox:{type:'readOnly'}};
   if(method==='thread/read')return {thread:{id:'fresh-target',ephemeral:false,status:{type:mode==='target-busy'?'active':'idle'}}};
   if(method==='turn/start'){
    turn++;if(mode==='ack-loss' && turn===2)throw Object.assign(Error('lost'),{code:'ACK_LOST'});
@@ -60,7 +61,10 @@ const native={connectionId:'fixture-connection',hostVersion:'fixture-no-model',
   await check();return {
   terminal:{method:'turn/completed',params:{threadId,turn:{id:turnId,status:mode==='interrupted-continuation'&&turn===2?'interrupted':'completed'}}},
   output:'fixed response '+turnId, events:[{method:'item/completed',threadId,turnId,itemType:'agentMessage'}]};},
-  async close(){closed=true;closeCount++;return {closed:true,exitCode:0,signal:null,forced:false};}
+  async close(){closeCount++;
+   if(mode==='cancel-write-transition'&&closeCount===1){
+    queueMicrotask(()=>{cancellation=operation.cancel('cancel during old peer closure');});await new Promise(setImmediate);}
+   closed=true;return {closed:true,primaryProcessClosed:true,exitObserved:true,closeObserved:true,exitCode:0,signal:null,forced:false};}
 };
 (async()=>{let error=null;
  try{
@@ -69,7 +73,7 @@ const native={connectionId:'fixture-connection',hostVersion:'fixture-no-model',
      const r=recorder.compareAndSet(...args);
      if(mode==='before-factory' && args[2].pendingEffect?.kind==='owned-native-start')clock=6000;
      return r;}},current:async()=>JSON.parse(JSON.stringify(basis)),
-    nativeFactory:async()=>{factoryStarted=true;factoryEntered();
+     nativeFactory:async()=>{factoryStarted=true;factoryCount++;factoryEntered();
      if(mode==='late-factory')return factoryGate;
      if(mode==='factory-clock-expired')clock=6000;
      return native;},
@@ -77,7 +81,8 @@ const native={connectionId:'fixture-connection',hostVersion:'fixture-no-model',
   const preparing=operation.prepare({transferId:'transfer-1',scopeRef:'review-scope',cwd:process.cwd(),
   model:'fixture',intake:'Inspect the candidate; do not review yet.',
   continuation:'Review first bounded section.',postRelease:'Finish remaining review.',
-   deadlineMs:Date.now()+(mode==='idle-deadline'?100:5000)});
+    deadlineMs:Date.now()+(mode==='idle-deadline'?100:5000),
+    ...(mode==='cancel-write-transition'?{sandbox:'workspace-write',writeScope:{authoritySourceRef:'fixture',outputs:[]}}:{})});
   if(mode==='late-factory'){
    await entered;
    const active=timers.filter(t=>!t.cleared);
@@ -104,9 +109,10 @@ const native={connectionId:'fixture-connection',hostVersion:'fixture-no-model',
   if(mode==='paused')basis.paused=true;
   await operation.release({evidenceRef:'root-reviewed-first-continuation'});
  }catch(e){error={code:e.code,message:e.message};}
- let retry=null;
+  if(cancellation)await cancellation;
+  let retry=null;
  if(mode==='ack-loss'){try{await operation.commit({evidenceRef:'no replay'});}catch(e){retry=e.code;}}
-  console.log(JSON.stringify({error,retry,calls,checks,closed,factoryStarted,closeCount,beforeFactoryReturn,state:operation?.inspect()??null}));
+   console.log(JSON.stringify({error,retry,calls,checks,closed,factoryStarted,factoryCount,closeCount,beforeFactoryReturn,state:operation?.inspect()??null}));
  recorder.close();
 })().catch(e=>{console.error(e);process.exitCode=1});
 '''
@@ -209,6 +215,61 @@ class ExternalHandoffTests(unittest.TestCase):
                 self.assertEqual(result["state"]["phase"], "cancelled-held")
                 self.assertEqual(result["state"]["writer"], "source")
                 self.assertTrue(result["closed"])
+
+    def test_cancel_during_old_peer_close_does_not_start_replacement(self):
+        result = self.run_scenario('cancel-write-transition')
+        self.assertEqual(result['error']['code'], 'CANCELLED')
+        self.assertEqual(result['factoryCount'], 1)
+        self.assertEqual(sum(row['method']=='turn/start' for row in result['calls']), 1)
+        state = result['state']
+        self.assertEqual(state['phase'], 'cancelled-held')
+        self.assertEqual(state['writer'], 'source')
+        self.assertTrue(state['nativeClosed']['closed'])
+        self.assertEqual(state['priorNative']['closure'], state['nativeClosed'])
+        self.assertIsNone(state['lateNativeClosed'])
+
+    def test_owned_start_preabort_and_racing_failure_keep_separate_evidence(self):
+        script = r'''
+const fs=require('node:fs'),vm=require('node:vm'),{createRequire}=require('node:module');
+const file=process.argv[1],base=createRequire(file),cp=require('node:child_process'),spawn=cp.spawn;
+let spawns=0,controller,closures=0;
+const box={module:{exports:{}},require(name){
+ if(name==='node:child_process')return {...cp,spawn(...args){spawns++;return spawn(...args);}};
+ if(name==='./codex-connection.cjs')return {createOwnedAppServerConnection:()=>({
+  close(){closures++;},transport:{request(){
+   const failure=Object.assign(Error('fixed protocol failure before abort'),{code:'FIXTURE_PROTOCOL_FAILURE',
+    rpcRequest:{connectionId:'fixture',hostVersion:'fixture',requestId:'r1',method:'initialize'}});
+   const rejected=Promise.reject(failure);controller.abort(Object.assign(Error('stop'),{code:'CANCELLED'}));return rejected;
+  }}})};
+ return base(name);},process,Buffer,TextDecoder,AbortSignal,AbortController,setTimeout,clearTimeout};
+vm.runInNewContext(fs.readFileSync(file,'utf8'),box,{filename:file});
+const start=box.module.exports.createOwnedNativeRunner;
+const options={executable:process.execPath,cwd:process.cwd(),hostVersion:'fixture',deadlineMs:Date.now()+5000,
+ args:['-e',"require('node:readline').createInterface({input:process.stdin})"],cleanupTimeoutMs:500};
+(async()=>{
+ const early=new AbortController();early.abort(Object.assign(Error('expired'),{code:'DEADLINE_EXCEEDED'}));
+ let preabort,invalid,failure;
+ try{await start({...options,signal:early.signal});}catch(e){preabort=e.code;}
+ try{await start({...options,signal:{aborted:false}});}catch(e){invalid=e.code;}
+ const before=spawns;controller=new AbortController();
+ try{await start({...options,signal:controller.signal});}catch(e){failure={code:e.code,prior:e.startupFailure,process:e.processState};}
+ console.log(JSON.stringify({preabort,invalid,before,spawns,closures,failure}));
+})().catch(e=>{console.error(e);process.exitCode=1});
+'''
+        result = owned_run(['node', '-e', script, str(MODULE)], cwd=ROOT,
+                           text=True, encoding='utf-8', timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        observed = json.loads(result.stdout)
+        self.assertEqual(observed['preabort'], 'DEADLINE_EXCEEDED')
+        self.assertEqual(observed['invalid'], 'INVALID_START_SIGNAL')
+        self.assertEqual(observed['before'], 0)
+        self.assertEqual(observed['spawns'], 1)
+        self.assertGreaterEqual(observed['closures'], 1)
+        self.assertEqual(observed['failure']['code'], 'CANCELLED')
+        self.assertEqual(observed['failure']['prior']['code'], 'FIXTURE_PROTOCOL_FAILURE')
+        self.assertEqual(observed['failure']['prior']['request']['method'], 'initialize')
+        self.assertTrue(observed['failure']['process']['closed'])
+        self.assertFalse(observed['failure']['process']['forced'])
 
     def test_late_input_after_release_holds_without_false_completion(self):
         result = self.run_scenario("late-input")
