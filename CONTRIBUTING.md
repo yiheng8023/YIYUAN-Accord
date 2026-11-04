@@ -15,17 +15,21 @@ current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks
 their old criteria and workflow prescriptions do not govern this successor.
 
 The next stage starts from the released and locally adopted **3.3.11** baseline.
-Its [current bounded work](docs/operations/PLAN-v3.3.md#3312-ci-失败修正与再验证2026-11-04)
+Its [current bounded work](docs/operations/PLAN-v3.3.md#3312-取消收尾修正与重新验证2026-11-04)
 extends the existing three priorities through design/host/consumer review and
 general ecosystem cooperation. Confirmed owned-start cancellation repairs use
 **3.3.12** as the final candidate after **3.3.12-dev.1** development; a candidate
 declaration is not a published package, roadmap promise or release date. The installed 3.3.11 and its evidence
-remain separate. The previous candidate passed its local suite and qualification,
-but CI exposed Python 3.10 cleanup compatibility and deadline-error propagation
-failures. Preserve those results and failures under their original identities;
-repair the affected paths, bind and verify the new candidate before a new push,
-and require all hosted checks before release. Host-authored browser context stays
-reviewable source data and never grants user authority.
+remain separate. CI exposed Python 3.10 cleanup compatibility and deadline-error
+propagation failures. A later complete local run found three cancellation exit
+observation failures; its formal consumption also rejected two supplemental
+witness schemas. Preserve each result, failure and clock under its original
+identity. The bounded Windows primary-handle fallback and corrected witness
+metadata require a new exact candidate, complete local validation and current
+qualification before a new push, then all required hosted checks before release.
+Host-authored browser context stays reviewable source data and never grants
+user authority. Current scope and evidence limits are in
+[plan r87](docs/operations/PLAN-v3.3.md#3312-取消收尾修正与重新验证2026-11-04).
 Use the existing result and acceptance views; do not add parallel governance.
 
 These project documents govern Accord development and evidence review. Ordinary

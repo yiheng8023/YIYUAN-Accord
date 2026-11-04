@@ -115,7 +115,7 @@ superiority over specialized models.
 
 ### Post-3.3.11 shared safeguards review
 
-The [current bounded development scope](operations/PLAN-v3.3.md#3312-最终候选与统一验证2026-11-04)
+The [current bounded development scope](operations/PLAN-v3.3.md#3312-取消收尾修正与重新验证2026-11-04)
 reviews the existing responsibility chain, rather than adding a universal runtime.
 For each applicable guarantee, identify the actual provider, interface, authority,
 failure window, observable consequence and recovery/exit owner. Direct host reuse,
@@ -133,6 +133,10 @@ Choose needed redundancy and failure containment by the relevant fault and
 consequence; do not require every component to own a circuit breaker. Reuse the
 following allocation and evidence rules before adding, replacing or retiring code.
 The earlier preparation added no runtime guarantee; subsequent confirmed repairs retain separate source and behavioral evidence.
+For Windows version probing, a failed owned-tree stop can fall back once to the
+retained primary-process handle within the existing recovery window. Tree-stop
+and primary-fallback diagnostics remain separate from actual exit/close events;
+unobserved descendants and recovery responsibility remain unresolved.
 The [bounded adoption review](../research/reviews/2026-10-30-host-evolution-and-assets.md#2026-11-04-普通任务能力采用与纠偏的有界复核)
 uses existing host history to distinguish source reading, actual method adoption,
 peer-feedback corrections and later verification. It introduces no new router,

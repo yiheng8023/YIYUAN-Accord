@@ -69,16 +69,36 @@ async function launcherVersion(launch, cwd, signal) {
   const ownedPid = child.pid ?? null;
   let output = '', stopped = false, tooLarge = false, spawnFailed = false, exited = false, exitCode = null;
   let terminationAttempt = null, closeObserved = false;
+  let terminationExitCode = null, terminationSignal = null, terminationError = null, terminationElapsedMs = null, primaryFallback = null;
   function stopOwnedVersion() {
-    if (exited || ownedPid === null || child.pid !== ownedPid || child.exitCode !== null || child.signalCode !== null || terminationAttempt) return;
+    if (exited || ownedPid === null || child.pid !== ownedPid || child.exitCode !== null || child.signalCode !== null || terminationAttempt) return 0;
     if (process.platform === 'win32') {
       terminationAttempt = 'owned-pid-tree';
-      spawnSync(path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'taskkill.exe'),
-        ['/PID', String(ownedPid), '/T', '/F'], {stdio: 'ignore', windowsHide: true, shell: false, timeout: 1000});
+      const started = performance.now();
+      try {
+        const result = spawnSync(path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'taskkill.exe'),
+          ['/PID', String(ownedPid), '/T', '/F'], {stdio: 'ignore', windowsHide: true, shell: false, timeout: 1000});
+        terminationExitCode = result.status ?? null; terminationSignal = result.signal ?? null;
+        terminationError = result.error == null ? null : result.error.code || 'TREE_STOP_FAILED';
+      } catch (error) { terminationError = error.code || 'TREE_STOP_FAILED'; }
+      terminationElapsedMs = performance.now() - started;
+      // The retained ChildProcess handle targets only this primary, never a later PID occupant.
+      if ((terminationExitCode !== 0 || terminationError || terminationSignal) && !exited &&
+          child.pid === ownedPid && child.exitCode === null && child.signalCode === null) {
+        const fallbackStarted = performance.now();
+        primaryFallback = {attempted: true, signalSent: false, error: null};
+        const onError = error => { primaryFallback.error = error.code || 'PRIMARY_STOP_FAILED'; };
+        child.once('error', onError);
+        try { primaryFallback.signalSent = child.kill('SIGKILL'); }
+        catch (error) { primaryFallback.error = error.code || 'PRIMARY_STOP_FAILED'; }
+        finally { child.removeListener('error', onError); }
+        return performance.now() - fallbackStarted;
+      }
     } else {
       terminationAttempt = 'owned-process-group';
       try { process.kill(-ownedPid, 'SIGKILL'); } catch (_) { /* No exit claim follows the signal alone. */ }
     }
+    return 0;
   }
   child.stdout.on('data', bytes => {
     if (tooLarge) return;
@@ -95,8 +115,8 @@ async function launcherVersion(launch, cwd, signal) {
   const stopping = new Promise(resolve => { resolveStop = resolve; });
   const stop = () => {
     if (stopped) return;
-    stopped = true; stopOwnedVersion();
-    recoveryTimer = setTimeout(() => resolveStop(null), 1000);
+    stopped = true; const fallbackElapsed = stopOwnedVersion();
+    recoveryTimer = setTimeout(() => resolveStop(null), Math.max(0, 1000 - fallbackElapsed));
   };
   timer = setTimeout(stop, 3000);
   signal?.addEventListener('abort', stop, {once: true});
@@ -108,7 +128,7 @@ async function launcherVersion(launch, cwd, signal) {
     const reason = signal?.aborted ? stopReason() : 'native-cli-version-unavailable';
     throw Object.assign(new Error(reason), {code: reason,
       processState: {pid: ownedPid, exitObserved: exited, closeObserved, exitCode, forced: stopped || tooLarge,
-        terminationAttempt, descendantVerification: 'not-independently-observed', recoveryRequired: true}});
+        terminationAttempt, terminationExitCode, terminationSignal, terminationError, terminationElapsedMs, primaryFallback, descendantVerification: 'not-independently-observed', recoveryRequired: true}});
   }
   return output.trim();
 }
@@ -775,7 +795,7 @@ function createNativeTaskExecution(options) {
             try { return await factory({...opts, source}); }
             catch (error) {
               if (error.processState) slot.startupFailureEvidence = putEvidence(slot, {reason: safeCode(error),
-                process: Object.fromEntries(['pid', 'exitObserved', 'closeObserved', 'exitCode', 'forced', 'terminationAttempt', 'terminationExitCode', 'terminationError', 'descendantVerification', 'recoveryRequired', 'closureScope'].filter(key => Object.hasOwn(error.processState, key)).map(key => [key, error.processState[key]]))});
+                process: Object.fromEntries(['pid', 'exitObserved', 'closeObserved', 'exitCode', 'forced', 'terminationAttempt', 'terminationExitCode', 'terminationSignal', 'terminationError', 'terminationElapsedMs', 'primaryFallback', 'descendantVerification', 'recoveryRequired', 'closureScope'].filter(key => Object.hasOwn(error.processState, key)).map(key => [key, error.processState[key]]))});
               throw error;
             }
           },
@@ -864,7 +884,7 @@ function createNativeTaskExecution(options) {
       ...(error.sourceObservation ? {sourceObservation: error.sourceObservation} : {}),
       ...(error.recorderCleanup?.state === 'close-unverified' ? {recorderCleanup:
         {state: 'close-unverified', code: safeCode({code: error.recorderCleanup.code})}} : {}),
-      ...(error.processState ? {process: Object.fromEntries(['pid', 'started', 'exitObserved', 'closeObserved', 'exitCode', 'signal', 'forced', 'terminationAttempt', 'queryPhase', 'terminationExitCode', 'terminationSignal', 'terminationError', 'terminationElapsedMs', 'descendantVerification'].filter(key => Object.hasOwn(error.processState, key)).map(key => [key, error.processState[key]]))} : {}),
+      ...(error.processState ? {process: Object.fromEntries(['pid', 'started', 'exitObserved', 'closeObserved', 'exitCode', 'signal', 'forced', 'terminationAttempt', 'queryPhase', 'terminationExitCode', 'terminationSignal', 'terminationError', 'terminationElapsedMs', 'primaryFallback', 'descendantVerification'].filter(key => Object.hasOwn(error.processState, key)).map(key => [key, error.processState[key]]))} : {}),
       claimLimit: 'No new authority or success is implied. Inspect the exact existing operation before retrying an uncertain effect.'}}; }
   }
   async function close() {

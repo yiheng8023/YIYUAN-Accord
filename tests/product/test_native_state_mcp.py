@@ -4819,6 +4819,49 @@ vm.runInNewContext(fs.readFileSync(file,'utf8')+'\nmodule.exports.versionProbe=l
                 self.assertTrue(row['process']['closeObserved'])
                 self.assertTrue(row['process']['forced'])
 
+    if os.name == 'nt':
+        def test_default_launcher_failed_tree_uses_primary_handle(self):
+            script = r'''
+    const a=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),cp=require('node:child_process');
+    const file=process.argv[1],req=require('node:module').createRequire(file);
+    let mode,child,kill,recoveryBudget,spawns=0,calls=0;const owned=[];
+    const wrapped={...cp,spawn(...args){child=cp.spawn(...args);spawns++;kill=child.kill.bind(child);owned.push(kill);
+     const own=child,stop=kill;own.kill=s=>{calls++;if(mode==='emit'){own.emit('error',Object.assign(Error(),{code:'EPERM'}));return false;}
+      if(mode==='throw-primary')throw Object.assign(Error(),{code:'EPERM'});if(mode==='slow'){Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,180);return false;}if(mode==='blocked')return false;return stop(s);};return own;},
+     spawnSync(_file,args,opts){a.equal(JSON.stringify(args),JSON.stringify(['/PID',String(child.pid),'/T','/F']));a.equal(opts.timeout,1000);
+      if(mode==='throw-tree')throw Object.assign(Error(),{code:'EACCES'});
+      if(mode==='success'){kill('SIGKILL');return {status:0,signal:null};}
+      return mode==='nonzero'?{status:1,signal:null}:{status:null,signal:'SIGTERM',error:{code:'ETIMEDOUT'}};}};
+    const box={module:{exports:{}},exports:{},require:n=>n==='node:child_process'?wrapped:req(n),process,Buffer,TextDecoder,AbortSignal,AbortController,setTimeout:(f,ms)=>{if(ms!==3000)recoveryBudget=ms;return setTimeout(f,ms);},clearTimeout};
+    vm.runInNewContext(fs.readFileSync(file,'utf8')+'\nmodule.exports.probe=launcherVersion;',box,{filename:file});
+    (async()=>{try{
+     for(mode of ['CANCELLED','DEADLINE_EXCEEDED','reconciliation-cancelled','nonzero','throw-tree','success','blocked','throw-primary','emit','slow','preabort','normal']){
+      const reason=mode.includes('CANCELLED')||mode.includes('EXCEEDED')||mode==='reconciliation-cancelled'?mode:'CANCELLED';
+      const c=new AbortController(),before=spawns;calls=0;
+      if(mode==='preabort')c.abort(Object.assign(Error(),{code:reason}));
+      const p=box.module.exports.probe({executable:process.execPath,prefix:['-e',mode==='normal'?"console.log('codex-cli fixture')":'setInterval(()=>{},1000)','--']},process.cwd(),c.signal).then(value=>({value}),e=>({code:e.code,process:e.processState}));
+      if(!['normal','preabort'].includes(mode))c.abort(Object.assign(Error(),{code:reason}));const r=await p;
+      if(mode==='normal'){a.equal(r.value,'codex-cli fixture');continue;}a.equal(r.code,reason);
+      if(mode==='preabort'){a.equal(spawns,before);continue;}
+      const s=r.process,blocked=['blocked','throw-primary','emit','slow'].includes(mode);
+      if(mode==='slow')a.ok(recoveryBudget>=0&&recoveryBudget<900);if(mode==='success')a.equal(recoveryBudget,1000);
+      a.equal(s.exitObserved,!blocked,'owned primary exit');a.equal(s.closeObserved,!blocked);
+      a.equal(s.descendantVerification,'not-independently-observed');a.equal(s.recoveryRequired,true);
+      a.equal(calls,mode==='success'?0:1);a.ok(s.terminationElapsedMs>=0);
+      a.equal(s.terminationExitCode,mode==='success'?0:mode==='nonzero'?1:null);
+      a.equal(s.terminationSignal,['success','nonzero','throw-tree'].includes(mode)?null:'SIGTERM');
+      a.equal(s.terminationError,mode==='throw-tree'?'EACCES':['success','nonzero'].includes(mode)?null:'ETIMEDOUT');
+      if(mode==='success')a.equal(s.primaryFallback,null);
+      else{a.equal(s.primaryFallback.attempted,true);a.equal(s.primaryFallback.signalSent,!blocked);a.equal(s.primaryFallback.error,['throw-primary','emit'].includes(mode)?'EPERM':null);}
+     }console.log('owned-version-fallback-controls-ok');
+    }finally{for(const stop of owned)stop('SIGKILL');}})().catch(e=>{console.error(e);process.exitCode=1});
+    '''
+            from tests.product.test_codex_capabilities import owned_run
+            result = owned_run([self.node, '-e', script, str(BRIDGE.with_name('native-task-execution.cjs'))],
+                               cwd=self.work, env=self.env, text=True, encoding='utf-8', timeout=15)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn('owned-version-fallback-controls-ok', result.stdout)
+
     def delayed_capability_fixture(self):
         fixture = self.work / 'selected-cli.cjs'
         fixture.write_text("""
