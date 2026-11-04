@@ -155,6 +155,20 @@ function typedAmbient(payload, turnId) {
       metadata.content_item_kinds.length !== 1) return false;
   if (metadata.content_item_kinds[0] === 'additional_content.codex_apps_open_page') return true;
   const content = payload?.content, attribution = metadata.content_item_metadata;
+  if (metadata.content_item_kinds[0] === 'environments.environment_context') {
+    if (Object.keys(payload).sort().join(',') !== 'content,id,internal_chat_message_metadata_passthrough,role,type' ||
+        payload.type !== 'message' || payload.role !== 'user' || !boundedText(payload.id, 200) ||
+        Object.keys(metadata).sort().join(',') !== 'content_item_kinds,content_item_metadata,create_time,turn_id' ||
+        !Number.isFinite(metadata.create_time) || !Array.isArray(attribution) || attribution.length !== 1 ||
+        Object.keys(attribution[0] || {}).join(',') !== 'provenance' ||
+        canonical(attribution[0].provenance) !== canonical({type: 'harness', hook: false}) ||
+        !Array.isArray(content) || content.length !== 1 || content[0]?.type !== 'input_text' ||
+        Object.keys(content[0]).sort().join(',') !== 'text,type' || !goalUtf8Text(content[0].text)) return false;
+    const value = content[0].text, opening = '<environment_context>', closing = '</environment_context>';
+    if (!value.startsWith(opening) || !value.endsWith(closing)) return false;
+    const body = value.slice(opening.length, -closing.length);
+    return Boolean(body.trim()) && !/<\/?environment_context\b/u.test(body);
+  }
   if (metadata.content_item_kinds[0] !== 'additional_content.browser_tabs' ||
       payload.type !== 'message' || payload.role !== 'user' || !Array.isArray(content) || content.length !== 1 ||
       content[0]?.type !== 'input_text' || typeof content[0].text !== 'string' ||

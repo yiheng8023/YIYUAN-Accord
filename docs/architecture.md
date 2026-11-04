@@ -115,7 +115,7 @@ superiority over specialized models.
 
 ### Post-3.3.11 shared safeguards review
 
-The [current bounded development scope](operations/PLAN-v3.3.md#3312-压缩重试兼容与候选重核2026-11-05)
+The [current bounded development scope](operations/PLAN-v3.3.md#3312-环境来源兼容与实际接续2026-11-05)
 reviews the existing responsibility chain, rather than adding a universal runtime.
 For each applicable guarantee, identify the actual provider, interface, authority,
 failure window, observable consequence and recovery/exit owner. Direct host reuse,
@@ -133,6 +133,11 @@ Choose needed redundancy and failure containment by the relevant fault and
 consequence; do not require every component to own a circuit breaker. Reuse the
 following allocation and evidence rules before adding, replacing or retiring code.
 The earlier preparation added no runtime guarantee; subsequent confirmed repairs retain separate source and behavioral evidence.
+The native input reader also recognizes the observed, strictly attributed
+single-part environment wrapper. It retains the source as pending review data,
+including instruction-like text; it neither imports authority nor clears pauses.
+An actual source-built helper reconciliation/bind is distinct from loaded MCP
+recovery and complete application acceptance.
 For Windows version probing, a failed owned-tree stop can fall back once to the
 retained primary-process handle within the existing recovery window. Tree-stop
 and primary-fallback diagnostics remain separate from actual exit/close events;

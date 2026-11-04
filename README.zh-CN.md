@@ -5,7 +5,7 @@
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/releases/latest"><img src="https://img.shields.io/github/v/release/yiheng8023/YIYUAN-Accord?color=blue&amp;label=Release" alt="最新发布版本"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/stargazers"><img src="https://img.shields.io/github/stars/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=ffaa00" alt="GitHub Stars"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/network/members"><img src="https://img.shields.io/github/forks/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=grey" alt="GitHub Forks"></a>
-  <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/badge/Python_CI-3.10%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10–3.14 CI 测试版本"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/badge/Python_CI-3.11%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.11–3.14 CI 测试版本"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/badge/CI-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="Linux、Windows、macOS CI 平台"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/yiheng8023/YIYUAN-Accord?color=green" alt="Apache-2.0 许可证"></a>
 </p>
@@ -31,7 +31,7 @@ Accord 的通用设计不绑定某一家模型厂商或宿主。**当前发行�
 
 ## 开始使用
 
-正式版本见 [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest)。请选择支持插件的 Codex CLI 或桌面入口，并确保该宿主能运行兼容 Node（当前受测推荐为 Node 24）。普通使用不需要 Python。
+正式版本见 [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest)。请选择支持插件的 Codex CLI 或桌面入口，并确保该宿主能运行兼容 Node（当前受测推荐为 Node 24）。普通使用不需要 Python。仓库开发与验证支持 Python 3.11–3.14，以 3.14 为验证基准；3.15 暂列观察，适时验证后再评估。参见[贡献指南](CONTRIBUTING.md)。
 
 1. **安装。** 从本项目来源安装 YIYUAN Accord；CLI 登记来源可使用：
 

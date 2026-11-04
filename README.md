@@ -5,7 +5,7 @@
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/releases/latest"><img src="https://img.shields.io/github/v/release/yiheng8023/YIYUAN-Accord?color=blue&amp;label=Release" alt="Latest release"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/stargazers"><img src="https://img.shields.io/github/stars/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=ffaa00" alt="GitHub stars"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/network/members"><img src="https://img.shields.io/github/forks/yiheng8023/YIYUAN-Accord?style=flat&amp;logo=github&amp;color=grey" alt="GitHub forks"></a>
-  <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/badge/Python_CI-3.10%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10 through 3.14 CI"></a>
+  <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/badge/Python_CI-3.11%E2%80%933.14-3776AB?logo=python&amp;logoColor=white" alt="Python 3.11 through 3.14 CI"></a>
   <a href="https://github.com/yiheng8023/YIYUAN-Accord/actions/workflows/validate.yml"><img src="https://img.shields.io/badge/CI-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey" alt="CI on Linux, Windows, and macOS"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/yiheng8023/YIYUAN-Accord?color=green" alt="Apache-2.0 license"></a>
 </p>
@@ -31,7 +31,7 @@ These goals need continuing validation. An initial two-pair pilot produced corre
 
 ## Get started
 
-Published versions are available in [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest). Use a Codex CLI or desktop entry that supports plugins, with a compatible Node executable available to that host; Node 24 is the current tested recommendation. Ordinary use does not require Python.
+Published versions are available in [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest). Use a Codex CLI or desktop entry that supports plugins, with a compatible Node executable available to that host; Node 24 is the current tested recommendation. Ordinary use does not require Python. Repository development and verification support Python 3.11–3.14, with 3.14 as the validation baseline; Python 3.15 remains under observation. See [Contributing](CONTRIBUTING.md).
 
 1. **Install.** Install YIYUAN Accord from this repository's marketplace source. To register that source from the CLI:
 

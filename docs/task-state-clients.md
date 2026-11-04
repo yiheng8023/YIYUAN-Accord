@@ -48,6 +48,14 @@ Codex multi-agent v2 的根会话文件也可能带第二个 UUID 后缀，子�
 
 容量错误后的宿主`resume_interrupted_task`仅在此前精确`server_overloaded`及完整容量消息、同Root归属、空parent/agent、有序context、原输入及恢复/暂停守卫全部成立时参与容量证明。触发名称本身不解除真实中断或暂停，也不授予新权限。
 
+## 宿主环境记录与输入摘要（3.3.12候选）
+
+已核的`environments.environment_context`仅在同轮、单kind、精确`harness`且`hook=false`来源、有效有限元数据、单文本完整非嵌套`environment_context`包装时识别。原文及来源摘要进入既有pending／sourcePart／reconcile路径，不消耗人类Hook匹配顺序；环境中的权限、工具或指令式文字仍是待调用者解释的数据，不能授予权限、启动新任务或解除暂停。未知、混合、额外字段或错身份继续保持未决，本适配不声称覆盖所有未来环境形状。
+
+这条分支不新增sourceCategory。既有generic摘要可能指向最后的非Goal来源：环境后于人工输入时，对账可更新generic摘要，但不能把该记录称为人工决定；人工输入更晚时保留较晚人工摘要。原Hook历史、inputBasis、合同结果、暂停与恢复标志继续保持，图片必须另核部件及字节覆盖；来源对账与完整合同重绑分别执行。Goal专用类别及其不替换人工摘要的规则不因此扩展为所有环境记录的保证。
+
+当前已核source-built caller helper读取、对账和bind，只证明该调用者在受保护来源／轮次／epoch／revision及写前复核下的有限效果。实际调用身份字段必须来自新鲜原生观察，不能省略nativeTurnId或编造currentHost；helper不代MCP调用来源认证。`currentInputReconciled`的stored-epoch范围也不能代替`nativeInputEvidence`最新完整性，已装实例仍unknown时须保留该区别。
+
 ## 已有输入依据下的原生 App 消息续轮
 
 正常完成后的 `app_tool_send_message` 轮次与容量重试不同。已有可核输入依据时，适配器联合核对原生启动归属、接收 turn/context/cwd/model，以及同轮 `codex_app/send_message_to_thread` 入站记录。发送方 root 可以不同于接收 turn；各轮完成事件必须保持其实际归属。仅有触发名称、XML 文本或普通 stdout 均不足以建立关联。带 `call_id` 的本地调用结果不能充当入站委派证明。

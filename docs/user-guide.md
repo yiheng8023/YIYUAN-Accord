@@ -121,7 +121,7 @@ python -B -m yiyuan_accord verify --root . --json
 python -B -m yiyuan_accord host-check --adapter codex --root . --json
 ```
 
-仅有 `python3` 时替换启动器。CI 覆盖 Linux、Windows、macOS 的 Python 3.10–3.14 和 Node 24；这不代表所有用户宿主已获行为验收。静态 `host-check` 不检查用户宿主运行时或实际参与。发布需符合[现行计划](operations/PLAN-v3.3.md)中的范围、证据、评审、精确提交及授权条件；冻结候选不是发布回执。历史 3.1 文件与 Golden Tasks 不定义当前后继版本的验收。贡献见[CONTRIBUTING](../CONTRIBUTING.md)，求助见[SUPPORT](../SUPPORT.md#支持说明)。
+仅有 `python3` 时替换启动器。仓库开发与验证最低需要 Python 3.11，以 3.14 为验证基准，3.15 暂列观察，实际配套和相关验证满足需要后再评估。CI 在 Linux 配置 3.11–3.14，在 Windows、macOS 配置 3.11／3.14，均使用 Node 24；实际终态见对应 CI，配置范围不代表所有用户宿主已获行为验收。静态 `host-check` 不检查用户宿主运行时或实际参与。发布需符合[现行计划](operations/PLAN-v3.3.md)中的范围、证据、评审、精确提交及授权条件；冻结候选不是发布回执。历史 3.1 文件与 Golden Tasks 不定义当前后继版本的验收。贡献见[CONTRIBUTING](../CONTRIBUTING.md)，求助见[SUPPORT](../SUPPORT.md#支持说明)。
 
 ## English user guide
 
@@ -242,4 +242,4 @@ python -B -m yiyuan_accord verify --root . --json
 python -B -m yiyuan_accord host-check --adapter codex --root . --json
 ```
 
-Use `python3` where appropriate. CI covers Python 3.10–3.14 on Linux, Windows and macOS, with Node 24; this does not qualify behavior in every user host. Static `host-check` does not test the actual host runtime or participation. Publication follows the scope, evidence, review, exact-commit and authority conditions in the [current plan](operations/PLAN-v3.3.md). A frozen candidate is not a release receipt. Historical 3.1 documents and Golden Tasks do not define successor acceptance. See [Contributing](../CONTRIBUTING.md) and [Support](../SUPPORT.md).
+Use `python3` where appropriate. Repository development and verification require Python 3.11 or later within the supported 3.11–3.14 range; 3.14 is the validation baseline and 3.15 remains under observation. CI configures 3.11–3.14 on Linux and 3.11/3.14 on Windows and macOS, with Node 24. Actual results belong to their CI runs; this does not qualify behavior in every user host. Static `host-check` does not test the actual host runtime or participation. Publication follows the scope, evidence, review, exact-commit and authority conditions in the [current plan](operations/PLAN-v3.3.md). A frozen candidate is not a release receipt. Historical 3.1 documents and Golden Tasks do not define successor acceptance. See [Contributing](../CONTRIBUTING.md) and [Support](../SUPPORT.md).

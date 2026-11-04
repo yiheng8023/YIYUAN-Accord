@@ -32,7 +32,7 @@ _BASELINE_FILES = (
     "evals/golden-tasks.json",
 )
 # Fixed-order before/after digests bind only this reviewed reference retirement.
-_RETIRED_PROMPT_DIGEST = "d2e8411f3f6a8ae9cf0f52109dc74e1c9835fd109a24e6470cbb7aab8f339e78"
+_RETIRED_PROMPT_DIGEST = "fc7d3e8432488c61657549062f26b59652ccc6c4b2c80e01b08f5187cff5884c"
 _DUTY_FIELDS = set(
     "id name goldenTasks activationWhen requiredOutcome normalEntry "
     "failureOracle dependsOn assessment evidence".split()

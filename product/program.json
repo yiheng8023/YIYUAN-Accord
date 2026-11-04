@@ -1179,7 +1179,7 @@
       ],
       ".github/workflows/validate.yml": [
         "permissions: contents: read",
-        "python-version: \"3.10\"",
+        "python-version: \"3.11\"",
         "python-version: \"3.14\"",
         "actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
         "node-version: \"24\"",
