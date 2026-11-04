@@ -31,8 +31,11 @@ _BASELINE_FILES = (
     "product/acceptance.json", "product/reshaping-guidance.json",
     "evals/golden-tasks.json",
 )
-# Fixed-order before/after digests bind only this reviewed reference retirement.
-_RETIRED_PROMPT_DIGEST = "fc7d3e8432488c61657549062f26b59652ccc6c4b2c80e01b08f5187cff5884c"
+# Each supported generation binds one reviewed fixed-order reference retirement.
+_RETIRED_PROMPT_DIGESTS = {
+    "yiyuan-accord-development/v4": "d2e8411f3f6a8ae9cf0f52109dc74e1c9835fd109a24e6470cbb7aab8f339e78",
+    V5_SCHEMA: "fc7d3e8432488c61657549062f26b59652ccc6c4b2c80e01b08f5187cff5884c",
+}
 _DUTY_FIELDS = set(
     "id name goldenTasks activationWhen requiredOutcome normalEntry "
     "failureOracle dependsOn assessment evidence".split()
@@ -780,7 +783,7 @@ def _inspect_development(root):
                     errors.append("predecessor snapshot is not closed")
             if locator == "evals/golden-tasks.json":
                 golden_ids = [task["id"] for task in _strict_json_object(previous.decode("utf-8"))["tasks"]]
-        if retirement.hexdigest() != _RETIRED_PROMPT_DIGEST:
+        if retirement.hexdigest() != _RETIRED_PROMPT_DIGESTS.get(contract.get("schema")):
             errors.append("historical reference retirement changed")
         errors.extend(development_contract_errors(contract, golden_ids))
         if not errors and "historicalDevelopmentObservations" in contract:

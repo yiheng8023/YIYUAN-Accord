@@ -75,6 +75,32 @@ class OwnedGitFixtureRoutingTests(unittest.TestCase):
 
 
 class DevelopmentEvidenceTests(unittest.TestCase):
+    def test_reference_retirement_is_bound_to_each_supported_contract_schema(self):
+        from yiyuan_accord import development
+        original = development._bounded_regular_bytes
+        current_root = development_fixtures.ROOT
+        old_program = (self.root / "product/program.json").read_bytes()
+        current_program = (current_root / "product/program.json").read_bytes()
+        self.assertNotEqual(old_program, current_program)
+        for root, replacement in ((self.root, current_program), (current_root, old_program)):
+            with self.subTest(schema=json.loads((root / DEVELOPMENT_FILE).read_bytes())["schema"]):
+                self.assertTrue(development.verify_development(root)["valid"])
+
+                def crossed(path):
+                    return (replacement, None) if path == root / "product/program.json" else original(path)
+
+                with patch.object(development, "_bounded_regular_bytes", side_effect=crossed):
+                    report = development.verify_development(root)
+                self.assertIn("historical reference retirement changed", report["errors"])
+        unsupported = dict(self.contract, schema="yiyuan-accord-development/unknown")
+
+        def unknown(path):
+            return (json.dumps(unsupported).encode(), None) if path == self.root / DEVELOPMENT_FILE else original(path)
+
+        with patch.object(development, "_bounded_regular_bytes", side_effect=unknown):
+            report = development.verify_development(self.root)
+        self.assertIn("unsupported development schema", report["errors"])
+
     def test_successor_cannot_promote_retained_cases_even_with_an_observer(self):
         from pathlib import Path
         from yiyuan_accord.admission import assess_development_evidence
