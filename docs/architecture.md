@@ -62,6 +62,15 @@ authority. Share experience only after checking source host/entry, applicable
 versions, prerequisites and invalidators; a host-specific lesson cannot silently
 become a global rule or permission.
 
+The existing [verification Skill](../plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md)
+distinguishes an event and its retellings from later use and verified results.
+For material repeats under the Agent's control, it compares a decision-relevant
+expected observation with the actual result and carries excluded explanations
+through sufficient existing task records when continuation needs them. This is
+Agent guidance; host controls and attributable-effect checks retain their own
+responsibilities. The [bounded wording review](../research/reviews/2026-10-30-host-evolution-and-assets.md#2026-11-05-经验复用与无进展纠偏的指导细化)
+does not establish automatic monitoring or a measured reliability or cost gain.
+
 Namespaces prevent accidental state mixing; they are not OS access control.
 Choose separate processes for incompatible dependencies or lifecycle/failure
 containment, and stronger OS accounts, sandboxes or containers when the effect

@@ -44,8 +44,13 @@ hypotheses. Generalize only when a traceable cause, distinguishing counterexampl
 and expected reuse justify upkeep. Put stable invariants, conditional guidance
 and deterministic checks in sufficient existing layers; one-off findings may
 remain task evidence. Respect authority for cross-task persistence and verify
-changed behavior. Revise or retire invalidated lessons; claim useful reuse only
-after observed later adoption.
+changed behavior. Revise or retire invalidated lessons and affected active
+guidance within authority.
+Keep a source event distinct from its retellings and later uses. Retelling one
+event does not establish another execution or a later use. For later use, check
+the current conditions, observe the actual action and verify its consequential
+result before claiming successful reuse; attempted or unverified use remains
+limited evidence.
 
 After failure, inspect actual effects and partial artifacts before selecting a
 supported recovery. Distinguish missing evidence from an earlier prerequisite that
@@ -59,11 +64,18 @@ this does not require a new log or a checkpoint for every call.
 Assess progress by necessary outcomes, reduced uncertainty or established
 prerequisites. Error counts, elapsed time or file changes alone do not decide it.
 Preserve informative negative checks, necessary verification, and transient retries
-or waits with a plausible changing condition. Before repeating an approach, identify
-the changed premise or discriminating check. Outside justified retries or changing
+or waits with a plausible changing condition. Before a material repeat under the
+Agent's control, identify the changed premise, discriminating check or observable
+waiting condition and what result would change the next decision. Compare the
+actual observation with that expectation before choosing another attempt. A
+different tool, wording or explanation alone is not progress.
+Outside justified retries or changing
 wait conditions, end repeated attempts that establish none of those forms of
-progress and choose an evidenced change to the premise, work unit or capability. Preserve the goal, authority, quality and
-independent safe work; inspect unknown effects before replay or compensation.
+progress and choose an evidenced change to the premise, work unit or capability.
+Preserve the goal, authority, quality and independent safe work; inspect unknown
+effects before replay or compensation. When continuation could otherwise repeat
+an excluded explanation, retain its evidence and retry conditions in sufficient
+existing task records.
 This Skill guides the Agent; it does not itself observe every tool or cancel an
 execution.
 When the requested artifact reports completion, encountered issues or final state,

@@ -24,6 +24,7 @@ Accord's general design is independent of any model vendor or host. **The curren
 
 - **Many tools, but you have to coordinate them.** Let the assistant discover and coordinate host, Accord and third-party capabilities, including necessary settings and dependencies. Ask you only for a decision, authorization or action that actually needs you.
 - **Requirements change, but earlier work does not follow.** Incorporate additions and changes, correct affected work, and preserve requirements and results that remain valid.
+- **Repeated failures, with the same approach again.** Help the assistant check whether prior experience applies, distinguish useful investigation from repetition without progress, and verify the result after changing approach.
 - **An interruption means explaining everything again.** Preserve goals, progress and unfinished work for recovery through supported host workflows.
 - **Much activity, but no clear completion.** Check the agreed result, actual effects and cleanup, and explain what remains.
 
