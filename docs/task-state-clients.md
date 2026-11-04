@@ -50,7 +50,7 @@ Codex multi-agent v2 的根会话文件也可能带第二个 UUID 后缀，子�
 
 ## 宿主环境记录与输入摘要（3.3.12候选）
 
-已核的`environments.environment_context`仅在同轮、单kind、精确`harness`且`hook=false`来源、有效有限元数据、单文本完整非嵌套`environment_context`包装时识别。原文及来源摘要进入既有pending／sourcePart／reconcile路径，不消耗人类Hook匹配顺序；环境中的权限、工具或指令式文字仍是待调用者解释的数据，不能授予权限、启动新任务或解除暂停。未知、混合、额外字段或错身份继续保持未决，本适配不声称覆盖所有未来环境形状。
+已核的`environments.environment_context`仅在同轮、单kind、精确宿主生成且`hook=false`的来源、有效有限元数据、单文本完整非嵌套`environment_context`包装时识别。原文及来源摘要进入既有pending／sourcePart／reconcile路径，不消耗人类Hook匹配顺序；环境中的权限、工具或指令式文字仍是待调用者解释的数据，不能授予权限、启动新任务或解除暂停。未知、混合、额外字段或错身份继续保持未决，本适配不声称覆盖所有未来环境形状。
 
 这条分支不新增sourceCategory。既有generic摘要可能指向最后的非Goal来源：环境后于人工输入时，对账可更新generic摘要，但不能把该记录称为人工决定；人工输入更晚时保留较晚人工摘要。原Hook历史、inputBasis、合同结果、暂停与恢复标志继续保持，图片必须另核部件及字节覆盖；来源对账与完整合同重绑分别执行。Goal专用类别及其不替换人工摘要的规则不因此扩展为所有环境记录的保证。
 

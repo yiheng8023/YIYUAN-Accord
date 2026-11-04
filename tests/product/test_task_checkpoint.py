@@ -1,5 +1,7 @@
 """Executable local task behavior; native Hook loading and model behavior are separate."""
 import json
+import base64
+import sys
 import hashlib
 import os
 from pathlib import Path
@@ -14,6 +16,12 @@ from datetime import datetime, timezone
 
 
 RUNTIME = Path(__file__).resolve().parents[2] / "runtime/task-checkpoint.cjs"
+
+
+_MCP_FIXTURE_ROOT = Path(__file__).resolve().parents[2]
+if str(_MCP_FIXTURE_ROOT) not in sys.path:
+    sys.path.insert(0, str(_MCP_FIXTURE_ROOT))
+from tests.product.test_native_state_mcp import NativeStateMcpFixture
 
 
 class TaskCheckpointTests(unittest.TestCase):
@@ -4232,6 +4240,89 @@ fs.readFileSync = function(file, ...args) {
                 self.assertEqual(status['inputSource'], 'quarantined-native-input')
                 self.event('UserPromptSubmit', prompt='new current input', recovery_epoch=status['epoch'])
                 self.assertFalse(self.status()['needsNativeReplay'])
+
+
+class EnvironmentContextNativeTests(NativeStateMcpFixture, unittest.TestCase):
+    def test_native_environment_context_pending_png_and_paused_contract(self):
+        for position in (2, 3):
+            with self.subTest(position=position):
+                if self.state.exists(): shutil.rmtree(self.state)
+                self.params['_meta']['x-codex-turn-metadata']['turn_id'] = 'current-turn'
+                self.native_context(); initial = self.native_input_preview()
+                self.assertFalse(self.manage(action='bind', epoch=initial['epoch'], expectedRevision=0,
+                    result='Original bound result', inputs=[], outputs=[{'path': 'report.txt'}],
+                    nextAction='Wait', canContinue=False)['isError'])
+                self.assertFalse(self.manage(action='pause', epoch=initial['epoch'], expectedRevision=1,
+                    reason='Explicit user pause')['isError'])
+                state = next(self.state.glob('*.state.json')); bound = state.read_bytes()
+                self.params['_meta']['x-codex-turn-metadata']['turn_id'] = 'environment-turn'
+                png = self.png_fixture(); transcript = self.replace_anchor_png(png)
+                rows = [json.loads(x) for x in transcript.read_text(encoding='utf-8').splitlines()]
+                env = self.environment_context_payload(self.params['_meta']['x-codex-turn-metadata']['turn_id'])
+                rows.insert(position, {'type': 'response_item', 'payload': env})
+                text = ''.join(json.dumps(x)+'\n' for x in rows)
+                transcript.write_text(text, encoding='utf-8')
+                receipt = next(self.state.glob('*.input.json')); old = json.loads(receipt.read_bytes())
+                cur = self.native_input_preview(); ev = cur['nativeInputEvidence']
+                self.assertEqual(ev['state'], 'observed', ev)
+                self.assertFalse(ev['latestNativeInputsComplete'])
+                self.assertEqual([x['itemId'] for x in ev['pendingInputs']], ['host-environment'])
+                self.assertEqual(len(ev['enrichments']), 1)
+                self.assertEqual(ev['controls'], [])
+                record = ev['pendingInputs'][0]
+                self.assertNotIn('sourceCategory', record)
+                before = self.files()
+                for item, index in ((record, 0), (ev['enrichments'][0], 2)):
+                    read = self.read_input(expectedReceiptEpoch=cur['epoch'], sourcePart={
+                        'evidenceCursor': ev['cursor'], 'recordOffset': item['recordOffset'],
+                        'recordSha256': item['recordSha256'], 'partIndex': index})
+                    self.assertFalse(read['isError'], read)
+                    self.assertEqual(read['value']['input']['text'] if index == 0 else
+                        base64.b64decode(read['imageContent']['data']), env['content'][0]['text'] if index == 0 else png)
+                self.assertEqual(self.files(), before)
+                reply = self.manage(action='reconcile-input', epoch=cur['epoch'], expectedRevision=2,
+                    evidenceCursor=ev['cursor'])
+                self.assertFalse(reply['isError'], reply)
+                saved = json.loads(receipt.read_bytes())
+                self.assertEqual(saved['nativeInputs'][:-1], old['nativeInputs'])
+                self.assertEqual(saved['nativeInputs'][-1]['prompt'], env['content'][0]['text'])
+                self.assertEqual(saved['nativeInputBasis'], old['nativeInputBasis'])
+                self.assertEqual(saved['promptSha256'], old['promptSha256'] if position == 2 else record['promptSha256'])
+                self.assertEqual(state.read_bytes(), bound)
+                complete = self.native_input_preview()
+                self.assertEqual(complete['mode'], 'paused')
+                self.assertTrue(complete['nativeInputEvidence']['latestNativeInputsComplete'])
+                self.assertNotIn('data:image/', json.dumps(saved))
+
+    def test_native_environment_context_rejects_unproved_source_shapes(self):
+        body = '<environment_context>x</environment_context>'
+        cases = (('m.turn_id', 'foreign'), ('m.content_item_kinds', ['unknown.environment']),
+            ('m.content_item_kinds', ['environments.environment_context', 'user.text']),
+            ('a.provenance', {'type': 'user'}), ('o.hook', True),
+            ('o.extra', True),
+            ('m.content_item_metadata', []), ('m.extra', True), ('m.create_time', 'unproved'),
+            ('p.id', 'x'*201), ('p.extra', True), ('c.extra', True),
+            ('p.content', [{'type': 'input_text', 'text': body}]*2),
+            ('c.text', 'extra'+body), ('c.text', body+'extra'),
+            ('c.text', '<environment_context>'+body+'</environment_context>'), ('c.text', '<environment_context> </environment_context>'),
+            ('c.text', '<environment_context>\ud800</environment_context>'))
+        for field, value in cases:
+            with self.subTest(field=field, value=value):
+                if self.state.exists(): shutil.rmtree(self.state)
+                self.native_context()
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(x) for x in transcript.read_text(encoding='utf-8').splitlines()]
+                payload = self.environment_context_payload(meta['turn_id'])
+                m = payload['internal_chat_message_metadata_passthrough']
+                owner, key = field.split('.')
+                {'p': payload, 'm': m, 'a': m['content_item_metadata'][0],
+                 'o': m['content_item_metadata'][0]['provenance'], 'c': payload['content'][0]}[owner][key] = value
+                rows.insert(2, {'type': 'response_item', 'payload': payload})
+                transcript.write_text(''.join(json.dumps(x)+'\n' for x in rows), encoding='utf-8')
+                before = self.files(); ev = self.native_input_preview()['nativeInputEvidence']
+                self.assertEqual((ev['state'], ev['reason']), ('unknown', 'native-input-origin-unavailable'))
+                self.assertEqual(self.files(), before)
 
 
 if __name__ == "__main__":

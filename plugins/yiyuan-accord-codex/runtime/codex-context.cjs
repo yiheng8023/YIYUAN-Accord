@@ -161,7 +161,7 @@ function typedAmbient(payload, turnId) {
         Object.keys(metadata).sort().join(',') !== 'content_item_kinds,content_item_metadata,create_time,turn_id' ||
         !Number.isFinite(metadata.create_time) || !Array.isArray(attribution) || attribution.length !== 1 ||
         Object.keys(attribution[0] || {}).join(',') !== 'provenance' ||
-        canonical(attribution[0].provenance) !== canonical({type: 'harness', hook: false}) ||
+        canonical(attribution[0]?.provenance) !== canonical({type: 'harness', hook: false}) ||
         !Array.isArray(content) || content.length !== 1 || content[0]?.type !== 'input_text' ||
         Object.keys(content[0]).sort().join(',') !== 'text,type' || !goalUtf8Text(content[0].text)) return false;
     const value = content[0].text, opening = '<environment_context>', closing = '</environment_context>';
