@@ -660,8 +660,8 @@ closure receipt is still retained. Initialization cancellation closes the owned
 connection and invokes the existing bounded process owner; successful startup
 removes that listener and returns closure responsibility to its caller.
 Normal startup reads `nativeStartFailure` from the evidence located by
-`stateEvidence`. Connection deadline errors retain `DEADLINE_EXCEEDED` both when
-already expired and when their timer fires; a request timeout can precede the
+`stateEvidence`. The connection's bounded waiter retains `DEADLINE_EXCEEDED` on
+its already-expired and timer paths; a request timeout can precede the
 outer abort while owned startup awaits closure. Keep the original request and
 closure facts separate from that error classification. Recovery-reader startup
 uses `failure` and `targetRecoveryResource.startupFailure` / `.process` for the stop
