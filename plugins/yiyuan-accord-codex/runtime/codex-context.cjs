@@ -575,7 +575,8 @@ function capacityRetry(rows, binding, host, promptHash, sourceRef, captured = [p
       const at = Date.parse(line.timestamp);
       if (pending || completedAt !== null || payload.turn_id !== turn || payload.root_turn_id !== turn ||
           payload.error?.codex_error_info !== 'server_overloaded' ||
-          payload.error.message !== 'Selected model is at capacity. Please try a different model.' ||
+          !['Selected model is at capacity. Please try a different model.',
+            'Error running remote compact task: Selected model is at capacity. Please try a different model.'].includes(payload.error.message) ||
           !integer(at) || at < boundaryAt) return empty('capacity-retry-failure-unproven');
       completedAt = at;
     }

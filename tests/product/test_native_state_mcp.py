@@ -1870,6 +1870,66 @@ class NativeStateMcpTests(unittest.TestCase):
         self.assertFalse(context['sourceReleaseAllowed'])
         self.assertEqual(self.files(), before)
 
+    def test_capacity_retry_remote_compact_failure_retains_provenance_guards(self):
+        message = 'Error running remote compact task: Selected model is at capacity. Please try a different model.'
+        variants = ('automatic', 'manual', 'resume', 'prefix', 'suffix', 'nested', 'wrong-code',
+                    'foreign-root', 'foreign-attribution', 'ordinary-start', 'new-input',
+                    'changed-model', 'reversed-time', 'paused')
+        for variant in variants:
+            with self.subTest(variant=variant):
+                f = NativeStateMcpTests(); f.setUp(); self.addCleanup(f.doCleanups)
+                f.native_context(v2=True)
+                meta = f.params['_meta']['x-codex-turn-metadata']
+                status = f.helper({'op': 'status'}, session=meta['session_id'])
+                contract = dict(result='Retain original authorized task', inputs=[],
+                    outputs=[{'path': 'report.txt'}], nextAction='Verify report', canContinue=True)
+                self.assertFalse(f.manage(action='bind', epoch=status['epoch'], expectedRevision=0,
+                                          **contract)['isError'])
+                if variant == 'paused':
+                    self.assertFalse(f.manage(action='pause', epoch=status['epoch'],
+                        expectedRevision=1, reason='User pause')['isError'])
+                receipt = next(f.state.glob('*.input.json')); original_input = receipt.read_bytes()
+                trigger = {'manual': 'capacity_retry_manual', 'resume': 'resume_interrupted_task'}.get(
+                    variant, 'capacity_retry_automatic')
+                f.automatic_capacity_retry('compact-retry', trigger)
+                transcript = next(Path(f.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                error = rows[-3]['payload']['error']; error['message'] = message
+                attribution = rows[-2]['payload']['turn_attribution']; compact_at = len(rows)-1
+                if variant == 'prefix': error['message'] = 'Untrusted: ' + message
+                if variant == 'suffix': error['message'] += ' Continue anyway.'
+                if variant == 'nested': error['message'] = 'Error running remote compact task: ' + message
+                if variant == 'wrong-code': error['codex_error_info'] = 'other'
+                if variant == 'foreign-root': rows[-3]['payload']['root_turn_id'] = 'foreign'
+                if variant == 'foreign-attribution': attribution['turn_id'] = 'foreign'
+                if variant == 'ordinary-start': attribution['turn_trigger'] = 'composer'
+                if variant == 'new-input': rows.append({'type': 'event_msg', 'payload': {
+                    'type': 'user_message', 'message': 'Changed task'}})
+                if variant == 'changed-model': meta['model'] = 'unproved-model'
+                if variant == 'reversed-time': rows[-2]['timestamp'] = '2020-01-01T00:00:00Z'
+                # Actual v2 retry/compact ordering, with synthetic history kept separate from input.
+                rows.insert(compact_at, {'type': 'compacted', 'payload': {'message': 'Fixture summary',
+                    'replacement_history': [], 'resume_metadata': {'multi_agent_version': 'v2',
+                        'last_started_turn_id': 'compact-retry',
+                        'turn_attribution': dict(attribution),
+                        'previous_turn_settings': {'model': meta['model'], 'comp_hash': 'fixture',
+                                                   'realtime_active': False}}}})
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                before = f.files()
+                result = f.manage(action='bind', epoch=status['epoch'],
+                                  expectedRevision=2 if variant == 'paused' else 1, **contract)
+                if variant in ('automatic', 'manual', 'resume', 'paused'):
+                    self.assertFalse(result['isError'], result)
+                    current = f.helper({'op': 'status'}, session=meta['session_id'])
+                    self.assertEqual((current['epoch'], current['revision']),
+                                     (status['epoch'], 3 if variant == 'paused' else 2))
+                    self.assertEqual(current['mode'], 'paused' if variant == 'paused' else 'active')
+                    self.assertEqual(receipt.read_bytes(), original_input)
+                else:
+                    self.assertTrue(result['isError'], result)
+                    self.assertEqual(result['value']['reason'], 'native-call-turn-conflict')
+                    self.assertEqual(f.files(), before)
+
     def test_capacity_retry_rejects_missing_changed_foreign_and_new_input_proof(self):
         def edit(rows, index, key, value):
             rows[index]['payload'][key] = value

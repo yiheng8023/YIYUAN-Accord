@@ -115,7 +115,7 @@ superiority over specialized models.
 
 ### Post-3.3.11 shared safeguards review
 
-The [current bounded development scope](operations/PLAN-v3.3.md#3312-取消收尾修正与重新验证2026-11-04)
+The [current bounded development scope](operations/PLAN-v3.3.md#3312-压缩重试兼容与候选重核2026-11-05)
 reviews the existing responsibility chain, rather than adding a universal runtime.
 For each applicable guarantee, identify the actual provider, interface, authority,
 failure window, observable consequence and recovery/exit owner. Direct host reuse,

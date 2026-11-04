@@ -15,7 +15,7 @@ current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks
 their old criteria and workflow prescriptions do not govern this successor.
 
 The next stage starts from the released and locally adopted **3.3.11** baseline.
-Its [current bounded work](docs/operations/PLAN-v3.3.md#3312-取消收尾修正与重新验证2026-11-04)
+Its [current bounded work](docs/operations/PLAN-v3.3.md#3312-压缩重试兼容与候选重核2026-11-05)
 extends the existing three priorities through design/host/consumer review and
 general ecosystem cooperation. Confirmed owned-start cancellation repairs use
 **3.3.12** as the final candidate after **3.3.12-dev.1** development; a candidate
@@ -27,9 +27,14 @@ witness schemas. Preserve each result, failure and clock under its original
 identity. The bounded Windows primary-handle fallback and corrected witness
 metadata require a new exact candidate, complete local validation and current
 qualification before a new push, then all required hosted checks before release.
+The 2a5 candidate later passed its complete 1454-test local suite. A subsequent
+remote-compaction capacity-error message exposed another turn-association format
+gap; the exact second message spelling is now recognized with all original
+source, retry-identity, input and pause guards retained. New exact qualification
+remains required; the installed 3.3.11 has not been hotpatched.
 Host-authored browser context stays reviewable source data and never grants
 user authority. Current scope and evidence limits are in
-[plan r87](docs/operations/PLAN-v3.3.md#3312-取消收尾修正与重新验证2026-11-04).
+[plan r88](docs/operations/PLAN-v3.3.md#3312-压缩重试兼容与候选重核2026-11-05).
 Use the existing result and acceptance views; do not add parallel governance.
 
 These project documents govern Accord development and evidence review. Ordinary
