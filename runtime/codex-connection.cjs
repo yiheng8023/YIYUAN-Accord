@@ -46,13 +46,13 @@ function createOwnedAppServerConnection(options) {
   function bounded(deadline, label, install) {
     const remaining = deadline - performance.now();
     if (!Number.isFinite(deadline) || remaining > 0x7fffffff) return Promise.reject(new Error(`${label} deadline is invalid`));
-    if (remaining <= 0) return Promise.reject(new Error(`${label} deadline exceeded`));
+    if (remaining <= 0) return Promise.reject(Object.assign(new Error(`${label} deadline exceeded`), {code: 'DEADLINE_EXCEEDED'}));
     if (aborters.size >= MAX_PENDING * 2) return Promise.reject(new Error('connection waiter limit exceeded'));
     return new Promise((resolve, reject) => {
       let done = false, cleanup = () => {};
       const finish = (error, value) => { if (done) return; done = true; stopTimer(timer); aborters.delete(abort); try { cleanup(); } catch (_) {} if (error) reject(error); else resolve(value); };
       const abort = (error) => finish(error || new Error('owned connection is unavailable'));
-      const timer = setTimeout(() => finish(new Error(`${label} deadline exceeded`)), remaining);
+      const timer = setTimeout(() => finish(Object.assign(new Error(`${label} deadline exceeded`), {code: 'DEADLINE_EXCEEDED'})), remaining);
       timers.add(timer); aborters.add(abort);
       try {
         cleanup = install(finish) || (() => {});

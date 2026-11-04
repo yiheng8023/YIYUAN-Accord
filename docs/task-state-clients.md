@@ -8,6 +8,8 @@
 
 状态及输入读取本身不写检查点或业务文件、不派发新任务；共享 MCP 处理器仍会核对本进程已有所属执行，来源失效时可保护性停止它并保留操作证据。因此两个读取工具不声明为全环境只读；直接 helper 的 `status` 仍是只读查询。
 
+宿主浏览器环境封装只在当前turn、单一原生类型、明确的宿主来源及严格内容形状均匹配时识别；仍保留原始待审记录，读取不自动完成对账或授予调用权限。用户仿写、混合来源或附加指令不能沿该兼容路径通过。连接自身生成的期限错误保留`DEADLINE_EXCEEDED`；外层取消原因、先前启动错误与进程关闭后态仍分别核对，不能据错误码推断所有效果已停止。
+
 ## 调用前：取得可用的最新观察
 
 先通过宿主已获授权的原生 MCP 路径调用 `inspect_task_state`，参数为 `{cwd: absoluteWorkspace}`。确认返回 `checkpoint.state === "observed"`，读取 `checkpoint.snapshot` 的当前 `epoch`、`revision`、完整合同、pause 与恢复标志。每次管理调用都取同一次最新观察的 epoch/revision；更新后的 revision 再 inspect 取得。旧 `checkpoint.epoch` 是上次绑定依据，不可替代 snapshot.epoch。缺失或不可用观察保持未决。[读取实现](../runtime/native-state-mcp.cjs)、[snapshot](../runtime/task-checkpoint.cjs)。

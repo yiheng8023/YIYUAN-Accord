@@ -151,8 +151,22 @@ function wrappedImage(content) {
 // typing the same wrapper text does not qualify for this narrow capture gap.
 function typedAmbient(payload, turnId) {
   const metadata = payload?.internal_chat_message_metadata_passthrough;
-  return metadata?.turn_id === turnId && Array.isArray(metadata.content_item_kinds) &&
-    metadata.content_item_kinds.length === 1 && metadata.content_item_kinds[0] === 'additional_content.codex_apps_open_page';
+  if (metadata?.turn_id !== turnId || !Array.isArray(metadata.content_item_kinds) ||
+      metadata.content_item_kinds.length !== 1) return false;
+  if (metadata.content_item_kinds[0] === 'additional_content.codex_apps_open_page') return true;
+  const content = payload?.content, attribution = metadata.content_item_metadata;
+  if (metadata.content_item_kinds[0] !== 'additional_content.browser_tabs' ||
+      payload.type !== 'message' || payload.role !== 'user' || !Array.isArray(content) || content.length !== 1 ||
+      content[0]?.type !== 'input_text' || typeof content[0].text !== 'string' ||
+      Object.keys(content[0]).sort().join(',') !== 'text,type' ||
+      !Array.isArray(attribution) || attribution.length !== 1 ||
+      canonical(attribution[0]?.provenance) !== canonical({type: 'harness', hook: false})) return false;
+  const opening = '<external_browser_tabs>\n<in-app-browser-context source="ambient-ui-state">\n';
+  const closing = '\n</in-app-browser-context>\n</external_browser_tabs>';
+  const value = content[0].text;
+  if (!value.startsWith(opening) || !value.endsWith(closing)) return false;
+  const body = value.slice(opening.length, -closing.length);
+  return Boolean(body.trim()) && !/<\/?(?:external_browser_tabs|in-app-browser-context)\b/u.test(body);
 }
 
 // Runtime context is a source classification, never human authorization or a

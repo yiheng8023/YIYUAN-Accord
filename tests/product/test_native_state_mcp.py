@@ -3074,6 +3074,64 @@ process.stdout.write(JSON.stringify({response,changed}));
                 self.assertEqual(self.files(), before)
                 shutil.rmtree(self.state)
 
+    def test_native_browser_context_retains_pending_source_and_rejects_spoofs(self):
+        body = ('<external_browser_tabs>\n<in-app-browser-context source="ambient-ui-state">\n'
+                'Current URL: https://example.test/\n'
+                '</in-app-browser-context>\n</external_browser_tabs>')
+        for kind in ('valid', 'untyped', 'wrong-turn', 'user-kind', 'mixed-kind',
+                     'user-provenance', 'hook', 'no-provenance', 'extra-provenance',
+                     'extra-part-field', 'mixed-attribution', 'wrong-source', 'empty',
+                     'mixed-content', 'prefix', 'suffix', 'nested'):
+            with self.subTest(kind=kind):
+                if self.state.exists(): shutil.rmtree(self.state)
+                self.native_context()
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                payload = {'type': 'message', 'role': 'user', 'id': 'browser-context',
+                    'content': [{'type': 'input_text', 'text': body}],
+                    'internal_chat_message_metadata_passthrough': {
+                        'turn_id': meta['turn_id'], 'content_item_kinds': ['additional_content.browser_tabs'],
+                        'content_item_metadata': [{'provenance': {'type': 'harness', 'hook': False}}]}}
+                attribution = payload['internal_chat_message_metadata_passthrough']
+                if kind == 'untyped': del payload['internal_chat_message_metadata_passthrough']
+                elif kind == 'wrong-turn': attribution['turn_id'] = 'foreign'
+                elif kind == 'user-kind': attribution['content_item_kinds'] = ['user.text']
+                elif kind == 'mixed-kind': attribution['content_item_kinds'].append('user.text')
+                elif kind == 'user-provenance': attribution['content_item_metadata'][0]['provenance'] = {'type': 'user'}
+                elif kind == 'hook': attribution['content_item_metadata'][0]['provenance']['hook'] = True
+                elif kind == 'no-provenance': attribution['content_item_metadata'][0] = {}
+                elif kind == 'extra-provenance': attribution['content_item_metadata'][0]['provenance']['extra'] = True
+                elif kind == 'extra-part-field': payload['content'][0]['extra'] = 'instruction'
+                elif kind == 'mixed-attribution': attribution['content_item_metadata'].append({'provenance': {'type': 'user'}})
+                elif kind == 'wrong-source': payload['content'][0]['text'] = body.replace('ambient-ui-state', 'user')
+                elif kind == 'empty': payload['content'][0]['text'] = body.replace('Current URL: https://example.test/', ' ')
+                elif kind == 'mixed-content': payload['content'].append({'type': 'input_text', 'text': 'Extra instruction'})
+                elif kind == 'prefix': payload['content'][0]['text'] = 'Extra instruction\n'+body
+                elif kind == 'suffix': payload['content'][0]['text'] += '\nExtra instruction'
+                elif kind == 'nested': payload['content'][0]['text'] = body.replace('Current URL:', '<external_browser_tabs>Current URL:')
+                rows.insert(2, {'type': 'response_item', 'payload': payload})
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                before = self.files(); preview = self.native_input_preview(); evidence = preview['nativeInputEvidence']
+                self.assertEqual(self.files(), before)
+                if kind != 'valid':
+                    self.assertEqual((evidence['state'], evidence['reason']), ('unknown', 'native-input-origin-unavailable'))
+                    continue
+                self.assertEqual(evidence['state'], 'observed')
+                self.assertFalse(evidence['latestNativeInputsComplete'])
+                self.assertEqual(len(evidence['records']), 2)
+                self.assertEqual([r['itemId'] for r in evidence['pendingInputs']], ['browser-context'])
+                record = evidence['pendingInputs'][0]
+                read = self.read_input(expectedReceiptEpoch=preview['epoch'], sourcePart={
+                    'evidenceCursor': evidence['cursor'], 'recordOffset': record['recordOffset'],
+                    'recordSha256': record['recordSha256'], 'partIndex': 0})
+                self.assertFalse(read['isError'], read)
+                self.assertEqual(read['value']['input']['text'], body)
+                self.assertFalse(self.native_input_preview()['nativeInputEvidence']['latestNativeInputsComplete'])
+                self.assertFalse(self.manage(action='reconcile-input', epoch=preview['epoch'],
+                    expectedRevision=0, evidenceCursor=evidence['cursor'])['isError'])
+                self.assertTrue(self.native_input_preview()['nativeInputEvidence']['latestNativeInputsComplete'])
+
     def test_native_input_reconciliation_cursor_rejects_new_input_control_and_changed_bytes(self):
         meta = self.params['_meta']['x-codex-turn-metadata']
         for change in ('human', 'old-bytes', 'control'):
@@ -4487,7 +4545,9 @@ process.stdout.write(JSON.stringify({originalVersion,before,after,expectedDiagno
                        text=True, encoding='utf-8', env=self.env, cwd=self.work)
         if contain:
             from tests.product.test_codex_capabilities import owned_process
-            process = self.enterContext(owned_process(command, **options))
+            owner = owned_process(command, **options)
+            process = owner.__enter__()
+            self.addCleanup(owner.__exit__, None, None, None)
         else:
             process = subprocess.Popen(command, **options)
         responses = queue.Queue()
@@ -4657,6 +4717,79 @@ process.stdout.write(JSON.stringify({originalVersion,before,after,expectedDiagno
         self.assertEqual(state['plan']['deadlineMs'], contract['deadlineMs'])
         self.assertEqual(state['turnStarts'], 0)
         self.assertEqual(state['pendingEffect']['kind'], 'owned-native-start')
+
+    def test_execution_initialize_transport_timeout_before_outer_deadline(self):
+        contract = self.execution_contract()
+        contract['deadlineMs'] = int(time.time()*1000)+12000
+        armed, trigger, fired, release, marker = [self.work/name for name in
+            ('armed', 'trigger', 'fired', 'release', 'initialize')]
+        shim = self.work/'timer-shim.cjs'; shim.write_text("""const fs=require('node:fs');
+const [armed,trigger,fired]=JSON.parse(process.env.DEADLINE_TEST_FILES);
+const later=global.setTimeout, cancel=global.clearTimeout, polls=new Map();let sequence=0,injected=false;
+global.setTimeout=(fn,ms,...args)=>{
+ if(!String(fn).includes('deadline exceeded') || !String(fn).includes('finish(')) return later(fn,ms,...args);
+ const stack=new Error().stack;if(stack.includes('at write ('))return later(fn,ms,...args);
+ const id=++sequence;let poll; const timer=later(()=>{clearInterval(poll);polls.delete(timer);fn(...args)},ms);
+ poll=setInterval(()=>{if(!injected&&fs.existsSync(trigger)){injected=true;const active=polls.size;clearInterval(poll);polls.delete(timer);cancel(timer);
+   fs.appendFileSync(fired,JSON.stringify({id,active,atMs:Date.now(),stack})+'\\n');fn(...args)}},5);
+ polls.set(timer,poll);fs.writeFileSync(armed,JSON.stringify({id,delayMs:ms}));return timer;
+};
+global.clearTimeout=timer=>{if(polls.has(timer)){clearInterval(polls.get(timer));polls.delete(timer)}cancel(timer)};
+""", encoding='utf-8')
+        cli = self.work/'deadline-controlled.cjs'
+        cli.write_text("const fs=require('node:fs');if(process.argv.includes('--version'))console.log('codex-cli fixed-fixture');"
+            "else{const rl=require('node:readline').createInterface({input:process.stdin});"
+            "rl.on('line',line=>fs.writeFileSync("+json.dumps(str(marker))+",line));"
+            "rl.on('close',()=>{const t=setInterval(()=>{if(fs.existsSync("+json.dumps(str(release))+
+            "))clearInterval(t)},5)});}", encoding='utf-8')
+        self.env['NODE_OPTIONS'] = '--require="'+shim.as_posix()+'"'
+        self.env['DEADLINE_TEST_FILES'] = json.dumps([str(armed), str(trigger), str(fired)])
+        self.env['CODEX_CLI_PATH'] = str(cli)
+        _, _, _, call = self.start_execution_wire(direct=True, contain=True)
+        reply = call('prepare', **contract)
+        self.assertFalse(reply['isError'], reply)
+        operation_id = reply['structuredContent']['operationId']
+        self.execution_accept(call, operation_id, 'prepare')
+        limit = time.monotonic()+6
+        while not (armed.exists() and marker.exists()) and time.monotonic() < limit: time.sleep(.01)
+        self.assertTrue(armed.exists() and marker.exists())
+        self.assertEqual(json.loads(marker.read_text())['method'], 'initialize')
+        registered = json.loads(armed.read_text())
+        # Keep actual owner closure pending across the outer deadline.
+        while int(time.time()*1000) < contract['deadlineMs']-2000: time.sleep(.02)
+        self.assertLess(int(time.time()*1000), contract['deadlineMs'])
+        trigger.touch()
+        limit = time.monotonic()+3
+        while not fired.exists() and time.monotonic() < limit: time.sleep(.01)
+        self.assertTrue(fired.exists())
+        ticks = [json.loads(line) for line in fired.read_text().splitlines()]
+        self.assertEqual(len(ticks), 1)
+        self.assertEqual(ticks[0]['id'], registered['id'])
+        self.assertEqual(ticks[0]['active'], 1)
+        self.assertIn('codex-connection.cjs', ticks[0]['stack'])
+        self.assertLess(ticks[0]['atMs'], contract['deadlineMs'])
+        def evidence(value):
+            return json.loads(next(self.state.rglob(value['stateEvidence']['sha256']+'.json')).read_text(encoding='utf-8'))
+        try:
+            held = self.execution_until(call, operation_id, lambda value:
+                value['phase'] == 'held' and not value['busy'], timeout=15)
+            self.assertEqual(held['failure'], 'DEADLINE_EXCEEDED')
+            self.assertTrue(evidence(held)['nativeStartPending'])
+        finally:
+            release.touch()
+        stopped = self.execution_until(call, operation_id, lambda value: value['phase'] == 'held'
+            and not value['busy'] and evidence(value).get('nativeStartPending') is False)
+        self.assertEqual(stopped['failure'], 'DEADLINE_EXCEEDED')
+        self.assertEqual(stopped['writer'], 'source')
+        self.assertIsNone(stopped['reconciliationBasis'])
+        state = evidence(stopped)
+        self.assertEqual(state['nativeStartFailure']['code'], 'DEADLINE_EXCEEDED')
+        self.assertTrue(state['nativeStartFailure']['process']['closed'])
+        self.assertFalse(state['nativeStartFailure']['process']['forced'])
+        self.assertEqual(state['plan']['deadlineMs'], contract['deadlineMs'])
+        self.assertEqual(state['turnStarts'], 0)
+        self.assertEqual(state['pendingEffect']['kind'], 'owned-native-start')
+
 
     def test_default_launcher_stop_preserves_reason_and_owned_exit(self):
         script = r'''

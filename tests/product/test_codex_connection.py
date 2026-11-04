@@ -27,7 +27,7 @@ const emit=(v, split=false)=>{const b=Buffer.from(JSON.stringify(v)+'\n'); if(sp
   const q=await c.receiveRequest(x=>x.id===9,until()); let got=[]; const ch=c.proposalChannel(q,()=>({scopeRef:'s',authorityRef:'a',stateRef:'z',writerThreadId:'t1'})); const clone=JSON.parse(JSON.stringify(q)); const stop=ch.subscribe(x=>got.push(x.method),clone);
   await ch.respond({jsonrpc:'2.0',id:9,result:{ok:true}},until()); emit({method:'item/completed',params:{threadId:'t1',turnId:'u1',item:{id:'x'}}}); emit({method:'turn/completed',params:{threadId:'t1',turn:{id:'u1',status:'completed'}}});
   const term=await c.transport.waitTerminal('t1','u1',until()); stop(); let duplicate=null; try{await ch.respond({id:9,result:{}},until())}catch(e){duplicate=e.message}; r={got,term,writes,duplicate,context};
- } else if(process.argv[3]==='timeout'){try{await c.receiveRequest(()=>true,until(5))}catch(e){r.timeout=e.message}; out.end(); await new Promise(x=>setTimeout(x,5)); r.broken=c.context('x','y',5).reason;
+ } else if(process.argv[3]==='timeout'){try{await c.receiveRequest(()=>true,until(5))}catch(e){r.timeout=e.message;r.timeoutCode=e.code}; out.end(); await new Promise(x=>setTimeout(x,5)); r.broken=c.context('x','y',5).reason;
  } else if(process.argv[3]==='bad'){out.write(Buffer.from('{bad}\n')); await new Promise(x=>setTimeout(x,5)); r={reason:c.context('x','y',5).reason};
  } else if(process.argv[3]==='context-missing'){emit({method:'turn/started',params:{threadId:'t1',turn:{id:'u1'}}}); emit({method:'thread/tokenUsage/updated',params:{threadId:'t1',turnId:'u1',tokenUsage:{modelContextWindow:1000,last:{totalTokens:2}}}}); r={reason:c.context('t1','u1',1000).reason};
  } else if(process.argv[3]==='close-pending'){const rpc=c.transport.request('thread/read',{},until(60000)).catch(e=>e.message);const terminal=c.transport.waitTerminal('t','u',until(60000)).catch(e=>e.message);c.close();r={rpc:await rpc,terminal:await terminal};
@@ -52,11 +52,11 @@ const emit=(v, split=false)=>{const b=Buffer.from(JSON.stringify(v)+'\n'); if(sp
  } else if(process.argv[3]==='stream-replacement'){let foreignWrites=0;options.stdin=new Writable({write(c,e,done){foreignWrites++;done();}});await c.transport.notify('initialized',{},until());r={original:writes.length,foreign:foreignWrites};
  } else if(process.argv[3]==='listener-error'){emit({id:9,method:'item/tool/call',params:{threadId:'t',turnId:'u',callId:'x'}});const q=await c.receiveRequest(()=>true,until());c.proposalChannel(q,()=>({})).subscribe(()=>{throw new Error('caller listener failed')},q);emit({method:'notice',params:{threadId:'t'}});r={reason:c.context('t','u',100).reason,attached:out.listenerCount('data')};
  } else if(process.argv[3]==='rpc-error-reference'){
-  const result=p=>p.catch(e=>({message:e.message,reference:e.rpcRequest,frozen:Object.isFrozen(e.rpcRequest)}));
+  const result=p=>p.catch(e=>({message:e.message,code:e.code??null,reference:e.rpcRequest,frozen:Object.isFrozen(e.rpcRequest)}));
   const first=result(c.transport.request('turn/start',{threadId:'t'},until()));
   const second=result(c.transport.request('thread/read',{threadId:'t'},until()));
   out.end();r.errors=await Promise.all([first,second]);r.requests=writes;
- } else if(process.argv[3]==='expired'){for(const method of ['request','notify']){try{await c.transport[method]('thread/start',{},performance.now()-1)}catch(e){r[method]=e.message}}r.writes=writes.length;
+ } else if(process.argv[3]==='expired'){for(const method of ['request','notify']){try{await c.transport[method]('thread/start',{},performance.now()-1)}catch(e){r[method]=e.message;r[method+'Code']=e.code}}r.writes=writes.length;
  } else if(process.argv[3]==='bad-cleanup'){out.write(Buffer.from('{}\n'));r={data:out.listenerCount('data'),end:out.listenerCount('end'),stdinError:input.listenerCount('error')};
  } else if(process.argv[3]==='close'){c.close(); r={destroyed:input.destroyed||out.destroyed,writeEnded:input.writableEnded};}
  }catch(e){r.error=e.message} console.log(JSON.stringify(r));})()
@@ -300,6 +300,7 @@ class CodexConnectionTests(unittest.TestCase):
     def test_timeout_and_eof_become_unknown_without_writes(self):
         result = self.run_case('timeout')
         self.assertIn('deadline exceeded', result['timeout'])
+        self.assertEqual(result.get('timeoutCode'), 'DEADLINE_EXCEEDED')
         self.assertEqual(result['broken'], 'native-connection-unavailable')
 
     def test_invalid_frame_breaks_connection(self):
@@ -334,6 +335,8 @@ class CodexConnectionTests(unittest.TestCase):
         self.assertEqual(result['writes'], 0)
         self.assertIn('deadline exceeded', result['request'])
         self.assertIn('deadline exceeded', result['notify'])
+        self.assertEqual(result.get('requestCode'), 'DEADLINE_EXCEEDED')
+        self.assertEqual(result.get('notifyCode'), 'DEADLINE_EXCEEDED')
 
     def test_each_failed_rpc_keeps_its_own_frozen_request_reference(self):
         result=self.run_case('rpc-error-reference')
@@ -343,6 +346,7 @@ class CodexConnectionTests(unittest.TestCase):
             self.assertEqual(error['reference'],{'connectionId':'c1','hostVersion':'v1',
                 'requestId':request['id'],'method':request['method']})
             self.assertTrue(error['frozen'])
+            self.assertNotEqual(error['code'], 'DEADLINE_EXCEEDED')
         self.assertNotEqual(result['errors'][0]['reference']['requestId'],
                             result['errors'][1]['reference']['requestId'])
 
