@@ -15,7 +15,8 @@ _ALLOWED = {
 _SCOPE = 'v33-dynamic-model-routing'
 
 
-def evaluate(root, witness, contract, cases, records, admitted, subject, budget, now, candidate_time):
+def evaluate(root, witness, contract, cases, records, admitted, subject, budget, now, candidate_time,
+             *, package_snapshots=None):
     if isinstance(witness, dict) and witness.get('schema') == 'yiyuan-accord-obligation-execution-evidence/v2':
         return _correction(root, witness, contract, subject, budget, now, candidate_time)
     goal = isinstance(witness, dict) and witness.get('schema') == 'yiyuan-accord-obligation-execution-evidence/v3'
@@ -111,9 +112,10 @@ def evaluate(root, witness, contract, cases, records, admitted, subject, budget,
     projection = next(p for p in contract['delivery']['hostProjections'] if p['id'] == case['host'])
     old_package = PurePosixPath(old_projection['manifest']).parents[1].as_posix()
     package = PurePosixPath(projection['manifest']).parents[1].as_posix()
-    snapshot = a._revision_package_snapshot(root, revision, old_package, budget)
+    snapshot = a._assessment_package_snapshot(root, revision, old_package, budget, package_snapshots)
     require(execution['packageSha256'] == snapshot['sha256'] == old_projection['packageSha256'])
-    current_snapshot = a._revision_package_snapshot(root, subject['revision'], package, budget)
+    current_snapshot = a._assessment_package_snapshot(
+        root, subject['revision'], package, budget, package_snapshots)
     current = witness['current']
     require(isinstance(current, dict) and set(current) == {'subject', 'packageSha256', 'context'}
             and current['subject'] == subject

@@ -767,6 +767,18 @@ def _revision_package_snapshot(root, revision, package, budget):
     return {"sha256": digest.hexdigest(), "files": files, "modes": modes}
 
 
+def _assessment_package_snapshot(root, revision, package, budget, snapshots):
+    """Reuse successful immutable reads only in the caller's one assessment."""
+    if snapshots is None or not isinstance(revision, str) or not re.fullmatch(r"[0-9a-f]{40}", revision):
+        return _revision_package_snapshot(root, revision, package, budget)
+    key = (Path(root).resolve(), revision, package)
+    if key not in snapshots:
+        # Failed/partial reads retain their charges and never enter the cache.
+        snapshot = _revision_package_snapshot(root, revision, package, budget)
+        snapshots[key] = copy.deepcopy(snapshot)
+    return copy.deepcopy(snapshots[key])
+
+
 def _normalized_cache_version(value):
     if not isinstance(value, str):
         raise ValueError("package version is unavailable")
@@ -1587,16 +1599,10 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     current_host = hosts[case["host"]]
                     original_package = Path(original_host["manifest"]).parents[1].as_posix()
                     current_package = Path(current_host["manifest"]).parents[1].as_posix()
-                    original_hash_key = (revision, original_package)
-                    current_hash_key = (subject["revision"], current_package)
-                    if original_hash_key not in package_snapshots:
-                        package_snapshots[original_hash_key] = _revision_package_snapshot(
-                            root, revision, original_package, package_budget)
-                    if current_hash_key not in package_snapshots:
-                        package_snapshots[current_hash_key] = _revision_package_snapshot(
-                            root, subject["revision"], current_package, package_budget)
-                    original_snapshot = package_snapshots[original_hash_key]
-                    current_snapshot = package_snapshots[current_hash_key]
+                    original_snapshot = _assessment_package_snapshot(
+                        root, revision, original_package, package_budget, package_snapshots)
+                    current_snapshot = _assessment_package_snapshot(
+                        root, subject["revision"], current_package, package_budget, package_snapshots)
                     checks = {
                         "record-definition": record["definitionSha256"] == _definition(prior[revision], original),
                         "reuse-definition": _reuse_definition(prior[revision], original) == _reuse_definition(contract, case),
@@ -1698,7 +1704,8 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                     try:
                         _json(witness)
                         result = evaluate_obligation_evidence(root, witness, contract, cases, records_by_case,
-                            admitted, subject, package_budget, now, candidate_time)
+                            admitted, subject, package_budget, now, candidate_time,
+                            package_snapshots=package_snapshots)
                         supplemental[witness_id] = result
                     except (OSError, subprocess.SubprocessError, KeyError, TypeError, ValueError, StopIteration) as error:
                         supplemental_rejections[witness_id] = "supplementary-execution-unsupported"

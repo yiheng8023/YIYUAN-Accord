@@ -28,6 +28,28 @@ class ObligationEvidenceTests(unittest.TestCase):
             return fixtures.CurrentDevelopmentEvidenceTests.assess(self, contract, observer)
     IDS = ["a02-delegated-managed-selection", "a02-explicit-policy-native-adoption"]
 
+    def test_cases_and_supplements_share_successful_immutable_package_reads(self):
+        for make in (self.fixture, self.goal_fixture):
+            with self.subTest(schema=make.__name__), self.history():
+                contract, case, observer, _ = make()
+                reads, budgets = {}, []
+                original = a._revision_package_snapshot
+
+                def counted(root, revision, package, budget):
+                    result = original(root, revision, package, budget)
+                    budgets.append(budget)  # Keep identities distinct for this observation.
+                    key = (id(budget), root.resolve(), revision, package)
+                    reads[key] = reads.get(key, 0) + 1
+                    return result
+
+                with patch.object(a, '_revision_package_snapshot', side_effect=counted):
+                    report = self.assess(contract, observer)
+                self.assertIn(case['id'], report['acceptedCases'], report['errors'])
+                self.assertIn('supplement-1', report.get('obligationEvidence', {}),
+                              report.get('obligationEvidenceRejections'))
+                self.assertTrue(reads)
+                self.assertEqual(max(reads.values()), 1, 'One assessment reread a successful package')
+
     def flat_fixture(self):
         contract = copy.deepcopy(self.contract)
         case = next(c for c in contract['acceptance']['admission']['cases']

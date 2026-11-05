@@ -3910,6 +3910,51 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
             with self.subTest(budget=budget), self.assertRaises(ValueError):
                 admission._revision_package_snapshot(self.root, revision, package, budget)
 
+    def test_assessment_package_cache_is_isolated_and_cannot_mutate_validated_bytes(self):
+        from yiyuan_accord import admission
+        revision = self.git("rev-parse", "HEAD")
+        package = Path(self.contract["delivery"]["hostProjections"][0]["manifest"]).parents[1].as_posix()
+        budget = {"calls": 0, "files": 0, "bytes": 0}
+        cache = {}
+        first = admission._assessment_package_snapshot(self.root, revision, package, budget, cache)
+        charged = copy.deepcopy(budget)
+        first["files"].clear()
+        first["modes"].clear()
+        second = admission._assessment_package_snapshot(self.root, revision, package, budget, cache)
+        self.assertTrue(second["files"])
+        self.assertTrue(second["modes"])
+        self.assertEqual(budget, charged)
+        with patch.object(admission, "_revision_package_snapshot", return_value=second) as reader:
+            for root, rev, path, scope in (
+                (self.root / "other", revision, package, cache),
+                (self.root, "a" * 40, package, cache),
+                (self.root, revision, package + "-other", cache),
+                (self.root, revision, package, {}),
+                (self.root, "HEAD", package, cache),
+                (self.root, "HEAD", package, cache),
+            ):
+                admission._assessment_package_snapshot(root, rev, path, budget, scope)
+            self.assertEqual(reader.call_count, 6)
+        budget["calls"] = admission._PACKAGE_ASSESSMENT_CALLS
+        self.assertEqual(admission._assessment_package_snapshot(
+            self.root, revision, package, budget, cache), second)
+        with self.assertRaises(ValueError):
+            admission._assessment_package_snapshot(self.root, revision, package + "-new", budget, cache)
+
+    def test_assessment_package_cache_never_caches_failed_reads_or_refunds_their_budget(self):
+        from yiyuan_accord import admission
+        revision = self.git("rev-parse", "HEAD")
+        package = Path(self.contract["delivery"]["hostProjections"][0]["manifest"]).parents[1].as_posix()
+        budget = {"calls": 0, "files": 0, "bytes": 0}
+        cache = {}
+        with patch.object(admission, "_batch_blobs", side_effect=ValueError("fixture batch failure")):
+            for _ in range(2):
+                with self.assertRaises(ValueError):
+                    admission._assessment_package_snapshot(self.root, revision, package, budget, cache)
+        self.assertEqual(cache, {})
+        self.assertEqual(budget["calls"], 4)
+        self.assertEqual(budget["bytes"], 2 * admission._PACKAGE_TREE_BYTES)
+
     def test_failed_package_reads_consume_the_shared_assessment_budget(self):
         from yiyuan_accord import admission
         revision = self.git("rev-parse", "HEAD")
