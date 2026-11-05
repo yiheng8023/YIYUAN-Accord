@@ -48,7 +48,7 @@ Codex multi-agent v2 的根会话文件也可能带第二个 UUID 后缀，子�
 
 容量错误后的宿主`resume_interrupted_task`仅在此前精确`server_overloaded`及完整容量消息、同Root归属、空parent/agent、有序context、原输入及恢复/暂停守卫全部成立时参与容量证明。触发名称本身不解除真实中断或暂停，也不授予新权限。
 
-## 宿主环境记录与输入摘要（3.3.12候选）
+## 宿主环境记录与输入摘要（3.3.12）
 
 已核的`environments.environment_context`仅在同轮、单kind、精确宿主生成且`hook=false`的来源、有效有限元数据、单文本完整非嵌套`environment_context`包装时识别。原文及来源摘要进入既有pending／sourcePart／reconcile路径，不消耗人类Hook匹配顺序；环境中的权限、工具或指令式文字仍是待调用者解释的数据，不能授予权限、启动新任务或解除暂停。未知、混合、额外字段或错身份继续保持未决，本适配不声称覆盖所有未来环境形状。
 

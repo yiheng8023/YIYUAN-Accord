@@ -37,7 +37,7 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
 2. 在需要登记来源时，可采用[官方 marketplace 命令](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)：
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 3a39ed9815a36885262fd9bdeb802da9fb2aea13
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref e6b3594c5f56091ecf9a03d58a845c1a206c53cf
    ```
 
    这条命令只登记来源。CLI 在 `/plugins` 中切到该来源，查看并安装 YIYUAN Accord；桌面使用实际可用的插件目录与来源入口。本项目来源不等于已被官方公共目录收录。
@@ -71,6 +71,8 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 
 ### 排查、更新与退出
 
+固定提交来源变更时，若宿主提示来源已登记且与新来源不同，先由执行者保留未完任务、原来源和恢复副本，再按当前宿主支持的流程只替换具名来源。本轮Codex 0.166.0-alpha.6实测使用`codex plugin marketplace remove yiyuan-accord --json`后重新登记本版本固定提交并安装，已核默认来源与启用状态。安装结束时现有聊天实测MCP仍3.3.11，新版实际加载待正常重启后另核；其余来源和配置保持。此操作观察保其版本范围，不将反复`add`当作更新。
+
 | 现象 | 由执行者优先核对 |
 |---|---|
 | 看不到 Accord 标记或 MCP 调用 | 核对指导是否进入、适用 Skill 或原生操作是否实际发生、必要结果是否成立。Skill 读取可能显示为普通命令；MCP 按需调用，次数不代表参与程度。展示或读取本身也不证明全部职责落实或收益。 |
@@ -94,6 +96,8 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 | 3.3.8 | `213dbea2` 的Skill目录、环境组合与完整快照变化检测修正；[CI #1046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41081944936)全11项成功，正式标签为[v3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8)。发布、本机更新和实际加载见[接续](operations/CONTINUATION.md#目标与当前写者)。 |
 | 3.3.9 | 退役确认、精确文本/部分输入视图、有限并发读取及既有经验/接续/交互控制指导修正；发行、CI和实际采用见[接续](operations/CONTINUATION.md#目标与当前写者)，原失败及证据限制保持。 |
 | 3.3.10 | 原生交接可选时间字段兼容、仓库转发与测试路径核验修正；验证、发行与实际采用状态见[接续](operations/CONTINUATION.md#目标与当前写者)，不扩大实际恢复或收益承诺。 |
+| 3.3.11 | `3a39ed98` 的入口指导和维护验证修订；[发行原件](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.11)与原 CI／采用记录各保其身份。 |
+| 3.3.12 | 取消、严格来源兼容和仓库验证器修正，细化既有核验指导；[精确发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12)，提交 `e6b3594c5f56091ecf9a03d58a845c1a206c53cf`。C11 本地1461项及18案／17范围资格通过；托管、安装和实际加载分别见[当前接续](operations/CONTINUATION.md#目标与当前写者)，不证明普遍收益。 |
 
 原始失败、版本、环境和条件保持原身份；后续文档不移动发行标签，也不把旧通过直接当作新版本通过。CLI、SDK、桌面、IDE、Work 与 Remote 之间，仅在核对适用性和差异后复用相应机制证据；历史入口观察不能覆盖现行官方已知限制。
 
@@ -158,7 +162,7 @@ Complete **installation, enablement and Hook trust** separately, then verify act
 2. Where source registration is needed, use the official [marketplace command](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli):
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 3a39ed9815a36885262fd9bdeb802da9fb2aea13
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref e6b3594c5f56091ecf9a03d58a845c1a206c53cf
    ```
 
    This registers the source only. In CLI `/plugins`, select it, inspect and install YIYUAN Accord. On desktop use the actual plugin directory/source entry. A repository marketplace is not a listing in the official public directory.
@@ -192,6 +196,8 @@ This is not complete conversation history or a progress record, and grants no ne
 
 ### Troubleshooting, updates and exit
 
+When changing a fixed source revision, if the host reports an existing different source, have the executor preserve unfinished work, the previous source and a recovery copy, then replace only the named source through the current host controls. In this Codex 0.166.0-alpha.6 observation, `codex plugin marketplace remove yiyuan-accord --json` was followed by registration at this release commit and installation. The default source and enablement were verified; at installation close this existing chat still reported MCP 3.3.11, with actual 3.3.12 loading reserved for separate verification after normal client restart. Other sources and settings were preserved. This is version-bound evidence; repeating `add` is not an update.
+
 | Symptom | Executor's first checks |
 |---|---|
 | No Accord label or MCP call is visible | Check delivered guidance, actual relevant Skill reads or native actions, and required outcomes. A Skill read may appear as an ordinary command; MCP calls are demand-driven and their count does not measure participation. Visibility or reading alone does not prove full compliance or benefit. |
@@ -215,6 +221,8 @@ Before update, rollback or removal, use a healthy executor independent of the pl
 | 3.3.8 | Skill directories, environment combinations and full-snapshot change detection at `213dbea2`; all 11 [CI #1046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41081944936) jobs passed. Official tag: [v3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8). Publication, local update and actual loading are recorded in [continuation](operations/CONTINUATION.md#目标与当前写者). |
 | 3.3.9 | Retirement acknowledgment, exact-text/partial-input-view and bounded concurrent-read compatibility, plus existing learning/continuity/human-control guidance. Publication, CI and actual adoption are separate in [continuation](operations/CONTINUATION.md#目标与当前写者); original failures and evidence limits remain. |
 | 3.3.10 | Optional lifecycle-field compatibility in native handoff, repository facade and test-path verification corrections. See [continuation](operations/CONTINUATION.md#目标与当前写者) for checks, publication and actual adoption; broader recovery and value claims remain unproven. |
+| 3.3.11 | Entry-guidance and maintenance-verification revisions at `3a39ed98`; the [release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.11), original CI and adoption records retain their identities. |
+| 3.3.12 | Cancellation, strict source compatibility and repository-verifier fixes, with refinements to existing verification guidance; [exact release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12), commit `e6b3594c5f56091ecf9a03d58a845c1a206c53cf`. C11 passed 1,461 local tests and qualification of 18 cases / 17 scopes. Hosted checks, installation and actual loading are separate in [continuation](operations/CONTINUATION.md#目标与当前写者); general benefits remain unproven. |
 
 Original failures, versions, environments and conditions retain their identities. Later documentation does not move release tags or validate changed versions through an old PASS. Reuse common-mechanism evidence across CLI, SDK, desktop, IDE, Work or Remote only after checking applicability and differences. Historical observations do not override known current upstream limitations.
 

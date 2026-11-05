@@ -220,12 +220,15 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current release and scoped connections
 
-The current published Codex package is [3.3.10](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.10),
-from exact commit `e2be58f61a9dda9d9b64245d98ddf921ed597579`. Both bound CI runs
-passed all 11 jobs; local installation and this chat adoption were separately
-verified. Earlier package descriptions retain their historical versions.
-Publication, local installation and actual adoption are recorded separately in
-[current continuation](operations/CONTINUATION.md#当前事实).
+The current published Codex package is [3.3.12](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12),
+from exact commit `e6b3594c5f56091ecf9a03d58a845c1a206c53cf`. Its source qualification
+was completed on C11 (`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`):
+1,461 local tests and the original 18-case / 17-scope qualification passed.
+Hosted CI: [CI #1059](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42002302364): 10/10 success; post-tag [CI #1060](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42015531434) was still running at this record. Installation and actual
+loading: 3.3.12 installed and enabled, all 30 cache/catalog members matched; persistent default source fixed to `e6b3594c5f56091ecf9a03d58a845c1a206c53cf`. Other 43 plugins, three sources and all other parsed settings were preserved. This existing chat still reported MCP 3.3.11; actual new loading awaits normal client restart. Final protocol/resource closure remains open. These facts remain
+separate; neither publication nor a fresh process proves adoption by an existing chat.
+Earlier package descriptions retain their historical versions. See
+[current continuation](operations/CONTINUATION.md#目标与当前写者).
 The [3.3.2 release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.2)
 and its bound qualification retain their exact `ef8bde2a` subject; earlier releases
 also remain immutable. Version declarations and candidate validation alone do not
