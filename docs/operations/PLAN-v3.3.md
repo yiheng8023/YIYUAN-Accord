@@ -4,7 +4,7 @@
 
 ## 3.3.12 当前终态与发布接续
 
-C11／`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`（tree `2aeddd0a9d352948b6c6133595398f20f4b16379`、30成员包D6）已完成本地完整1461项，0失败／错误／跳过、三静态exit0，整体8649.097752秒；正式两阶段366.393813秒，18案／17范围及两补充见证接受，源clean、自然Job0／Close且无forced。原件见`.tmp/ci1058-fixes-20261104-01/final-candidate-11/TERMINAL.json`、`FORMAL-TERMINAL-01.json`及`LOCAL-GATES.json`。精确托管CI：[CI #1059](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42002302364)全10项成功；本次记录时标签[CI #1060](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42015531434)仍在运行；发行：https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12（提交`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`）；安装、当前聊天实际加载及最终协议／资源收尾：本机3.3.12已安装启用，缓存／目录30成员匹配，默认来源固定至`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`；其余43插件、3来源及其他配置保持。当前聊天实测MCP仍3.3.11，待正常重启后核验新版实际加载；最终协议／资源收尾未完成。原18案／17scope／52义务、质量与发布条件保持。以下r93及更早记录保原时点，不能据其中旧pending否定新原件，也不能用本次通过改写旧失败。本次事实更新不改变r93共识及验收判据。
+C11／`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`（tree `2aeddd0a9d352948b6c6133595398f20f4b16379`、30成员包D6）的本地完整1461项、三静态及18案／17范围正式两阶段已通过；原8649.097752秒及366.393813秒、原失败／时钟和全部质量边界保留。[CI #1059](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42002302364)及标签[CI #1060](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42015531434)均10／10终态成功；两轮各18份原生制品按各自来源独立复核。已从该精确提交正式发行[3.3.12](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12)；本机3.3.12已安装启用，同一聊天重启后实测MCP3.3.12；缓存／目录30成员、六个已加载函数体及默认来源`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`分别核对一致，当前原生输入完整／已对账、pending0，原99输入和五输出判据保持。最终文档远端回读、所属资源分类及原协议退役仍按依赖顺序收尾；不以已发布或单次重启代替这些终态。原件与剩余责任见[当前接续](CONTINUATION.md#目标与当前写者)。三条主线、18案／17scope／52义务、原预算和未来不预设版本／日期的约定保持。
 
 ## 3.3.12 评估内包快照复用与读取预算修复（2026-11-05）
 

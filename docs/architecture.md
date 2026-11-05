@@ -224,9 +224,7 @@ The current published Codex package is [3.3.12](https://github.com/yiheng8023/YI
 from exact commit `e6b3594c5f56091ecf9a03d58a845c1a206c53cf`. Its source qualification
 was completed on C11 (`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`):
 1,461 local tests and the original 18-case / 17-scope qualification passed.
-Hosted CI: [CI #1059](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42002302364): 10/10 success; post-tag [CI #1060](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42015531434) was still running at this record. Installation and actual
-loading: 3.3.12 installed and enabled, all 30 cache/catalog members matched; persistent default source fixed to `e6b3594c5f56091ecf9a03d58a845c1a206c53cf`. Other 43 plugins, three sources and all other parsed settings were preserved. This existing chat still reported MCP 3.3.11; actual new loading awaits normal client restart. Final protocol/resource closure remains open. These facts remain
-separate; neither publication nor a fresh process proves adoption by an existing chat.
+Hosted CI [#1059](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42002302364) and post-tag CI [#1060](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42015531434) each finished 10/10 successful; their 18 native archives were reviewed separately. The installed/default-source 30-member package matched the exact release. After normal restart this same chat actually reported MCP 3.3.12, and its six listed loaded function bodies matched the installed source. Current native input was complete and reconciled. These are separate scoped observations, not all-client recovery or ordinary-use value. Original failures, clocks, POSIX resource limits and the transient macOS observation errors remain recorded; protocol/resource closure is recorded separately.
 Earlier package descriptions retain their historical versions. See
 [current continuation](operations/CONTINUATION.md#目标与当前写者).
 The [3.3.2 release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.2)
