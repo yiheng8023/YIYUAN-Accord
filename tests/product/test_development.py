@@ -808,15 +808,21 @@ class DevelopmentContractTests(unittest.TestCase):
         original = development._bounded_regular_bytes
         expected = development.render_development_plan(self.contract)
         self.assertEqual((ROOT / development.PLAN_FILE).read_text(encoding="utf-8"), expected)
+        legacy_program = subprocess.check_output(
+            ["git", "show", f"{V4_REVISION}:product/program.json"], cwd=ROOT,
+            env=owned_git_environment(), timeout=30)
 
         def stale(path):
             if path == ROOT / DEVELOPMENT_FILE:
                 return json.dumps(self.contract).encode(), None
+            if path == ROOT / "product/program.json":
+                return legacy_program, None
             if path == ROOT / development.PLAN_FILE:
                 return b"stale progress\n", None
             return original(path)
 
         with patch.object(development, "_bounded_regular_bytes", side_effect=stale):
+            self.assertNotIn("historical reference retirement changed", verify_development(ROOT)["errors"])
             self.assertIn("visible plan is missing or out of sync with the development contract",
                           verify_development(ROOT)["errors"])
 
@@ -1302,7 +1308,8 @@ class SuccessorDevelopmentTests(unittest.TestCase):
     def test_consensus_revision_is_data_but_must_match_the_plan(self):
         from yiyuan_accord import development
         changed = copy.deepcopy(self.contract)
-        changed["consensusNode"]["revision"] = "r91"
+        revision = "r" + str(int(self.contract["consensusNode"]["revision"][1:]) + 1)
+        changed["consensusNode"]["revision"] = revision
         self.assertEqual(self.errors(changed), [])
         self.assertIn("current consensus node metadata differs between plan and machine projection",
                       development._successor_navigation_errors(ROOT, changed["consensusNode"]))
@@ -1312,7 +1319,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
             data, state = original(path)
             if path == plan:
                 old = ("修订：" + self.contract["consensusNode"]["revision"]).encode()
-                data = data.replace(old, "修订：r91".encode(), 1)
+                data = data.replace(old, ("修订：" + revision).encode(), 1)
             return data, state
         with patch.object(development, "_bounded_regular_bytes", side_effect=revised):
             self.assertEqual(development._successor_navigation_errors(ROOT, changed["consensusNode"]), [])
@@ -1544,6 +1551,9 @@ class DeclarationCaseBindingTests(unittest.TestCase):
     def test_legacy_admission_and_static_report_do_not_gain_current_summary(self):
         from yiyuan_accord import admission, development
         legacy = historical_development()
+        legacy_program = subprocess.check_output(
+            ["git", "show", f"{V4_REVISION}:product/program.json"], cwd=ROOT,
+            env=owned_git_environment(), timeout=30)
         legacy_v3 = copy.deepcopy(legacy)
         policy = legacy_v3["acceptance"]["admission"]
         policy["schema"] = admission.SCHEMA
@@ -1563,9 +1573,12 @@ class DeclarationCaseBindingTests(unittest.TestCase):
         def changed(path, *args, **kwargs):
             if Path(path) == ROOT / DEVELOPMENT_FILE:
                 return json.dumps(legacy).encode(), None
+            if Path(path) == ROOT / "product/program.json":
+                return legacy_program, None
             return original_read(path, *args, **kwargs)
         with patch.object(development, "_bounded_regular_bytes", side_effect=changed):
             report = verify_development(ROOT)
+        self.assertNotIn("historical reference retirement changed", report["errors"])
         self.assertNotIn("declarationSummary", report)
 
     def test_historical_top_schema_keeps_existing_current_policy_report(self):
