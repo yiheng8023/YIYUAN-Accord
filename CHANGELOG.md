@@ -2,7 +2,7 @@
 
 ## 3.3.12（2026-11-05）
 
-发行：[精确记录](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12)，提交`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`。[CI #1059](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42002302364)及标签[CI #1060](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42015531434)均10／10终态成功；两轮各18份原生制品按各自来源独立复核。C11／`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`（tree `2aeddd0a9d352948b6c6133595398f20f4b16379`、30成员包D6）的本地完整1461项、三静态及18案／17范围正式两阶段已通过；原8649.097752秒及366.393813秒、原失败／时钟和全部质量边界保留。本机3.3.12已安装启用，同一聊天重启后实测MCP3.3.12；缓存／目录30成员、六个已加载函数体及默认来源`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`分别核对一致，当前原生输入完整／已对账、pending0，原99输入和五输出判据保持。原件见`.tmp/ci1058-fixes-20261104-01/final-candidate-11/`中的`TERMINAL.json`、`FORMAL-TERMINAL-01.json`、`CI1059-TERMINAL.json`、`CI1060-TERMINAL.json`及重启后读回；最终协议与资源结果见[当前接续](docs/operations/CONTINUATION.md#目标与当前写者)。
+发行：[精确记录](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12)，提交`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`。[CI #1059](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42002302364)及标签[CI #1060](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42015531434)均10／10终态成功；两轮各18份原生制品按各自来源独立复核。C11／`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`（tree `2aeddd0a9d352948b6c6133595398f20f4b16379`、30成员包D6）的本地完整1461项、三静态及18案／17范围正式两阶段已通过；原8649.097752秒及366.393813秒、原失败／时钟和全部质量边界保留。本机3.3.12已安装启用，同一聊天重启后实测MCP3.3.12；缓存／目录30成员、六个已加载函数体及默认来源`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`分别核对一致，该次采用核验时原生输入完整／已对账、pending0，原99输入和五输出判据保持。原件见`.tmp/ci1058-fixes-20261104-01/final-candidate-11/`中的`TERMINAL.json`、`FORMAL-TERMINAL-01.json`、`CI1059-TERMINAL.json`、`CI1060-TERMINAL.json`及重启后读回；最终协议与资源结果见[当前接续](docs/operations/CONTINUATION.md#目标与当前写者)。
 
 以下各项中的“待验证”“未发布”及局部结果均保留其当时主体与时点；本段给出后续C11终态，不将旧失败或旧局部通过改签。
 
