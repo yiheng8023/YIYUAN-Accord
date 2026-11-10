@@ -12,7 +12,7 @@ import unittest
 import copy
 import time
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 
 RUNTIME = Path(__file__).resolve().parents[2] / "runtime/task-checkpoint.cjs"
@@ -4240,6 +4240,342 @@ fs.readFileSync = function(file, ...args) {
                 self.assertEqual(status['inputSource'], 'quarantined-native-input')
                 self.event('UserPromptSubmit', prompt='new current input', recovery_epoch=status['epoch'])
                 self.assertFalse(self.status()['needsNativeReplay'])
+
+
+class ApprovalPrefixDirectoryNativeTests(NativeStateMcpFixture, unittest.TestCase):
+    def approved_prefix_directory(self):
+        return {'ordinal': 42, 'type': 'world_state', 'payload': {'full': False, 'state': {
+            'permissions': {'approved_command_prefixes': [['example-command', 'read']]}}}}
+
+    def test_approved_prefix_directory_keeps_same_turn_input_and_pause(self):
+        self.native_context(v2=True)
+        initial = self.native_input_preview()
+        epoch = initial['epoch']
+        self.assertFalse(self.manage(action='bind', epoch=epoch, expectedRevision=0,
+            result='Preserve the task', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Wait for the user', canContinue=False)['isError'])
+        self.assertFalse(self.manage(action='pause', epoch=epoch, expectedRevision=1,
+            reason='User pause')['isError'])
+        transcript = self._resume_control_append_rows([self.approved_prefix_directory()])
+        raw = transcript.read_bytes().splitlines()[-1]
+        before = self.files()
+        preview = self.native_input_preview()
+        evidence = preview['nativeInputEvidence']
+        self.assertEqual(evidence['state'], 'observed', evidence)
+        self.assertTrue(evidence['latestNativeInputsComplete'])
+        self.assertTrue(evidence['latestInputReconciled'])
+        self.assertEqual(evidence['records'], initial['nativeInputEvidence']['records'])
+        self.assertEqual(evidence['pendingInputs'], [])
+        control, = evidence['controls']
+        self.assertEqual(control['section'], 'permissions')
+        self.assertEqual(control['controlDisposition'], 'host-approved-prefix-directory-requires-review')
+        self.assertEqual(control['recordSha256'], hashlib.sha256(raw).hexdigest())
+        self.assertNotIn('example-command', json.dumps(evidence))
+        params = {**self.params, 'arguments': {'cwd': str(self.work), 'includeContext': True}}
+        context = self.inspect(params)['value']['context']
+        self.assertEqual(context['state'], 'observed', context)
+        self.assertEqual(context['lastResponseTokens'], 4000)
+        stale = self.manage(action='reconcile-input', epoch=epoch, expectedRevision=2,
+            evidenceCursor=initial['nativeInputEvidence']['cursor'])
+        self.assertEqual(stale['value']['reason'], 'native-input-evidence-changed', stale)
+        self.assertEqual(self.files(), before)
+
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        prompt = 'Keep the pause while reviewing the source.'
+        self.append_native_message(text=prompt)
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt,
+            'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
+            session=meta['session_id'], hook='UserPromptSubmit')
+        resumed = self.native_input_preview()
+        self.assertNotEqual(resumed['epoch'], epoch)
+        self.assertEqual((resumed['revision'], resumed['mode']), (2, 'paused'))
+        self.assertTrue(resumed['nativeInputEvidence']['latestNativeInputsComplete'])
+        self.assertEqual(len(resumed['nativeInputEvidence']['records']), 2)
+
+        old_turn = meta['turn_id']
+        meta['turn_id'] = 'ordinary-new-turn'
+        prompt = 'Review the same task in a new turn.'
+        self._resume_control_append_rows([
+            {'type': 'event_msg', 'payload': {'type': 'task_complete',
+                'turn_id': old_turn, 'root_turn_id': old_turn, 'error': None}},
+            {'type': 'turn_context', 'payload': {'turn_id': meta['turn_id'], 'model': meta['model'],
+                'cwd': str(self.work)}},
+        ])
+        self.append_native_message(text=prompt)
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt,
+            'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
+            session=meta['session_id'], hook='UserPromptSubmit')
+        new_turn = self.native_input_preview()
+        evidence = new_turn['nativeInputEvidence']
+        self.assertTrue(evidence['latestNativeInputsComplete'], evidence)
+        self.assertEqual(evidence['currentTurnId'], meta['turn_id'])
+        self.assertEqual(evidence['controls'], [])
+        self.assertEqual((new_turn['revision'], new_turn['mode']), (2, 'paused'))
+
+    def test_approved_prefix_directory_preserves_capacity_and_goal_association(self):
+        _, initial, contract = self.app_message_contract()
+        receipt = next(self.state.glob('*.input.json'))
+        original_input = receipt.read_bytes()
+        self._resume_control_append_rows([self.approved_prefix_directory()])
+        self.automatic_capacity_retry()
+        self.append_context_usage(4500)
+        preview = self.native_input_preview()
+        self.assertTrue(preview['nativeInputEvidence']['latestNativeInputsComplete'])
+        bound = self.manage(action='bind', epoch=initial['epoch'], expectedRevision=1, **contract)
+        self.assertFalse(bound['isError'], bound)
+        self.assertEqual(receipt.read_bytes(), original_input)
+
+        self.setUp()
+        self.goal_auto_source(lambda edge: edge.insert(0, self.approved_prefix_directory()), paused=True)
+        preview = self.goal_preview()
+        self.assertEqual(preview['nativeInputEvidence']['state'], 'observed')
+        reconciled = self.goal_reconcile(preview)
+        self.assertFalse(reconciled['isError'], reconciled)
+        current = self.goal_preview()
+        self.assertEqual((current['mode'], current['revision']), ('paused', 2))
+        self.assertTrue(current['nativeInputEvidence']['latestNativeInputsComplete'])
+        self._resume_control_append_rows([self.approved_prefix_directory()])
+        current = self.goal_preview()
+        evidence = current['nativeInputEvidence']
+        self.assertEqual((evidence['state'], evidence['reason']),
+            ('unknown', 'native-input-control-unrecognized'))
+
+    def test_approved_prefix_directory_rejects_unproved_controls(self):
+        prefixes = {'approved_command_prefixes': [['example-command']]}
+        for state in (
+            {'permissions': {**prefixes, 'instructions': 'A different permission rule'}},
+            {'permissions': {**prefixes, 'approval_policy': 'never'}},
+            {'permissions': prefixes, 'tools': {}},
+            {'permissions': {'approved_command_prefixes': []}},
+            {'permissions': {'approved_command_prefixes': [['example-command'], []]}},
+            {'permissions': {'approved_command_prefixes': [['']]}},
+            {'permissions': {'approved_command_prefixes': [['example-command', 42]]}},
+            {'permissions': {'approved_command_prefixes': ['example-command']}},
+        ):
+            with self.subTest(state=state):
+                self.setUp()
+                self.native_context()
+                self._resume_control_append_rows([{'ordinal': 42, 'type': 'world_state',
+                    'payload': {'full': False, 'state': state}}])
+                evidence = self.native_input_preview()['nativeInputEvidence']
+                self.assertEqual((evidence['state'], evidence['reason']),
+                    ('unknown', 'native-input-control-unrecognized'))
+
+        for alter in (
+            {'timestamp': '2000-01-01T00:00:00Z'}, {'timestamp': 9999},
+            {'timestamp': ['2099-01-01T00:00:00Z']}, {'timestamp': '9999'},
+            {'timestamp': '2099-02-30T00:00:00Z'}, {'ordinal': '42'}, {'metadata': {'client_authored': True}},
+        ):
+            with self.subTest(alter=alter):
+                self.setUp()
+                self.native_context()
+                self._resume_control_append_rows([{'ordinal': 42, 'type': 'world_state',
+                    'payload': {'full': False, 'state': {'permissions': prefixes}}, **alter}])
+                evidence = self.native_input_preview()['nativeInputEvidence']
+                self.assertEqual((evidence['state'], evidence['reason']),
+                    ('unknown', 'native-input-control-unrecognized'))
+
+        self.setUp()
+        self.native_context()
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        rows = [json.loads(line) for line in transcript.read_bytes().splitlines()]
+        context_at = datetime.fromisoformat(rows[1]['timestamp'])
+        rows[2]['timestamp'] = (context_at + timedelta(milliseconds=2)).isoformat()
+        base = ''.join(json.dumps(row) + '\n' for row in rows)
+        transcript.write_text(base, encoding='utf-8')
+        delta = self.approved_prefix_directory()
+        delta['timestamp'] = (context_at + timedelta(milliseconds=1)).isoformat()
+        self._resume_control_append_rows([delta])
+        evidence = self.native_input_preview()['nativeInputEvidence']
+        self.assertEqual((evidence['state'], evidence['reason']),
+            ('unknown', 'native-input-control-unrecognized'))
+
+        transcript.write_text(base, encoding='utf-8')
+        delta['timestamp'] = (context_at + timedelta(milliseconds=3)).isoformat()
+        turn = rows[1]['payload']['turn_id']
+        self._resume_control_append_rows([delta, {
+            'type': 'event_msg', 'timestamp': rows[2]['timestamp'], 'payload': {
+                'type': 'task_complete', 'turn_id': turn, 'root_turn_id': turn, 'error': None}}])
+        evidence = self.native_input_preview()['nativeInputEvidence']
+        self.assertEqual((evidence['state'], evidence['reason']),
+            ('unknown', 'native-input-control-unrecognized'))
+
+        for position in ('completed', 'next-started', 'both'):
+            with self.subTest(position=position):
+                self.setUp()
+                self.native_context(v2=True)
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                turn = meta['turn_id']
+                boundary = []
+                if position != 'next-started':
+                    boundary.append({'type': 'event_msg', 'payload': {'type': 'task_complete',
+                        'turn_id': turn, 'root_turn_id': turn, 'error': None}})
+                if position != 'completed':
+                    boundary.append({'type': 'event_msg', 'payload': {'type': 'task_started',
+                        'turn_id': 'next-turn', 'root_turn_id': 'next-turn'}})
+                self._resume_control_append_rows([*boundary, self.approved_prefix_directory()])
+                evidence = self.native_input_preview()['nativeInputEvidence']
+                self.assertEqual((evidence['state'], evidence['reason']),
+                    ('unknown', 'native-input-control-unrecognized'))
+
+        self.setUp()
+        self.native_context()
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        self._resume_control_append_rows([
+            {'type': 'turn_context', 'payload': {'turn_id': 'unproved-turn', 'model': meta['model'],
+                'cwd': str(self.work)}},
+            {'ordinal': 42, 'type': 'world_state', 'payload': {'full': False, 'state': {'permissions': prefixes}}},
+        ])
+        evidence = self.native_input_preview()['nativeInputEvidence']
+        self.assertEqual((evidence['state'], evidence['reason']),
+            ('unknown', 'native-input-control-unrecognized'))
+
+
+class CompanionSelectionNativeTests(NativeStateMcpFixture, unittest.TestCase):
+    def empty_selection_record(self, turn=None):
+        turn = turn or self.params['_meta']['x-codex-turn-metadata']['turn_id']
+        tag = 'external_codex_apps_selected_page_part_1_of_1'
+        body = (f'<{tag}>Companion Page snapshot part 1 of 1:\n'
+                '{"page_id":null,"document_view":null}'
+                f'</{tag}>')
+        payload = self.environment_context_payload(turn)
+        payload['id'] = 'host-selection'
+        payload['content'][0]['text'] = body
+        payload['internal_chat_message_metadata_passthrough']['content_item_kinds'] = [
+            'additional_content.codex_apps_selected_page_part_1_of_1']
+        return {'type': 'response_item', 'ordinal': 42, 'payload': payload}
+
+    def test_companion_selection_preserves_user_message_proof_for_goal(self):
+        self.goal_auto_source(paused=True)
+        old_turn = self.rows[2]['payload']['turn_id']
+        user_completed = self.goal_record_fixture('user')
+        self.goal_record_check([self.empty_selection_record(old_turn), user_completed], accepted=True)
+        self.assertEqual(self.goal_preview()['mode'], 'paused')
+
+    def test_empty_companion_selection_preserves_input_and_requires_review(self):
+        self.native_context(v2=True)
+        initial = self.native_input_preview()
+        epoch = initial['epoch']
+        contract = dict(result='Preserve the task', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Wait for the user', canContinue=False)
+        self.assertFalse(self.manage(action='bind', epoch=epoch, expectedRevision=0, **contract)['isError'])
+        self.assertFalse(self.manage(action='pause', epoch=epoch, expectedRevision=1, reason='User pause')['isError'])
+        state = next(self.state.glob('*.state.json')); original_state = state.read_bytes()
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        old_turn, turn = meta['turn_id'], 'selection-turn'
+        meta['turn_id'] = turn
+        prompt = 'Keep the task paused while reviewing.'
+        row = self.empty_selection_record()
+        transcript = self._resume_control_append_rows([
+            {'type': 'event_msg', 'payload': {'type': 'task_complete',
+                'turn_id': old_turn, 'root_turn_id': old_turn, 'error': None}},
+            {'type': 'turn_context', 'payload': {'turn_id': turn, 'model': meta['model'], 'cwd': str(self.work)}},
+            row,
+            {'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+                'content': [{'type': 'input_text', 'text': prompt}]}},
+        ])
+        raw = transcript.read_bytes().splitlines()[-2]
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt, 'turn_id': turn,
+            'model': meta['model'], 'transcript_path': str(transcript)}, session=meta['session_id'], hook='UserPromptSubmit')
+        receipt = next(self.state.glob('*.input.json')); original_input = json.loads(receipt.read_bytes())
+        epoch = original_input['epoch']
+        before = self.files()
+        evidence = self.native_input_preview()['nativeInputEvidence']
+        self.assertEqual(evidence['state'], 'observed', evidence)
+        self.assertFalse(evidence['latestNativeInputsComplete'])
+        self.assertEqual(evidence['controls'], [])
+        pending, = evidence['pendingInputs']
+        self.assertEqual((pending['itemId'], pending['recordSha256']), ('host-selection', hashlib.sha256(raw).hexdigest()))
+        human = [r['promptSha256'] for r in evidence['records'] if r['captured']]
+        self.assertEqual(human, [original_input['promptSha256']])
+        read = self.read_input(expectedReceiptEpoch=epoch, sourcePart={'evidenceCursor': evidence['cursor'],
+            'recordOffset': pending['recordOffset'], 'recordSha256': pending['recordSha256'], 'partIndex': 0})
+        self.assertFalse(read['isError'], read)
+        self.assertEqual(read['value']['input']['text'], row['payload']['content'][0]['text'])
+        stale = self.manage(action='reconcile-input', epoch=epoch, expectedRevision=2,
+            evidenceCursor=initial['nativeInputEvidence']['cursor'])
+        self.assertEqual(stale['value']['reason'], 'native-input-evidence-changed', stale)
+        self.assertEqual(self.files(), before)
+        current = self.manage(action='reconcile-input', epoch=epoch, expectedRevision=2,
+            evidenceCursor=evidence['cursor'])
+        self.assertFalse(current['isError'], current)
+        saved = json.loads(receipt.read_bytes())
+        self.assertEqual(saved['nativeInputs'][:-1], original_input['nativeInputs'])
+        self.assertEqual(saved['nativeInputBasis'], original_input['nativeInputBasis'])
+        self.assertEqual(saved['promptSha256'], original_input['promptSha256'])
+        self.assertEqual(saved['nativeInputs'][-1]['prompt'], row['payload']['content'][0]['text'])
+        self.assertEqual(state.read_bytes(), original_state)
+        reconciled = self.native_input_preview()
+        self.assertEqual((reconciled['mode'], reconciled['revision']), ('paused', 2))
+        self.assertTrue(reconciled['nativeInputEvidence']['latestNativeInputsComplete'])
+        self.assertTrue(any(r['captured'] and r['recordSha256'] == pending['recordSha256']
+            for r in reconciled['nativeInputEvidence']['records']))
+
+    def test_companion_selection_keeps_unproved_shapes_unknown(self):
+        self.native_context(v2=True)
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        rows = transcript.read_bytes().splitlines(keepends=True)
+        index = next(i for i, line in enumerate(rows) if json.loads(line).get('payload', {}).get('role') == 'user')
+        prefix, suffix = b''.join(rows[:index]), b''.join(rows[index:])
+        row = {'timestamp': json.loads(rows[index])['timestamp'], **self.empty_selection_record()}
+        body = row['payload']['content'][0]['text']
+        for owner, field, value in (
+            ('frame', 'timestamp', 9999),
+            ('frame', 'timestamp', '2000-01-01T00:00:00Z'),
+            ('frame', 'ordinal', '42'),
+            ('frame', 'metadata', {'client_authored': True}),
+            ('payload', 'role', 'assistant'),
+            ('payload', 'role', 'developer'),
+            ('metadata', 'turn_id', 'foreign-turn'),
+            ('metadata', 'create_time', 'not-a-native-timestamp'),
+            ('metadata', 'content_item_kinds', ['user.text']),
+            ('metadata', 'content_item_kinds', ['additional_content.codex_apps_selected_page_part_1_of_2']),
+            ('metadata', 'content_item_kinds', ['user.text', 'additional_content.codex_apps_selected_page_part_1_of_1']),
+            ('metadata', 'extra', True),
+            ('provenance', 'type', 'user'),
+            ('provenance', 'hook', True),
+            ('payload', 'content', [{'type': 'input_text', 'text': body}, {'type': 'input_text', 'text': 'extra'}]),
+            ('part', 'text', body.replace('snapshot part 1 of 1', 'snapshot part 1 of 2')),
+            ('part', 'text', body.replace('"page_id":null', '"page_id":"page"')),
+            ('part', 'text', body.replace('"document_view":null', '"document_view":{}')),
+            ('part', 'text', body + ' extra'),
+        ):
+            with self.subTest(owner=owner, field=field, value=value):
+                variant = copy.deepcopy(row)
+                payload = variant['payload']
+                meta = payload['internal_chat_message_metadata_passthrough']
+                targets = {'frame': variant, 'payload': payload, 'metadata': meta, 'part': payload['content'][0],
+                    'provenance': meta['content_item_metadata'][0]['provenance']}
+                targets[owner][field] = value
+                raw = json.dumps(variant).encode() + b'\n'
+                transcript.write_bytes(prefix + raw + suffix)
+                evidence = self.native_input_preview()['nativeInputEvidence']
+                self.assertEqual((evidence['state'], evidence['reason']), ('unknown', 'native-input-origin-unavailable'))
+                if meta['content_item_kinds'] != ['user.text']:
+                    transcript.write_bytes(prefix + suffix + raw)
+                    evidence = self.native_input_preview()['nativeInputEvidence']
+                    self.assertEqual((evidence['state'], evidence['reason']),
+                        ('unknown', 'native-input-control-unrecognized'))
+
+        transcript.write_bytes(prefix + suffix)
+        turn = self.params['_meta']['x-codex-turn-metadata']['turn_id']
+        self._resume_control_append_rows([
+            {'type': 'event_msg', 'payload': {'type': 'task_complete',
+                'turn_id': turn, 'root_turn_id': turn, 'error': None}},
+            self.empty_selection_record(),
+        ])
+        evidence = self.native_input_preview()['nativeInputEvidence']
+        self.assertEqual((evidence['state'], evidence['reason']),
+            ('unknown', 'native-input-control-unrecognized'))
+
+        transcript.write_bytes(prefix + suffix)
+        bound = self.native_input_preview()
+        self.assertFalse(self.manage(action='bind', epoch=bound['epoch'], expectedRevision=0,
+            result='Preserve original source', inputs=[], outputs=[{'path': 'report.txt'}],
+            nextAction='Review', canContinue=True)['isError'])
+        transcript.write_bytes(prefix + json.dumps(row).encode() + b'\n' + suffix)
+        evidence = self.native_input_preview()['nativeInputEvidence']
+        self.assertEqual((evidence['state'], evidence['reason']), ('unknown', 'native-input-evidence-changed'))
 
 
 class EnvironmentContextNativeTests(NativeStateMcpFixture, unittest.TestCase):

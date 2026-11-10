@@ -280,7 +280,7 @@ class SkillReferencePackageTests(unittest.TestCase):
                          '14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026')
         self.assertEqual(translated['originalSourceSha256'],
                          '9f9019523491d9e41f7d3e41ee5bd3c783b0a1049fb280242959198fb88a439a')
-        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9', '3.3.10', '3.3.11', '3.3.11-dev.1', '3.3.12', '3.3.12-dev.1'):
+        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9', '3.3.10', '3.3.11', '3.3.11-dev.1', '3.3.12', '3.3.12-dev.1', '3.3.13', '3.3.13-dev.1'):
             with self.subTest(version=version):
                 self.assertEqual(foundation(version), translated)
 
@@ -313,7 +313,7 @@ class SkillReferencePackageTests(unittest.TestCase):
             package_version='3.3.11', **options), current)
         self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
             package_version='3.3.11-dev.1', **options), current)
-        for version in ('3.3.12', '3.3.12-dev.1'):
+        for version in ('3.3.12', '3.3.12-dev.1', '3.3.13', '3.3.13-dev.1'):
             self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
                 package_version=version, **options), current)
         execution = current['nativeTaskStateMcp']

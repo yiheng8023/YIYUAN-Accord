@@ -605,8 +605,9 @@ function turnProofBasis(input, request, evidence, state = null) {
       retainedCursor: retainedOriginCursor(input, request, state),
       recoveredControl: input.nativeControlRecovery,
       coverage: input.nativeInputReconciliation?.recordCoverage,
-      captured: evidence.records.map(({promptSha256, turnId, recordSha256, sourceRef, sourceCategory}) =>
-        ({promptSha256, turnId, recordSha256, sourceRef, ...(sourceCategory ? {sourceCategory} : {})}))},
+       captured: evidence.records.map(({promptSha256, turnId, recordSha256, sourceRef, sourceCategory, hookMatched}) =>
+         ({promptSha256, turnId, recordSha256, sourceRef, ...(sourceCategory ? {sourceCategory} : {}),
+           ...(hookMatched ? {hookMatched: true} : {})}))},
     acceptedExecution: {turnId: execution.turnId, model: execution.model}};
 }
 function associateCurrentTurn(input, request, state = null, stage = 'initial-validation') {

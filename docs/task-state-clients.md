@@ -56,6 +56,12 @@ Codex multi-agent v2 的根会话文件也可能带第二个 UUID 后缀，子�
 
 当前已核source-built caller helper读取、对账和bind，只证明该调用者在受保护来源／轮次／epoch／revision及写前复核下的有限效果。实际调用身份字段必须来自新鲜原生观察，不能省略nativeTurnId或编造currentHost；helper不代MCP调用来源认证。`currentInputReconciled`的stored-epoch范围也不能代替`nativeInputEvidence`最新完整性，已装实例仍unknown时须保留该区别。
 
+## 宿主伴随页空选区
+
+未发布维护源码复用活跃同轮的宿主来源校验，识别单一`additional_content.codex_apps_selected_page_part_1_of_1`。记录须由宿主生成且`hook=false`，含已核外层角色、序号和UTC时间，唯一文本项、精确单段包装，以及`page_id`和`document_view`均为`null`的实测正文。带选区来源标记的多段、非空、混合或额外内容均保留为未知，包括出现在人类输入之后的记录。
+
+单段空选区让输入定位继续查找同轮的人类Hook正文。选区原文、偏移与摘要作为待审记录保留，调用者仍走现有来源回读和显式对账。已核空选区保留既有的人类消息配对依据。暂停、旧游标和已核对前缀继续受原守卫保护。
+
 ## 已有输入依据下的原生 App 消息续轮
 
 正常完成后的 `app_tool_send_message` 轮次与容量重试不同。已有可核输入依据时，适配器联合核对原生启动归属、接收 turn/context/cwd/model，以及同轮 `codex_app/send_message_to_thread` 入站记录。发送方 root 可以不同于接收 turn；各轮完成事件必须保持其实际归属。仅有触发名称、XML 文本或普通 stdout 均不足以建立关联。带 `call_id` 的本地调用结果不能充当入站委派证明。
@@ -101,6 +107,12 @@ Goal记录完整进入来源顺序、原字节摘要和pending列表，标为`so
 3.3.8将同一分类器贯通输入定位、晚到输入、执行关联与最终扫描，识别已核`skills`、`cloud_skills`、`host_skills`目录的递归局部字段，并允许与已支持的tools/environments组合。目录条目身份、fingerprint/shown、roots、usage和allocation分别按固定producer类型核验；路径字符串不会触发文件读取。未知目录schema、额外model/permissions段仍拒绝，不能把一般合并补丁语义当作所有形状的兼容保证。
 
 完整`world_state`快照的原始offset/digest也计入变化信号；这不新增对其权限或内容的资格判断。已有持久retained/recovered游标仅在来源身份和原前缀字节逐项匹配时，可接受该精确前缀按旧算法或新算法重算的信号摘要。当前调用传入的expectedCursor只认完整新信号；后到完整快照、目录或输入仍使其失效，须重新观察、审阅并显式对账。只读兼容不会重写旧回执，也不自动解除暂停或完成任务。
+
+## 宿主已批准命令前缀目录
+
+未发布维护源码在活跃同轮已匹配人类Hook输入之后，识别记录序号及UTC时间有效、`full=false`且只有`state.permissions.approved_command_prefixes`的已观察形状。列表、每项参数数组和参数字符串均非空。目录的时间顺序须与人类输入、后续结束及新轮边界相符。额外权限字段、混合段、其他控制和无法核实身份或时序的记录仍保留为未知。
+
+记录的偏移和摘要进入原有游标和`controls`，标记为`host-approved-prefix-directory-requires-review`。身份复查按原记录和轮次验证已匹配的人类Hook。前缀值留在宿主来源，调用者仍需核对相关动作的当前实际权限和用户授权。后到增量使旧游标失效。输入定位、执行归属、暂停和并发读取继续由原有保护负责。
 
 ## bind：每次完整绑定当前合同
 

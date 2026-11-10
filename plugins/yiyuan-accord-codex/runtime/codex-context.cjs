@@ -149,13 +149,24 @@ function wrappedImage(content) {
 
 // Source shape only: host ambient metadata grants no human authority. A user
 // typing the same wrapper text does not qualify for this narrow capture gap.
-function typedAmbient(payload, turnId) {
+const PAGE_SELECTION_PART = 'additional_content.codex_apps_selected_page_part_';
+
+function claimedPageSelection(payload) {
+  const kinds = payload?.internal_chat_message_metadata_passthrough?.content_item_kinds;
+  return (Array.isArray(kinds) ? kinds : [kinds])
+    .some(kind => typeof kind === 'string' && kind.startsWith(PAGE_SELECTION_PART));
+}
+
+function typedAmbient(line, turnId, activeContextAt) {
+  const payload = line?.type === 'response_item' ? line.payload : null;
   const metadata = payload?.internal_chat_message_metadata_passthrough;
   if (metadata?.turn_id !== turnId || !Array.isArray(metadata.content_item_kinds) ||
       metadata.content_item_kinds.length !== 1) return false;
-  if (metadata.content_item_kinds[0] === 'additional_content.codex_apps_open_page') return true;
+  const kind = metadata.content_item_kinds[0];
+  if (kind === 'additional_content.codex_apps_open_page') return true;
   const content = payload?.content, attribution = metadata.content_item_metadata;
-  if (metadata.content_item_kinds[0] === 'environments.environment_context') {
+  const singlePartSelection = kind === PAGE_SELECTION_PART + '1_of_1';
+  if (kind === 'environments.environment_context' || singlePartSelection) {
     if (Object.keys(payload).sort().join(',') !== 'content,id,internal_chat_message_metadata_passthrough,role,type' ||
         payload.type !== 'message' || payload.role !== 'user' || !boundedText(payload.id, 200) ||
         Object.keys(metadata).sort().join(',') !== 'content_item_kinds,content_item_metadata,create_time,turn_id' ||
@@ -164,12 +175,22 @@ function typedAmbient(payload, turnId) {
         canonical(attribution[0]?.provenance) !== canonical({type: 'harness', hook: false}) ||
         !Array.isArray(content) || content.length !== 1 || content[0]?.type !== 'input_text' ||
         Object.keys(content[0]).sort().join(',') !== 'text,type' || !goalUtf8Text(content[0].text)) return false;
-    const value = content[0].text, opening = '<environment_context>', closing = '</environment_context>';
+    const value = content[0].text;
+    // Recognize only the observed empty snapshot and retain it for review.
+    if (singlePartSelection) {
+      const at = rolloutUtcTime(line.timestamp);
+      return goalProducerKeys(line, ['ordinal', 'payload', 'timestamp', 'type']) &&
+        integer(line.ordinal) && line.ordinal >= 0 && activeContextAt !== null && at !== null && at >= activeContextAt &&
+        metadata.create_time >= 0 && value ===
+        '<external_codex_apps_selected_page_part_1_of_1>Companion Page snapshot part 1 of 1:\n' +
+        '{"page_id":null,"document_view":null}</external_codex_apps_selected_page_part_1_of_1>';
+    }
+    const opening = '<environment_context>', closing = '</environment_context>';
     if (!value.startsWith(opening) || !value.endsWith(closing)) return false;
     const body = value.slice(opening.length, -closing.length);
     return Boolean(body.trim()) && !/<\/?environment_context\b/u.test(body);
   }
-  if (metadata.content_item_kinds[0] !== 'additional_content.browser_tabs' ||
+  if (kind !== 'additional_content.browser_tabs' ||
       payload.type !== 'message' || payload.role !== 'user' || !Array.isArray(content) || content.length !== 1 ||
       content[0]?.type !== 'input_text' || typeof content[0].text !== 'string' ||
       Object.keys(content[0]).sort().join(',') !== 'text,type' ||
@@ -437,6 +458,31 @@ function environmentDelta(line) {
     Object.keys(state).join(',') === 'environments' && env && typeof env === 'object' && !Array.isArray(env);
 }
 
+// Only the observed prefix catalogue shape. It proves no effective permission.
+const APPROVED_PREFIX_REVIEW = 'host-approved-prefix-directory-requires-review';
+
+function approvedPrefixDirectoryDelta(line) {
+  const p = line?.payload, state = p?.state, permissions = state?.permissions;
+  if (line?.type !== 'world_state' || !Number.isSafeInteger(line.ordinal) || line.ordinal < 0 ||
+      Object.keys(line).sort().join(',') !== 'ordinal,payload,timestamp,type' || p?.full !== false ||
+      Object.keys(p).sort().join(',') !== 'full,state' || !permissions ||
+      Object.keys(state).join(',') !== 'permissions' ||
+      Object.keys(permissions).join(',') !== 'approved_command_prefixes') return false;
+  const prefixes = permissions.approved_command_prefixes;
+  return Array.isArray(prefixes) && prefixes.length > 0 && prefixes.every(prefix =>
+    Array.isArray(prefix) && prefix.length > 0 && prefix.every(text));
+}
+
+function rolloutUtcTime(value) {
+  const match = typeof value === 'string' &&
+    /^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d)(?:\.(\d{1,9}))?(?:Z|\+00:00)$/u.exec(value);
+  if (!match) return null;
+  const second = Date.parse(match[1] + 'Z');
+  if (!integer(second) || new Date(second).toISOString().slice(0, 19) !== match[1]) return null;
+  // UTC seconds and equally padded fractions sort without losing precision.
+  return `${match[1]}.${(match[2] || '').padEnd(9, '0')}`;
+}
+
 // Historical output before a late first input stays inside the verified prefix.
 // This is not the benign-append policy: metadata here grants no new authority.
 function lateOriginOutput(row, binding) {
@@ -484,14 +530,17 @@ function retryOrigin(rows, binding, promptHash) {
       item?.type === 'event_msg' && item.payload?.type === 'task_started' && item.payload.turn_id === binding.turnId);
     const root = prior?.payload.root_turn_id || line.payload.root_turn_id;
     const contextAt = Date.parse(line.timestamp);
+    const activeContextAt = rolloutUtcTime(line.timestamp);
     for (let next = index + 1; next < rows.length; next++) {
       const candidate = parseRow(rows[next]);
       if (goalSourceControl(candidate, binding, binding.turnId, contextAt)) continue;
-      if (candidate?.type === 'response_item' && candidate.payload?.type === 'message' &&
-          candidate.payload.role === 'developer') continue;
-      if (candidate?.type === 'response_item' && candidate.payload?.type === 'message' &&
-          candidate.payload.role === 'user' && (typedAmbient(candidate.payload, binding.turnId) ||
-            goalRuntimeContext(candidate.payload, binding.turnId))) continue;
+      if (candidate?.type === 'response_item') {
+        const payload = candidate.payload;
+        if (payload?.type === 'message' && payload.role === 'user' &&
+            (typedAmbient(candidate, binding.turnId, activeContextAt) || goalRuntimeContext(payload, binding.turnId))) continue;
+        if (claimedPageSelection(payload)) return -1;
+        if (payload?.type === 'message' && payload.role === 'developer') continue;
+      }
       if (candidate?.type === 'event_msg' && candidate.payload?.type === 'token_count' &&
           (!Object.hasOwn(candidate.payload, 'turn_id') || candidate.payload.turn_id === binding.turnId) ||
           candidate?.type === 'token_usage_record' && candidate.payload?.turn_id === binding.turnId) continue;
@@ -887,13 +936,20 @@ function goalChain(rows, binding, host, sourceRef, scan, accepted = null) {
     if (completed !== null || pending) return reject();
     if (line.type === 'response_item' && p?.role === 'user') {
       const record = scan.records.find(item => item.recordOffset === row.offset && item.turnId === turn && item.supported);
-      if (!record || edges && !goalRuntimeContext(p, turn) || needsRootGoal && (!integer(at) || at < boundary)) return reject();
+      if (!record) return reject();
+      // A verified companion selection carries neither a user message nor Goal steering.
+      if (claimedPageSelection(p)) continue;
+      if (edges && !goalRuntimeContext(p, turn) || needsRootGoal && (!integer(at) || at < boundary)) return reject();
       human = typedHumanInput(p, turn) ? p : null;
       if (edges) { needsGoal = false; needsRootGoal = false; }
       continue;
     }
     if (needsGoal && !(line.type === 'response_item' && p?.type === 'message' && p.role === 'developer') &&
         !((configurationUpdate(line) || directoryDelta(line)) && integer(at) && at >= boundary)) return reject();
+    // Reuse the same-snapshot input proof. The directory proves no Goal edge.
+    if (line.type === 'world_state' && integer(at) && at >= boundary && scan.controls.some(item =>
+        item.controlDisposition === APPROVED_PREFIX_REVIEW && item.turnId === turn &&
+        item.recordOffset === row.offset && item.recordSha256 === crypto.createHash('sha256').update(row.bytes).digest('hex'))) continue;
     if (integer(at) && at >= boundary && nativeExecutionRecord(line, binding, turn, root, model, attribution, human,
         anchorRoot !== null && turn === execution.turnId)) {
       if (line.type === 'compacted' || p?.item?.type === 'UserMessage') human = null;
@@ -1048,7 +1104,7 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
   const anchorOffset = rows[start].offset;
   let turn = binding.turnId, model = null, originModel = null, inputIndex = 0;
   const signals = [], fullOffsets = new Set(), pendingInputs = [], records = [], enrichments = [], controls = [];
-  let contextAt = null;
+  let contextAt = null, activeContextAt = null, hookAt = null, lastPrefixAt = null;
   const hooks = scan.captured.filter(item => !item.recordSha256);
   const sourced = scan.captured.filter(item => item.recordSha256);
   const matchedSources = new Set();
@@ -1066,10 +1122,15 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
   for (let index = start; index < rows.length; index++) {
     const row = rows[index], line = parseRow(row), payload = line?.payload;
     if (!line) return empty('invalid-complete-tail-record');
+    const event = line.type === 'event_msg' ? payload?.type : null;
     const digest = crypto.createHash('sha256').update(row.bytes).digest('hex');
     if (pendingResume && line.type !== 'turn_context' &&
         !(line.type === 'event_msg' && payload?.type === 'task_started')) {
       return empty('native-input-control-needs-reconciliation');
+    }
+    if (lastPrefixAt !== null && (line.type === 'turn_context' || event === 'task_started' || event === 'task_complete')) {
+      const at = rolloutUtcTime(line.timestamp);
+      if (at === null || at < lastPrefixAt) return empty('native-input-control-unrecognized');
     }
     if (line.type === 'turn_context') {
       if (!text(payload?.turn_id) || !text(payload.model) || !text(payload.cwd) ||
@@ -1084,7 +1145,9 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
         }
         resumeIndex++; pendingResume = null;
       }
+      if (payload.turn_id !== turn) hookAt = null;
       turn = payload.turn_id; model = payload.model; contextAt = Date.parse(line.timestamp);
+      activeContextAt = rolloutUtcTime(line.timestamp);
       if (index === start) originModel = model;
       signals.push([row.offset, digest]);
     }
@@ -1096,27 +1159,43 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
         recordSha256: digest, type: 'configuration_update', reasoningEffort: payload.reasoning.effort,
         controlDisposition: 'host-control-not-human-or-permission'});
     }
-    // A full snapshot can replace catalog state; its bytes change the reviewed
-    // basis without proving identity, permission, execution, or recovery.
-    if (line.type === 'world_state' && payload?.full === true) {
-      signals.push([row.offset, digest]); fullOffsets.add(row.offset);
-    }
-    if (line.type === 'world_state' && payload?.full !== true &&
-        !directoryDelta(line) && !environmentDelta(line))
-      return empty('native-input-control-unrecognized');
-    if (directoryDelta(line)) {
-      if (!integer(contextAt) || !integer(Date.parse(line.timestamp)) || Date.parse(line.timestamp) < contextAt)
-        return empty('native-input-control-unrecognized');
+    if (line.type === 'world_state') {
+      // Full snapshots change the reviewed bytes without proving permission.
+      if (payload?.full === true) {
+        signals.push([row.offset, digest]); fullOffsets.add(row.offset);
+        continue;
+      }
+      const approvedPrefixes = approvedPrefixDirectoryDelta(line);
+      if (!approvedPrefixes && !directoryDelta(line)) {
+        if (!environmentDelta(line)) return empty('native-input-control-unrecognized');
+        continue;
+      }
+      if (approvedPrefixes) {
+        // A prefix directory cannot locate the origin or cross a turn boundary.
+        const prefixAt = rolloutUtcTime(line.timestamp);
+        if (activeContextAt === null || hookAt === null || prefixAt === null ||
+            prefixAt < activeContextAt || prefixAt < hookAt ||
+            lastPrefixAt !== null && prefixAt < lastPrefixAt) return empty('native-input-control-unrecognized');
+        lastPrefixAt = prefixAt;
+      } else {
+        const at = Date.parse(line.timestamp);
+        if (!integer(contextAt) || !integer(at) || at < contextAt) return empty('native-input-control-unrecognized');
+      }
       signals.push([row.offset, digest]);
+      const sections = Object.keys(payload.state);
+      const section = sections.length === 1 ? sections[0] : 'directories';
       controls.push({turnId: turn, sourceRef: `${sourceRef}#byte=${row.offset}`, recordOffset: row.offset,
-        recordSha256: digest, type: 'world_state', section: Object.keys(payload.state).length === 1
-          ? Object.keys(payload.state)[0] : 'directories',
-        controlDisposition: Object.keys(payload.state).join(',') === 'tools'
-          ? 'host-tool-directory-not-permission-or-invocation' : 'host-directory-not-permission-or-invocation'});
+        recordSha256: digest, type: 'world_state', section, controlDisposition: {
+          permissions: APPROVED_PREFIX_REVIEW,
+          tools: 'host-tool-directory-not-permission-or-invocation',
+        }[section] ?? 'host-directory-not-permission-or-invocation'});
+      continue;
     }
     if (line.type === 'response_item' && nativeTaskOutput(payload)) signals.push([row.offset, digest]);
     const user = line.type === 'response_item' && payload?.role === 'user';
-    const event = line.type === 'event_msg' ? payload?.type : null;
+    const claimedSelection = line.type === 'response_item' && claimedPageSelection(payload);
+    const ambient = user && typedAmbient(line, turn, activeContextAt);
+    if (claimedSelection && !ambient) return empty('native-input-control-unrecognized');
     const stateGoal = event === 'thread_goal_updated' ? goalStateObservation(line, binding, turn, contextAt) : null;
     if (event?.startsWith('thread_goal_') && !stateGoal) return empty('native-input-control-unrecognized');
     if (user || stateGoal) {
@@ -1128,7 +1207,6 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       const sourceMatch = sourceIndex >= 0;
       const goal = goalRuntimeContext(payload, turn);
       const userGoal = userGoalControl(line, binding, turn, contextAt);
-      const ambient = typedAmbient(payload, turn);
       const hostContext = ambient || goal || userGoal || stateGoal;
       const sourceCategory = userGoal ? 'user-goal-control' : stateGoal ? 'goal-state-observation' : goal ? 'goal-runtime-context' : null;
       const kinds = payload?.internal_chat_message_metadata_passthrough?.content_item_kinds;
@@ -1152,10 +1230,20 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
         format: 'control-json', textChars: [...rawJson].length, sha256: digest}]} :
         contentEvidence(payload, {...binding, turnId: turn}, capturedHash);
       const metadata = payload?.internal_chat_message_metadata_passthrough;
+      // Only the association re-scan can carry forward a verified Hook match,
+      // using the same record bytes, source, turn and prompt hash.
+      const hook = hookMatch ? expected : sourced[sourceIndex]?.hookMatched === true ? sourced[sourceIndex] : null;
+      const hookMatched = !hostContext && hook?.turnId === turn && hook.promptSha256 === promptHash &&
+        (metadata == null || metadata.turn_id === turn);
+      if (hookMatched) {
+        const at = rolloutUtcTime(line.timestamp);
+        hookAt = activeContextAt !== null && at !== null && at >= activeContextAt ? at : null;
+      }
       const record = {turnId: turn, sourceRef: sourceRefAtRow, recordOffset: row.offset,
         recordSha256: digest, promptSha256: promptHash, itemId: payload.id ?? null, captured: Boolean(sourceMatch || hookMatch),
         supported: content.supported && (!claimedGoal || goal), parts: content.parts,
         timestamp: line.timestamp, physicalOrderWithinAnchor: index - start,
+        ...(hookMatched ? {hookMatched: true} : {}),
         ...(integer(line.ordinal) ? {sourceOrdinal: line.ordinal} : {}),
         ...(boundedText(metadata?.turn_id, 200) ? {sourceContextId: metadata.turn_id} : {}),
         ...(integer(line.metadata?.user_input_order) ? {userInputOrder: line.metadata.user_input_order} : {}),
@@ -1190,6 +1278,9 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       }
       signals.push([row.offset, digest]);
       if (event === 'model_rerouted' && text(payload.to_model)) model = payload.to_model;
+      if (event === 'task_started' || event === 'task_complete') {
+        activeContextAt = null; hookAt = null;
+      }
       if (event === 'turn_aborted' && resumes[resumeIndex] && payload.reason === 'interrupted' &&
           payload.turn_id === turn && turn !== resumes[resumeIndex].turnId && integer(Date.parse(line.timestamp))) {
         if (resumeIndex < (recovered?.resumes.length || 0) && row.offset >= recovered.cursor.endOffset) {

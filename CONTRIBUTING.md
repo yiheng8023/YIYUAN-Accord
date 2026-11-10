@@ -14,29 +14,11 @@ the machine validation projection, not a competing source of user decisions.
 current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks;
 their old criteria and workflow prescriptions do not govern this successor.
 
-The next stage starts from the released and locally adopted **3.3.11** baseline.
-Its [current bounded work](docs/operations/PLAN-v3.3.md#3312-环境来源兼容与实际接续2026-11-05)
-extends the existing three priorities through design/host/consumer review and
-general ecosystem cooperation. Confirmed owned-start cancellation repairs use
-**3.3.12** as the final candidate after **3.3.12-dev.1** development; a candidate
-declaration is not a published package, roadmap promise or release date. The installed 3.3.11 and its evidence
-remain separate. CI exposed Python 3.10 cleanup compatibility and deadline-error
-propagation failures. A later complete local run found three cancellation exit
-observation failures; its formal consumption also rejected two supplemental
-witness schemas. Preserve each result, failure and clock under its original
-identity. The bounded Windows primary-handle fallback and corrected witness
-metadata require a new exact candidate, complete local validation and current
-qualification before a new push, then all required hosted checks before release.
-The 2a5 candidate later passed its complete 1454-test local suite. A subsequent
-remote-compaction capacity-error message exposed another turn-association format
-gap; the exact second message spelling is now recognized with all original
-source, retry-identity, input and pause guards retained. New exact qualification
-remains required; the installed 3.3.11 has not been hotpatched.
-Host-authored browser and strictly attributed environment context stay reviewable
-source data and never grant user authority. The actual compatible caller helper
-read source parts, reconciled pending records and rebound the full contract; the
-installed 3.3.11 MCP still reports native input origin unknown. These are separate
-observations, not complete application recovery or new-candidate qualification.
+Current maintenance starts from the released and locally adopted **3.3.12**
+baseline. The [current plan](docs/operations/PLAN-v3.3.md#基于3312的后续维护)
+covers confirmed Codex continuation gaps and their verification. The
+[acceptance view](docs/operations/ACCEPTANCE-v3.3.md) defines the required evidence
+for a changed candidate. The next release version and date are open.
 
 The repository now supports Python 3.11–3.14, with 3.14 as the validation baseline.
 Python 3.15 remains under observation and outside current CI. Reassess actual
@@ -44,8 +26,8 @@ dependency/tooling readiness and relevant validation before later adoption; no
 date is preset. Ordinary plugin use needs no Python.
 Python 3.10 upstream support ended on 2026-10-01; retain its compatibility repairs,
 original failures and historical version identities when updating current CI and
-copy. Current scope and evidence limits are in
-[plan r89](docs/operations/PLAN-v3.3.md#3312-环境来源兼容与实际接续2026-11-05).
+copy. The [baseline](docs/operations/BASELINE-v3.3.md) links the current support
+and maintenance records.
 Use the existing result and acceptance views; do not add parallel governance.
 
 These project documents govern Accord development and evidence review. Ordinary
