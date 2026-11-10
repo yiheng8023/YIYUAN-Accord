@@ -4247,6 +4247,41 @@ class ApprovalPrefixDirectoryNativeTests(NativeStateMcpFixture, unittest.TestCas
         return {'ordinal': 42, 'type': 'world_state', 'payload': {'full': False, 'state': {
             'permissions': {'approved_command_prefixes': [['example-command', 'read']]}}}}
 
+    def test_approved_prefix_directory_checks_later_hook_input_time(self):
+        for offset, captured in ((-1, True), (0, True), (1, True), (None, True),
+                                 (-1, False), (0, False), (1, False), (None, False)):
+            with self.subTest(later_input_milliseconds=offset, captured_by_hook=captured):
+                self.setUp()
+                self.native_context()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_bytes().splitlines()]
+                context_at = datetime.fromisoformat(rows[1]['timestamp'])
+                rows[2]['timestamp'] = (context_at + timedelta(milliseconds=2)).isoformat()
+                transcript.write_text(''.join(json.dumps(row) + '\n' for row in rows), encoding='utf-8')
+                directory_at = context_at + timedelta(milliseconds=4)
+                delta = {**self.approved_prefix_directory(), 'timestamp': directory_at.isoformat()}
+                prompt = 'Review the updated source in this same turn.'
+                self._resume_control_append_rows([delta, {
+                    'timestamp': ((directory_at + timedelta(milliseconds=offset)).isoformat()
+                        if offset is not None else None),
+                    'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+                        'content': [{'type': 'input_text', 'text': prompt}]}}])
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                if captured:
+                    self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt,
+                        'turn_id': meta['turn_id'], 'model': meta['model'],
+                        'transcript_path': str(transcript)}, session=meta['session_id'], hook='UserPromptSubmit')
+                evidence = self.native_input_preview()['nativeInputEvidence']
+                if offset is None or offset < 0:
+                    self.assertEqual((evidence['state'], evidence['reason']),
+                        ('unknown', 'native-input-control-unrecognized'))
+                else:
+                    self.assertEqual(evidence['state'], 'observed', evidence)
+                    if captured:
+                        self.assertTrue(evidence['latestNativeInputsComplete'], evidence)
+                    self.assertEqual(len(evidence['records']), 2)
+                    self.assertEqual(evidence['records'][-1]['captured'], captured)
+
     def test_approved_prefix_directory_keeps_same_turn_input_and_pause(self):
         self.native_context(v2=True)
         initial = self.native_input_preview()
@@ -4282,7 +4317,8 @@ class ApprovalPrefixDirectoryNativeTests(NativeStateMcpFixture, unittest.TestCas
 
         meta = self.params['_meta']['x-codex-turn-metadata']
         prompt = 'Keep the pause while reviewing the source.'
-        self.append_native_message(text=prompt)
+        self._resume_control_append_rows([{'type': 'response_item', 'payload': {
+            'type': 'message', 'role': 'user', 'content': [{'type': 'input_text', 'text': prompt}]}}])
         self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt,
             'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
             session=meta['session_id'], hook='UserPromptSubmit')

@@ -53,7 +53,7 @@
     ],
     "additionalHostAdaptation": "deferred",
     "scopeRule": "Version 3.3 continues the six selected local OpenAI execution/control paths and their selected modes: CLI, Desktop, VS Code, local-only Work/Remote, mobile Remote of selected local hosts and bounded SDK duties. Per the final r38 decision retained in r39, independent ordinary Chat research/content modes, web Chat and JetBrains/Xcode integrations are deferred for this release, with capability unknown and future decisions open. Actual loading, interaction, authority, continuity, recovery, verification and exit remain required for selected paths; a limited IDE observation does not close those requirements. Shared Linux/macOS CLI and standard hosted CI remain. Claude, Pi, DeepSeek Harness, ZCode and Antigravity remain future host candidates only; decisions follow 3.3 publication and discussion with the user. Future adaptation remains candidate-only with no preset version or schedule; other agreed future directions remain available. Public-directory listing is optional and does not block product iteration or value evaluation.",
-    "sourceDecision": "Resume the quota-deferred maintenance toward the next release per the 2026-11-10 user input. Version3.3.13 will carry the approved-prefix and exact-empty-selection compatibility corrections and the verified human Hook/turn boundaries. R97 b01b142e8d33071869b16966cbc932fa0731f59a has1467 local regressions and three statics at its original identity. Apply current source and host evidence, exact functional qualification, hosted validation, release notes and local adoption to the new candidate. Current Remote setting is user-reported enabled for incoming connections with no devices added; actual controller scope and effects require sourced applicability. Preserve prior release identities and failures. Compare Accord value only through enabled/disabled same-host pairs and reuse their actual results for communication.",
+    "sourceDecision": "Resume the quota-deferred maintenance toward the next release per the 2026-11-10 user input. Version3.3.13 will carry the approved-prefix and exact-empty-selection compatibility corrections and the verified human Hook/turn boundaries. R97 b01b142e8d33071869b16966cbc932fa0731f59a has1467 local regressions and three statics at its original identity. Apply current source and host evidence, exact functional qualification, hosted validation, release notes and local adoption to the new candidate. Current Remote setting is user-reported enabled for incoming connections with no devices added; actual controller scope and effects require sourced applicability. Preserve prior release identities and failures. Compare Accord value only through enabled/disabled same-host pairs and reuse their actual results for communication. The r99 follow-up fixes the independently reproduced later ordinary-input UTC ordering gap in both captured and pending-source paths. The initial candidate and deliberate stop retain their own clocks and results.",
     "claudeAdaptation": "candidate-only",
     "futureAdaptationVersion": "undecided",
     "futureAdaptationCandidates": [
@@ -109,7 +109,7 @@
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.13",
-        "packageSha256": "5647d7b02fc8b01a713d00a89084f0bb88368656671f4bc5ca062763c808b1e4",
+        "packageSha256": "06ab249bfa25e5b184250f6d1146a3d9bdd8dbd14f489e15fac9c93ab4541bf0",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -339,7 +339,7 @@
       "maxProductCodeAndTestBytes": 5110000,
       "maxTrackedFiles": 225,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "PLANr94 used7560B of8000B for the approved-prefix directory, from4781477B to4789037B. PLANr95 independently scopes9000B net to the same adapter, exact facade and checkpoint tests for the empty selection. Actual net8196B comprises413 runtime and7783 test bytes. R96 measured4797233B. R97 adds10247B to the same runtime, caller and existing regressions for verified Hook reuse and source boundaries. Current4807480B, 225 sources, primary20338B, capacity5110000B, reserve255500B and usable4854500B. The prior release budget is retained at 352965ffc835b3f272b85355e1bc23df0998924e:product/development.json#/changeBoundary/complexityBudget/rationale."
+      "rationale": "R97 source b01b142e8d33071869b16966cbc932fa0731f59a measured4807480 product/test bytes with225 tracked sources and20338 primary instruction bytes. R98 added3.3.13 version-contract coverage in existing modules and tests. R99 adds the ordinary-input UTC ordering check and expands its existing native fixture for captured and uncaptured sources. Capacity5110000, reserve255500, usable4854500 and tracked-file ceiling225 are retained; fresh observed metrics accompany the final source checks. Prior budget evidence stays at b01b142e8d33071869b16966cbc932fa0731f59a:product/development.json#/changeBoundary/complexityBudget."
     }
   },
   "source": {
@@ -6435,7 +6435,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "currentMaintenance": "Next-release preparation resumes the verified r97 compatibility work. R97 source b01b142e8d33071869b16966cbc932fa0731f59a/30-member package0e7a5ef5 retains1467 full local tests and three statics. Current case, witness and role dependencies are being reconciled before exact new qualification. The desktop package updated to26.1103.7773.0; the previous getRemoteConnections map is SSH catalog evidence and requires corrected Remote-role mapping. The user reports incoming connections enabled and no devices added. Preserve unsupported current UI/control effects as unknown and assess only task-necessary conditions. The 2026-11-10 decision uses same-host enabled/disabled comparisons and actual paired material for communication. Historical raw evidence and original failures remain in their original records. New exact candidate validation, functional qualification, hosted terminals, publication and actual adoption remain pending.",
+    "currentMaintenance": "Version3.3.13 continues the approved-prefix and exact-empty-selection corrections. The initial c795fcf3 candidate passed its three clean statics; full local suite was intentionally stopped after167.099seconds for an independently identified chronology counterexample, with owned processes0 and source/checkout unchanged. A real-entry regression reproduced acceptance of a later Hook input whose UTC precedes the directory, and a second variant reproduced the uncaptured-source branch. The corrected scanner checks ordinary human input before capture classification, preserving equal/later UTC and rejecting missing/backward time. Existing pause fixture now uses its actual timestamped native shape and keeps original assertions. Seven directory/selection tests and four origin/identity consumer tests pass. Correct facade and package hashes bind the new source. Current phone-to-local maintenance input was corroborated against native and source-helper observations; user-reported physical origin and unobserved control effects keep separate scopes. Both original A01/A02 chains were read back without replay and keep their original roles, Goal absence, preplanned inputs and cleanup failures. Exact new suite, fresh case/witness applicability, four-axis/two-phase qualification, hosted checks and conditional publication/adoption remain pending.",
     "decisionCapabilityPolicy": {
       "responsibility": "Keep portable judgment, selection, feedback and correction; no default dedicated decision model, service, account, key or per-step extra call.",
       "selection": "Use code/native facts for deterministic checks or sufficient existing models for semantic judgment. Optional specialized capabilities require actual need, availability, authority and supported whole-task benefit; this is not a fixed call sequence.",
@@ -6473,7 +6473,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r98",
+    "revision": "r99",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

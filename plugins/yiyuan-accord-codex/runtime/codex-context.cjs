@@ -1208,6 +1208,10 @@ function scanNativeInputs(rows, tail, tailOffset, binding, scan, identity, headH
       const goal = goalRuntimeContext(payload, turn);
       const userGoal = userGoalControl(line, binding, turn, contextAt);
       const hostContext = ambient || goal || userGoal || stateGoal;
+      if (!hostContext && lastPrefixAt !== null) {
+        const at = rolloutUtcTime(line.timestamp);
+        if (at === null || at < lastPrefixAt) return empty('native-input-control-unrecognized');
+      }
       const sourceCategory = userGoal ? 'user-goal-control' : stateGoal ? 'goal-state-observation' : goal ? 'goal-runtime-context' : null;
       const kinds = payload?.internal_chat_message_metadata_passthrough?.content_item_kinds;
       const claimedGoal = Array.isArray(kinds) && kinds.includes('goal.internal_context');

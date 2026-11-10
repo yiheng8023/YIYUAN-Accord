@@ -18,7 +18,8 @@ Current maintenance starts from the released and locally adopted **3.3.12**
 baseline. The [current plan](docs/operations/PLAN-v3.3.md#基于3312的后续维护)
 covers confirmed Codex continuation gaps and their verification. The
 [acceptance view](docs/operations/ACCEPTANCE-v3.3.md) defines the required evidence
-for a changed candidate. The next release version and date are open.
+for a changed candidate. The current maintenance target is **3.3.13**.
+Publication follows its applicable evidence and release conditions.
 
 The repository now supports Python 3.11–3.14, with 3.14 as the validation baseline.
 Python 3.15 remains under observation and outside current CI. Reassess actual
