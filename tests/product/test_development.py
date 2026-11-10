@@ -1150,6 +1150,10 @@ class SuccessorDevelopmentTests(unittest.TestCase):
     def errors(self, contract):
         return development_contract_errors(contract, self.tasks)
 
+    def unselected_patch_target(self):
+        parts = self.contract['cycle']['targetVersion'].split('.')
+        return '.'.join([*parts[:-1], str(int(parts[-1]) + 1)])
+
     def test_authorized_v33_final_freeze_preserves_unqualified_claims(self):
         candidate = copy.deepcopy(self.contract)
         candidate['status'] = 'candidate-frozen'
@@ -1171,7 +1175,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
             elif kind == 'complete': altered['claimCeiling']['functionalCompletion'] = True
             elif kind == 'eligible': altered['claimCeiling']['candidateEligible'] = True
             elif kind in ('target', 'unselected-patch'):
-                target = '3.4.0' if kind == 'target' else '3.3.13'
+                target = '3.4.0' if kind == 'target' else self.unselected_patch_target()
                 altered['cycle']['targetVersion'] = release['target'] = target
                 altered['delivery']['version'] = target
                 altered['delivery']['hostProjections'][0]['packageVersion'] = target
@@ -1190,7 +1194,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
                         self.assertIn(error, errors)
 
     def test_unselected_development_target_is_not_admitted(self):
-        for target in ('3.3.13', '3.4.0'):
+        for target in (self.unselected_patch_target(), '3.4.0'):
             with self.subTest(target=target):
                 altered = copy.deepcopy(self.contract)
                 altered['status'] = 'in-development'
@@ -1251,7 +1255,13 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertEqual(self.contract["authority"]["conditionalRelease"]["decision"],
                          "user-authorized-after-acceptance")
         self.assertFalse(self.contract["authority"]["conditionalRelease"]["ready"])
-        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], "3.3.12")
+        manifest = json.loads((ROOT / self.contract["delivery"]["hostProjections"][0]["manifest"])
+                              .read_text(encoding="utf-8"))
+        self.assertEqual(self.contract["delivery"]["version"], manifest["version"])
+        base_version = manifest["version"].split('-', 1)[0].split('+', 1)[0]
+        self.assertEqual(self.contract["authority"]["conditionalRelease"]["target"], base_version)
+        if self.contract["status"] == 'candidate-frozen':
+            self.assertEqual(manifest["version"], base_version)
         self.assertEqual(self.contract["predecessorSnapshot"], old["predecessorSnapshot"])
         self.assertEqual({p["id"] for p in self.contract["delivery"]["hostProjections"]}, {"codex"})
         self.assertEqual({p["id"] for p in old["delivery"]["hostProjections"]}, {"codex", "claude-code"})
