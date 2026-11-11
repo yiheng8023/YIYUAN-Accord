@@ -227,7 +227,7 @@ two-phase qualification. [CI #1061](https://github.com/yiheng8023/YIYUAN-Accord/
 has the sourced terminal attempt2 completed with all10 jobs successful. Both native artifact groups were checked
 against this exact source. The original unacquired macOS/Python3.11 job and its
 single-job retry retain their own provider records; the other nine successes
-retain their original execution clocks. The enabled local3.3.13 cache/catalog and persistent pinned source are verified. This existing chat still reports MCP3.3.12; actual adoption awaits normal client restart. Tag CI#1062 remains nonterminal and is tracked separately.
+retain their original execution clocks. The enabled local3.3.13 cache/catalog and persistent pinned source are verified. After normal restart, this same chat reports MCP 3.3.13 and its six listed loaded functions match source. The original goal and bound input/output conditions are preserved; current input is complete and reconciled. Tag CI #1062 also completed with all 10 jobs successful, and its 18 native artifacts were independently checked.
 Original failures and limited host roles remain scoped; ordinary host resumption
 does not establish plugin-attributable recovery or general incremental value.
 The previous [3.3.12 observations](https://github.com/yiheng8023/YIYUAN-Accord/blob/2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc/docs/architecture.md#current-release-and-scoped-connections)
