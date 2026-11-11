@@ -37,7 +37,7 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
 2. 在需要登记来源时，可采用[官方 marketplace 命令](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)：
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref e6b3594c5f56091ecf9a03d58a845c1a206c53cf
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc
    ```
 
    这条命令只登记来源。CLI 在 `/plugins` 中切到该来源，查看并安装 YIYUAN Accord；桌面使用实际可用的插件目录与来源入口。本项目来源不等于已被官方公共目录收录。
@@ -71,7 +71,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 
 ### 排查、更新与退出
 
-固定提交来源变更时，若宿主提示来源已登记且与新来源不同，先由执行者保留未完任务、原来源和恢复副本，再按当前宿主支持的流程只替换具名来源。本轮Codex 0.166.0-alpha.6实测使用`codex plugin marketplace remove yiyuan-accord --json`后重新登记本版本固定提交并安装，已核默认来源与启用状态。安装结束时旧聊天仍加载MCP3.3.11；随后正常重启，在同一聊天实测3.3.12并另核包字节及当前输入。其余来源与当前用户设置保留，重启时的外部配置变化按实际字段另行对账。此操作观察保其版本范围，不将反复安装当作刷新。
+固定提交来源变更时，若宿主提示来源已登记且与新来源不同，先由执行者保留未完任务、原来源和恢复副本，再按当前宿主支持的流程只替换具名来源。3.3.12更新时，Codex 0.166.0-alpha.6实测使用`codex plugin marketplace remove yiyuan-accord --json`后重新登记当时3.3.12的固定提交并安装，已核默认来源与启用状态。安装结束时旧聊天仍加载MCP3.3.11；随后正常重启，在同一聊天实测3.3.12并另核包字节及当前输入。其余来源与当前用户设置保留，重启时的外部配置变化按实际字段另行对账。此操作观察保其版本范围，不将反复安装当作刷新。
 
 | 现象 | 由执行者优先核对 |
 |---|---|
@@ -98,6 +98,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 | 3.3.10 | 原生交接可选时间字段兼容、仓库转发与测试路径核验修正；验证、发行与实际采用状态见[接续](operations/CONTINUATION.md#目标与当前写者)，不扩大实际恢复或收益承诺。 |
 | 3.3.11 | `3a39ed98` 的入口指导和维护验证修订；[发行原件](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.11)与原 CI／采用记录各保其身份。 |
 | 3.3.12 | 取消、严格来源兼容和仓库验证器修正，细化既有核验指导；[精确发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12)，提交 `e6b3594c5f56091ecf9a03d58a845c1a206c53cf`。C11 本地1461项及18案／17范围资格通过；托管、安装和实际加载分别见[当前接续](operations/CONTINUATION.md#目标与当前写者)，不证明普遍收益。 |
+| 3.3.13 | Bounded approved-prefix directory, exact empty-selection and ordinary-input UTC ordering compatibility; [exact release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.13), commit `2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc`. The exact r100 candidate passed 1,468 local tests and the original 18-case / 17-scope qualification. Hosted terminal, installation and actual loading are separate in [continuation](operations/CONTINUATION.md#目标与当前写者); historical roles and comparative limits remain. |
 
 原始失败、版本、环境和条件保持原身份；后续文档不移动发行标签，也不把旧通过直接当作新版本通过。CLI、SDK、桌面、IDE、Work 与 Remote 之间，仅在核对适用性和差异后复用相应机制证据；历史入口观察不能覆盖现行官方已知限制。
 
@@ -162,7 +163,7 @@ Complete **installation, enablement and Hook trust** separately, then verify act
 2. Where source registration is needed, use the official [marketplace command](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli):
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref e6b3594c5f56091ecf9a03d58a845c1a206c53cf
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc
    ```
 
    This registers the source only. In CLI `/plugins`, select it, inspect and install YIYUAN Accord. On desktop use the actual plugin directory/source entry. A repository marketplace is not a listing in the official public directory.
@@ -196,7 +197,7 @@ This is not complete conversation history or a progress record, and grants no ne
 
 ### Troubleshooting, updates and exit
 
-When changing a fixed source revision, if the host reports an existing different source, have the executor preserve unfinished work, the previous source and a recovery copy, then replace only the named source through the current host controls. In this Codex 0.166.0-alpha.6 observation, `codex plugin marketplace remove yiyuan-accord --json` was followed by registration at this release commit and installation. The default source and enablement were verified; at installation close this existing chat still reported MCP 3.3.11, with actual 3.3.12 loading reserved for separate verification after normal client restart. Other sources and settings were preserved. This is version-bound evidence; repeating `add` is not an update.
+When changing a fixed source revision, if the host reports an existing different source, have the executor preserve unfinished work, the previous source and a recovery copy, then replace only the named source through the current host controls. For the 3.3.12 update with Codex 0.166.0-alpha.6, `codex plugin marketplace remove yiyuan-accord --json` was followed by registration at that release commit and installation. The default source and enablement were verified; at installation close this existing chat still reported MCP 3.3.11, with actual 3.3.12 loading reserved for separate verification after normal client restart. Other sources and settings were preserved. This is version-bound evidence; repeating `add` is not an update.
 
 | Symptom | Executor's first checks |
 |---|---|

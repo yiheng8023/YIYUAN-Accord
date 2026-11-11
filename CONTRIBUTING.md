@@ -14,12 +14,13 @@ the machine validation projection, not a competing source of user decisions.
 current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks;
 their old criteria and workflow prescriptions do not govern this successor.
 
-Current maintenance starts from the released and locally adopted **3.3.12**
-baseline. The [current plan](docs/operations/PLAN-v3.3.md#基于3312的后续维护)
-covers confirmed Codex continuation gaps and their verification. The
-[acceptance view](docs/operations/ACCEPTANCE-v3.3.md) defines the required evidence
-for a changed candidate. The current maintenance target is **3.3.13**.
-Publication follows its applicable evidence and release conditions.
+The current released maintenance baseline is **3.3.13**, qualified on exact
+`2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc`. The [current plan](docs/operations/PLAN-v3.3.md)
+records the completed continuation fixes and retained historical limits.
+Source qualification, publication, installation and actual loading are
+separate in [continuation](docs/operations/CONTINUATION.md#目标与当前写者).
+Future work follows confirmed needs and host changes, with no preset version
+or schedule. Existing acceptance and release conditions remain applicable.
 
 The repository now supports Python 3.11–3.14, with 3.14 as the validation baseline.
 Python 3.15 remains under observation and outside current CI. Reassess actual

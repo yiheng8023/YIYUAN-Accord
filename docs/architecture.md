@@ -220,11 +220,18 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current release and scoped connections
 
-The current published Codex package is [3.3.12](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12),
-from exact commit `e6b3594c5f56091ecf9a03d58a845c1a206c53cf`. Its source qualification
-was completed on C11 (`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`):
-1,461 local tests and the original 18-case / 17-scope qualification passed.
-Hosted CI [#1059](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42002302364) and post-tag CI [#1060](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42015531434) each finished 10/10 successful; their 18 native archives were reviewed separately. The installed/default-source 30-member package matched the exact release. After normal restart this same chat actually reported MCP 3.3.12, and its six listed loaded function bodies matched the installed source. At that adoption observation native input was complete and reconciled. These are separate scoped observations, not all-client recovery or ordinary-use value. Original failures, clocks, POSIX resource limits and the transient macOS observation errors remain recorded; protocol/resource closure is recorded separately.
+The current published Codex package is [3.3.13](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.13),
+from exact commit `2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc`. Its r100 source qualification
+passed 1,468 local tests, three static checks and the original 18-case / 17-scope
+two-phase qualification. [CI #1061](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42858639379)
+has the sourced terminal attempt2 completed with all10 jobs successful. Both native artifact groups were checked
+against this exact source. The original unacquired macOS/Python3.11 job and its
+single-job retry retain their own provider records; the other nine successes
+retain their original execution clocks. The enabled local3.3.13 cache/catalog and persistent pinned source are verified. This existing chat still reports MCP3.3.12; actual adoption awaits normal client restart. Tag CI#1062 remains nonterminal and is tracked separately.
+Original failures and limited host roles remain scoped; ordinary host resumption
+does not establish plugin-attributable recovery or general incremental value.
+The previous [3.3.12 observations](https://github.com/yiheng8023/YIYUAN-Accord/blob/2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc/docs/architecture.md#current-release-and-scoped-connections)
+keep their exact source, clocks and adoption limits.
 Earlier package descriptions retain their historical versions. See
 [current continuation](operations/CONTINUATION.md#目标与当前写者).
 The [3.3.2 release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.2)

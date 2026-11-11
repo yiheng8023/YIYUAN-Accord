@@ -37,7 +37,7 @@ Accord 的通用设计不绑定某一家模型厂商或宿主。**当前发行�
 1. **安装。** 从本项目来源安装 YIYUAN Accord；CLI 登记来源可使用：
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref e6b3594c5f56091ecf9a03d58a845c1a206c53cf
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc
    ```
 
 2. **启用插件。** 确认宿主允许使用插件，并在实际使用范围内启用 Accord。CLI 在 `/plugins` 中选择来源、安装，并对已安装项按 `Space` 启停。
