@@ -124,12 +124,15 @@ def read_regular(path, limit=8 * 1024 * 1024):
 def digest(path, *, os_shell=False):
     path = Path(path)
     before = path.lstat()
-    # Windows servicing hard-links its system shells. Accept those
-    # OS-owned links only for the explicitly bound default shell, never package,
-    # credentials, inputs, executable Node or any prior evidence hash source.
-    system = Path(os.environ.get("SystemRoot", "C:/Windows")) / "System32"
-    allowed_os_shell = (os_shell and os.name == "nt" and path in {
-        (system / "cmd.exe").resolve(), (system / "WindowsPowerShell/v1.0/powershell.exe").resolve()})
+    # Windows servicing may hard-link both system and host-bundled shells.
+    # The exception follows the actual native selection, not a directory name
+    # or signer allowlist. It binds executable bytes, not installation trust.
+    # Other roles (including Node/package/input/evidence) keep the single-link
+    # rule; even another hard link to this shell is not the selected path.
+    allowed_os_shell = False
+    if os_shell and os.name == "nt" and before.st_nlink != 1:
+        selected, kind = _native_hook_shell()
+        allowed_os_shell = path == selected and kind in {"powershell", "cmd"}
     if (not stat.S_ISREG(before.st_mode) or (before.st_nlink != 1 and not allowed_os_shell) or path.is_symlink()
             or getattr(before, "st_file_attributes", 0) & 0x400 or before.st_size > 1024 * 1024 * 1024):
         raise ValueError("unsafe or oversized hash source")
@@ -617,11 +620,23 @@ def _verify_control_stage(manifest, stage, thread_id):
         raise ValueError("prepared stage command changed")
 
 
+def _store_powershell_path(path):
+    """Match upstream's Store package/alias distinction, not all WindowsApps."""
+    parts = re.split(r"[\\/]", str(path).lower())
+    for index, part in enumerate(parts[:-1]):
+        if part == "windowsapps":
+            following = parts[index + 1]
+            return (following in {"pwsh.exe", "powershell.exe"}
+                    or following.startswith("microsoft.powershell"))
+    return False
+
+
 def _native_hook_shell():
     """Follow the supported native user-shell selection, not the engine fallback.
 
-    rust-v0.154.0 session/mod.rs build_hooks_config supplies TurnEnvironment.shell.
-    shell_detect.rs prefers PowerShell on Windows; COMSPEC is only a fallback.
+    rust-v0.167.1 session/mod.rs build_hooks_config supplies TurnEnvironment.shell.
+    Normal discovery keeps PATH priority; only the native sandbox caller can
+    decide a Store-shell fallback. WindowsApps also holds valid Codex frameworks.
     """
     if os.name == "nt":
         candidates = [shutil.which("pwsh"), r"C:\Program Files\PowerShell\7\pwsh.exe",
@@ -630,7 +645,7 @@ def _native_hook_shell():
         for value in candidates:
             if value and Path(value).is_file():
                 path = Path(value).resolve()
-                if any(part.lower() == "windowsapps" for part in path.parts):
+                if _store_powershell_path(value) or _store_powershell_path(path):
                     raise ValueError("native Store shell requires separately verified sandbox-compatible resolution")
                 return path, "powershell"
         return (Path(os.environ.get("SystemRoot", "C:/Windows")) / "System32/cmd.exe").resolve(), "cmd"

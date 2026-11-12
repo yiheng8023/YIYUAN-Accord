@@ -152,6 +152,18 @@ GitHub官方[状态函数](https://docs.github.com/en/actions/reference/workflow
 
 另6项评审主体／材料摘要、历史隔离、纯函数未知与维护转换检查通过（82.479秒）。原件与审查记录保存在私有`.tmp/phase-3.3.14-20261112-01/`的`REMAINING-*`、`CI-CANCEL-*`和`WORKFLOW-LINT.txt`；不把这些局部检查合算成整阶段资格。当前已逐类核资产用途及主要消费者，后续收敛到实际材料适用性、精确候选转换和统一必要验证；已核范围发生相关变化时再回看。运行插件仍3.3.13，没有新增复杂评价体系、宿主适配、推送、托管CI或发行。
 
+### 2026-11-12 原生Shell选择与摘要绑定
+
+精确候选`6ad5230e`的1477项完整执行自然结束，2个失败、21个错误均遇到入口观察器的WindowsApps拒绝。总运行2430.2495193秒，原源码与clean保持，所属Job最终0、句柄关闭；保留失败原件，不将后续修复覆盖到原结果。
+
+当前PATH首选为宿主CodexPrimaryRuntime框架内的PowerShell，文件位于WindowsApps并有两个硬链接。观察器原来将所有WindowsApps路径当成Microsoft Store PowerShell；[官方0.154.0](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/shell-command/src/shell_detect.rs#L125-L175)和[0.167.1源码](https://github.com/openai/codex/blob/rust-v0.167.1/codex-rs/shell-command/src/shell_detect.rs#L137-L188)均已区分Store包／直接执行别名与合法Codex框架，普通发现保留PATH顺序。这是旧观察器简化被当前实际载体暴露，不足以证明宿主Hook或沙箱故障。
+
+修正分别覆盖选择和摘要：原始路径及解析目标中的Store包／别名仍拒绝，不静默换用classic；WindowsApps本身不构成拒绝理由。只有`digest(os_shell=True)`对当前精确选中且类型受支持的Windows Shell豁免硬链接数，继续检查普通文件、symlink／reparse、大小和读取前后身份。其它硬链接别名、Node、包、输入和证据不因此获豁免，`read_regular`保持。该绑定提供本次执行依赖的字节证据，不建立新的安装信任、签名白名单或无竞态保证。
+
+新增回归先在旧实现产生3失败／2错误，再修正实现；同时纠正一项环境测试在准备后改父PATH而无意切换Shell的假设。实际选择改变仍有拒绝负例，子进程环境构造不改父PATH。153项完整观察器模块检查通过（测试43.366秒，所属运行43.9532416秒），实际所选Shell经过摘要绑定和最小Node投影执行，所属Job最终0、句柄关闭且两源码摘要保持。初始仅在子进程前置classic路径的2项通过保留为诊断对照，没有改机器PATH或把它当原生采用。
+
+私有原件：`.tmp/phase-3.3.14-20261112-01/candidate-02/checks/full-suite-01/`及`shell-diagnosis-01/`。本片只改开发观察器与测试、说明；包运行实现不变。后继精确源码仍需统一完整回归及受影响材料重评，桌面alpha后端、实际原生Hook和特定沙箱各自的执行证据不能由本进程投影代签。
+
 ### 2026-10-30 原始核查起点
 
 先核宿主变化、实际载体及资产消费者，再决定有限重塑。当前源码关系审阅和两对合成任务试行均有用，但不足以替代这项前置核查。“动态适应”应复用可发现、可核验的稳定能力；依赖发生实质变化时，适配层仍要随之调整。没有一种静态提示词或接口能保证适应所有未来变化。

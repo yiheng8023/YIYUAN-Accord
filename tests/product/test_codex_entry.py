@@ -1628,6 +1628,7 @@ class EntryTests(unittest.TestCase):
     def test_native_execution_env_keeps_codex_home_and_bound_node_first(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
+            parent_path = os.environ.get("PATH", "")
             manifest = self.prepared_persistent(root, self.scoped_case(root), native_hooks=True)
             shared = root / "shared"
             shared.mkdir()
@@ -1636,13 +1637,15 @@ class EntryTests(unittest.TestCase):
             def execute(manifest, stage, thread, env, *_):
                 self.assertEqual(env["CODEX_HOME"], str(shared))
                 self.assertEqual(env["PATH"].split(os.pathsep)[:2], [str(Path(manifest["hookShell"]).parent), str(Path(manifest["node"]).parent)])
+                self.assertEqual(env["PATH"].split(os.pathsep, 2)[2], parent_path)
+                self.assertEqual(os.environ.get("PATH", ""), parent_path)
                 (Path(manifest["workspace"]) / "report.json").write_text('{"candidate":"abc"}', encoding="utf-8")
                 return {"valid": True, "threadId": "native-thread"}
             ordinary_read = entry.read_regular
             def no_auth_read(path, *args, **kwargs):
                 self.assertNotEqual(Path(path).name, "auth.json")
                 return ordinary_read(path, *args, **kwargs)
-            with patch.dict(os.environ, {"CODEX_HOME": str(shared), "PATH": "original-path"}), \
+            with patch.dict(os.environ, {"CODEX_HOME": str(shared)}), \
                     patch.object(entry, "_run_persistent_stage", side_effect=execute), \
                     patch.object(entry, "read_regular", side_effect=no_auth_read):
                 result = entry.run_persistent(argparse.Namespace(evidence=manifest["evidence"]))
@@ -2045,6 +2048,91 @@ class EntryTests(unittest.TestCase):
             self.assertIn("prepared stage prompt changed before dispatch", receipt["failure"])
             forbidden.assert_not_called()
 
+    def test_native_shell_keeps_path_selected_codex_framework(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            selected = root / 'WindowsApps/OpenAI.CodexPrimaryRuntime.v26_1_x64__publisher/dependencies/native/powershell/pwsh.EXE'
+            selected.parent.mkdir(parents=True)
+            selected.write_bytes(b'path-selected shell fixture')
+            windows = Mock(wraps=os)
+            windows.name, windows.environ = 'nt', os.environ
+            with patch.object(entry, 'os', windows), patch.object(entry.shutil, 'which', return_value=str(selected)):
+                self.assertEqual(entry._native_hook_shell(), (selected, 'powershell'))
+
+    def test_native_shell_rejects_store_alias_or_package_in_raw_and_resolved_path(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            classic = root / 'classic/pwsh.exe'
+            classic.parent.mkdir()
+            classic.write_bytes(b'classic shell fixture')
+            windows = Mock(wraps=os)
+            windows.name, windows.environ = 'nt', os.environ
+            original_resolve = Path.resolve
+            for relative in ('WindowsApps/pwsh.exe', 'windowsapps/PowerShell.EXE',
+                             'WINDOWSAPPS/Microsoft.PowerShell_7_x64__publisher/pwsh.exe'):
+                store = root / relative
+                store.parent.mkdir(parents=True, exist_ok=True)
+                store.write_bytes(b'store shell fixture')
+                for raw, resolved in ((store, store), (store, classic), (classic, store)):
+                    def resolve(path, *args, **kwargs):
+                        return resolved if path == raw else original_resolve(path, *args, **kwargs)
+                    with self.subTest(raw=relative, resolves_to_store=resolved == store), \
+                            patch.object(entry, 'os', windows), \
+                            patch.object(entry.shutil, 'which', return_value=str(raw)), \
+                            patch.object(Path, 'resolve', autospec=True, side_effect=resolve):
+                        with self.assertRaisesRegex(ValueError, 'native Store shell'):
+                            entry._native_hook_shell()
+
+    def test_selected_native_shell_hash_accepts_hardlinks_only_for_its_bound_role(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            shell, other = root / 'pwsh.exe', root / 'other.exe'
+            shell.write_bytes(b'bound shell bytes')
+            os.link(shell, other)
+            windows = Mock(wraps=os)
+            windows.name, windows.environ = 'nt', os.environ
+            with patch.object(entry, 'os', windows), \
+                    patch.object(entry, '_native_hook_shell', return_value=(shell, 'powershell')):
+                self.assertEqual(entry.digest(shell, os_shell=True), hashlib.sha256(shell.read_bytes()).hexdigest())
+                for path, role in ((shell, False), (other, True)):
+                    with self.subTest(path=path.name, shell_role=role), self.assertRaisesRegex(ValueError, 'unsafe'):
+                        entry.digest(path, os_shell=role)
+                with self.assertRaisesRegex(ValueError, 'ordinary file'):
+                    entry.read_regular(shell)
+            with patch.object(entry, 'os', windows), \
+                    patch.object(entry, '_native_hook_shell', return_value=(other, 'powershell')), \
+                    self.assertRaisesRegex(ValueError, 'unsafe'):
+                entry.digest(shell, os_shell=True)
+            with patch.object(entry, 'os', windows), \
+                    patch.object(entry, '_native_hook_shell', return_value=(shell, 'unknown')), \
+                    self.assertRaisesRegex(ValueError, 'unsafe'):
+                entry.digest(shell, os_shell=True)
+            with patch.object(entry, 'os', windows), \
+                    patch.object(entry, '_native_hook_shell', side_effect=ValueError('selection unavailable')), \
+                    self.assertRaisesRegex(ValueError, 'selection unavailable'):
+                entry.digest(shell, os_shell=True)
+
+    def test_native_shell_selection_change_is_rejected_before_execution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            manifest = self.prepared_persistent(root, native_hooks=True)
+            other = root / 'different-shell.exe'
+            other.write_bytes(b'different shell')
+            with patch.object(entry, '_native_hook_shell', return_value=(other, 'powershell')), \
+                    patch.object(entry.subprocess, 'Popen') as forbidden:
+                with self.assertRaisesRegex(ValueError, 'unsafe|prepared package'):
+                    entry._verify_prepared_sources(manifest)
+                forbidden.assert_not_called()
+
+    def test_store_shell_classification_preserves_windows_path_forms(self):
+        for root in ('C:/Program Files/WindowsApps/', 'c:\\program files\\WINDOWSAPPS\\',
+                     '\\\\?\\C:\\Program Files\\WindowsApps\\'):
+            with self.subTest(root=root):
+                self.assertTrue(entry._store_powershell_path(root + 'Microsoft.PowerShell_7_x64__publisher/pwsh.exe'))
+                self.assertTrue(entry._store_powershell_path(root + 'pwsh.EXE'))
+                self.assertFalse(entry._store_powershell_path(root + 'OpenAI.CodexPrimaryRuntime.v26_1_x64__publisher/dependencies/native/powershell/pwsh.exe'))
+        self.assertFalse(entry._store_powershell_path('C:/Program Files/PowerShell/7/pwsh.exe'))
+
     def test_os_shell_hash_exception_does_not_accept_hardlinked_package_or_node(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
@@ -2090,6 +2178,9 @@ class EntryTests(unittest.TestCase):
             (root / 'node.cmd').write_text('@echo shadow\r\nexit /B 91\r\n', encoding='utf-8')
             projection = entry._native_hook_projection(package, renamed)
             shell, kind = Path(projection['hookShell']), projection['shellKind']
+            # Use the actual selected shell, including a serviced framework with
+            # hard links, through both preparation hashing and real execution.
+            self.assertEqual(entry.digest(shell, os_shell=True), hashlib.sha256(shell.read_bytes()).hexdigest())
             command = projection['hooks']['Stop'][0]['hooks'][0]['command']
             if kind == 'cmd':
                 actual = _run_copied_runtime('"' + str(shell) + '" /C "' + command + '"', executable=str(shell),
