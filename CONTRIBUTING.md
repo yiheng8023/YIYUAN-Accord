@@ -22,24 +22,20 @@ the machine validation projection, not a competing source of user decisions.
 current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks;
 their old criteria and workflow prescriptions do not govern this successor.
 
-The current released maintenance baseline is **3.3.13**, qualified on exact
-`2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc`. The [current plan](docs/operations/PLAN-v3.3.md)
-records the completed continuation fixes and retained historical limits.
-Source qualification, publication, installation and actual loading are
-separate in [continuation](docs/operations/CONTINUATION.md#目标与当前写者).
-The user has selected **3.3.14** for the next asset retrospective and capability
-calibration stage; see [the approved scope](docs/operations/PLAN-v3.3.md#3314-资产回溯与能力校准2026-11-12).
-Review regressions since 3.3, actual host and third-party responsibilities,
-experience reuse and misapplication, correction, tests and current documentation.
-Keep, improve, replace or retire assets from evidence; add only justified missing
-capability. The delivery fields identify the 3.3.14 maintenance target. Candidate
-`a11ffecb` passed 1482 local checks and formal qualification, then hosted native
-jobs exposed a direct-script import-path defect. The corrected successor needs
-its own verification; the installed and actually loaded baseline is still
-3.3.13. `nextBoundary` records the remaining work. Existing acceptance
-is the starting point and may be questioned with explicit evidence and impact
-review, never changed retroactively to pass a result. Other future adaptations
-remain discussion-only candidates without a preset version or schedule.
+The current released maintenance version is **3.3.14**, qualified on exact
+`55b675ff5ef02c8b09470328b71f1b549f4c7b14`. PLAN r101's asset retrospective started
+from the completed 3.3.13 baseline. C4 passed 1,483 local tests, three statics,
+current material review and formal two-phase qualification; CI #1064 passed all
+ten jobs, with 18 native archives and 22 source manifests checked. The earlier
+C3 run retains its eight matrix successes and two native entry failures.
+Local 3.3.14 installation and persistent source are verified; this chat still
+loads MCP 3.3.13. Actual adoption, tag CI #1065 and final resource/protocol closure
+remain separate in [continuation](docs/operations/CONTINUATION.md#目标与当前写者).
+The package differs from 3.3.13 only in its version manifest; runtime and Skill
+bytes are unchanged. The current plan records bounded asset dispositions and
+retained unknowns. Existing acceptance may be questioned with explicit evidence
+and impact review, never retroactively changed to pass a result. Other future
+adaptations remain discussion-only candidates without a preset version or date.
 
 The repository now supports Python 3.11–3.14, with 3.14 as the validation baseline.
 Python 3.15 remains under observation and outside current CI. Reassess actual
