@@ -30,8 +30,10 @@ ten jobs, with 18 native archives and 22 source manifests checked. The earlier
 C3 run retains its eight matrix successes and two native entry failures.
 Local 3.3.14 installation, persistent source and current-chat MCP adoption are
 verified, including six loaded function fingerprints and preserved task state.
-Tag CI #1065 and final protocol closure remain pending; task checkouts were
-archived and removed, with evidence and recovery copies retained. These remain separate in [continuation](docs/operations/CONTINUATION.md#目标与当前写者).
+Tag CI #1065 also passed all ten jobs, with its own 18 native archives and 22
+source manifests independently verified. Business and resource checks are complete;
+final protocol retirement remains. Task checkouts were archived and removed,
+with evidence and recovery copies retained. These remain separate in [continuation](docs/operations/CONTINUATION.md#目标与当前写者).
 The package differs from 3.3.13 only in its version manifest; runtime and Skill
 bytes are unchanged. The current plan records bounded asset dispositions and
 retained unknowns. Existing acceptance may be questioned with explicit evidence
