@@ -23,7 +23,7 @@ from yiyuan_accord.development import (
 
 ROOT = Path(__file__).resolve().parents[2]
 V4_REVISION = "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88"
-# PLAN r101 selects this successor while frozen delivery fields retain 3.3.13.
+# Explicit user-selected target for the PLAN r101 contract fixtures.
 R101_TARGET = "3.3.14"
 
 
