@@ -32,8 +32,10 @@ calibration stage; see [the approved scope](docs/operations/PLAN-v3.3.md#3314-èµ
 Review regressions since 3.3, actual host and third-party responsibilities,
 experience reuse and misapplication, correction, tests and current documentation.
 Keep, improve, replace or retire assets from evidence; add only justified missing
-capability. The delivery fields identify the local 3.3.14 candidate, whose formal
-qualification remains pending; installed and actually loaded baseline is still
+capability. The delivery fields identify the 3.3.14 maintenance target. Candidate
+`a11ffecb` passed 1482 local checks and formal qualification, then hosted native
+jobs exposed a direct-script import-path defect. The corrected successor needs
+its own verification; the installed and actually loaded baseline is still
 3.3.13. `nextBoundary` records the remaining work. Existing acceptance
 is the starting point and may be questioned with explicit evidence and impact
 review, never changed retroactively to pass a result. Other future adaptations

@@ -16,6 +16,9 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
+# Direct script entry evaluates source inventories before the CLI dispatch below.
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 DRIVER = Path(__file__).with_name('carrier_handoff_host.cjs')
 PROPOSAL_TOOL = 'accord_request_handoff'
 CARRIER_EXECUTION_SOURCES = frozenset({
@@ -365,6 +368,21 @@ def _shared_config_observation():
     if not path.is_file() or path.is_symlink(): raise ValueError('shared config is not an ordinary file')
     return {'path':str(path),'present':True,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),
             'size':path.stat().st_size}
+
+
+class StandaloneCarrierEntryTests(unittest.TestCase):
+    def test_direct_entry_bootstraps_sources_before_dispatch(self):
+        # CI invokes this file directly. unittest discovery already puts the
+        # repository on sys.path and cannot expose an import before dispatch.
+        with tempfile.TemporaryDirectory() as cwd:
+            for arguments in (['--help'], ['--native-codex', 'unused-for-help', '--help'],
+                              ['--inspect-evidence', 'unused-for-help', '--help']):
+                with self.subTest(arguments=arguments):
+                    result = subprocess.run(
+                        [sys.executable, '-I', '-B', str(Path(__file__).resolve()), *arguments],
+                        cwd=cwd, capture_output=True, text=True, timeout=30)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertIn('usage:', result.stdout.lower())
 
 
 class CarrierHandoffTests(unittest.TestCase):
