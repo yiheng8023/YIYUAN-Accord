@@ -6,6 +6,14 @@ plan. Include an exact revision, safe log, screenshot or patch when available.
 
 ## Current development
 
+Review language by audience and file role. Keep English entry points, plugin
+metadata, executable Skill guidance and machine identifiers in their intended
+language; keep paired translations consistent in meaning and current facts.
+Chinese source guidance, explicitly bilingual sections, historical quotations,
+test inputs and link anchors are intentional where their consumers require them.
+Check context before translating: a character scan is an inventory, not proof of
+misplaced prose. Preserve contributor recognition, badges and sponsorship content.
+
 For current v3.3 work, [the consensus and plan](docs/operations/PLAN-v3.3.md)
 owns the approved scope, decisions and procedures; its linked acceptance view
 defines the criteria. [product/development.json](product/development.json) is
@@ -19,8 +27,16 @@ The current released maintenance baseline is **3.3.13**, qualified on exact
 records the completed continuation fixes and retained historical limits.
 Source qualification, publication, installation and actual loading are
 separate in [continuation](docs/operations/CONTINUATION.md#目标与当前写者).
-Future work follows confirmed needs and host changes, with no preset version
-or schedule. Existing acceptance and release conditions remain applicable.
+The user has selected **3.3.14** for the next asset retrospective and capability
+calibration stage; see [the approved scope](docs/operations/PLAN-v3.3.md#3314-资产回溯与能力校准2026-11-12).
+Review regressions since 3.3, actual host and third-party responsibilities,
+experience reuse and misapplication, correction, tests and current documentation.
+Keep, improve, replace or retire assets from evidence; add only justified missing
+capability. The frozen delivery fields still identify the released 3.3.13 package
+during preparation, while `nextBoundary` records this new work. Existing acceptance
+is the starting point and may be questioned with explicit evidence and impact
+review, never changed retroactively to pass a result. Other future adaptations
+remain discussion-only candidates without a preset version or schedule.
 
 The repository now supports Python 3.11–3.14, with 3.14 as the validation baseline.
 Python 3.15 remains under observation and outside current CI. Reassess actual
@@ -124,8 +140,22 @@ checks on tracked working-tree bytes in a new directory outside the source.
 Use a verified full commit SHA and an existing parent for the new work directory:
 
 ~~~powershell
-python -B -m yiyuan_accord check-snapshot --root . --work-dir C:/accord-checks/new-check --expected-head <full-commit-sha> --adapter codex --archive --json
+$checkConsole = 'C:/accord-checks/new-check.console.json'
+python -B -m yiyuan_accord check-snapshot --root . --work-dir C:/accord-checks/new-check --expected-head <full-commit-sha> --adapter codex --archive --json > $checkConsole
+$checkExitCode = $LASTEXITCODE
+Get-Content -Raw -Encoding utf8 -LiteralPath $checkConsole |
+    ConvertFrom-Json |
+    Select-Object valid, errors, scope, checks, cleanup, sourceStable, snapshotStable, archiveSha256 |
+    ConvertTo-Json -Depth 4
+if ($checkExitCode -ne 0) { throw "Static check failed; retain the full report and original exit code $checkExitCode." }
 ~~~
+
+Use a new console-output path as well as a new work directory. `--json` changes
+formatting only; it does not reduce report fields. Preserve the full report on
+disk and select the fields needed for the next decision before emitting it to
+the conversation. If decoding or projection fails, retain that failure separately
+from the saved check exit code. Expand to the relevant source/error fields when
+needed; a compact view does not replace complete evidence or repair a failed check.
 
 The source must have full local Git history and regular tracked files. Unsupported
 index additions/deletions, hidden entries, links and non-ignored untracked sources

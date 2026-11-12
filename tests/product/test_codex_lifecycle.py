@@ -1,4 +1,5 @@
 import argparse
+import ast
 from contextlib import redirect_stdout
 import io
 import hashlib
@@ -6,6 +7,7 @@ import http.client
 import json
 import os
 from pathlib import Path
+import re
 import tempfile
 import unittest
 from unittest.mock import Mock, patch
@@ -403,6 +405,57 @@ class CodexLifecycleTests(unittest.TestCase):
                          'config-read': 'configReadErrorType'}[phase]
                 self.assertEqual(rows[0][field], 'PermissionError' if phase == 'config-read' else 'KeyboardInterrupt')
                 self.assertFalse((evidence / 'empty-config').exists())
+
+    def test_ci_cancellation_stops_new_scenarios_but_retains_diagnostics(self):
+        workflow = (lifecycle.ROOT / '.github/workflows/validate.yml').read_text(encoding='utf-8')
+        steps = dict(re.findall(r'^      - name: ([^\n]+)\n(.*?)(?=^      - name: |\Z)',
+                                workflow, re.MULTILINE | re.DOTALL))
+        launches = {
+            'Reconcile a lost carrier acknowledgement without replay': 'prepare_upgrade',
+            'Finalize a reconciled native handoff without replay': 'prepare_upgrade',
+            'Exercise two SDK handoffs on the existing native host': 'prepare_upgrade',
+            'Restore the settled SDK writer on a new controller': 'sdk_session',
+            'Create an acknowledged ordinary SDK source': 'prepare_upgrade',
+            'Restore that ordinary source on a new controller': 'sdk_source',
+        }
+        diagnostics = {
+            'Independently inspect native finalization evidence': 'prepare_upgrade',
+            'Independently inspect the SDK native protocol evidence': 'prepare_upgrade',
+            'Independently inspect restored SDK state and original preservation': 'sdk_session',
+            'Independently inspect ordinary source restoration': 'sdk_source',
+            'Retain native finalization evidence': 'storage',
+            'Retain SDK restoration evidence': 'storage',
+            'Retain SDK native protocol evidence': 'storage',
+            'Retain ordinary source restoration evidence': 'storage',
+        }
+
+        def eligible(name, status, prerequisite, outcome):
+            condition = re.search(r'^        if: (.+)$', steps[name], re.MULTILINE).group(1)
+            condition = condition.removeprefix('${{').removesuffix('}}').strip()
+            # Evaluate only this workflow's boolean status/step-outcome subset.
+            # Status semantics: docs.github.com/en/actions/reference/workflows-and-actions/expressions
+            condition = re.sub(r"steps\.([a-z_]+)\.outcome == 'success'",
+                lambda match: str(match[1] == prerequisite and outcome == 'success'), condition)
+            for function, value in {'always': True, 'cancelled': status == 'cancelled',
+                                    'success': status == 'success', 'failure': status == 'failure'}.items():
+                condition = condition.replace(function + '()', str(value))
+            tree = ast.parse(condition.replace('&&', ' and ').replace('||', ' or ').replace('!', ' not ').strip(), mode='eval')
+            self.assertTrue(all(isinstance(node, (ast.Expression, ast.BoolOp, ast.UnaryOp,
+                ast.And, ast.Or, ast.Not, ast.Constant)) for node in ast.walk(tree)))
+            self.assertTrue(all(type(node.value) is bool for node in ast.walk(tree) if isinstance(node, ast.Constant)))
+            return eval(compile(tree, '<workflow-condition>', 'eval'), {'__builtins__': {}})
+
+        for name, prerequisite in launches.items():
+            for status in ('success', 'failure', 'cancelled'):
+                for outcome in ('success', 'failure', 'skipped', 'cancelled'):
+                    with self.subTest(step=name, status=status, prerequisite=outcome):
+                        self.assertEqual(eligible(name, status, prerequisite, outcome),
+                                         status != 'cancelled' and outcome == 'success')
+        for name, prerequisite in diagnostics.items():
+            for status in ('success', 'failure', 'cancelled'):
+                for outcome in ('success', 'failure'):
+                    with self.subTest(diagnostic=name, status=status, prerequisite=outcome):
+                        self.assertEqual(eligible(name, status, prerequisite, outcome), outcome == 'success')
 
     def test_ci_case_binding_rejects_incomplete_or_changed_execution_before_dispatch(self):
         workflow = (lifecycle.ROOT / ".github/workflows/sdk-lifecycle-case.yml").read_text(encoding="utf-8")

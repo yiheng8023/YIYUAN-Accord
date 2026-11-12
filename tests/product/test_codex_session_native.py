@@ -26,7 +26,7 @@ from scripts.observe_codex_lifecycle import (
     _App, _Fixture, _argv, _codex_version, _ordinary_dir, _owned_environment,
     _record_released, _regular_file, _tree_hashes,
 )
-from tests.product.test_carrier_handoff import proposal_fixture_item
+from tests.product.test_carrier_handoff import proposal_fixture_item, runtime_source_files
 
 
 SCHEMA = "accord-codex-session-native-evidence/v1"
@@ -147,7 +147,7 @@ def _shared_config_observation() -> dict:
 
 
 def _source_hashes(root=ROOT) -> dict:
-    return {name: _sha(Path(root) / name) for name in SOURCE_FILES}
+    return {name: _sha(Path(root) / name) for name in runtime_source_files(root, SOURCE_FILES)}
 
 
 def _input_inventory(root: Path) -> dict:
@@ -493,7 +493,7 @@ def _inspect_source_start(root: Path, manifest: dict, post: dict,
             result["history"]["thread"]["turns"][0].get("status") != "completed"):
         raise ValueError("original source identity, scope or completed turn differs")
     if (not isinstance(manifest.get("sourceHashes"), dict) or
-            set(manifest["sourceHashes"]) != set(SOURCE_FILES) or
+            set(manifest["sourceHashes"]) != set(runtime_source_files(root / "retained/executed-sources", SOURCE_FILES)) or
             any(_sha(root / "retained/executed-sources" / name) != expected
                 for name, expected in manifest["sourceHashes"].items()) or
             post.get("sourceHashesAfter") != manifest["sourceHashes"] or
@@ -605,7 +605,7 @@ def _inspect_source_context_exchange(root, thread_id, turn_id, count):
 def _inspect_source_restore(root: Path, manifest: dict, post: dict,
                             envelope: dict, config: dict):
     if (not isinstance(manifest.get("sourceHashes"), dict)
-            or set(manifest["sourceHashes"]) != set(SOURCE_FILES)
+            or set(manifest["sourceHashes"]) != set(runtime_source_files(root / "retained/executed-sources", SOURCE_FILES))
             or any(_sha(root / "retained/executed-sources" / name) != expected
                    for name, expected in manifest["sourceHashes"].items())
             or post.get("sourceHashesAfter") != manifest["sourceHashes"]
@@ -809,7 +809,7 @@ def _inspect_restore_evidence(root: Path, manifest: dict, post: dict,
     _validate_restore_ledger_sidecars(root / "retained/carrier.sqlite")
 
     if (not isinstance(manifest.get("sourceHashes"), dict)
-            or set(manifest["sourceHashes"]) != set(SOURCE_FILES)):
+            or set(manifest["sourceHashes"]) != set(runtime_source_files(root / "retained/executed-sources", SOURCE_FILES))):
         raise ValueError("cold frozen execution source set differs")
     snapshot = _ordinary_dir(root / "retained/executed-sources")
     for name, expected in manifest["sourceHashes"].items():
@@ -1068,7 +1068,7 @@ def inspect_evidence(value):
             or final_overrides.get("model_provider") != 'model_provider="accord_fixture"'):
         raise ValueError("native plugins, hooks, apps, web or provider isolation differs")
     if (not isinstance(manifest.get("sourceHashes"), dict)
-            or set(manifest["sourceHashes"]) != set(SOURCE_FILES)):
+            or set(manifest["sourceHashes"]) != set(runtime_source_files(root / "retained/executed-sources", SOURCE_FILES))):
         raise ValueError("frozen execution source set differs")
     snapshot = _ordinary_dir(root / "retained/executed-sources")
     for name, expected in manifest["sourceHashes"].items():
@@ -1435,6 +1435,34 @@ def native_integration(codex_value, evidence_value, restore_from=None,
 
 class CodexSessionNativeOfflineTests(unittest.TestCase):
 
+    def test_source_inventory_covers_shared_dependencies_and_keeps_full_copy_history(self):
+        with tempfile.TemporaryDirectory() as temp:
+            snapshot = Path(temp)
+            files = runtime_source_files(ROOT, SOURCE_FILES)
+            added = {f"plugins/yiyuan-accord-codex/runtime/{name}.cjs"
+                     for name in ("codex-connection", "codex-session", "task-checkpoint")}
+            self.assertEqual(set(files), set(SOURCE_FILES) | added)
+            for name in files:
+                target = snapshot / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / name, target)
+            before = _source_hashes(snapshot)
+            checkpoint = snapshot / "plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs"
+            checkpoint.write_bytes(checkpoint.read_bytes() + b"// changed\n")
+            self.assertNotEqual(_source_hashes(snapshot), before)
+            checkpoint.unlink()
+            with self.assertRaises((ValueError, OSError)):
+                _source_hashes(snapshot)
+            # Historical full copies need no new package-local checkpoint.
+            for name in ("codex-connection", "codex-session"):
+                shutil.copyfile(ROOT / f"plugins/yiyuan-accord-codex/runtime/{name}.cjs",
+                                snapshot / f"runtime/{name}.cjs")
+            self.assertEqual(set(_source_hashes(snapshot)), set(SOURCE_FILES))
+            shutil.copyfile(ROOT / "runtime/codex-connection.cjs", snapshot / "runtime/codex-connection.cjs")
+            (snapshot / "plugins/yiyuan-accord-codex/runtime/codex-connection.cjs").write_bytes(b"tampered")
+            with self.assertRaisesRegex(ValueError, "implementation digest differs"):
+                _source_hashes(snapshot)
+
     def test_source_restore_checks_execution_identity_before_portable_reads(self):
         from unittest.mock import patch
         source_hashes = {name: "a" * 64 for name in SOURCE_FILES}
@@ -1458,6 +1486,7 @@ class CodexSessionNativeOfflineTests(unittest.TestCase):
                 raise RuntimeError("past existing execution identity guards")
 
             with patch.dict(_inspect_source_restore.__globals__, {
+                    "runtime_source_files": lambda *_: SOURCE_FILES,
                     "_sha": lambda _: "b" * 64 if change == "frozen-source-drift" else "a" * 64,
                     "_version_record_ok": version_record, "_ordinary_dir": portable_read}):
                 _inspect_source_restore(Path("unused"), manifest, post, {}, {})

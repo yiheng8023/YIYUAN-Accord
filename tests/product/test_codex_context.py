@@ -305,6 +305,36 @@ class CodexContextTests(unittest.TestCase):
                 self.assertEqual(result["result"]["reason"], "native-last-response-boundary" if allowed
                                  else "transcript-path-changed-after-read")
 
+    def test_rejects_changes_during_read_and_recovers_from_a_stable_append(self):
+        script = (
+            "const fs=require('node:fs');const {observeNativeTranscript}=require(process.argv[1]);"
+            "const x=JSON.parse(fs.readFileSync(0,'utf8'));const fstat=fs.fstatSync;"
+            "let checks=0,changed=false;fs.fstatSync=(fd,opts)=>{if(++checks===2){"
+            "changed=true;if(x.mode==='append')fs.appendFileSync(x.binding.transcriptPath,x.line+'\\n');"
+            "else fs.truncateSync(x.binding.transcriptPath,0);}return fstat(fd,opts);};"
+            "let result;try{result=observeNativeTranscript(x.binding,x.options)}"
+            "finally{fs.fstatSync=fstat}process.stdout.write(JSON.stringify({changed,checks,result}));"
+        )
+        for mode in ("append", "truncate"):
+            with self.subTest(change=mode):
+                self.write(self.meta(), self.context(), self.usage())
+                self.assertEqual(self.observe()["state"], "observed")
+                request = {"binding": self.binding, "mode": mode, "line": self.usage(),
+                           "options": {"now": NOW, "maxAgeMs": 30000,
+                                       "sessionsRoot": str(self.sessions)}}
+                run = subprocess.run([self.node, "-e", script, str(RUNTIME)], input=json.dumps(request),
+                    text=True, encoding="utf-8", capture_output=True, timeout=10, cwd=ROOT)
+                self.assertEqual(run.returncode, 0, run.stderr)
+                result = json.loads(run.stdout)
+                self.assertTrue(result["changed"])
+                self.assertEqual(result["checks"], 2)
+                self.assertEqual(result["result"]["state"], "unknown")
+                self.assertEqual(result["result"]["reason"], "transcript-changed-during-read")
+                fresh = self.observe()
+                self.assertEqual(fresh["state"], "observed" if mode == "append" else "unknown")
+                if mode == "append":
+                    self.assertEqual(fresh["reason"], "native-last-response-boundary")
+
     def test_rejects_path_replacement_after_bounded_read(self):
         self.write(self.meta(), self.context(), self.usage())
         replacement = self.rollout.with_suffix(".replacement")

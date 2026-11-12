@@ -1,8 +1,55 @@
-# YIYUAN Accord
+# YIYUAN Accord glossary
+
+These terms describe goals, responsibilities and evidence in Accord's collaboration
+contracts. They do not mean that every corresponding capability has been verified.
+Host-specific and engineering fields retain the meanings of their own protocols.
+
+## English
+
+**Authorized objective**:
+The concrete outcome undertaken by the responsible collaborator within the user's
+intent, valid authority and completion conditions. Later corrections, tradeoffs
+and pauses remain part of its current meaning.
+
+**Authority boundary**:
+The permitted scope of action defined by valid authorization and applicable
+constraints. Capability visibility, component enablement and responsibility for
+collaboration do not expand that scope.
+
+**Closed-loop outcome**:
+A deliverable that meets the agreed completion conditions, has been verified in
+practice, and has accounted for resource closure and unfinished responsibilities.
+A successful local action, complete materials or a record of unfinished duties
+does not replace those completion conditions.
+
+**Capability composition**:
+The host, Agent and surrounding capabilities selected for an authorized objective,
+together with their responsibilities. Applicability depends on actual availability,
+quality, authority, total cost, privacy and exit conditions.
+
+**Responsibility continuity**:
+An accountable relationship among the goal, authority, effects, unknowns and
+unfinished duties through interruption, recovery or a change of responsible party.
+Saved information or a handoff receipt alone does not confirm takeover.
+
+**Evidence boundary**:
+The subject, time, conditions and claims supported by an observation. Source
+existence, actual adoption, outcome acceptance and formal publication are distinct
+levels of evidence.
+
+**Functional completion**:
+The state in which sufficient evidence shows that all applicable functional and
+quality conditions meet the current outcome definition. Component counts, case
+registration and isolated successes do not establish that state.
+
+**Candidate eligibility**:
+The state in which a specific candidate meets the required functional, lifecycle,
+impact-review and candidate conditions within its current scope. Publication and
+the authority to publish are assessed separately.
+
+## 简体中文
 
 这些术语描述 Accord 协作约定中的目标、责任与证据，不表示相应功能已经全部验证。具体宿主与工程字段按各自的协议解释。
-
-## Language
 
 **受托目标（Authorized objective）**：
 协作责任承担者在用户意图、有效授权和完成条件下承接的具体结果目标。后续真实纠正、取舍与暂停共同限定它的有效内容。

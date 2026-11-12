@@ -530,9 +530,15 @@ def activation_mechanism_errors(
             delivered = repository_relative_path(root, connection_locator)
             canonical_connection = repository_relative_path(root, "runtime/codex-connection.cjs")
             if (adapter_id != "codex" or delivered is None or canonical_connection is None
-                    or delivered.is_symlink() or canonical_connection.is_symlink()
-                    or _owned_bytes(delivered) != _owned_bytes(canonical_connection)):
+                    or delivered.is_symlink() or canonical_connection.is_symlink()):
                 errors.append(f"{prefix} owned-connection module differs from canonical bytes")
+            else:
+                implementation = _owned_bytes(delivered)
+                facade = ("'use strict';\n// Packaged implementation SHA256: "
+                          + sha256(implementation).hexdigest()
+                          + "\nmodule.exports = require('../plugins/yiyuan-accord-codex/runtime/codex-connection.cjs');\n").encode()
+                if _owned_bytes(canonical_connection) not in (implementation, facade):
+                    errors.append(f"{prefix} owned-connection module differs from canonical bytes")
         except OSError:
             errors.append(f"{prefix} owned-connection module is unreadable")
     if carrier_session:
@@ -547,14 +553,12 @@ def activation_mechanism_errors(
                     errors.append(f"{prefix} {name} module differs from canonical bytes")
                 else:
                     implementation = _owned_bytes(delivered)
-                    accepted = (implementation,)
-                    if name == "carrier-recorder":
-                        # Bind the repository facade to the unchanged package;
-                        # retain historical full-copy source compatibility.
-                        facade = ("'use strict';\n// Packaged implementation SHA256: "
-                                  + sha256(implementation).hexdigest()
-                                  + "\nmodule.exports = require('../plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs');\n").encode()
-                        accepted = (*accepted, facade)
+                    # Bind the repository facade to the unchanged package;
+                    # retain historical full-copy source compatibility.
+                    facade = ("'use strict';\n// Packaged implementation SHA256: "
+                              + sha256(implementation).hexdigest()
+                              + f"\nmodule.exports = require('../plugins/yiyuan-accord-codex/runtime/{name}.cjs');\n").encode()
+                    accepted = (implementation, facade)
                     if _owned_bytes(canonical) not in accepted:
                         errors.append(f"{prefix} {name} module differs from canonical bytes")
             except OSError:

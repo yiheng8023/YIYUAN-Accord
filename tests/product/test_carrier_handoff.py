@@ -31,6 +31,42 @@ CARRIER_EXECUTION_SOURCES = frozenset({
 })
 
 
+def runtime_source_files(root, sources):
+    """Bind the known repository library facades and their package dependencies.
+
+    Old full-copy snapshots keep their original source set. This is not an
+    arbitrary JavaScript dependency resolver or permission to execute a snapshot.
+    """
+    from scripts.observe_codex_entry import read_regular
+    def source_bytes(name):
+        try:
+            return read_regular(Path(root) / name, 1024 * 1024)
+        except OSError as error:
+            raise ValueError('necessary execution sources not retained') from error
+    required = set(sources)
+    for name in ('codex-connection', 'codex-session'):
+        entry = f'runtime/{name}.cjs'
+        if entry not in required:
+            continue
+        body = source_bytes(entry)
+        target = f'plugins/yiyuan-accord-codex/runtime/{name}.cjs'
+        pattern = (rb"'use strict';\n// Packaged implementation SHA256: ([0-9a-f]{64})\n"
+                   + re.escape(f"module.exports = require('../{target}');\n".encode()))
+        match = re.fullmatch(pattern, body)
+        if match:
+            implementation = source_bytes(target)
+            if hashlib.sha256(implementation).hexdigest().encode() != match[1]:
+                raise ValueError('runtime facade implementation digest differs')
+            required.add(target)
+            # The shared connection imports the package-local checkpoint. Its
+            # context reader is already retained by these native observers.
+            required.update(f'plugins/yiyuan-accord-codex/runtime/{child}.cjs'
+                            for child in ('codex-connection', 'task-checkpoint', 'codex-context'))
+        elif b"../plugins/yiyuan-accord-codex/runtime/" in body:
+            raise ValueError('runtime facade source form differs')
+    return tuple(sorted(required))
+
+
 FAILED_TRANSFER_SCENARIO = r'''
 const assert = require('node:assert/strict');
 const path = require('node:path');
@@ -1269,7 +1305,7 @@ def inspect_finalize_receipt_evidence(value):
         if (not frozen.is_file() or frozen.is_symlink() or frozen.resolve(strict=True)!=frozen
                 or hashlib.sha256(frozen.read_bytes()).hexdigest()!=expected):
             raise ValueError('frozen finalize source differs: '+str(relative))
-    if not CARRIER_EXECUTION_SOURCES<=observed_sources:
+    if not set(runtime_source_files(snapshot, CARRIER_EXECUTION_SOURCES))<=observed_sources:
         raise ValueError('necessary execution sources not retained')
     if post.get('sourceHashesAfter')!=manifest.get('sourceHashes'):
         raise ValueError('execution source changed during finalize evidence run')
@@ -1793,6 +1829,7 @@ def native_release_recovery_integration(codex, evidence):
     sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs')
     sources += [DRIVER, Path(__file__), ROOT/'scripts/observe_codex_lifecycle.py',
                 ROOT/'scripts/observe_codex_entry.py', ROOT/'scripts/codex_rpc.py', ROOT/'scripts/inspect_native_resources.py']
+    sources = [ROOT / name for name in runtime_source_files(ROOT, (p.relative_to(ROOT).as_posix() for p in sources))]
     manifest = {'scenario': 'release-recovery', 'evidence': str(root), 'sourceRoot': str(ROOT),
         'codex': str(codex), 'node': str(node), 'realModelCalls': 0,
         'ownedRoots': {n: str(root/n) for n in ('home', 'workspace', 'state', 'temp')},
@@ -2028,7 +2065,8 @@ def inspect_release_recovery_evidence(value):
         except ValueError: raise ValueError('source outside recorded checkout') from None
         observed_sources.add('/'.join(relative.parts))
         need(sha(data('retained/executed-sources/'+'/'.join(relative.parts)))==expected,'executed source bytes changed')
-    need(CARRIER_EXECUTION_SOURCES<=observed_sources,'necessary execution sources not retained')
+    need(set(runtime_source_files(root/'retained/executed-sources', CARRIER_EXECUTION_SOURCES))<=observed_sources,
+         'necessary execution sources not retained')
     def location(value, relative):
         try: observed=pure(value).relative_to(original)
         except (ValueError,TypeError): return False
@@ -2220,7 +2258,7 @@ class SyntheticReleaseRecoveryOracleTests(unittest.TestCase):
     model-free Node mock runs. Versions, processes, provider and native frames are
     explicit stubs; actual repository source bytes are copied into each temp tree.
     """
-    SOURCES = (
+    SOURCES = runtime_source_files(ROOT, (
         'runtime/carrier-handoff.cjs', 'runtime/carrier-recorder.cjs',
         'plugins/yiyuan-accord-codex/runtime/carrier-handoff.cjs',
         'plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs',
@@ -2230,7 +2268,7 @@ class SyntheticReleaseRecoveryOracleTests(unittest.TestCase):
         'tests/product/test_carrier_handoff.py', 'scripts/observe_codex_lifecycle.py',
         'scripts/observe_codex_entry.py', 'scripts/codex_rpc.py',
         'scripts/inspect_native_resources.py',
-    )
+    ))
 
     @classmethod
     def setUpClass(cls):
@@ -2665,7 +2703,8 @@ class SyntheticReleaseRecoveryOracleTests(unittest.TestCase):
             exec(code, {'root': self.root, 'pure': pure,
                         'source_root': pure(original['sourceRoot']), 'manifest': manifest,
                         'post': post, 'hashlib': hashlib,
-                        'CARRIER_EXECUTION_SOURCES': CARRIER_EXECUTION_SOURCES})
+                        'CARRIER_EXECUTION_SOURCES': CARRIER_EXECUTION_SOURCES,
+                        'runtime_source_files': runtime_source_files})
         inspect_sources(original['sourceHashes'])
         for missing in (None, *self.SOURCES):
             with self.subTest(missing=missing), self.assertRaisesRegex(
@@ -2812,6 +2851,7 @@ def native_integration(codex, evidence, scenario=None):
     if 'finalize-receipt' in scenarios:
         sources.append(ROOT/'runtime/carrier-recorder.cjs')
         sources.append(ROOT/'plugins/yiyuan-accord-codex/runtime/carrier-recorder.cjs')
+    sources = [ROOT / name for name in runtime_source_files(ROOT, (p.relative_to(ROOT).as_posix() for p in sources))]
     manifest['sourceHashes']={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}
     if scenarios==('finalize-receipt',):
         manifest.update(scenario='finalize-receipt',sourceRoot=str(ROOT),

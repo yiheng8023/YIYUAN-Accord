@@ -211,7 +211,9 @@ function retireParams(latest, absoluteWorkspace) {
 
 原生输入核验的内建来源失败带 `nativeInputDiagnostic`，可随 `native-input-evidence-unavailable` 或原生续轮关联的 `native-call-turn-conflict` 返回；仅身份不符、缺少证明等未产生具体读源原因的拒绝不补造诊断。`stage` 为 `initial-validation`（首次核验）或 `commit-recheck`（状态提交/退役前复核），`readerReason` 为有限的内建来源原因；未知值统一为 `reader-reason-unavailable`。例如来源在读取后变化可得到 `transcript-path-changed-after-read`。helper 保留原退出码和错误行，并另输出一行同名 JSON；MCP 保留原 reason/isError/effect。任意异常属性、原始文本、路径和输入不会作为这些字段反射。没有该字段不等于核验成功，也不能猜测失败阶段。
 
-这些信息用于定位被拒边界，不授予重试、恢复、放宽防护或新的权限；仍须核对实际输入、来源和操作后态。此修正不宣称已找出全部历史失败的触发原因，也不启用日志观察器。`inspect_task_state` 的运行时指纹包含 `manageTaskState` 和 `nativeInputDiagnostic`，可核本次改变的已加载函数；它们仍不覆盖闭包、常量、整个软件包或其它进程。
+`transcript-path-changed-after-read`表示读取后路径或文件身份快照未保持一致；快照也包含大小和修改时间，因此它不单独证明路径被替换。正常追加也可能触发该原因。`transcript-changed-during-read`表示同一文件描述符在读取前后发生变化，不能把读取所得内容视为稳定原件。当前实现仅对读取后变化的一类完整、同源、非控制追加作一次有界一致重读，校验旧内容、文件身份和新增记录；读取中变化、文件替换、未知控制或不满足条件的追加仍保持未知。该区别见[来源读取实现](../plugins/yiyuan-accord-codex/runtime/codex-context.cjs)及[边界回归](../tests/product/test_codex_context.py)。
+
+这些信息用于定位被拒边界，不授予重试、恢复、放宽防护或新的权限；仍须核对实际输入、来源和操作后态。已有授权下，可在来源稳定后取得新观察；对效果未知的写入须先核后态，不自动重放。先前失败保留原时点，后来读取成功也不证明其根因。此修正不宣称已找出全部历史失败的触发原因，也不启用日志观察器。`inspect_task_state` 的运行时指纹包含 `manageTaskState` 和 `nativeInputDiagnostic`，可核本次改变的已加载函数；它们仍不覆盖闭包、常量、整个软件包或其它进程。
 
 bind 缺参返回 `invalid-task-state-binding`、requiredFields/missingFields 及 `effect: "not-requested"`：该 guard 在 operate 前拒绝，补齐并重新取得最新观察，不宣称业务已变更。真正进入 operate 后的异常带 `effect: "unknown-check-post-state"`，reason保留对应诊断原因；实际 mutation 后传输失败也可能丢失成功回执。两者先 inspect 后状态并核对保留证据，再决定下一安全动作；已发生或未知效果先对账，不能自动重试，不能一概声称零写入。成功但细节超长返回精简成功回执；回查完整合同。[guard/执行](../runtime/native-state-mcp.cjs)、[传输边界](../runtime/native-state-mcp.cjs)。
 

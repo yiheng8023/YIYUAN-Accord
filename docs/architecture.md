@@ -743,6 +743,11 @@ module detaches its listeners and rejects waits without destroying injected stre
 or closing the caller's socket. Failed WebSocket sends invalidate pending work;
 local buffer-limit rejection does not retry. Its message limit applies after the
 supplied socket has assembled a message, not to that implementation's whole memory.
+The repository connection and session entries forward to the independently
+packaged implementations through fixed paths and digest-bound source checks.
+Native evidence collectors include the package-local dependencies when those
+facades are used; retained full-copy histories keep their original source set.
+The checkpoint's direct CLI and Hook entry remains a byte-checked mirror.
 Controllers may expose its optional `accord_inspect_context` dynamic tool to the
 source. The connection replies from the actual request identity and native journal;
 model arguments cannot select another task or operation. Unknown first-use signals
@@ -888,6 +893,20 @@ closed, checkpointed ledger with SQLite's immutable option: read-only mode alone
 can create WAL/SHM sidecars. The Windows 0.155.1 observation is protocol evidence
 with fixed responses, not model judgment or performance evidence; context remained
 unknown, and full-history hydration carried a paginated-thread deprecation notice.
+
+The 2026-11-12 [history audit](../research/reviews/2026-10-30-host-evolution-and-assets.md#2026-11-12-恢复历史的完整性与停止责任)
+distinguishes a passive read of copied sessions from host-driven restoration.
+Copying only JSONL files from a paginated history produced equal empty results
+on both read interfaces; that is not a completeness check. With the original
+history database and WAL included, the current three backend binaries returned
+the exact 1/3/2 recorded turns through both interfaces. This bounded fixture
+observation is not a portable backup specification. The existing cold fixture
+checks old history after `thread/resume`; its retained successful receipts
+preserve two old turns before a new turn. Do not infer a cold-restore regression
+from a passive copy missing its store, or infer current restoration from that
+historical success. Independent original-turn evidence, controller quiescence
+and effect review remain separate requirements. No general pagination migration
+or retirement is justified by this small sample alone.
 
 ### Context timing
 

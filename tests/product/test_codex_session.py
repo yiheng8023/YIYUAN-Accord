@@ -1140,10 +1140,42 @@ class CodexSourceSessionTests(unittest.TestCase):
         self.assertEqual(result["settleCalls"], 1)
         self.assertEqual(result["snapshot"]["status"], "ready")
 
-    def test_distributed_runtime_matches_canonical_source(self):
-        self.assertEqual(MODULE.read_bytes(),
-                         (ROOT / "plugins" / "yiyuan-accord-codex" / "runtime" /
-                          "codex-session.cjs").read_bytes())
+    def test_repository_entries_share_the_packaged_library_instances(self):
+        code = """
+const path = require('node:path');
+for (const name of ['codex-connection', 'codex-session']) {
+  const source = require(path.join(process.argv[1], 'runtime', name + '.cjs'));
+  const packaged = require(path.join(process.argv[1], 'plugins/yiyuan-accord-codex/runtime', name + '.cjs'));
+  if (source !== packaged) throw new Error(name + ': duplicate module instance');
+}
+"""
+        run = subprocess.run([shutil.which("node"), "-e", code, str(ROOT)],
+                             capture_output=True, text=True, encoding="utf-8", timeout=5)
+        self.assertEqual(run.returncode, 0, run.stderr)
+
+    def test_packaged_libraries_run_without_repository_entries(self):
+        # Exercise the existing request/deadline scenario against a standalone
+        # copy, so a repository facade cannot hide an outward package dependency.
+        from tests.product.test_codex_connection import NODE_SCENARIO as connection_scenario
+        with tempfile.TemporaryDirectory() as temp:
+            runtime = Path(temp) / "runtime"
+            shutil.copytree(ROOT / "plugins/yiyuan-accord-codex/runtime", runtime)
+            for mode in ("success", "close-pending"):
+                run = subprocess.run([shutil.which("node"), "-e", connection_scenario,
+                    str(runtime / "codex-connection.cjs"), "", mode], capture_output=True,
+                    text=True, encoding="utf-8", cwd=temp, timeout=5)
+                self.assertEqual(run.returncode, 0, run.stderr)
+                result = json.loads(run.stdout)
+                if mode == "success":
+                    self.assertEqual(result["term"]["params"]["turn"]["status"], "completed")
+                else:
+                    self.assertTrue(result["rpc"])
+                    self.assertTrue(result["terminal"])
+            run = subprocess.run([shutil.which("node"), "-e",
+                "const m=require(process.argv[1]); if(typeof m.restoreCodexSourceSession!=='function') process.exit(1)",
+                str(runtime / "codex-session.cjs")], capture_output=True, text=True,
+                encoding="utf-8", cwd=temp, timeout=5)
+            self.assertEqual(run.returncode, 0, run.stderr)
 
     def test_settled_transfer_restores_on_a_fresh_controller_and_fences_the_old_token(self):
         result = self.restore_case("success")

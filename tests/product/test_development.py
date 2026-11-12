@@ -23,6 +23,8 @@ from yiyuan_accord.development import (
 
 ROOT = Path(__file__).resolve().parents[2]
 V4_REVISION = "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88"
+# PLAN r101 selects this successor while frozen delivery fields retain 3.3.13.
+R101_TARGET = "3.3.14"
 
 
 def historical_development():
@@ -145,6 +147,51 @@ class WorkingTreeOverlayTests(unittest.TestCase):
             self.assertFalse((clone / "retired.txt").exists())
             self.assertNotIn(b"retired.txt", subprocess.check_output(["git", "ls-files"], cwd=clone, env=git_env))
             self.assertEqual((source / "keep.txt").read_text(), "current")
+
+
+class ImmutableGitReadTests(unittest.TestCase):
+    def test_exact_revision_reads_ignore_commit_tree_and_blob_replacements(self):
+        from yiyuan_accord import control, identity
+        with tempfile.TemporaryDirectory(prefix='accord-git-identity-') as temporary:
+            root = Path(temporary).resolve()
+            environment = owned_git_environment()
+
+            def git(*args):
+                return subprocess.check_output(['git', '-C', str(root), *args],
+                    env=environment, stderr=subprocess.PIPE, timeout=30)
+
+            def commit(content):
+                (root / 'source.txt').write_bytes(content)
+                git('add', '.')
+                git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
+                    'commit', '--quiet', '-m', 'Bind synthetic source')
+                return {kind: git('rev-parse', expression).decode().strip()
+                        for kind, expression in (('commit', 'HEAD'), ('tree', 'HEAD^{tree}'),
+                                                 ('blob', 'HEAD:source.txt'))}
+
+            git('init', '--quiet')
+            original = commit(b'original source\n')
+            replacement = commit(b'replacement source\n')
+            locator = original['commit'] + ':source.txt'
+            for kind in ('commit', 'tree', 'blob'):
+                git('replace', original[kind], replacement[kind])
+                self.assertEqual(git('show', locator), b'replacement source\n')
+                self.assertEqual(git('--no-replace-objects', 'show', locator), b'original source\n')
+                with patch.dict(os.environ, {'GIT_NO_REPLACE_OBJECTS': '0',
+                                             'GIT_REPLACE_REF_BASE': 'refs/foreign-replacements'}):
+                    before = dict(os.environ)
+                    reads = {
+                        'bounded': identity._bounded_git_bytes(root, ['show', locator]),
+                        'uncached': control._snapshot_bytes(root, 'source.txt', original['commit']),
+                        'cached': control._SnapshotBlobCache().read(root, 'source.txt', original['commit']),
+                    }
+                    for reader, value in reads.items():
+                        with self.subTest(kind=kind, reader=reader):
+                            self.assertEqual(value, b'original source\n')
+                    self.assertEqual(dict(os.environ), before)
+                self.assertEqual(git('show', locator), b'replacement source\n')
+                git('replace', '-d', original[kind])
+            self.assertEqual(git('replace', '-l'), b'')
 
 
 class SkillReferencePackageTests(unittest.TestCase):
@@ -280,7 +327,7 @@ class SkillReferencePackageTests(unittest.TestCase):
                          '14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026')
         self.assertEqual(translated['originalSourceSha256'],
                          '9f9019523491d9e41f7d3e41ee5bd3c783b0a1049fb280242959198fb88a439a')
-        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9', '3.3.10', '3.3.11', '3.3.11-dev.1', '3.3.12', '3.3.12-dev.1', '3.3.13', '3.3.13-dev.1'):
+        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9', '3.3.10', '3.3.11', '3.3.11-dev.1', '3.3.12', '3.3.12-dev.1', '3.3.13', '3.3.13-dev.1', R101_TARGET, R101_TARGET+'-dev.1+fixture'):
             with self.subTest(version=version):
                 self.assertEqual(foundation(version), translated)
 
@@ -313,7 +360,7 @@ class SkillReferencePackageTests(unittest.TestCase):
             package_version='3.3.11', **options), current)
         self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
             package_version='3.3.11-dev.1', **options), current)
-        for version in ('3.3.12', '3.3.12-dev.1', '3.3.13', '3.3.13-dev.1'):
+        for version in ('3.3.12', '3.3.12-dev.1', '3.3.13', '3.3.13-dev.1', R101_TARGET, R101_TARGET+'-dev.1+fixture'):
             self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
                 package_version=version, **options), current)
         execution = current['nativeTaskStateMcp']
@@ -1151,8 +1198,32 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         return development_contract_errors(contract, self.tasks)
 
     def unselected_patch_target(self):
-        parts = self.contract['cycle']['targetVersion'].split('.')
-        return '.'.join([*parts[:-1], str(int(parts[-1]) + 1)])
+        # The frozen baseline's next patch can already be user-selected.
+        # Derive the rejection fixture beyond both independent source decisions.
+        parts = max(tuple(map(int, version.split('.'))) for version in
+                    (self.contract['cycle']['targetVersion'], R101_TARGET))
+        return '.'.join(map(str, (*parts[:-1], parts[-1] + 1)))
+
+    def test_r101_selected_target_retains_unversioned_future_and_unqualified_claims(self):
+        for frozen in (False, True):
+            with self.subTest(frozen=frozen):
+                candidate = copy.deepcopy(self.contract)
+                candidate['status'] = 'candidate-frozen' if frozen else 'in-development'
+                candidate['cycle']['versionState'] = ('final-candidate-not-publication-proof'
+                    if frozen else 'development-target-not-published')
+                candidate['cycle']['targetVersion'] = R101_TARGET
+                candidate['authority']['conditionalRelease']['target'] = R101_TARGET
+                candidate['authority']['conditionalRelease']['decision'] = 'user-authorized-after-acceptance'
+                version = R101_TARGET if frozen else R101_TARGET+'-dev.1'
+                candidate['delivery']['version'] = version
+                candidate['delivery']['hostProjections'][0]['packageVersion'] = version
+                self.assertEqual(self.errors(candidate), [])
+                self.assertFalse(candidate['authority']['conditionalRelease']['ready'])
+                self.assertFalse(candidate['claimCeiling']['functionalCompletion'])
+                self.assertFalse(candidate['claimCeiling']['candidateEligible'])
+                candidate['cycle']['futureAdaptationVersion'] = '3.4'
+                self.assertIn('future candidates must retain their version-bound planning status, not current delivery',
+                              self.errors(candidate))
 
     def test_authorized_v33_final_freeze_preserves_unqualified_claims(self):
         candidate = copy.deepcopy(self.contract)
@@ -2103,6 +2174,29 @@ class DevelopmentDeliveryTests(unittest.TestCase):
                 report = self.report()
                 self.assertFalse(report["valid"])
                 self.assertTrue(any(fragment in error for error in report["errors"]), report["errors"])
+
+    def test_connection_and_session_facades_preserve_binding_and_old_source_forms(self):
+        from hashlib import sha256
+        for name, label in (("codex-connection", "owned-connection"), ("codex-session", "codex-session")):
+            locator = f"runtime/{name}.cjs"
+            implementation = (self.root / f"plugins/yiyuan-accord-codex/runtime/{name}.cjs").read_bytes()
+            facade = ("'use strict';\n// Packaged implementation SHA256: "
+                      + sha256(implementation).hexdigest()
+                      + f"\nmodule.exports = require('../plugins/yiyuan-accord-codex/runtime/{name}.cjs');\n").encode()
+            for source in (facade, implementation):
+                with self.subTest(name=name, form="facade" if source == facade else "legacy"), self.changed(locator, source):
+                    # Source compatibility is separate from current whole-product
+                    # complexity, release and independent-use requirements.
+                    report = self.report()["hostChecks"]["codex"]
+                    self.assertTrue(report["staticReady"], report["errors"])
+            for altered in (facade.replace(b"plugins/yiyuan-accord-codex", b"plugins/unbound-adapter"),
+                            facade.replace(b"SHA256: ", b"SHA256: 0"),
+                            facade + b"process.exit(0);\n"):
+                with self.subTest(name=name, altered=altered[-60:]), self.changed(locator, altered):
+                    report = self.report()["hostChecks"]["codex"]
+                    self.assertFalse(report["staticReady"])
+                    self.assertTrue(any(f"{label} module differs from canonical bytes" in error
+                                        for error in report["errors"]), report["errors"])
 
     def test_recorder_facade_is_bound_and_full_copy_source_compatibility_is_retained(self):
         locator = "runtime/carrier-recorder.cjs"

@@ -98,7 +98,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 | 3.3.10 | 原生交接可选时间字段兼容、仓库转发与测试路径核验修正；验证、发行与实际采用状态见[接续](operations/CONTINUATION.md#目标与当前写者)，不扩大实际恢复或收益承诺。 |
 | 3.3.11 | `3a39ed98` 的入口指导和维护验证修订；[发行原件](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.11)与原 CI／采用记录各保其身份。 |
 | 3.3.12 | 取消、严格来源兼容和仓库验证器修正，细化既有核验指导；[精确发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12)，提交 `e6b3594c5f56091ecf9a03d58a845c1a206c53cf`。C11 本地1461项及18案／17范围资格通过；托管、安装和实际加载分别见[当前接续](operations/CONTINUATION.md#目标与当前写者)，不证明普遍收益。 |
-| 3.3.13 | Bounded approved-prefix directory, exact empty-selection and ordinary-input UTC ordering compatibility; [exact release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.13), commit `2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc`. The exact r100 candidate passed 1,468 local tests and the original 18-case / 17-scope qualification. Hosted terminal, installation and actual loading are separate in [continuation](operations/CONTINUATION.md#目标与当前写者); historical roles and comparative limits remain. |
+| 3.3.13 | 有界已批准命令前缀目录、精确空选区及普通输入UTC排序兼容；[精确发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.13)，提交 `2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc`。精确r100候选通过1468项本地检查及原18案／17范围资格；托管终态、安装和实际加载分别见[接续](operations/CONTINUATION.md#目标与当前写者)，历史角色及对照限制保持。 |
 
 原始失败、版本、环境和条件保持原身份；后续文档不移动发行标签，也不把旧通过直接当作新版本通过。CLI、SDK、桌面、IDE、Work 与 Remote 之间，仅在核对适用性和差异后复用相应机制证据；历史入口观察不能覆盖现行官方已知限制。
 
@@ -106,7 +106,7 @@ Accord 不训练模型、不扩大上下文、不越过宿主权限，也不注�
 
 协调可能增加上下文、延迟、计算、指令冲突与维护负担。增量价值需要公平对照并同时考虑质量、自动化程度、人工协调和总成本；合理额外开销不等于失败，“省用量但仍需用户盯着”也不能替代必要自动化。首轮[两对有限试行](../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行)已完成：两组交付均正确，启用组报告用量和耗时更高；这不构成普遍收益、性能或统计结论。
 
-3.3.9补强了经验复用与无进展处置指导：只在可能影响下一步时取回相关的获准记录，先核适用条件；重复尝试看成果、信息增量或必要前提，保留合理重试与等待。普通入口是否正确采用及实际收益仍需观察，不能据此声称已具有跨项目经验库、全工具停滞监控或任意执行取消。发行状态、安装与实际采用分别核验，见[接续](operations/CONTINUATION.md#目标与当前写者)。
+当前指导要求助手在经验可能影响下一步时，从获准的宿主记忆或任务记录中取回相关内容，核对来源、适用条件与反例，再观察实际采用的结果。重复尝试前应明确什么条件改变、哪项检查能区分原因，或正在等待什么可观察的变化；保留有依据的重试与等待。一次纠正不必写成永久规则，过期经验也应在权限范围内修订或退出。指导已提供不保证每次都被正确执行；普通任务中的实际采用和收益仍需观察。这不建立独立的跨项目经验库、全工具停滞监控或任意执行取消能力。发行状态、安装与实际采用分别核验，见[接续](operations/CONTINUATION.md#目标与当前写者)。
 
 ### 原理与进阶阅读
 
@@ -197,7 +197,7 @@ This is not complete conversation history or a progress record, and grants no ne
 
 ### Troubleshooting, updates and exit
 
-When changing a fixed source revision, if the host reports an existing different source, have the executor preserve unfinished work, the previous source and a recovery copy, then replace only the named source through the current host controls. For the 3.3.12 update with Codex 0.166.0-alpha.6, `codex plugin marketplace remove yiyuan-accord --json` was followed by registration at that release commit and installation. The default source and enablement were verified; at installation close this existing chat still reported MCP 3.3.11, with actual 3.3.12 loading reserved for separate verification after normal client restart. Other sources and settings were preserved. This is version-bound evidence; repeating `add` is not an update.
+When changing a fixed source revision, if the host reports an existing different source, have the executor preserve unfinished work, the previous source and a recovery copy, then replace only the named source through the current host controls. For the 3.3.12 update with Codex 0.166.0-alpha.6, `codex plugin marketplace remove yiyuan-accord --json` was followed by registration at that release commit and installation. The default source and enablement were verified. At installation close this chat still loaded MCP 3.3.11; after a normal restart, the same chat was observed loading 3.3.12, with package bytes and current input checked separately. Other sources and user settings were preserved; external configuration changes observed at restart were reconciled field by field. This observation retains its version scope; repeated installation is not a refresh.
 
 | Symptom | Executor's first checks |
 |---|---|
@@ -224,6 +224,7 @@ Before update, rollback or removal, use a healthy executor independent of the pl
 | 3.3.10 | Optional lifecycle-field compatibility in native handoff, repository facade and test-path verification corrections. See [continuation](operations/CONTINUATION.md#目标与当前写者) for checks, publication and actual adoption; broader recovery and value claims remain unproven. |
 | 3.3.11 | Entry-guidance and maintenance-verification revisions at `3a39ed98`; the [release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.11), original CI and adoption records retain their identities. |
 | 3.3.12 | Cancellation, strict source compatibility and repository-verifier fixes, with refinements to existing verification guidance; [exact release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12), commit `e6b3594c5f56091ecf9a03d58a845c1a206c53cf`. C11 passed 1,461 local tests and qualification of 18 cases / 17 scopes. Hosted checks, installation and actual loading are separate in [continuation](operations/CONTINUATION.md#目标与当前写者); general benefits remain unproven. |
+| 3.3.13 | Bounded approved-prefix directory, exact empty-selection and ordinary-input UTC ordering compatibility; [exact release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.13), commit `2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc`. The exact r100 candidate passed 1,468 local tests and the original 18-case / 17-scope qualification. Hosted terminal, installation and actual loading are separate in [continuation](operations/CONTINUATION.md#目标与当前写者); historical roles and comparative limits remain. |
 
 Original failures, versions, environments and conditions retain their identities. Later documentation does not move release tags or validate changed versions through an old PASS. Reuse common-mechanism evidence across CLI, SDK, desktop, IDE, Work or Remote only after checking applicability and differences. Historical observations do not override known current upstream limitations.
 
@@ -231,7 +232,7 @@ Accord does not train models, enlarge context or bypass host permissions. It reg
 
 Coordination may add context, latency, compute, instruction conflicts and maintenance. Incremental value needs a fair comparison accounting for quality, automation, human coordination and total cost. Reasonable extra cost is not failure; lower usage that still leaves the user supervising cannot replace necessary automation. The initial [two-pair pilot](../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行) is complete: both arms produced correct outputs, while the enabled arm used more reported tokens and time. This establishes no general benefit, performance or statistical conclusion.
 
-The 3.3.9 implementation strengthens guidance for retrieving relevant authorized experience and reviewing stalled attempts. The guidance asks the agent to check applicability and useful progress while preserving justified retries and changing wait conditions. Correct normal-entry adoption and actual benefits still need observation; this does not establish a cross-project memory service, all-tool stagnation monitoring or arbitrary execution cancellation. Publication status, installation and actual adoption are checked separately in [continuation](operations/CONTINUATION.md#目标与当前写者).
+Current guidance asks the assistant to retrieve relevant authorized host memory or task records when prior experience could change the next decision, check sources, applicability and counterexamples, then verify the result of actual use. Before repeating an attempt, identify a changed condition, a check that can distinguish causes, or an observable waiting condition; preserve justified retries and waits. A single correction need not become a permanent rule, and invalidated experience should be revised or retired within authority. Supplied guidance does not guarantee correct execution every time; ordinary adoption and benefits still need observation. This does not establish a separate cross-project memory service, all-tool stagnation monitoring or arbitrary execution cancellation. Publication status, installation and actual adoption are checked separately in [continuation](operations/CONTINUATION.md#目标与当前写者).
 
 ### Principles and further reading
 

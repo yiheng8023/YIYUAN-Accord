@@ -224,7 +224,7 @@ jobs:
               "--evidence", str(root / "native-state-mcp-scoped"),
               "--scoped-hook"], check=True)
       - name: Reconcile a lost carrier acknowledgement without replay
-        if: always() && steps.prepare_upgrade.outcome == 'success'
+        if: ${{ !cancelled() && steps.prepare_upgrade.outcome == 'success' }}
         shell: python
         run: |
           import json, os, pathlib, subprocess, sys
@@ -235,7 +235,7 @@ jobs:
               "--evidence", str(root / "carrier-recovery"), "--scenario", "recover-receipt"], check=True)
       - name: Finalize a reconciled native handoff without replay
         id: carrier_finalization
-        if: always() && steps.prepare_upgrade.outcome == 'success'
+        if: ${{ !cancelled() && steps.prepare_upgrade.outcome == 'success' }}
         shell: python
         run: |
           import json, os, pathlib, subprocess, sys
@@ -276,7 +276,7 @@ jobs:
             ${{ env.ACCORD_NATIVE_ROOT }}/carrier-finalization/workspace
       - name: Exercise two SDK handoffs on the existing native host
         id: sdk_session
-        if: always() && steps.prepare_upgrade.outcome == 'success'
+        if: ${{ !cancelled() && steps.prepare_upgrade.outcome == 'success' }}
         shell: python
         run: |
           import json, os, pathlib, subprocess, sys
@@ -302,7 +302,7 @@ jobs:
           sys.exit(result.returncode)
       - name: Restore the settled SDK writer on a new controller
         id: sdk_session_restore
-        if: always() && steps.sdk_session.outcome == 'success'
+        if: ${{ !cancelled() && steps.sdk_session.outcome == 'success' }}
         shell: python
         run: |
           import json, os, pathlib, subprocess, sys
@@ -356,7 +356,7 @@ jobs:
             ${{ env.ACCORD_NATIVE_ROOT }}/sdk-session/retained
       - name: Create an acknowledged ordinary SDK source
         id: sdk_source
-        if: always() && steps.prepare_upgrade.outcome == 'success'
+        if: ${{ !cancelled() && steps.prepare_upgrade.outcome == 'success' }}
         shell: python
         run: |
           import json, os, pathlib, subprocess, sys
@@ -366,7 +366,7 @@ jobs:
               "--native-codex", manifest["hostReplacement"]["replacement"]["path"],
               "--evidence", str(root / "sdk-source"), "--source-start"], check=True)
       - name: Restore that ordinary source on a new controller
-        if: always() && steps.sdk_source.outcome == 'success'
+        if: ${{ !cancelled() && steps.sdk_source.outcome == 'success' }}
         shell: python
         run: |
           import json, os, pathlib, subprocess, sys

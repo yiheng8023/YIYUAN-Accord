@@ -1798,6 +1798,7 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
             # Criterion reads belong to the same observe-through-final-check
             # window as the other source reads, before the final subject guards.
             if policy["schema"] == CURRENT_SCHEMA:
+                criterion_documents = {}
                 for requirement in policy["acceptanceRequirements"]:
                     for obligation in requirement.get("outcomeObligations", []):
                         source_key = (obligation["source"]["path"], obligation["source"]["anchor"])
@@ -1813,7 +1814,12 @@ def assess_development_evidence(root, contract, observer, review_bundle=None, *,
                                 for key, case in cases.items())):
                             continue
                         try:
-                            source = _git(root, "show", f"{subject['revision']}:{source_key[0]}").decode("utf-8")
+                            locator = f"{subject['revision']}:{source_key[0]}"
+                            # Reuse only successful immutable reads within this assessment.
+                            # Failed reads and each anchor's verdict remain independent.
+                            if locator not in criterion_documents:
+                                criterion_documents[locator] = _git(root, "show", locator).decode("utf-8")
+                            source = criterion_documents[locator]
                             # Identity only; source interpretation remains a review duty.
                             criterion_sources[source_key] = re.search(
                                 r"(?<![A-Za-z0-9_-])" + re.escape(source_key[1]) + r"(?![A-Za-z0-9_-])", source) is not None

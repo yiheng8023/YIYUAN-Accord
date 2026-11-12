@@ -2544,6 +2544,62 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                 self.assertTrue(all('current-applicability-expired' in reasons
                                     for reasons in report['caseRejections'].values()))
 
+    def test_current_criteria_share_successful_reads_only_within_assessment(self):
+        from yiyuan_accord import admission
+        locator = self.git('rev-parse', 'HEAD') + ':docs/operations/ACCEPTANCE-v3.3.md'
+        original_git = admission._git
+        reports = []
+        for unavailable in (False, True):
+            reads = []
+
+            def git(root, *args):
+                value = original_git(root, *args)
+                if args == ('show', locator):
+                    reads.append(args)
+                    return b'' if unavailable else value
+                return value
+
+            with self.subTest(unavailable=unavailable), patch(
+                    'yiyuan_accord.admission._git', side_effect=git):
+                report = self.assess(observer=self.observer)
+                reports.append(report)
+                self.assertTrue(report['acceptedCases'])
+                self.assertEqual(report['errors'], [])
+                self.assertEqual(len(reads), 1)
+        self.assertEqual(reports[0]['acceptedCases'], reports[1]['acceptedCases'])
+        gaps = [{obligation for row in report['acceptanceRequirements'].values()
+                 for obligation in row.get('missingObligations', [])} for report in reports]
+        self.assertLess(gaps[0], gaps[1])
+        reasons = {obligation: reason for row in reports[1]['acceptanceRequirements'].values()
+                   for obligation, reason in row.get('missingObligationReasons', {}).items()}
+        self.assertTrue(all(reasons[key] == 'criterion-anchor-unavailable' for key in gaps[1] - gaps[0]))
+        self.assertFalse(reports[1]['candidateEligible'])
+
+    def test_current_criterion_read_failures_do_not_poison_other_anchors(self):
+        from yiyuan_accord import admission
+        locator = self.git('rev-parse', 'HEAD') + ':docs/operations/ACCEPTANCE-v3.3.md'
+        original_git = admission._git
+        for failure in ('process', 'decode'):
+            reads = []
+
+            def git(root, *args):
+                if args == ('show', locator):
+                    reads.append(args)
+                    if len(reads) == 1:
+                        if failure == 'process':
+                            raise subprocess.SubprocessError('temporary criterion read failure')
+                        return b'\xff'
+                return original_git(root, *args)
+
+            with self.subTest(failure=failure), patch('yiyuan_accord.admission._git', side_effect=git):
+                report = self.assess(observer=self.observer)
+                self.assertTrue(report['acceptedCases'])
+                self.assertEqual(report['errors'], [])
+                self.assertEqual(len(reads), 2)
+                self.assertTrue(any(reason == 'criterion-anchor-unavailable'
+                    for row in report['acceptanceRequirements'].values()
+                    for reason in row.get('missingObligationReasons', {}).values()))
+
     def test_current_subject_and_checkout_checked_after_criterion_sources(self):
         from yiyuan_accord import admission
         for change in ('subject', 'dirty'):
