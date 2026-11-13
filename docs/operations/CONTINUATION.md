@@ -12,9 +12,13 @@
 
 本候选完整1,487项回归及三静态通过，原总时钟2529.2253663秒；18案材料四轴及原18案／17范围／52义务正式两阶段已核，原211.8503455秒保持。原件索引留在`.tmp/release-3.3.15-20261113-01/LOCAL-QUALIFICATION.json`，准备错误、历史失败、角色与效果范围不改签。
 
-CI #1066／run43375235018最终事实：attempt1十项任务全部终态成功，[运行原件](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/43375235018)绑定上述精确源码；两平台18份原生制品、22份来源清单已核，完整资格索引在`.tmp/release-3.3.15-20261113-01/HOSTED-QUALIFICATION.json`。18份native archives／22份source manifests的核查保持自身来源；tag CI：[#1067／run43385408822](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/43385408822) attempt1已由同一源码的v3.3.15标签触发，仍在运行；其全部终态与独立制品核验待完成，不借用主CI回执。
+CI #1066／run43375235018最终事实：attempt1十项任务全部终态成功，[运行原件](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/43375235018)绑定上述精确源码；两平台18份原生制品、22份来源清单已核，完整资格索引在`.tmp/release-3.3.15-20261113-01/HOSTED-QUALIFICATION.json`。标签[#1067／run43385408822](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/43385408822) attempt1也已十项终态成功，其两平台18份原生制品、22份来源清单按自身运行、精确源码和原时钟独立核验，索引为`.tmp/release-3.3.15-20261113-01/TAG-QUALIFICATION.json`。读取进程自然回收、所属Job归零且句柄关闭；原读取失败、早期未完成快照和POSIX资源观测范围保持，不借用主CI回执。
 
-公开发行回读：[3.3.15](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.15)于北京时间2026-11-13 15:23:22正式发布，Release443931364，实际标签commit及发行目标均为上述f7源码，draft／prerelease均false，Latest和正文读回一致；没有附加资产，使用GitHub自动源码归档。安装及persistent source／配置保护／恢复副本：由已核原生CLI0.168.0完成安装启用，cache与catalog的30成员均匹配上述精确源码和包摘要；persistent ref更新至f7，仅配置路径`/marketplaces/yiyuan-accord/ref`改变，已有设置及Hook信任保持；旧版恢复副本已逐字节读回。拥有本聊天的宿主实际加载／MCP／函数指纹／原任务条件：当前聊天仍实际报告MCP3.3.14，桌面后端0.167.0-alpha.4.1与独立CLI0.168.0保持不同身份；尚未证明本聊天采用3.3.15，可用工具无本聊天局部刷新入口，需正常重启后再核。所属资源及协议后态／未完责任：完整回归、正式验收和对照所属Job均已归零且句柄关闭；短路径测试检出和4个对照工作目录逐文件保全后回收，原件及恢复副本保留；标签CI、新版实际采用及原生绑定退役仍待完成。安装、实际采用及阶段收尾分别判断，当前Root继续承担未完写入与核验责任。
+公开发行回读：[3.3.15](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.15)于北京时间2026-11-13 15:23:22正式发布，Release443931364，实际标签commit及发行目标均为上述f7源码，draft／prerelease均false，Latest和正文读回一致；没有附加资产，使用GitHub自动源码归档。安装及persistent source／配置保护／恢复副本：由已核原生CLI0.168.0完成安装启用，cache与catalog的30成员均匹配上述精确源码和包摘要；persistent ref更新至f7，仅配置路径`/marketplaces/yiyuan-accord/ref`改变，已有设置及Hook信任保持；旧版恢复副本已逐字节读回。
+
+当前聊天安装后先报告MCP3.3.14，后续原生读回已报告MCP3.3.15及新版缓存路径，六个已加载函数指纹匹配精确源码；压缩后的原生入口也提供3.3.15协调指导。这些观测不证明刷新机制的原因、所有Hook进程或普通行为覆盖；无需再要求用户重启。桌面后端0.167.0-alpha.4.1与独立CLI0.168.0保持不同身份。原生最新输入核查仍报告`native-input-recovery-range-exceeded`，存储的已对账标记不代替当前完整性；已请求新一轮用户输入，原任务绑定退役暂待该回执恢复后继续。
+
+完整回归、正式验收、对照及标签读取的所属Job均已归零且句柄关闭；短路径测试检出和4个对照工作目录逐文件保全后回收，原件及恢复副本保留。发行、安装、新版MCP加载及两轮CI已核，原生状态对账和绑定退役仍未完成。安装、实际采用及阶段收尾分别判断，当前Root继续承担未完核验责任。
 
 新pair：本次以原生CLI0.168.0、openai／GPT-6.1 Sol／medium和同一冻结事实分别运行未启用与启用Accord3.3.14的初稿整理任务，各1次业务；两组均无所需两份交付文件。Off业务24.5703283秒后返回文件执行错误并请求材料；On在原300秒上限中断，所属进程随后自然关闭。先前两次准备失败／停止和全部原件保持，完整环境等价、计费成本与超时原因仍未知，不支持产品因果收益。详见[失败观察](../../research/evaluations/accord-toggle-v1.md#2026-11-13-发行说明初稿的受控失败观察)。兼容准备、实际业务、独立成品核查与可支持的比较结论分开；仅准备或单组不签新配对、稳定采用、自主发现及净收益。普通任务观察、持续传播与未来候选保留原权限和范围。
 
