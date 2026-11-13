@@ -212,6 +212,8 @@ def main():
     child.add_argument('--expected-head', required=True)
     child.add_argument('--adapter', required=True)
     child.add_argument('--archive', action='store_true', help='Retain exact source bytes as source.zip before removing the checkout.')
+    child.add_argument('--summary', action='store_true',
+                       help='Show check outcomes, errors and report directory; keep full source inventories in the saved reports.')
     child.add_argument('--json', action='store_true')
 
     args = parser.parse_args()
@@ -224,7 +226,12 @@ def main():
         report = verify_development(args.root)
     else:
         report = verify_product(args.root)
-    _emit(report, args.json)
+    output = report
+    if args.command == 'check-snapshot' and args.summary:
+        output = {key: report[key] for key in (
+            'valid', 'errors', 'scope', 'checks', 'cleanup', 'sourceStable',
+            'snapshotStable', 'workDirectory', 'archiveSha256') if key in report}
+    _emit(output, args.json)
     return 0 if report["valid"] else 1
 
 

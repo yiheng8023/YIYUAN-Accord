@@ -976,6 +976,9 @@ For a current v5 tracked working-tree snapshot, maintainers may use the narrow
 these statics in an isolated full-history checkout. It preserves source bytes,
 records drift and owns only that disposable checkout, not test/model execution,
 release or installation. A successful static report keeps the same claim limits.
+Its optional `--summary` selects only console outcome fields; complete source and
+check reports remain on disk, and errors and exit status are preserved. This is
+a maintainer output view, not a runtime observer or a new user-task workflow.
 
 The current package `packageSha256` is a tree digest, not an archive digest.
 For each exact distributed member in sorted repository-relative path order,

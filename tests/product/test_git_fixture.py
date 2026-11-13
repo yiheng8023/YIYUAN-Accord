@@ -1,10 +1,12 @@
 """Fixture Git commands must never inherit a caller's repository routing."""
 
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -41,6 +43,82 @@ class SnapshotCheckTests(unittest.TestCase):
                 patch.object(cli, 'host_check', side_effect=checks[2]):
             return cli.check_snapshot(self.root, work or self.work,
                                       head or self.head, 'codex', archive)
+
+    def run_cli(self, work, *options, development=None):
+        from yiyuan_accord import __main__ as cli
+        output = io.StringIO()
+        good = {'valid': True, 'errors': []}
+        arguments = ['yiyuan_accord', 'check-snapshot', '--root', str(self.root),
+                     '--work-dir', str(work), '--expected-head', self.head,
+                     '--adapter', 'codex', *options]
+        with patch.object(sys, 'argv', arguments), patch.object(sys, 'stdout', output), \
+                patch.object(cli, 'verify_development', return_value=development or good), \
+                patch.object(cli, 'verify_product', return_value=good), \
+                patch.object(cli, 'host_check', return_value=good):
+            status = cli.main()
+        return status, json.loads(output.getvalue())
+
+    def test_snapshot_summary_keeps_full_reports_and_default_output(self):
+        for index, options in enumerate(((), ('--json',), ('--summary',),
+                                         ('--summary', '--json'))):
+            with self.subTest(options=options):
+                work = self.base / ('output-' + str(index))
+                status, output = self.run_cli(work, *options, '--archive')
+                saved = json.loads((work / 'result.json').read_text(encoding='utf-8'))
+                self.assertEqual(status, 0)
+                self.assertTrue(output['valid'])
+                self.assertEqual(output['cleanup'], 'removed')
+                self.assertTrue(output['sourceStable'])
+                self.assertTrue(output['snapshotStable'])
+                self.assertEqual(output['workDirectory'], str(work))
+                self.assertEqual(len(output['checks']), 3)
+                self.assertEqual(set(saved['source']['files']),
+                                 {'keep.txt', 'product/development.json'})
+                self.assertEqual(output['archiveSha256'],
+                                 hashlib.sha256((work / 'source.zip').read_bytes()).hexdigest())
+                self.assertFalse((work / 'repo').exists())
+                if '--summary' in options:
+                    self.assertNotIn('source', output)
+                    self.assertEqual(output, {k: v for k, v in saved.items() if k != 'source'})
+                else:
+                    self.assertEqual(output, saved)
+
+    def test_snapshot_summary_preserves_failed_check_and_detailed_error(self):
+        original = {'valid': False, 'errors': ['controlled source mismatch']}
+        status, output = self.run_cli(self.work, '--summary', development=original)
+        self.assertEqual(status, 1)
+        self.assertFalse(output['valid'])
+        self.assertTrue(output['errors'])
+        self.assertEqual(output['checks'][0], {'name': 'development', 'valid': False})
+        self.assertEqual(output['cleanup'], 'retained')
+        self.assertEqual(json.loads((self.work / 'development.json').read_text()), original)
+        self.assertIn('source', json.loads((self.work / 'result.json').read_text()))
+        self.assertTrue((self.work / 'repo').is_dir())
+
+    def test_snapshot_summary_preserves_preflight_failure_without_report_directory(self):
+        status, output = self.run_cli(self.work, '--summary', '--expected-head', '0' * 40)
+        self.assertEqual(status, 1)
+        self.assertFalse(output['valid'])
+        self.assertTrue(output['errors'])
+        self.assertEqual(output['checks'], [])
+        self.assertEqual(output['cleanup'], 'not-created')
+        self.assertNotIn('workDirectory', output)
+        self.assertFalse(self.work.exists())
+
+    def test_snapshot_summary_preserves_result_write_failure(self):
+        original_open = Path.open
+        def refuse_result(path, mode='r', *args, **kwargs):
+            if path == self.work / 'result.json' and mode == 'x':
+                raise OSError('controlled result write refusal')
+            return original_open(path, mode, *args, **kwargs)
+        with patch.object(Path, 'open', refuse_result):
+            status, output = self.run_cli(self.work, '--summary', '--json')
+        self.assertEqual(status, 1)
+        self.assertFalse(output['valid'])
+        self.assertIn('controlled result write refusal', str(output['errors']))
+        self.assertEqual(output['cleanup'], 'removed')
+        self.assertFalse((self.work / 'result.json').exists())
+        self.assertTrue((self.work / 'source.json').is_file())
 
     def test_snapshot_checks_working_bytes_preserves_index_and_archives_on_request(self):
         import zipfile

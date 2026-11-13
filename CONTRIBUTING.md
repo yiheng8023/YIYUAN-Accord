@@ -22,6 +22,13 @@ the machine validation projection, not a competing source of user decisions.
 current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks;
 their old criteria and workflow prescriptions do not govern this successor.
 
+The local **3.3.15 candidate** is being qualified under PLAN r103. Its 30-member
+plugin package differs from released 3.3.14 only in the version manifest;
+runtime and Skill bytes are unchanged. Maintainer CLI, source-contract, test and
+documentation changes still need the current candidate's own full checks and
+material review. Local version conversion is not qualification, publication or
+installation. Keep the earlier slice results at their original source identities.
+
 The current released maintenance version is **3.3.14**, qualified on exact
 `55b675ff5ef02c8b09470328b71f1b549f4c7b14`. PLAN r101's asset retrospective started
 from the completed 3.3.13 baseline. C4 passed 1,483 local tests, three statics,
@@ -40,6 +47,18 @@ bytes are unchanged. The current plan records bounded asset dispositions and
 retained unknowns. Existing acceptance may be questioned with explicit evidence
 and impact review, never retroactively changed to pass a result. Other future
 adaptations remain discussion-only candidates without a preset version or date.
+
+PLAN r103 now owns the user-selected 3.3.15 development stage: investigate demonstrated gaps in actual
+guidance use and human–tool coordination, prepare bounded enabled/disabled
+comparisons, and maintain communication materials continuously. The completed
+r101 audit remains the baseline. Reuse adequate host and third-party capabilities;
+check actual consequences before adding mechanisms or claiming improvement.
+The release date has not been selected. Technical delivery and the conditional
+release target now identify the local 3.3.15 candidate; released, installed and
+actually loaded state remains 3.3.14. Full current qualification is still pending.
+Development documents are
+project-specific aids; ordinary tasks use sufficient host state, proportional
+checks and revisable routes rather than this repository's full document chain.
 
 The repository now supports Python 3.11–3.14, with 3.14 as the validation baseline.
 Python 3.15 remains under observation and outside current CI. Reassess actual
@@ -143,22 +162,24 @@ checks on tracked working-tree bytes in a new directory outside the source.
 Use a verified full commit SHA and an existing parent for the new work directory:
 
 ~~~powershell
-$checkConsole = 'C:/accord-checks/new-check.console.json'
-python -B -m yiyuan_accord check-snapshot --root . --work-dir C:/accord-checks/new-check --expected-head <full-commit-sha> --adapter codex --archive --json > $checkConsole
+python -B -m yiyuan_accord check-snapshot --root . --work-dir C:/accord-checks/new-check --expected-head <full-commit-sha> --adapter codex --archive --summary --json
 $checkExitCode = $LASTEXITCODE
-Get-Content -Raw -Encoding utf8 -LiteralPath $checkConsole |
-    ConvertFrom-Json |
-    Select-Object valid, errors, scope, checks, cleanup, sourceStable, snapshotStable, archiveSha256 |
-    ConvertTo-Json -Depth 4
 if ($checkExitCode -ne 0) { throw "Static check failed; retain the full report and original exit code $checkExitCode." }
 ~~~
 
-Use a new console-output path as well as a new work directory. `--json` changes
-formatting only; it does not reduce report fields. Preserve the full report on
-disk and select the fields needed for the next decision before emitting it to
-the conversation. If decoding or projection fails, retain that failure separately
-from the saved check exit code. Expand to the relevant source/error fields when
-needed; a compact view does not replace complete evidence or repair a failed check.
+The optional `--summary` keeps outcomes, errors, cleanup/stability observations,
+the report directory and any archive digest in stdout. Full source inventories
+remain in `source.json` and `result.json`; individual check details remain in the
+named reports inside that directory. Preflight failure may create no directory,
+and report-write failure remains an error with a nonzero exit code. The view does
+not change checks, retained evidence, cleanup or exit status. Omit it for the
+original full stdout report. `--json` changes formatting only.
+
+For other commands or a full stdout report, preserve the output to a new file
+and select the fields needed for the next decision before emitting it. Keep a
+decoding/projection failure separate from the saved command exit code. Expand
+to relevant source/error fields when needed; a compact view does not replace
+complete evidence or repair a failed check.
 
 The source must have full local Git history and regular tracked files. Unsupported
 index additions/deletions, hidden entries, links and non-ignored untracked sources
