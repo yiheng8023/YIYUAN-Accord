@@ -220,6 +220,12 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current release and scoped connections
 
+The current release and its hosted, installation, actual-loading and closure evidence are recorded in [current continuation](operations/CONTINUATION.md#目标与当前写者). The 3.3.15 qualified source is `f7bf747b950c777e717cc60760f13dc3397c730b`, tree `06c398cde266c2b02bb939db98f7b59de1a2cdb7`, package SHA256 `001ccc508b87596fca3fcfd7e09fd1c122ea5d002c7268d7773b8e310beb7f4c`. Only its version manifest differs from 3.3.14; no new runtime capability or general value claim follows.
+
+#### Historical 3.3.13 observation
+
+The following original release/adoption account retains its recorded-time wording, source identities, clocks and limits; its word "current" does not identify today's release.
+
 The current published Codex package is [3.3.13](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.13),
 from exact commit `2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc`. Its r100 source qualification
 passed 1,468 local tests, three static checks and the original 18-case / 17-scope

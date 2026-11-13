@@ -22,14 +22,9 @@ the machine validation projection, not a competing source of user decisions.
 current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks;
 their old criteria and workflow prescriptions do not govern this successor.
 
-The local **3.3.15 candidate** is being qualified under PLAN r103. Its 30-member
-plugin package differs from released 3.3.14 only in the version manifest;
-runtime and Skill bytes are unchanged. Maintainer CLI, source-contract, test and
-documentation changes still need the current candidate's own full checks and
-material review. Local version conversion is not qualification, publication or
-installation. Keep the earlier slice results at their original source identities.
+The **3.3.15** source `f7bf747b950c777e717cc60760f13dc3397c730b` has its own 1,487-test full local run, three statics, 18-material four-axis review and formal two-phase qualification. Its 30-member plugin package differs from 3.3.14 only in the version manifest; runtime and Skill bytes are unchanged. Current hosted, publication, installation, actual loading and closure facts are separate in [continuation](docs/operations/CONTINUATION.md#目标与当前写者); original failures and scoped unknowns remain.
 
-The current released maintenance version is **3.3.14**, qualified on exact
+The historical **3.3.14** maintenance release was qualified on exact
 `55b675ff5ef02c8b09470328b71f1b549f4c7b14`. PLAN r101's asset retrospective started
 from the completed 3.3.13 baseline. C4 passed 1,483 local tests, three statics,
 current material review and formal two-phase qualification; CI #1064 passed all
@@ -53,10 +48,7 @@ guidance use and human–tool coordination, prepare bounded enabled/disabled
 comparisons, and maintain communication materials continuously. The completed
 r101 audit remains the baseline. Reuse adequate host and third-party capabilities;
 check actual consequences before adding mechanisms or claiming improvement.
-The release date has not been selected. Technical delivery and the conditional
-release target now identify the local 3.3.15 candidate; released, installed and
-actually loaded state remains 3.3.14. Full current qualification is still pending.
-Development documents are
+Current publication, installation, loading and remaining responsibilities follow the source-bound [continuation](docs/operations/CONTINUATION.md#目标与当前写者), without re-signing earlier evidence. Development documents are
 project-specific aids; ordinary tasks use sufficient host state, proportional
 checks and revisable routes rather than this repository's full document chain.
 
