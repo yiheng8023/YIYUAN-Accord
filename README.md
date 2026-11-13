@@ -18,7 +18,7 @@
 
 YIYUAN Accord is an open-source human–AI collaboration system. Its goal is to let you describe what you want to achieve while the AI assistant and its host work together to understand the request, choose capabilities, carry out the task and check the result. You should not have to study the host's settings, options, models, tools and workflows before coordinating them yourself.
 
-Accord's general design is independent of any model vendor or host. **The current release provides a Codex adaptation for OpenAI environments.** Other host integrations remain future work; this does not imply support for every host or every OpenAI entry.
+Accord's general design is independent of any model vendor or host. **The current release provides a ChatGPT/Codex adaptation.** See the [user guide](docs/user-guide.md#current-entries-and-runtime) for desktop Codex, local Work, CLI, IDE and Remote entry conditions. Other host integrations remain future work.
 
 ## What problem it addresses
 
@@ -32,7 +32,7 @@ These goals need continuing validation. An initial two-pair pilot produced corre
 
 ## Get started
 
-Published versions are available in [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest). Use a Codex CLI or desktop entry that supports plugins, with a compatible Node executable available to that host; Node 24 is the current tested recommendation. Ordinary use does not require Python. Repository development and verification support Python 3.11–3.14, with 3.14 as the validation baseline; Python 3.15 remains under observation. See [Contributing](CONTRIBUTING.md).
+Published versions are available in [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest). Install through Codex CLI or the ChatGPT desktop app, then use a supported Codex or local Work entry. The host needs a compatible Node executable; Node 24 is the current tested recommendation. Ordinary use does not require Python. Repository development and verification support Python 3.11–3.14, with 3.14 as the validation baseline; Python 3.15 remains under observation. See [Contributing](CONTRIBUTING.md).
 
 1. **Install.** Install YIYUAN Accord from this repository's marketplace source. To register that source from the CLI:
 
@@ -44,7 +44,7 @@ Published versions are available in [Releases](https://github.com/yiheng8023/YIY
 3. **Manually allow Hooks after installation and updates.** Hooks are plugin scripts run at task events. In the current desktop workflow, the user must review and click **Allow** after the first installation and after every update. Installation, enablement or unchanged declaration bytes do not replace this step. In CLI `/hooks`, review and trust Accord's current definitions; the installation executor must verify other versions, entries and rollback procedures in the actual host. See the user guide.
 4. **Start a new task and describe the goal.** For example: “Help me complete this task. If conditions change, correct the affected work and check the result before delivery.”
 
-**Installation, enablement, Hook trust and actual loading are all necessary.** See the [user guide](docs/user-guide.md#english-user-guide) for complete steps, an installation request template and troubleshooting. Current official documentation does not support native plugins in the Codex IDE extension; running CLI in an editor terminal is a different route. See [entry limitations](docs/user-guide.md#current-entries-and-runtime).
+**Installation, enablement, Hook trust and actual loading are all necessary.** See the [user guide](docs/user-guide.md#english-user-guide) for complete steps, an installation request template and troubleshooting, including the [specific IDE, Work and Remote routes](docs/user-guide.md#current-entries-and-runtime).
 
 ## How it works
 

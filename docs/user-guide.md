@@ -8,18 +8,20 @@
 
 ### 当前入口与运行条件
 
-Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发为 OpenAI 环境下的 Codex 适配。其它宿主的资料和历史包不代表本版提供相应支持。
+Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发为 **ChatGPT/Codex 适配**，包括下列已选本地入口及其 Remote 路线。Work 是 ChatGPT 的使用模式，不能因技术包名含 Codex 就把本地 Work 排除。其它宿主的资料和历史包不代表本版提供相应支持。
 
-以下入口说明于 **2026-10-30** 核对当前[官方插件文档](https://learn.chatgpt.com/docs/plugins#use-plugins-from-a-supported-surface)与[Hook 文档](https://learn.chatgpt.com/docs/hooks)。产品与上游会变化，安装执行者须核对具体版本和有效设置。
+以下入口说明于 **2026-11-14** 结合[官方插件文档](https://learn.chatgpt.com/docs/plugins#use-plugins-from-a-supported-surface)、[共享配置说明](https://learn.chatgpt.com/docs/developer-settings)与[仓库实际入口记录](../research/reviews/2026-10-30-host-evolution-and-assets.md#2026-11-14-chatgptcodex命名与ide入口纠正)核对。共同配置和后端机制按适用条件复用；安装执行者须核对实际版本、有效设置及入口差异。
 
 | 入口 | 当前使用说明 |
 |---|---|
-| Codex CLI、桌面中的 Codex | 使用实际支持插件、Hook 与 MCP 的版本和作用域，完成启用与 Hook 信任后核验加载。 |
-| Codex IDE 扩展 | 当前官方文档明确不支持原生插件入口。VS Code 终端中的 CLI、SDK 本地后端与 IDE 扩展原生加载是不同路线。仓库已有 IDE 观察保留原版本与条件，不构成当前任意扩展版本的支持承诺。 |
-| 本地编排、本地执行的 Work | 仅在所选版本确实支持插件及所需 Hook/MCP 时使用；不要因能本地执行工具便推断编排也在本地。 |
+| Codex CLI、ChatGPT 桌面中的 Codex | 使用实际支持插件、Hook 与 MCP 的版本和作用域，完成启用与 Hook 信任后核验加载。 |
+| VS Code 中的 Codex 扩展 | 保留为当前已选适配路线，已有具体版本的原生指导送达、Accord MCP 响应及输入恢复记录。核对实际扩展／后端、配置、信任与加载条件；编辑器终端中的 CLI 是另一条路线，不能替代扩展自身的观察。 |
+| ChatGPT 桌面中的本地 Work | 属于当前已选适配路线，使用支持所需插件、Hook/MCP 的本地编排与执行模式；仅能本地执行工具不代表编排也在本地。 |
 | 云端编排的 Work、Synced Work | 当前官方文档不支持插件 Hook；Synced Work 的管理员 MCP Hook 不等同于本包的本机命令 Hook，不作为本包的替代安装路线。 |
 | Remote 桌面或手机 | 可作为已选本地宿主的交互控制通道；须核主机实际参与及控制端差异，手机不是独立运行本包的环境。 |
 | SDK、普通 Chat、网页 Chat、其它 IDE | SDK 的版本绑定后端验证不产生通用安装界面；普通 Chat 独立用途、网页 Chat、JetBrains 与 Xcode 未纳入当前适配承诺。按具体路线的证据判断。 |
+
+官方通用插件页仍写明 IDE 扩展不支持插件，并引导通过 ChatGPT 桌面或 CLI 安装；仓库同时保留了具体 IDE 构建的管理界面与原生参与实证。这项差异尚不能归结为所有版本都不可用，也不能反向保证所有版本都完整支持。按实际构建和必要功能核验，已有通过保留原范围；不把未重测写成能力被取消。
 
 当前[Work说明](https://learn.chatgpt.com/docs/get-started-with-work#continue-work-across-devices)中的“Local computer access with Work Cloud”由云端协调并连接本机执行；能访问本地文件不表示它等同本地Work。安装执行者应先识别具体模式及Hook支持，旧任务也不会仅因启用同步而自动变更模式。
 
@@ -104,7 +106,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 | 3.3.14 | 资产回溯与开发／发布链维护：修正Shell观察、Git原件读取、CI取消条件及独立脚本入口；[精确发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.14)，提交 `55b675ff5ef02c8b09470328b71f1b549f4c7b14`。本地1483项及CI #1064十项通过；运行包仅版本清单变化。本机安装及当前聊天MCP采用已核，标签CI与收尾另见[接续](operations/CONTINUATION.md#目标与当前写者)。 |
 | 3.3.15 | 维护者`check-snapshot --summary`可选控制台视图、有限已选版本契约及文档校准；[精确发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.15)，提交`f7bf747b950c777e717cc60760f13dc3397c730b`。本地1,487项及三静态、18案材料四轴和正式两阶段已核；包内仅版本清单变化。托管、安装、实际加载与收尾分别见[接续](operations/CONTINUATION.md#目标与当前写者)，不签新运行能力或普遍收益。 |
 
-原始失败、版本、环境和条件保持原身份；后续文档不移动发行标签，也不把旧通过直接当作新版本通过。CLI、SDK、桌面、IDE、Work 与 Remote 之间，仅在核对适用性和差异后复用相应机制证据；历史入口观察不能覆盖现行官方已知限制。
+原始失败、版本、环境和条件保持原身份；后续文档不移动发行标签，也不把旧通过直接当作新版本通过。CLI、SDK、桌面、IDE、Work 与 Remote 之间，在核对适用性和差异后复用共同机制证据。官方通用描述与具体版本实测不一致时，分别保留并核清适用范围，不以任一方直接覆盖另一方。
 
 Accord 不训练模型、不扩大上下文、不越过宿主权限，也不注册 Stop 自动续轮或自动增加对话回合。长程控制由用户选择宿主的相应能力。参考指导、接口可用或人工救援不能代替普通任务中的实际效果；必要条件不足时保留限制和未完事项。
 
@@ -138,18 +140,20 @@ This guide carries the installation, use, privacy and mechanism details behind t
 
 ### Current entries and runtime
 
-Accord's general design is separate from vendor-specific adapters. The current distribution provides a Codex adaptation for OpenAI environments; historical packages and research on other hosts do not establish current support.
+Accord's general design is separate from vendor-specific adapters. The current distribution provides a **ChatGPT/Codex adaptation**, covering the selected local entries and Remote paths below. Work is a ChatGPT mode; the technical package name does not exclude local Work. Historical packages and research on other hosts do not establish current support.
 
-The following entry limits were checked on **2026-10-30** against the current official [plugin](https://learn.chatgpt.com/docs/plugins#use-plugins-from-a-supported-surface) and [Hook](https://learn.chatgpt.com/docs/hooks) documentation. The installation executor must recheck the actual version and effective settings as both projects evolve.
+The following entry conditions were checked on **2026-11-14** using the official [plugin documentation](https://learn.chatgpt.com/docs/plugins#use-plugins-from-a-supported-surface), [shared configuration guidance](https://learn.chatgpt.com/docs/developer-settings) and [recorded entry observations](../research/reviews/2026-10-30-host-evolution-and-assets.md#2026-11-14-chatgptcodex命名与ide入口纠正). Reuse applicable shared configuration and backend mechanisms; check the actual version, effective settings and entry differences.
 
 | Entry | Current use |
 |---|---|
-| Codex CLI and desktop Codex | Use a version and scope that support plugins and the required Hooks/MCP; enable, trust and verify actual loading. |
-| Codex IDE extension | Current official documentation excludes native plugins. CLI in a VS Code terminal, an SDK local backend and native IDE loading are distinct routes. Earlier repository observations retain their exact versions and conditions, rather than promising support in every current extension. |
-| Locally orchestrated and executed Work | Use only when the selected version supports the required plugin Hooks/MCP. Local tool execution alone does not establish local orchestration. |
+| Codex CLI and Codex in the ChatGPT desktop app | Use a version and scope that support plugins and the required Hooks/MCP; enable, trust and verify actual loading. |
+| Codex extension in VS Code | Remains a selected adaptation path, with version-bound native guidance delivery, Accord MCP responses and input recovery observations. Check the actual extension/backend, configuration, trust and loading. CLI in an editor terminal is a separate route and cannot replace observations of the extension itself. |
+| Local Work in the ChatGPT desktop app | A selected adaptation path: use local orchestration and execution with the required plugin Hooks/MCP. Local tool execution alone does not establish local orchestration. |
 | Cloud-orchestrated Work and Synced Work | Plugin Hooks are not supported in the current official documentation. Administrator MCP Hooks in Synced Work do not replace this package's local command Hooks. |
 | Remote desktop or mobile | May control a selected local host, subject to actual host participation and material client differences. Mobile is not an independent environment running this package. |
 | SDK, ordinary Chat, web Chat and other IDEs | Backend-specific SDK evidence creates no universal installation UI. Independent ordinary Chat, web Chat, JetBrains and Xcode are outside current adaptation commitments; assess the exact route. |
+
+The general plugin page still says the IDE extension does not support plugins and directs installation through the ChatGPT desktop app or CLI. Repository evidence also records management UI and native participation in specific IDE builds. This unresolved difference establishes neither universal unavailability nor complete support in every version. Check the actual build and necessary functions, retain prior results within their scope, and do not describe an untested update as withdrawn capability.
 
 The current [Work guide](https://learn.chatgpt.com/docs/get-started-with-work#continue-work-across-devices) says Local computer access with Work Cloud uses cloud coordination and a connected computer for local execution. Local file access does not make it local Work. Check the actual mode and Hook support; enabling sync does not automatically convert existing tasks.
 
@@ -234,7 +238,7 @@ Continuation links below retain their original observation-time labels and now l
 | 3.3.14 | Asset retrospective and development/release-chain maintenance: Shell observation, original Git object reads, CI cancellation conditions and standalone script entry. [Exact release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.14), commit `55b675ff5ef02c8b09470328b71f1b549f4c7b14`. All 1,483 local tests and ten CI #1064 jobs passed; only the runtime package version manifest changed. Local installation and current-chat MCP adoption are verified; tag CI and final closure are separate in [continuation](operations/CONTINUATION.md#目标与当前写者). |
 | 3.3.15 | Optional maintainer `check-snapshot --summary` console view, finite selected-version contracts and documentation calibration. [Exact release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.15), commit `f7bf747b950c777e717cc60760f13dc3397c730b`. All 1,487 local tests, three statics, 18-material four-axis review and formal two-phase qualification are verified; only the package version manifest changed. Hosted results, installation, actual loading and closure remain separate in [continuation](operations/CONTINUATION.md#目标与当前写者); no new runtime capability or general benefit is claimed. |
 
-Original failures, versions, environments and conditions retain their identities. Later documentation does not move release tags or validate changed versions through an old PASS. Reuse common-mechanism evidence across CLI, SDK, desktop, IDE, Work or Remote only after checking applicability and differences. Historical observations do not override known current upstream limitations.
+Original failures, versions, environments and conditions retain their identities. Later documentation does not move release tags or validate changed versions through an old PASS. Reuse common-mechanism evidence across CLI, SDK, desktop, IDE, Work or Remote after checking applicability and differences. When general upstream descriptions and specific build observations differ, preserve both and resolve their scope rather than treating either as an automatic override.
 
 Accord does not train models, enlarge context or bypass host permissions. It registers no Stop auto-continuation and adds no conversation turns. Users select the host's long-running controls. Guidance, interface availability or evaluator rescue does not establish ordinary-use outcomes; preserve real limitations and unfinished work when conditions are insufficient.
 

@@ -23,7 +23,7 @@
   "interface": {
     "displayName": "YIYUAN Accord",
     "shortDescription": "Pursue outcomes with coordinated, verified work",
-    "longDescription": "Tell your agent what you want to achieve. YIYUAN Accord is designed to help it assess feasibility, establish necessary conditions, choose and combine native and external capabilities, correct affected work, preserve continuity and verify the result. It works within your choices and permissions. Accord's general collaboration design is supplier-neutral and separate from host adapters; this package provides the Codex adaptation. Actual behavior depends on the host, available capabilities and the task's conditions.",
+    "longDescription": "Tell your agent what you want to achieve. YIYUAN Accord is designed to help it assess feasibility, establish necessary conditions, choose and combine native and external capabilities, correct affected work, preserve continuity and verify the result. It works within your choices and permissions. Accord's general collaboration design is supplier-neutral and separate from host adapters; this package provides the ChatGPT/Codex adaptation, including supported local Work paths. See the user guide for desktop, CLI, IDE and Remote entry conditions. Actual behavior depends on the host, available capabilities and the task's conditions.",
     "developerName": "yiheng8023",
     "category": "Developer Tools",
     "capabilities": [

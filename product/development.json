@@ -103,13 +103,13 @@
   },
   "delivery": {
     "version": "3.3.16",
-    "rule": "The local 3.3.16 candidate has 30 declared package members; only the manifest version differs from released 3.3.15. Runtime, Skills and other package bytes are unchanged. Developer contract compatibility, tests, current documentation and machine projection require their own current-source qualification. Installed and loaded baseline remains 3.3.15 until separately verified. Previous release and adoption evidence stays at b6668f1c1e6c45fdfe7a1513b693774f35b2f94f:product/development.json#/delivery.",
+    "rule": "The local 3.3.16 candidate has 30 declared package members; only the manifest version and reader-facing ChatGPT/Codex description differ from released 3.3.15. Runtime, Skills and other package bytes are unchanged. Developer contract compatibility, tests, current documentation and machine projection require their own current-source qualification. Installed and loaded baseline remains 3.3.15 until separately verified. Previous release and adoption evidence stays at b6668f1c1e6c45fdfe7a1513b693774f35b2f94f:product/development.json#/delivery.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
         "packageVersion": "3.3.16",
-        "packageSha256": "886bde7ce717325fe83bbc2ca8e542366c3116a6260c7ca8c0f382e4b61ae4b2",
+        "packageSha256": "0f394d1bbf61cca6d13cff61223a808de8d0c9fa902ea815efa38d15d91c7690",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",

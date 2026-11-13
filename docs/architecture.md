@@ -6,16 +6,17 @@
 source assumptions, duties, quality floors and non-linear procedures; its linked
 acceptance view defines the criteria. [product/development.json](../product/development.json)
 is the machine validation projection. Version 3.3 distributes only the applicable
-OpenAI adaptation. Earlier releases and host observations keep their historical
+ChatGPT/Codex adaptation. Earlier releases and host observations keep their historical
 identities; current implementation or documentation does not grant publication.
 
 The reader-facing overview is in the [README](../README.md#how-it-works).
 The [user guide](user-guide.md#english-user-guide) carries installation, Hook
-trust, privacy and current upstream entry limits. In particular, current upstream
-documentation excludes native plugins in the Codex IDE extension and plugin
-Hooks in cloud-orchestrated Work; historical version-bound observations and
-backend tests do not establish support in those current surfaces. This clarifies
-entry applicability without changing the portable duties or past evidence.
+trust, privacy and actual entry conditions. ChatGPT desktop Codex, local Work,
+Codex CLI and the selected VS Code extension path reuse applicable common
+mechanisms. General upstream IDE plugin restrictions and version-bound native IDE
+observations must be reconciled by build and function; neither erases the other.
+Cloud-orchestrated Work lacks the package's local command Hook route. Entry
+conditions do not change the portable duties or past evidence.
 
 The portable outcome and authority contracts do not require Codex events or
 protocols. `runtime/native-state-mcp.cjs` forwards to the packaged Codex adapter;
@@ -28,7 +29,8 @@ replace them by evidenced equivalents when adapting another host.
 ### Future host adaptation: isolation and reuse
 
 This is a design direction for later host decisions, not a second active adapter
-or a universal runtime. The current distribution has one Codex adaptation;
+or a universal runtime. The current distribution has one ChatGPT/Codex adaptation,
+retaining the technical package identity `yiyuan-accord-codex`;
 multi-host coexistence, independent upgrades and state migration remain untested.
 The user clarified on 2026-11-03 that additional host adaptation is outside the
 current phase: discuss options and retain the design only. No candidate interface,
