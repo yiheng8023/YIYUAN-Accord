@@ -101,7 +101,11 @@ Use existing records for the disposition and verify the resource post-state;
 ordinary tasks need neither a repository-wide sweep nor a new artifact registry.
 
 For UI-based maintenance, distinguish a session reset or accepted completion
-summary from actual return of interactive control and capture state. Use the
+summary from actual return of interactive control and capture state. If this
+judgment needs guidance from the verification Skill, reuse what is already loaded
+or read the applicable [resource closure branch](plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md#release-owned-resources-and-close-out)
+and its needed dependencies. A fixed initial line count does not establish that
+coverage, and reading the branch does not establish execution. Use the
 current host's supported lifecycle and evidence of the required post-state;
 if that evidence is unavailable, preserve the limit rather than claiming release.
 Do not reacquire capture merely to prove its absence or turn a historical
