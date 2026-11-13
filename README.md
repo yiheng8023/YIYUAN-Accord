@@ -37,11 +37,11 @@ Published versions are available in [Releases](https://github.com/yiheng8023/YIY
 1. **Install.** Install YIYUAN Accord from this repository's marketplace source. To register that source from the CLI:
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref f7bf747b950c777e717cc60760f13dc3397c730b
    ```
 
 2. **Enable plugins and Accord.** Allow plugin use in the host and enable Accord in the scope you actually use. In CLI `/plugins`, select the marketplace, install, and press `Space` on the installed plugin to turn it on or off.
-3. **Review and trust the Hooks on first use.** Hooks are plugin scripts run at task events. Installation or enablement does not trust them automatically. In CLI `/hooks`, review and trust Accord's current definitions. The installation executor must verify the supported desktop method for your version; see the user guide.
+3. **Review and trust the Hooks on first use.** Hooks are plugin scripts run at task events. Installation or enablement does not trust them automatically. In CLI `/hooks`, review and trust Accord's current definitions. After an update or rollback, check again for a host trust prompt and review it before confirming; unchanged declarations alone do not guarantee retained trust. The installation executor must verify the supported desktop method for your version; see the user guide.
 4. **Start a new task and describe the goal.** For example: “Help me complete this task. If conditions change, correct the affected work and check the result before delivery.”
 
 **Installation, enablement, Hook trust and actual loading are all necessary.** See the [user guide](docs/user-guide.md#english-user-guide) for complete steps, an installation request template and troubleshooting. Current official documentation does not support native plugins in the Codex IDE extension; running CLI in an editor terminal is a different route. See [entry limitations](docs/user-guide.md#current-entries-and-runtime).

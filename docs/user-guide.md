@@ -37,12 +37,12 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
 2. 在需要登记来源时，可采用[官方 marketplace 命令](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)：
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref f7bf747b950c777e717cc60760f13dc3397c730b
    ```
 
    这条命令只登记来源。CLI 在 `/plugins` 中切到该来源，查看并安装 YIYUAN Accord；桌面使用实际可用的插件目录与来源入口。本项目来源不等于已被官方公共目录收录。
 3. 确认宿主或组织允许使用插件，再在目标作用域启用 Accord。CLI 可对 `/plugins` 内已安装项按 `Space` 启停；桌面的全局插件使用开关和单插件启用分别核对，具体界面以所用版本为准。
-4. **首次使用前审阅并信任 Accord 的当前 Hook 定义。** CLI 输入 `/hooks`。桌面的具体审阅/信任方式尚未跨版本统一核实，由安装执行者核对当前版本的受支持路径；没有可用路径时明确报告限制，不据安装成功声称已生效，也不把另一 CLI 的信任状态直接外推到桌面。安装、启用不会自动授予 Hook 信任；定义变化后需重新审阅。不要用手工修改信任摘要或全量放行代替审阅。当前[官方信任规则](https://learn.chatgpt.com/docs/hooks#plugin-bundled-hooks)说明未获信任的插件 Hook 会被跳过，CLI 操作见[审阅与信任](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks)。
+4. **首次使用前审阅并信任 Accord 的当前 Hook 定义。** CLI 输入 `/hooks`。桌面的具体审阅/信任方式尚未跨版本统一核实，由安装执行者核对当前版本的受支持路径；没有可用路径时明确报告限制，不据安装成功声称已生效，也不把另一 CLI 的信任状态直接外推到桌面。安装、启用不会自动授予 Hook 信任；升级或回退后应重新检查宿主信任状态，并由用户审阅确认宿主提出的信任请求。声明字节相同也不证明新版本的内容信任仍有效。不要用手工修改信任摘要或全量放行代替审阅。当前[官方信任规则](https://learn.chatgpt.com/docs/hooks#plugin-bundled-hooks)说明未获信任的插件 Hook 会被跳过，CLI 操作见[审阅与信任](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks)。
 5. 让执行者核对实际 Hook 参与、MCP 连接、插件来源和版本。首次安装按所用版本完成会话初始化；后续升级或回退可在支持[热刷新](https://github.com/openai/codex/releases/tag/rust-v0.154.0)的宿主中由既有会话采用，仅在实际版本要求时新建会话或重载。已加载的旧会话、目录中可见的 Skill、静态 `host-check` 都不能单独证明生效。
 
 如果已有具备相应权限的 AI 助手，可以直接交给它：
@@ -165,12 +165,12 @@ Complete **installation, enablement and Hook trust** separately, then verify act
 2. Where source registration is needed, use the official [marketplace command](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli):
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 2a1bf4cbb4e34de25cc144f1ef2693815dac3dfc
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref f7bf747b950c777e717cc60760f13dc3397c730b
    ```
 
    This registers the source only. In CLI `/plugins`, select it, inspect and install YIYUAN Accord. On desktop use the actual plugin directory/source entry. A repository marketplace is not a listing in the official public directory.
 3. Confirm that the host or organization permits plugins and enable Accord in the intended scope. CLI `/plugins` uses `Space` to toggle an installed item. On desktop check global plugin use and the individual plugin separately; labels vary by version.
-4. **Before first use, review and trust Accord's current Hook definitions.** Use CLI `/hooks`. A desktop review/trust method has not been uniformly verified across versions; the installation executor must check the supported route in the actual version. If none is available, report that limitation rather than treating installation as participation or extrapolating another CLI's trust state to desktop. Installation or enablement does not trust Hooks automatically; changed definitions require fresh review. Do not substitute manually edited trust hashes or blanket approval. The official [trust rule](https://learn.chatgpt.com/docs/hooks#plugin-bundled-hooks) says untrusted plugin Hooks are skipped; see [review and trust](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks) for CLI operations.
+4. **Before first use, review and trust Accord's current Hook definitions.** Use CLI `/hooks`. A desktop review/trust method has not been uniformly verified across versions; the installation executor must check the supported route in the actual version. If none is available, report that limitation rather than treating installation as participation or extrapolating another CLI's trust state to desktop. Installation or enablement does not trust Hooks automatically. After an update or rollback, check the host trust state again and have the user review and confirm any requested trust. Unchanged declaration bytes do not establish that content trust remains valid for the new version. Do not substitute manually edited trust hashes or blanket approval. The official [trust rule](https://learn.chatgpt.com/docs/hooks#plugin-bundled-hooks) says untrusted plugin Hooks are skipped; see [review and trust](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks) for CLI operations.
 5. Have the executor verify actual Hook participation, MCP connection, source and version. Complete session initialization as required by the version for a first installation. For later upgrades or rollbacks, hosts supporting [hot refresh](https://github.com/openai/codex/releases/tag/rust-v0.154.0) can adopt updates in an existing session; start a new session or reload only when the actual version requires it. An old loaded session, visible Skill or static `host-check` result cannot prove these effects.
 
 You can ask an existing assistant with suitable authority:
