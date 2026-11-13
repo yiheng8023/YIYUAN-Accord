@@ -14,43 +14,22 @@ test inputs and link anchors are intentional where their consumers require them.
 Check context before translating: a character scan is an inventory, not proof of
 misplaced prose. Preserve contributor recognition, badges and sponsorship content.
 
-For current v3.3 work, [the consensus and plan](docs/operations/PLAN-v3.3.md)
-owns the approved scope, decisions and procedures; its linked acceptance view
+For current v3.3 work, [the current plan](docs/operations/PLAN-v3.3.md#current-work)
+owns the approved scope, decisions, progress and unfinished responsibilities;
+its linked acceptance view
 defines the criteria. [product/development.json](product/development.json) is
 the machine validation projection, not a competing source of user decisions.
-[Continuation](docs/operations/CONTINUATION.md) identifies the bound checkout and
-current evidence limits. Git preserves the exact v3.1 documents and Golden Tasks;
+[Continuation](docs/operations/CONTINUATION.md) preserves old entry points and
+links historical evidence at fixed revisions. Git preserves the exact v3.1 documents and Golden Tasks;
 their old criteria and workflow prescriptions do not govern this successor.
 
-The **3.3.15** source `f7bf747b950c777e717cc60760f13dc3397c730b` has its own 1,487-test full local run, three statics, 18-material four-axis review and formal two-phase qualification. Its 30-member plugin package differs from 3.3.14 only in the version manifest; runtime and Skill bytes are unchanged. Current hosted, publication, installation, actual loading and closure facts are separate in [continuation](docs/operations/CONTINUATION.md#目标与当前写者); original failures and scoped unknowns remain.
-
-The historical **3.3.14** maintenance release was qualified on exact
-`55b675ff5ef02c8b09470328b71f1b549f4c7b14`. PLAN r101's asset retrospective started
-from the completed 3.3.13 baseline. C4 passed 1,483 local tests, three statics,
-current material review and formal two-phase qualification; CI #1064 passed all
-ten jobs, with 18 native archives and 22 source manifests checked. The earlier
-C3 run retains its eight matrix successes and two native entry failures.
-Local 3.3.14 installation, persistent source and current-chat MCP adoption are
-verified, including six loaded function fingerprints and preserved task state.
-Tag CI #1065 also passed all ten jobs, with its own 18 native archives and 22
-source manifests independently verified. Business and resource checks are complete. The native task binding was retired
-after 30 unchanged protected inputs and both output predicates were verified;
-state and captured-input files were confirmed absent, completing stage closeout. Task checkouts were archived and removed,
-with evidence and recovery copies retained. These remain separate in [continuation](docs/operations/CONTINUATION.md#目标与当前写者).
-The package differs from 3.3.13 only in its version manifest; runtime and Skill
-bytes are unchanged. The current plan records bounded asset dispositions and
-retained unknowns. Existing acceptance may be questioned with explicit evidence
-and impact review, never retroactively changed to pass a result. Other future
-adaptations remain discussion-only candidates without a preset version or date.
-
-PLAN r103 now owns the user-selected 3.3.15 development stage: investigate demonstrated gaps in actual
-guidance use and human–tool coordination, prepare bounded enabled/disabled
-comparisons, and maintain communication materials continuously. The completed
-r101 audit remains the baseline. Reuse adequate host and third-party capabilities;
-check actual consequences before adding mechanisms or claiming improvement.
-Current publication, installation, loading and remaining responsibilities follow the source-bound [continuation](docs/operations/CONTINUATION.md#目标与当前写者), without re-signing earlier evidence. Development documents are
-project-specific aids; ordinary tasks use sufficient host state, proportional
-checks and revisable routes rather than this repository's full document chain.
+Release-specific test counts, package identity, adoption and closure evidence
+belong to the plan's linked records, not this contribution guide. Preserve their
+original subjects and failures when current work changes. Reuse adequate host
+and third-party capabilities; check actual consequences before adding mechanisms
+or claiming improvement. Existing acceptance may be questioned with evidence and
+impact review, never retroactively changed to pass a result. Future adaptations
+remain candidates without preset versions or dates.
 
 The repository now supports Python 3.11–3.14, with 3.14 as the validation baseline.
 Python 3.15 remains under observation and outside current CI. Reassess actual
@@ -111,6 +90,23 @@ Retain, merge, replace or retire with reasons and aligned acceptance. Remove
 misleading active guidance; preserve historical evidence at exact Git locators.
 Do not add another runtime, registry or router without a justified unmet need
 or material improvement. A size target cannot excuse lost function or quality.
+
+When an artifact is replaced, its dependencies change or its task closes, review
+the affected residue without waiting for a separate cleanup request. Check its
+owner, live writers, references and recovery needs before disposal. Keep necessary
+failures and release evidence; reclaim reproducible scratch or redundant working
+copies after checking their retained source. Age alone does not justify deletion,
+and archiving every temporary copy indefinitely does not finish maintenance.
+Use existing records for the disposition and verify the resource post-state;
+ordinary tasks need neither a repository-wide sweep nor a new artifact registry.
+
+For UI-based maintenance, distinguish a session reset or accepted completion
+summary from actual return of interactive control and capture state. Use the
+current host's supported lifecycle and evidence of the required post-state;
+if that evidence is unavailable, preserve the limit rather than claiming release.
+Do not reacquire capture merely to prove its absence or turn a historical
+exact-process intervention into blanket termination of shared helpers. See the
+[maintenance observations](research/evaluations/accord-toggle-v1.md#2026-11-14-真实维护中的路线调整与资源纠偏).
 
 For material corrections or failures, return to the earliest affected dependency.
 Preserve unrelated verified work and superseded evidence; recheck affected claims.

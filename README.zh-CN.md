@@ -68,7 +68,7 @@ flowchart TD
 
 ## 进一步了解与参与
 
-[用户指南](docs/user-guide.md#中文使用指南) · [设计与当前计划](docs/operations/PLAN-v3.3.md) · [验收依据](docs/operations/ACCEPTANCE-v3.3.md) · [当前接续](docs/operations/CONTINUATION.md) · [更新日志](CHANGELOG.md)
+[用户指南](docs/user-guide.md#中文使用指南) · [设计与当前计划](docs/operations/PLAN-v3.3.md) · [验收依据](docs/operations/ACCEPTANCE-v3.3.md) · [接续与历史导航](docs/operations/CONTINUATION.md) · [更新日志](CHANGELOG.md)
 
 开发、评估和维护检查见[贡献指南](CONTRIBUTING.md)；遇到问题可以先用自己的话说明期望和实际结果，见[支持说明](SUPPORT.md#支持说明)。请勿公开凭据或私密会话原文，安全问题按[安全政策](SECURITY.md)报告。
 

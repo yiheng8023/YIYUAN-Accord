@@ -65,7 +65,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 
 启用输入 Hook 后，根任务的原生输入文字保留在本机既有回执中，用于恢复；每份回执上限为 **8 MiB**。显式审阅和对账也会保留受支持的宿主上下文、目标控制文字及相应状态原文；结构化媒体保留字节与记录摘要，不缓存base64正文。其中可能含敏感信息，中断时即使没有检查点也可能保留，结束会话不保证立即删除。状态按任务生命周期处理，清理前须确认未完工作和恢复依据。
 
-3.3.9会在必要时保留每会话的最小失败确认记录，防止已确认的旧失败在退役后再次触发隔离；其中没有原输入或会话正文，后续输入成功保存后移除。原3.3.8发行包保持；当前发行、验证和实际采用分别见[接续](operations/CONTINUATION.md#目标与当前写者)。
+3.3.9会在必要时保留每会话的最小失败确认记录，防止已确认的旧失败在退役后再次触发隔离；其中没有原输入或会话正文，后续输入成功保存后移除。原3.3.8发行包保持；各版发行、验证和实际采用分别从[历史导航](operations/CONTINUATION.md#目标与当前写者)核对，当前工作见[计划](operations/PLAN-v3.3.md#current-work)。
 
 这不是完整对话或进度记录，也不产生新授权。子代理使用宿主自己的任务状态，不承接根检查点。请勿公开上传原始回执、凭据或私人会话；报告问题可先描述现象，由执行者选取必要且脱敏的证据。保留、退役及失败边界见[架构](architecture.md#current-release-and-scoped-connections)与[状态调用指南](task-state-clients.md)。
 
@@ -84,6 +84,8 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 切换版本、回滚或移除前，使用不依赖待变更插件的健康执行者，核对未完任务、稍后才触发的 Hook、有效权限和恢复副本。无法确认安全切换时保留准备成果；备份存在不等于已经恢复。安装状态、已进入上下文的内容、连接与运行进程分别核验和处理，卸载本身不能证明后两者已消失。维护引导见[生命周期 Skill](../plugins/yiyuan-accord-codex/skills/manage-plugin-lifecycle/SKILL.md)。
 
 ### 版本与证据
+
+下表中的接续链接保留原观察时点的称谓，现经[历史导航](operations/CONTINUATION.md)查阅对应原件；当前工作统一见[计划](operations/PLAN-v3.3.md#current-work)。各版记录不自动代表后续版本的状态。
 
 | 版本 | 公开记录与含义 |
 |---|---|
@@ -108,7 +110,7 @@ Accord 不训练模型、不扩大上下文、不越过宿主权限，也不注�
 
 协调可能增加上下文、延迟、计算、指令冲突与维护负担。增量价值需要公平对照并同时考虑质量、自动化程度、人工协调和总成本；合理额外开销不等于失败，“省用量但仍需用户盯着”也不能替代必要自动化。首轮[两对有限试行](../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行)已完成：两组交付均正确，启用组报告用量和耗时更高；这不构成普遍收益、性能或统计结论。
 
-当前指导要求助手在经验可能影响下一步时，从获准的宿主记忆或任务记录中取回相关内容，核对来源、适用条件与反例，再观察实际采用的结果。重复尝试前应明确什么条件改变、哪项检查能区分原因，或正在等待什么可观察的变化；保留有依据的重试与等待。一次纠正不必写成永久规则，过期经验也应在权限范围内修订或退出。指导已提供不保证每次都被正确执行；普通任务中的实际采用和收益仍需观察。这不建立独立的跨项目经验库、全工具停滞监控或任意执行取消能力。发行状态、安装与实际采用分别核验，见[接续](operations/CONTINUATION.md#目标与当前写者)。
+当前指导要求助手在经验可能影响下一步时，从获准的宿主记忆或任务记录中取回相关内容，核对来源、适用条件与反例，再观察实际采用的结果。重复尝试前应明确什么条件改变、哪项检查能区分原因，或正在等待什么可观察的变化；保留有依据的重试与等待。一次纠正不必写成永久规则，过期经验也应在权限范围内修订或退出。指导已提供不保证每次都被正确执行；普通任务中的实际采用和收益仍需观察。这不建立独立的跨项目经验库、全工具停滞监控或任意执行取消能力。发行状态、安装与实际采用分别核验，原记录见[历史导航](operations/CONTINUATION.md#目标与当前写者)，当前工作见[计划](operations/PLAN-v3.3.md#current-work)。
 
 ### 原理与进阶阅读
 
@@ -193,7 +195,7 @@ Starting conditions, work and results may feed back, run in parallel and nest. C
 
 With the input Hook enabled, root-task native input text is retained in an existing local receipt for recovery, bounded to **8 MiB per receipt**. Explicit review and reconciliation also retain supported host context, goal-control text and the corresponding state text; structured media keeps byte and record summaries without caching base64 content. The receipt may contain sensitive information and survive interruption even without a checkpoint. Session exit does not guarantee immediate deletion. Follow the task lifecycle and check unfinished work and recovery needs before cleanup.
 
-The 3.3.9 implementation also retains a minimal session-specific failure acknowledgment when needed, so an already acknowledged failure does not trigger quarantine again after retirement. It contains no original input or conversation text and is removed after a subsequent input is successfully saved. The earlier3.3.8 package remains unchanged; current publication, verification and actual adoption are recorded separately in [continuation](operations/CONTINUATION.md#目标与当前写者).
+The 3.3.9 implementation also retains a minimal session-specific failure acknowledgment when needed, so an already acknowledged failure does not trigger quarantine again after retirement. It contains no original input or conversation text and is removed after a subsequent input is successfully saved. The earlier 3.3.8 package remains unchanged; check each version's publication, verification and actual adoption through [historical navigation](operations/CONTINUATION.md#目标与当前写者), and current work in the [plan](operations/PLAN-v3.3.md#current-work).
 
 This is not complete conversation history or a progress record, and grants no new authority. Subagents use their native task state rather than adopting the root checkpoint. Do not publish raw receipts, credentials or private transcripts; describe the problem first and let the executor select necessary redacted evidence. See the [architecture](architecture.md#current-release-and-scoped-connections) and [state-client guide](task-state-clients.md) for retention, retirement and failure boundaries.
 
@@ -212,6 +214,8 @@ When changing a fixed source revision, if the host reports an existing different
 Before update, rollback or removal, use a healthy executor independent of the plugin being changed. Check unfinished work, later-triggered Hooks, authority and a recovery copy. If a safe switch cannot be established, preserve preparation. A backup is not completed recovery. Installed files, loaded context, connections and processes have separate lifecycles; uninstalling alone does not establish that context or activity disappeared. See the [lifecycle Skill](../plugins/yiyuan-accord-codex/skills/manage-plugin-lifecycle/SKILL.md).
 
 ### Versions and evidence
+
+Continuation links below retain their original observation-time labels and now lead through [historical navigation](operations/CONTINUATION.md) to the corresponding sources. The [plan](operations/PLAN-v3.3.md#current-work) owns current work. A version's record does not establish a later version's state.
 
 | Version | Public record and meaning |
 |---|---|
@@ -236,7 +240,7 @@ Accord does not train models, enlarge context or bypass host permissions. It reg
 
 Coordination may add context, latency, compute, instruction conflicts and maintenance. Incremental value needs a fair comparison accounting for quality, automation, human coordination and total cost. Reasonable extra cost is not failure; lower usage that still leaves the user supervising cannot replace necessary automation. The initial [two-pair pilot](../research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行) is complete: both arms produced correct outputs, while the enabled arm used more reported tokens and time. This establishes no general benefit, performance or statistical conclusion.
 
-Current guidance asks the assistant to retrieve relevant authorized host memory or task records when prior experience could change the next decision, check sources, applicability and counterexamples, then verify the result of actual use. Before repeating an attempt, identify a changed condition, a check that can distinguish causes, or an observable waiting condition; preserve justified retries and waits. A single correction need not become a permanent rule, and invalidated experience should be revised or retired within authority. Supplied guidance does not guarantee correct execution every time; ordinary adoption and benefits still need observation. This does not establish a separate cross-project memory service, all-tool stagnation monitoring or arbitrary execution cancellation. Publication status, installation and actual adoption are checked separately in [continuation](operations/CONTINUATION.md#目标与当前写者).
+Current guidance asks the assistant to retrieve relevant authorized host memory or task records when prior experience could change the next decision, check sources, applicability and counterexamples, then verify the result of actual use. Before repeating an attempt, identify a changed condition, a check that can distinguish causes, or an observable waiting condition; preserve justified retries and waits. A single correction need not become a permanent rule, and invalidated experience should be revised or retired within authority. Supplied guidance does not guarantee correct execution every time; ordinary adoption and benefits still need observation. This does not establish a separate cross-project memory service, all-tool stagnation monitoring or arbitrary execution cancellation. Publication status, installation and actual adoption are checked separately: use [historical navigation](operations/CONTINUATION.md#目标与当前写者) for original records and the [plan](operations/PLAN-v3.3.md#current-work) for ongoing work.
 
 ### Principles and further reading
 

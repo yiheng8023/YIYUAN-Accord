@@ -1,14 +1,14 @@
 # 持续传播与社区材料工作稿
 
-用途：随项目维护传播、使用说明、社区入口及核对依据；沿用本路径以保持已有链接。本文本身不构成验收、发布回执或日期通知。版本状态、未完项和实际发布记录以[共识计划](PLAN-v3.3.md)、[当前接续](CONTINUATION.md)及精确版本公开记录为准；本文复用W08/S5，不新增产品验收或发布日期。
+用途：随项目维护传播、使用说明、社区入口及核对依据；沿用本路径以保持已有链接。本文本身不构成验收、发布回执或日期通知。当前工作和未完项以[计划当前入口](PLAN-v3.3.md#current-work)为准，历史发布事实沿精确版本公开记录及固定原文核对；本文复用W08/S5，不新增产品验收或发布日期。
 
-2026-11-13确认的[持续传播职责](PLAN-v3.3.md#持续传播与社区材料)保持。当前发行及实际资格／采用状态统一见[当前接续](CONTINUATION.md#目标与当前写者)，3.3.15精确主体为`f7bf747b950c777e717cc60760f13dc3397c730b`。下方较早草案、单组与对照仍保各自受测版本，不能改签当前性能或普遍增益。
+2026-11-13确认的[持续传播职责](PLAN-v3.3.md#持续传播与社区材料)保持。当前发行及实际资格／采用状态见[固定接续原文](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)，3.3.15精确主体为`f7bf747b950c777e717cc60760f13dc3397c730b`。下方较早草案、单组与对照仍保各自受测版本，不能改签当前性能或普遍增益。
 
 传播沿实际启用／未启用对照，也可准备有据的功能、使用说明和单组真实案例。每份可用素材注明证据入口、适用版本或条件及当前／历史／待核状态；相关事实改变时复核，充分的旧证据继续复用。徽章、贡献者、赞助及参与入口按社区用途保持。现有素材仍在NEXUS体系维护；本轮没有制作、迁移或对外发布素材。
 
 ## 3.3.15阶段素材与对照准备（2026-11-13）
 
-本阶段选定的3.3.15已完成精确主体的本地资格；发行与后续采用层次见[当前接续](CONTINUATION.md#目标与当前写者)。本节继续复用既有材料边界，阶段选择、版本或发行本身不证明收益。
+本阶段选定的3.3.15已完成精确主体的本地资格；发行与后续采用层次见[固定接续原文](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)。本节继续复用既有材料边界，阶段选择、版本或发行本身不证明收益。
 
 | 既有材料 | 当前可准备的叙述 | 结论边界 |
 |---|---|---|
@@ -16,11 +16,11 @@
 | [真实未完任务续作](../../research/evaluations/accord-toggle-v1.md#2026-10-31-真实未完应用的安全接续观察) | 解释实际发生的续作、人工介入、超时及核验边界 | 单组、原3.3.8；不能说完整自主恢复通过或Accord减少了救援 |
 | [本项目原生诊断复用](../../research/evaluations/accord-toggle-v1.md#2026-11-13-诊断输出的宿主复用与实际采用) | 讲述先核已有能力、修正调用方式及保留失败的工程过程 | 维护者预设的读取路径核查；字符体积不等于Token或端到端收益，不称为新增产品功能 |
 | [普通维护的能力重选与反馈纠偏](../../research/evaluations/accord-toggle-v1.md#2026-11-13-普通维护中的选择采用与反馈纠偏) | 说明旧路径失败后的重新发现、宿主工具使用与用户反馈修正，并保留过早完成声明的反例 | 原3.3.13单组回顾，含用户介入；Skill取回不等于其方法实际采用，不签自主发现、当前版本表现、全面资源关闭或Accord因果收益 |
-| [当前使用说明](../user-guide.md)及双语README | 介绍正式版功能、适用入口、启用及首次信任条件 | 说明与行为证据分别使用；不将文档覆盖写成每位用户和每个入口均已验 |
+| [当前使用说明](../user-guide.md)及双语README | 介绍正式版功能、适用入口、插件启用，以及当前桌面首次安装／每次更新后的Hook允许 | 说明与行为证据分别使用；不将文档覆盖写成每位用户和每个入口均已验 |
 
 下一组拟回答：普通维护中，启用Accord的额外介入是否必要，成品、返工或人工救援的变化与实际开销怎样对应？按[同一对照口径](../../research/evaluations/accord-toggle-v1.md#统一对照口径)选新发生且有独立成品判据的材料，核共同条件并隔离两组。当前开发仓库包含Accord指导，不能直接充当未启用组的中立环境。
 
-新材料及当前兼容准备／实际执行进展见[当前接续](CONTINUATION.md#目标与当前写者)，按[隔离准备](../../research/evaluations/accord-toggle-v1.md#2026-11-13-后继对照的隔离准备)处理。若尚无业务、成品或完整比较，就保留该状态；不为取得差异制造错误，不重跑旧题筛收益。
+新材料及当前准备／执行进展见[计划当前入口](PLAN-v3.3.md#current-work)，按[隔离准备](../../research/evaluations/accord-toggle-v1.md#2026-11-13-后继对照的隔离准备)处理。若尚无业务、成品或完整比较，就保留该状态；不为取得差异制造错误，不重跑旧题筛收益。
 
 ## 3.3.13 发行历史（2026-11-12）
 
@@ -90,7 +90,7 @@
 
 ## 首次使用者说明与发布字段草案
 
-以下中英介绍、结构字段和检查清单面向非技术首次使用者，按精确版本及其有效证据使用；不构成普遍支持、效果或发布承诺。构建身份、安装采用和入口验收分别以当前接续及其来源为准，不从旧构建观察继承。
+以下中英介绍、结构字段和检查清单面向非技术首次使用者，按精确版本及其有效证据使用；不构成普遍支持、效果或发布承诺。构建身份、安装采用和入口验收分别查对应版本的原件，历史入口见[接续导航](CONTINUATION.md)，当前工作见[计划](PLAN-v3.3.md#current-work)；不从旧构建观察继承。
 
 ## YIYUAN Accord 3.3：让 Agent 协调协作（草案）
 
@@ -178,7 +178,7 @@ This description covers the design intent and scope of 3.3, not verified univers
     ]
   },
   "verification": {
-    "status": "Support claims require an exact-version suitability decision and actual acceptance; consult the current continuation and acceptance sources for results and unfinished duties.",
+    "status": "Support claims require an exact-version suitability decision and actual acceptance. Consult PLAN current-work for ongoing duties and the corresponding version's original acceptance and release sources for observed results; the continuation page provides historical navigation.",
     "unverified": [
       "Support and actual behavior for specific entry points",
       "User installation and use instructions",
@@ -225,9 +225,10 @@ This checklist serves first-use copy and the existing release work; it grants no
 | 配对前冻结的条件 | 执行与记录要求 |
 |---|---|
 | 版本与入口 | 绑定宿主、后端、OS、插件包和精确版本/摘要。只切换目标作用域内 Accord 的启用状态，不用全局禁插件开关顺便移除其它能力。核对当前入口的实际 Hook 支持。 |
+| 必要执行能力 | 准备时核同一实际载体、配置层、信任、权限及影响执行的环境；只记录必要字段，不收集整份环境。版本／帮助／初始化成功不代替文件能力。可复用无模型原生接口，但先核沙箱状态等副作用与所属退出，不自动加信任、改权限或重放已完成业务；原失败保留。 |
 | 模型与工具 | 两组保有相同的主模型/推理选择、可用子模型、原生和第三方工具、权限及资源上限。保留各组获准调度与恢复能力，记录实际选择、并发和切换，不能强制对照组走较弱路线。 |
 | 指令、记忆与材料 | 两组用新会话、相同中立目录和材料快照。核对实际生效的用户/项目指令、记忆、已加载 Skill 和状态。当前产品仓库本身含 Accord 指导，不直接拿来作为未启用基线；禁用或卸载不能清除已经进入上下文的指导。 |
-| 输入与人工介入 | 用相同初始需求、预定变化和恢复输入；运行前冻结救援规则。正常追问/确认、必要授权/本人动作、新需求，以及已证纠错/救援和可避免性分别记录；续轮本身不算失败。不给任一组隐藏辅导，也不抹去安装与首次信任成本。 |
+| 输入与人工介入 | 用相同初始需求、预定变化和恢复输入；运行前冻结救援规则。正常追问/确认、必要授权/本人动作、新需求，以及已证纠错/救援和可避免性分别记录；续轮本身不算失败。不给任一组隐藏辅导，也不抹去安装、首次信任及适用时更新后的再次确认成本。 |
 | 判据与成本 | 先核可独立检查的成品、原件保护、要求完整性和真实效果，再报告人工次数/时间、端到端时间、模型/工具用量、冷/热加载、缓存、并发及退出成本。不可取得的字段保留未知；账户配额不是本任务费用。 |
 
 候选覆盖包含以下三类同材料、同交付要求的真实任务；本轮只执行了简单任务与需求变化各一对，中断恢复仍未由本批验证。后续材料、预算、触发节点、重复次数和判据在实际派发前冻结，不由下表自动授予执行或新增费用：
@@ -250,7 +251,9 @@ Status on 2026-10-30: **two native pairs of synthetic tasks completed; both arms
 
 Before dispatch, freeze paired host/backend/package versions and hashes, OS, main model/effort, available submodels, native and external tools, permissions, resource limits and task materials. Toggle only Accord in the target scope, preserving other plugins and both groups' native scheduling/recovery capabilities. Record actual allocation rather than forcing identical tool paths. Check current entry and Hook support.
 
-Use fresh sessions and equal neutral workspaces. Inspect effective user/project instructions, memory, loaded Skills and state; this product repository's Accord instructions would contaminate a disabled baseline. Disabling or uninstalling does not erase loaded context. Give both arms the same initial request, scheduled change and recovery input, with a rescue policy set in advance. Record normal questions and confirmations, necessary authorization/personal actions, new requirements, and demonstrated correction/rescue separately; assess avoidability from evidence. An extra turn alone is not failure. Include setup and first-use trust costs; give neither arm hidden coaching.
+Check the necessary execution capability on the same actual host binary, configuration layers, trust, permissions and relevant environment. Retain only needed fields. Version, help or initialization success does not establish file execution. A native interface without model work may be reused after checking side effects, including sandbox state, and owned exit conditions. Do not automatically add trust, change permissions or replay completed business; preserve original failures.
+
+Use fresh sessions and equal neutral workspaces. Inspect effective user/project instructions, memory, loaded Skills and state; this product repository's Accord instructions would contaminate a disabled baseline. Disabling or uninstalling does not erase loaded context. Give both arms the same initial request, scheduled change and recovery input, with a rescue policy set in advance. Record normal questions and confirmations, necessary authorization/personal actions, new requirements, and demonstrated correction/rescue separately; assess avoidability from evidence. An extra turn alone is not failure. Include setup, first-use trust and applicable repeated confirmation after updates; give neither arm hidden coaching.
 
 Candidate coverage includes three task types: an added requirement affecting earlier output; interruption and native recovery at the same semantic milestone; and a simple one-prompt task without an artificial fault. This pilot ran one simple-task pair and one requirement-change pair; it did not test interrupted recovery. Check the actual deliverable, complete requirements, protected originals, corrected effects, retained goals/pauses/authority, no duplicate actions and resource exit. Record human effort, full elapsed time, model/tool use, cold/warm loading, caching, concurrency and recovery/exit costs. Unknown costs stay unknown; account quota is not task cost. Reasonable overhead does not excuse missing automation or quality, nor imply failure by itself.
 
@@ -271,13 +274,13 @@ Retain configuration, input/intervention timelines, outputs, independent checks,
 
 ## 发布前待补齐的事实
 
-本表用于核对拟公开的具体素材；引用对应发行与原任务已有证据，按实际受影响范围补齐。当前3.3.14发行和收尾事实见上方入口。
+本表用于核对拟公开的具体素材；引用对应发行与原任务已有证据，按实际受影响范围补齐。已闭发行及收尾事实见上方固定来源，当前工作见[计划](PLAN-v3.3.md#current-work)。
 
 | 内容 | 当前情况 | 完成条件 |
 |---|---|---|
-| 精确发行与更新日志 | 以当前接续和精确版本公开记录核对 | 验收、候选审查、已有适用发布授权及其条件、同版本公开后态成立 |
+| 精确发行与更新日志 | 以对应版本的固定原件、发行和更新日志核对 | 验收、候选审查、已有适用发布授权及其条件、同版本公开后态成立 |
 | README整体修订 | 入口分层由双语 README 与[用户指南](../user-guide.md)承接 | 每次改动按实际成品复核中英文定位、能力及限制、安装使用、图示与链接，不能仅沿用开发期文案 |
-| 安装与使用入口 | 以[当前接续](CONTINUATION.md)所列精确发行、实际支持入口、启用和首次 Hook 信任说明为基准 | 新用户能取得精确包，按真实支持条件完成安装和使用；市场收录不冒充必需前提，指南不代验每位用户的实际加载 |
+| 安装与使用入口 | 以[用户指南](../user-guide.md)的实际支持入口、启用和Hook允许说明及对应精确发行记录为基准；当前桌面首次安装和每次更新后均需手动允许 | 新用户能取得精确包，按真实支持条件完成安装和使用；市场收录不冒充必需前提，指南不代验每位用户的实际加载 |
 | 演示及效果说明 | 已有局部试验，不是完整演示 | 按各自受测版本和条件引用真实任务、可复验成品、参与边界及限制；效果对照归回同一配对 |
 | 发布页面 | 本文仅底稿 | 更新文案、缩略图、截图、视频、关联工具致谢和可用链接；在实际发布表单重新检查限制 |
 

@@ -1,10 +1,10 @@
 # Accord 启用与未启用对照记录
 
-本记录是[持续对照与真实观察](../../docs/operations/PLAN-v3.3.md#持续对照与真实观察)的现有入口，按2026-11-13共识随相关事实维护。记录方式统一，历史结果仍绑定原版本和条件；具体配对完成不结束持续核查职责。当前发行及下一步以计划、接续为准，不将下方旧案改签为新版本效果。
+本记录是[持续对照与真实观察](../../docs/operations/PLAN-v3.3.md#持续对照与真实观察)的现有入口，按2026-11-13共识随相关事实维护。记录方式统一，历史结果仍绑定原版本和条件；具体配对完成不结束持续核查职责。当前工作与下一步统一见[计划当前入口](../../docs/operations/PLAN-v3.3.md#current-work)，不将下方旧案改签为新版本效果。
 
 2026-10-29初版。本文、[六份合成任务材料](../../evals/comparisons/accord-toggle-v1.json)、[文件检查工具](../../scripts/grade_accord_comparison.py)及其[校准反例](../../tests/product/test_accord_comparison.py)共同构成开发期初版，用来校准任务、判分和记录方式。初版建立时尚未执行真实双组运行；随后已完成[2026-10-30首轮有限试行](#2026-10-30-首轮有限试行)。**两对小样本不支持普遍产品增益结论**。工程与产品主线见[当前计划](../../docs/operations/PLAN-v3.3.md#后续候选适配与对照展示)。
 
-当前发行、源码资格和本机采用边界见[项目接续](../../docs/operations/CONTINUATION.md#目标与当前写者)。[3.3.11发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.11)和[CI #1056](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41615570280)保留原主体。本文各试行按原受测版本、材料、成本和失败分别保留，正文中的工作状态按各自观察时点阅读。
+已闭3.3.15的源码资格、发行和本机采用边界见[固定接续原文](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)。[3.3.11发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.11)和[CI #1056](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41615570280)保留原主体。本文各试行按原受测版本、材料、成本和失败分别保留，正文中的工作状态按各自观察时点阅读。
 
 ## 统一对照口径
 
@@ -13,6 +13,35 @@
 沿用原任务的交付标准和授权边界。每对简要记录共同条件、成品与失败、返工与人工救援、时间与用量以及可支持的结论。历史案例从原件回填同样的字段，保留原版本、时限、判据和失败，缺项注明未知。单组观察或共同条件存在未解释差异时，按实际证据范围展示。复算和追查归回原案。 [对照复核表](#2026-11-04-既有对照的共同条件观测者与完整成本)
 
 功能验收、工程质量、实际使用价值与发行分别判断。已有 A01–A08、质量底线和历史失败保持；本初版不改写其通过记录，也不成为日常用户的新流程。3.3.2 保留为发展节点，初版阶段的 3.3.4 发行包和标签独立保存；当前状态以项目接续及精确发行记录为准。评价材料本身不要求新发版；若发现真实缺陷，则按受影响对象、兼容性、风险和修复验证决定维护或发版。
+
+### 2026-11-14 真实维护中的路线调整与资源纠偏
+
+用户允许从已有Codex聊天中只读选择真实任务；例行维护同样适用，不要求新增项目。本次选择配置维护的一轮及另一汉化项目的连续两轮，核需求、公开动作回执和用户反馈；未发送协调消息、接管写入或重放业务。以下为事后单组观察，缺少未启用组、完整成本与独立全任务验收，不能据此宣称Accord增益。
+
+| 观察 | 原件支持的事实 | 可判断范围 |
+|---|---|---|
+| 配置维护 | 用户询问是否需要更新；普通命令读取Accord连续性／核验Skill及官方文档Skill。PATH CLI目录查询60秒超时后改用桌面内置CLI，后者有成功输出；扫描误报和退役选项处理有同三项测试先红后绿，后续25项单测通过。捕获动作比较本机配置、指导及记忆文件的前后摘要并报告不变。 | 存在有依据的路线调整与实际修复，没有原样循环重试；Skill读取不等于其所有职责执行，也不证明触发策略、跨任务经验继承或总收益。最终托管／发布声明未在本次另行审计。 |
+| 另一汉化维护的资源后态 | 前轮有成功的运行时reset；后轮用户仍报告黄框。执行者按当时PID、父进程与路径核对后停止两个截图助手，输出仍有一个助手，随后记录到新助手，用户确认黄框消失。 | 这是另一线程的新事件，与先前12条事件的案例不同；再次暴露“重置成功不等于实际交还”的执行不足。纠偏由用户触发，不能记为自主发现，也不能声称宿主辅助进程全部退出。历史按PID处置不成为今后强制终止共享进程的通用办法。 |
+
+现有协调／核验指导已经要求交还控制并验证后态。本次未隔离造成遗漏的模型、上下文、工具或宿主机制，也未证明旧经验已可供新线程取回，因此保留实际不足，不把它自动归为经验存储缺失或新增Hook／监控的依据。后续真实UI维护应在其实际支持的生命周期入口核验交还效果；缺少回执时保留未知，保护共享组件。只有确认具体可修的薄弱处，再调整对应机制。
+
+原生线程／回合／事件定位和必要选段保留于私有`.tmp/stage-after-3.3.15-20261113-01/maintenance-observation-04/selected-events.json`，身份复核另见同阶段`closeout-docs-04/OBSERVATION-IDENTITY.md`。本观察不改签旧例受测版本，不重新验收这两个项目，也不公开私有配置、原聊天或账户材料。
+
+同日补核当前已装Computer Use 26.1106.51428的`api.md`与`guidance.md`：所列Window2接口未提供显式捕获释放方法，reset出现在超时／失效句柄恢复说明中，没有承诺捕获已结束。这是该版公开给执行者的说明范围，不证明宿主底层完全没有退出能力，也不补成两次旧执行的共同根因。开发指南据此补充UI维护的后态判断例，优先复用实际支持的生命周期与独立可观察结果；未操作桌面、终止现有进程或新增运行机制。
+
+### 2026-11-14 既有采用证据与执行前提复核
+
+本片复用原件，没有重放已完成业务或派发新模型任务。汉化维护的12条选定原生事件按字节定位重算摘要均匹配；当前已装3.3.15三份相关Skill与旧来源正文相同。UI后态声明、用户反馈后恢复及独审纠正取回／执行混同的边界保持；字段选择例仍是指导已送达、先整份输出而后筛选。两例能证明当次采用偏差，不能定位为指导缺失或某个组件故障，不据此新增经验库、监控或同义规则。
+
+本项目本轮维护已再次实际使用既有`check-snapshot --summary`：控制台摘要396字节、完整结果41198字节，摘要控制字段与原完整结果一致，225份来源身份仍在详细报告中。它是一次后续维护中的方法采用；没有关闭组，不能推出普通任务稳定采用、Token节省或Accord因果收益。现有三静态和56项消费者回归保持第一片的源码边界，不改签为本片新运行资格。
+
+旧发行说明对照的7份关键原件及8项来源钉扎重新匹配。两臂实际CLI0.168.0、provider、模型／推理、权限、网络及基础指导的已核叶保持；完整工具送达、全部共同上下文及完整成本仍未知。operation01参数构造错误、operation02混用配置默认与实际provider均已在原operation03之前修正；03进入业务后拒绝创建runner，On最后工具返回后的停滞原因仍未隔离，不再把这些失败归并成一种“CLI启动失败”。
+
+2026-11-13 23:59:22 +08:00，另核当前独立CLI0.169.0的精确二进制（SHA256 `ce1945eb440b5481ed1233ebaf32b7056ee7e4e452fa62ffe1cbfb26103cdee0`）：新建的所属挂起子进程继承`CODEX_WINDOWS_REGISTERED_CORE=1`，没有环境覆写；Windows [GetPackageFullName](https://learn.microsoft.com/en-us/windows/win32/api/appmodel/nf-appmodel-getpackagefullname)查询返回15700／无包身份。之后仅运行`--version`，exit0；Job活动进程0、查询与Job句柄关闭，二进制、配置及所用控制器源码摘要保持。这证明当前该子进程的包身份与启动条件，不证明文件命令执行，不补签旧0.168子进程的环境或根因。
+
+官方0.169的[command/exec](https://github.com/openai/codex/blob/d32063f96c2dff1dc96af839b3952abb6acfeda4/codex-rs/app-server-protocol/src/protocol/v2/command_exec.rs#L21)提供无thread／turn的沙箱命令；WindowsRestrictedToken且elevated的路径与所核unified exec汇入相同runner入口，但此前可能对账沙箱凭据、ACL和桌面状态，且WindowsRestrictedToken分支不支持command/exec/terminate。故本次未执行该接口或改变registered Core标记、信任和沙箱设置。新的必要文件能力仍需在实际载体、权限、环境及可控后态下验证；版本／帮助成功、接口存在或当前包身份探针均不代替它。
+
+私有复核与当前探针原件在`.tmp/stage-after-3.3.15-20261113-01/{adoption-review-02,host-conditions-02,host-identity-02}/`；原业务、失败和时钟保原身份。当前未确认新的Accord运行缺陷，保留实现。后续只在实际需要时准备有界原生能力检查；观察正常维护中的动作前选择、后果及首次发现者，不制造业务以证明收益。
 
 ### 2026-11-13 发行说明初稿的受控失败观察
 
@@ -31,7 +60,7 @@
 
 ### 2026-11-13 后继对照的隔离准备
 
-当前兼容准备、共同条件、业务是否执行、成品与成本状态统一见[接续](../../docs/operations/CONTINUATION.md#目标与当前写者)。以下筹备段落保留各自原时点；其中“尚未／拟采用”等不是当前执行回执，也不由后来发行改签为新配对或收益。
+本节所述原3.3.15筹备和后续执行状态见[固定接续原文](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)；当前工作见[计划](../../docs/operations/PLAN-v3.3.md#current-work)。以下筹备段落保留各自原时点；其中“尚未／拟采用”等不是当前执行回执，也不由后来发行改签为新配对或收益。
 
 本片只审查既有执行路径并准备下一份有实际用途的任务，未派发模型业务。11月3日私有执行器显式绑定原任务摘要、原运行限额、已用运行标记、旧包和指导来源，且采用旧合成任务检查器；它不能通过替换版本号直接成为新对照。可复用的是经当前源码复核的RPC、事件、进程生命周期与原件保全能力，不复用旧任务、冻结清单或通过标记。
 
@@ -538,6 +567,17 @@ python -B -m unittest tests.product.test_accord_comparison
 当前文件检查不能证明宿主有效隔离、真实使用效果、安全覆盖、长期成本或统计显著性。可用的评价方法和工程质量要继续校准，未知不是零分、完成或默认通过。
 
 ## English summary
+
+The 2026-11-14 read-only maintenance observation checked a configuration task's
+switch from a timed-out PATH CLI query to the desktop CLI and three red-to-green
+checks. A different localization chat exposed another control-release shortfall:
+successful reset preceded a user report that the capture border remained. After
+identity-bounded helper cleanup, the user confirmed it disappeared; a new helper
+was still present. This is a separate event from the earlier UI case, not proof
+of the same cause, inherited learning, autonomous detection or zero host helpers.
+No business was replayed or other task modified. Existing guidance already asks
+for verified resource post-state; these enabled-only observations do not establish
+a missing runtime component, general benefit or complete cost.
 
 The 2026-11-04 review reused existing evidence without new business runs.
 Independent response-ID-based recomputation of six original token traces matched

@@ -68,7 +68,7 @@ The host supplies models, tools and execution; Accord adds coordination, continu
 
 ## Learn more and participate
 
-[User guide](docs/user-guide.md#english-user-guide) · [Design and current plan](docs/operations/PLAN-v3.3.md) · [Acceptance criteria](docs/operations/ACCEPTANCE-v3.3.md) · [Current continuation](docs/operations/CONTINUATION.md) · [Changelog](CHANGELOG.md)
+[User guide](docs/user-guide.md#english-user-guide) · [Design and current plan](docs/operations/PLAN-v3.3.md) · [Acceptance criteria](docs/operations/ACCEPTANCE-v3.3.md) · [Continuation and history](docs/operations/CONTINUATION.md) · [Changelog](CHANGELOG.md)
 
 See [Contributing](CONTRIBUTING.md) for development, evaluation and maintainer checks. For help, start with what you expected and what happened in your own words; see [Support](SUPPORT.md). Do not publish credentials or private raw transcripts. Report security issues under the [security policy](SECURITY.md).
 

@@ -5,13 +5,15 @@ examples, probes, lifecycle procedures, and host-specific behavior belong in
 task-bound Skills or reviewable documentation. Their installation or visibility
 does not make them active authority.
 
-For post-v3.1 development, read `product/development.json` for the authorized
-current phase, system-quality floors and successor acceptance. Its absence is a
+For post-v3.1 development, use `product/development.json` for the machine
+projection, system-quality floors and successor acceptance. Its absence is a
 validation error, not a return to the frozen predecessor's review-only authority.
 
 For v3.3 development and continuation, read the current consensus node in
-`docs/operations/PLAN-v3.3.md` and the brief state in
-`docs/operations/CONTINUATION.md`. The plan owns consensus, source-consistency
+`docs/operations/PLAN-v3.3.md#current-work` for current scope, progress and
+unfinished responsibilities. `docs/operations/CONTINUATION.md` preserves old
+entry points and navigates historical evidence; it is not a second progress log.
+The plan owns consensus, source-consistency
 review, dynamic evaluation, historical disposition and non-linear procedures.
 Detailed result and acceptance views are linked there; the former procedure
 file contains historical observations only. `product/development.json` is the

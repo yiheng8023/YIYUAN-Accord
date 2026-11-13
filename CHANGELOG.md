@@ -1,8 +1,22 @@
 # 更新日志
 
+## 开发中（未选择后继版本）
+
+- 按r104启动宿主对齐、文档与开发资产减负及实际协作观察。当前计划和进度统一维护于[PLAN当前工作](docs/operations/PLAN-v3.3.md#current-work)；已闭3.3.15资格、发行及历史证据保持原身份，后继版本与发布尚未确定。
+- 接续页改为兼容导航，保留67个原标题、2个显式锚点及固定Git原文；贡献指南移除重复的逐版发布账本，AGENTS、基线、验收与机器投影统一指向当前计划，仍适用的停止条件与未知保留。
+- 核对CLI0.169.0相关上游变化，未确认新的Accord运行缺陷；按实际载体区分信任、历史恢复、取消、MCP刷新及Cloud消息接纳。回收一份已逐文件归档核对的旧失败检查工作树及一处空目录，原失败报告和必要档案保留；维护说明增加替代、依赖变化及收尾时的按需处置。
+
+- 第二片复核既有经验采用与旧对照原件，区分私有准备错误、实际工具启动边界和未明停滞；当前独立CLI的包身份探针只签当前条件，不补旧原因。对照准备说明补充必要执行能力及无模型接口的副作用边界，传播入口同步当前计划与历史来源，未改变运行包。
+
+- 第三片补齐当前CLI独立客户端及既有文件策略下的一次原生读写／回读与退出证据，保留旧受限分支和因果未知；进程局部隔离无关插件／Apps启动，用户配置及Remote所核字段保持。修正基线、验收、计划和机器投影中的活动状态旧指针，保留有实际消费者的文档分工及冻结交付字段。
+
+- 第四片只读复核真实配置与汉化维护：保留有依据的换路／红绿修复，也记录另一线程中用户反馈才纠正的控制释放不足，不将相似事件归为同因。同步双语README、用户指南和传播资料中的当前／历史来源、对照准备及Hook更新后确认说明。本轮限定维护结果汇总于当前计划，运行包与已闭3.3.15发行保持。
+
+- 核对当前Computer Use说明中reset的恢复含义，在开发指南补充实际交还与捕获后态的维护示例；不将成功回执当作资源已退出，也不推广历史进程处置。仅更新仓库文档，不新增插件机制。
+
 ## 3.3.15（2026-11-13）
 
-精确发行源码为`f7bf747b950c777e717cc60760f13dc3397c730b`，30成员包摘要为`001ccc508b87596fca3fcfd7e09fd1c122ea5d002c7268d7773b8e310beb7f4c`；相对3.3.14仅包清单版本变化，运行实现与Skill字节保持。本候选已通过1,487项完整本地回归及三静态（2529.2253663秒）、18案材料四轴与正式两阶段（211.8503455秒）。发行、最终托管、安装、实际加载与收尾分别见[当前接续](docs/operations/CONTINUATION.md#目标与当前写者)；原失败、时钟与收益未知保持。下列切片仍保留原核验时点。
+精确发行源码为`f7bf747b950c777e717cc60760f13dc3397c730b`，30成员包摘要为`001ccc508b87596fca3fcfd7e09fd1c122ea5d002c7268d7773b8e310beb7f4c`；相对3.3.14仅包清单版本变化，运行实现与Skill字节保持。本候选已通过1,487项完整本地回归及三静态（2529.2253663秒）、18案材料四轴与正式两阶段（211.8503455秒）。发行、最终托管、安装、实际加载与收尾分别见[当前接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)；原失败、时钟与收益未知保持。下列切片仍保留原核验时点。
 
 [3.3.15](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.15)已正式发布并完成本机安装；当前聊天MCP已实测加载3.3.15，六个已加载函数指纹匹配精确源码，无需再次重启。主CI #1066与标签[CI #1067](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/43385408822) attempt1均十项终态成功，两轮各自的18份原生制品、22份来源清单分别核验。旧轮原生输入超出查找窗口，同轮问答未更换锚点；普通新轮次恢复对账，后续Hook说明及图片输入也已核到来源完整。7份输入基线及原输出判据保持，最终绑定revision5通过核验并由原生生命周期退役；状态与捕获输入文件移除已读回，阶段收尾完成。旧失败与时序保留。
 
@@ -53,7 +67,7 @@
 
 ## 3.3.12（2026-11-05）
 
-发行：[精确记录](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12)，提交`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`。[CI #1059](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42002302364)及标签[CI #1060](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42015531434)均10／10终态成功；两轮各18份原生制品按各自来源独立复核。C11／`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`（tree `2aeddd0a9d352948b6c6133595398f20f4b16379`、30成员包D6）的本地完整1461项、三静态及18案／17范围正式两阶段已通过；原8649.097752秒及366.393813秒、原失败／时钟和全部质量边界保留。本机3.3.12已安装启用，同一聊天重启后实测MCP3.3.12；缓存／目录30成员、六个已加载函数体及默认来源`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`分别核对一致，该次采用核验时原生输入完整／已对账、pending0，原99输入和五输出判据保持。原件见`.tmp/ci1058-fixes-20261104-01/final-candidate-11/`中的`TERMINAL.json`、`FORMAL-TERMINAL-01.json`、`CI1059-TERMINAL.json`、`CI1060-TERMINAL.json`及重启后读回；最终协议与资源结果见[当前接续](docs/operations/CONTINUATION.md#目标与当前写者)。
+发行：[精确记录](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.12)，提交`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`。[CI #1059](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42002302364)及标签[CI #1060](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/42015531434)均10／10终态成功；两轮各18份原生制品按各自来源独立复核。C11／`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`（tree `2aeddd0a9d352948b6c6133595398f20f4b16379`、30成员包D6）的本地完整1461项、三静态及18案／17范围正式两阶段已通过；原8649.097752秒及366.393813秒、原失败／时钟和全部质量边界保留。本机3.3.12已安装启用，同一聊天重启后实测MCP3.3.12；缓存／目录30成员、六个已加载函数体及默认来源`e6b3594c5f56091ecf9a03d58a845c1a206c53cf`分别核对一致，该次采用核验时原生输入完整／已对账、pending0，原99输入和五输出判据保持。原件见`.tmp/ci1058-fixes-20261104-01/final-candidate-11/`中的`TERMINAL.json`、`FORMAL-TERMINAL-01.json`、`CI1059-TERMINAL.json`、`CI1060-TERMINAL.json`及重启后读回；最终协议与资源结果见[当前接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)。
 
 本阶段发布与本机收尾已完成：普通新轮次核对后，原任务绑定经支持生命周期退役，并独立核实state／input缺席；退役确认标记、原始证据和历史失败保留。该次收尾将权限目录增量列为后续核查。
 
@@ -104,7 +118,7 @@
 
 ## 3.3.11（2026-11-03）
 
-- 北京时间2026-11-03 20:05:46（UTC12:05:46Z）正式发布，标签与Release均指向精确`3a39ed9815a36885262fd9bdeb802da9fb2aea13`，30成员插件包SHA256为`00ab358eb4199ea2d35ae0d6229e88541348ea2b246f28698cf05ac5abfcb36f`。[CI #1056](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41615570280)全11项成功，18份原生制品与14份独立报告另核；本次精确来源／适用性消费通过18案、17范围、A01–A08及52义务。它们保留原案身份、失败与限制，不是所有客户端的新执行或普遍收益证明。本机安装与持久来源已固定该提交，原生新进程核到六项可信Hook、五项启用Skill及3.3.11 MCP；正常重启后，当前聊天已实际加载3.3.11，原开发合同和当前输入已对账恢复，30成员字节、来源、启用及已有信任固定值复核一致。同提交标签[CI #1057](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41632837505)也已全11项成功，最后一项于北京时间22:29:20（UTC13:29:20Z）完成。发行、本机采用与必要CI证据已核齐；末次事实记录单独核验、提交及读回，不改变发行标签，也不扩大为应用侧完整恢复或普遍收益。[正式发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.11)与[当前接续](docs/operations/CONTINUATION.md#目标与当前写者)分别保存这些边界。
+- 北京时间2026-11-03 20:05:46（UTC12:05:46Z）正式发布，标签与Release均指向精确`3a39ed9815a36885262fd9bdeb802da9fb2aea13`，30成员插件包SHA256为`00ab358eb4199ea2d35ae0d6229e88541348ea2b246f28698cf05ac5abfcb36f`。[CI #1056](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41615570280)全11项成功，18份原生制品与14份独立报告另核；本次精确来源／适用性消费通过18案、17范围、A01–A08及52义务。它们保留原案身份、失败与限制，不是所有客户端的新执行或普遍收益证明。本机安装与持久来源已固定该提交，原生新进程核到六项可信Hook、五项启用Skill及3.3.11 MCP；正常重启后，当前聊天已实际加载3.3.11，原开发合同和当前输入已对账恢复，30成员字节、来源、启用及已有信任固定值复核一致。同提交标签[CI #1057](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41632837505)也已全11项成功，最后一项于北京时间22:29:20（UTC13:29:20Z）完成。发行、本机采用与必要CI证据已核齐；末次事实记录单独核验、提交及读回，不改变发行标签，也不扩大为应用侧完整恢复或普遍收益。[正式发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.11)与[当前接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)分别保存这些边界。
 
 - 本次实际维护补丁先经3.3.11-dev.1开发准备，再转为3.3.11最终版本、精确清洁提交及必要验收。同步现有版本合同及下一未选版本拒绝覆盖，旧版本谓词、权限和验收闸门保持；开发态、冻结准备与先前3.3.10发行／安装仍保留原时点和身份，不预设之后的路线版本。
 - 核对三条主线及相关剩余项，更新现阶段处置账目和状态导航；显式限定旧版本冻结字段的技术角色，避免把历史账目、版本枚举或局部检查当成当前冻结／发行资格。既有验收、原失败与行为／收益未知保持，没有据此增加运行组件或预设后继版本。
@@ -118,12 +132,12 @@
 
 ## 3.3.10
 
-- 2026-11-02正式发布，标签与Release均指向`e2be58f61a9dda9d9b64245d98ddf921ed597579`，30成员插件包SHA256为`603bde3cff75bd2ef928c966902fe4feafe89023155fedb6a5b72158e82c216f`。[CI #1054](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41456800897)全11项成功；标签触发的同提交[CI #1055](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41471917513)也已全11项成功。本机包与持久来源已更新，原生回读六项已有Hook可信、五项Skill及新MCP进程为3.3.10；2026-11-03正常重启后，当前聊天已实际加载3.3.10，本轮输入对账完成；该补丁的发行、本机采用及CI收尾已闭合。[发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.10)与[接续](docs/operations/CONTINUATION.md#目标与当前写者)分别保留发布、安装、加载及恢复边界。
+- 2026-11-02正式发布，标签与Release均指向`e2be58f61a9dda9d9b64245d98ddf921ed597579`，30成员插件包SHA256为`603bde3cff75bd2ef928c966902fe4feafe89023155fedb6a5b72158e82c216f`。[CI #1054](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41456800897)全11项成功；标签触发的同提交[CI #1055](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41471917513)也已全11项成功。本机包与持久来源已更新，原生回读六项已有Hook可信、五项Skill及新MCP进程为3.3.10；2026-11-03正常重启后，当前聊天已实际加载3.3.10，本轮输入对账完成；该补丁的发行、本机采用及CI收尾已闭合。[发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.10)与[接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)分别保留发布、安装、加载及恢复边界。
 
 - 修复原生交接对工具完成项可选生命周期时间字段的误拒，保留调用身份、参数、结果、成功终态与事件顺序校验。兼容缺省、null及原生i64经JavaScript解析后的整数表示；不将时间元数据用于授权或排序。
 - 根handoff入口复用包内实现，补齐精确摘要、缺件、篡改及执行快照依赖守卫；修正原生测试核验器对Windows普通／扩展路径表示的比较，保持目录、链接及来源检查。
 - 完成这一阶段的有据处置：保留必要的重复读取和四份根runtime副本；把本项目开发计入真实任务观察，区分普通澄清、受控验证与效果归因。同步计划、评价、传播准备及中英使用说明。
-- 版本前196项不同适用检查及实际CLI固定响应hot／cold验证保留其精确主体；版本化候选另经197项开发契约／生命周期检查和三静态核验，两名独立审阅者覆盖四轴。精确云端CI、发行与本机采用状态见[接续](docs/operations/CONTINUATION.md#目标与当前写者)，不据局部通过宣称所有应用恢复、跨任务经验库或因果收益。
+- 版本前196项不同适用检查及实际CLI固定响应hot／cold验证保留其精确主体；版本化候选另经197项开发契约／生命周期检查和三静态核验，两名独立审阅者覆盖四轴。精确云端CI、发行与本机采用状态见[接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)，不据局部通过宣称所有应用恢复、跨任务经验库或因果收益。
 
 ## 仓库维护（2026-11-02，未发布）
 
@@ -153,7 +167,7 @@
 
 ## 3.3.9
 
-2026-10-31正式发布，标签与Release目标为`fe1a6e71`，30成员插件包SHA256为`7c75ae2a04479f8f6aeb2c3e823a37edf0f775341f5a3fce373a96b4633d6498`；[CI #1049](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41184112915)全11项终态成功。发布后标签CI #1050及两次记录CI #1051/#1052也各11项成功；本机及当前聊天已核验采用3.3.9。639项不同的适用本地回归及三静态已核（518项核心机制与121项开发/版本契约，15项协议身份另重复复验）。[正式发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.9)、本机安装、实际加载与完整恢复分别核验；真实观察及原失败的范围见[当前接续](docs/operations/CONTINUATION.md#目标与当前写者)。
+2026-10-31正式发布，标签与Release目标为`fe1a6e71`，30成员插件包SHA256为`7c75ae2a04479f8f6aeb2c3e823a37edf0f775341f5a3fce373a96b4633d6498`；[CI #1049](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41184112915)全11项终态成功。发布后标签CI #1050及两次记录CI #1051/#1052也各11项成功；本机及当前聊天已核验采用3.3.9。639项不同的适用本地回归及三静态已核（518项核心机制与121项开发/版本契约，15项协议身份另重复复验）。[正式发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.9)、本机安装、实际加载与完整恢复分别核验；真实观察及原失败的范围见[当前接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)。
 
 - 补齐有限并发重读对0.166同身份用量记录、已完成命令记录的兼容；仅接受已核producer的严格字段与状态，保留原文件/前缀、用户输入、暂停、压缩及未知控制守卫。固定竞态的旧/新区别与30个子例已验证，真实应用先前一次游标变化的成因仍未知，不把局部修复写成完整恢复。
 - 在现有连续性Skill明确“读取已观察且游标完整”的前提，未知读取中的空待核列表不证明就绪；在现有核验Skill明确请求用户操作前交还阻挡操作或回复的自有交互控制。真实未完应用观察保留超时、源状态未绑定、新回归与人工补救；续作早于第二条协调消息，不宣称消息造成恢复或普遍收益。没有新增Skill、MCP、Hook或正式验收案例。
@@ -174,7 +188,7 @@
 
 ## 3.3.8
 
-[3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8)于北京时间2026-10-31 01:11:25（UTC2026-10-30T17:11:25Z）正式发布，Release429293534，标签与发行目标均为精确`213dbea2ae0946b5beec3054ece6513792010bc2`。[CI #1046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41081944936)全11项终态成功；30成员包SHA为`2c33c8b3adb2684859feaf5edb77f7b3e2221f3ffff79337ea3e5d14bdf982e2`。同一提交的标签[CI #1047](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41096629439)于北京时间02:35:44全11项终态成功。本机更新、3.3.8实际加载及完整合同恢复已核；本轮有界核查与结果收尾见[接续](docs/operations/CONTINUATION.md#目标与当前写者)，后续记录不改变发行包或标签。
+[3.3.8](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.8)于北京时间2026-10-31 01:11:25（UTC2026-10-30T17:11:25Z）正式发布，Release429293534，标签与发行目标均为精确`213dbea2ae0946b5beec3054ece6513792010bc2`。[CI #1046](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41081944936)全11项终态成功；30成员包SHA为`2c33c8b3adb2684859feaf5edb77f7b3e2221f3ffff79337ea3e5d14bdf982e2`。同一提交的标签[CI #1047](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41096629439)于北京时间02:35:44全11项终态成功。本机更新、3.3.8实际加载及完整合同恢复已核；本轮有界核查与结果收尾见[接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)，后续记录不改变发行包或标签。
 
 - 修复 Skill 目录增量阻断来源读取的问题，覆盖已核的三个目录及其部分字段、增删记录和已有环境/工具目录组合；目录观察不代表启用、调用或授权。
 - 将完整宿主快照纳入来源变化检测，防止追加快照后继续使用旧校验游标。保留旧持久游标对精确原前缀的摘要算法兼容；当前调用仍须重新观察并显式对账，不放宽来源、身份、权限或暂停校验。
@@ -182,7 +196,7 @@
 
 ## 3.3.7
 
-[3.3.7](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.7)于2026-10-30T11:54:44Z正式发布，Release428975932，draft/prerelease均false；标签与Release目标均为精确`d972da27bdd02670628057d45cf4e69c65b5d2f1`。[CI #1043](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41039765605)全11项终态成功；30成员包SHA为`79e5a53b74bee1c71d3732bce9158cc0449baba1c9a09764d9520a0fd7718743`。发布、本机安装、实际加载与完整重绑分别记录于[当前接续](docs/operations/CONTINUATION.md#目标与当前写者)。
+[3.3.7](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.7)于2026-10-30T11:54:44Z正式发布，Release428975932，draft/prerelease均false；标签与Release目标均为精确`d972da27bdd02670628057d45cf4e69c65b5d2f1`。[CI #1043](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41039765605)全11项终态成功；30成员包SHA为`79e5a53b74bee1c71d3732bce9158cc0449baba1c9a09764d9520a0fd7718743`。发布、本机安装、实际加载与完整重绑分别记录于[当前接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)。
 
 - 修复已核用户目标变更阻断输入定位的问题：单独保留目标设置、状态变更、清除及正文省略说明，保留注入上下文、物理顺序与保留输入顺序，不占用人工输入匹配或覆盖最新人工摘要。
 - 将独立目标状态事件纳入变化信号、完整来源分页和显式对账；状态原JSON不替代用户意图，后到变化使旧游标失效。只有控制变化时也可审阅和对账，暂停、恢复、并发及执行关联守卫保持。
@@ -191,7 +205,7 @@
 
 ## 3.3.6
 
-[3.3.6](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.6)已于2026-10-30正式发布，精确提交为`fc30f8e6`；[CI #1040](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41015677485)全11项终态成功。发布、本机安装、实际加载与完整重绑分别记录于[当前接续](docs/operations/CONTINUATION.md#目标与当前写者)。
+[3.3.6](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.6)已于2026-10-30正式发布，精确提交为`fc30f8e6`；[CI #1040](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/41015677485)全11项终态成功。发布、本机安装、实际加载与完整重绑分别记录于[当前接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)。
 
 - 识别已核宿主来源的持久推理设置记录，修复其阻断用户输入定位的问题；保留原序、完整摘要及独立设置观察，不作为用户输入或权限。
 - 将设置变化纳入控制信号，拒绝继续使用变化前的核验游标；保留未知形状、身份、暂停、恢复及全局追加守卫。
@@ -202,7 +216,7 @@
 
 ## 3.3.5
 
-[3.3.5](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.5) 已于2026-10-30正式发布，精确提交为`9825f03f`；[CI #1036](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40946789878)全11项成功。发布、本机安装与当前聊天实际采用分别记录于[当前接续](docs/operations/CONTINUATION.md#目标与当前写者)。
+[3.3.5](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.5) 已于2026-10-30正式发布，精确提交为`9825f03f`；[CI #1036](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/40946789878)全11项成功。发布、本机安装与当前聊天实际采用分别记录于[当前接续](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者)。
 
 - 区分宿主Goal运行时上下文与人类输入，完整保留来源和控制正文，避免阻断后续输入定位或覆盖用户输入摘要。
 - 增加已观察形状下的自动Goal续轮及人工/Goal组合核验，保留正常结束、父/root关系、时序、暂停、恢复和提交前复核；对账不替代目标/预算解释或宿主派发。
