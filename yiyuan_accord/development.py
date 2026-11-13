@@ -20,9 +20,9 @@ from .admission import CURRENT_SCHEMA, admission_contract_errors, declaration_ca
 DEVELOPMENT_FILE = "product/development.json"
 PLAN_FILE = "docs/operations/PLAN-v3.2.md"
 V5_SCHEMA = "yiyuan-accord-development/v5"
-# Reviewed source-contract generations through the user-selected r103 target.
+# Reviewed source-contract generations through the user-selected r105 target.
 # This finite set describes compatibility, not release authority or readiness.
-_V33_REVIEWED_TARGETS = tuple(f"3.3.{patch}" for patch in range(16))
+_V33_REVIEWED_TARGETS = tuple(f"3.3.{patch}" for patch in range(17))
 PREVIOUS_DEVELOPMENT = "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json"
 V5_DOCUMENTS = {name: f"docs/operations/{name}-v3.3.md"
                 for name in ("BASELINE", "PLAN", "PROCEDURE", "ACCEPTANCE")}

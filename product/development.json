@@ -5,7 +5,7 @@
   "status": "candidate-frozen",
   "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
   "authority": {
-    "basis": "The user approved and started the post-3.3.15 work under PLAN r104 on 2026-11-13: host alignment, documentation and artifact maintenance, and observed ordinary collaboration. PLAN current-work owns the current decision, scope and progress. The already exercised 3.3.15 conditional release retains its original target and evidence below; no successor release version has been selected.",
+    "basis": "On 2026-11-14 the user selected 3.3.16 as the release goal for the accepted r104 maintenance work. PLAN r105 current-work owns the current scope and remaining duties. The conditional release requires exact candidate verification, applicable independent review and hosted results. Completed 3.3.15 authority and observations retain their original identity at b6668f1c1e6c45fdfe7a1513b693774f35b2f94f:product/development.json#/authority.",
     "scope": [
       "source-semantics",
       "full-function-acceptance-mapping",
@@ -27,7 +27,7 @@
       "blind-process-termination-or-global-environment-reset"
     ],
     "conditionalRelease": {
-      "target": "3.3.15",
+      "target": "3.3.16",
       "decision": "user-authorized-after-acceptance",
       "ready": false,
       "conditions": [
@@ -39,21 +39,21 @@
         "ordered-publication-poststate-and-task-residue-closure",
         "release-notes-match-exact-candidate-and-evidence"
       ],
-      "rule": "The user-authorized 3.3.15 route keeps exact qualification, hosted results, publication, installation, actual adoption and resource/protocol closeout in their real order. The completed 3.3.15 source-bound results are retained at 96c070aaef54ea9841a8602bd53b5ed96fd6786b:docs/operations/CONTINUATION.md; the current continuation page navigates that history. Publication observation: Release443931364 was published on 2026-11-13T07:23:22Z; actual v3.3.15 tag and target bind f7bf747b950c777e717cc60760f13dc3397c730b, draft/prerelease false, Latest and body matched. Installation and owning-chat MCP3.3.15 with six loaded function fingerprints are verified separately. Tag CI1067 attempt1 completed with ten successful jobs and independently checked native artifacts. The old bounded-input failure and ineffective same-turn async renewal are retained. The ordinary new turn and later Hook UI/image inputs were reconciled against complete source evidence. All seven input baselines and original output predicates were preserved; revision5 passed local predicate verification and was retired through the native lifecycle. Checkpoint/input absence was read back. Stage closeout is complete; earlier failed reconciliation attempts and their unresolved cause remain recorded. ready remains false as a contract declaration, not an observed-release flag. Completed 3.3.14 authority retains its exact historical identity."
+      "rule": "The user-authorized 3.3.16 route remains conditional on exact candidate/source identity, required regression, material and formal qualification, independent review, hosted terminal results and accurate release text. Publication, installation, actual loading and final resource/protocol closeout keep their real order. Preparation is not readiness or publication; ready remains false as a contract declaration. Completed 3.3.15 release facts remain at b6668f1c1e6c45fdfe7a1513b693774f35b2f94f:product/development.json#/authority/conditionalRelease."
     },
-    "rule": "Follow PLAN r104 current-work for the authorized ongoing development and maintenance. Reuse sufficient host and third-party capabilities, make evidence-backed changes, preserve necessary duties and source/authority boundaries, and verify affected consumers and resource post-state. Current facts have one maintained plan entry; this machine projection is not a second decision source. Development governance is not a mandatory ordinary-user workflow. Unversioned future hosts remain candidates; the completed release authority below does not select another target."
+    "rule": "Follow PLAN r105 current-work for the selected 3.3.16 maintenance release. Reuse sufficient host and third-party capabilities, preserve source and authority boundaries, and verify affected consumers and post-state. This machine projection is not a second decision source. No new host implementation, focused promotion, unrelated external messages or new trust is granted."
   },
-  "baselineRole": "Closed 3.3.15 at source f7bf747b950c777e717cc60760f13dc3397c730b and final documentation 96c070aaef54ea9841a8602bd53b5ed96fd6786b is the starting baseline for PLAN r104. Frozen delivery fields continue to describe that released identity. Subsequent work, impact and verification are scoped separately; previous qualification is not transferred.",
+  "baselineRole": "Released, installed and closed 3.3.15 is the baseline for r105/3.3.16. Technical cycle and delivery fields identify the new local candidate. Historical observations, failed attempts, qualifications and clocks keep their original identities. Local source conformance does not establish new release, adoption or incremental value.",
   "cycle": {
     "id": "v3.3-ordinary-entry-functional-development",
-    "targetVersion": "3.3.15",
+    "targetVersion": "3.3.16",
     "versionState": "final-candidate-not-publication-proof",
     "existingHosts": [
       "codex"
     ],
     "additionalHostAdaptation": "deferred",
     "scopeRule": "Version 3.3 continues the six selected local OpenAI execution/control paths and their selected modes: CLI, Desktop, VS Code, local-only Work/Remote, mobile Remote of selected local hosts and bounded SDK duties. Per the final r38 decision retained in r39, independent ordinary Chat research/content modes, web Chat and JetBrains/Xcode integrations are deferred for this release, with capability unknown and future decisions open. Actual loading, interaction, authority, continuity, recovery, verification and exit remain required for selected paths; a limited IDE observation does not close those requirements. Shared Linux/macOS CLI and standard hosted CI remain. Claude, Pi, DeepSeek Harness, ZCode and Antigravity remain future host candidates only; decisions follow 3.3 publication and discussion with the user. Future adaptation remains candidate-only with no preset version or schedule; other agreed future directions remain available. Public-directory listing is optional and does not block product iteration or value evaluation.",
-    "sourceDecision": "The user selected 3.3.15 under PLAN r103. Its optional maintainer output, finite selected-version compatibility and scoped ordinary-maintenance observations retain their actual roles. Exact candidate local/material/formal qualification is complete; hosted/publication/adoption/closure observations and remaining responsibilities are in CONTINUATION. The selected host scope and unversioned future decisions remain.",
+    "sourceDecision": "The user selected 3.3.16 on 2026-11-14 to consolidate r104 host alignment, documentation and artifact maintenance, and bounded ordinary-collaboration observations. Finite source-contract support now includes that selected target. Current full regression, material/formal qualification, independent review and hosted results remain required. Existing host scope and unversioned future candidates stay unchanged. Earlier decisions remain at b6668f1c1e6c45fdfe7a1513b693774f35b2f94f:product/development.json#/cycle.",
     "claudeAdaptation": "candidate-only",
     "futureAdaptationVersion": "undecided",
     "futureAdaptationCandidates": [
@@ -102,14 +102,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.15",
-    "rule": "The 3.3.15 source has 30 declared package members; only the manifest version differs from released 3.3.14. Runtime, Skill and other member bytes remain unchanged. Whole-source local/material/formal qualification binds f7bf747b950c777e717cc60760f13dc3397c730b. Installation, persistent-source and actual-loading observations remain separate in the fixed historical source 96c070aaef54ea9841a8602bd53b5ed96fd6786b:docs/operations/CONTINUATION.md, reached through the current navigation page. Package identity does not establish them; current post-release work is in PLAN current-work.",
+    "version": "3.3.16",
+    "rule": "The local 3.3.16 candidate has 30 declared package members; only the manifest version differs from released 3.3.15. Runtime, Skills and other package bytes are unchanged. Developer contract compatibility, tests, current documentation and machine projection require their own current-source qualification. Installed and loaded baseline remains 3.3.15 until separately verified. Previous release and adoption evidence stays at b6668f1c1e6c45fdfe7a1513b693774f35b2f94f:product/development.json#/delivery.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.15",
-        "packageSha256": "001ccc508b87596fca3fcfd7e09fd1c122ea5d002c7268d7773b8e310beb7f4c",
+        "packageVersion": "3.3.16",
+        "packageSha256": "886bde7ce717325fe83bbc2ca8e542366c3116a6260c7ca8c0f382e4b61ae4b2",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -6435,7 +6435,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "currentMaintenance": "Current post-3.3.15 scope, decisions, progress and remaining duties are maintained once in docs/operations/PLAN-v3.3.md#current-work. CONTINUATION is a compatibility and historical navigation entry; its preserved release evidence does not define a successor version.",
+    "currentMaintenance": "Current 3.3.16 scope, decisions, progress and remaining release duties are maintained in docs/operations/PLAN-v3.3.md#current-work. CONTINUATION remains historical navigation. R104 maintenance results are inputs to this candidate, not its whole-source qualification.",
     "decisionCapabilityPolicy": {
       "responsibility": "Keep portable judgment, selection, feedback and correction; no default dedicated decision model, service, account, key or per-step extra call.",
       "selection": "Use code/native facts for deterministic checks or sufficient existing models for semantic judgment. Optional specialized capabilities require actual need, availability, authority and supported whole-task benefit; this is not a fixed call sequence.",
@@ -6444,7 +6444,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "Execute the source-bound current plan, use affected-consumer checks for document consolidation and artifact disposition, and observe normal maintenance for actual guidance adoption and correction. Retain original comparison failures and complete-cost/context/causal unknowns. Select any new paired business only after common execution conditions hold; no replay of completed business or invented positive-benefit gate.",
+    "work": "Complete the selected 3.3.16 candidate, necessary consolidated regression and static checks, independent material/candidate review, formal qualification, exact hosted CI, publication, local update/adoption and closeout. Reuse still-applicable historical raw evidence after source-bound review without replaying completed business. Do not manufacture a comparison or handoff to demonstrate value. Frequent compaction alone is not evidence of regression; prompted diagnosis is not autonomous-trigger success. Future hosts and focused promotion remain deferred.",
     "requires": "Reuse the completed r101 asset dispositions as the baseline; scope new checks to consequential changes and demonstrated gaps under PLAN current-work. Preserve necessary duties when implementations are replaced or retired; close confirmed in-scope defects with appropriate regression and actual consequence evidence. Unresolved necessary outcomes block dependent completion; other unknowns retain scope, effect and revisit triggers without becoming universal blockers. Reconcile current plans, baseline, acceptance, machine projection and affected user/release text; retain immutable history. Use existing sufficient host/third-party controls and same-host Accord enabled/disabled comparisons for incremental value; single-arm development and human rescue do not prove autonomous improvement. No new complex score, manufactured user task or business replay. The current F/A and quality, capacity and reserve declarations remain the starting requirements; changes need sourced justification, authority and impact review, not relaxed limits to recognize an old result. Before an authorized release require exact candidate/source identity, necessary full regression and statics, applicable independent review/qualification, required pre-release hosted terminals, matched notes and closed preparatory resources. After publication verify release identity, any triggered tag CI, installation, actual adoption and final owned-resource/protocol closure. Keep these subsequent outputs in their actual order rather than making them circular publication prerequisites. Declarations establish neither readiness nor authority."
   },
   "claimCeiling": {
@@ -6473,7 +6473,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r104",
+    "revision": "r105",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

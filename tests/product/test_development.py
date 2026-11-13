@@ -27,6 +27,8 @@ V4_REVISION = "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88"
 R101_TARGET = "3.3.14"
 # Explicit user-selected successor; older fixtures retain their own identity.
 R103_TARGET = "3.3.15"
+# User-selected maintenance successor; historical targets stay independently tested.
+R105_TARGET = "3.3.16"
 
 
 def historical_development():
@@ -329,7 +331,7 @@ class SkillReferencePackageTests(unittest.TestCase):
                          '14f33a094f14cbbe5c721808a2070058f70728c4b0d365ade3cfc7c66b89f026')
         self.assertEqual(translated['originalSourceSha256'],
                          '9f9019523491d9e41f7d3e41ee5bd3c783b0a1049fb280242959198fb88a439a')
-        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9', '3.3.10', '3.3.11', '3.3.11-dev.1', '3.3.12', '3.3.12-dev.1', '3.3.13', '3.3.13-dev.1', R101_TARGET, R101_TARGET+'-dev.1+fixture', R103_TARGET, R103_TARGET+'-dev.1+fixture'):
+        for version in ('3.3.2', '3.3.2-dev.1+codex.20261021091952', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9', '3.3.10', '3.3.11', '3.3.11-dev.1', '3.3.12', '3.3.12-dev.1', '3.3.13', '3.3.13-dev.1', R101_TARGET, R101_TARGET+'-dev.1+fixture', R103_TARGET, R103_TARGET+'-dev.1+fixture', R105_TARGET, R105_TARGET+'-dev.1+fixture'):
             with self.subTest(version=version):
                 self.assertEqual(foundation(version), translated)
 
@@ -362,7 +364,7 @@ class SkillReferencePackageTests(unittest.TestCase):
             package_version='3.3.11', **options), current)
         self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
             package_version='3.3.11-dev.1', **options), current)
-        for version in ('3.3.12', '3.3.12-dev.1', '3.3.13', '3.3.13-dev.1', R101_TARGET, R101_TARGET+'-dev.1+fixture', R103_TARGET, R103_TARGET+'-dev.1+fixture'):
+        for version in ('3.3.12', '3.3.12-dev.1', '3.3.13', '3.3.13-dev.1', R101_TARGET, R101_TARGET+'-dev.1+fixture', R103_TARGET, R103_TARGET+'-dev.1+fixture', R105_TARGET, R105_TARGET+'-dev.1+fixture'):
             self.assertEqual(delivery_adapter_contract('codex', 'yiyuan-accord-codex',
                 package_version=version, **options), current)
         execution = current['nativeTaskStateMcp']
@@ -1203,12 +1205,13 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         # The frozen baseline's next patch can already be user-selected.
         # Derive rejection beyond the baseline and explicit selected successors.
         parts = max(tuple(map(int, version.split('.'))) for version in
-                    (self.contract['cycle']['targetVersion'], R101_TARGET, R103_TARGET))
+                    (self.contract['cycle']['targetVersion'], R101_TARGET, R103_TARGET, R105_TARGET))
         return '.'.join(map(str, (*parts[:-1], parts[-1] + 1)))
 
     def test_selected_targets_retain_unversioned_future_and_unqualified_claims(self):
         for target, frozen in ((R101_TARGET, False), (R101_TARGET, True),
-                               (R103_TARGET, False), (R103_TARGET, True)):
+                               (R103_TARGET, False), (R103_TARGET, True),
+                               (R105_TARGET, False), (R105_TARGET, True)):
             with self.subTest(target=target, frozen=frozen):
                 candidate = copy.deepcopy(self.contract)
                 candidate['status'] = 'candidate-frozen' if frozen else 'in-development'
