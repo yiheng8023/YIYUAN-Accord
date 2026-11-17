@@ -222,7 +222,7 @@ records this code observation and its limits; no deletion experiment was run.
 
 ### Current release and scoped connections
 
-The [current plan](operations/PLAN-v3.3.md#current-work) owns the selected release target and its remaining responsibilities. The completed 3.3.15 release, hosted checks, installation, actual loading and closure remain in the [fixed release record](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者). Its qualified source is `f7bf747b950c777e717cc60760f13dc3397c730b`, tree `06c398cde266c2b02bb939db98f7b59de1a2cdb7`, package SHA256 `001ccc508b87596fca3fcfd7e09fd1c122ea5d002c7268d7773b8e310beb7f4c`. Only its version manifest differs from 3.3.14; no new runtime capability or general value claim follows.
+See the [published releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest) for the current distribution and the [baseline](operations/BASELINE-v3.3.md) for its exact source, qualification and adoption evidence. The [current plan](operations/PLAN-v3.3.md#current-work) owns the next development scope. The earlier 3.3.15 qualification, publication and adoption retain their original subject in the [fixed release record](https://github.com/yiheng8023/YIYUAN-Accord/blob/96c070aaef54ea9841a8602bd53b5ed96fd6786b/docs/operations/CONTINUATION.md#目标与当前写者).
 
 #### Historical 3.3.13 observation
 

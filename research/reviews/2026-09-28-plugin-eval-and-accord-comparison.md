@@ -20,3 +20,27 @@
 [E]: https://code.claude.com/docs/en/plugin-evals
 [P]: https://code.claude.com/docs/en/plugins-reference
 [S]: https://code.claude.com/docs/en/skills
+<a id="claude-code-read-only-feasibility"></a>
+
+## 2026-11-18 Claude Code 只读可行性初查
+
+优先评估本地交互式 CLI 的一个实际入口。官方接口支持插件载入、输入观察、会话恢复和压缩通知，本机 `claude --version` 返回 2.1.326。版本检查与文档能建立接口可行性，实际启用、Hook 交付、权限和恢复行为仍待验证。SDK 只在交互式 CLI 缺必要信号且真实需求值得引入时单独核查。
+
+| 职责 | 先复用的宿主机制 | 最小后续核验 |
+| --- | --- | --- |
+| 入口、信任、更新及退出 | 插件由宿主管理，作用域及组织策略由宿主决定。更新后既有会话可以继续运行旧组件，官方提供 `/reload-plugins` 和下一次启动两条采用路径。 | 选定作用域和精确宿主版本，核实际加载、授权、升级和移除后的状态；保留宿主原信任决定。 [插件管理](https://code.claude.com/docs/en/discover-plugins) |
+| 输入与任务边界 | `UserPromptSubmit` 提供会话身份、工作目录、权限模式和提交文本；`SessionStart` 区分启动、恢复、清空、压缩和派生。 | 核正常提示、带附件或多个输入形态是否能关联到准确轮次、内容和任务。检查同会话新任务和退出边界。Codex 的回执解析器和状态文件约定属于 Codex 适配。 [Hook 参考](https://code.claude.com/docs/en/hooks#userpromptsubmit) |
+| 权限、暂停与迟到效果 | 原生权限对话和策略优先。SDK 文档提供中断当前响应且保留会话的接口。 | 交互式 CLI 的暂停和取消单独核验。记录停止前后的工具实际效果；`Stop`、`StopFailure` 以及会话结束各有不同生命周期。 [权限事件](https://code.claude.com/docs/en/hooks#permissionrequest) · [SDK 中断](https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode#interrupt-a-response) |
+| 压缩、续作和回收 | 原生 `resume`／`continue` 恢复会话。`PostCompact` 提供压缩完成观察，完成与结束事件可作为核对时机。 | 验证未完任务与已有结果、原约束及授权能对账，迟到效果可辨，下一输入能自然开始，所属工作资源实际停止或交还。 [压缩事件](https://code.claude.com/docs/en/hooks#postcompact) · [会话恢复](https://code.claude.com/docs/en/agent-sdk/sessions) |
+
+共用层保留目标、权限、暂停、接续、结果验收的语义和可复用夹具。宿主层承担事件解码、会话与工作区绑定、来源与信任、执行及包生命周期。历史 Claude 生命周期记录 [efea8371](https://github.com/yiheng8023/YIYUAN-Accord/commit/efea8371630843e481ef0f7ed6fec8383a4ecb45) 可回看故障和验证方法。观察链 [735a5919](https://github.com/yiheng8023/YIYUAN-Accord/commit/735a5919e0f40d13d003e45be08b7292fbf1643f) 和 Codex 包中的 Claude 专属分支 [fcf88bdf](https://github.com/yiheng8023/YIYUAN-Accord/commit/fcf88bdf08401d3e926c2545a645b3b78e212b9a) 已退役，其当时的验收保留在原入口与版本。
+
+候选结论为有依据进入单入口实证的准备。先有真实需求和一个受控验证范围，再决定是否实施。Claude 自带的插件对照工具可复用来检查后续限定场景，输入、授权及恢复仍按实际行为取证。本轮资料核查不涉及插件安装、配置写入、模型调用、适配实现或交付版本选择。 [插件对照官方说明](https://code.claude.com/docs/en/plugin-evals)
+
+### 2026-11-18 CLI 与桌面 Code 入口复核
+
+本机独立 CLI 的 `claude --version` 返回 2.1.326。Windows 注册的 Claude Desktop 包为 5.11492.5.0，应用清单登记了桌面入口。这两个版本分别描述 CLI 和外层桌面应用。桌面 Code 会话实际加载的引擎构建、provider、有效设置与组件仍待场景证据。此次读取只涉及版本和包身份。
+
+Anthropic 官方说明，本地桌面 **Code** 和独立 CLI 共用底层引擎、本地配置及项目记忆，但会话列表独立，有各自的权限与插件交互。CLI 的 `/desktop` 是官方迁移路径，会保存会话并退出原 CLI；采用与单写者仍按后态核验。桌面不同模式的插件约束分别成立，Cowork 的账户同步机制与本地 Code 的设置来源各有边界。 [桌面 Code](https://code.claude.com/docs/en/desktop) · [本地设置与优先级](https://code.claude.com/docs/en/settings)
+
+优先在独立交互式 CLI 证明一个真实链路，再用桌面本地 Code 核同一任务的实际入口条件。共享事件或配置以相同语义复用，插件是否可发现、信任是否有效、是否加载，以及实际输入、退出和接续按各入口核对。需要跨端时优先评估官方迁移能力。只有出现影响必要职责的差异才考虑适配特例；本节不预设新增宿主的实现或发行版本。
