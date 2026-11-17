@@ -437,6 +437,110 @@ class CodexContextTests(unittest.TestCase):
 
 
 class ConfigurationControlMetadataTests(NativeStateMcpFixture, unittest.TestCase):
+    def test_configuration_metadata_retry_compaction_keeps_pause_and_identity(self):
+        for v2, kind in ((v2, kind) for v2 in (False, True)
+                         for kind in ('active', 'paused', 'foreign')):
+            with self.subTest(v2=v2, kind=kind):
+                self.setUp()
+                self.native_context(v2=v2)
+                meta = self.params['_meta']['x-codex-turn-metadata']
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                control = self.configuration_control()
+                control['metadata'].update(history_sequence=17, sampled_through_sequence=12)
+                control['timestamp'] = rows[0]['timestamp']
+                # The retained input origin must recognize the same control as
+                # the later retry/compaction path, without treating it as input.
+                rows.insert(3 if v2 else 2, control)
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                first = self.native_input_preview()
+                contract = dict(result='Retain the original work', inputs=[],
+                    outputs=[{'path': 'report.txt'}], nextAction='Verify the report',
+                    canContinue=False, unresolved=['Keep the unmet condition'])
+                self.assertFalse(self.manage(action='bind', epoch=first['epoch'], expectedRevision=0,
+                    **contract)['isError'])
+                revision = 1
+                if kind == 'paused':
+                    self.assertFalse(self.manage(action='pause', epoch=first['epoch'], expectedRevision=1,
+                        reason='Explicit user pause')['isError'])
+                    revision = 2
+                receipt = next(self.state.glob('*.input.json'))
+                original = receipt.read_bytes()
+                self.automatic_capacity_retry()
+                control['timestamp'] = dt.datetime.now(dt.timezone.utc).isoformat()
+                control['metadata']['sampled_through_sequence'] = 13
+                with transcript.open('a', encoding='utf-8') as stream:
+                    stream.write(json.dumps(control)+'\n')
+                self.append_long_tail_and_repeated_context()
+                if kind == 'foreign':
+                    rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                    start = next(row for row in rows if row.get('payload', {}).get('type') == 'task_started'
+                                 and row['payload']['turn_id'] == 'retry-turn')
+                    start['payload']['turn_attribution']['initiating_agent_path'] = '/root/child'
+                    transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                before = self.files()
+                result = self.manage(action='bind', epoch=first['epoch'], expectedRevision=revision, **contract)
+                if kind == 'foreign':
+                    self.assertTrue(result['isError'], result)
+                    self.assertEqual(result['value']['reason'], 'native-call-turn-conflict')
+                    self.assertEqual(self.files(), before)
+                else:
+                    self.assertFalse(result['isError'], result)
+                    current = self.helper({'op': 'status'}, session=meta['session_id'])
+                    self.assertEqual((current['mode'], current['revision']),
+                                     ('paused' if kind == 'paused' else 'active', revision + 1))
+                    self.assertEqual(current['checkpoint']['unresolved'], contract['unresolved'])
+                    if kind == 'paused':
+                        self.assertEqual(current['checkpoint']['reason'], 'Explicit user pause')
+                    evidence = self.native_input_preview()['nativeInputEvidence']
+                    self.assertEqual(evidence['state'], 'observed', evidence)
+                    self.assertTrue(evidence['latestInputReconciled'])
+                    self.assertTrue(evidence['latestNativeInputsComplete'])
+                    self.assertEqual(len(evidence['controls']), 2)
+                self.assertEqual(receipt.read_bytes(), original)
+
+    def test_configuration_metadata_retirement_then_new_input_keeps_new_authority(self):
+        self.native_context()
+        first = self.native_input_preview()
+        contract = dict(result='Deliver the original report', inputs=[], outputs=[{'path': 'report.txt'}],
+                        nextAction='Verify the report', canContinue=False)
+        self.assertFalse(self.manage(action='bind', epoch=first['epoch'], expectedRevision=0, **contract)['isError'])
+        (self.work / 'report.txt').write_text('verified original result', encoding='utf-8')
+        control = self.configuration_control()
+        control['metadata'].update(history_sequence=17, sampled_through_sequence=12)
+        self._resume_control_append_rows([control])
+        retired = self.manage(action='retire', epoch=first['epoch'], expectedRevision=1)
+        self.assertFalse(retired['isError'], retired)
+        self.assertFalse(any(self.state.glob('*.state.json')))
+        self.assertFalse(any(self.state.glob('*.input.json')))
+        meta = self.params['_meta']['x-codex-turn-metadata']
+        old_turn = meta['turn_id']
+        meta['turn_id'] = 'new-human-turn'
+        prompt = 'Inspect a different result; keep the previous report.'
+        transcript = self._resume_control_append_rows([
+            {'type': 'event_msg', 'payload': {'type': 'task_complete', 'turn_id': old_turn,
+                                            'root_turn_id': old_turn, 'error': None}},
+            {'type': 'turn_context', 'payload': {'turn_id': meta['turn_id'],
+                'model': meta['model'], 'cwd': str(self.work)}},
+            control,
+            {'type': 'response_item', 'payload': {'type': 'message', 'role': 'user',
+                'content': [{'type': 'input_text', 'text': prompt}]}}
+        ])
+        self.helper({'hook_event_name': 'UserPromptSubmit', 'prompt': prompt,
+            'turn_id': meta['turn_id'], 'model': meta['model'], 'transcript_path': str(transcript)},
+            session=meta['session_id'], hook='UserPromptSubmit')
+        current = self.native_input_preview()
+        self.assertEqual((current['mode'], current['revision']), ('unbound', 0))
+        self.assertNotEqual(current['epoch'], first['epoch'])
+        self.assertTrue(current['nativeInputEvidence']['latestInputReconciled'])
+        self.assertTrue(current['nativeInputEvidence']['latestNativeInputsComplete'])
+        before = self.files()
+        rejected = self.manage(action='bind', epoch=first['epoch'], expectedRevision=1, **contract)
+        self.assertTrue(rejected['isError'], rejected)
+        self.assertEqual(rejected['value']['reason'], 'latest-user-input-not-reconciled')
+        self.assertEqual(self.files(), before)
+        self.assertEqual((self.work / 'report.txt').read_text(encoding='utf-8'), 'verified original result')
+
     def test_configuration_control_accepts_optional_sequence_metadata(self):
         # Exercise persisted host controls through the real MCP reader, both
         # before the captured input and as a later change to its source evidence.
