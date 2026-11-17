@@ -2,10 +2,10 @@
   "schema": "yiyuan-accord-development/v5",
   "productId": "yiyuan-accord",
   "phase": "whole-system-optimization-and-functional-closure",
-  "status": "in-development",
+  "status": "candidate-frozen",
   "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
   "authority": {
-    "basis": "On 2026-11-17, after the delegated metadata repair and independent source retest closed, the user accepted a bounded successor maintenance stage combining host-change review, ordinary-task burden and correction, and enabled-difference/value work. The user additionally requires impact analysis beyond the local fix and examination of dynamic adaptation coverage and actual use. PLAN r107 current-work owns this stage. Prepare a combined later release after scope and qualification settle; no successor public version is selected and no immediate push/publication is authorized. The source chat retains its unrelated business and HTTP 400 investigation.",
+    "basis": "On 2026-11-17 the user accepted 3.3.17 as the successor public target after the r107 local maintenance stage. PLAN r108 current-work owns preparation, exact-candidate qualification, hosted verification and conditional publication, followed by the already authorized local update and verified closeout. Existing conditions apply without duplicate release confirmation. The source chat retains its unrelated business and HTTP 400 investigation.",
     "scope": [
       "source-semantics",
       "full-function-acceptance-mapping",
@@ -27,8 +27,8 @@
       "blind-process-termination-or-global-environment-reset"
     ],
     "conditionalRelease": {
-      "target": "3.3.16",
-      "decision": "not-authorized",
+      "target": "3.3.17",
+      "decision": "user-authorized-after-acceptance",
       "ready": false,
       "conditions": [
         "all-in-scope-changes-committed-and-exact-candidate-pushed",
@@ -39,21 +39,21 @@
         "ordered-publication-poststate-and-task-residue-closure",
         "release-notes-match-exact-candidate-and-evidence"
       ],
-      "rule": "No new public release is authorized by this delegated repair. The 3.3.16 target identifies the existing release base for a distinct local development build, not permission to republish that tag. Original 3.3.16 authority, qualification and closeout remain at 7ee6f5dd2830e2fb03f1b3dc0b54f3082057baed:product/development.json#/authority. Select and qualify a successor target before any new publication."
+      "rule": "The user selected 3.3.17 after r107 local qualification. Publish only after all listed conditions are verified against its exact committed source and package; ready remains false in this source declaration. Released 3.3.16 and its completed duties keep their original identities. The local development pass is evidence for its original subject, not the new candidate qualification."
     },
-    "rule": "Follow PLAN r107 current-work. Trace changes across shared consumers, lifecycle phases, supported-entry common mechanisms and material differences; retain valid local repair results without treating them as whole-system coverage. Examine change detection, affected assumptions, capability selection, actual action and verified consequences. Reuse host and mature third-party capabilities; confirm a gap before changing mechanisms. Human adapter maintenance is not proof of runtime self-adaptation. Preserve identity, authority, pauses, unrelated configuration and the withdrawn compression override. No new host implementation, focused promotion, unrelated external message, trust grant or immediate publication is authorized. This projection is not a second decision source."
+    "rule": "Follow PLAN r108 current-work and the accepted r107 scope. Finish the exact 3.3.17 candidate, current affected-material and independent candidate review, formal qualification and hosted checks before conditional publication; then verify installation, actual loading, manual Hook trust and owned-resource closure. Preserve identity, authority, pauses, unrelated configuration and the withdrawn compression override. Reuse sufficient host and mature third-party capabilities. No new host implementation, focused promotion, unrelated external message or trust grant is authorized. This projection is not a second decision source."
   },
-  "baselineRole": "Released 3.3.16 at df7a198853dc7e71e98cbd2362f5451dcbc18199 remains the public baseline. PLAN r107 starts from local 88d9fb7598d2e44bceffaf0d01de99bc3783262b after the bounded repair and source retest. The installed distinct development build retains its exact package identity and verified scope. It is not a successor public release; historical results, failures and clocks remain attached to their subjects. Changed dependencies require scoped reassessment, not erasure of valid evidence or automatic full-history replay.",
+  "baselineRole": "Released 3.3.16 at df7a198853dc7e71e98cbd2362f5451dcbc18199 remains the public baseline. The r107 development subject 3cb4b6f4c6638bcae5ad1b8a932a2dd14397f9ff passed 1492 local tests and three statics; the distinct metadata build was actually adopted in two chats. These outcomes retain their scopes. The selected 3.3.17 candidate needs exact-source qualification and affected evidence review, without replaying completed business or rewriting original failures and clocks.",
   "cycle": {
     "id": "v3.3-ordinary-entry-functional-development",
-    "targetVersion": "3.3.16",
-    "versionState": "development-target-not-published",
+    "targetVersion": "3.3.17",
+    "versionState": "final-candidate-not-publication-proof",
     "existingHosts": [
       "codex"
     ],
     "additionalHostAdaptation": "deferred",
     "scopeRule": "Version 3.3 continues the six selected local OpenAI execution/control paths and their selected modes: CLI, Desktop, VS Code, local-only Work/Remote, mobile Remote of selected local hosts and bounded SDK duties. Per the final r38 decision retained in r39, independent ordinary Chat research/content modes, web Chat and JetBrains/Xcode integrations are deferred for this release, with capability unknown and future decisions open. Actual loading, interaction, authority, continuity, recovery, verification and exit remain required for selected paths; a limited IDE observation does not close those requirements. Shared Linux/macOS CLI and standard hosted CI remain. Claude, Pi, DeepSeek Harness, ZCode and Antigravity remain future host candidates only; decisions follow 3.3 publication and discussion with the user. Future adaptation remains candidate-only with no preset version or schedule; other agreed future directions remain available. Public-directory listing is optional and does not block product iteration or value evaluation.",
-    "sourceDecision": "The user-selected 3.3.16 maintenance release consolidated r104 host alignment, documentation and artifact maintenance, and bounded ordinary-collaboration observations. Exact df7a198853dc7e71e98cbd2362f5451dcbc18199 passed 1487 local tests, three statics, four-axis review, formal two-phase qualification and main/tag CI1069/1070. Publication, installation and actual owning-chat adoption are verified, with manual Hook allowance confirmed by the user. Completed release duties are removed from pending work; existing host scope and unversioned future candidates remain unchanged.",
+    "sourceDecision": "The user accepted 3.3.17 on 2026-11-17 to consolidate the r106 metadata repair, r107 shared-consumer and entry-impact checks, dynamic-adaptation observations and isolated test-fixture premises. PLAN r108 owns remaining qualification and conditional publication. Existing host scope, F/A obligations and unversioned future candidates remain; no new automatic-adaptation or enabled-value claim is established.",
     "claudeAdaptation": "candidate-only",
     "futureAdaptationVersion": "undecided",
     "futureAdaptationCandidates": [
@@ -102,14 +102,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.16-dev.1+metadata.20261117",
-    "rule": "Distinct local repair build based on released 3.3.16; the public tag and immutable package are unchanged. Native switching retired the old active cache after an independent recovery archive was verified. The 30-member package changes only its manifest version and configuration metadata reader. Installation, actual loading in both development and source chats, and the source chat's independent three-test regression and stable input readback are verified under PLAN r106. The source input matches its Hook receipt; this does not identify a user's trust-button action or establish all-event coverage. No forced restart remains necessary for this adoption. Preserve unrelated settings and human trust; HTTP 400 remains outside the repair's causal claim.",
+    "version": "3.3.17",
+    "rule": "Exact 3.3.17 candidate declaration, not publication or installation evidence. Relative to released 3.3.16, the package changes its version and configuration metadata reader; relative to the verified local metadata build, only the manifest version changes. Original source-chat observations remain scoped to that development build. New release installation, actual consumer loading and manually allowed Hooks require separate observations; no HTTP 400 remedy or universal refresh guarantee is claimed.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.16-dev.1+metadata.20261117",
-        "packageSha256": "724073caeb4a758801ed6245287ad426cba116abe2625e8251b5e157dec97e8c",
+        "packageVersion": "3.3.17",
+        "packageSha256": "399b59e48878a2c5c8ccc93f4e52170c40c89112b59d99167078fa347ea09c95",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -6435,7 +6435,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "currentMaintenance": "PLAN r107 current-work owns bounded host-change, repair-impact and dynamic-adaptation review, including ordinary-task burden/correction and enabled-difference evidence. The r106 repair/adoption/source retest and 3.3.16 publication remain closed at their original scopes. CONTINUATION remains historical navigation; no successor public version has been selected.",
+    "currentMaintenance": "PLAN r108 current-work owns the selected 3.3.17 exact-candidate qualification, conditional release, local update and closeout. r107 local qualification, r106 repair/adoption and released 3.3.16 retain their original scopes; CONTINUATION remains historical navigation.",
     "decisionCapabilityPolicy": {
       "responsibility": "Keep portable judgment, selection, feedback and correction; no default dedicated decision model, service, account, key or per-step extra call.",
       "selection": "Use code/native facts for deterministic checks or sufficient existing models for semantic judgment. Optional specialized capabilities require actual need, availability, authority and supported whole-task benefit; this is not a fixed call sequence.",
@@ -6444,7 +6444,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "Selected configuration consumers, combination branches, entry-specific evidence and five upstream changes have been reviewed. The frozen development subject 3cb4b6f4c6638bcae5ad1b8a932a2dd14397f9ff passed all 1492 applicable local tests and three static checks; source stability and natural owned-resource closure were verified. Synthetic applicability fixtures now define their own version and conditional-authority premises; product identity, authority and read limits remain unchanged. The first failed, owner-stopped run is retained. Retained-source integrity and unchanged case definitions do not transfer old qualification to the new package. Next select the successor public target, then bind exact current materials, independent material/candidate reviews, formal qualification and hosted checks before publication under that target authority. No successor public version is selected and no push/publication is authorized by this local result. Preserve scoped unknowns, sufficient host mechanisms, active recovery sources and the original observations; do not replay completed business or expand the stage without a concrete new dependency.",
+    "work": "Prepare the exact selected 3.3.17 source and current materials; independently review affected dependencies and the candidate, complete formal qualification, then push and verify required hosted terminals and artifacts before publication. Reuse valid original observations without restamping them, preserve the first failed and owner-stopped r107 run, and do not replay completed business. After publication verify canonical release identity, tag CI, installation, actual loaded version, manual Hook trust and resource closure in their actual order. Source declarations and the earlier 1492-test development pass do not establish this candidate readiness.",
     "requires": "Reuse the completed r101 asset dispositions as the baseline; scope new checks to consequential changes and demonstrated gaps under PLAN current-work. Preserve necessary duties when implementations are replaced or retired; close confirmed in-scope defects with appropriate regression and actual consequence evidence. Unresolved necessary outcomes block dependent completion; other unknowns retain scope, effect and revisit triggers without becoming universal blockers. Reconcile current plans, baseline, acceptance, machine projection and affected user/release text; retain immutable history. Use existing sufficient host/third-party controls and same-host Accord enabled/disabled comparisons for incremental value; single-arm development and human rescue do not prove autonomous improvement. No new complex score, manufactured user task or business replay. The current F/A and quality, capacity and reserve declarations remain the starting requirements; changes need sourced justification, authority and impact review, not relaxed limits to recognize an old result. Before an authorized release require exact candidate/source identity, necessary full regression and statics, applicable independent review/qualification, required pre-release hosted terminals, matched notes and closed preparatory resources. After publication verify release identity, any triggered tag CI, installation, actual adoption and final owned-resource/protocol closure. Keep these subsequent outputs in their actual order rather than making them circular publication prerequisites. Declarations establish neither readiness nor authority."
   },
   "claimCeiling": {
@@ -6453,7 +6453,7 @@
     "currentHostBehavior": "unverified",
     "incrementalValue": "unverified",
     "candidateEligible": false,
-    "releaseIntent": "not-authorized"
+    "releaseIntent": "conditional-v3.3-release-after-acceptance"
   },
   "navigation": {
     "BASELINE": "docs/operations/BASELINE-v3.3.md",
@@ -6473,7 +6473,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r107",
+    "revision": "r108",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",
