@@ -1170,24 +1170,28 @@ class CurrentDevelopmentEvidenceTests(unittest.TestCase):
                        env=development_fixtures.owned_git_environment(), check=True, timeout=60)
         development_fixtures.overlay_current_tree(cls.root)
         cls.contract = json.loads((cls.root / DEVELOPMENT_FILE).read_text(encoding="utf-8"))
-        # Synthetic development sources stay explicit after the real candidate freezes.
+        # This owned synthetic subject must not borrow the live release phase,
+        # authorization or arbitrary local-build metadata. Positive bridge tests
+        # need their own authorized development premise; negative tests remove it.
         # Individual final-promotion tests perform their own directional transition.
-        if cls.contract['status'] == 'candidate-frozen':
-            from yiyuan_accord.guardrails import package_sha256
-            cls.contract['status'] = 'in-development'
-            cls.contract['cycle']['versionState'] = 'development-target-not-published'
-            version = cls.contract['cycle']['targetVersion'] + '-dev.1'
-            cls.contract['delivery']['version'] = version
-            for projection in cls.contract['delivery']['hostProjections']:
-                manifest = cls.root / projection['manifest']
-                value = json.loads(manifest.read_text(encoding='utf-8'))
-                value['version'] = projection['packageVersion'] = version
-                manifest.write_text(json.dumps(value), encoding='utf-8')
-                # Include newly declared package files before hashing this synthetic subject.
-                cls.git('add', '--', manifest.parent.parent.relative_to(cls.root).as_posix())
-                projection['packageSha256'] = package_sha256(cls.root, cls.git(
-                    'ls-files', '--', manifest.parent.parent.relative_to(cls.root).as_posix()).splitlines())
-            (cls.root / DEVELOPMENT_FILE).write_text(json.dumps(cls.contract), encoding='utf-8')
+        from yiyuan_accord.guardrails import package_sha256
+        cls.contract['status'] = 'in-development'
+        cls.contract['cycle']['versionState'] = 'development-target-not-published'
+        cls.contract['authority']['conditionalRelease'].update(
+            decision='user-authorized-after-acceptance', ready=False)
+        cls.contract['claimCeiling']['releaseIntent'] = 'conditional-v3.3-release-after-acceptance'
+        version = cls.contract['cycle']['targetVersion'] + '-dev.1'
+        cls.contract['delivery']['version'] = version
+        for projection in cls.contract['delivery']['hostProjections']:
+            manifest = cls.root / projection['manifest']
+            value = json.loads(manifest.read_text(encoding='utf-8'))
+            value['version'] = projection['packageVersion'] = version
+            manifest.write_text(json.dumps(value), encoding='utf-8')
+            # Include newly declared package files before hashing this synthetic subject.
+            cls.git('add', '--', manifest.parent.parent.relative_to(cls.root).as_posix())
+            projection['packageSha256'] = package_sha256(cls.root, cls.git(
+                'ls-files', '--', manifest.parent.parent.relative_to(cls.root).as_posix()).splitlines())
+        (cls.root / DEVELOPMENT_FILE).write_text(json.dumps(cls.contract), encoding='utf-8')
         cls.git("add", ".")
         cls.git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
                 "commit", "--quiet", "--allow-empty", "-m", "Bind synthetic v3.3 admission subject")
