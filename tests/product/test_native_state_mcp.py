@@ -3798,6 +3798,7 @@ process.stdout.write(JSON.stringify({result,changed}));
             reason='Explicit pause')['isError'])
         transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
         control = self.configuration_control('future-custom')
+        control['metadata'].update(history_sequence=17, sampled_through_sequence=12)
         control['timestamp'] = datetime.now(timezone.utc).isoformat()
         with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(control)+'\n')
         before = self.files()
@@ -3812,17 +3813,20 @@ process.stdout.write(JSON.stringify({result,changed}));
         self.assertEqual(self.helper({'op': 'status'}, session=meta['thread_id'])['mode'], 'paused')
 
     def test_configuration_control_goal_edge_and_identity(self):
-        for kind in ('valid', 'identity', 'pause'):
+        for kind in ('legacy', 'valid', 'identity', 'pause'):
             with self.subTest(kind=kind):
                 self.setUp()
                 def change(edge):
-                    edge.insert(3, self.configuration_control())
+                    control = self.configuration_control()
+                    if kind != 'legacy':
+                        control['metadata'].update(history_sequence=17, sampled_through_sequence=12)
+                    edge.insert(3, control)
                     if kind == 'identity': edge[1]['payload']['turn_attribution']['parent_turn_id'] = 'foreign'
                     if kind == 'pause': edge.insert(4, {'type': 'event_msg', 'payload': {'type': 'task_interrupted'}})
                 self.goal_auto_source(change, paused=kind == 'pause')
                 preview = self.goal_preview()
                 before = self.files()
-                if kind == 'valid':
+                if kind in ('legacy', 'valid'):
                     self.assertEqual(preview['nativeInputEvidence']['state'], 'observed')
                     self.assertEqual(preview['nativeInputEvidence']['controls'][0]['reasoningEffort'], 'xhigh')
                     self.assertFalse(self.goal_reconcile(preview)['isError'])

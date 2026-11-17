@@ -2,10 +2,10 @@
   "schema": "yiyuan-accord-development/v5",
   "productId": "yiyuan-accord",
   "phase": "whole-system-optimization-and-functional-closure",
-  "status": "candidate-frozen",
+  "status": "in-development",
   "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
   "authority": {
-    "basis": "On 2026-11-14 the user selected 3.3.16 as the release goal for the accepted r104 maintenance work. PLAN r105 current-work owns the current scope and remaining duties. The conditional release requires exact candidate verification, applicable independent review and hosted results. Completed 3.3.15 authority and observations retain their original identity at b6668f1c1e6c45fdfe7a1513b693774f35b2f94f:product/development.json#/authority.",
+    "basis": "On 2026-11-17 the user delegated an Accord-only configuration metadata compatibility repair, regressions and necessary local adoption to this project chat. PLAN r106 current-work owns this bounded maintenance slice; the source chat retains its business task, HTTP 400 investigation and independent original-chat retest. The previously selected 3.3.16 release is closed. The current development build is based on that version for distinct local testing and adoption; no successor public release is selected.",
     "scope": [
       "source-semantics",
       "full-function-acceptance-mapping",
@@ -28,7 +28,7 @@
     ],
     "conditionalRelease": {
       "target": "3.3.16",
-      "decision": "user-authorized-after-acceptance",
+      "decision": "not-authorized",
       "ready": false,
       "conditions": [
         "all-in-scope-changes-committed-and-exact-candidate-pushed",
@@ -39,15 +39,15 @@
         "ordered-publication-poststate-and-task-residue-closure",
         "release-notes-match-exact-candidate-and-evidence"
       ],
-      "rule": "The user-authorized 3.3.16 release at df7a198853dc7e71e98cbd2362f5451dcbc18199 completed exact qualification, independent review and CI1069 before publication as Release444921905. Local installation, current-chat MCP3.3.16 loading, user-confirmed manual Hook allowance and tag CI1070 attempt1 all-ten-job success are verified. Completed temporary verification allocations were archived and removed. The release gates and ready=false contract declaration remain unchanged; actual records are in PLAN r105 current-work. Native task state is retired only after verified outputs."
+      "rule": "No new public release is authorized by this delegated repair. The 3.3.16 target identifies the existing release base for a distinct local development build, not permission to republish that tag. Original 3.3.16 authority, qualification and closeout remain at 7ee6f5dd2830e2fb03f1b3dc0b54f3082057baed:product/development.json#/authority. Select and qualify a successor target before any new publication."
     },
-    "rule": "Follow PLAN r105 current-work for the selected 3.3.16 maintenance release. Reuse sufficient host and third-party capabilities, preserve source and authority boundaries, and verify affected consumers and post-state. This machine projection is not a second decision source. No new host implementation, focused promotion, unrelated external messages or new trust is granted."
+    "rule": "Follow PLAN r106 current-work for the delegated compatibility repair. Preserve the completed 3.3.16 release identity and all unrelated live configuration. The source thread withdrew its request-compression override at the user's direction; do not recreate it from an old snapshot. Reuse sufficient host capabilities, verify affected consumers and distinguish source tests, local adoption and independent original-chat recovery. No successor public release, unrelated external message, new host, focused promotion or new trust is granted by this maintenance slice. This projection is not a second decision source."
   },
-  "baselineRole": "Released, installed and closed 3.3.15 is the baseline for r105/3.3.16. Technical cycle and delivery fields identify the new local candidate. Historical observations, failed attempts, qualifications and clocks keep their original identities. Local source conformance does not establish new release, adoption or incremental value.",
+  "baselineRole": "Released, installed and closed 3.3.16 at df7a198853dc7e71e98cbd2362f5451dcbc18199 is the runtime baseline for r106; the clean repository starts at 7ee6f5dd2830e2fb03f1b3dc0b54f3082057baed. The distinct development build provides a separate cache identity for the delegated local repair. It is not a successor public release. Historical observations, failures, qualifications and clocks retain their original identities; current source changes require their own evidence and any successor release needs its own selected target.",
   "cycle": {
     "id": "v3.3-ordinary-entry-functional-development",
     "targetVersion": "3.3.16",
-    "versionState": "final-candidate-not-publication-proof",
+    "versionState": "development-target-not-published",
     "existingHosts": [
       "codex"
     ],
@@ -102,14 +102,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.16",
-    "rule": "Published 3.3.16 at df7a198853dc7e71e98cbd2362f5451dcbc18199 has 30 declared package members; only the manifest version and reader-facing ChatGPT/Codex description differ from 3.3.15. Runtime and Skill bytes are unchanged. Native local installation and the persistent source were verified, with only the Accord marketplace ref changed in parsed configuration. The first installation readback loaded MCP3.3.15; a later current-chat native response loaded MCP3.3.16 with all six function fingerprints matching installed source. The user confirmed manual Hook allowance and current-input Hook participation was observed; no Agent grant or user restart is claimed. Version-state and ready fields are source-contract declarations, not publication receipts; actual results are in PLAN r105 current-work.",
+    "version": "3.3.16-dev.1+metadata.20261117",
+    "rule": "Distinct local repair build based on released 3.3.16; no released cache, tag or immutable package is changed. The 30-member package changes only its manifest version and configuration metadata reader. Local regressions, installation, actual owning-entry adoption and source-chat independent recovery are separate evidence. Preserve unrelated live settings and human Hook trust. Current progress is in PLAN r106; original 3.3.16 release results remain in its historical section.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.16",
-        "packageSha256": "0f394d1bbf61cca6d13cff61223a808de8d0c9fa902ea815efa38d15d91c7690",
+        "packageVersion": "3.3.16-dev.1+metadata.20261117",
+        "packageSha256": "724073caeb4a758801ed6245287ad426cba116abe2625e8251b5e157dec97e8c",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -6435,7 +6435,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "currentMaintenance": "Completed 3.3.16 results and scoped follow-up triggers are maintained in docs/operations/PLAN-v3.3.md#current-work. Qualification, main/tag hosted verification, publication, installation, actual current-chat adoption and manual Hook allowance are verified; owned short allocations were archived and removed. No successor phase is selected. CONTINUATION remains historical navigation.",
+    "currentMaintenance": "PLAN r106 current-work owns the delegated configuration metadata compatibility repair and necessary local adoption. Completed 3.3.16 results remain historical evidence. The distinct local development build is not a selected successor public release. CONTINUATION remains historical navigation.",
     "decisionCapabilityPolicy": {
       "responsibility": "Keep portable judgment, selection, feedback and correction; no default dedicated decision model, service, account, key or per-step extra call.",
       "selection": "Use code/native facts for deterministic checks or sufficient existing models for semantic judgment. Optional specialized capabilities require actual need, availability, authority and supported whole-task benefit; this is not a fixed call sequence.",
@@ -6444,7 +6444,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "The selected 3.3.16 release, local adoption and owned temporary-resource duties are complete. Preserve original qualifications, failures, human corrections and evidence limits. Retire native task state only against verified final outputs. Future work follows current plan triggers and user direction; do not replay completed business, manufacture comparisons or handoffs, or start new host implementation or focused promotion from this closeout.",
+    "work": "Complete the bounded metadata repair, affected regressions, reversible local adoption and exact source/version report. Preserve all unrelated live configuration and the user's withdrawal of the compression workaround. Distinguish current source-prefix success from the original failure and from deployed repair. The source chat independently rechecks its original task; HTTP 400 remains outside this repair's causal claim. Preserve original qualifications and failures, and hold public release until a successor target is selected and qualified.",
     "requires": "Reuse the completed r101 asset dispositions as the baseline; scope new checks to consequential changes and demonstrated gaps under PLAN current-work. Preserve necessary duties when implementations are replaced or retired; close confirmed in-scope defects with appropriate regression and actual consequence evidence. Unresolved necessary outcomes block dependent completion; other unknowns retain scope, effect and revisit triggers without becoming universal blockers. Reconcile current plans, baseline, acceptance, machine projection and affected user/release text; retain immutable history. Use existing sufficient host/third-party controls and same-host Accord enabled/disabled comparisons for incremental value; single-arm development and human rescue do not prove autonomous improvement. No new complex score, manufactured user task or business replay. The current F/A and quality, capacity and reserve declarations remain the starting requirements; changes need sourced justification, authority and impact review, not relaxed limits to recognize an old result. Before an authorized release require exact candidate/source identity, necessary full regression and statics, applicable independent review/qualification, required pre-release hosted terminals, matched notes and closed preparatory resources. After publication verify release identity, any triggered tag CI, installation, actual adoption and final owned-resource/protocol closure. Keep these subsequent outputs in their actual order rather than making them circular publication prerequisites. Declarations establish neither readiness nor authority."
   },
   "claimCeiling": {
@@ -6453,7 +6453,7 @@
     "currentHostBehavior": "unverified",
     "incrementalValue": "unverified",
     "candidateEligible": false,
-    "releaseIntent": "conditional-v3.3-release-after-acceptance"
+    "releaseIntent": "not-authorized"
   },
   "navigation": {
     "BASELINE": "docs/operations/BASELINE-v3.3.md",
@@ -6473,7 +6473,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r105",
+    "revision": "r106",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

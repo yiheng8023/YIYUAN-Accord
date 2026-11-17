@@ -6,6 +6,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from tests.product.test_native_state_mcp import NativeStateMcpFixture
+
 
 ROOT = Path(__file__).resolve().parents[2]
 RUNTIME = ROOT / "runtime" / "codex-context.cjs"
@@ -430,6 +432,89 @@ class CodexContextTests(unittest.TestCase):
                             changed["conditions"]["contextGeneration"])
         self.assertNotEqual(first["observationId"], changed["observationId"])
         self.assertEqual(changed["conditions"]["hostVersion"], "0.155.2")
+
+
+
+
+class ConfigurationControlMetadataTests(NativeStateMcpFixture, unittest.TestCase):
+    def test_configuration_control_accepts_optional_sequence_metadata(self):
+        # Exercise persisted host controls through the real MCP reader, both
+        # before the captured input and as a later change to its source evidence.
+        metadata_cases = ({}, {'history_sequence': 0}, {'sampled_through_sequence': 0},
+            {'history_sequence': 17, 'sampled_through_sequence': 12},
+            {'history_sequence': 2**53-1, 'sampled_through_sequence': 2**53-1})
+        for position, metadata in ((p, m) for p in ('origin', 'tail') for m in metadata_cases):
+            with self.subTest(position=position, metadata=metadata):
+                self.setUp()
+                self.native_context()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+                control = self.configuration_control()
+                control['metadata'].update(metadata)
+                control['timestamp'] = rows[1]['timestamp']
+                rows.insert(2 if position == 'origin' else len(rows), control)
+                transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+                before = self.files()
+                evidence = self.native_input_preview()['nativeInputEvidence']
+                self.assertEqual(evidence['state'], 'observed', evidence)
+                self.assertTrue(evidence['latestInputReconciled'])
+                self.assertTrue(evidence['latestNativeInputsComplete'])
+                self.assertEqual(len(evidence['records']), 1)
+                self.assertEqual(len(evidence['controls']), 1)
+                self.assertEqual(evidence['controls'][0]['controlDisposition'], 'host-control-not-human-or-permission')
+                self.assertEqual(self.files(), before)
+
+    def test_configuration_control_sequence_metadata_does_not_relax_guards(self):
+        invalid = (None, True, False, -1, 0.5, '17', [], {}, 2**53, 2**64-1, 2**64)
+        cases = [(key + '-' + repr(value), {key: value})
+            for key in ('history_sequence', 'sampled_through_sequence') for value in invalid]
+        cases += [('unknown', {'future_metadata': 1}), ('client', {'client_authored': True}),
+            ('host-flag', {'harness_authored_configuration': False}),
+            ('client-type', {'client_authored': 0}), ('host-flag-type', {'harness_authored_configuration': 1}),
+            ('missing-client', {}), ('missing-host-flag', {}), ('early-timestamp', {})]
+        for kind, changes in cases:
+            with self.subTest(kind=kind):
+                self.setUp()
+                self.native_context()
+                preview = self.native_input_preview()
+                transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+                control = self.configuration_control()
+                control['metadata'].update(history_sequence=17, sampled_through_sequence=12)
+                control['metadata'].update(changes)
+                if kind == 'missing-client': control['metadata'].pop('client_authored')
+                if kind == 'missing-host-flag': control['metadata'].pop('harness_authored_configuration')
+                control['timestamp'] = ('2000-01-01T00:00:00Z' if kind == 'early-timestamp'
+                    else dt.datetime.now(dt.timezone.utc).isoformat())
+                with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(control)+'\n')
+                before = self.files()
+                evidence = self.native_input_preview()['nativeInputEvidence']
+                self.assertEqual((evidence['state'], evidence['reason']),
+                    ('unknown', 'native-input-control-unrecognized'))
+                result = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+                    evidenceCursor=preview['nativeInputEvidence']['cursor'])
+                self.assertTrue(result['isError'], result)
+                self.assertEqual(self.files(), before)
+
+    def test_configuration_control_sequence_change_invalidates_evidence_cursor(self):
+        self.native_context()
+        transcript = next(Path(self.env['CODEX_HOME']).rglob('rollout-*.jsonl'))
+        control = self.configuration_control()
+        control['timestamp'] = dt.datetime.now(dt.timezone.utc).isoformat()
+        control['metadata'].update(history_sequence=17, sampled_through_sequence=12)
+        with transcript.open('a', encoding='utf-8') as stream: stream.write(json.dumps(control)+'\n')
+        preview = self.native_input_preview()
+        rows = [json.loads(line) for line in transcript.read_text(encoding='utf-8').splitlines()]
+        rows[-1]['metadata']['sampled_through_sequence'] = 13
+        transcript.write_text(''.join(json.dumps(row)+'\n' for row in rows), encoding='utf-8')
+        before = self.files()
+        evidence = self.native_input_preview()['nativeInputEvidence']
+        self.assertEqual(evidence['state'], 'observed', evidence)
+        self.assertNotEqual(evidence['cursor']['signalsSha256'], preview['nativeInputEvidence']['cursor']['signalsSha256'])
+        rejected = self.manage(action='reconcile-input', epoch=preview['epoch'], expectedRevision=0,
+            evidenceCursor=preview['nativeInputEvidence']['cursor'])
+        self.assertTrue(rejected['isError'], rejected)
+        self.assertEqual(rejected['value']['reason'], 'native-input-evidence-changed')
+        self.assertEqual(self.files(), before)
 
 
 if __name__ == "__main__":

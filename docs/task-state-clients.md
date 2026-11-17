@@ -94,7 +94,9 @@ Goal记录完整进入来源顺序、原字节摘要和pending列表，标为`so
 
 ## 宿主推理设置控制
 
-3.3.6支持已核来源形状的`response_item.configuration_update`：外层metadata恰含`client_authored=false`及`harness_authored_configuration=true`，payload仅type/reasoning，reasoning仅effort。effort按官方可含custom的字符串语义保留原值，并受200个UTF-16代码单元的本地读取界限约束；观察到值不证明当前模型支持该值，也不代表Agent已经理解或批准其影响。空白、控制字符、错类型、超界值、额外控制字段、缺失或伪造外层来源保持未决。
+3.3.6起支持已核来源形状的`response_item.configuration_update`：外层metadata要求`client_authored=false`及`harness_authored_configuration=true`，payload仅type/reasoning，reasoning仅effort。effort按官方可含custom的字符串语义保留原值，并受200个UTF-16代码单元的本地读取界限约束；观察到值不证明当前模型支持该值，也不代表Agent已经理解或批准其影响。空白、控制字符、错类型、超界值、额外控制字段、缺失或伪造外层来源保持未决。
+
+2026-11-17开发修复另接纳metadata中可选的`history_sequence`与`sampled_through_sequence`。[已核producer](https://github.com/openai/codex/blob/b8cbdbfeff72869e5d715480572aad24f739aa65/codex-rs/history/src/lib.rs#L69)省略不存在的`Option<u64>`字段；本地JSON读取仅接纳0至`Number.MAX_SAFE_INTEGER`的精确整数，显式null、布尔、负数、小数、字符串及超出精确表示范围的数保持未决，不将完整u64范围声明为已支持。未知metadata键继续拒绝。两个序号仅随原记录进入摘要，不替代物理顺序、时间、来源身份或恢复关系；仅序号变化也使旧游标失效。当前公开3.3.16仍使用原二键白名单，此段开发修复的采用状态见[当前计划](operations/PLAN-v3.3.md#current-work)。
 
 原记录进入完整控制signals，返回独立`controls`观察：sourceRef、recordOffset、recordSha256、当前来源上下文关联的turnId、reasoningEffort及非人类/非权限说明。turnId不是该记录自带身份。设置不进入人类输入序列或替换输入摘要；后到或改写设置使旧cursor失效。响应过大时省略controls详情并给出数量及既有只读helper入口，不能把省略当无设置。调用者仍须理解实际设置及Goal/预算，保留暂停、恢复和权限；对账与绑定依旧分别执行。
 

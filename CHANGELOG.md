@@ -1,5 +1,9 @@
 # 更新日志
 
+## 未发布
+
+- 修正宿主配置事件 metadata 的兼容性：保留 `client_authored=false` 与 `harness_authored_configuration=true` 来源要求，允许已核实的两个可选历史序号字段。未知字段、非安全整数、失序、身份冲突及暂停守卫保持；序号变化仍使旧来源游标失效。当前为开发源码，未更改已发布的 3.3.16，也不据此宣称原聊天恢复或 HTTP 400 已解决。进度及采用边界见[当前计划](docs/operations/PLAN-v3.3.md#current-work)。
+
 ## 3.3.16（2026-11-14）
 
 [3.3.16](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.16)已于北京时间2026-11-14 09:32:19正式发布，Release444921905，标签和发行目标均为`df7a198853dc7e71e98cbd2362f5451dcbc18199`。30成员包SHA256为`0f394d1bbf61cca6d13cff61223a808de8d0c9fa902ea815efa38d15d91c7690`。精确候选的1,487项完整本地回归与三静态、18材料及完整候选四轴审阅、正式两阶段均通过；本地及正式核验分别用时2430.9753933秒和105.3942917秒，所属Job自然关闭。[CI #1069](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/43510508688) attempt1全部10项成功，两平台18份原生制品、22份来源清单已核。原候选及失败保留原身份，未重放已完成业务。

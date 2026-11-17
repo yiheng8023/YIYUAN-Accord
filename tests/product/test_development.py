@@ -630,7 +630,11 @@ class DevelopmentContractTests(unittest.TestCase):
         self.assertFalse(report["functionalCompletion"])
         self.assertFalse(report["candidateEligible"])
         self.assertEqual(report["currentHostBehavior"], "unverified")
-        self.assertEqual(report["releaseIntent"], "conditional-v3.3-release-after-acceptance")
+        current = json.loads((ROOT / DEVELOPMENT_FILE).read_text(encoding='utf-8'))
+        expected_intent = ('conditional-v3.3-release-after-acceptance'
+            if current['authority']['conditionalRelease']['decision'] == 'user-authorized-after-acceptance'
+            else 'not-authorized')
+        self.assertEqual(report["releaseIntent"], expected_intent)
 
     def test_conditional_release_requires_commit_push_and_remaining_evidence(self):
         altered = copy.deepcopy(self.contract)
@@ -1220,6 +1224,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
                 candidate['cycle']['targetVersion'] = target
                 candidate['authority']['conditionalRelease']['target'] = target
                 candidate['authority']['conditionalRelease']['decision'] = 'user-authorized-after-acceptance'
+                candidate['claimCeiling']['releaseIntent'] = 'conditional-v3.3-release-after-acceptance'
                 version = target if frozen else target+'-dev.1'
                 candidate['delivery']['version'] = version
                 candidate['delivery']['hostProjections'][0]['packageVersion'] = version
@@ -1233,6 +1238,8 @@ class SuccessorDevelopmentTests(unittest.TestCase):
 
     def test_authorized_v33_final_freeze_preserves_unqualified_claims(self):
         candidate = copy.deepcopy(self.contract)
+        candidate['authority']['conditionalRelease']['decision'] = 'user-authorized-after-acceptance'
+        candidate['claimCeiling']['releaseIntent'] = 'conditional-v3.3-release-after-acceptance'
         candidate['status'] = 'candidate-frozen'
         candidate['cycle']['versionState'] = 'final-candidate-not-publication-proof'
         candidate['delivery']['version'] = candidate['cycle']['targetVersion']
@@ -1329,8 +1336,8 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         self.assertEqual(old["status"], "candidate-frozen")
         self.assertEqual(old["authority"]["conditionalRelease"]["decision"],
                          "user-authorized-after-acceptance")
-        self.assertEqual(self.contract["authority"]["conditionalRelease"]["decision"],
-                         "user-authorized-after-acceptance")
+        self.assertIn(self.contract["authority"]["conditionalRelease"]["decision"],
+                      ("not-authorized", "user-authorized-after-acceptance"))
         self.assertFalse(self.contract["authority"]["conditionalRelease"]["ready"])
         manifest = json.loads((ROOT / self.contract["delivery"]["hostProjections"][0]["manifest"])
                               .read_text(encoding="utf-8"))

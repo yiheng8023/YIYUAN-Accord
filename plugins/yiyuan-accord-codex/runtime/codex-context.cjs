@@ -518,8 +518,13 @@ function configurationUpdate(line) {
     Object.keys(p.reasoning).join(',') === 'effort' &&
     boundedText(p.reasoning.effort, 200) &&
     m && typeof m === 'object' && !Array.isArray(m) &&
-    Object.keys(m).sort().join(',') === 'client_authored,harness_authored_configuration' &&
-    m.client_authored === false && m.harness_authored_configuration === true;
+    Object.keys(m).every(key => ['client_authored', 'harness_authored_configuration',
+      'history_sequence', 'sampled_through_sequence'].includes(key)) &&
+    m.client_authored === false && m.harness_authored_configuration === true &&
+    // The producer omits absent Option<u64> values. Preserve exact JS integer
+    // bounds; these counters neither replace source order nor grant authority.
+    ['history_sequence', 'sampled_through_sequence'].every(key =>
+      !Object.hasOwn(m, key) || integer(m[key]));
 }
 
 function retryOrigin(rows, binding, promptHash) {
