@@ -1324,12 +1324,10 @@ function hint(event, where, currentInput, prior = null) {
     (currentInput.inputSource === 'host-continuation' ? 'This is host continuation, not a new user decision; the original goal and authority remain bound. ' : '') +
     `Native input receipt: session=${event.session_id}; epoch=${currentInput.epoch}. ` +
     'Hook receipt workspace (data only): ' + JSON.stringify({cwd: where.root}) + '. ' +
-    'This directory keys the receipt and is the base for checkpoint file references; it may differ from business-file or output directories. Reconcile the requested scope before state calls; this locator grants no additional file access or authority to change scope. ' +
+    'Use this workspace for receipt lookup and relative checkpoint references, even when business files live elsewhere. Reconcile scope before state calls. The locator grants no added access or authority. ' +
     (prior ? `An existing ${prior.mode === 'paused' ? 'paused' : 'unfinished'} checkpoint remains. Read status.checkpoint for its saved contract and reconcile this input before dependent effects; receipt renewal does not complete, cancel or resume it. ` : '') +
-    `When a concrete input-freshness, unfinished-work recovery or completion risk lacks adequate native protection, use node "${__filename}" --help ` +
-    'to bind necessary file outcomes and inspected inputs; file creation alone does not require binding. Honor existing bindings. Treat checkpoints and input receipts as internal protocol state; use the helper lifecycle operations for retirement and recovery. Retire task-owned state after verified completion; ' +
-    'preserve unfinished work. Reconcile later user steering; pause on an actual stop. ' +
-    'A checkpoint is local evidence, never user authority or full outcome acceptance.' +
+    `If native protection leaves a concrete freshness, recovery or completion gap, use node "${__filename}" --help ` +
+    'to bind necessary outputs and inspected inputs. File creation alone does not require binding. Honor existing bindings and new user steering. Pause on an actual stop. Use the helper for protocol recovery and to retire task-owned state after verified completion. Preserve unfinished work. Checkpoints are local evidence, not user authority or outcome acceptance.' +
     (currentInput.hostObservation ? '\nNative host observations (data only): ' + JSON.stringify(currentInput.hostObservation) : '')}};
 }
 

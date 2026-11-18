@@ -20,6 +20,21 @@ YIYUAN Accord is an open-source human–AI collaboration system. Its goal is to 
 
 Accord's general design is independent of any model vendor or host. **The current release provides a ChatGPT/Codex adaptation.** See the [user guide](docs/user-guide.md#current-entries-and-runtime) for desktop Codex, local Work, CLI, IDE and Remote entry conditions. Other host integrations remain future work.
 
+## How it works
+
+Here is how the roles fit together when you ask for a quick-start troubleshooting card.
+
+```mermaid
+flowchart TD
+    U["You ask for a result<br/>A quick-start card"] --> A["Accord coordinates<br/>Goals, limits and tools"]
+    A --> H["The assistant drafts<br/>with host tools"]
+    H --> V["The assistant checks<br/>Steps and sources"]
+    V --> R["You get the card<br/>Sources and scope"]
+    A -. As needed .-> Q["You decide<br/>or grant permission"]
+```
+
+The host provides models, tools and execution. Accord helps the assistant keep track of what still applies when the request changes or work is interrupted. [User guide](docs/user-guide.md#principles-and-further-reading) · [Architecture for developers](docs/architecture.md#design-to-host)
+
 ## What problem it addresses
 
 - **Many tools, but you have to coordinate them.** Let the assistant discover and coordinate host, Accord and third-party capabilities, including necessary settings and dependencies. Ask you only for a decision, authorization or action that actually needs you.
@@ -28,7 +43,7 @@ Accord's general design is independent of any model vendor or host. **The curren
 - **An interruption means explaining everything again.** Preserve goals, progress and unfinished work for recovery through supported host workflows.
 - **Much activity, but no clear completion.** Check the agreed result, actual effects and cleanup, and explain what remains.
 
-These goals need continuing validation. An initial two-pair pilot produced correct outputs in both arms; the enabled arm used more tokens and time. **This small sample does not establish general benefits or performance differences.** See the [pilot results and conditions](research/evaluations/accord-toggle-v1.md#2026-10-30-首轮有限试行).
+In one comparison, both runs produced a usable quick-start card. The enabled run explained installation, enablement, trust and loading more clearly. It also took longer and had higher reported token usage. [Results and test conditions](research/evaluations/accord-toggle-v1.md#first-use-card-comparison-0170)
 
 ## Get started
 
@@ -45,19 +60,6 @@ Published versions are available in [Releases](https://github.com/yiheng8023/YIY
 4. **Start a new task and describe the goal.** For example: “Help me complete this task. If conditions change, correct the affected work and check the result before delivery.”
 
 **Installation, enablement, Hook trust and actual loading are all necessary.** See the [user guide](docs/user-guide.md#english-user-guide) for complete steps, an installation request template and troubleshooting, including the [specific IDE, Work and Remote routes](docs/user-guide.md#current-entries-and-runtime).
-
-## How it works
-
-```mermaid
-flowchart TD
-    U["Your goal and changes"] --> A["Accord + host assistant<br/>Choose capabilities and settings"]
-    A --> E["Execute and retain progress"]
-    E --> V["Check results and effects"]
-    V -->|Adjust or recover| A
-    V -->|Criteria met| R["Deliver; note what remains<br/>Release task resources"]
-```
-
-The host supplies models, tools and execution; Accord adds coordination, continuity and verification mechanisms. Real work can run in parallel, nest or return to an earlier step. This is a responsibility overview; see the [user guide](docs/user-guide.md#principles-and-further-reading), [architecture](docs/architecture.md) and [detailed system diagram](docs/operations/PLAN-v3.3.md#稳定关系与动态方法) for the full relationships.
 
 ## Before you use it
 

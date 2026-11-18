@@ -29,8 +29,8 @@ R101_TARGET = "3.3.14"
 R103_TARGET = "3.3.15"
 # User-selected maintenance successor; historical targets stay independently tested.
 R105_TARGET = "3.3.16"
-# Explicit r108 successor; future unselected versions remain rejected.
 R108_TARGET = "3.3.17"
+R115_TARGET = "3.3.18"
 
 
 def historical_development():
@@ -1211,14 +1211,16 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         # The frozen baseline's next patch can already be user-selected.
         # Derive rejection beyond the baseline and explicit selected successors.
         parts = max(tuple(map(int, version.split('.'))) for version in
-                    (self.contract['cycle']['targetVersion'], R101_TARGET, R103_TARGET, R105_TARGET, R108_TARGET))
+                    (self.contract['cycle']['targetVersion'], R101_TARGET, R103_TARGET,
+                     R105_TARGET, R108_TARGET, R115_TARGET))
         return '.'.join(map(str, (*parts[:-1], parts[-1] + 1)))
 
     def test_selected_targets_retain_unversioned_future_and_unqualified_claims(self):
         for target, frozen in ((R101_TARGET, False), (R101_TARGET, True),
                                (R103_TARGET, False), (R103_TARGET, True),
                                (R105_TARGET, False), (R105_TARGET, True),
-                               (R108_TARGET, False), (R108_TARGET, True)):
+                               (R108_TARGET, False), (R108_TARGET, True),
+                               (R115_TARGET, False), (R115_TARGET, True)):
             with self.subTest(target=target, frozen=frozen):
                 candidate = copy.deepcopy(self.contract)
                 candidate['status'] = 'candidate-frozen' if frozen else 'in-development'

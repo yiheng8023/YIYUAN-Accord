@@ -5,7 +5,7 @@
   "status": "candidate-frozen",
   "predecessorSnapshot": "2d09d6d089453d165f5bacb6c1f1492ddfc618aa:product/program.json#/maintenanceCycle/closeoutSnapshot",
   "authority": {
-    "basis": "PLAN r111 records the 3.3.18 development stage from closed release 3.3.17 and the user's 2026-11-18 direction to promptly align and push misleading public documentation. The stage also covers real maintenance comparison, read-only Claude Code CLI and Desktop Code feasibility, and ongoing communication preparation. The frozen delivery and its earlier release authorization describe 3.3.17.",
+    "basis": "PLAN r116 records the user-selected 3.3.18 candidate and conditional publication from the closed 3.3.17 baseline. The candidate combines first-use diagrams, actual comparison evidence and shorter ordinary receipt text. Consider quality, rework, human burden, elapsed time and reported usage together.",
     "scope": [
       "source-semantics",
       "full-function-acceptance-mapping",
@@ -27,7 +27,7 @@
       "blind-process-termination-or-global-environment-reset"
     ],
     "conditionalRelease": {
-      "target": "3.3.17",
+      "target": "3.3.18",
       "decision": "user-authorized-after-acceptance",
       "ready": false,
       "conditions": [
@@ -39,21 +39,21 @@
         "ordered-publication-poststate-and-task-residue-closure",
         "release-notes-match-exact-candidate-and-evidence"
       ],
-      "rule": "The 3.3.17 authority and declaration describe the completed release route. The published subject 1fe60c2c7febd83c60287510873fe830642825f6 passed qualification, independent review and CI #1071 before publication. Installation, owning-chat adoption, manual Hook allowance, tag CI #1072 and final resource and task retirement have their own receipts linked from PLAN."
+      "rule": "The user authorized freezing 3.3.18, pushing after complete local acceptance, and publishing after all required hosted checks pass on that candidate. The source declares authority and candidate identity, not an acceptance or publication receipt. PLAN retains the completed 3.3.17 route and receipts."
     },
-    "rule": "Follow PLAN r111 current-work for the 3.3.18 stage. Reconcile and push corrected release facts and affected entry documents, keep the same-host comparison tied to its measured version, and assess Claude Code CLI and Desktop Code under the existing read-only scope. Use the then-current release for focused promotion once the evidence is ready. New-host implementation and concrete publication follow their respective decisions."
+    "rule": "Follow PLAN r116 current-work. Verify the changed receipt and its affected lifecycle paths on the exact candidate. Use role diagrams and measured comparison evidence to explain the current adaptation. Claude Code CLI and Desktop Code remain read-only feasibility subjects. Use the then-current release for focused promotion once evidence is ready."
   },
   "baselineRole": "Closed release 3.3.17 at 1fe60c2c7febd83c60287510873fe830642825f6 is the current public and comparison baseline. Its own 1492 local tests, three statics, four-axis review, formal qualification, CI #1071, publication, installation, owning-chat adoption, Hook allowance, tag CI #1072 and closeout retain their original evidence. Closed 3.3.16 and the r107 development subject 3cb4b6f4c6638bcae5ad1b8a932a2dd14397f9ff retain their original scopes.",
   "cycle": {
     "id": "v3.3-ordinary-entry-functional-development",
-    "targetVersion": "3.3.17",
+    "targetVersion": "3.3.18",
     "versionState": "final-candidate-not-publication-proof",
     "existingHosts": [
       "codex"
     ],
     "additionalHostAdaptation": "deferred",
     "scopeRule": "Version 3.3 continues the six selected local OpenAI execution/control paths and their selected modes: CLI, Desktop, VS Code, local-only Work/Remote, mobile Remote of selected local hosts and bounded SDK duties. Per the final r38 decision retained in r39, independent ordinary Chat research/content modes, web Chat and JetBrains/Xcode integrations are deferred for this release, with capability unknown and future decisions open. Actual loading, interaction, authority, continuity, recovery, verification and exit remain required for selected paths; a limited IDE observation does not close those requirements. Shared Linux/macOS CLI and standard hosted CI remain. Claude, Pi, DeepSeek Harness, ZCode and Antigravity remain future host candidates only; decisions follow 3.3 publication and discussion with the user. Future adaptation remains candidate-only with no preset version or schedule; other agreed future directions remain available. Public-directory listing is optional and does not block product iteration or value evaluation.",
-    "sourceDecision": "The 2026-11-17 selection of 3.3.17 covered the r106 metadata repair, r107 impact and dynamic-adaptation checks and isolated fixture premises. Its exact release and closeout are historical outcomes. PLAN r111 uses the closed version as the public baseline and records the next development scope separately.",
+    "sourceDecision": "On 2026-11-18 the user authorized the 3.3.18 freeze and conditional publication. PLAN r116 records the bounded ChatGPT/Codex candidate, the independent qualification and hosted checks, and Claude Code feasibility separately. Closed 3.3.17 remains the public baseline.",
     "claudeAdaptation": "candidate-only",
     "futureAdaptationVersion": "undecided",
     "futureAdaptationCandidates": [
@@ -102,14 +102,14 @@
     ]
   },
   "delivery": {
-    "version": "3.3.17",
-    "rule": "Published 3.3.17 at 1fe60c2c7febd83c60287510873fe830642825f6 has 30 package members. Relative to 3.3.16, the package changes its version and configuration metadata reader; relative to the adopted local development build, only its manifest version changes. Installation, cache and persistent Git source bytes are verified, with only the Accord source_type, source and ref changed. Initial owning-chat readback still loaded the development build; a later call loaded 3.3.17 with six matching function bodies. The user confirmed all Hooks allowed and current input participation matched. No restart is needed solely for this MCP update; refresh mechanism and execution of other Hook events are not inferred. Source version-state and readiness declarations are not outcome receipts.",
+    "version": "3.3.18",
+    "rule": "The 30-member candidate changes the package version and shortens ordinary receipt text. It preserves structured receipt data, state operations, trust and recovery conditions. The measured first-use comparison belongs to released 3.3.17. Exact qualification, publication and adoption have separate evidence.",
     "hostProjections": [
       {
         "id": "codex",
         "packageId": "yiyuan-accord-codex",
-        "packageVersion": "3.3.17",
-        "packageSha256": "399b59e48878a2c5c8ccc93f4e52170c40c89112b59d99167078fa347ea09c95",
+        "packageVersion": "3.3.18",
+        "packageSha256": "173e730a819b84d7ab1712d1d672ee238de38821060ab768672b8ecef17f1ede",
         "manifest": "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
         "marketplace": ".agents/plugins/marketplace.json",
         "contract": "plugins/yiyuan-accord-codex/adapter.json",
@@ -6435,7 +6435,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "currentMaintenance": "PLAN r111 follows completed 3.3.17 release, adoption and closeout. Tag CI #1072 ended on attempt 4 with ten successful results for the published commit. Four current install examples now point to that exact release. Successful execution attempts and artifact attribution are preserved in the 3.3.17 closeout record.",
+    "currentMaintenance": "PLAN r116 freezes 3.3.18 from the completed 3.3.17 release, adoption and closeout. CI #1073 verified the earlier installation-example correction. The prior 3.3.18-dev.1 passed 328 related tests and three static checks. That evidence retains its development subject.",
     "decisionCapabilityPolicy": {
       "responsibility": "Keep portable judgment, selection, feedback and correction; no default dedicated decision model, service, account, key or per-step extra call.",
       "selection": "Use code/native facts for deterministic checks or sufficient existing models for semantic judgment. Optional specialized capabilities require actual need, availability, authority and supported whole-task benefit; this is not a fixed call sequence.",
@@ -6444,7 +6444,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "Use 3.3.18 as the next maintenance target. Push the aligned 3.3.17 install references, release facts and interface claims. The earlier pair preparation ended without execution when the install examples were corrected directly. The first-use troubleshooting card remains a real deliverable for a new comparison. Verify actual loading and matched execution conditions before running either arm. Assess the installed Claude Code CLI and Desktop Code separately using read-only evidence. Future-host delivery version and schedule remain undecided. Maintain comparisons and communication materials continuously, using the then-current public release when focused promotion is ready. Observe the host compaction incident during normal use and revisit affected duties if it recurs.",
+    "work": "Qualify the exact 3.3.18 candidate before pushing, then verify hosted results before conditional publication. The first-use comparison and the confined Windows sandbox failure retain their original scopes. The Claude Code 2.1.327 validator statically checked the retired package; actual interactive behavior still requires separate evidence. Continue maintaining comparisons and communication materials alongside the current release.",
     "requires": "Reuse the completed r101 asset dispositions as the baseline; scope new checks to consequential changes and demonstrated gaps under PLAN current-work. Preserve necessary duties when implementations are replaced or retired; close confirmed in-scope defects with appropriate regression and actual consequence evidence. Unresolved necessary outcomes block dependent completion; other unknowns retain scope, effect and revisit triggers without becoming universal blockers. Reconcile current plans, baseline, acceptance, machine projection and affected user/release text; retain immutable history. Use existing sufficient host/third-party controls and same-host Accord enabled/disabled comparisons for incremental value; single-arm development and human rescue do not prove autonomous improvement. No new complex score, manufactured user task or business replay. The current F/A and quality, capacity and reserve declarations remain the starting requirements; changes need sourced justification, authority and impact review, not relaxed limits to recognize an old result. Before an authorized release require exact candidate/source identity, necessary full regression and statics, applicable independent review/qualification, required pre-release hosted terminals, matched notes and closed preparatory resources. After publication verify release identity, any triggered tag CI, installation, actual adoption and final owned-resource/protocol closure. Keep these subsequent outputs in their actual order rather than making them circular publication prerequisites. Declarations establish neither readiness nor authority."
   },
   "claimCeiling": {
@@ -6473,7 +6473,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r111",
+    "revision": "r116",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",

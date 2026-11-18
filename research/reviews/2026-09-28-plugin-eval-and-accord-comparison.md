@@ -44,3 +44,17 @@
 Anthropic 官方说明，本地桌面 **Code** 和独立 CLI 共用底层引擎、本地配置及项目记忆，但会话列表独立，有各自的权限与插件交互。CLI 的 `/desktop` 是官方迁移路径，会保存会话并退出原 CLI；采用与单写者仍按后态核验。桌面不同模式的插件约束分别成立，Cowork 的账户同步机制与本地 Code 的设置来源各有边界。 [桌面 Code](https://code.claude.com/docs/en/desktop) · [本地设置与优先级](https://code.claude.com/docs/en/settings)
 
 优先在独立交互式 CLI 证明一个真实链路，再用桌面本地 Code 核同一任务的实际入口条件。共享事件或配置以相同语义复用，插件是否可发现、信任是否有效、是否加载，以及实际输入、退出和接续按各入口核对。需要跨端时优先评估官方迁移能力。只有出现影响必要职责的差异才考虑适配特例；本节不预设新增宿主的实现或发行版本。
+
+<a id="claude-code-feasibility-r116"></a>
+
+### 2026-11-18 当前工具与历史包的只读核验
+
+本次独立 CLI 返回 2.1.327，当前桌面安装记录显示 Claude 6.6395.0，开始菜单登记了 Squirrel 应用入口。前次 MSIX 观察保留原时点，当前登记未证明桌面 Code 会话的后端版本。CLI 帮助确认可通过 `--plugin-dir` 只在一次会话中加载本地包，为后续隔离实证提供入口。本次没有启动交互会话、安装插件、改写现有设置或调用模型。 [CLI 参考](https://code.claude.com/docs/en/cli-reference)
+
+从 `efea8371630843e481ef0f7ed6fec8383a4ecb45` 提取历史 Claude 包，在当前 CLI 上执行 `claude plugin validate`。普通模式退出 0，清单错误为 0；严格模式因包名含 `claude` 的同名警告退出 1。校验器识别一项 Skill 和五个 Hook（SessionStart、PostToolBatch、UserPromptSubmit、Stop、SessionEnd）。单独提取的子包同时报告目录用 README 和图标缺失；这两项按真实投稿树重核，尤其 README 可由仓库根提供。静态结果只覆盖这份历史包及校验器。 [清单规范](https://code.claude.com/docs/en/plugins-reference#validate-the-manifest)
+
+后续单入口实证优先核以下差异：
+
+- **输入与授权。** 宿主定时任务也能触发 `UserPromptSubmit`，Hook 超时时默认可能继续投递提示。测试需区分真实用户输入、宿主触发和回执缺失，用原生授权及事件辨别三者。 [输入 Hook](https://code.claude.com/docs/en/hooks#userpromptsubmit)
+- **执行停止和资源归还。** 工具批结束可复用 `PostToolBatch` 的批次信号。停止请求、工具终态和实际输出分别观察；退出 Hook 的默认时间很短，应明确哪些工作可在退出时完成、哪些需由下次接续对账。 [工具批完成](https://code.claude.com/docs/en/hooks#posttoolbatch) · [退出事件](https://code.claude.com/docs/en/hooks#sessionend)
+- **接续和下一任务。** 先在 CLI 完成一个带授权和中断的真实任务，核实恢复内容、迟到效果、未完工作和退出后态。需要跨端时先试官方迁移，核 CLI 实际退出及同一会话在桌面接续。CLI 与桌面各自验证插件加载及信任。 [桌面迁移](https://code.claude.com/docs/en/desktop#coming-from-the-cli)

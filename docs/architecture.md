@@ -9,7 +9,24 @@ is the machine validation projection. Version 3.3 distributes only the applicabl
 ChatGPT/Codex adaptation. Earlier releases and host observations keep their historical
 identities; current implementation or documentation does not grant publication.
 
-The reader-facing overview is in the [README](../README.md#how-it-works).
+<a id="design-to-host"></a>
+
+### From Accord's design to the active host
+
+```mermaid
+flowchart TD
+    D["Accord's design<br/>Coordination, continuity, verification"]
+    A["ChatGPT/Codex adapter<br/>Skills, Hooks, state tools"]
+    H["Host assistant<br/>Models, tools, execution"]
+    U["User<br/>Goal, limits, permission"]
+    R["Result and effects"]
+    D --> A
+    A -->|Guidance and state| H
+    U --> H
+    H --> R
+```
+
+See the [reader-facing example](../README.md#how-it-works) and the [detailed system diagram](operations/PLAN-v3.3.md#稳定关系与动态方法).
 The [user guide](user-guide.md#english-user-guide) carries installation, Hook
 trust, privacy and actual entry conditions. ChatGPT desktop Codex, local Work,
 Codex CLI and the selected VS Code extension path reuse applicable common
