@@ -27,10 +27,12 @@ Here is how the roles fit together when you ask for a quick-start troubleshootin
 ```mermaid
 flowchart TD
     U["You ask for a result<br/>A quick-start card"] --> A["Accord coordinates<br/>Goals, limits and tools"]
-    A --> H["The assistant drafts<br/>with host tools"]
+    A -- Ready --> H["The assistant drafts<br/>with host tools"]
     H --> V["The assistant checks<br/>Steps and sources"]
-    V --> R["You get the card<br/>Sources and scope"]
+    V -- Meets the goal --> R["You get the card<br/>Sources and scope"]
+    V -- Needs revision --> A
     A -. As needed .-> Q["You decide<br/>or grant permission"]
+    Q -. Decision received .-> A
 ```
 
 The host provides models, tools and execution. Accord helps the assistant keep track of what still applies when the request changes or work is interrupted. [User guide](docs/user-guide.md#principles-and-further-reading) · [Architecture for developers](docs/architecture.md#design-to-host)
