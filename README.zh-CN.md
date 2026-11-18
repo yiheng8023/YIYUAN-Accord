@@ -54,7 +54,7 @@ flowchart TD
 1. **安装。** 从本项目来源安装 YIYUAN Accord；CLI 登记来源可使用：
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 1fe60c2c7febd83c60287510873fe830642825f6
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 699b24c3092edbafc431f0760a539eeca3f175e3
    ```
 
 2. **启用插件。** 确认宿主允许使用插件，并在实际使用范围内启用 Accord。CLI 在 `/plugins` 中选择来源、安装，并对已安装项按 `Space` 启停。

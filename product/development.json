@@ -39,11 +39,11 @@
         "ordered-publication-poststate-and-task-residue-closure",
         "release-notes-match-exact-candidate-and-evidence"
       ],
-      "rule": "The user authorized freezing 3.3.18, pushing after complete local acceptance, and publishing after all required hosted checks pass on that candidate. The source declares authority and candidate identity, not an acceptance or publication receipt. PLAN retains the completed 3.3.17 route and receipts."
+      "rule": "The user-authorized 3.3.18 route completed exact local, independent, formal and CI #1074 qualification before publication from 699b24c3092edbafc431f0760a539eeca3f175e3. PLAN links the actual receipt. Source declarations continue to describe candidate qualification."
     },
-    "rule": "Follow PLAN r116 current-work. Verify the changed receipt and its affected lifecycle paths on the exact candidate. Use role diagrams and measured comparison evidence to explain the current adaptation. Claude Code CLI and Desktop Code remain read-only feasibility subjects. Use the then-current release for focused promotion once evidence is ready."
+    "rule": "PLAN r116 records exact 3.3.18 release and qualification, with tag CI #1075 tracked separately. Keep the first-use comparison scoped to its observed conditions. Claude Code CLI and Desktop Code follow a separate feasibility track with no assigned release version. Use the then-current release for promotion once evidence is ready."
   },
-  "baselineRole": "Closed release 3.3.17 at 1fe60c2c7febd83c60287510873fe830642825f6 is the current public and comparison baseline. Its own 1492 local tests, three statics, four-axis review, formal qualification, CI #1071, publication, installation, owning-chat adoption, Hook allowance, tag CI #1072 and closeout retain their original evidence. Closed 3.3.16 and the r107 development subject 3cb4b6f4c6638bcae5ad1b8a932a2dd14397f9ff retain their original scopes.",
+  "baselineRole": "Released 3.3.18 at 699b24c3092edbafc431f0760a539eeca3f175e3 is the public baseline. PLAN records exact local, formal and CI #1074 results. Earlier 3.3.17 adoption and comparison evidence retain their original identities.",
   "cycle": {
     "id": "v3.3-ordinary-entry-functional-development",
     "targetVersion": "3.3.18",
@@ -53,7 +53,7 @@
     ],
     "additionalHostAdaptation": "deferred",
     "scopeRule": "Version 3.3 continues the six selected local OpenAI execution/control paths and their selected modes: CLI, Desktop, VS Code, local-only Work/Remote, mobile Remote of selected local hosts and bounded SDK duties. Per the final r38 decision retained in r39, independent ordinary Chat research/content modes, web Chat and JetBrains/Xcode integrations are deferred for this release, with capability unknown and future decisions open. Actual loading, interaction, authority, continuity, recovery, verification and exit remain required for selected paths; a limited IDE observation does not close those requirements. Shared Linux/macOS CLI and standard hosted CI remain. Claude, Pi, DeepSeek Harness, ZCode and Antigravity remain future host candidates only; decisions follow 3.3 publication and discussion with the user. Future adaptation remains candidate-only with no preset version or schedule; other agreed future directions remain available. Public-directory listing is optional and does not block product iteration or value evaluation.",
-    "sourceDecision": "On 2026-11-18 the user authorized the 3.3.18 freeze and conditional publication. PLAN r116 records the bounded ChatGPT/Codex candidate, the independent qualification and hosted checks, and Claude Code feasibility separately. Closed 3.3.17 remains the public baseline.",
+    "sourceDecision": "The user authorized the 3.3.18 freeze and conditional publication on 2026-11-18. PLAN r116 links the published ChatGPT/Codex candidate at 699b24c3092edbafc431f0760a539eeca3f175e3, its qualification and the separate Claude Code feasibility review.",
     "claudeAdaptation": "candidate-only",
     "futureAdaptationVersion": "undecided",
     "futureAdaptationCandidates": [
@@ -103,7 +103,7 @@
   },
   "delivery": {
     "version": "3.3.18",
-    "rule": "The 30-member candidate changes the package version and shortens ordinary receipt text. It preserves structured receipt data, state operations, trust and recovery conditions. The measured first-use comparison belongs to released 3.3.17. Exact qualification, publication and adoption have separate evidence.",
+    "rule": "The 30-member 3.3.18 package was published from 699b24c3092edbafc431f0760a539eeca3f175e3. PLAN links exact qualification and hosted evidence. The first-use comparison is from 3.3.17. New local loading and Hook allowance require their actual user and host evidence.",
     "hostProjections": [
       {
         "id": "codex",
@@ -6435,7 +6435,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "currentMaintenance": "PLAN r116 freezes 3.3.18 from the completed 3.3.17 release, adoption and closeout. CI #1073 verified the earlier installation-example correction. The prior 3.3.18-dev.1 passed 328 related tests and three static checks. That evidence retains its development subject.",
+    "currentMaintenance": "PLAN r116 records exact 3.3.18 publication and the main CI terminal. Preserve the original comparison, catchup and review scopes. Tag CI and later adoption have their own actual evidence.",
     "decisionCapabilityPolicy": {
       "responsibility": "Keep portable judgment, selection, feedback and correction; no default dedicated decision model, service, account, key or per-step extra call.",
       "selection": "Use code/native facts for deterministic checks or sufficient existing models for semantic judgment. Optional specialized capabilities require actual need, availability, authority and supported whole-task benefit; this is not a fixed call sequence.",
@@ -6444,7 +6444,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "Qualify the exact 3.3.18 candidate before pushing, then verify hosted results before conditional publication. The first-use comparison and the confined Windows sandbox failure retain their original scopes. The Claude Code 2.1.327 validator statically checked the retired package; actual interactive behavior still requires separate evidence. Continue maintaining comparisons and communication materials alongside the current release.",
+    "work": "Use released 3.3.18 for current installation guidance. Continue the recurring comparison and communication work. Claude Code remains a distinct, unversioned read-only feasibility subject until a separate implementation decision.",
     "requires": "Reuse the completed r101 asset dispositions as the baseline; scope new checks to consequential changes and demonstrated gaps under PLAN current-work. Preserve necessary duties when implementations are replaced or retired; close confirmed in-scope defects with appropriate regression and actual consequence evidence. Unresolved necessary outcomes block dependent completion; other unknowns retain scope, effect and revisit triggers without becoming universal blockers. Reconcile current plans, baseline, acceptance, machine projection and affected user/release text; retain immutable history. Use existing sufficient host/third-party controls and same-host Accord enabled/disabled comparisons for incremental value; single-arm development and human rescue do not prove autonomous improvement. No new complex score, manufactured user task or business replay. The current F/A and quality, capacity and reserve declarations remain the starting requirements; changes need sourced justification, authority and impact review, not relaxed limits to recognize an old result. Before an authorized release require exact candidate/source identity, necessary full regression and statics, applicable independent review/qualification, required pre-release hosted terminals, matched notes and closed preparatory resources. After publication verify release identity, any triggered tag CI, installation, actual adoption and final owned-resource/protocol closure. Keep these subsequent outputs in their actual order rather than making them circular publication prerequisites. Declarations establish neither readiness nor authority."
   },
   "claimCeiling": {

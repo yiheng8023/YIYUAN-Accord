@@ -54,7 +54,7 @@ Published versions are available in [Releases](https://github.com/yiheng8023/YIY
 1. **Install.** Install YIYUAN Accord from this repository's marketplace source. To register that source from the CLI:
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 1fe60c2c7febd83c60287510873fe830642825f6
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 699b24c3092edbafc431f0760a539eeca3f175e3
    ```
 
 2. **Enable plugins and Accord.** Allow plugin use in the host and enable Accord in the scope you actually use. In CLI `/plugins`, select the marketplace, install, and press `Space` on the installed plugin to turn it on or off.
