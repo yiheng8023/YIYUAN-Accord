@@ -53,6 +53,14 @@
 
 r115 改用已安装的桌面包内 CLI（0.169.0-alpha.11.1），从当前 Shell 单独启动 App Server 复核。初始化成功，显式 `workspaceWrite` 的 `command/exec` 再次返回同一注册 Core 错误（RPC `-32603`），输入未变，未产生输出，所属进程自然归零。按[上游源码](https://github.com/openai/codex/blob/9480ec100c3edee9fc69172e8e80a4730444094d/codex-rs/windows-sandbox-rs/src/app_package.rs)推断，校验取当前进程的包身份，仅指定已安装二进制路径不足以建立该身份。已激活桌面入口中受限命令的结果仍待观察。本次没有模型调用或业务重跑。
 
+<a id="first-use-card-readback"></a>
+
+#### 2026-11-19 成品读回与开销复算
+
+两组卡片的 SHA-256 与完成记录相符，各组的两份输入与冻结清单相符。未启用稿在第 2 步写明「在已安装项按 `Space` 启用」，第 4 步核对其余三种状态。启用稿在第 4 步集中核对四种状态，其中对启用的描述是“「已启用」看目标作用域开关”，并在文末链接了固定提交的指南。两组都给出了启用步骤。
+
+按原运行摘要复算，启用组业务耗时多 10.731 秒，宿主报告累计用量多 8,149 token，其中缓存输入多 6,400 token。两组各有五条原生用量事件和一条轮次完成事件，记录均显示进程自然退出且活跃进程为零。上述耗时仅覆盖业务轮，用量为宿主计数，账单金额和首次安装、信任开销未计入本表。此次仅复核原件。
+
 <a id="first-use-entry-cost"></a>
 
 #### 首用卡首轮输入与回执负担复核
@@ -62,6 +70,32 @@ r115 改用已安装的桌面包内 CLI（0.169.0-alpha.11.1），从当前 Shel
 隔离副本仅压缩普通回执的工作区说明及辅助操作说明，保留精确身份、工作区定位和结构化宿主观察。将路径长度归一后，两种实现实际输出 2,244 和 2,041 字节。10 项已有测试通过，包含普通回执、完整启动、子代理、暂停、恢复、隔离和宿主变化。该原型未发生模型调用，原先两组卡片及工作区配置保持原件。
 
 在这项短任务中，两组都交付，启用稿额外讲清四种状态，耗时与用量也更高。读者能否据此减少误装或人工排障尚无观察。后续用新任务分别核对短任务负担与出现真实纠偏、暂停或恢复时的结果，再决定值得保留的介入。不设综合分。
+
+<a id="release-source-preflight-3318"></a>
+
+### 2026-11-19 固定发行安装来源与 3.3.18 对照预检
+
+3.3.18 公开标签解析到 `699b24c3092edbafc431f0760a539eeca3f175e3`。该提交的两份 README 和双语指南共四处安装命令仍指向 3.3.17，默认分支 `71541c3d` 的四处已指向 3.3.18。将提交自己的 SHA 写回该提交中的文本会改变提交身份。下一项可用的维护任务是编制随未来发行的中英文安装来源说明和复核步骤，要求固定标签中的说明能选中本发行、发行页保留供交叉核对的完整提交 SHA，并说明标签发布前的适用边界。按三个固定源码文件的四处入口与真实市场清单验收，上一版作为负例。[固定发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.18) · [现行首用说明](../../docs/operations/LAUNCH-v3.3.md#first-use-materials)
+
+Windows 独立 Codex CLI 0.170.0（二进制 SHA-256 `8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce`）在各自的临时配置目录，用公开发行的精确 Git 对象和本地 Git URL 重写复核来源登记。实际 `codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref refs/tags/v3.3.18` 与使用 3.3.18 完整 SHA 的命令均检出上述提交，插件清单读到 3.3.18。上一版 SHA 检出 3.3.17。预检中的标签来自本地试验镜像，公开标签指向另用 `git ls-remote` 核对。
+
+沿[现有 App Server 与 Windows Job 观察器](../../scripts/observe_codex_lifecycle.py)核对临时作用域。两组缓存各 30 个成员与正式源码逐字匹配，有效配置回读为一组禁用、一组启用。43 个共同 Skill 的名称和作用域一致，Accord 的原生可见项为 0／5 个 Skill、0／6 个 Hook 和 0／4 个 MCP 工具。启用组的六个 Hook 均未获信任。首次尝试仅从 App Server 参数覆写开关，两组均出现 Accord 可见项。改为在各自临时配置中设置并用 `config/read` 回读后，才得到上述结果。
+
+两组 `command/exec` 均通过本工作区的文件读写回读。显式请求 `workspaceWrite` 时，两组也写入了相邻自有目录。原脚本将两组的 `TEMP` 和 `TMP` 设为共同的试验根，相邻目标位于其下。请求的唯一显式可写根是各自的工作区，且 `excludeTmpdirEnvVar` 与 `excludeSlashTmp` 均为 `true`。0.170.0 的策略转换在此条件下省略临时目录项。Windows 仅在该项存在时从命令环境的 `TEMP` 和 `TMP` 解析可写根，环境变量指向试验根本身不足以解释这次写入。[策略转换](https://github.com/openai/codex/blob/rust-v0.170.0/codex-rs/protocol/src/permissions.rs#L775-L819) · [Windows 临时目录解析](https://github.com/openai/codex/blob/rust-v0.170.0/codex-rs/windows-sandbox-rs/src/resolved_permissions.rs#L162-L192)
+
+原请求使用了非默认的输出上限并成功执行。按该版本源码推断，此次未走会拒绝该参数的 `WindowsRestrictedToken` 分支。原预检未保留实际选用的 Windows 后端或完整有效可写根，具体原因仍待确认，这条路径的工作区隔离未通过负控。[命令执行分支](https://github.com/openai/codex/blob/rust-v0.170.0/codex-rs/app-server/src/command_exec.rs#L166-L176)
+
+两组均无轮次事件，App Server 自然退出 0，Windows Job 活跃进程为零，临时目录已回收。实际对照仍待核可信 Hook、模型收到的共同上下文及允许的有效权限，然后观察各自成品、失败、人工介入、耗时和报告用量。本次取得安装来源复核和无模型预检结果。
+
+<a id="release-source-toggle-with-existing-trust"></a>
+
+### r123 复用既有信任核对插件开关
+
+使用同一 Codex CLI 0.170.0 启动两个独立 App Server，分别用进程参数设置各自的插件开关。插件 ID 不带内层引号。两组复用正式 3.3.18 安装和已有 Hook 信任，临时工作目录及 Accord 状态目录各自独立，现用配置文件摘要相同。会话设置的 `disabledPluginIds` 在该版本仅保存选择，实际能力以原生回读为准。[进程参数解析](https://github.com/openai/codex/blob/rust-v0.170.0/codex-rs/config/src/overrides.rs#L16-L25) · [会话设置语义](https://github.com/openai/codex/blob/rust-v0.170.0/codex-rs/app-server-protocol/src/protocol/v2/thread.rs#L299-L316)
+
+首轮观察器缺少原生 RPC 的事件回调，两个进程均自然退出。补齐观察器后，`config/read` 分别确认启用和关闭。启用组回读 5 个 Accord Skill、6 个启用且已信任的 Hook。关闭组均为零。其余 73 个 Skill 的名称、作用域及启用状态一致。两组 App Server 自然退出，Windows Job 活跃进程为零，临时目录回收。保留脱敏摘要 `CODEX-TOGGLE-PREFLIGHT.json`。
+
+正式对照可在会话最终回复中交付双语说明。按业务需要核原件读取、实际权限和共同模型请求。此轮未开模型轮次，MCP 实际注入、模型共同上下文和业务结果仍待核对。
 
 ### 2026-11-14 指导取回与资源交还再核
 

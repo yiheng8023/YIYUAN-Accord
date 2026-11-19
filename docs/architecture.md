@@ -5,9 +5,9 @@
 [The v3.3 consensus and plan](operations/PLAN-v3.3.md) owns current decisions,
 source assumptions, duties, quality floors and non-linear procedures; its linked
 acceptance view defines the criteria. [product/development.json](../product/development.json)
-is the machine validation projection. Version 3.3 distributes only the applicable
+is the machine validation projection. The 3.3.18 release distributes the applicable
 ChatGPT/Codex adaptation. Earlier releases and host observations keep their historical
-identities; current implementation or documentation does not grant publication.
+identities. The separate Claude Code candidate is built locally for verification.
 
 <a id="design-to-host"></a>
 
@@ -43,17 +43,13 @@ Their repository location does not make those interfaces universal requirements.
 Keep host formats, observations and controls within the applicable adaptation;
 replace them by evidenced equivalents when adapting another host.
 
-### Future host adaptation: isolation and reuse
+### Host adapter isolation and reuse
 
-This is a design direction for later host decisions, not a second active adapter
-or a universal runtime. The current distribution has one ChatGPT/Codex adaptation,
-retaining the technical package identity `yiyuan-accord-codex`;
-multi-host coexistence, independent upgrades and state migration remain untested.
-The user clarified on 2026-11-03 that additional host adaptation is outside the
-current phase: discuss options and retain the design only. No candidate interface,
-adapter package, host installation or cross-host execution is being implemented.
-Group a host family by evidenced protocol, state and control semantics. A vendor
-name or shared backend alone does not establish equivalent entry capabilities.
+The published ChatGPT/Codex package retains the identity `yiyuan-accord-codex`.
+Group a host family by evidenced protocol, state and control semantics. Verify
+entry capabilities, coexistence, independent upgrades and any state migration at
+their actual boundaries. The local Claude Code candidate exercises this design
+with independent packaging and shared guidance from the current Accord sources.
 
 | Responsibility | Shared meaning and implementation | Host-owned implementation and isolation |
 |---|---|---|
@@ -80,6 +76,62 @@ explicit unmet condition. Keep capability discovery separate from execution
 authority. Share experience only after checking source host/entry, applicable
 versions, prerequisites and invalidators; a host-specific lesson cannot silently
 become a global rule or permission.
+
+The [multi-host research note](../research/reviews/2026-11-19-multi-host-adapter-boundaries.md)
+records the shared package members and native discovery and loading rules. The
+[lifecycle build observation](../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#lifecycle-source-result)
+checks that both existing package outputs can be reproduced with separately
+selected lifecycle guidance.
+
+<a id="local-claude-code-candidate"></a>
+
+### Local Claude Code candidate
+
+The builder reads the current Accord manifest, coordination guidance, applicable
+Skills, license and notices. It supplies Claude-specific capability, continuity
+and lifecycle guidance, then records the source and package hashes in `build.json`.
+Claude's native `SessionStart` and `SubagentStart` Hooks deliver brief guidance
+drawn from the current coordination Skill. The Claude Skill directs the agent to
+reuse the meta-guidance present in the session or read the bundled translation
+when needed. The translation links to the packaged Chinese text when the bundle
+moves to a different machine or directory. Claude handles execution,
+interruption and restoration through its native task history.
+
+Use the repository's Python 3.11–3.14 development environment, Node.js and Claude
+Code. Build into a new directory and validate before loading for one CLI session.
+The builder stages the package privately and places the marketplace manifest
+after the complete package and its build record.
+
+```sh
+python -B scripts/build_claude_plugin.py --output ../accord-claude-dev
+claude plugin validate --strict ../accord-claude-dev/plugins/yiyuan-accord
+claude plugin validate --strict ../accord-claude-dev
+claude --plugin-dir ../accord-claude-dev/plugins/yiyuan-accord
+```
+
+For lifecycle authoring, edit the [shared Skill source](../product/skill-sources/manage-plugin-lifecycle.md)
+and the applicable host's guidance. Render the Codex Skill to a fresh file with
+`python -B scripts/build_claude_plugin.py --codex-lifecycle-output ../accord-codex-lifecycle.md`.
+Review it against the tracked Codex Skill. The Claude build reads the shared
+source and supplies its own lifecycle guidance. The adapter tests compare both
+projections and the effect of a Codex-specific edit.
+
+The [candidate observation](../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-current-candidate)
+covers isolated read-only CLI and local Desktop Code tasks with the configured
+third-party model. The [CLI write observation](../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-cli-interrupted-write)
+checks the host's interruption, the writer's actual exit, and the result on disk
+for one controlled write. The [desktop follow-up](../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-guidance)
+checks complete guidance delivery to the first request and native `AGENTS.md`
+loading. The [desktop write observation](../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-write)
+checks native `Write` permission decisions, the files on disk and a new task in
+the same session. Validate each entry's actual engine, scope and permissions.
+[Claude Code Desktop documentation](https://code.claude.com/docs/en/desktop#claude-code-version-in-the-code-tab)
+
+The [same-release Windows comparison](../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-windows-packaging)
+supports reuse of the checked renderer evidence across Squirrel and MSIX. Use
+Squirrel as the Windows local Code reference for the current adapter. If a user
+report or host change points to a packaging difference, check the affected MSIX
+session's engine, effective configuration, Hook behavior and observed result.
 
 The existing [verification Skill](../plugins/yiyuan-accord-codex/skills/verify-and-close-outcome/SKILL.md)
 distinguishes an event and its retellings from later use and verified results.

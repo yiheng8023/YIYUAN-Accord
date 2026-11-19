@@ -4,7 +4,7 @@
 
 备料随现行发行持续更新。集中传播具备条件后，以[届时最新正式版](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest)核对安装、功能说明和成品。先核首用说明和演示脚本，待真实对照证据扎实后再商定集中传播。每组对照按当次实际版本和条件引用，变更影响所述能力时再补核。
 
-3.3.18 已[正式发布](PLAN-v3.3.md#release-3.3.18)。素材上的支持范围以届时正式发行和实际入口证据核对。Claude Code 的 CLI／桌面候选只用于可行性研究，未来的采用与传播各自按证据决定。
+3.3.18 已[正式发布](PLAN-v3.3.md#release-3.3.18)。传播前按届时的正式发行和入口实证核对支持范围。Claude Code 仍为本地候选。dev.2 的 CLI 观察覆盖受控写入与中断，Squirrel 本地 Code 覆盖只读任务、内建 `Write` 的权限和后续任务。dev.3 已在隔离 CLI 核对随包元指导。受测条件与后续资格见[当前工作](PLAN-v3.3.md#current-work)。对照与传播继续随可公开的证据更新。
 
 传播沿实际启用／未启用对照，也可准备有据的功能、使用说明和单组真实案例。每份可用素材注明证据入口、适用版本或条件及当前／历史／待核状态；相关事实改变时复核，充分的旧证据继续复用。徽章、贡献者、赞助及参与入口按社区用途保持。旧素材仍在 NEXUS 体系维护。
 
@@ -12,7 +12,13 @@
 
 ## 首用场景和演示准备（2026-11-18）
 
-现行安装示例已对齐 3.3.18，以下配对材料形成于 3.3.17。[中文首用排障卡的实际对照](../../research/evaluations/accord-toggle-v1.md#first-use-card-comparison-0170)两组均交付了可用成品。本页采用两组共同核实的步骤及启用稿的状态区分。备料适用于该版相应入口，集中传播前按届时正式发行核对。[3.3.17 发行记录](PLAN-v3.3.md#release-3.3.17-closeout)。
+当前首用说明以 3.3.18 为准。下方的演示数据和历史排障卡来自 3.3.17，两组均交付了可用成品。集中传播前按届时正式发行复核当前说明。[3.3.17 对照记录](../../research/evaluations/accord-toggle-v1.md#first-use-card-comparison-0170)
+
+### 当前首用核对（3.3.18）
+
+1. 从正式发行页确认版本。CLI 需要登记来源时，从默认分支的现行指南复制命令，核对 `--ref` 指向 3.3.18 的发行提交 `699b24c3092edbafc431f0760a539eeca3f175e3`。该发行标签内的 README 和指南仍保留 3.3.17 的来源命令。登记后到 `/plugins` 选择 `yiyuan-accord`，安装并在目标作用域启用 Accord。桌面使用所用版本的插件目录或来源入口。[3.3.18 正式发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.18) · [现行安装指南](../user-guide.md#首次安装与信任)
+2. 首次安装和每次更新后手动审阅并允许 Hook。桌面用**设置 → 钩子 → YIYUAN Accord**或输入区的钩子提示，CLI 用 `/hooks`。
+3. 在目标会话核对实际插件来源、版本、适用 Hook 的执行记录与 MCP 连接。仍显示旧版时，先核安装来源和包，再按实际宿主支持的方式刷新或重载并读回。[排查、更新与退出](../user-guide.md#排查更新与退出)
 
 演示从新用户的实际问题开始，展示安装、启用、手动允许 Hook，再用一条普通请求确认该会话的加载。可从 NEXUS 复用片头、配色和制作经验。短任务的对照可展示两组都交付和本次成本差异，素材标明受测版本与条件。
 
@@ -27,7 +33,7 @@
 | 业务耗时 | 33.1 秒 | 43.8 秒 |
 | 宿主报告累计 token | 174,296 | 182,445 |
 
-此表是画面脚本的核对依据。目前可复用的是差异摘要和下方综合排障卡。实际制作画面前，应从两组原始成品分别选取可公开的脱敏摘录，并标注来源。读者能否因此少误装或少返工仍待观察。
+此表只计业务耗时，累计 token 含缓存输入。启用稿把四种状态的核对放在同一处，未启用稿把启用核对放在安装步骤。读者能否因此少误装或少返工仍待观察。画面可使用经原件复核的摘录。[两组摘录与复算](../../research/evaluations/accord-toggle-v1.md#first-use-card-readback)
 
 ### 中文首用排障卡（3.3.17 备料）
 
@@ -178,7 +184,9 @@ Version 3.3 uses host-provided models, supported tools, and Accord components; i
 
 This description covers the design intent and scope of 3.3, not verified universal results. Claims about entry support, behavior, installation, use and effects require the exact version and applicable evidence. Publication dates and results follow the corresponding public records. This introduction does not replace installation guidance or a publication receipt.
 
-### 结构字段 / Structured fields
+### 3.3.0 历史稿的结构字段 / Structured fields from the 3.3.0 draft
+
+以下保留 3.3.0 工作稿在当时的措辞和待核状态。编制当前素材时按[当前工作](PLAN-v3.3.md#current-work)及对应发行记录填写版本和支持范围。
 
 ```json
 {

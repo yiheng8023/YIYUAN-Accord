@@ -547,3 +547,23 @@ Root回读上述最小事实文件，SHA256为`a1bbc114faaec8ab14e719f21e47d3503
 首轮完整运行因已确认的模拟前提问题由所有者停止，保留部分失败及中止事实，不作为完整 1492 项结论；最终所属进程为零、Job 句柄已关闭、冻结源码与干净检出核回一致。原件、两项诊断及独立源码审阅保于私有 `r107-qualification-20261117-01` 目录。修正后的精确主体仍须重新冻结和完整验证；既有局部配置修复的实际采用结论不因此扩张或撤销。
 
 随后将修正冻结为 `3cb4b6f4c6638bcae5ad1b8a932a2dd14397f9ff`：1492 项全部执行并通过，零失败／错误／跳过，三静态通过，完整用时 2796.822 秒；源码稳定、Job 自然关闭且所属进程为零。原四项失败及未授权拒绝、历史转换共六项先通过，规范／需求两个独立源码审阅轴无确认问题。两个冻结源均已逐文件归档核回并释放临时检出。再核 3.3.16 的 15 份保留原件、18 项不变案例定义、16 项材料／两个 direct 记录／两份见证，结果仅支持原件完整性及当前重审范围；产品包已变化，不能直接迁移旧资格。后继公开目标尚未选定，材料与候选的正式资格、托管与发行仍须按其精确主体完成。
+
+## 2026-11-19 CLI 0.170.0 零模型输入诊断
+
+3.3.18 发布后的本机复核使用 npm 独立 Windows x64 CLI，实际版本 `0.170.0`，二进制 SHA256 为 `8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce`。为每个条件创建独立配置目录和工作区，使用无凭据的回环 provider，命令为 `codex [权限选择] -a never -C <工作区> debug prompt-input <合成输入>`。两组首测分别请求 `-s read-only` 和 `-s workspace-write`，均渲染只读，原先预期后者显示可写的断言失败。
+
+随后用有 Git 元数据的工作区复查 `-s workspace-write`，并在其他独立工作区分别核 `-c sandbox_mode=workspace-write`、`-c default_permissions=:read-only` 和 `-c default_permissions=:workspace`。前三个均显示只读，最后一个显示 `workspace-write` 并列出该工作区。首轮结果与上游在 Windows 沙箱后端禁用时对旧模式的回退规则一致。此处保留权限参数与实际渲染的区别，今后可先用这条命令检查合成工作区的输入和权限提示。[0.170.0 旧模式转换及测试](https://github.com/openai/codex/blob/rust-v0.170.0/codex-rs/config/src/config_toml.rs#L1045)
+
+六次 CLI 均退出 0，stderr 为空，三条输入项包含项目指导与用户输入正控。回环 provider／代理收到零请求，未产生 rollout，两轮专属目录和监听均已释放。固定源码显示调试入口只返回 `prompt.input`，且绕过正式轮次执行。普通回执从实际 `UserPromptSubmit` 核对，权限实际效果由相应入口的受控命令和读回验证。已激活桌面的受限操作，以及 3.3.18 普通任务中的回执开销、经验采用和纠偏结果，分别沿各自正常入口取证。[0.170.0 调试实现](https://github.com/openai/codex/blob/rust-v0.170.0/codex-rs/core/src/prompt_debug.rs#L94) · [首用回执基线](../evaluations/accord-toggle-v1.md#first-use-entry-cost)
+
+<a id="codex-3.3.18-ordinary-input-receipt"></a>
+
+## 2026-11-19 Codex 3.3.18 普通维护输入回执
+
+本机现行维护聊天于北京时间 18:13:07.583 开始一轮普通续作。原生用户输入消息、同轮 `UserMessage` 事件与磁盘 `native-input-event` 的文本摘要一致。18:13:08.421 的开发者回执与该轮会话、输入代次和工作区相符，正文为 **1,966 UTF-8 字节**，SHA256 为 `5e13adbe82d124f1a3ac2185e35b214cadb69d9d3a9158a06c5559eb93759b90`。根原生日志与保存的 Hook 日志路径指向同一文件，选定的轮次、输入、回执和用量记录逐字节一致。
+
+回执保留工作区定位、模型和权限模式的事件观察、授权与暂停提示，以及保护不足时的绑定、恢复和收尾说明。该轮采用普通分支，没有重复发送完整启动指导。未见暂停或未完检查点提示、输入隔离或压缩恢复文案。只读时未见绑定检查点，保存回执也未标记重放、恢复核对或中断。此次观察验证的是普通回执送达，保护分支仍以各自适用的验证为准。
+
+本机缓存运行时与 3.3.18 正式源码逐字节一致。将同一轮的回执字段和路径代入两个正式版本的纯文案渲染片段，3.3.17 源码生成 2,169 字节，3.3.18 生成 1,966 字节且与实际送达的正文完全一致，确认该次文案减少 203 字节。普通回执、隔离、完整入口、压缩接续、子代理隔离和宿主变化六项定向回归通过。旧首用任务实测的 2,350 字节保留其原条件。[3.3.17 源码](https://github.com/yiheng8023/YIYUAN-Accord/blob/1fe60c2c7febd83c60287510873fe830642825f6/plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs#L1322) · [3.3.18 源码](https://github.com/yiheng8023/YIYUAN-Accord/blob/699b24c3092edbafc431f0760a539eeca3f175e3/plugins/yiyuan-accord-codex/runtime/task-checkpoint.cjs#L1322) · [首用回执基线](../evaluations/accord-toggle-v1.md#first-use-entry-cost)
+
+首条宿主用量记录在同轮回执之后，整条请求报告输入 394,239 token，其中缓存输入 392,704 token。这一单组记录无法将开销归因到单条回执。经验是否在相关动作前被采用、发生失误时的换路结果、返工及启用收益仍需直接核对实际工作和适用对照。

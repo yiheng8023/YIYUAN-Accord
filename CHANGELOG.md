@@ -1,5 +1,13 @@
 # 更新日志
 
+## 开发中
+
+- 增加基于当前 Accord 源码构建的独立 Claude Code 本地候选。隔离 CLI 和 Windows Squirrel 本地 Code 已有只读任务实测。修复长指导在桌面入口被截短的问题，完整的中英文元指导随包提供。[当前工作](docs/operations/PLAN-v3.3.md#current-work)
+- 补齐 Claude 候选构建器和市场清单的 SHA256 校验。隔离 CLI 已验证运行中写入的中断、回读、权限拒绝和新任务。观察分别核对宿主轮次终态、写入进程退出和目标文件字节。[中断和磁盘读回](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-cli-interrupted-write)
+- Windows Squirrel 本地 Code 实测了内建 `Write` 的权限允许、拒绝和同会话后续写入，原生结果与文件读回一致。[桌面写入实证](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-write)
+- 插件生命周期 Skill 改为从一份共用正文和各宿主的说明生成。两端成品已逐字节复核，Codex 专属措辞的改动也通过了 Claude 独立构建回归。[生命周期构建实证](research/reviews/2026-11-19-multi-host-adapter-boundaries.md#lifecycle-source-result)
+- Claude Code 本地候选明确协调 Skill 何时读取随包元指导。构建完成包成员后再提供供宿主发现的清单，并覆盖成员写入中途失败、清理和同一目标重试的回归。[当前工作](docs/operations/PLAN-v3.3.md#current-work)
+
 ## 3.3.18（2026-11-19）
 
 [3.3.18](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.18) 于北京时间 2026-11-19 02:17:56 正式发布（Release `450379543`），发行提交和标签均指向 `699b24c3092edbafc431f0760a539eeca3f175e3`。30 成员包 SHA256 为 `173e730a819b84d7ab1712d1d672ee238de38821060ab768672b8ecef17f1ede`。该提交通过 1,492 项本地回归、三项静态检查、独立审阅和两阶段正式验收。[CI #1074](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44351612238) 全部 10 项通过，两平台 18 份原生制品和 22 份来源清单已核。

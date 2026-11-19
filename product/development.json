@@ -19,7 +19,8 @@
       "conditional-v3.3-release"
     ],
     "notGranted": [
-      "other-host-experiments",
+      "unselected-host-experiments",
+      "persistent-claude-installation-or-trust",
       "new-trust-data-or-material-cost",
       "unrelated-external-writes",
       "rewrite-historical-tags-or-releases",
@@ -41,7 +42,7 @@
       ],
       "rule": "The user-authorized 3.3.18 route completed exact local, independent, formal and CI #1074 qualification before publication from 699b24c3092edbafc431f0760a539eeca3f175e3. PLAN links the actual receipt. Source declarations continue to describe candidate qualification."
     },
-    "rule": "PLAN r116 records exact 3.3.18 release and qualification, including ten successful tag CI #1075 results after a selective retry. Keep the first-use comparison scoped to its observed conditions. Claude Code CLI and Desktop Code follow a separate feasibility track with no assigned release version. Use the then-current release for promotion once evidence is ready."
+    "rule": "PLAN records exact 3.3.18 release and qualification, including ten successful tag CI #1075 results after a selective retry. The current work separately covers the local Claude Code development candidate and bounded verification of CLI and Squirrel Desktop Code. Development-source push follows the user's current discretion. Claude publication and persistent installation or trust require their own authority and evidence. Keep comparisons scoped to observed conditions and use the then-current release for promotion once evidence is ready."
   },
   "baselineRole": "Released 3.3.18 at 699b24c3092edbafc431f0760a539eeca3f175e3 is the public baseline. PLAN records exact local, formal and CI #1074 results. Earlier 3.3.17 adoption and comparison evidence retain their original identities.",
   "cycle": {
@@ -52,7 +53,7 @@
       "codex"
     ],
     "additionalHostAdaptation": "deferred",
-    "scopeRule": "Version 3.3 continues the six selected local OpenAI execution/control paths and their selected modes: CLI, Desktop, VS Code, local-only Work/Remote, mobile Remote of selected local hosts and bounded SDK duties. Per the final r38 decision retained in r39, independent ordinary Chat research/content modes, web Chat and JetBrains/Xcode integrations are deferred for this release, with capability unknown and future decisions open. Actual loading, interaction, authority, continuity, recovery, verification and exit remain required for selected paths; a limited IDE observation does not close those requirements. Shared Linux/macOS CLI and standard hosted CI remain. Claude, Pi, DeepSeek Harness, ZCode and Antigravity remain future host candidates only; decisions follow 3.3 publication and discussion with the user. Future adaptation remains candidate-only with no preset version or schedule; other agreed future directions remain available. Public-directory listing is optional and does not block product iteration or value evaluation.",
+    "scopeRule": "The 3.3.18 distribution covers the six selected local OpenAI execution/control paths and their selected modes: CLI, Desktop, VS Code, local-only Work/Remote, mobile Remote of selected local hosts and bounded SDK duties. Per the final r38 decision retained in r39, independent ordinary Chat research/content modes, web Chat and JetBrains/Xcode integrations were deferred for that release. Actual loading, interaction, authority, continuity, recovery, verification and exit remain required for selected paths. Shared Linux/macOS CLI and standard hosted CI remain. The current local Claude Code development candidate is tracked separately in PLAN. Pi, DeepSeek Harness, ZCode and Antigravity remain unselected candidates. Future adaptation keeps no preset release version or schedule. Public-directory listing is optional and does not block product iteration or value evaluation.",
     "sourceDecision": "The user authorized the 3.3.18 freeze and conditional publication on 2026-11-18. PLAN r116 links the published ChatGPT/Codex candidate at 699b24c3092edbafc431f0760a539eeca3f175e3, its qualification and the separate Claude Code feasibility review.",
     "claudeAdaptation": "candidate-only",
     "futureAdaptationVersion": "undecided",
@@ -196,6 +197,9 @@
       "plugins/yiyuan-accord-claude/runtime/inspect-plugin-update.cjs",
       "plugins/yiyuan-accord-claude/runtime/task-checkpoint.cjs",
       "plugins/yiyuan-accord-claude/skills/deliver-demand-driven-outcome/SKILL.md",
+      "plugins/yiyuan-accord-claude-code/runtime/accord-hook.cjs",
+      "scripts/build_claude_plugin.py",
+      "tests/product/test_claude_code_adapter.py",
       "plugins/yiyuan-accord-codex/.codex-plugin/plugin.json",
       "plugins/yiyuan-accord-codex/adapter.json",
       "plugins/yiyuan-accord-codex/hooks/hooks.json",
@@ -332,14 +336,17 @@
       "evals/comparisons/accord-toggle-v1.json",
       "scripts/grade_accord_comparison.py",
       "tests/product/test_accord_comparison.py",
-      "research/reviews/2026-10-30-host-evolution-and-assets.md"
+      "research/reviews/2026-10-30-host-evolution-and-assets.md",
+      "research/reviews/2026-11-19-multi-host-adapter-boundaries.md",
+      "product/skill-sources/manage-plugin-lifecycle.md",
+      "product/skill-sources/manage-plugin-lifecycle.codex.md"
     ],
-    "rule": "The 2026-10-21 authorized 3.3.2 OpenAI development slice includes whole-system consistency and engineering corrections, necessary execution reachability and source-bound acceptance strengthening. Reconcile only actual authorized changed and pending files; preserve the immutable predecessor definitions, published identities and original evidence. Current plans remain revisable against source facts. Other hosts remain undecided future candidates and gain no active development, enablement or release authority. Local conformance and synthetic regressions do not establish functional acceptance or publication readiness. The completed 3.3.4 maintenance scope aligns descriptions, current source/authority views and their validation projections without changing runtime control semantics or prior qualification identities. The 2026-10-29 user-authorized next slice establishes a bounded comparison calibration kit and aligns the current roadmap around consolidation, evidence-led finite reshaping and continued iteration. That comparison slice added four named developer evaluation files plus affected documentation and this projection. The2026-10-30 host/asset baseline adds one named research report and updates affected current views before further improvement. It preserves release/package bytes, historical outcomes and existing quality/acceptance floors; synthetic checks and configuration discovery are not native paired trials or measured benefit. The current Goal compatibility slice changes existing adapter/runtime/test/version and affected documentation paths only; no new tracked source or upstream fixture payload is required. Preserve the prior host-baseline document and original failures.",
+    "rule": "Reconcile only authorized changed and pending files. Preserve immutable predecessor definitions, public release identities, original failures and prior quality floors. Earlier maintenance, comparison calibration, host inventory and compatibility work retain their original scope in PLAN. The current Claude Code slice adds one separate native entry implementation, a local builder and one focused test module. It reuses current Accord guidance, preserves the published ChatGPT/Codex package and keeps the Claude artifact outside the published catalog. Each bounded CLI or Desktop observation retains its tested artifact and conditions. Unselected hosts remain candidates. Functional and publication claims each need their own evidence.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 5110000,
-      "maxTrackedFiles": 225,
+      "maxTrackedFiles": 231,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "R97 source b01b142e8d33071869b16966cbc932fa0731f59a measured4807480 product/test bytes with225 tracked sources and20338 primary instruction bytes. R98 added3.3.13 version-contract coverage in existing modules and tests. R99 adds the ordinary-input UTC ordering check and expands its existing native fixture for captured and uncaptured sources. Capacity5110000, reserve255500, usable4854500 and tracked-file ceiling225 are retained; fresh observed metrics accompany the final source checks. Prior budget evidence stays at b01b142e8d33071869b16966cbc932fa0731f59a:product/development.json#/changeBoundary/complexityBudget."
+      "rationale": "R117 allocates the native entry, builder and focused tests for the local Claude candidate. R120 adds one multi-host research note. R121 adds exactly two lifecycle authoring inputs outside the installed packages. Their observed staged total is 231 files. The code and test ceiling is 5110000 bytes with a 255500-byte reserve, and the primary instruction ceiling is 36000 bytes. Prior budget evidence remains at b01b142e8d33071869b16966cbc932fa0731f59a:product/development.json#/changeBoundary/complexityBudget."
     }
   },
   "source": {
@@ -6444,7 +6451,7 @@
       "evidenceAndFallback": "Typed answers/probabilities/confidence do not grant authority or prove outcomes. Refusal/unavailability/timeout returns to sufficient permitted capability without weakening pauses, permission or completion.",
       "releaseBoundary": "No fixed Jev/Laya/Decisions integration is scheduled; none is a3.3 prerequisite. Applicable methods, original trial identities and all acceptance remain."
     },
-    "work": "Use released 3.3.18 for current installation guidance. Continue the recurring comparison and communication work. Claude Code remains a distinct, unversioned read-only feasibility subject until a separate implementation decision.",
+    "work": "Use released 3.3.18 for current installation guidance. R123 fixes the Claude coordination Skill's foundation-reading condition and stages complete build outputs before host discovery. Dev.3 isolated CLI evidence includes one observed reference read and one run without a read. R122 retains dev.2 Squirrel Write allowance, denial and the subsequent task, separate from CLI interruption and future desktop in-flight cancellation evidence. An ordinary Codex maintenance receipt was 1966 bytes, 203 below the 3.3.17 render from the same fields. Continue observing actual cost and correction. The release-source preflight confirms exact installation from the 3.3.18 tag and commit. Two process-scoped Codex arms confirmed the Accord Hook and Skill difference with existing trust and 73 common visible Skills, without starting a model turn. Verify model request conditions and required permissions in the actual paired task. Use Squirrel as the Windows reference and investigate MSIX for concrete effects. Keep the release window tied to evidence and acceptance.",
     "requires": "Reuse the completed r101 asset dispositions as the baseline; scope new checks to consequential changes and demonstrated gaps under PLAN current-work. Preserve necessary duties when implementations are replaced or retired; close confirmed in-scope defects with appropriate regression and actual consequence evidence. Unresolved necessary outcomes block dependent completion; other unknowns retain scope, effect and revisit triggers without becoming universal blockers. Reconcile current plans, baseline, acceptance, machine projection and affected user/release text; retain immutable history. Use existing sufficient host/third-party controls and same-host Accord enabled/disabled comparisons for incremental value; single-arm development and human rescue do not prove autonomous improvement. No new complex score, manufactured user task or business replay. The current F/A and quality, capacity and reserve declarations remain the starting requirements; changes need sourced justification, authority and impact review, not relaxed limits to recognize an old result. Before an authorized release require exact candidate/source identity, necessary full regression and statics, applicable independent review/qualification, required pre-release hosted terminals, matched notes and closed preparatory resources. After publication verify release identity, any triggered tag CI, installation, actual adoption and final owned-resource/protocol closure. Keep these subsequent outputs in their actual order rather than making them circular publication prerequisites. Declarations establish neither readiness nor authority."
   },
   "claimCeiling": {
@@ -6473,7 +6480,7 @@
   "previousDevelopmentSnapshot": "cf13486db9e5d0e9a6eef2d9df187d5e0405ee88:product/development.json",
   "consensusNode": {
     "id": "N33-20260909",
-    "revision": "r116",
+    "revision": "r123",
     "path": "docs/operations/PLAN-v3.3.md",
     "evaluation": "docs/operations/PLAN-v3.3.md#全维度动态评价框架",
     "procedures": "docs/operations/PLAN-v3.3.md#工序与依赖",
