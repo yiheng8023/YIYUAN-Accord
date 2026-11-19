@@ -145,3 +145,15 @@ Windows Squirrel 6.6395.0 使用内置 Claude Code 2.1.326 与 `deepseek-flash`�
 - 原生 CLI 2.1.328 对插件和市场分别通过严格校验。构建回归模拟 `NOTICE` 写入失败，检查当时两个发现清单均未出现，清理后同一目标可以重试。生命周期隔离回归用临时增补模拟宿主说明变化。
 - 在没有项目级元指导文件的临时目录，以 `deepseek-flash` 显式请求采用协调 Skill。两次只读任务的原生记录均有 1,580 字节短指导和成功的 Skill 调用。第一轮未观察到参考读取。第二轮调整测试的权限表述，并保留会话记录以复核正文送达，确认完整 Skill 进入会话、同一任务随后成功 `Read` 随包英文译文。两轮均正常结束。条件并非完全相同，实际读取有差异，尚无法将差异归因于某一个条件。
 - 两个运行范围自然退出，Windows Job 活跃进程归零，临时工作区和配置目录已回收，原提供商配置摘要一致。摘要保留为 `CLI-01-OBSERVED.json`、`CLI-02-OBSERVED.json` 和 `build.json`。桌面端后继候选的实际读取仍需观察。
+
+在 r124 重建 dev.3，构建记录与 r123 一致，插件和市场分别通过独立 CLI 2.1.328 的严格校验。当前 Desktop 会自动引入用户级指导和其它已启用 Hook。在任务级设置中独立保留 Accord Hook，同时排除这些其它自动行为的路径尚未核实。保留桌面实测缺口和既有用户配置，配置摘要复核一致。本轮的 [CLI 观察](#claude-code-foundation-fallback) 和 [dev.2 桌面观察](#claude-code-desktop-write) 各沿原入口和条件引用。
+
+<a id="claude-code-desktop-isolation"></a>
+
+### Windows Squirrel 的 Desktop Code 隔离条件
+
+Anthropic 为 Desktop 本地 Code 记录了 `CLAUDE_CONFIG_DIR`，设置后应完全退出并重开 Desktop。它有应用启动侧的设置入口，与在普通保存的 Local 环境中逐会话添加变量的入口有别。该目录承载 Code 的设置、历史和插件。Desktop 同时可引入自身的 MCP 配置及账户连接的能力，实际加载来源须分别核对。[本地会话的环境变量](https://code.claude.com/docs/en/desktop#environment-variables-in-local-sessions) · [共享配置](https://code.claude.com/docs/en/desktop#shared-configuration) · [设置文件](https://code.claude.com/docs/en/settings#settings-files-and-who-they-affect)
+
+对本机 Squirrel 6.6395.0 的程序包只读复核，Code 根的选择分支会读 `CLAUDE_CONFIG_DIR`。Windows 的 `claude_desktop_config.json` 还有以 `LOCALAPPDATA` 为根的查找分支，相关代码与保留的本地原始备份一致。因此，同用户的隔离启动若只换 Code 根或独立窗口，仍需从真正启动的本地 Code 会话核 Desktop MCP 的有效来源。`--setting-sources` 等独立 CLI 参数在 Desktop 的公开对照中没有等效入口。[CLI 参数对照](https://code.claude.com/docs/en/desktop#cli-flag-equivalents)
+
+安全的验证条件是独立的设置和工作目录、已有认证的适用模型入口，以及生效的工作区信任与宿主管理策略。先核 `/status` 的桌面实际引擎，读回配置根、候选注册、Hook、Plugin、Skill 和 MCP 来源，再核任务实际行为。若同用户无法获得这些条件，可在已有授权的干净 Windows 测试用户或主机按同版 Squirrel 复验，并留意账户同步。本轮只完成官方资料和本机程序路径的核查。dev.3 的桌面加载和读取仍须实机绑定。[Desktop 内核版本](https://code.claude.com/docs/en/desktop#claude-code-version-in-the-code-tab)

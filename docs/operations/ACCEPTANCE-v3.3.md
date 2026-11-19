@@ -8,6 +8,8 @@
 
 Claude Code 本地候选核构建来源、实际插件和宿主版本、指导正文、取消确认、迟到结果、原轮终态及后续任务。只读链路已在受测 CLI 与 Windows Squirrel 本地 Code 观察。dev.2 的 CLI 有前台 Bash 写入中断、权限拒绝和同会话后续写入的原生与磁盘证据，Squirrel 已实测内建 `Write` 的允许、拒绝及同会话后续新任务。dev.3 已在隔离 CLI 核对完整 Skill 与随包元指导的实际读取。当前候选的桌面采用和进行中写入的中断效果仍需对应证据。跨入口接续需核实际同一任务、权限、结果及单一写者。启用收益仍用同宿主、同条件的实际启用差异判断。[当前候选观察](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-current-candidate) · [桌面写入观察](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-write) · [dev.3 复验](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-foundation-fallback)
 
+r124 双语安装说明的两组业务轮次均完成，成品按同一任务要求匿名复核后均为部分通过。两组实际任务材料与选项一致。旧摘要未保留足以逐项比较的共同消息正文和工具定义，影响归因的部分按未知保留。保留每组成品与观察用量，合稿作为后续维护材料。新任务复验时核对实际请求中顶层以及 `additional_tools` 包装内的有序定义。[本轮原件范围](../../research/evaluations/accord-toggle-v1.md#release-source-pair-3318)
+
 生命周期共用源码的本轮复验按两端实际产物逐字节核对，并用一个只改 Codex 专属段落的样本核实 Claude 的构建独立性。原生运行行为继续沿对应入口、包成员和实机记录判断。[构建复验范围](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#lifecycle-source-result)
 
 普通任务减负按同一任务的结果合看质量、返工、人工主动成本、耗时与报告用量。遇到实质风险的任务再核暂停、接续及错误后果。首轮消息字节数用于定位来源，机制回归用于核必须职责；净收益以相关的实际任务观察为依据。

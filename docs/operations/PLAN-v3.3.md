@@ -1,10 +1,12 @@
 # 3.3 共识节点与当前计划
 
-节点：N33-20260909 · 修订：r123 · 2026-11-19。本文保存现行共识、结果关系与工序。当前计划和进度集中在[当前工作](#current-work)。历史过程及原件按下方索引查阅。
+节点：N33-20260909 · 修订：r124 · 2026-11-19。本文保存现行共识、结果关系与工序。当前计划和进度集中在[当前工作](#current-work)。历史过程及原件按下方索引查阅。
 
 <a id="current-work"></a>
 
 ## 基于 3.3.18 的当前工作（2026-11-19）
+
+**开发 CI。** `1726b95aeb15309ab18953d138dea52fb8969f98` 的 [CI #1076](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44511069396) 首轮 10 项全部通过。最后一项于北京时间 2026-11-19 20:24:52 完成。八项 Python 矩阵均完成产品套件，另外两项分别通过 Ubuntu 和 macOS 原生生命周期核验。范围是 r123 开发提交。
 
 **Claude Code 适配。** 从 3.3.18 正式包对应的源码构建独立候选。原生 `SessionStart` 和 `SubagentStart` 传递短指导，完整中英文元指导与协调职责随 Skill 提供。独立 CLI 2.1.328 经 DeepSeek 复验 dev.2 的中断、续作、新任务及重启进程后恢复。dev.3 的完整协调 Skill 按元指导的实际可用性指引读取。无项目级元指导的两次隔离 CLI 试验均调用了 Skill，其中一次实际读到随包译文。构建先写完包成员，再提供可供宿主发现的市场清单。[本地实现与原始观察](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-current-candidate) · [dev.3 复验](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-foundation-fallback)
 
@@ -16,7 +18,9 @@
 
 **减负与持续纠偏。** 一次实际普通维护续轮送达 1,966 字节回执。按相同字段重算，3.3.17 为 2,169 字节，相差 203 字节。实际模型用量、经验是否赶在操作前采用、失误后是否成功换路，继续按真实任务的操作和结果核对。[普通续轮回执](../../research/reviews/2026-10-30-host-evolution-and-assets.md#codex-3.3.18-ordinary-input-receipt)
 
-**对照和传播备料。** 复核 3.3.17 首用卡的两个成品及业务耗时、宿主用量和缓存口径。两组均完成。工作稿的首用说明已对齐正式 3.3.18，演示注明受测版本和成本范围。下一配对选取双语发行安装来源说明及其验收办法。已核正式 3.3.18 标签与完整提交引用安装等效，复用既有信任的进程级开关也核到两组 Hook、Skill 的实际差异和 73 个共同 Skill。正式配对仍需核原件读取、两组实际模型请求和任务所需权限。[原件复核](../../research/evaluations/accord-toggle-v1.md#first-use-card-readback) · [安装预检](../../research/evaluations/accord-toggle-v1.md#release-source-preflight-3318) · [开关预检](../../research/evaluations/accord-toggle-v1.md#release-source-toggle-with-existing-trust) · [传播工作稿](LAUNCH-v3.3.md#first-use-materials)
+**对照和传播备料。** 3.3.17 首用卡沿原版本与成本口径引用，现行首用说明对齐 3.3.18。以 3.3.18 实跑一组双语发行安装说明，双方完成，匿名复核均为部分通过。合成一份补齐缺口的双语维护稿。旧原件可确认相同任务和请求选项，以及启用组的两段额外指导。整项摘要无法复原共同消息及 `additional_tools` 定义。保留用量与耗时的观察值，下一次在新任务中分别核正文和有序工具定义。[首用卡原件](../../research/evaluations/accord-toggle-v1.md#first-use-card-readback) · [本轮观察](../../research/evaluations/accord-toggle-v1.md#release-source-pair-3318) · [双语维护稿](LAUNCH-v3.3.md#release-source-draft)
+
+**dev.3 桌面验证准备。** 重建包与 r123 记录一致，独立 CLI 再次通过包和市场的严格校验。官方提供 Desktop 的 `CLAUDE_CONFIG_DIR` 入口。本机 Squirrel 另有独立的 Desktop MCP 配置查找路径。实测前需要读回 Code 配置根、Desktop 配置和实际加载来源。保留既有用户设置、工作区信任及适用管理策略，沿 dev.2 桌面和 dev.3 CLI 的原验证条件引用结果。[桌面隔离核查](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-isolation)
 
 **生命周期指导共用。** 按已同意的最小范围拆出共同正文与 Codex 专属源码，两端各自生成成品。Codex 生成结果与 3.3.18 的已发 Skill 一致，Claude dev.2 的 14 个成员和市场清单也逐一相同。单改 Codex 的专属文字时，Claude 的构建记录和成员保持一致。[实施与边界](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#lifecycle-source-result)
 

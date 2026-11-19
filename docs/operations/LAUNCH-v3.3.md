@@ -35,6 +35,26 @@
 
 此表只计业务耗时，累计 token 含缓存输入。启用稿把四种状态的核对放在同一处，未启用稿把启用核对放在安装步骤。读者能否因此少误装或少返工仍待观察。画面可使用经原件复核的摘录。[两组摘录与复算](../../research/evaluations/accord-toggle-v1.md#first-use-card-readback)
 
+<a id="release-source-draft"></a>
+
+### 固定发行的双语安装来源稿
+
+发布源标签选定后，将完整 `refs/tags/v实际版本` 同步到英文 README、中文 README 和双语用户指南的中英文两段。Git 提交身份包含文件内容。在文件中写入本提交的 SHA 会再次改变它。在 GitHub Release 正文记录最终提交的完整 SHA，供安装后核对。以下命令已用 3.3.18 预检，下一发行采用前按其实际标签和提交复核。[真实任务复核](../../research/evaluations/accord-toggle-v1.md#release-source-pair-3318)
+
+Once the release tag is selected, use its fully qualified `refs/tags/v…` ref in both READMEs and both language sections of the user guide. Git includes the source content in the commit identity. Writing a commit's own SHA into its files changes the SHA. Record the full final SHA in the GitHub Release notes for verification after installation. The following command was checked against 3.3.18. Recheck the selected tag and commit before adopting it for a later release.
+
+```sh
+codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref refs/tags/v3.3.18
+```
+
+**简体中文。** 在 Codex CLI 登记所选发行的来源。打开 `/plugins`，核对市场 `yiyuan-accord`，安装并在目标作用域启用 `yiyuan-accord-codex`。首次安装及每次更新后在 `/hooks` 手动审阅并允许适用 Hook。新会话中核实实际加载的来源、版本和适用 Hook 的执行。可通过发行页上的完整提交 SHA 核对来源。
+
+**English.** Register the selected release as a source in Codex CLI. Open `/plugins`, check the `yiyuan-accord` marketplace, then install and enable `yiyuan-accord-codex` for the intended scope. Review and allow the applicable hooks in `/hooks` after the first install and each update. In a new session, verify the loaded source and version and check that the applicable hooks ran. Use the full commit SHA on the release page to verify the source.
+
+维护者在发布前记录最终候选的完整 SHA，并用 `git rev-parse` 独立核对本地标签解引用后的提交等于该 SHA。发布后，远端标签解引用后的提交、Release 正文的完整 SHA 和实际市场检出的 `HEAD` 均须等于这个候选 SHA。逐处读回三份固定源码文件的四条命令。用干净配置核对市场 `yiyuan-accord`、完整插件 ID `yiyuan-accord-codex@yiyuan-accord` 和插件清单版本。实际检出的提交和清单版本须分别与预期值完全一致，登记成功也不能抵消出入。保留旧标签及其文档原件。
+
+Before publishing, record the final candidate's full SHA. Use `git rev-parse` independently to check that the local tag resolves to that commit. After publishing, require the remote tag's resolved commit, the full SHA in the release notes and the marketplace checkout's `HEAD` each to equal the recorded candidate SHA. Read back all four commands in the three files at the fixed release source. In a clean configuration, verify the `yiyuan-accord` marketplace and the full plugin ID `yiyuan-accord-codex@yiyuan-accord`. Require the checkout commit and plugin manifest version each to match the expected value exactly, even if registration succeeded. Preserve earlier tags and their documentation.
+
 ### 中文首用排障卡（3.3.17 备料）
 
 1. 从项目正式发行选择来源。桌面使用所用版本的插件目录或来源入口。CLI 按指南登记来源，再从 `/plugins` 安装并启用 Accord。 [正式发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.17) · [安装步骤](../user-guide.md#首次安装与信任)

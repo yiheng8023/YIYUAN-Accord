@@ -7,6 +7,7 @@
 - Windows Squirrel 本地 Code 实测了内建 `Write` 的权限允许、拒绝和同会话后续写入，原生结果与文件读回一致。[桌面写入实证](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-write)
 - 插件生命周期 Skill 改为从一份共用正文和各宿主的说明生成。两端成品已逐字节复核，Codex 专属措辞的改动也通过了 Claude 独立构建回归。[生命周期构建实证](research/reviews/2026-11-19-multi-host-adapter-boundaries.md#lifecycle-source-result)
 - Claude Code 本地候选明确协调 Skill 何时读取随包元指导。构建完成包成员后再提供供宿主发现的清单，并覆盖成员写入中途失败、清理和同一目标重试的回归。[当前工作](docs/operations/PLAN-v3.3.md#current-work)
+- 完成双语发行安装说明的两组实测和匿名复核，合稿补齐标签来源、完整提交 SHA 和实际加载的核验步骤。原件复核记录了共同请求与工具定义的证据边界。[双语维护稿](docs/operations/LAUNCH-v3.3.md#release-source-draft) · [对照复核](research/evaluations/accord-toggle-v1.md#release-source-pair-3318)
 
 ## 3.3.18（2026-11-19）
 
