@@ -32,7 +32,13 @@
 
 [3.3.18](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.18) 于北京时间 2026-11-19 02:17:56 正式发布（Release `450379543`），发行提交和标签均指向 `699b24c3092edbafc431f0760a539eeca3f175e3`。30 成员包 SHA256 为 `173e730a819b84d7ab1712d1d672ee238de38821060ab768672b8ecef17f1ede`。该提交通过 1,492 项本地回归、三项静态检查、独立审阅和两阶段正式验收。[CI #1074](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44351612238) 全部 10 项通过，两平台 18 份原生制品和 22 份来源清单已核。
 
-首轮候选在独立评审发现双语图与当前计划需修正后停止，失败记录与运行器退出状态保留。修订候选重新完整验证。Ubuntu 与 macOS 制品首次读取各遇到一次 HTTP 503，四份已校验归档分别按原轮次复用，缺件补齐后通过来源、摘要和完整性核对。本机加载与新版 Hook 信任需按实际会话另行核实。发布触发了[标签 CI #1075](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44368158635)。标签运行结果另行记录。
+首轮候选在独立评审发现双语图与当前计划需修正后停止，失败记录与运行器退出状态保留。修订候选重新完整验证。Ubuntu 与 macOS 制品首次读取各遇到一次 HTTP 503，四份已校验归档分别按原轮次复用，缺件补齐后通过来源、摘要和完整性核对。本机加载与新版 Hook 信任需按实际会话另行核实。
+
+[标签 CI #1075](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44368158635/attempts/2) 于北京时间 2026-11-19 11:17:57 完成，原发行提交的 10 项检查全部通过。第二轮只补跑 Ubuntu／Python 3.11 与 macOS 原生任务，两项均通过。其余 8 项沿用首轮结果。
+
+[首轮](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44368158635/attempts/1)通过 8 项。[Ubuntu／Python 3.11](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44368158635/job/135027405580)在等待 MCP `prepare` 回复时触及测试端的 8 秒上限，触发一次测试错误。[macOS 原生任务](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44368158635/job/135027405774)因 GitHub 未分配托管运行器而取消，执行零步。第二轮 [Ubuntu／Python 3.11](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44368158635/job/135300102796)通过全部 1,490 项托管回归，包括首轮超时的用例。[macOS 原生任务](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44368158635/job/135300102364)取得运行器并通过。首轮 Ubuntu 超时原因仍未确定。
+
+标签运行的 18 份原生制品和 22 份来源清单均已核对。Ubuntu 制品来自首轮，macOS 制品来自第二轮。
 
 <a id="release-3.3.17-closeout"></a>
 

@@ -41,7 +41,7 @@
       ],
       "rule": "The user-authorized 3.3.18 route completed exact local, independent, formal and CI #1074 qualification before publication from 699b24c3092edbafc431f0760a539eeca3f175e3. PLAN links the actual receipt. Source declarations continue to describe candidate qualification."
     },
-    "rule": "PLAN r116 records exact 3.3.18 release and qualification, with tag CI #1075 tracked separately. Keep the first-use comparison scoped to its observed conditions. Claude Code CLI and Desktop Code follow a separate feasibility track with no assigned release version. Use the then-current release for promotion once evidence is ready."
+    "rule": "PLAN r116 records exact 3.3.18 release and qualification, including ten successful tag CI #1075 results after a selective retry. Keep the first-use comparison scoped to its observed conditions. Claude Code CLI and Desktop Code follow a separate feasibility track with no assigned release version. Use the then-current release for promotion once evidence is ready."
   },
   "baselineRole": "Released 3.3.18 at 699b24c3092edbafc431f0760a539eeca3f175e3 is the public baseline. PLAN records exact local, formal and CI #1074 results. Earlier 3.3.17 adoption and comparison evidence retain their original identities.",
   "cycle": {
@@ -6435,7 +6435,7 @@
     "sourceRevisionRule": "A legitimate change to source semantics or acceptance invalidates dependent claims. Keep the predecessor and failed trials immutable; never rewrite an old result to make a new definition pass."
   },
   "nextBoundary": {
-    "currentMaintenance": "PLAN r116 records exact 3.3.18 publication and the main CI terminal. Preserve the original comparison, catchup and review scopes. Tag CI and later adoption have their own actual evidence.",
+    "currentMaintenance": "PLAN r116 records the 3.3.18 tag CI #1075 terminal after a selective retry. Eight successes carried forward from attempt 1. The Ubuntu Python 3.11 regression and macOS native job actually passed in attempt 2. The first attempt's MCP response timeout and the unallocated macOS runner remain recorded. Preserve the comparison and adoption evidence scopes.",
     "decisionCapabilityPolicy": {
       "responsibility": "Keep portable judgment, selection, feedback and correction; no default dedicated decision model, service, account, key or per-step extra call.",
       "selection": "Use code/native facts for deterministic checks or sufficient existing models for semantic judgment. Optional specialized capabilities require actual need, availability, authority and supported whole-task benefit; this is not a fixed call sequence.",
