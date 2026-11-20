@@ -31,6 +31,7 @@ R103_TARGET = "3.3.15"
 R105_TARGET = "3.3.16"
 R108_TARGET = "3.3.17"
 R115_TARGET = "3.3.18"
+R133_TARGET = "3.3.19"
 
 
 def historical_development():
@@ -1212,7 +1213,7 @@ class SuccessorDevelopmentTests(unittest.TestCase):
         # Derive rejection beyond the baseline and explicit selected successors.
         parts = max(tuple(map(int, version.split('.'))) for version in
                     (self.contract['cycle']['targetVersion'], R101_TARGET, R103_TARGET,
-                     R105_TARGET, R108_TARGET, R115_TARGET))
+                     R105_TARGET, R108_TARGET, R115_TARGET, R133_TARGET))
         return '.'.join(map(str, (*parts[:-1], parts[-1] + 1)))
 
     def test_selected_targets_retain_unversioned_future_and_unqualified_claims(self):
@@ -1220,7 +1221,8 @@ class SuccessorDevelopmentTests(unittest.TestCase):
                                (R103_TARGET, False), (R103_TARGET, True),
                                (R105_TARGET, False), (R105_TARGET, True),
                                (R108_TARGET, False), (R108_TARGET, True),
-                               (R115_TARGET, False), (R115_TARGET, True)):
+                               (R115_TARGET, False), (R115_TARGET, True),
+                               (R133_TARGET, False), (R133_TARGET, True)):
             with self.subTest(target=target, frozen=frozen):
                 candidate = copy.deepcopy(self.contract)
                 candidate['status'] = 'candidate-frozen' if frozen else 'in-development'

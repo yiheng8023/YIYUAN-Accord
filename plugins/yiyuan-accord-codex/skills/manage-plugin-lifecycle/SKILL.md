@@ -99,6 +99,13 @@ the switch. Preserve a recoverable source until the successor works. If the entr
 itself is unavailable, its own Hook cannot certify or initiate recovery; use the
 previously retained host control or other authorized recovery actor.
 
+On the tested ChatGPT desktop, users review and click **Allow** after the first
+installation and after every update. Check **Settings → Hooks → YIYUAN Accord**.
+The hook indicator beside the chat input also opens pending approvals and
+disappears after allowance. Ask the user to act only while approval is pending.
+Once allowed, verify the relevant Hook event in the target session. In the
+Codex CLI, use `/hooks` to review the current definitions.
+
 In Codex 0.154.0, a changed active plugin root is rechecked when creating the next
 turn, including external-process version switches. Same-root, same-version edits
 do not have that assurance. Use a supported distinct build identity and reinstall

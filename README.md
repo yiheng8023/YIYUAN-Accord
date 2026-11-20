@@ -58,7 +58,7 @@ Published versions are available in [Releases](https://github.com/yiheng8023/YIY
    ```
 
 2. **Enable plugins and Accord.** Allow plugin use in the host and enable Accord in the scope you actually use. In CLI `/plugins`, select the marketplace, install, and press `Space` on the installed plugin to turn it on or off.
-3. **Manually allow Hooks after installation and updates.** Hooks are plugin scripts run at task events. In the current desktop workflow, the user must review and click **Allow** after the first installation and after every update. Installation, enablement or unchanged declaration bytes do not replace this step. In CLI `/hooks`, review and trust Accord's current definitions; the installation executor must verify other versions, entries and rollback procedures in the actual host. See the user guide.
+3. **Manually allow Hooks after installation and updates.** Hooks are plugin scripts that run at task events. On the tested desktop, review and click **Allow** after the first installation and after every update. Open **Settings → Hooks → YIYUAN Accord** or use the hook indicator beside the chat input. In the CLI, review the current definitions with `/hooks`. [Installation and verification](docs/user-guide.md)
 4. **Start a new task and describe the goal.** For example: “Help me complete this task. If conditions change, correct the affected work and check the result before delivery.”
 
 **Installation, enablement, Hook trust and actual loading are all necessary.** See the [user guide](docs/user-guide.md#english-user-guide) for complete steps, an installation request template and troubleshooting, including the [specific IDE, Work and Remote routes](docs/user-guide.md#current-entries-and-runtime).

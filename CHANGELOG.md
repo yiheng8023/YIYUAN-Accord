@@ -14,6 +14,10 @@
 - 在独立标准用户的 Windows 本地 Code 实测 Claude dev.3 启动指导、显式采用协调 Skill、读取随包英文元指导、内建 `Write` 的允许和拒绝、前台写入中断后的进程和磁盘状态，以及同会话的新任务。以无指引文件的 Codex 原生首轮验证 Accord 完整元指导早期送达。[dev.3 桌面实测](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-dev3-desktop-read) · [元指导来源](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#accord-foundation-without-agents)
 - 复验独立 Claude CLI 2.1.329 和 Windows Squirrel 6.28899.2 本地 Code 2.1.328 的智谱 Flash 与 dev.3 只读链路。新版桌面按原生记录确认启动 Hook、协调 Skill 调用、探针读回和同会话补读的随包英文元指导。[智谱复验](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-glm-flash-r128)
 - 修复 Claude 本地候选在最终移动文件失败时留下半成品的问题。安全回滚后可以重试同一输出路径，发现变动的产物会保留供检查。重新构建的 14 个插件成员与市场清单和已实测版一致。[构建恢复](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-candidate-publish-rollback)
+
+## 3.3.19 候选
+
+- 补齐 ChatGPT/Codex 安装助手的 Hook 指引。实测桌面首次安装及更新后，用户可从「设置 → 钩子 → YIYUAN Accord」或输入框的钩子图标审阅并允许。已经允许时继续核对会话中的实际 Hook 事件。CLI 使用 `/hooks`。[安装说明](docs/user-guide.md)
 - 在 Codex CLI 0.171.0 复验开发说明的启用差异对照。通过同一录制二进制还原新版请求记录，核对实际工具定义、预热上下文、Skill 目录和被动 MCP 启动状态。[新对照](research/evaluations/accord-toggle-v1.md#r129-builder-note-pair)
 - 历史证据校验复用已有的 Git 读取环境隔离，按选定检出目录复核祖先关系、跟踪文件及内容，避免继承的错误 Git 路由导致误判。[本地回归](docs/operations/PLAN-v3.3.md#r129-local-regression)
 

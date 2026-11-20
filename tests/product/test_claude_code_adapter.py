@@ -100,7 +100,15 @@ class ClaudeCodeAdapterTests(unittest.TestCase):
             capture_output=True, timeout=10, check=False,
         )
         self.assertEqual(0, done.returncode, done.stderr)
-        self.assertEqual((self.current / builder.LIFECYCLE_SKILL).read_bytes(), output.read_bytes())
+        manifest = json.loads((self.current / ".codex-plugin/plugin.json").read_bytes())
+        onboarding = manifest["extensions"]["com.openai"]["onboardingSkill"]
+        self.assertEqual((self.current / onboarding).read_bytes(), output.read_bytes())
+        codex = output.read_text(encoding="utf-8")
+        claude = (self.package / builder.LIFECYCLE_SKILL).read_text(encoding="utf-8")
+        for route in ("Settings → Hooks", "`/hooks`"):
+            with self.subTest(route=route):
+                self.assertIn(route, codex)
+        self.assertNotIn("Settings → Hooks", claude)
 
     def test_codex_lifecycle_edit_leaves_claude_package_unchanged(self):
         source_root = self.copy_build_sources()
