@@ -345,15 +345,16 @@
       "tests/product/test_accord_comparison.py",
       "research/reviews/2026-10-30-host-evolution-and-assets.md",
       "research/reviews/2026-11-19-multi-host-adapter-boundaries.md",
+      "product/skill-sources/deliver-demand-driven-outcome.md",
       "product/skill-sources/manage-plugin-lifecycle.md",
       "product/skill-sources/manage-plugin-lifecycle.codex.md"
     ],
     "rule": "Reconcile only authorized changed and pending files. Preserve immutable predecessor definitions, public release identities, original failures and prior quality floors. Earlier maintenance, comparison calibration, host inventory and compatibility work retain their original scope in PLAN. The current Claude Code slice adds one separate native entry implementation, a local builder and one focused test module. It reuses current Accord guidance, preserves the published ChatGPT/Codex package and keeps the Claude artifact outside the published catalog. Each bounded CLI or Desktop observation retains its tested artifact and conditions. Unselected hosts remain candidates. Functional and publication claims each need their own evidence.",
     "complexityBudget": {
       "maxProductCodeAndTestBytes": 5110000,
-      "maxTrackedFiles": 231,
+      "maxTrackedFiles": 232,
       "maxPrimaryInstructionBytes": 36000,
-      "rationale": "R117 allocates the native entry, builder and focused tests for the local Claude candidate. R120 adds one multi-host research note. R121 adds exactly two lifecycle authoring inputs outside the installed packages. Their observed staged total is 231 files. The code and test ceiling is 5110000 bytes with a 255500-byte reserve, and the primary instruction ceiling is 36000 bytes. Prior budget evidence remains at b01b142e8d33071869b16966cbc932fa0731f59a:product/development.json#/changeBoundary/complexityBudget."
+      "rationale": "R117 allocates the native entry, builder and focused tests for the local Claude candidate. R120 adds one multi-host research note. R121 adds exactly two lifecycle authoring inputs outside the installed packages. Their observed staged total was 231 files. R130 allocates one shared, build-only coordination Skill source for the two verified consumers. It carries the named entry duties without adding a file or markup to either host package. The exact tracked-file allocation is 232. The code and test ceiling is 5110000 bytes with a 255500-byte reserve, and the primary instruction ceiling is 36000 bytes. Prior budget evidence remains at b01b142e8d33071869b16966cbc932fa0731f59a:product/development.json#/changeBoundary/complexityBudget."
     }
   },
   "source": {

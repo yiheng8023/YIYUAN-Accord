@@ -111,3 +111,13 @@ r120 首选方案是拆出已经证实受 `In Codex` 约束的插件生命周期
 | 独立 Claude CLI 2.1.329 | 默认和换行副本各做一次启动、一次同会话恢复。四次均核到对应插件路径和版本、配对的原生 Hook 回执、首个任务请求里的完整预期文本，以及正常终态。每轮向本机固定响应服务发出一次任务请求。 | 原生 CLI 送达链路已验。固定响应只用于观察请求，模型对指导的实际采用仍需真实任务举证。 |
 
 Windows 与 Ubuntu WSL 各通过 16 项适配和 23 项既有对照回归。后者复核取证工具，本次没有重跑历史业务。Squirrel 6.28899.2／内核 2.1.328 的模型采用证据属于 dev.3。下次桌面实测先查 dev.4 实际加载与首轮投递，再按观察决定需复核的行为。[桌面原始观察](2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-glm-flash-r128)
+
+整库初检先发现共用源码缺少路径登记，补登后又检查到原文件数上限 231。为两个实际消费者的同一份作者源码分配 1 个仓库文件，两个宿主的包成员数及启动文本均未增加。代码及测试字节、主指令和预留空间沿用原限额。[精确路径与规模预算](../../product/development.json)
+
+<a id="cc-switch-plugin-management"></a>
+
+## CC Switch 作为可选的插件管理入口
+
+本机运行版为 4.0.36。该版针对 Claude Code 和 Codex 提供插件及市场管理，支持添加本地市场目录。Claude Code 通过原生插件命令操作。Codex 的启停开关写入所选配置中相应插件的 `enabled` 字段。管理器按目标配置目录调用 CLI。独立的 Claude Desktop Code 会话仍需确认其自己的配置、内核和加载结果。[4.0.36 发布说明](https://github.com/farion1231/cc-switch/releases/tag/v4.0.36) · [该版管理实现](https://github.com/farion1231/cc-switch/blob/v4.0.36/src-tauri/src/services/plugin_manager/mod.rs#L1-L18)
+
+开发时可用本地市场预检登记、更新和移除。做启用对照时，在各自隔离的配置中核对其他插件和版本，再从两边的新会话核对实际加载、工具及 Hook。记忆类或 Hook 类插件值得记入共同条件，其存在和实际影响分别取证。本轮四个隔离 CLI 配置的原生已安装清单均无 Accord 条目，用 `--plugin-dir` 启动的相应会话却都有 dev.4 的加载回执。按次加载和长期登记各有用途。[现有启用对照](../evaluations/accord-toggle-v1.md#r129-builder-note-pair)
