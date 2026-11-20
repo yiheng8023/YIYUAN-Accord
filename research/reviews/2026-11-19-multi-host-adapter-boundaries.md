@@ -95,3 +95,19 @@ r120 首选方案是拆出已经证实受 `In Codex` 约束的插件生命周期
 共同正文和 Codex 附录成为独立的作者输入。构建器分别代入两端的安装机制说明，Claude 组合自有附录，只在构建记录中列入实际采用的共同来源。Codex 重新生成的 Skill 与 Git 发行提交 `699b24c3` 的成员一致。Claude dev.2 重新生成的 14 个包成员和市场清单与此前的实测包逐字节相同。构建记录更新共同来源摘要。[共同正文](../../product/skill-sources/manage-plugin-lifecycle.md) · [Codex 附录](../../product/skill-sources/manage-plugin-lifecycle.codex.md) · [构建器](../../scripts/build_claude_plugin.py)
 
 在临时源码副本里将 Codex 附录及对应成品的 `In Codex` 改为 `For Codex`。Codex 的生成内容随附录更新，Claude 仍正常构建，其构建记录和 14 个成员与同轮基准一致。回归测试同时从受支持的命令入口验证 Codex 成品。该结果只覆盖生命周期源码与构建。两端行为继续沿实际加载的包及原生会话观察。[构建回归](../../tests/product/test_claude_code_adapter.py)
+
+<a id="entry-projection-result"></a>
+
+## r130 协调指导从源码到首次请求
+
+在 dev.3 的隔离源码副本中，将 `Verify the claimed consequence` 的第一个空格换成 Markdown 软换行。两个包都能构建，Claude CLI 2.1.329 对换行副本的插件和市场清单严格校验通过。用相同输入分别执行原包和换行包的 Hook，原包在五种会话入口及子智能体入口均有输出，换行包六次都退出 1、标准输出为空。原因是 Hook 在运行时用英文句首定位职责。同期另把接续 Skill 的一处章节改名，构建器在创建输出目录前已报错。两者的失败时点不同。
+
+共用 Markdown 现在标出宿主引言、范围、行动和核验。构建器据此生成各自的完整 Skill，并把短指导编入 Claude Hook。源码标记只供构建使用。缺少或重复职责、完整 Skill 过大、任一事件超过 1,800 个 UTF-8 字节，都会在发布构建目录前报错。Hook 继续校验事件及同包完整 Skill。Codex 3.3.18 的 Hook 对元数据字段顺序有要求，生成器会输出它能读取的顺序。另在隔离的 Codex 包实际运行该 Hook，确认调换作者源码字段并改写职责后仍能读到新正文。[作者源码](../../product/skill-sources/deliver-demand-driven-outcome.md) · [构建器及入口](../../scripts/build_claude_plugin.py) · [回归用例](../../tests/product/test_claude_code_adapter.py)
+
+| 观察对象 | 实际读回 | 可据此判断 |
+| --- | --- | --- |
+| 默认 dev.4 与原 dev.3 | 六种入口的短指导逐字节相同。启动 1,580 字节，恢复 1,700 字节。14 个包成员中只有插件版本清单及 Hook 改变，市场清单相同。Codex 协调 Skill 与 3.3.18 发行成员逐字节相同。 | 正常入口交给宿主的指导没有变长。 |
+| 改过原文的 dev.4 | 六种事件均送出预期换行。自动回归还涵盖职责改写、多段正文、包含相同英文句首的无关示例、损坏或缺失的成品。 | 编辑者可以调整措辞。无关段落不会被选入，损坏的包会报错。 |
+| 独立 Claude CLI 2.1.329 | 默认和换行副本各做一次启动、一次同会话恢复。四次均核到对应插件路径和版本、配对的原生 Hook 回执、首个任务请求里的完整预期文本，以及正常终态。每轮向本机固定响应服务发出一次任务请求。 | 原生 CLI 送达链路已验。固定响应只用于观察请求，模型对指导的实际采用仍需真实任务举证。 |
+
+Windows 与 Ubuntu WSL 各通过 16 项适配和 23 项既有对照回归。后者复核取证工具，本次没有重跑历史业务。Squirrel 6.28899.2／内核 2.1.328 的模型采用证据属于 dev.3。下次桌面实测先查 dev.4 实际加载与首轮投递，再按观察决定需复核的行为。[桌面原始观察](2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-glm-flash-r128)

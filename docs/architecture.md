@@ -90,8 +90,8 @@ selected lifecycle guidance.
 The builder reads the current Accord manifest, coordination guidance, applicable
 Skills, license and notices. It supplies Claude-specific capability, continuity
 and lifecycle guidance, then records the source and package hashes in `build.json`.
-Claude's native `SessionStart` and `SubagentStart` Hooks deliver brief guidance
-drawn from the current coordination Skill. The Claude Skill directs the agent to
+Claude's native `SessionStart` and `SubagentStart` Hooks deliver three duties
+selected when the plugin is built. The Claude Skill directs the agent to
 reuse the meta-guidance present in the session or read the bundled translation
 when needed. The translation links to the packaged Chinese text when the bundle
 moves to a different machine or directory. Claude handles execution,
@@ -113,6 +113,15 @@ claude plugin validate --strict ../accord-claude-dev/plugins/yiyuan-accord
 claude plugin validate --strict ../accord-claude-dev
 claude --plugin-dir ../accord-claude-dev/plugins/yiyuan-accord
 ```
+
+Edit the [shared coordination Skill](../product/skill-sources/deliver-demand-driven-outcome.md)
+to change an entry duty. Its source markers identify the host introduction and the
+three duties used by the Claude Hook. Both hosts receive ordinary Markdown. Use
+`python -B scripts/build_claude_plugin.py --codex-entry-output ../accord-codex-entry.md`
+to render the Codex copy for review. A Claude build checks each event’s 1,800-byte
+budget and binds its Hook to the rendered Skill. If installed members become
+mismatched, the Hook exits with an error. Rebuild from source after editing.
+[Entry tests and CLI observations](../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#entry-projection-result)
 
 For lifecycle authoring, edit the [shared Skill source](../product/skill-sources/manage-plugin-lifecycle.md)
 and the applicable host's guidance. Render the Codex Skill to a fresh file with

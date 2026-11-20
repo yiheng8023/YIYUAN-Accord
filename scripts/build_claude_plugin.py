@@ -1,4 +1,4 @@
-"""Build the local Claude Code package or regenerate the Codex lifecycle Skill."""
+"""Build the local Claude Code package or render a shared Skill for Codex."""
 
 import argparse
 from hashlib import sha256
@@ -16,10 +16,11 @@ ENTRY = "deliver-demand-driven-outcome"
 PACKAGE = "yiyuan-accord"
 MARKETPLACE = "yiyuan-accord-development"
 HOOK_SOURCE = "plugins/yiyuan-accord-claude-code/runtime/accord-hook.cjs"
+ENTRY_SOURCE = "product/skill-sources/deliver-demand-driven-outcome.md"
 LIFECYCLE_SKILL = "skills/manage-plugin-lifecycle/SKILL.md"
 LIFECYCLE_SOURCE = "product/skill-sources/manage-plugin-lifecycle.md"
 CODEX_LIFECYCLE_SOURCE = "product/skill-sources/manage-plugin-lifecycle.codex.md"
-SKILLS = (ENTRY, "coordinate-capabilities", "maintain-task-continuity",
+SKILLS = ("coordinate-capabilities", "maintain-task-continuity",
           "verify-and-close-outcome")
 FOUNDATION = (f"skills/{ENTRY}/references/meta-guidance.md",
               f"skills/{ENTRY}/references/meta-guidance.zh-CN.md")
@@ -29,6 +30,15 @@ meta-guidance already present in this task. When it is missing, read the bundled
 [English translation](references/meta-guidance.md) before applying these duties.
 The [Chinese source](references/meta-guidance.zh-CN.md) travels with it. Use this
 foundation within the host's instruction hierarchy and the user's authority."""
+
+SESSION_NOTES = {
+    "startup": "",
+    "resume": "Accord resume entry: reconcile the current user instruction, pauses, ownership and observed effects before continuing.",
+    "clear": "Accord clear entry: recover any unfinished work only from explicitly retained, applicable evidence.",
+    "compact": "Accord compact entry: check which task facts survived and recover missing evidence before acting on it.",
+    "fork": "Accord fork entry: copied history carries context. Establish this task’s authority and writer before acting.",
+}
+SUBAGENT_NOTE = "Accord subagent entry: apply these duties within the delegated scope. Reconcile your own inputs and leave the parent task state to its owner."
 
 NATIVE_CAPABILITIES = """# Claude Code capabilities
 
@@ -87,6 +97,61 @@ def split_guidance(data, heading):
     return text.split("\n" + heading, 1)
 
 
+def compose_entry(source, host_intro=None):
+    """Render the Skill, collecting the named duties without exposing source markers."""
+    text = source.decode("utf-8").replace("\r\n", "\n")
+    header = re.match(r"\A---\n(.+?)\n---\n", text, re.DOTALL)
+    fields = header[1].splitlines() if header else []
+    metadata = dict(line.split(": ", 1) for line in fields if ": " in line)
+    if (len(fields) != 2 or metadata.get("name") != ENTRY or
+            not metadata.get("description", "").strip()):
+        raise ValueError("Invalid coordination Skill metadata")
+    # The released Codex entry parser consumes these two fields in this order.
+    text = f"---\nname: {ENTRY}\ndescription: {metadata['description']}\n---\n" + text[header.end():]
+    roles = {"host-entry", "scope", "action", "verification"}
+    sections = {}
+
+    def render(match):
+        role, body = match.groups()
+        if role not in roles or role in sections or not body.strip() or "<!-- accord:" in body:
+            raise ValueError(f"Invalid coordination Skill section: {role}")
+        sections[role] = body
+        return host_intro if role == "host-entry" and host_intro is not None else body
+
+    rendered = re.sub(r"^<!-- accord:([\w-]+) -->\n(.*?)\n^<!-- /accord -->$",
+                      render, text, flags=re.MULTILINE | re.DOTALL)
+    if sections.keys() != roles or "<!-- accord:" in rendered or "<!-- /accord" in rendered:
+        raise ValueError("Incomplete or unmatched coordination Skill sections")
+    skill = rendered.encode("utf-8")
+    if len(skill) > 10000:
+        raise ValueError("Coordination Skill exceeds the 10000-byte input limit")
+    return skill, sections
+
+
+def compile_entry_hook(template, skill, sections):
+    """Bind the short Claude context to the full Skill before exposing the package."""
+    context = "\n\n".join((
+        "Accord task entry. For material needs, consult the installed yiyuan-accord:deliver-demand-driven-outcome Skill. Reuse equivalent meta-guidance already present.",
+        sections["scope"],
+        sections["action"],
+        "Retain the goal, authority, pauses, verified results and unfinished work. Check actual effects and writer ownership before retry, recovery or handoff.",
+        sections["verification"],
+    ))
+    # Keep every variant within the project's budget for the local Desktop entry.
+    max_bytes = 1800
+    for note in (*SESSION_NOTES.values(), SUBAGENT_NOTE):
+        output = context + ("\n\n" + note if note else "")
+        if len(output.encode("utf-8")) > max_bytes:
+            raise ValueError(f"Claude entry exceeds the {max_bytes}-byte context budget")
+    entry = {"skillSha256": sha256(skill).hexdigest(), "context": context,
+             "sessionNotes": SESSION_NOTES, "subagentNote": SUBAGENT_NOTE,
+             "maxContextBytes": max_bytes}
+    marker = b"/* compiled entry guidance */ null"
+    if template.count(marker) != 1:
+        raise ValueError("Expected one compiled guidance slot in the Claude Hook")
+    return template.replace(marker, json.dumps(entry, ensure_ascii=True, indent=2).encode("ascii"))
+
+
 def compose_lifecycle(common, setup_mechanism, host_guidance):
     placeholder = b"{{setup_mechanism}}"
     if common.count(placeholder) != 1:
@@ -136,7 +201,7 @@ def build(output):
     """Write a new local marketplace and package. Return the package path."""
     output = Path(output).absolute()
     source_paths = ["scripts/build_claude_plugin.py", f"{CURRENT}/.codex-plugin/plugin.json",
-                    HOOK_SOURCE, LIFECYCLE_SOURCE, "LICENSE", "NOTICE"]
+                    HOOK_SOURCE, ENTRY_SOURCE, LIFECYCLE_SOURCE, "LICENSE", "NOTICE"]
     source_paths.extend(f"{CURRENT}/skills/{skill}/SKILL.md" for skill in SKILLS)
     source_paths.extend(f"{CURRENT}/{name}" for name in FOUNDATION)
     sources = {name: (ROOT / name).read_bytes() for name in source_paths}
@@ -147,17 +212,16 @@ def build(output):
         raise ValueError("Expected a current Accord version")
     manifest = {key: metadata[key] for key in
                 ("description", "author", "homepage", "repository", "license", "keywords")}
-    manifest.update(name=PACKAGE, version=f"{version}-claude-dev.3", skills="./skills/")
+    manifest.update(name=PACKAGE, version=f"{version}-claude-dev.4", skills="./skills/")
     hook_command = 'node "${CLAUDE_PLUGIN_ROOT}/runtime/accord-hook.cjs"'
     command = {"type": "command", "command": hook_command, "timeout": 3}
     hooks = {
-        "SessionStart": [{"matcher": "startup|resume|clear|compact|fork", "hooks": [command]}],
+        "SessionStart": [{"matcher": "|".join(SESSION_NOTES), "hooks": [command]}],
         "SubagentStart": [{"hooks": [command]}],
     }
     files = {
         ".claude-plugin/plugin.json": json_bytes(manifest),
         "hooks/hooks.json": json_bytes({"hooks": hooks}),
-        "runtime/accord-hook.cjs": sources[HOOK_SOURCE],
         "LICENSE": sources["LICENSE"],
         "NOTICE": sources["NOTICE"],
         "README.md": (
@@ -173,12 +237,8 @@ def build(output):
         name = f"skills/{skill}/SKILL.md"
         files[name] = sources[f"{CURRENT}/{name}"]
     entry = f"skills/{ENTRY}/SKILL.md"
-    title = "# Coordinate the current task"
-    front_matter, body = split_guidance(files[entry], title)
-    _, separator, duties = body.lstrip("\n").partition("\n\n")
-    if not separator or not duties.startswith("Interpret each input"):
-        raise ValueError("Current coordination Skill no longer has one opening paragraph before its duties")
-    files[entry] = f"{front_matter}\n{title}\n\n{CLAUDE_ENTRY}\n\n{duties}".encode("utf-8")
+    files[entry], sections = compose_entry(sources[ENTRY_SOURCE], CLAUDE_ENTRY)
+    files["runtime/accord-hook.cjs"] = compile_entry_hook(sources[HOOK_SOURCE], files[entry], sections)
     for name in FOUNDATION:
         files[name] = sources[f"{CURRENT}/{name}"]
     files["skills/coordinate-capabilities/references/native-capabilities.md"] = NATIVE_CAPABILITIES.encode("utf-8")
@@ -254,9 +314,15 @@ def main():
     destination = parser.add_mutually_exclusive_group(required=True)
     destination.add_argument("--output", type=Path, help="A new local Claude marketplace directory")
     destination.add_argument("--codex-lifecycle-output", type=Path, help="A new Codex lifecycle Skill file")
+    destination.add_argument("--codex-entry-output", type=Path, help="A new Codex coordination Skill file")
     args = parser.parse_args()
     try:
-        if args.codex_lifecycle_output is not None:
+        if args.codex_entry_output is not None:
+            content, _ = compose_entry((ROOT / ENTRY_SOURCE).read_bytes())
+            with args.codex_entry_output.open("xb") as stream:
+                stream.write(content)
+            print(args.codex_entry_output)
+        elif args.codex_lifecycle_output is not None:
             print(build_codex_lifecycle(args.codex_lifecycle_output))
         else:
             print(build(args.output))

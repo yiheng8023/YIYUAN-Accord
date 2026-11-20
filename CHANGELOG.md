@@ -2,6 +2,7 @@
 
 ## 开发中
 
+- 修复 Claude Code 本地候选会因指导原文换行而丢失启动指导的问题。dev.4 从具名职责生成短指导，构建时检查每种入口的长度，已在隔离 CLI 核到启动和恢复时实际送达的正文。[入口回归](research/reviews/2026-11-19-multi-host-adapter-boundaries.md#entry-projection-result)
 - 增加基于当前 Accord 源码构建的独立 Claude Code 本地候选。隔离 CLI 和 Windows Squirrel 本地 Code 已有只读任务实测。修复长指导在桌面入口被截短的问题，完整的中英文元指导随包提供。[当前工作](docs/operations/PLAN-v3.3.md#current-work)
 - 补齐 Claude 候选构建器和市场清单的 SHA256 校验。隔离 CLI 已验证运行中写入的中断、回读、权限拒绝和新任务。观察分别核对宿主轮次终态、写入进程退出和目标文件字节。[中断和磁盘读回](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-cli-interrupted-write)
 - Windows Squirrel 本地 Code 实测了内建 `Write` 的权限允许、拒绝和同会话后续写入，原生结果与文件读回一致。[桌面写入实证](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-write)

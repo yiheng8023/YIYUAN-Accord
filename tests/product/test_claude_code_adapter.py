@@ -20,7 +20,6 @@ class ClaudeCodeAdapterTests(unittest.TestCase):
         self.market = Path(temporary.name) / "local market"
         self.package = builder.build(self.market)
         self.current = builder.ROOT / builder.CURRENT
-        self.hook = self.package / "runtime/accord-hook.cjs"
 
     def test_build_preserves_portable_guidance_and_records_versions_and_hashes(self):
         source_manifest = json.loads((self.current / ".codex-plugin/plugin.json").read_bytes())
@@ -62,13 +61,37 @@ class ClaudeCodeAdapterTests(unittest.TestCase):
         name = f"skills/{builder.ENTRY}/SKILL.md"
         codex = (self.current / name).read_text(encoding="utf-8")
         claude = (self.package / name).read_text(encoding="utf-8")
-        first_duty = "\n\nInterpret each input"
-        self.assertIn(first_duty, codex)
-        self.assertIn(first_duty, claude)
-        self.assertEqual(codex.split(first_duty, 1)[1], claude.split(first_duty, 1)[1])
+        source = (builder.ROOT / builder.ENTRY_SOURCE).read_text(encoding="utf-8")
+        intro = source.split("<!-- accord:host-entry -->\n", 1)[1].split("\n<!-- /accord -->", 1)[0]
+        self.assertEqual(1, codex.count(intro))
+        self.assertEqual(codex.replace(intro, builder.CLAUDE_ENTRY), claude)
+        self.assertNotIn("<!-- accord:", claude)
         self.assertIn("meta-guidance already present in this task. When it is missing, read the bundled\n"
                       "[English translation](references/meta-guidance.md) before applying these duties.", claude)
-        self.assertNotIn("The native entry supplies the English text", claude)
+
+    def test_codex_coordination_projection_matches_the_packaged_skill(self):
+        output = self.market.parent / "codex coordination.md"
+        done = subprocess.run(
+            [sys.executable, "-B", str(Path(builder.__file__)), "--codex-entry-output", str(output)],
+            capture_output=True, timeout=10, check=False,
+        )
+        self.assertEqual(0, done.returncode, done.stderr)
+        self.assertEqual((self.current / f"skills/{builder.ENTRY}/SKILL.md").read_bytes(), output.read_bytes())
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required for native Hook tests")
+    def test_reordered_source_metadata_still_loads_in_the_codex_entry_hook(self):
+        package = shutil.copytree(self.current, self.market.parent / "codex entry")
+        source = (builder.ROOT / builder.ENTRY_SOURCE).read_bytes().splitlines(keepends=True)
+        source[1], source[2] = source[2], source[1]
+        marker = b"<!-- accord:scope -->\n"
+        edited = b"".join(source).replace(marker, marker + b"Revised scope. ", 1)
+        skill, _ = builder.compose_entry(edited)
+        (package / f"skills/{builder.ENTRY}/SKILL.md").write_bytes(skill)
+        done = self.invoke_hook(b'{"hook_event_name":"SessionStart","source":"startup"}', package)
+        self.assertEqual(0, done.returncode, done.stderr)
+        context = json.loads(done.stdout)["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("Revised scope. ", context)
+        self.assertNotIn("<!-- accord:", context)
 
     def test_codex_lifecycle_source_matches_the_packaged_skill(self):
         output = self.market.parent / "codex lifecycle.md"
@@ -80,14 +103,12 @@ class ClaudeCodeAdapterTests(unittest.TestCase):
         self.assertEqual((self.current / builder.LIFECYCLE_SKILL).read_bytes(), output.read_bytes())
 
     def test_codex_lifecycle_edit_leaves_claude_package_unchanged(self):
-        source_root = self.market.parent / "source copy"
+        source_root = self.copy_build_sources()
         record = (self.market / "build.json").read_bytes()
         codex_skill = f"{builder.CURRENT}/{builder.LIFECYCLE_SKILL}"
         codex_paths = (builder.CODEX_LIFECYCLE_SOURCE, codex_skill)
-        for name in (*json.loads(record)["sources"], *codex_paths):
-            data = (builder.ROOT / name).read_bytes()
-            if name in codex_paths:
-                data += b"\nTemporary Codex lifecycle note.\n"
+        for name in codex_paths:
+            data = (builder.ROOT / name).read_bytes() + b"\nTemporary Codex lifecycle note.\n"
             copy = source_root / name
             copy.parent.mkdir(parents=True, exist_ok=True)
             copy.write_bytes(data)
@@ -160,24 +181,119 @@ class ClaudeCodeAdapterTests(unittest.TestCase):
         self.assertEqual(unrelated.read_bytes(), b"independent contents")
         self.assertFalse((output / ".claude-plugin/marketplace.json").exists())
 
-    def invoke_hook(self, data):
+    def invoke_hook(self, data, package=None):
         return subprocess.run(
-            ["node", str(self.hook)], input=data, capture_output=True,
+            ["node", str((package or self.package) / "runtime/accord-hook.cjs")], input=data, capture_output=True,
             cwd=self.market, timeout=5, check=False,
         )
+
+    def copy_build_sources(self):
+        root = self.market.parent / "source copy"
+        for name in json.loads((self.market / "build.json").read_bytes())["sources"]:
+            target = root / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(builder.ROOT / name, target)
+        return root
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required for native Hook tests")
+    def test_edits_follow_named_duties_through_build_and_hook(self):
+        root = self.copy_build_sources()
+        source = root / builder.ENTRY_SOURCE
+        text = source.read_text(encoding="utf-8")
+        lines = text.splitlines(keepends=True)
+        lines[1], lines[2] = lines[2], lines[1]
+        text = "".join(lines)
+        revised = {"scope": "Apply the current scope.", "action": "Use the authorized means.",
+                   "verification": "Check\nthe result.\n\n复核原件。"}
+        for role, value in revised.items():
+            marker = f"<!-- accord:{role} -->\n"
+            original = text.split(marker, 1)[1].split("\n<!-- /accord -->", 1)[0]
+            text = text.replace(marker + original, marker + value, 1)
+        outside = "Verify the claimed consequence in an unrelated example."
+        source.write_text(text + "\n" + outside + "\n", encoding="utf-8")
+        with patch.object(builder, "ROOT", root):
+            package = builder.build(self.market.parent / "reworded")
+        skill = (package / f"skills/{builder.ENTRY}/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn(outside, skill)
+        done = self.invoke_hook(b'{"hook_event_name":"SessionStart","source":"startup"}', package)
+        self.assertEqual(0, done.returncode, done.stderr)
+        context = json.loads(done.stdout)["hookSpecificOutput"]["additionalContext"]
+        for value in revised.values():
+            self.assertIn(value, context)
+            self.assertIn(value, skill)
+        self.assertNotIn(outside, context)
+        self.assertNotIn("<!-- accord:", context)
+
+    def test_invalid_source_or_oversized_event_fails_before_publication(self):
+        root = self.copy_build_sources()
+        source = root / builder.ENTRY_SOURCE
+        original = source.read_text(encoding="utf-8")
+        marker = "<!-- accord:scope -->\n"
+        scope = original.split(marker, 1)[1].split("\n<!-- /accord -->", 1)[0]
+        changes = {
+            "missing": original.replace(marker, ""),
+            "duplicate": original.replace("<!-- accord:action -->", "<!-- accord:scope -->"),
+            "empty": original.replace(marker + scope, marker),
+            "unknown": original.replace(marker, "<!-- accord:unspecified -->\n"),
+            "over budget": original.replace(marker, marker + "界" * 601),
+            "oversized full Skill": original + "x" * 10001,
+            "incorrect identity": original.replace("name: " + builder.ENTRY, "name: different-skill", 1),
+            "extra field": original.replace("name: ", "unhandled-setting: enabled\nname: ", 1),
+        }
+        output = self.market.parent / "retryable build"
+        with patch.object(builder, "ROOT", root):
+            for case, changed in changes.items():
+                with self.subTest(case=case):
+                    source.write_text(changed, encoding="utf-8")
+                    with self.assertRaises(ValueError):
+                        builder.build(output)
+                    self.assertFalse(output.exists())
+            source.write_text(original, encoding="utf-8")
+            self.assertTrue(builder.build(output).is_dir())
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required for native Hook tests")
+    def test_a_longer_event_can_exceed_the_budget_while_startup_still_fits(self):
+        startup = self.invoke_hook(b'{"hook_event_name":"SessionStart","source":"startup"}')
+        self.assertEqual(0, startup.returncode, startup.stderr)
+        context = json.loads(startup.stdout)["hookSpecificOutput"]["additionalContext"]
+        padding = "x" * (1800 - len(context.encode("utf-8")))
+        source = (builder.ROOT / builder.ENTRY_SOURCE).read_bytes()
+        marker = b"<!-- accord:action -->\n"
+        revised = source.replace(marker, marker + padding.encode("ascii"), 1)
+        skill, sections = builder.compose_entry(revised, builder.CLAUDE_ENTRY)
+        with self.assertRaisesRegex(ValueError, "1800-byte context budget"):
+            builder.compile_entry_hook((builder.ROOT / builder.HOOK_SOURCE).read_bytes(), skill, sections)
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required for native Hook tests")
+    def test_hook_recognizes_line_endings_and_rejects_a_damaged_or_missing_skill(self):
+        skill = self.package / f"skills/{builder.ENTRY}/SKILL.md"
+        original = skill.read_bytes()
+        event = b'{"hook_event_name":"SessionStart","source":"startup"}'
+        expected = self.invoke_hook(event)
+        self.assertEqual(0, expected.returncode, expected.stderr)
+        skill.write_bytes(original.replace(b"\n", b"\r\n"))
+        converted = self.invoke_hook(event)
+        self.assertEqual(0, converted.returncode, converted.stderr)
+        self.assertEqual(expected.stdout, converted.stdout)
+        for data in (original.replace(b"Claude Code", b"Other Code", 1), b"\xff", None):
+            with self.subTest(damage="missing" if data is None else len(data)):
+                if data is None:
+                    skill.unlink()
+                else:
+                    skill.write_bytes(data)
+                done = self.invoke_hook(event)
+                self.assertNotEqual(0, done.returncode)
+                self.assertEqual(b"", done.stdout)
 
     @unittest.skipUnless(shutil.which("node"), "Node.js is required for native Hook tests")
     def test_native_entry_events_carry_current_guidance_without_task_data(self):
         hooks = json.loads((self.package / "hooks/hooks.json").read_bytes())["hooks"]
         self.assertEqual({"SessionStart", "SubagentStart"}, set(hooks))
         self.assertEqual("node", hooks["SessionStart"][0]["hooks"][0]["command"].split()[0])
-        skill = (self.current / f"skills/{builder.ENTRY}/SKILL.md").read_bytes().decode("utf-8")
-        body = skill.split("---", 2)[-1].strip()
+        source = (builder.ROOT / builder.ENTRY_SOURCE).read_text(encoding="utf-8")
         foundation = (self.current / builder.FOUNDATION[0]).read_bytes().decode("utf-8").strip()
-        expected_duties = [paragraph for paragraph in body.replace("\r\n", "\n").split("\n\n")
-                           if paragraph.startswith(("Interpret each input", "For an authorized outcome",
-                                                    "Verify the claimed consequence"))]
-        self.assertEqual(len(expected_duties), 3)
+        expected_duties = [source.split(f"<!-- accord:{role} -->\n", 1)[1].split("\n<!-- /accord -->", 1)[0]
+                           for role in ("scope", "action", "verification")]
         sources = hooks["SessionStart"][0]["matcher"].split("|")
         events = [{"hook_event_name": "SessionStart", "source": source} for source in sources]
         events.append({"hook_event_name": "SubagentStart", "agent_id": "synthetic-id", "agent_type": "Explore"})
@@ -204,6 +320,8 @@ class ClaudeCodeAdapterTests(unittest.TestCase):
         for data in (
             b'{"hook_event_name":"Stop"}',
             b'{"hook_event_name":"SessionStart","source":"unknown"}',
+            b'{"hook_event_name":"SessionStart","source":"__proto__"}',
+            b'{"hook_event_name":"SessionStart","source":["startup"]}',
             b'{"hook_event_name":"SubagentStart","agent_type":"Explore"}',
             b'"\xff"',
             b" " * 65537,

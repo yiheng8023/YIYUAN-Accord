@@ -6,6 +6,8 @@
 
 3.3.18 已[正式发布](PLAN-v3.3.md#release-3.3.18)。传播前按届时的正式发行和入口实证核对支持范围。Claude Code 仍为本地候选。dev.2 的 CLI 观察覆盖受控写入与中断。dev.3 已在隔离 CLI 和 Windows Squirrel 本地 Code 核对启动指导、随包元指导和只读任务。受控写入、中断和迟到效果按原测试条件引用。受测条件与后续资格见[当前工作](PLAN-v3.3.md#current-work)。对照与传播继续随可公开的证据更新。
 
+Claude dev.4 的本机回环结果可作开发案例，说明一次 Markdown 换行如何影响插件，以及如何从宿主请求核实修复。对外说明仍按届时正式版和真实任务的证据确定。[案例原件与适用范围](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#entry-projection-result)
+
 传播沿实际启用／未启用对照，也可准备有据的功能、使用说明和单组真实案例。每份可用素材注明证据入口、适用版本或条件及当前／历史／待核状态；相关事实改变时复核，充分的旧证据继续复用。徽章、贡献者、赞助及参与入口按社区用途保持。旧素材仍在 NEXUS 体系维护。
 
 <a id="first-use-materials"></a>
