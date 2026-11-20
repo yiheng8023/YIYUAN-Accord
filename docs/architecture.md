@@ -17,16 +17,29 @@ identities. The separate Claude Code candidate is built locally for verification
 flowchart TD
     D["Accord's design<br/>Coordination, continuity, verification"]
     A["ChatGPT/Codex adapter<br/>Skills, Hooks, state tools"]
-    H["Host assistant<br/>Models, tools, execution"]
+    H["Host assistant<br/>Model or agent"]
     U["User<br/>Goal, limits, permission"]
+    E["Relevant capabilities<br/>Host tools, plugins and external services"]
     R["Result and effects"]
     D --> A
     A -->|Guidance and state| H
     U --> H
-    H --> R
+    H -->|Selects as needed| E
+    E -->|Availability and results| H
+    E -->|Can read or change the task artifact| R
+    H -->|Acts within authority| R
+    R -->|Feedback for the next decision| H
+    R -->|Checked outcome or open question| U
 ```
 
 See the [reader-facing example](../README.md#how-it-works) and the [detailed system diagram](operations/PLAN-v3.3.md#稳定关系与动态方法).
+For example, a drawing reader can report its units and supported operations.
+If it loses write access, the assistant can still inspect the drawing and
+explain which requested change needs a different authorized route. If the
+user changes the drawing, the assistant checks whether the earlier correction
+still applies. The component supplies the domain facts. Accord helps the
+assistant decide which earlier assumptions and results need checking.
+
 The [user guide](user-guide.md#english-user-guide) carries installation, Hook
 trust, privacy and actual entry conditions. ChatGPT desktop Codex, local Work,
 Codex CLI and the selected VS Code extension path reuse applicable common

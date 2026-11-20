@@ -8,7 +8,7 @@
 
 Claude Code 本地候选核构建来源、实际插件和宿主版本、指导正文、取消确认、迟到结果、原轮终态及后续任务。只读链路已在受测 CLI 与 Windows Squirrel 本地 Code 观察。dev.2 的 CLI 有前台 Bash 写入中断、权限拒绝和同会话后续写入的原生与磁盘证据，Squirrel 已实测内建 `Write` 的允许、拒绝及同会话后续新任务。dev.3 已在隔离 CLI 核对完整 Skill 与随包元指导的实际读取。dev.3 的受测 Squirrel 本地 Code 已核候选采用、执行中写入中断、到点后磁盘复核及取消后新任务。跨入口接续需核实际同一任务、权限、结果及单一写者。启用收益仍用同宿主、同条件的实际启用差异判断。[当前候选观察](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-current-candidate) · [桌面写入观察](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-write) · [dev.3 复验](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-foundation-fallback)
 
-Claude dev.4 的入口改动分别核对构建时选入的职责、实际 Hook 输出和宿主首个任务请求里的正文。隔离 CLI 已核默认与换行的启动和恢复。dev.4 的桌面投递及模型采用留待相应入口复核。[入口实证与范围](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#entry-projection-result)
+Claude dev.4 核对构建时选入的职责、实际 Hook 输出和首个任务请求。独立 CLI 2.1.329 已核默认与换行的启动和恢复。直接调用同一桌面 Code 2.1.328 内核时，启用组在启动、恢复时分别送达完整的 1,580 和 1,700 字节，未启用组两次均无这段指导。桌面界面发起的会话另查实际工作区和首个请求。真实模型怎样采用指导、对任务有何效果，按原受测版本和任务记录。[入口修复](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#entry-projection-result) · [对照原理和结果](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#r131-adaptation)
 
 r124 的两组成品、观察用量和证据缺口按原记录保留。r125 对新任务在原件可用时分别核对有序正文和实际工具定义。两组首轮工具定义及顺序一致，共同正文仍有宿主目录差异。盲审均为部分通过，合稿补齐了下一次实机所需的核验步骤。后续按实际请求判断共同条件，用量及成品差异随该前提使用。[r124 原件范围](../../research/evaluations/accord-toggle-v1.md#release-source-pair-3318) · [r125 对照](../../research/evaluations/accord-toggle-v1.md#desktop-preflight-pair-3318)
 

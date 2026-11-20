@@ -1,10 +1,12 @@
 # 3.3 共识节点与当前计划
 
-节点：N33-20260909 · 修订：r130 · 2026-11-20。本文保存现行共识、结果关系与工序。当前计划和进度集中在[当前工作](#current-work)。历史过程及原件按下方索引查阅。
+节点：N33-20260909 · 修订：r131 · 2026-11-20。本文保存现行共识、结果关系与工序。当前计划和进度集中在[当前工作](#current-work)。历史过程及原件按下方索引查阅。
 
 <a id="current-work"></a>
 
 ## 基于 3.3.18 的当前工作（2026-11-20）
+
+**r131 动态适应。** 已用同一桌面 Code 内核核对仅切换 Accord 时首个任务请求的差异，也核了宿主设置相同、用户连续补充要求时的输入保留，以及设置变化、信号缺失和恢复时的暂停边界。桌面界面与内核分别取证。[本轮观察](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#r131-adaptation)
 
 **r130 入口修复。** 在隔离副本中，dev.3 的指导换一行即可让两份清单严格校验通过、六种入口却全部交付失败。共用源码现标明启动时需要的三段职责，构建器生成各宿主所用的正文。Claude dev.4 的默认六种输出与 dev.3 逐字节一致，Codex 协调 Skill 与 3.3.18 发行成员一致。原文和换行的 dev.4 各在独立 CLI 2.1.329 核到启动、恢复以及首个任务请求里的完整指导。下次本地桌面 Code 使用 dev.4 时核实际加载和首轮指导。写入、中断与迟到效果仍沿用各原受测版本的记录。[复现、回归与范围](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#entry-projection-result)
 
@@ -1022,6 +1024,8 @@ VS Code兼容编辑器优先作为同一扩展适配族，Xcode、JetBrains等�
 
 ## 稳定关系与动态方法
 
+人机协作还取决于模型、宿主和生态组件能提供哪些事实、能力和反馈。既有办法能否沿用，要看哪些前提仍成立。例如两张图纸都出现尺寸偏差，先让读图工具核实单位和标注约束，再决定是否复用上次的修正。单次任务关注受影响的交付，跨任务再看同类调整是否减少返工、人工介入和总体负担。已有经验可以缩小查找范围，改动授权或验收仍由相应责任主体决定。[开发者架构图](../architecture.md#design-to-host)
+
 本节系统图与[工序依赖图](#工序与依赖)持续维护；面向用户和开发者的概要视图见[中文 README](../../README.zh-CN.md#如何工作)与[英文 README](../../README.md#how-it-works)。图示沿用本计划的设计依据，相关职责、关系或依赖变化时按[贡献指南](../../CONTRIBUTING.md#current-development)同步校准受影响视图；验收状态仍以所链接的证据为准。
 
 起点—过程—结果是可嵌套、并行、反馈的关系，不规定三个物理模块或三个 Skill。非线性工序同时适用于 Accord 的开发、通用设计及普通用户实际任务；工作按依赖和条件组织，允许交叉、并行、回退和重排。简单任务可以线性完成，授权、共享状态、不可逆动作及交接释放的必要局部顺序仍须遵守。语义判断解释输入与变化；事件驱动只重审受影响判断；负边界限定缺乏成立条件的推断、授权、动作和完成声明。少数稳定约束驱动可变路线。局部确定性操作可标准化，全程不套固定 SOP。
@@ -1533,7 +1537,7 @@ W02持续承担完整入口处置，W04随受影响历史依赖纠偏，W06/W07�
 
 | 候选 | 已保留资料与可能评估内容 |
 |---|---|
-| Claude Code | 现行本地候选已核 CLI 只读续作、受控写入中断及权限拒绝。Windows Squirrel 本地 Code 已证实际加载与只读任务链。其他入口及影响交付的差异按实际条件取证。[当前工作](#current-work) · [原生 plugin eval](https://code.claude.com/docs/en/plugin-evals) |
+| Claude Code | 隔离 CLI 与 Windows Squirrel 本地 Code 已在相应候选上实测读写、权限和中断后的效果。各版候选及入口的验证范围见[当前工作](#current-work)。dev.4 的首轮指导另有[启用对照](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#r131-adaptation)。其他入口按实际条件核查。[原生 plugin eval](https://code.claude.com/docs/en/plugin-evals) |
 | Pi | 指向当前[Pi项目](https://github.com/earendil-works/pi)（原badlogic/pi-mono）；核扩展/Skill、会话及模型接口能否承担Accord必要职责，保留其轻量设计，不先复制另一套控制器。 |
 | DeepSeek Harness | [官方开发者预览](https://www.deepseek.com/harness/en/)和[源码](https://github.com/deepseek-ai/deepseek-harness)提供可组合插件路线；接口仍演进，先核稳定性、接入与退出成本，再决定具体支持。 |
 | ZCode | 本次按[Z.ai ZCode](https://github.com/zai-org/ZCode)及[官方Agent文档](https://zcode.z.ai/cn/docs/agents)理解；区分自有Agent、模型、插件/Skill/Hook与其它代理入口，不能按相似UI或组件名称推定兼容。 |
