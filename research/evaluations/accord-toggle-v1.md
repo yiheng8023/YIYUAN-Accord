@@ -16,6 +16,18 @@
 
 功能验收、工程质量、实际使用价值与发行分别判断。已有 A01–A08、质量底线和历史失败保持；本初版不改写其通过记录，也不成为日常用户的新流程。3.3.2 保留为发展节点，初版阶段的 3.3.4 发行包和标签独立保存；当前状态以项目接续及精确发行记录为准。评价材料本身不要求新发版；若发现真实缺陷，则按受影响对象、兼容性、风险和修复验证决定维护或发版。
 
+<a id="r132-component-change-observation"></a>
+
+### r132 组件升级后哪些工作需要重做（2026-11-21 复核）
+
+11 月 20 日，维护者告知 Claude Desktop 已更新。任务在 ChatGPT/Codex 中执行，被维护的是 Windows Squirrel 版的汉化。助手核到桌面从 6.6395.0 升到 6.28899.2，原安装机制仍可用，旧规则限定的模块名已变，遂按新版原始资源重新匹配文案。原生操作记录显示，本轮显式读取 Accord 3.3.18 的 `verify-and-close-outcome` 在这项决定之后、上机核验之前。[该次维护提交](https://github.com/yiheng8023/claude-chinese/commit/6ba86d227432ac88cf740d912904491e09af874e)
+
+权限菜单的 `Plan` 在两版都译为「计划」，模块名和匹配表达式却变了。维护中的一次漂移检查同时报旧规则 `DRIFTED`、新规则命中。助手修正了检查器，让它先找规则指定的模块。再查同一新版时，4 条规则因目标模块缺席归入 `OUTSIDE_MODULE_SCOPE`，`DRIFTED` 为 0。两代 `Plan` 规则都保留在词库里。[两个版本的词条](https://github.com/yiheng8023/claude-chinese/blob/6ba86d227432ac88cf740d912904491e09af874e/dict/scoped-ui-zh-CN.json#L724-L761) · [检查器的判定条件](https://github.com/yiheng8023/claude-chinese/blob/6ba86d227432ac88cf740d912904491e09af874e/tools/drift-detector.js#L79-L98)
+
+与父提交比对，`install.bat`、整个 `core/`、6.6395 的界面和配置说明样本均为同一 Git 对象。新版另加两份样本，维护者可据此复核哪些旧证据仍然有效。原任务还用既有快捷方式冷启动新版，检查主界面、设置和权限菜单。公开 CI 在同一提交上通过 9 项，桌面实机观察另见当时的维护说明。[样本与修改范围](https://github.com/yiheng8023/claude-chinese/commit/6ba86d227432ac88cf740d912904491e09af874e) · [CI 作业](https://github.com/yiheng8023/claude-chinese/actions/runs/44708174603) · [实机维护说明](https://github.com/yiheng8023/claude-chinese/blob/6ba86d227432ac88cf740d912904491e09af874e/README.md#L69-L73)
+
+公开材料可独立核对修复、保留的成果和 CI。谁先提示更新、何时读取 Skill 及修复前的误报来自本地会话原件。缺少同条件的未启用组，无法由此估算 Accord 节省的返工、人工介入或用量。下次若有新的可配对维护，两组收到相同的原始需求和材料。观察者事先另记哪些旧结果仍有效，用于事后核验，避免在任务提示里透露解法。
+
 <a id="first-use-maintenance-pair"></a>
 
 ### 2026-11-18 首用安装文案维护对照
