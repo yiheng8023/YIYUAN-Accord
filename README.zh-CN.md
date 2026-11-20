@@ -51,10 +51,10 @@ flowchart TD
 
 正式版本见 [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest)。通过 Codex CLI 或 ChatGPT 桌面端安装，再从支持相应运行条件的 Codex 或本地 Work 入口使用。请确保宿主能运行兼容 Node（当前受测推荐为 Node 24）。普通使用不需要 Python。仓库开发与验证支持 Python 3.11–3.14，以 3.14 为验证基准；3.15 暂列观察，适时验证后再评估。参见[贡献指南](CONTRIBUTING.md)。
 
-1. **安装。** 从本项目来源安装 YIYUAN Accord；CLI 登记来源可使用：
+1. **安装。** 在 Releases 中看到 3.3.19 后，用下方命令登记该版本的插件来源。安装 3.3.18 可用[已核验的 3.3.18 说明](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/README.zh-CN.md#开始使用)。
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 699b24c3092edbafc431f0760a539eeca3f175e3
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref refs/tags/v3.3.19
    ```
 
 2. **启用插件。** 确认宿主允许使用插件，并在实际使用范围内启用 Accord。CLI 在 `/plugins` 中选择来源、安装，并对已安装项按 `Space` 启停。

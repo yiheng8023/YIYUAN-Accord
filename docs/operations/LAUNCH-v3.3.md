@@ -18,8 +18,8 @@ Claude dev.4 的本机回环结果可作开发案例，说明一次 Markdown 换
 
 ### 当前首用核对（3.3.18）
 
-1. 从正式发行页确认版本。CLI 需要登记来源时，从默认分支的现行指南复制命令，核对 `--ref` 指向 3.3.18 的发行提交 `699b24c3092edbafc431f0760a539eeca3f175e3`。该发行标签内的 README 和指南仍保留 3.3.17 的来源命令。登记后到 `/plugins` 选择 `yiyuan-accord`，安装并在目标作用域启用 Accord。桌面使用所用版本的插件目录或来源入口。[3.3.18 正式发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.18) · [现行安装指南](../user-guide.md#首次安装与信任)
-2. 首次安装和每次更新后手动审阅并允许 Hook。桌面用**设置 → 钩子 → YIYUAN Accord**或输入区的钩子提示，CLI 用 `/hooks`。
+1. 从正式发行页确认版本。CLI 需要登记来源时，从[当时发布后核验的安装指南](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/docs/user-guide.md#首次安装与信任)复制命令，核对 `--ref` 指向 3.3.18 的发行提交 `699b24c3092edbafc431f0760a539eeca3f175e3`。该发行标签内的 README 和指南仍保留 3.3.17 的来源命令。登记后到 `/plugins` 选择 `yiyuan-accord`，安装并在目标作用域启用 Accord。桌面使用所用版本的插件目录或来源入口。[3.3.18 正式发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.18) · [现行安装指南](../user-guide.md#首次安装与信任)
+2. 在实测桌面端，首次安装及每次更新后，从**设置 → 钩子 → YIYUAN Accord**或输入框旁的钩子图标审阅并点击“允许”。CLI 用 `/hooks` 查看当前定义，按实际待确认项操作。
 3. 在目标会话核对实际插件来源、版本、适用 Hook 的执行记录与 MCP 连接。仍显示旧版时，先核安装来源和包，再按实际宿主支持的方式刷新或重载并读回。[排查、更新与退出](../user-guide.md#排查更新与退出)
 
 演示从新用户的实际问题开始，展示安装、启用、手动允许 Hook，再用一条普通请求确认该会话的加载。可从 NEXUS 复用片头、配色和制作经验。短任务的对照可展示两组都交付和本次成本差异，素材标明受测版本与条件。
@@ -49,9 +49,9 @@ Once the release tag is selected, use its fully qualified `refs/tags/v…` ref i
 codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref refs/tags/v3.3.18
 ```
 
-**简体中文。** 在 Codex CLI 登记所选发行的来源。打开 `/plugins`，核对市场 `yiyuan-accord`，安装并在目标作用域启用 `yiyuan-accord-codex`。首次安装及每次更新后在 `/hooks` 手动审阅并允许适用 Hook。新会话中核实实际加载的来源、版本和适用 Hook 的执行。可通过发行页上的完整提交 SHA 核对来源。
+**简体中文。** 在 Codex CLI 登记所选发行的来源。打开 `/plugins`，核对市场 `yiyuan-accord`，安装并在目标作用域启用 `yiyuan-accord-codex`。用 `/hooks` 查看当前定义，按实际待确认项操作。新会话中核实实际加载的来源、版本和适用 Hook 的执行。可通过发行页上的完整提交 SHA 核对来源。
 
-**English.** Register the selected release as a source in Codex CLI. Open `/plugins`, check the `yiyuan-accord` marketplace, then install and enable `yiyuan-accord-codex` for the intended scope. Review and allow the applicable hooks in `/hooks` after the first install and each update. In a new session, verify the loaded source and version and check that the applicable hooks ran. Use the full commit SHA on the release page to verify the source.
+**English.** Register the selected release as a source in Codex CLI. Open `/plugins`, check the `yiyuan-accord` marketplace, then install and enable `yiyuan-accord-codex` for the intended scope. Use `/hooks` to review the current definitions and allow any that are pending. In a new session, verify the loaded source and version and check that the applicable hooks ran. Use the full commit SHA on the release page to verify the source.
 
 维护者在发布前记录最终候选的完整 SHA，并用 `git rev-parse` 独立核对本地标签解引用后的提交等于该 SHA。发布后，远端标签解引用后的提交、Release 正文的完整 SHA 和实际市场检出的 `HEAD` 均须等于这个候选 SHA。逐处读回三份固定源码文件的四条命令。用干净配置核对市场 `yiyuan-accord`、完整插件 ID `yiyuan-accord-codex@yiyuan-accord` 和插件清单版本。实际检出的提交和清单版本须分别与预期值完全一致，登记成功也不能抵消出入。保留旧标签及其文档原件。
 

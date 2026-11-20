@@ -51,10 +51,10 @@ In one comparison, both runs produced a usable quick-start card. The enabled run
 
 Published versions are available in [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest). Install through Codex CLI or the ChatGPT desktop app, then use a supported Codex or local Work entry. The host needs a compatible Node executable; Node 24 is the current tested recommendation. Ordinary use does not require Python. Repository development and verification support Python 3.11–3.14, with 3.14 as the validation baseline; Python 3.15 remains under observation. See [Contributing](CONTRIBUTING.md).
 
-1. **Install.** Install YIYUAN Accord from this repository's marketplace source. To register that source from the CLI:
+1. **Install.** Once 3.3.19 appears in Releases, register its marketplace source with the command below. For 3.3.18, use the [verified 3.3.18 instructions](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/README.md#get-started).
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 699b24c3092edbafc431f0760a539eeca3f175e3
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref refs/tags/v3.3.19
    ```
 
 2. **Enable plugins and Accord.** Allow plugin use in the host and enable Accord in the scope you actually use. In CLI `/plugins`, select the marketplace, install, and press `Space` on the installed plugin to turn it on or off.

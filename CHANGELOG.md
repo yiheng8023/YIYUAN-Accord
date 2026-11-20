@@ -17,6 +17,7 @@
 
 ## 3.3.19 候选
 
+- 3.3.19 的中英文安装命令使用完整发行标签，两份 README 和双语指南均保留 3.3.18 的固定安装入口。Codex 的两个 Skill 生成命令先写完临时文件再发布，写入失败后可以原路径重试，已有输出受到保护。
 - 补齐 ChatGPT/Codex 安装助手的 Hook 指引。实测桌面首次安装及更新后，用户可从「设置 → 钩子 → YIYUAN Accord」或输入框的钩子图标审阅并允许。已经允许时继续核对会话中的实际 Hook 事件。CLI 使用 `/hooks`。[安装说明](docs/user-guide.md)
 - 在 Codex CLI 0.171.0 复验开发说明的启用差异对照。通过同一录制二进制还原新版请求记录，核对实际工具定义、预热上下文、Skill 目录和被动 MCP 启动状态。[新对照](research/evaluations/accord-toggle-v1.md#r129-builder-note-pair)
 - 历史证据校验复用已有的 Git 读取环境隔离，按选定检出目录复核祖先关系、跟踪文件及内容，避免继承的错误 Git 路由导致误判。[本地回归](docs/operations/PLAN-v3.3.md#r129-local-regression)

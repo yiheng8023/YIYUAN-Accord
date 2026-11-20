@@ -1,6 +1,8 @@
 """Check the standalone Claude candidate's sources and native event contract."""
 
+from contextlib import contextmanager, redirect_stderr, redirect_stdout
 from hashlib import sha256
+import io
 import json
 from pathlib import Path
 import shutil
@@ -105,10 +107,62 @@ class ClaudeCodeAdapterTests(unittest.TestCase):
         self.assertEqual((self.current / onboarding).read_bytes(), output.read_bytes())
         codex = output.read_text(encoding="utf-8")
         claude = (self.package / builder.LIFECYCLE_SKILL).read_text(encoding="utf-8")
-        for route in ("Settings → Hooks", "`/hooks`"):
+        for route in ("Settings → Hooks", "indicator beside the chat input", "`/hooks`",
+                      "only while approval is pending", "Once allowed, verify the relevant Hook event"):
             with self.subTest(route=route):
                 self.assertIn(route, codex)
         self.assertNotIn("Settings → Hooks", claude)
+
+    def test_interrupted_codex_projection_is_retryable_and_preserves_existing_output(self):
+        original_open = Path.open
+
+        @contextmanager
+        def fail_during_write(stream):
+            with stream:
+                class InterruptedWriter:
+                    def write(self, data):
+                        stream.write(data[:8])
+                        raise OSError("simulated disk full")
+                yield InterruptedWriter()
+
+        def interrupt(path, mode="r", *args, **kwargs):
+            stream = original_open(path, mode, *args, **kwargs)
+            if mode in ("xb", "wb"):
+                return fail_during_write(stream)
+            return stream
+
+        for flag, name in (("--codex-entry-output", f"skills/{builder.ENTRY}/SKILL.md"),
+                           ("--codex-lifecycle-output", builder.LIFECYCLE_SKILL)):
+            with self.subTest(flag=flag), redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                output = self.market.parent / flag.lstrip("-")
+                with patch.object(sys, "argv", ["build", flag, str(output)]):
+                    with patch.object(Path, "open", interrupt), self.assertRaises(SystemExit) as failed:
+                        builder.main()
+                    self.assertEqual(1, failed.exception.code)
+                    self.assertFalse(output.exists())
+                    builder.main()
+                    self.assertEqual((self.current / name).read_bytes(), output.read_bytes())
+                    output.write_bytes(b"existing work")
+                    with self.assertRaises(SystemExit) as exists:
+                        builder.main()
+                    self.assertEqual(1, exists.exception.code)
+                    self.assertEqual(b"existing work", output.read_bytes())
+
+    def test_projection_detects_short_writes_and_respects_a_concurrent_creator(self):
+        output = self.market.parent / "result.md"
+        with patch.object(Path, "write_bytes", return_value=2), self.assertRaises(OSError):
+            builder.write_new_projection(output, b"complete")
+        self.assertFalse(output.exists())
+
+        write = Path.write_bytes
+
+        def create_competing_output(staged, content):
+            write(output, b"other writer")
+            return write(staged, content)
+
+        with patch.object(Path, "write_bytes", create_competing_output), self.assertRaises(FileExistsError):
+            builder.write_new_projection(output, b"complete")
+        self.assertEqual(b"other writer", output.read_bytes())
 
     def test_codex_lifecycle_edit_leaves_claude_package_unchanged(self):
         source_root = self.copy_build_sources()

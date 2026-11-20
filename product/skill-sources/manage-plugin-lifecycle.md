@@ -12,9 +12,9 @@ Skill grants no new work or permission.
 
 ## First setup and missing prerequisites
 
-When the host invokes this Skill for Accord setup, use its healthy native tools
-even if {{setup_mechanism}} are unavailable. This text does not
-require them to run. Preserve the requested installation scope and existing work;
+When the host invokes this Skill for Accord setup, use its healthy native tools.
+Setup can proceed without {{setup_mechanism}}.
+Preserve the requested installation scope and existing work;
 use host state where sufficient, not a broken Accord tool as a setup prerequisite.
 
 Check the actual host entry/backend, execution environment, package source and

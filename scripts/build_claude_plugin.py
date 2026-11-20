@@ -1,8 +1,10 @@
 """Build the local Claude Code package or render a shared Skill for Codex."""
 
 import argparse
+import errno
 from hashlib import sha256
 import json
+import os
 from os.path import samestat
 from pathlib import Path
 import re
@@ -161,6 +163,37 @@ def compose_lifecycle(common, setup_mechanism, host_guidance):
     return shared.rstrip() + b"\n\n" + appendix.lstrip()
 
 
+def write_new_projection(output, content):
+    """Publish a fully written Skill without overwriting an existing destination."""
+    with TemporaryDirectory(prefix=".accord-skill-", dir=output.parent) as temporary:
+        staged = Path(temporary) / "SKILL.md"
+        if staged.write_bytes(content) != len(content):
+            raise OSError("Incomplete Skill projection")
+        if os.name == "nt":
+            staged.rename(output)  # Windows rename refuses an existing destination.
+            return
+        try:
+            os.link(staged, output)
+            return
+        except OSError as error:
+            if error.errno not in (errno.EPERM, errno.ENOSYS, errno.EOPNOTSUPP):
+                raise
+        # Some mounted filesystems support rename but not hard links. Reserve the
+        # name exclusively before replacement so two builders cannot overwrite it.
+        with output.open("xb") as reservation:
+            identity = os.fstat(reservation.fileno())
+            try:
+                staged.replace(output)
+            except OSError:
+                try:
+                    current = output.lstat()
+                except FileNotFoundError:
+                    current = None
+                if current is not None and samestat(identity, current) and current.st_size == 0:
+                    output.unlink()
+                raise
+
+
 def build_codex_lifecycle(output):
     """Write the Codex lifecycle projection to a new file."""
     output = Path(output).absolute()
@@ -169,8 +202,7 @@ def build_codex_lifecycle(output):
         b"Accord's Node commands or state MCP",
         (ROOT / CODEX_LIFECYCLE_SOURCE).read_bytes(),
     )
-    with output.open("xb") as stream:
-        stream.write(content)
+    write_new_projection(output, content)
     return output
 
 
@@ -319,8 +351,7 @@ def main():
     try:
         if args.codex_entry_output is not None:
             content, _ = compose_entry((ROOT / ENTRY_SOURCE).read_bytes())
-            with args.codex_entry_output.open("xb") as stream:
-                stream.write(content)
+            write_new_projection(args.codex_entry_output, content)
             print(args.codex_entry_output)
         elif args.codex_lifecycle_output is not None:
             print(build_codex_lifecycle(args.codex_lifecycle_output))

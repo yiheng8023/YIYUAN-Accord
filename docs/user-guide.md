@@ -36,10 +36,10 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
 三个动作分别完成：**安装插件、启用插件、信任 Hook**。还需确认实际加载，不能只看“已安装”。
 
 1. 核对当前宿主、运行时、已有配置和插件，以及正式发行的精确 tag。正式版本见 [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest)，插件 ID 为 `yiyuan-accord-codex`，来源名为 `yiyuan-accord`。
-2. 在需要登记来源时，可采用[官方 marketplace 命令](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)：
+2. 在 Releases 中看到 3.3.19 后，用下方 CLI 命令登记该版本的来源。安装 3.3.18 可用[对应版本的指南](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/docs/user-guide.md#首次安装与信任)。[官方 marketplace 命令](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 699b24c3092edbafc431f0760a539eeca3f175e3
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref refs/tags/v3.3.19
    ```
 
    这条命令只登记来源。CLI 在 `/plugins` 中切到该来源，查看并安装 YIYUAN Accord；桌面使用实际可用的插件目录与来源入口。本项目来源不等于已被官方公共目录收录。
@@ -171,10 +171,10 @@ The current Hooks and state MCP launch a separate `node` executable. The executo
 Complete **installation, enablement and Hook trust** separately, then verify actual loading. An installed label is insufficient.
 
 1. Check the host, runtime, existing configuration/plugins and exact official release tag. Published versions are listed in [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest); the plugin ID is `yiyuan-accord-codex`, in the `yiyuan-accord` marketplace.
-2. Where source registration is needed, use the official [marketplace command](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli):
+2. Once 3.3.19 appears in Releases, register its source with the CLI command below. For 3.3.18, use the [corresponding installation guide](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/docs/user-guide.md#first-installation-and-trust). [Official marketplace command](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)
 
    ```sh
-   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref 699b24c3092edbafc431f0760a539eeca3f175e3
+   codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref refs/tags/v3.3.19
    ```
 
    This registers the source only. In CLI `/plugins`, select it, inspect and install YIYUAN Accord. On desktop use the actual plugin directory/source entry. A repository marketplace is not a listing in the official public directory.

@@ -427,6 +427,15 @@ class NativeOnboardingContractTests(unittest.TestCase):
         return manifest_shape_errors("codex", manifest, self.identity, "yiyuan-accord",
             self.projection["interfaceDefaultPrompt"], unified_name=True, **options)
 
+    def test_installation_commands_select_the_packaged_version_in_both_languages(self):
+        command = "codex plugin marketplace add yiheng8023/YIYUAN-Accord"
+        expected = [*command.split(), "--ref", f"refs/tags/v{self.manifest['version']}"]
+        for document, count in (("README.md", 1), ("README.zh-CN.md", 1), ("docs/user-guide.md", 2)):
+            with self.subTest(document=document):
+                lines = (ROOT / document).read_text(encoding="utf-8").splitlines()
+                commands = [line.split() for line in lines if line.lstrip().startswith(command)]
+                self.assertEqual([expected] * count, commands)
+
     def test_onboarding_is_explicit_and_preserves_the_previous_adapter_contract(self):
         from yiyuan_accord.development import V5_SCHEMA, delivery_adapter_contract
         options = dict(development_schema=V5_SCHEMA, startup_entry=True, meta_guidance=True,
