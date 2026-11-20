@@ -18,7 +18,7 @@
 
 YIYUAN Accord is an open-source human–AI collaboration system. Its goal is to let you describe what you want to achieve while the AI assistant and its host work together to understand the request, choose capabilities, carry out the task and check the result. You should not have to study the host's settings, options, models, tools and workflows before coordinating them yourself.
 
-Accord's general design is independent of any model vendor or host. **The current release provides a ChatGPT/Codex adaptation.** See the [user guide](docs/user-guide.md#current-entries-and-runtime) for desktop Codex, local Work, CLI, IDE and Remote entry conditions. Other host integrations remain future work.
+Accord's general design is independent of any model vendor or host. **The current release provides a ChatGPT/Codex adaptation.** See the [user guide](docs/user-guide.md#current-entries-and-runtime) for desktop Codex, local Work, CLI, IDE and Remote entry conditions. The source also includes a separately buildable Claude Code adapter tested with CLI and Windows Desktop Code. [Claude test results](research/reviews/2026-11-19-multi-host-adapter-boundaries.md#r131-adaptation)
 
 ## How it works
 
@@ -51,14 +51,14 @@ In one comparison, both runs produced a usable quick-start card. The enabled run
 
 Published versions are available in [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest). Install through Codex CLI or the ChatGPT desktop app, then use a supported Codex or local Work entry. The host needs a compatible Node executable; Node 24 is the current tested recommendation. Ordinary use does not require Python. Repository development and verification support Python 3.11–3.14, with 3.14 as the validation baseline; Python 3.15 remains under observation. See [Contributing](CONTRIBUTING.md).
 
-1. **Install.** Once 3.3.19 appears in Releases, register its marketplace source with the command below. For 3.3.18, use the [verified 3.3.18 instructions](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/README.md#get-started).
+1. **Install.** Register the 3.3.19 marketplace source with the command below. For 3.3.18, use the [verified 3.3.18 instructions](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/README.md#get-started).
 
    ```sh
    codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref refs/tags/v3.3.19
    ```
 
 2. **Enable plugins and Accord.** Allow plugin use in the host and enable Accord in the scope you actually use. In CLI `/plugins`, select the marketplace, install, and press `Space` on the installed plugin to turn it on or off.
-3. **Manually allow Hooks after installation and updates.** Hooks are plugin scripts that run at task events. On the tested desktop, review and click **Allow** after the first installation and after every update. Open **Settings → Hooks → YIYUAN Accord** or use the hook indicator beside the chat input. In the CLI, review the current definitions with `/hooks`. [Installation and verification](docs/user-guide.md)
+3. **Manually allow Hooks after installation and updates.** Hooks are plugin scripts that run at task events. On the tested desktop, review each pending hook after the first installation and after each update. The approval action reads **Allow** or, in some localized interfaces, **Trust**. Open **Settings → Hooks → YIYUAN Accord** or use the hook indicator beside the chat input. In the CLI, review the current definitions with `/hooks`. [Installation and verification](docs/user-guide.md)
 4. **Start a new task and describe the goal.** For example: “Help me complete this task. If conditions change, correct the affected work and check the result before delivery.”
 
 **Installation, enablement, Hook trust and actual loading are all necessary.** See the [user guide](docs/user-guide.md#english-user-guide) for complete steps, an installation request template and troubleshooting, including the [specific IDE, Work and Remote routes](docs/user-guide.md#current-entries-and-runtime).

@@ -4,7 +4,7 @@
 
 备料随现行发行持续更新。集中传播具备条件后，以[届时最新正式版](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest)核对安装、功能说明和成品。先核首用说明和演示脚本，待真实对照证据扎实后再商定集中传播。每组对照按当次实际版本和条件引用，变更影响所述能力时再补核。
 
-3.3.18 已[正式发布](PLAN-v3.3.md#release-3.3.18)。传播前按届时的正式发行和入口实证核对支持范围。Claude Code 仍为本地候选。dev.2 的 CLI 观察覆盖受控写入与中断。dev.3 已在隔离 CLI 和 Windows Squirrel 本地 Code 核对启动指导、随包元指导和只读任务。受控写入、中断和迟到效果按原测试条件引用。受测条件与后续资格见[当前工作](PLAN-v3.3.md#current-work)。对照与传播继续随可公开的证据更新。
+3.3.19 已[正式发布](PLAN-v3.3.md#release-3.3.19)。传播前按届时的正式发行和入口实证核对支持范围。Claude Code 仍为本地候选。dev.2 的 CLI 观察覆盖受控写入与中断。dev.3 已在隔离 CLI 和 Windows Squirrel 本地 Code 核对启动指导、随包元指导和只读任务。受控写入、中断和迟到效果按原测试条件引用。受测条件与后续资格见[当前工作](PLAN-v3.3.md#current-work)。对照与传播继续随可公开的证据更新。
 
 Claude dev.4 的本机回环结果可作开发案例，说明一次 Markdown 换行如何影响插件，以及如何从宿主请求核实修复。对外说明仍按届时正式版和真实任务的证据确定。[案例原件与适用范围](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#entry-projection-result)
 

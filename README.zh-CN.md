@@ -18,7 +18,7 @@
 
 YIYUAN Accord 是开源的人与 AI 协作系统。它的目标是让你直接说想完成什么，由 AI 助手与宿主共同理解需求、选择能力、推进任务并核对结果。你不必先研究宿主的设置、选项、模型、工具和工作流程，再亲自把它们组织起来。
 
-Accord 的通用设计不绑定某一家模型厂商或宿主。**当前发行提供 ChatGPT/Codex 适配。** 桌面 Codex、本地 Work、CLI、IDE 与 Remote 的具体入口条件见[用户指南](docs/user-guide.md#当前入口与运行条件)。其它宿主适配属于后续方向。
+Accord 的通用设计不绑定某一家模型厂商或宿主。**当前发行提供 ChatGPT/Codex 适配。** 桌面 Codex、本地 Work、CLI、IDE 与 Remote 的具体入口条件见[用户指南](docs/user-guide.md#当前入口与运行条件)。源码还包含可独立构建的 Claude Code 适配，已在 CLI 和 Windows 桌面 Code 入口实测。[Claude 实测记录](research/reviews/2026-11-19-multi-host-adapter-boundaries.md#r131-adaptation)
 
 ## 如何工作
 
@@ -51,14 +51,14 @@ flowchart TD
 
 正式版本见 [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest)。通过 Codex CLI 或 ChatGPT 桌面端安装，再从支持相应运行条件的 Codex 或本地 Work 入口使用。请确保宿主能运行兼容 Node（当前受测推荐为 Node 24）。普通使用不需要 Python。仓库开发与验证支持 Python 3.11–3.14，以 3.14 为验证基准；3.15 暂列观察，适时验证后再评估。参见[贡献指南](CONTRIBUTING.md)。
 
-1. **安装。** 在 Releases 中看到 3.3.19 后，用下方命令登记该版本的插件来源。安装 3.3.18 可用[已核验的 3.3.18 说明](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/README.zh-CN.md#开始使用)。
+1. **安装。** 用下方命令登记 3.3.19 的插件来源。安装 3.3.18 可用[已核验的 3.3.18 说明](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/README.zh-CN.md#开始使用)。
 
    ```sh
    codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref refs/tags/v3.3.19
    ```
 
 2. **启用插件。** 确认宿主允许使用插件，并在实际使用范围内启用 Accord。CLI 在 `/plugins` 中选择来源、安装，并对已安装项按 `Space` 启停。
-3. **首次安装及更新后，手动允许 Hook。** Hook 是在任务事件发生时运行的插件脚本。在实测桌面端，首次安装和每次更新后，打开「设置 → 钩子 → YIYUAN Accord」，或点击输入框旁的钩子图标，审阅并点击「允许」。CLI 可用 `/hooks` 审阅当前定义。[安装与核验说明](docs/user-guide.md)
+3. **首次安装及更新后，手动允许 Hook。** Hook 是在任务事件发生时运行的插件脚本。在实测桌面端，首次安装和每次更新后，打开「设置 → 钩子 → YIYUAN Accord」，或点击输入框旁的钩子图标，审阅后点击界面显示的「允许」或「信任」，两种文案都是对该 Hook 的一次确认。CLI 可用 `/hooks` 审阅当前定义。[安装与核验说明](docs/user-guide.md)
 4. **新建任务，直接描述目标。** 例如：“帮我完成这件事；中途有变化时，继续修正受影响的工作，并在交付前检查结果。”
 
 **安装、启用、Hook 信任和实际加载缺一不可。** 完整步骤、安装请求模板及未生效排查见[用户指南](docs/user-guide.md#中文使用指南)，IDE、Work 与 Remote 的加载路线分别见[具体入口条件](docs/user-guide.md#当前入口与运行条件)。

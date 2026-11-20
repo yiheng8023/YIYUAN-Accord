@@ -4,11 +4,17 @@
 
 <a id="current-work"></a>
 
-## 基于 3.3.18 的当前工作（2026-11-21）
+## 基于 3.3.19 的当前工作（2026-11-21）
 
-**3.3.19 维护候选。** 用户确认以发版为目标，本阶段做扎实后再发布。沿用已发行的 ChatGPT/Codex 范围。桌面安装及更新后需要用户允许 Hook，双语指南已写明入口，宿主指定的安装 Skill 却只提到声明改变可能需要重新信任。现已在 Codex 专用来源及生成的安装 Skill 补齐桌面入口、CLI 的 `/hooks` 和已允许时的核验动作。相对 3.3.18，30 个包成员中仅版本清单和该 Skill 改变。Claude Code 的本地构建与实机观测继续按各自版本记录。[安装与信任说明](../user-guide.md) · [变更记录](../../CHANGELOG.md)
+**3.3.19 已发布。** 本次交付 ChatGPT/Codex 的安装助手。桌面可从设置或输入框确认待信任的 Hook，CLI 可用 `/hooks`。用户实机看到的“允许”和“信任”均用于同一项 Hook 审批。双语安装说明已对齐，下次维护安装 Skill 时同步这两种叫法。回归、正式验收、主分支和标签 CI、公开标签实际检出均已核实。[发行记录](#release-3.3.19) · [安装与信任说明](../user-guide.md)
 
-核验该候选时，从宿主清单定位实际安装 Skill，核对 Codex 指引、Claude 包隔离及发布成员。随后在同一提交上完成适用的全量回归、静态和独立验收，推送后核对全部必需 CI 及对应制品。冻结前将两份 README 和双语指南内的四条命令固定到本版完整标签，并保留可用的 3.3.18 安装入口。发布后对照标签、Release 正文和市场实际检出提交，核对标签 CI。首候选因文档仍指向旧版且生成器写入中断后无法原路径重试，已停止该候选回归。修订候选重新验收。
+本版源码包含可独立构建的 Claude Code dev.4 适配。隔离 CLI 和 Windows Squirrel 版 Desktop Code 均已核到完整启动指导进入本机受控网关的实际请求。[Claude 适配实测](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#r131-adaptation)。后续对照优先采用真实维护中的新任务，分别记录成品、人工介入、实际时间和用量。传播工作稿随可公开的证据更新。
+
+<a id="python-toolchain-follow-up"></a>
+
+**下阶段评估 Python 工具链。** 3.3.19 的开发与验证范围为 3.11–3.14，基准为 3.14，普通插件运行使用 Node。2026-11-21 核对时，3.13 是已进入安全维护期的最高分支，3.11 和 3.12 的上游安全维护分别延续到 2027-10 和 2028-10。后续在隔离环境用已发布的 3.15.2 或届时最新的 3.15.x 检查构建、验证工具和必要跨平台回归，保留现行基准供比较。另行核对仍使用 3.11／3.12 的贡献者环境、运行器可用性与矩阵成本，再决定是否提高最低版本到 3.13。决定采纳后同步开发说明、徽章及 CI。[Python 官方维护表](https://devguide.python.org/versions/) · [3.15.2 发行记录](https://www.python.org/downloads/release/python-3152/)
+
+下一阶段同时考虑 Pi、DeepSeek Harness 和 Google Antigravity 的适配。待 3.3.19 收尾后再开展，可并行选取各自的入口，按实测范围决定交付。保留 Claude 的已验证成果和 ChatGPT/Codex 的现行基线。先用已有的 Claude 与 Codex 构建依赖核对[宿主能否独立退出或重新适配](#host-adapter-retirement)。
 
 **r132 组件升级后的真实维护。** 在 ChatGPT/Codex 中维护 Claude Desktop 汉化时，助手根据新版资源调整了文案匹配和漂移检查，保留了旧版样本及原安装入口。可定位的 Accord 3.3.18 核验 Skill 读取发生在决定重新匹配之后。这个单组案例可复核调整的范围；要判断 Accord 是否减少了返工，仍需另一项尚待交付、可在同一宿主配对的任务。[操作顺序、公开提交与证据边界](../../research/evaluations/accord-toggle-v1.md#r132-component-change-observation)
 
@@ -18,7 +24,7 @@
 
 **第三方插件管理。** CC Switch 4.0.36 新增插件和本地市场管理。做插件生命周期或启用对照时，可先用它核登记清单和配置目录，再核实际会话采用。[可复用的操作与边界](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#cc-switch-plugin-management)
 
-**r129 推进。** 修复 Claude 候选的发布中途失败回滚。Windows 与 Ubuntu 环境的故障注入确认同路径可重试及外部变动留存，重建候选的成员和市场清单与已实测 dev.3 一致。Codex CLI 0.171.0 的压缩请求分片先经无模型回环夹具校准，再用于新维护说明对照。两组实际工具定义一致，均交付可用草稿。当前两组都出现 API 额度名称，历史单侧差异按原条件保留。构建说明已采用核对后的文案，现行公开安装命令与 3.3.18 精确发行来源一致。[构建回归](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-candidate-publish-rollback) · [新版对照](../../research/evaluations/accord-toggle-v1.md#r129-builder-note-pair)
+**r129 推进。** 修复 Claude 候选的发布中途失败回滚。Windows 与 Ubuntu 环境的故障注入确认同路径可重试及外部变动留存，重建候选的成员和市场清单与已实测 dev.3 一致。Codex CLI 0.171.0 的压缩请求分片先经无模型回环夹具校准，再用于新维护说明对照。两组实际工具定义一致，均交付可用草稿。当前两组都出现 API 额度名称，历史单侧差异按原条件保留。构建说明已采用核对后的文案，该轮核验时，公开安装命令与 3.3.18 精确发行来源一致。[构建回归](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-candidate-publish-rollback) · [新版对照](../../research/evaluations/accord-toggle-v1.md#r129-builder-note-pair)
 
 <a id="r129-local-regression"></a>
 
@@ -69,6 +75,14 @@
 `3.3.18-dev.1` 的开发阶段验证包括三个静态检查及 328 项开发契约、任务检查点回归。该结果保留在开发构建的范围。精确候选的独立审阅、全量回归、正式资格、托管终态及发行已核实，见[发行记录](#release-3.3.18)。
 
 已核首用资料与传播脚本。[Claude 可行性复核](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-feasibility-r116)复用 2.1.327 的原生校验器审查历史包，并明确输入来源、退出预算、迁移和采用的待实测点。先用隔离的本地 CLI 验证一条真实任务链，再按需要核桌面 Code 的同一能力。新宿主实施和集中传播另行决策。
+
+<a id="release-3.3.19"></a>
+
+## 3.3.19 发行记录（2026-11-21）
+
+[3.3.19 正式发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.19)于北京时间 2026-11-21 05:54:18 发布，发行提交为 `f9eae894ca87f188cf39dff250a0e2b100070f62`，30 个成员的包 SHA-256 为 `ea177d0f62941f916ff776816590290d9986eb22eb1ae3ecb2e5756cdc4bed5d`。1,516 项本地回归、三项静态检查、四轴独立审阅和两阶段正式验收均已通过。主分支 [CI #1077](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44811710583) 和标签 [CI #1078](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44824333977) 各 10 项通过，每次均核对两平台 18 份制品及 22 份来源清单。从公开标签在隔离 CLI 登记市场源，实际检出提交和 30 个插件成员均与发行源码一致。
+
+首候选因四处安装示例和生成器写盘失败后的重试问题停用，第二候选因包摘要未同步及不支持硬链接的文件系统上可能留下空文件停用。两次失败保留原结果。第三候选重新核验。18 项材料包括 16 项历史执行和两项当前来源判断，另核对两个原始补充见证。长会话的原生助手无法在有限窗口定位最初输入时，正式初核与复核分别读取桌面宿主的实际对话并与插件留存的输入逐字核对。公开市场源检出和隔离生命周期分别验证。本机已通过原生 CLI 安装并启用 3.3.19，市场检出及安装缓存的 30 个成员均与发行源码一致。当前聊天的 MCP 已加载 3.3.19，宿主列出的六个 Hook 均已启用并获信任，新版 Hook 留存了该聊天的实际输入事件。用户确认这次读回时还没有手动重启客户端。
 
 <a id="release-3.3.18"></a>
 
@@ -959,7 +973,7 @@ Accord 面向人与 AI 的长期协作，属于更广泛的人机协作愿景。
 
 项目开源，不以盈利为目标，以工业/商业生产级交付标准建设，追求平权、普惠与用户自主。中立首先是价值和治理独立：不绑定供应商，不以资本、赞助或生态利益扭曲评价或牺牲用户利益。商业能力可以按实际价值借用；选择应考虑可获得性、质量、总成本、隐私、可替换性和退出条件。世界级是全维度持续对标的志向，具体成熟度由证据确定。
 
-**3.3.18 的公开发行覆盖 ChatGPT/Codex 的适用入口。** 新宿主按实际入口及条件各自取证。Claude Code 已进入[独立本地候选](#current-work)，当前公开支持范围以对应发行记录为准。Pi、DeepSeek Harness、Z.ai ZCode、Google Antigravity 和 OpenCode 列入[未来宿主候选](#其它宿主候选)。产品名称统一为 YIYUAN Accord，通用设计保持供应商独立。历史包、验证代码和证据保留原版本与原用途。
+**Accord 的通用设计保持供应商独立。** 3.3.19 公开市场提供 ChatGPT/Codex 插件，源码包含单独构建、按入口实测的 Claude Code 开发适配。历史包和实测结果保留各自的版本及适用条件。新入口的安排随维护需求更新。[发行记录](#release-3.3.19) · [宿主候选与已选方向](#其它宿主候选)
 
 AI协作入口承担所绑定任务的交付责任。入口先按任务必要能力、结果及控制经过下述适用性判断，再确定范围与承诺；普通Chat的研究/论证/内容等独立用途按r38本版deferred、能力unknown，不由界面名判定永久只有辅助。未上架不能推断不能调用，品牌相同不能推断能力相同。3.3 不自动缩成 CLI，也不承诺所有尚未验证的 OpenAI 入口都可用。
 
@@ -1531,6 +1545,14 @@ W02持续承担完整入口处置，W04随受影响历史依赖纠偏，W06/W07�
 
 ### 其它宿主候选
 
+<a id="host-adapter-retirement"></a>
+
+**宿主适配可以独立退出，也可以重新加入。** 维护者可以决定停止维护或分发某个入口，用户则可决定是否在本机停用或卸载。3.3.19 的 Claude 候选构建生成独立的本地市场目录及 Hook，其构建器仍从 Codex 插件目录读取版本清单、三份 Skill 及中英文元指导。下一阶段在临时源码副本中分别移开一个宿主的专属内容，检查其余宿主能否独立构建、安装和完成已有代表任务。按失败的实际依赖决定哪些共享源需要移出专属目录。若决定退役，先核对在途任务、未确认的副作用和状态归属，说明接续或收尾方法，再更新相应市场、文档和测试范围。保留原发行记录、退役理由和证据，尊重已有安装和用户数据。
+
+宿主接口、使用需求或维护条件变化时，可重新列为候选。先复核原退出原因和当前接口，再判断哪些原件仍适用、哪些入口需要复测。重新分发时公开当时通过的范围，重新启用时按当前用户选择和宿主信任机制办理。
+
+**Claude 的历史是维护排序的实例。** 早期同时开发 OpenAI 和 Anthropic 适配，3.2 的变更记录列出了两端各自的协作 Skill。维护者说明，当时双线工作量过大，先集中跑通 OpenAI 宿主，再恢复 Claude 适配。期间确实退役了旧观察链，后来从当前源码构建新候选。暂停一条主线时，注明维护范围、已有用户的可用路径和恢复条件。[早期两端记录](https://github.com/yiheng8023/YIYUAN-Accord/blob/f9eae894ca87f188cf39dff250a0e2b100070f62/CHANGELOG.md#L499-L516) · [旧观察链处置](https://github.com/yiheng8023/YIYUAN-Accord/commit/735a5919e0f40d13d003e45be08b7292fbf1643f) · [新候选](https://github.com/yiheng8023/YIYUAN-Accord/commit/1726b95aeb15309ab18953d138dea52fb8969f98)。[现有隔离设计](../architecture.md#host-adapter-isolation-and-reuse) · [3.3.19 构建依赖](https://github.com/yiheng8023/YIYUAN-Accord/blob/f9eae894ca87f188cf39dff250a0e2b100070f62/scripts/build_claude_plugin.py#L219-L238)
+
 [既有对照记录](../../research/evaluations/accord-toggle-v1.md)中的六份合成材料、文件检查与反例可用于校准。价值观察从适用的真实配对起步，后续按待核结论和实际材料安排。具体修复按有据的影响选择。
 
 2026-10-28用户已确认未来方向不预设具体版本号。下文日期记录中的3.4保留为当时讨论背景；现行候选状态不绑定3.4或其它发行版本。宿主/第三方协作核查、启用/未启用对照及新传播素材按实际需要规划，官方公开目录为可选渠道，既有其它宿主候选保留。
@@ -1544,15 +1566,21 @@ W02持续承担完整入口处置，W04随受影响历史依赖纠偏，W06/W07�
 | 候选 | 已保留资料与可能评估内容 |
 |---|---|
 | Claude Code | 隔离 CLI 与 Windows Squirrel 本地 Code 已在相应候选上实测读写、权限和中断后的效果。各版候选及入口的验证范围见[当前工作](#current-work)。dev.4 的首轮指导另有[启用对照](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#r131-adaptation)。其他入口按实际条件核查。[原生 plugin eval](https://code.claude.com/docs/en/plugin-evals) |
-| Pi | 指向当前[Pi项目](https://github.com/earendil-works/pi)（原badlogic/pi-mono）；核扩展/Skill、会话及模型接口能否承担Accord必要职责，保留其轻量设计，不先复制另一套控制器。 |
-| DeepSeek Harness | [官方开发者预览](https://www.deepseek.com/harness/en/)和[源码](https://github.com/deepseek-ai/deepseek-harness)提供可组合插件路线；接口仍演进，先核稳定性、接入与退出成本，再决定具体支持。 |
+| Pi | 下一阶段从终端 Agent 的原生扩展和 Skill 切入，先核首轮是否收到指导，再核取消后宿主报告的最终状态。已有 `agent_settled` 事件可作为查找实际效果的线索。[Pi 扩展文档](https://docs.pi.dev/latest/extensions) |
+| DeepSeek Harness | 下一阶段先选隔离的 headless profile，以宿主原生插件接入一项新维护任务。已有 Web／WebSocket 记录可用于定位会话，跨入口行为按实际运行核对。[官方项目](https://www.deepseek.com/harness/en/) · [Profile 和插件架构](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md) |
 | ZCode | 本次按[Z.ai ZCode](https://github.com/zai-org/ZCode)及[官方Agent文档](https://zcode.z.ai/cn/docs/agents)理解；区分自有Agent、模型、插件/Skill/Hook与其它代理入口，不能按相似UI或组件名称推定兼容。 |
-| Google Antigravity | 已按用户要求列入后续候选；以[官方产品入口](https://www.antigravity.google/)为来源，分别核对2.0、CLI、SDK、IDE等形态的职责和接入条件，不以品牌相同或编辑器相似推定兼容。当前只登记候选，未安装、连接或实施适配。 |
+| Google Antigravity | 以 CLI 和独立桌面 Agent（Antigravity App）为基础。Google 官方 VS Code 扩展在后台运行 `agy`，可作为共享同一 Agent 核心的候选入口。第一方 Antigravity IDE 暂不单列。其他 IDE 扩展按实际连接的 Agent 及入口差异评估。[产品形态](https://antigravity.google/docs/overview) · [扩展如何运行](https://antigravity.google/docs/ide/extensions/vscode/) · [Google 发布的扩展](https://marketplace.visualstudio.com/items?itemName=Google.google-antigravity) |
 | OpenCode | 2026-11-20 按用户要求列入后续候选。若选定评估，按 CLI、Desktop 和 Web 的实际入口核对插件、Skill、权限与接续条件。[OpenCode 官方文档](https://opencode.ai/docs/) |
+| Grok Build | 候选为 SpaceXSI 的终端编程 Agent。官方列有交互 CLI、无界面执行和 ACP 入口。实测时先核一个入口的插件加载、授权和退出。SpaceX 已完成收购 Cursor，产品整合情况以届时的插件、会话和权限接口为准。[Grok Build](https://docs.x.ai/build/overview) · [扩展源码说明](https://x.ai/news/grok-build-open-source) · [Cursor 收购公告](https://cursor.com/blog/joining-spacex) |
+| Kimi Code CLI | 候选为 Moonshot AI 的终端 Agent。其原生插件可在会话开始时加载指定 Skill。若进入实测，核启动指导实际送达、工具审批和接续。[CLI 入门](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/guides/getting-started.md) · [插件说明](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/plugins.md) |
+
+同一宿主家族优先复用共享内核的适配和已有实测。先用现有适配从新增入口运行一项普通任务，核对 Accord 是否实际加载、操作是否遵守用户权限。若中断等行为有差异，再补测受影响的部分。分别记录新增代码和入口验证成本。维护者已有的汉化实测可用于定位 Antigravity App 和 VS Code 扩展的版本及入口。[汉化维护记录](https://github.com/yiheng8023/antigravity-chinese/blob/cd1569dc609776615b38f5f40c441534e75ffdc7/docs/maintenance/antigravity-2.33.1.md)
+
+选择依据是具体入口能否承担 Accord 的协作职责，以及真实需求和维护成本。市场数据如用于排序，需注明统计对象、时间及分母。Cursor IDE 暂不列入候选。Cursor 另有自己的 Agent CLI，本轮也未选入。[Cursor CLI](https://cursor.com/docs/cli/overview)
 
 2026-11-18 用户选定 Claude Code 先做只读可行性核查。入口、原生职责、历史材料和后续实证条件见[只读初查](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-read-only-feasibility)。交互式 CLI 为首个待证入口，实施、支持范围与交付版本待定。
 
-以上保留已有资料与候选理由，不规定调查顺序、开工或交付。后续共同讨论若决定评估，再按真实用户收益、完整职责可行性、可复用接口、维护/资源成本和退出条件判断；边界或条件不足时保留待判及补足路径，不因一项评测工具可用就承诺整个宿主适配。
+维护者希望在 3.3.19 收尾后推进 Pi、DeepSeek Harness 与 Google Antigravity。各入口优先复用宿主原生权限、会话和恢复能力。CC Switch 可管理其支持的模型路由或插件，用新的宿主会话核验实际加载。启用／未启用对照在同一宿主和模型下核清共同工具与上下文，再观察交付、人工返工和用量。结合持续维护成本，决定哪些适配值得做深。其余候选保留各自资料，各入口的公开范围和交付版本按届时实证决定。[CC Switch 的实际管理范围](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#cc-switch-plugin-management)
 
 对照展示分开安排：3.3发布后的素材可复用本版实际支持入口的有/无Accord比较，沿原A08评估取得适用证据，不等待Claude版本。后续Claude候选可使用plugin eval减少测试/报告维护；其评分、重复运行、隔离、报告发布和费用边界见[官方核实记录](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md)。工具评分不替代成品核验、真实多轮变化、连续性/失败恢复、用户环境或跨宿主证据；Claude上的差值只用于该宿主和受测条件。 用户进一步明确：plugin eval只作为传播素材的一部分，而非全部，不能完整证明Accord的能力和价值。
 

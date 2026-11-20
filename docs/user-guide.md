@@ -8,7 +8,7 @@
 
 ### 当前入口与运行条件
 
-Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发为 **ChatGPT/Codex 适配**，包括下列已选本地入口及其 Remote 路线。Work 是 ChatGPT 的使用模式，不能因技术包名含 Codex 就把本地 Work 排除。其它宿主的资料和历史包不代表本版提供相应支持。
+Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发为 **ChatGPT/Codex 适配**，包括下列已选本地入口及其 Remote 路线。Work 是 ChatGPT 的使用模式，不能因技术包名含 Codex 就把本地 Work 排除。本版源码另含可独立构建的 Claude Code dev.4 适配。隔离 CLI 和 Windows Squirrel 版 Desktop Code 的实测均在本机受控网关收到完整启动指导。下方安装命令安装 ChatGPT/Codex 插件。[Claude 实测记录](../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#r131-adaptation)
 
 以下入口说明于 **2026-11-14** 结合[官方插件文档](https://learn.chatgpt.com/docs/plugins#use-plugins-from-a-supported-surface)、[共享配置说明](https://learn.chatgpt.com/docs/developer-settings)与[仓库实际入口记录](../research/reviews/2026-10-30-host-evolution-and-assets.md#2026-11-14-chatgptcodex命名与ide入口纠正)核对。共同配置和后端机制按适用条件复用；安装执行者须核对实际版本、有效设置及入口差异。
 
@@ -36,7 +36,7 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
 三个动作分别完成：**安装插件、启用插件、信任 Hook**。还需确认实际加载，不能只看“已安装”。
 
 1. 核对当前宿主、运行时、已有配置和插件，以及正式发行的精确 tag。正式版本见 [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest)，插件 ID 为 `yiyuan-accord-codex`，来源名为 `yiyuan-accord`。
-2. 在 Releases 中看到 3.3.19 后，用下方 CLI 命令登记该版本的来源。安装 3.3.18 可用[对应版本的指南](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/docs/user-guide.md#首次安装与信任)。[官方 marketplace 命令](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)
+2. 用下方 CLI 命令登记 3.3.19 的插件来源。安装 3.3.18 可用[对应版本的指南](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/docs/user-guide.md#首次安装与信任)。[官方 marketplace 命令](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)
 
    ```sh
    codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref refs/tags/v3.3.19
@@ -44,7 +44,7 @@ Accord 的通用设计与模型厂商、宿主适配分离；当前正式分发�
 
    这条命令只登记来源。CLI 在 `/plugins` 中切到该来源，查看并安装 YIYUAN Accord；桌面使用实际可用的插件目录与来源入口。本项目来源不等于已被官方公共目录收录。
 3. 确认宿主或组织允许使用插件，再在目标作用域启用 Accord。CLI 可对 `/plugins` 内已安装项按 `Space` 启停；桌面的全局插件使用开关和单插件启用分别核对，具体界面以所用版本为准。
-4. **首次安装和每次更新后，手动允许 Hook。** 当前桌面实机使用中，用户均需审阅 Accord 的当前 Hook 并手动点击“允许”。可在 **设置 → 钩子 → YIYUAN Accord** 管理，也可点击对话输入区的钩子提示进行允许；存在未信任Hook时会出现该提示，允许后消失。CLI 输入 `/hooks` 审阅并信任；其他版本、入口和回退流程由安装执行者核对实际支持的确认方式。没有可用路径时明确报告限制，不据安装成功声称已生效，也不把另一 CLI 的信任状态直接外推到桌面。安装、启用或声明字节相同都不能替代用户确认。不要用手工修改信任摘要或全量放行代替审阅。当前[官方信任规则](https://learn.chatgpt.com/docs/hooks#plugin-bundled-hooks)说明未获信任的插件 Hook 会被跳过，CLI 操作见[审阅与信任](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks)。
+4. **首次安装和每次更新后，手动允许 Hook。** 当前桌面实机使用中，用户均需审阅 Accord 的当前 Hook。按界面显示点击“允许”或“信任”，即可确认该 Hook。可在 **设置 → 钩子 → YIYUAN Accord** 管理，也可点击对话输入区的钩子提示进行允许；存在未信任Hook时会出现该提示，允许后消失。CLI 输入 `/hooks` 审阅并信任；其他版本、入口和回退流程由安装执行者核对实际支持的确认方式。没有可用路径时明确报告限制，不据安装成功声称已生效，也不把另一 CLI 的信任状态直接外推到桌面。安装、启用或声明字节相同都不能替代用户确认。不要用手工修改信任摘要或全量放行代替审阅。当前[官方信任规则](https://learn.chatgpt.com/docs/hooks#plugin-bundled-hooks)说明未获信任的插件 Hook 会被跳过，CLI 操作见[审阅与信任](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks)。
 5. 让执行者核对实际 Hook 参与、MCP 连接、插件来源和版本。首次安装按所用版本完成会话初始化；后续升级或回退可在支持[热刷新](https://github.com/openai/codex/releases/tag/rust-v0.154.0)的宿主中由既有会话采用，仅在实际版本要求时新建会话或重载。已加载的旧会话、目录中可见的 Skill、静态 `host-check` 都不能单独证明生效。
 
 如果已有具备相应权限的 AI 助手，可以直接交给它：
@@ -108,6 +108,7 @@ Accord 的目标是让助手按实际任务研究可行性，发现宿主设置�
 | 3.3.16 | 开发文档及资产维护、有限版本契约，统一ChatGPT/Codex、本地Work和已选VS Code入口说明；[精确发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.16)，提交`df7a198853dc7e71e98cbd2362f5451dcbc18199`。1,487项本地回归、三静态、四轴审阅、正式两阶段和CI #1069十项均通过。包内仅版本与描述清单变化，本机安装、当前聊天新版加载和用户手动Hook允许已核，标签CI #1070十项成功；收尾记录见[当前计划](operations/PLAN-v3.3.md#current-work)，不宣称新增运行能力。 |
 | 3.3.17 | 已核实配置 metadata 的兼容修复，补齐组合回归并隔离测试夹具前提。[发行源码](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.17)为 `1fe60c2c7febd83c60287510873fe830642825f6`。1,492 项本地回归、三静态、四轴审阅及正式资格均通过。CI #1071 和标签 CI #1072 各 10 项均通过。本机安装、当前聊天加载和用户手动允许新版 Hook 已核。详情见[当前计划](operations/PLAN-v3.3.md#current-work)。 |
 | 3.3.18 | [正式发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.18)的精确源码为 `699b24c3092edbafc431f0760a539eeca3f175e3`。双语首页和架构图已更新，普通回执说明已精简。1,492 项本地回归、三项静态检查、独立审阅和正式验收通过，[CI #1074](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44351612238) 全部 10 项通过。[标签 CI #1075](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44368158635/attempts/2) 补跑后全部 10 项通过。 每次更新仍需手动允许 Hook。 |
+| 3.3.19 | 桌面安装助手现能说明两种 Hook 允许入口，CLI 可用 `/hooks`。四条安装命令指向已核验的发行标签。[正式发行](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.19) |
 
 原始失败、版本、环境和条件保持原身份；后续文档不移动发行标签，也不把旧通过直接当作新版本通过。CLI、SDK、桌面、IDE、Work 与 Remote 之间，在核对适用性和差异后复用共同机制证据。官方通用描述与具体版本实测不一致时，分别保留并核清适用范围，不以任一方直接覆盖另一方。
 
@@ -143,7 +144,7 @@ This guide carries the installation, use, privacy and mechanism details behind t
 
 ### Current entries and runtime
 
-Accord's general design is separate from vendor-specific adapters. The current distribution provides a **ChatGPT/Codex adaptation**, covering the selected local entries and Remote paths below. Work is a ChatGPT mode; the technical package name does not exclude local Work. Historical packages and research on other hosts do not establish current support.
+Accord's general design is separate from vendor-specific adapters. The current distribution provides a **ChatGPT/Codex adaptation**, covering the selected local entries and Remote paths below. Work is a ChatGPT mode; the technical package name does not exclude local Work. The source includes a separately buildable Claude Code dev.4 adapter. An isolated CLI and Windows Squirrel Desktop Code both sent the full startup guidance to a controlled local gateway. The installation commands below install the ChatGPT/Codex plugin. [Claude test results](../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#r131-adaptation)
 
 The following entry conditions were checked on **2026-11-14** using the official [plugin documentation](https://learn.chatgpt.com/docs/plugins#use-plugins-from-a-supported-surface), [shared configuration guidance](https://learn.chatgpt.com/docs/developer-settings) and [recorded entry observations](../research/reviews/2026-10-30-host-evolution-and-assets.md#2026-11-14-chatgptcodex命名与ide入口纠正). Reuse applicable shared configuration and backend mechanisms; check the actual version, effective settings and entry differences.
 
@@ -171,7 +172,7 @@ The current Hooks and state MCP launch a separate `node` executable. The executo
 Complete **installation, enablement and Hook trust** separately, then verify actual loading. An installed label is insufficient.
 
 1. Check the host, runtime, existing configuration/plugins and exact official release tag. Published versions are listed in [Releases](https://github.com/yiheng8023/YIYUAN-Accord/releases/latest); the plugin ID is `yiyuan-accord-codex`, in the `yiyuan-accord` marketplace.
-2. Once 3.3.19 appears in Releases, register its source with the CLI command below. For 3.3.18, use the [corresponding installation guide](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/docs/user-guide.md#first-installation-and-trust). [Official marketplace command](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)
+2. Register the 3.3.19 marketplace source with the CLI command below. For 3.3.18, use the [corresponding installation guide](https://github.com/yiheng8023/YIYUAN-Accord/blob/53a0adbd4da924eb438b673125080347f24ff6b2/docs/user-guide.md#first-installation-and-trust). [Official marketplace command](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli)
 
    ```sh
    codex plugin marketplace add yiheng8023/YIYUAN-Accord --ref refs/tags/v3.3.19
@@ -179,7 +180,7 @@ Complete **installation, enablement and Hook trust** separately, then verify act
 
    This registers the source only. In CLI `/plugins`, select it, inspect and install YIYUAN Accord. On desktop use the actual plugin directory/source entry. A repository marketplace is not a listing in the official public directory.
 3. Confirm that the host or organization permits plugins and enable Accord in the intended scope. CLI `/plugins` uses `Space` to toggle an installed item. On desktop check global plugin use and the individual plugin separately; labels vary by version.
-4. **Manually allow Hooks after the first installation and every update.** In the current desktop workflow, the user must review Accord's current Hooks and click **Allow** each time. Manage them in **Settings → Hooks → YIYUAN Accord**, or click the hook indicator near the chat input to allow them. The indicator appears while Hooks await trust and disappears after allowance. Use CLI `/hooks` to review and trust; the installation executor must verify the supported confirmation route for other versions, entries and rollback procedures. If none is available, report that limitation rather than treating installation as participation or extrapolating another CLI's trust state to desktop. Installation, enablement or unchanged declaration bytes do not replace user confirmation. Do not substitute manually edited trust hashes or blanket approval. The official [trust rule](https://learn.chatgpt.com/docs/hooks#plugin-bundled-hooks) says untrusted plugin Hooks are skipped; see [review and trust](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks) for CLI operations.
+4. **Manually allow Hooks after the first installation and every update.** In the current desktop workflow, the user must review Accord's current Hooks and select the approval shown. **Allow** and **Trust** are localized labels for the same hook approval. Manage them in **Settings → Hooks → YIYUAN Accord**, or click the hook indicator near the chat input to allow them. The indicator appears while Hooks await trust and disappears after allowance. Use CLI `/hooks` to review and trust; the installation executor must verify the supported confirmation route for other versions, entries and rollback procedures. If none is available, report that limitation rather than treating installation as participation or extrapolating another CLI's trust state to desktop. Installation, enablement or unchanged declaration bytes do not replace user confirmation. Do not substitute manually edited trust hashes or blanket approval. The official [trust rule](https://learn.chatgpt.com/docs/hooks#plugin-bundled-hooks) says untrusted plugin Hooks are skipped; see [review and trust](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks) for CLI operations.
 5. Have the executor verify actual Hook participation, MCP connection, source and version. Complete session initialization as required by the version for a first installation. For later upgrades or rollbacks, hosts supporting [hot refresh](https://github.com/openai/codex/releases/tag/rust-v0.154.0) can adopt updates in an existing session; start a new session or reload only when the actual version requires it. An old loaded session, visible Skill or static `host-check` result cannot prove these effects.
 
 You can ask an existing assistant with suitable authority:
@@ -243,6 +244,7 @@ Continuation links below retain their original observation-time labels and now l
 | 3.3.16 | Development-document and asset maintenance, finite selected-version contracts and aligned ChatGPT/Codex, local Work and selected VS Code entry guidance. [Exact release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.16), commit `df7a198853dc7e71e98cbd2362f5451dcbc18199`. All 1,487 local tests, three statics, four-axis review, formal two-phase qualification and ten CI #1069 jobs passed. Only the package manifest version and description changed. Local installation, current-chat loading and user-confirmed manual Hook allowance are verified; all ten tag CI #1070 jobs passed. Closeout records are in the [current plan](operations/PLAN-v3.3.md#current-work). No new runtime capability is claimed. |
 | 3.3.17 | Compatibility for verified configuration metadata, combination regressions and isolated test-fixture premises. The [release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.17) points to `1fe60c2c7febd83c60287510873fe830642825f6`. All 1,492 local tests, three static checks, four-axis review and formal qualification passed. CI #1071 and tag CI #1072 each passed all ten jobs. Local installation, loading in the same chat and manual Hook allowance were verified. See the [current plan](operations/PLAN-v3.3.md#current-work) for details. |
 | 3.3.18 | [Released](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.18) from `699b24c3092edbafc431f0760a539eeca3f175e3`. Adds bilingual diagrams and shorter ordinary receipt guidance. All 1,492 local tests, three static checks, four-axis review and formal qualification passed. [CI #1074](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44351612238) passed all ten jobs. All ten [tag CI #1075](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44368158635/attempts/2) jobs passed after a selective retry. Review and manually allow Hooks after updating. |
+| 3.3.19 | The desktop onboarding skill identifies both hook approval controls. CLI users can review hooks with `/hooks`. All four installation examples select the verified release tag. [Release](https://github.com/yiheng8023/YIYUAN-Accord/releases/tag/v3.3.19) |
 
 Original failures, versions, environments and conditions retain their identities. Later documentation does not move release tags or validate changed versions through an old PASS. Reuse common-mechanism evidence across CLI, SDK, desktop, IDE, Work or Remote after checking applicability and differences. When general upstream descriptions and specific build observations differ, preserve both and resolve their scope rather than treating either as an automatic override.
 
