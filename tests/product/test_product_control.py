@@ -1149,6 +1149,12 @@ class ProductControlTests(unittest.TestCase):
                  if step['state'] in {'active', 'blocked'}],
             )
 
+    def test_historical_evidence_uses_the_selected_repository(self):
+        with _indexed() as root:
+            with patch.dict(os.environ, {'GIT_DIR': str(root / 'absent-git-dir')}):
+                report = verify_product(root)
+        self.assertTrue(report['valid'], report['errors'])
+
     def test_legacy_ready_public_verifier_returns_a_bound_candidate_report(self):
         with _indexed('299ae4011b0e48df586a137a2fbdcaff715e55c7') as root:
             review = _external_review_bundle(*_head_subject(root))

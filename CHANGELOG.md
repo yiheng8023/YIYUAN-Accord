@@ -8,6 +8,13 @@
 - 插件生命周期 Skill 改为从一份共用正文和各宿主的说明生成。两端成品已逐字节复核，Codex 专属措辞的改动也通过了 Claude 独立构建回归。[生命周期构建实证](research/reviews/2026-11-19-multi-host-adapter-boundaries.md#lifecycle-source-result)
 - Claude Code 本地候选明确协调 Skill 何时读取随包元指导。构建完成包成员后再提供供宿主发现的清单，并覆盖成员写入中途失败、清理和同一目标重试的回归。[当前工作](docs/operations/PLAN-v3.3.md#current-work)
 - 完成双语发行安装说明的两组实测和匿名复核，合稿补齐标签来源、完整提交 SHA 和实际加载的核验步骤。原件复核记录了共同请求与工具定义的证据边界。[双语维护稿](docs/operations/LAUNCH-v3.3.md#release-source-draft) · [对照复核](research/evaluations/accord-toggle-v1.md#release-source-pair-3318)
+- 对照取证改为分别核对有序正文和实际工具定义。新任务的工具定义一致，记录到共同 Skill 简介和 MCP 清单差异。两份桌面预检草稿经匿名复核后合成检查卡，并补入 Windows 已知文件夹的隔离核查。[新任务观察](research/evaluations/accord-toggle-v1.md#desktop-preflight-pair-3318) · [桌面预检卡](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-preflight-card)
+- 核实 Codex 的 Skill 目录预算会随新增条目重新分摊，并用同版源码夹具复现简介缩短。单独记录额外 MCP 名称的归因限制。Claude Desktop 已完成独立 Windows 标准用户的配置根和候选读回预检。[对照归因](research/evaluations/accord-toggle-v1.md#r126-comparison-attribution) · [独立用户预检](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-windows-test-profile)
+- 在独立标准用户的 Windows 本地 Code 实测 Claude dev.3 启动指导、显式采用协调 Skill、读取随包英文元指导、内建 `Write` 的允许和拒绝、前台写入中断后的进程和磁盘状态，以及同会话的新任务。以无指引文件的 Codex 原生首轮验证 Accord 完整元指导早期送达。[dev.3 桌面实测](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-dev3-desktop-read) · [元指导来源](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#accord-foundation-without-agents)
+- 复验独立 Claude CLI 2.1.329 和 Windows Squirrel 6.28899.2 本地 Code 2.1.328 的智谱 Flash 与 dev.3 只读链路。新版桌面按原生记录确认启动 Hook、协调 Skill 调用、探针读回和同会话补读的随包英文元指导。[智谱复验](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-glm-flash-r128)
+- 修复 Claude 本地候选在最终移动文件失败时留下半成品的问题。安全回滚后可以重试同一输出路径，发现变动的产物会保留供检查。重新构建的 14 个插件成员与市场清单和已实测版一致。[构建恢复](research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-candidate-publish-rollback)
+- 在 Codex CLI 0.171.0 复验开发说明的启用差异对照。通过同一录制二进制还原新版请求记录，核对实际工具定义、预热上下文、Skill 目录和被动 MCP 启动状态。[新对照](research/evaluations/accord-toggle-v1.md#r129-builder-note-pair)
+- 历史证据校验复用已有的 Git 读取环境隔离，按选定检出目录复核祖先关系、跟踪文件及内容，避免继承的错误 Git 路由导致误判。[本地回归](docs/operations/PLAN-v3.3.md#r129-local-regression)
 
 ## 3.3.18（2026-11-19）
 

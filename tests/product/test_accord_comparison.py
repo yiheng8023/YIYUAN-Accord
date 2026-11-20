@@ -12,6 +12,71 @@ from unittest.mock import patch
 from scripts import grade_accord_comparison as grading
 
 
+class NativeRequestEvidenceTests(unittest.TestCase):
+    def request(self):
+        tool = {"name": "read", "description": "read source", "parameters": {"properties": {"id": {"type": "string"}}}}
+        return {"input": [
+            {"id": "native-tool-item", "role": "developer", "type": "additional_tools",
+             "tools": [{"type": "namespace", "name": "demo", "tools": [tool, {"name": "list"}]}]},
+            {"id": "native-message", "role": "developer", "type": "message",
+             "content": [{"type": "input_text", "text": "Read alpha"}],
+             "internal_chat_message_metadata_passthrough": {"turn_id": "turn-a", "create_time": 10.5,
+                                                             "content_item_kinds": ["unknown"]}},
+        ]}
+
+    def evidence(self, request, turn_id="turn-a"):
+        return grading.native_request_evidence(request, b"e" * 32, turn_id=turn_id)
+
+    def test_native_ids_do_not_mask_message_text_or_attribution(self):
+        observed = self.request()
+        baseline = self.evidence(observed)
+        observed["input"][0]["id"] = "another-native-tool-item"
+        row = observed["input"][1]
+        row["id"] = "another-native-message"
+        metadata = row["internal_chat_message_metadata_passthrough"]
+        metadata.update(turn_id="turn-b", create_time=11.5)
+        self.assertEqual(baseline, self.evidence(observed, "turn-b"))
+        self.assertNotEqual(baseline, self.evidence(observed))
+        row["content"][0]["text"] = "Read omega"
+        self.assertNotEqual(baseline["input"][1]["content"], self.evidence(observed, "turn-b")["input"][1]["content"])
+        row["content"][0]["text"] = "Read alpha"
+        metadata["content_item_kinds"] = ["different"]
+        self.assertNotEqual(baseline, self.evidence(observed, "turn-b"))
+
+    def test_actual_additional_tool_definitions_order_and_absence_are_kept(self):
+        request = self.request()
+        baseline = self.evidence(request)
+        namespace = request["input"][0]["tools"][0]["tools"]
+        namespace[0]["parameters"]["properties"]["id"]["type"] = "number"
+        changed = self.evidence(request)
+        self.assertEqual(baseline["topLevelTools"], changed["topLevelTools"])
+        self.assertNotEqual(baseline["input"][0]["tools"], changed["input"][0]["tools"])
+        namespace[0]["parameters"]["properties"]["id"]["type"] = "string"
+        namespace.reverse()
+        self.assertNotEqual(baseline["input"][0]["tools"], self.evidence(request)["input"][0]["tools"])
+        self.assertEqual("absent", self.evidence(request)["topLevelTools"]["state"])
+        request["tools"] = None
+        self.assertEqual("null", self.evidence(request)["topLevelTools"]["state"])
+        request["tools"] = []
+        self.assertEqual({"state": "array", "definitions": [], "members": []}, self.evidence(request)["topLevelTools"])
+        request["instructions"] = None
+        self.assertNotEqual(baseline["topLevelFields"], self.evidence(request)["topLevelFields"])
+
+    def test_request_fields_preserve_session_metadata_separately(self):
+        request = self.request()
+        request.update(model="model", prompt_cache_key="session-a",
+                       client_metadata={"session_id": "session-a", "sandbox": "read-only"})
+        first = self.evidence(request)
+        request["prompt_cache_key"] = "session-b"
+        request["client_metadata"]["session_id"] = "session-b"
+        second = self.evidence(request)
+        self.assertEqual(first["topLevelFields"]["model"], second["topLevelFields"]["model"])
+        self.assertNotEqual(first["topLevelFields"]["prompt_cache_key"], second["topLevelFields"]["prompt_cache_key"])
+        self.assertEqual(first["clientMetadataFields"]["sandbox"], second["clientMetadataFields"]["sandbox"])
+        request["client_metadata"]["sandbox"] = "workspace-write"
+        self.assertNotEqual(first["clientMetadataFields"]["sandbox"], self.evidence(request)["clientMetadataFields"]["sandbox"])
+
+
 class ComparisonCalibrationTests(unittest.TestCase):
     def setUp(self):
         self.suite, self.sha = grading.load_suite()

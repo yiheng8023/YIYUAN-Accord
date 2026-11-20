@@ -157,3 +157,102 @@ Anthropic 为 Desktop 本地 Code 记录了 `CLAUDE_CONFIG_DIR`，设置后应�
 对本机 Squirrel 6.6395.0 的程序包只读复核，Code 根的选择分支会读 `CLAUDE_CONFIG_DIR`。Windows 的 `claude_desktop_config.json` 还有以 `LOCALAPPDATA` 为根的查找分支，相关代码与保留的本地原始备份一致。因此，同用户的隔离启动若只换 Code 根或独立窗口，仍需从真正启动的本地 Code 会话核 Desktop MCP 的有效来源。`--setting-sources` 等独立 CLI 参数在 Desktop 的公开对照中没有等效入口。[CLI 参数对照](https://code.claude.com/docs/en/desktop#cli-flag-equivalents)
 
 安全的验证条件是独立的设置和工作目录、已有认证的适用模型入口，以及生效的工作区信任与宿主管理策略。先核 `/status` 的桌面实际引擎，读回配置根、候选注册、Hook、Plugin、Skill 和 MCP 来源，再核任务实际行为。若同用户无法获得这些条件，可在已有授权的干净 Windows 测试用户或主机按同版 Squirrel 复验，并留意账户同步。本轮只完成官方资料和本机程序路径的核查。dev.3 的桌面加载和读取仍须实机绑定。[Desktop 内核版本](https://code.claude.com/docs/en/desktop#claude-code-version-in-the-code-tab)
+
+r125 对 Squirrel 6.6395.0 的本机隔离准备做了子进程对照。一个临时子进程实际继承了独立的 `CLAUDE_CONFIG_DIR`、`APPDATA` 和 `LOCALAPPDATA`，Windows 的已知文件夹查询仍返回现有用户的本地与漫游应用数据目录。程序包中也核到相应的应用数据回退路径，Squirrel 入口还可能启动原安装的更新器。已检查的三处 Desktop MCP 配置文件各有零个本地服务器。账户侧连接和 Local Code 实际采用的根仍需读回。这一轮未进入 Desktop Code，也未取得 dev.3 的桌面行为证据。当时尚无已核可用且获准使用的独立 Windows 环境。[Windows 已知文件夹](https://learn.microsoft.com/en-us/windows/win32/shell/known-folders) · [Desktop MCP 来源](https://code.claude.com/docs/en/desktop#mcp-servers-from-the-claude-desktop-chat-app)
+
+<a id="claude-code-windows-test-profile"></a>
+
+#### r126 独立用户预检（2026-11-20）
+
+经用户授权创建专用的标准本地 Windows 用户。以该用户令牌启动后台进程并加载其配置文件，核到本地和漫游应用数据的系统已知文件夹都位于独立用户目录，环境变量也指向实际根。目标进程可见机器级 Node 路径，并读回 dev.3 的 14 个成员和市场清单，摘要与原候选一致。候选及市场均通过 CLI 2.1.328 的严格校验。预检时该用户目录中尚未观察到 Squirrel 应用入口或 Claude 本地、漫游配置。[Windows 用户账户](https://support.microsoft.com/en-us/windows/security/identity-signin/manage-user-accounts-in-windows) · [Windows 已知文件夹查询](https://learn.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-shgetknownfolderpath)
+
+官方 Win32 x64 下载入口本次返回版本 `5.11492.5` 的引导器，文件的 Anthropic Authenticode 签名有效，目标用户读回的 SHA-256 一致。历史观察的 Squirrel `6.6395.0` 保持原范围，同版官方安装入口仍待核。采用当前引导器时，以目标桌面实际安装的版本和 Local Code 的 `/status` 建立当次基线。独立用户的后台预检已完成。交互登录、桌面安装和实际运行、适用模型授权及工作区信任仍待对应读回或确认。[官方 Win32 下载](https://releases.claude.com/api/desktop/win32/x64/exe/latest/redirect) · [桌面部署说明](https://support.claude.com/en/articles/12622703-deploy-claude-desktop-for-windows) · [Desktop Code 引擎版本](https://code.claude.com/docs/en/desktop#claude-code-version-in-the-code-tab)
+
+<a id="claude-code-isolated-desktop-install"></a>
+
+#### r127 独立标准用户安装与启动（2026-11-20）
+
+按授权以同一个官方引导器在专用标准用户内安装。安装前由目标令牌确认独立配置目录，未发现已有的 Squirrel 或 Claude MSIX 注册。安装后读回签名有效的 Squirrel `5.11492.5`、启动入口和原生更新器，目标用户的 MSIX 注册仍为零。随后的独立进程读回及实际窗口路径均指向该用户的 `app-5.11492.5`。原 Squirrel `6.6395.0` 的行为证据沿旧条件引用。
+
+本轮使用备用用户令牌启动，已确认桌面进程及窗口身份。窗口文档尚未呈现可核的本地 Code 状态，跨用户激活复试也未成功。合成工作区已准备，等待可操作的目标窗口、有效模型与工作区信任后读取实际内核、登记候选并取完整的 dev.3 行为证据。安装、启动和待取得的 Code 实测各依其原件记录。[Desktop Code 内核读回](https://code.claude.com/docs/en/desktop#claude-code-version-in-the-code-tab) · [备用用户令牌的组策略边界](https://learn.microsoft.com/en-us/troubleshoot/windows-client/group-policy/group-policy-not-applied-user-account-runas)
+
+<a id="claude-code-isolated-desktop-gateway"></a>
+
+#### r128 桌面更新与测试模型准备（2026-11-20）
+
+再次打开隔离账号的应用时，运行进程与窗口已指向 Squirrel `6.6395.1`，该版主程序的 Anthropic Authenticode 签名有效。窗口重新创建后，跨 Windows 用户激活仍失败。运行中的桌面外壳和真实 Local Code 会话继续分别核对。
+
+用户授权本次合成试验复用现有 DeepSeek。CC Switch 4.0.35 的本机 Desktop 网关已核对到当前 DeepSeek 记录，`claude-sonnet-5` 的上游映射为 `deepseek-flash`。本机网关的鉴权模型列表回读通过。标准用户写入 Claude 托管注册表路径被 Windows 拒绝，随后确认目标配置项仍不存在。改走 Claude 官方本地导入，将仅含测试模型配置和本机网关凭据的临时文件放入隔离用户的私有目录。DeepSeek 上游密钥继续由 CC Switch 管理。实机仍待进入该用户可操作的窗口、应用配置并信任合成工作区；尚无本轮的 Code 内核或推理结果。[CC Switch 桌面模型映射](https://github.com/farion1231/cc-switch/blob/v4.0.35/src-tauri/src/claude_desktop_config.rs) · [Claude 本地配置导入](https://claude.com/docs/third-party/claude-desktop/in-app-configuration#set-up-a-device-without-mdm)
+
+在本轮后续操作中，用户手动导入配置，界面进入 Gateway。Windows 重启后的首次重开出现 `Claude Desktop failed to launch`。用同一启动方式改跑只读探针，确认备用账户进程继承了外层账户的环境。改用由 Windows 为备用账户生成的环境，核回该账户的用户目录、本地和漫游 AppData，同一桌面程序成功打开。用户截图确认 Gateway 仍有效显示，并在 Code 新建页选中本地合成工作区。仍待对应会话核内核、有效信任、加载及推理结果。[Windows 进程环境](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-createprocesswithlogonw) · [Code 内核读回](https://code.claude.com/docs/en/desktop#claude-code-version-in-the-code-tab)
+
+同时读回本机独立 Codex CLI `0.171.0`、ChatGPT 客户端 `26.1117.3838.0`（所带 Codex CLI `0.171.0-alpha.13`）和独立 Claude CLI `2.1.329`。后者对同一 dev.3 插件及市场分别原生严格校验，两个退出码均为零。校验器另给出目录上架文案和图标提示，不改变本地校验结果。旧会话证据仍使用其实际运行版本。[Codex CLI 发行说明](https://github.com/openai/codex/releases/tag/rust-v0.171.0) · [Claude CLI 发行说明](https://github.com/anthropics/claude-code/releases/tag/v2.1.329)
+
+<a id="claude-code-dev3-desktop-read"></a>
+
+#### r128 桌面工作区与 dev.3 指导实测（2026-11-20）
+
+Gateway 新建页未列出 `/status`。从带标签 `R128-DESKTOP-DEV3-001` 的真实只读轮次、原生会话文件和运行进程核实，隔离 Squirrel `6.6395.1` 的本地 Code 内核为 `2.1.326`，实际返回模型为 `deepseek-flash`，权限模式为 `auto`。工作区信任已实际记录，原生项目设置选择本地 dev.3 市场和插件，候选的 14 个包内成员及市场清单与构建摘要一致。已检查用户、项目及三处 Desktop 本地 MCP 配置，均无登记。所查工作区和测试用户路径内未发现 `AGENTS.md` 或 `CLAUDE.md`。
+
+- 首轮原生 `SessionStart` 成功，标准输出中的 1,580 字节短指导与候选 Hook 的相同启动输入逐字节匹配。唯一工具操作为读取合成记录，回答正确指出记录缺少 Code 内核版本的读回证据。
+- 同一会话的 `R128-DESKTOP-DEV3-002` 实际调用协调 Skill，原生记录含 Skill 正文。随后 `Read` 成功返回精确 dev.3 候选包路径下的英文元指导及合成记录。原始合成文件在两次观察中的摘要一致。模型声称完成与原生工具结果分别取证。
+- 随后的独立任务 `R128-DESKTOP-DEV3-003` 使用本项目明示的允许和拒绝规则，按当前权限模式实际派发两次原生 `Write`。允许目标的内容经磁盘读回正确。拒绝目标回传权限错误，文件未出现，此轮无其他工具调用。原始合成文件继续保留。
+- 两次 75 秒前台写入均得到成功结果，目标文件如期出现。第二次用户确认未及时按下停止。之后的 `005` 读取独立完成，这部分对应自然完成后的新任务。
+- `004C` 将原定写入窗口延长至 150 秒。原生中断记录发生在前台写入器运行期间，Bash 回传中断错误。系统采样读回写入进程退出，并在原定执行时间之后再次确认目标文件缺席。接续的独立只读任务 `006` 成功读回允许目标的一行内容，同一会话正常完成。证据分别来自原生轮次、操作系统进程和磁盘。
+- 取证范围为该隔离 Windows 本地 Code 会话及实际使用的包、模型、命令和观察窗口。普通任务是否自动采用完整元指导和实际出站请求组装仍需独立证据。临时导入文件在路由实测后已移除。一次自然完成轮次还记录了 `mcp__ccd_turn__wrap_up`，后续对照以实际工具定义及投递来源为准。
+- 实测结束后读回隔离账户的 Claude 桌面与 Code 进程均已退出。本次导入的 Gateway 配置、项目级插件和市场登记、信任以及临时权限均已撤回。合成产物收作证据，工作区的原始合成文件摘要一致。共享 CC Switch 监听仍在。
+
+<a id="claude-code-glm-flash-r128"></a>
+
+#### r128 智谱 Flash 两条接入路径复验（2026-11-20）
+
+- 独立 Claude CLI `2.1.329` 使用专用配置根、空 MCP 配置和合成文件。实际请求通过智谱 Anthropic Messages 接入，返回 `glm-5.3-flash`。初始化记录发现 `3.3.18-claude-dev.3`，候选 14 个包内成员与构建摘要一致。原生 `SessionStart` 正常，1,580 字节指导摘要匹配；唯一 `Read` 工具调用读回合成文件，最终回复与原件完全一致，过程正常退出。本机使用的原 CLI 设置在前后读回一致。[智谱的 Claude Code 接入](https://docs.bigmodel.cn/cn/coding-plan/tool/claude)
+- CC Switch `4.0.36` 的 Desktop 代理模式从设备活动状态选择路由。旧直连选择和数据库旧当前标记对应其他配置。按实际活动路由读回 `claude-sonnet-5` 映射到智谱 `glm-5.3-flash`。初次用 Desktop 配置文件中的保存值查询本机模型目录，返回 401。按网关的原生认证来源取本机令牌后，模型目录返回 200。另发一条合成 Messages 请求返回 200，响应模型为 `glm-5.3-flash`，内容匹配，活动路由前后读回一致。[路由选择源码](https://github.com/farion1231/cc-switch/blob/v4.0.36/src-tauri/src/mode/current.rs#L63-L85) · [网关处理器](https://github.com/farion1231/cc-switch/blob/v4.0.36/src-tauri/src/proxy/handlers.rs)
+- 主账号 Squirrel 安装索引和可执行文件均显示 `6.28899.2`。初查时该账号的 `2.1.328` 缓存仍在分段下载，主账号入口供汉化适配。实际 Code 会话在独立标准用户实测。
+- 独立标准用户用 Squirrel 更新器从本机已核验的官方包更新到 `6.28899.2`。更新后安装索引中的包名、SHA1 和长度均与来源一致，实际安装的 `Claude.exe` 与包中签名有效的文件逐字节匹配。通过 Squirrel 安装入口打开新版，核对实际 Code 进程与原生记录均为 `2.1.328`，两轮实际返回模型均为 `glm-5.3-flash`。
+- 用户确认本轮合成工作区信任后，`R128-DESKTOP-628899-01` 的 `SessionStart` 原生执行成功，短指导与候选的 1,580 字节内容一致。模型调用 dev.3 协调 Skill 并用原生 `Read` 正确读回探针。首轮明确要求的英文元指导未单独读取。同一会话的 `R128-DESKTOP-628899-02` 只补验该项，原生 `Read` 的文件与候选包成员摘要一致，返回内容及最终答复与原文一致。两轮正常结束，原合成文件摘要一致。
+- 测试客户端正常退出。精确进程读回为零，临时网关、导入文件、工作区信任及项目权限和市场登记均已撤回。升级包与提取文件的临时副本已移除，合成探针及脱敏见证保留。执行中取消、写入权限和迟到效果沿 `6.6395.1` 的原测试条件引用。普通任务的隐式采用另按真实任务观察。
+
+脱敏见证包括 `cli-witness.json`、`cli-native-witness.json`、`desktop-authenticated-catalog.json`、`desktop-glm-message-witness.json`，以及新版隔离桌面的 `updated-desktop-witness.json`、`native-observation.json`、`guidance-observation.json` 和 `cleanup-witness.json`。合成任务用于兼容性核对，供应商改变后的成本或 Accord 增量另按同条件的真实对照判断。
+
+<a id="claude-candidate-publish-rollback"></a>
+
+### r129 本地候选的构建回滚（2026-11-20）
+
+在独立临时目标注入最终市场清单移动失败，旧构建留下 CLI 插件清单和构建记录。第二次构建同一路径被拒绝。自动检查也在旧代码复现了构建记录移动失败后的半成品。修复把构建记录和完整包置于市场清单之前。在移动失败时，按阶段回收仍与已构建内容一致的产物。已发生变化的路径保留并报告。输出为空并被移除后可重试同一路径。
+
+Windows 的 10 项 Claude 适配测试通过，Ubuntu WSL 中两项发布故障回归通过。重建的 14 个包内成员和市场清单摘要与 r128 实测的 dev.3 一致，构建器的源码摘要更新。Claude CLI 2.1.329 的插件和市场严格检查均通过。目录工具报告缺发布图标及本地候选未提供公开市场安装行的提示，两项均不改变严格检查结果。运行结论沿原候选对应的实际会话。[开发架构](../../docs/architecture.md#local-claude-code-candidate)
+
+<a id="claude-code-desktop-preflight-card"></a>
+
+### dev.3 Windows Squirrel 本地 Code 预检与收尾卡
+
+适用于下一次已获授权的隔离实测。dev.3 已在 Squirrel 6.6395.1 验证插件加载、指导读取、写入取消及其后态，在 Squirrel 6.28899.2 复验智谱路由下的只读链路。更换包、入口、版本或模型后，按实际受影响的步骤复验。[dev.3 桌面记录](#claude-code-dev3-desktop-read) · [智谱只读复验](#claude-code-glm-flash-r128)
+
+#### 启动前
+
+1. **核准候选和范围。** 读取构建记录、市场清单、14 个包成员摘要及插件与市场各自的原生校验。固定实际试验用的 Squirrel 安装、测试工作区和候选版本。包身份或登记权限有缺口时，暂停登记。
+2. **核准隔离入口。** 清点候选、临时工作区、启动设置和配置基线，确认已有适用模型权限、工作区信任及管理策略。使用 Desktop 启动侧的 `CLAUDE_CONFIG_DIR`，完全退出再启动。保存的 Local 环境给会话传变量，仍须从实际启动的 Desktop 核 Code 与应用数据根。同用户无法排除既有指导、Hook 或账户连接时，暂停该入口的实机任务，待有可用且已获授权的独立 Windows 用户或主机再验证。
+
+#### 实机核对
+
+3. **读回有效配置和能力。** 用本地 Code 的原生会话及进程记录确认 Squirrel 和 Code 引擎版本、模型、权限、Code 配置根、项目级登记、指导、插件、Hook 和 Skill。另核 Desktop 的应用数据路径、MCP 配置与账户连接的实际来源。关键来源仍未知时，暂停依赖该隔离的行为试验。
+4. **检查 dev.3 指导是否生效。** 在无预载完整元指导的受控任务中显式选协调 Skill，核短指导进入首个实际模型请求、完整 Skill 实际送达，以及原生 `Read` 返回随包英文译文。缺少任一证据时，保留相应环节待核。
+5. **核权限和后续任务。** 仅在已确认权限边界后使用合成目标。记录内建 `Write` 的允许及独立字节读回、受限请求的原生拒绝及文件缺席，检查是否有替代写入。另起同会话的新任务，验证新的允许文件。任一目标或权限有疑问时，暂停写入。
+6. **查清取消后的实际效果。** 从原生事件确认取消发生在授权写入进行中，单独记录取消回执、原轮终态、所属操作或进程实际停止、目标文件读回及观察窗口内的迟到效果。缺少哪个环节就保留该环节待核。
+
+#### 收尾
+
+7. **收回本次资源并核对原状。** 先确认任务及所属进程结束，再移除本次登记、临时文件、工作区和配置。撤销本次启动设置，读回资源清理结果，并比较原有配置与信任状态。仍有写者或归属不清时暂停相应清理，记录实际后态。
+
+此卡为两份独立草稿经匿名复核后的维护合稿。[两组原始结果与范围](../evaluations/accord-toggle-v1.md#desktop-preflight-pair-3318)
+
+<a id="accord-foundation-without-agents"></a>
+
+### r127 元指导由 Accord 独立送达的范围
+
+在独立 Codex 配置和工作区使用 CLI 0.170.0，发行版 3.3.18 的 30 个包成员核验一致。原生 `thread/start` 返回零个指引文件来源。开启并按规格摘要信任此次试验范围的 Hook 后，在首个请求第 4 项的 `developer` 消息中核到完整的英文元指导与协调正文，合计 12,144 UTF-8 字节，逐字节匹配对应的原生 Hook 输出。它在第 5 项的任务输入之前。请求由本机固定回包接收，原生轮次完成，未使用付费模型。完整送达支持 Accord 作为本地 Codex 的早期指导来源，实际决策和效果还需相应行为证据。宿主层级和授权规则继续适用。[Codex 启动 Hook](https://learn.chatgpt.com/docs/hooks#sessionstart) · [Codex 指引文件发现](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
+
+Claude dev.3 的启动 Hook 给出短指导与读取定位。隔离 CLI 和 Windows 本地 Code 均已实测显式采用协调 Skill 并按需读取随包译文。普通轮次的完整前置送达还需独立证据。Claude 自身的 `CLAUDE.md` 和有条件的 `AGENTS.md` 发现规则也应计入实际来源。[dev.3 CLI 观察](#claude-code-foundation-fallback) · [dev.3 桌面实测](#claude-code-dev3-desktop-read) · [Claude Hook 的附加上下文](https://code.claude.com/docs/en/hooks#add-context-for-claude) · [Claude 指引文件发现](https://code.claude.com/docs/en/memory#when-claude-code-reads-agentsmd)
+
+本机 Codex 用户级 `AGENTS.md` 的核心正文与随包英文元指导一致，项目 `AGENTS.md` 则保有独立的仓库职责。Claude 用户级 `CLAUDE.md` 为另一实际来源。用户级副本在 Accord 未启用或更新后 Hook 尚待重新允许时仍有作用。本轮按所核入口使用单一送达证据，现有指引文件保留。随包中文原文继续对应 CALIBRATION 的来源稿。

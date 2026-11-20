@@ -1,13 +1,15 @@
-"""Prepare synthetic calibration inputs or inspect outputs; never run an Agent.
+"""Prepare comparison inputs, grade outputs or summarize observed requests.
 
-This developer tool grades specified file facts only. It cannot certify host
-isolation, authority, process behavior, user effort, net value or release status.
+This developer tool does not run Agents. Its outputs cover the supplied files or
+requests. Host isolation, authority, process behavior and net value need evidence
+from their own sources.
 """
 
 import argparse
 from collections import Counter
 from decimal import Decimal
 import hashlib
+import hmac
 import json
 from pathlib import Path, PurePosixPath
 import posixpath
@@ -37,6 +39,72 @@ def strict_json(text):
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
+
+
+def native_request_evidence(request, key, *, turn_id):
+    """Fingerprint an observed initial Codex request with a key shared by both arms.
+
+    The caller binds the request to its native response and identifies known
+    plugin input from the source. Array order and all other fields are significant.
+    """
+    if not isinstance(key, bytes) or len(key) < 32:
+        raise ValueError("request evidence needs a pair-local key of at least 32 bytes")
+    if not isinstance(turn_id, str) or not turn_id:
+        raise ValueError("request evidence needs the observed turn ID")
+
+    def fingerprint(value):
+        encoded = json.dumps(value, ensure_ascii=False, sort_keys=True,
+                             separators=(",", ":"), allow_nan=False).encode("utf-8")
+        return hmac.new(key, encoded, hashlib.sha256).hexdigest()
+
+    def tools_in(fields):
+        if "tools" not in fields:
+            return {"state": "absent"}
+        tools = fields["tools"]
+        if tools is None:
+            return {"state": "null"}
+        if not isinstance(tools, list) or not all(isinstance(tool, dict) for tool in tools):
+            raise ValueError("invalid native tool definitions")
+        return {"state": "array", "definitions": [fingerprint(tool) for tool in tools],
+                "members": [[fingerprint(member) for member in tool["tools"]]
+                            if tool.get("type") == "namespace" and isinstance(tool.get("tools"), list)
+                            else None for tool in tools]}
+
+    if not isinstance(request, dict) or not isinstance(request.get("input"), list):
+        raise ValueError("expected a native input array")
+    items = []
+    for ordinal, item in enumerate(request["input"]):
+        if not isinstance(item, dict):
+            raise ValueError("invalid native input item")
+        fields = item.copy()
+        kind = fields.get("type")
+        normalized = []
+        if kind in ("message", "additional_tools") and isinstance(fields.get("id"), str):
+            del fields["id"]
+            normalized.append("id")
+        meta_field = "internal_chat_message_metadata_passthrough"
+        metadata = fields.get(meta_field)
+        if kind == "message" and isinstance(metadata, dict) and metadata.get("turn_id") == turn_id:
+            metadata = fields[meta_field] = metadata.copy()
+            del metadata["turn_id"]
+            normalized.append("turn_id")
+            if type(metadata.get("create_time")) in (int, float):
+                del metadata["create_time"]
+                normalized.append("create_time")
+
+        content = fields.get("content")
+        row = {"ordinal": ordinal, "normalized": normalized, "fingerprint": fingerprint(fields)}
+        if kind == "message":
+            row["content"] = [fingerprint(part) for part in content] if isinstance(content, list) else None
+        elif kind == "additional_tools":
+            row["tools"] = tools_in(fields)
+        items.append(row)
+    client_metadata = request.get("client_metadata")
+    return {"topLevelFields": {field: fingerprint(value) for field, value in request.items()
+                               if field not in ("input", "tools")},
+            "clientMetadataFields": {field: fingerprint(value) for field, value in client_metadata.items()}
+            if isinstance(client_metadata, dict) else None,
+            "topLevelTools": tools_in(request), "input": items}
 
 
 def path_parts(relative):

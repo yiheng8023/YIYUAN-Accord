@@ -11,7 +11,7 @@ from .closure import (
     reconcile_closure,
 )
 from .identity import (
-    _bounded_git_bytes, _exact, _nonempty_string as _text,
+    _bounded_git_bytes, _exact, _git_read_environment, _nonempty_string as _text,
     _safe_https_locator, _strict_json_object,
 )
 from .stage_lifecycle import is_structurally_valid_closed_maintenance_snapshot
@@ -2047,18 +2047,19 @@ def _behavior_subject_revision_errors(root, label, observation, task):
     if (not isinstance(files, list) or not files
             or any(not _text(locator) for locator in files)):
         return [f"{label} behavior subject is invalid"]
+    environment = _git_read_environment()
     try:
         tracked = subprocess.check_output(
             ["git", "-C", str(root), "ls-files", "--", *files],
-            stderr=subprocess.DEVNULL, text=True,
+            stderr=subprocess.DEVNULL, text=True, env=environment,
         ).splitlines()
         ancestor = subprocess.run(
             ["git", "-C", str(root), "merge-base", "--is-ancestor", revision, "HEAD"],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=environment,
         ).returncode
         changed = subprocess.run(
             ["git", "-C", str(root), "diff", "--quiet", revision, "--", *files],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=environment,
         ).returncode
     except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
         return [f"{label} behavior subject is unavailable"]
@@ -2839,6 +2840,7 @@ def provisional_gt20_21_source_errors(
                     ["git", "-C", str(root), "merge-base", "--is-ancestor",
                      revision, "HEAD"],
                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                    env=_git_read_environment(),
                 ).returncode
             except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
                 errors.append(f"{label} evaluatedRevision is unavailable")
@@ -3109,6 +3111,7 @@ def frozen_gt20_21_promotion_errors(
             code = subprocess.run(
                 ["git", "-C", str(root), "merge-base", "--is-ancestor", revision, "HEAD"],
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                env=_git_read_environment(),
             ).returncode
         except (OSError, subprocess.SubprocessError, UnicodeError, ValueError):
             code = 1

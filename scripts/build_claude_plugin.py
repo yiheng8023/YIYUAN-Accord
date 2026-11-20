@@ -3,8 +3,10 @@
 import argparse
 from hashlib import sha256
 import json
+from os.path import samestat
 from pathlib import Path
 import re
+import stat
 from tempfile import TemporaryDirectory
 
 
@@ -107,6 +109,29 @@ def build_codex_lifecycle(output):
     return output
 
 
+def restore_staged_entry(output, staging, entry, written):
+    files = {Path(name): data for name, data in written.items()
+             if name == entry or name.startswith(entry + "/")}
+    members = set(files)
+    members.update(parent for name in files for parent in name.parents if parent.parts)
+    for relative in sorted(members, key=lambda name: len(name.parts)):
+        path = output / relative
+        info = path.lstat()
+        if stat.S_ISLNK(info.st_mode) or (
+                getattr(info, "st_file_attributes", 0) & stat.FILE_ATTRIBUTE_REPARSE_POINT):
+            raise OSError(f"Build output changed at {path}")
+        if relative in files:
+            data = files[relative]
+            unchanged = (stat.S_ISREG(info.st_mode) and info.st_size == len(data)
+                         and path.read_bytes() == data)
+        else:
+            children = {output / name for name in members if name.parent == relative}
+            unchanged = stat.S_ISDIR(info.st_mode) and set(path.iterdir()) == children
+        if not unchanged:
+            raise OSError(f"Build output changed at {path}")
+    (output / entry).rename(staging / entry)
+
+
 def build(output):
     """Write a new local marketplace and package. Return the package path."""
     output = Path(output).absolute()
@@ -189,6 +214,7 @@ def build(output):
         ".claude-plugin/marketplace.json": catalog_bytes,
     }
     output.mkdir()
+    owned_output = output.lstat()
     try:
         with TemporaryDirectory(prefix=".build-", dir=output) as temporary:
             staging = Path(temporary)
@@ -196,12 +222,27 @@ def build(output):
                 target = staging / name
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes(data)
-            # The host can discover the marketplace only after the complete package is present.
-            for name in ("plugins", "build.json", ".claude-plugin"):
-                (staging / name).rename(output / name)
+            published = []
+            try:
+                # The build record and full package precede marketplace discovery.
+                for name in ("build.json", "plugins", ".claude-plugin"):
+                    destination = output / name
+                    if destination.exists() or destination.is_symlink():
+                        raise FileExistsError(destination)
+                    (staging / name).rename(destination)
+                    published.append(name)
+            except OSError:
+                if not samestat(owned_output, output.lstat()):
+                    raise OSError("Build output directory was replaced")
+                for name in reversed(published):
+                    restore_staged_entry(output, staging, name, written)
+                raise
     except OSError as error:
         try:
-            output.rmdir()
+            if samestat(owned_output, output.lstat()):
+                output.rmdir()
+            else:
+                raise OSError("Build output directory was replaced")
         except OSError:
             raise OSError(f"Build failed with output remaining at {output}: {error}") from error
         raise

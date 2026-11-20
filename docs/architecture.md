@@ -99,8 +99,13 @@ interruption and restoration through its native task history.
 
 Use the repository's Python 3.11–3.14 development environment, Node.js and Claude
 Code. Build into a new directory and validate before loading for one CLI session.
-The builder stages the package privately and places the marketplace manifest
-after the complete package and its build record.
+The builder stages the files and places the build record and complete package
+before the marketplace manifest. If a move fails, the builder returns entries
+that still match its staged files. Retry the same path after it removes the empty
+output directory. If it reports remaining output, inspect that path or use a
+fresh directory. The strict checks validate the local plugin and marketplace
+manifests and structure. Use the observed sessions below for runtime evidence.
+[Build and retry evidence](../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-candidate-publish-rollback)
 
 ```sh
 python -B scripts/build_claude_plugin.py --output ../accord-claude-dev

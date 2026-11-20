@@ -124,6 +124,42 @@ class ClaudeCodeAdapterTests(unittest.TestCase):
         self.assertTrue((package / ".claude-plugin/plugin.json").is_file())
         self.assertTrue((output / ".claude-plugin/marketplace.json").is_file())
 
+    def test_failed_publication_removes_partial_output_and_allows_retry(self):
+        rename = Path.rename
+        for final_name in ("build.json", "plugins", ".claude-plugin"):
+            with self.subTest(final_name=final_name):
+                output = self.market.parent / f"interrupted publication {final_name}"
+
+                def fail_move(source, target):
+                    if Path(target) == output / final_name:
+                        raise OSError("simulated publication failure")
+                    return rename(source, target)
+
+                with patch.object(Path, "rename", fail_move):
+                    with self.assertRaisesRegex(OSError, "simulated publication failure"):
+                        builder.build(output)
+                self.assertFalse(output.exists())
+                package = builder.build(output)
+                self.assertTrue((package / ".claude-plugin/plugin.json").is_file())
+                self.assertTrue((output / ".claude-plugin/marketplace.json").is_file())
+
+    def test_failed_publication_preserves_a_changed_output_entry(self):
+        output = self.market.parent / "publication with an external addition"
+        unrelated = output / "plugins" / "other-project.txt"
+        rename = Path.rename
+
+        def fail_move(source, target):
+            if Path(target) == output / ".claude-plugin":
+                unrelated.write_bytes(b"independent contents")
+                raise OSError("simulated publication failure")
+            return rename(source, target)
+
+        with patch.object(Path, "rename", fail_move):
+            with self.assertRaisesRegex(OSError, "output remaining"):
+                builder.build(output)
+        self.assertEqual(unrelated.read_bytes(), b"independent contents")
+        self.assertFalse((output / ".claude-plugin/marketplace.json").exists())
+
     def invoke_hook(self, data):
         return subprocess.run(
             ["node", str(self.hook)], input=data, capture_output=True,

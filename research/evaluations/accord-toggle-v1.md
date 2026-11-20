@@ -120,6 +120,61 @@ Windows 独立 Codex CLI 0.170.0（二进制 SHA-256 `8d06dc231dba649c7d48d3eeca
 
 两组 App Server 退出码均为 0，Windows Job 活跃进程为零，配置文件摘要一致。临时工作区和原始跟踪已回收，保留 `PAIRED.json`、成品及其读回摘要。现有证据按实际范围使用，正式对照的共同请求核验继续保留。
 
+<a id="desktop-preflight-pair-3318"></a>
+
+### r125 桌面预检卡的启用差异观察（2026-11-20）
+
+两组分别根据固定提交 `53a0adbd` 的三段公开材料，为 dev.3 后续 Windows Squirrel 实测撰写中文检查卡。使用同一 Windows Codex CLI 0.170.0、正式 Accord 3.3.18、`gpt-6.2-sol`／low 和同一只读工作目录，网络禁用且审批为 `never`。按启用、关闭的顺序各新建一个临时会话。两组预检匹配 45 个共同本地 Skill，Accord 的 Skill 与受信任 Hook 分别为 5／6 和 0／0。r124 双语安装说明沿原记录引用。
+
+按线程、轮次、同一任务正文和原生响应匹配两份首轮请求。在临时请求原件可用时，用成对密钥生成 HMAC-SHA256，保留有序消息的正文分项、来源元数据和顶层字段，并为实际工具定义保留命名空间与子工具的有序指纹。仅归一化本次原生格式中可识别的请求项 ID，以及与当前轮次绑定的消息轮次 ID 和实测创建时间。字段缺席、空值和空数组分别保留。比较时按来源对齐共同消息，将会话标识和缓存键变化与实际请求内容分别核对。[取证实现](../../scripts/grade_accord_comparison.py) · [Codex 请求项结构](https://github.com/openai/codex/blob/rust-v0.170.0/codex-rs/protocol/src/models.rs#L1061-L1095)
+
+- 两组实际的 `additional_tools.tools` 均包含 3 个命名空间、12 个工具。完整定义及顺序一致，顶层 `tools` 均缺席。两组请求的业务材料、模型、推理强度和已核权限选项一致。顶层其余变化在 `client_metadata` 与 `prompt_cache_key`，后者分别匹配所在的原生线程。
+- 除去启用组新增的两段 Accord 指导（11,946 和 2,189 UTF-8 字节），七项对齐的输入中六项相同。一条开发者消息仍有差异。模型实际收到的 Skill 目录中，199 个共同条目及其顺序一致，启用组多 5 个 Accord 条目，且 169 个共同简介更短。Skill 目录与预检的本地可见列表是两项独立观察。[宿主 Skill 目录渲染](https://github.com/openai/codex/blob/rust-v0.170.0/codex-rs/ext/skills/src/render.rs)
+- 同一条消息的 MCP 清单在启用组多列出 Accord 和 OpenAI API 额度服务的名称。原件确认文字变化，两组首轮实际提交的工具定义仍一致。[后续来源核查](#r126-comparison-attribution)
+
+| 可复核结果 | 关闭 Accord | 启用 Accord |
+| --- | --- | --- |
+| 原生轮次终态 | 完成 | 完成 |
+| 匿名成品复核 | 部分通过。给出了七步，较完整地描述写入权限和取消后的实际核验 | 部分通过。给出了六步，明确了试验资源归属及清理后的读回 |
+| 业务耗时 | 27.414 秒 | 28.639 秒 |
+| 宿主报告 token（输入／输出／合计） | 24,528／1,052／25,580 | 27,492／1,029／28,521 |
+
+缓存输入均为零。两组业务轮次均未观测到监测范围内的工具启动，也无人工救援。两份草稿都漏了保存的 Local 环境变量与 Desktop 启动配置根的区分，也未把取消后的原轮终态单列为读回项。本轮维护合稿补齐这些步骤，结合各组可用内容形成[桌面预检与收尾卡](../reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-preflight-card)。App Server 均以 0 退出，Windows Job 活跃进程归零，原配置摘要保持。
+
+本轮可核定实际工具定义一致，并具体指出共同正文的差异。两组成品、1.225 秒及 2,941 token 的差值按该任务观察引用。由于仍有宿主上下文差异，单凭本轮无法把差值或成品差异归因于 Accord，也不据此作传播中的净收益声明。
+
+<a id="r126-comparison-attribution"></a>
+
+#### r126 来源复核（2026-11-20）
+
+用 r125 留存的摘要和同一 Codex CLI 0.170.0 的公开源码复核。启用 Accord 直接增加两段指导、5 个 Skill 及其目录别名。发行包只声明 `accord-state`，Codex 将服务名规范化并构成 `mcp__accord_state`。[Accord 发行清单](https://github.com/yiheng8023/YIYUAN-Accord/blob/699b24c3092edbafc431f0760a539eeca3f175e3/plugins/yiyuan-accord-codex/.mcp.json) · [Codex 名称规范化](https://github.com/openai/codex/blob/29eb79e9866b3262a777fdf8195c1b9e63684c91/codex-rs/codex-mcp/src/mcp/mod.rs#L645-L662)
+
+**共同 Skill 简介缩短。** Codex 先为目录名称和定位保留空间，再轮流分配剩余预算给简介。选用目录别名时，别名表也占用预算。用固定提交中的分配函数，在等额预算下只将合成目录从 199 项增至 204 项，复现了 169 个共同简介变短、30 个保持原长的现象。扩大预算后，合成对照中的共同简介全部一致。r125 共同条目及顺序一致，缩短的文字均保留较长简介的开头，与宿主预算分摊一致。这是开启 Accord 增加条目后产生的宿主渲染影响。夹具的预算和简介均为合成条件，历史轮次的精确预算尚无读回。[目录预算分配](https://github.com/openai/codex/blob/29eb79e9866b3262a777fdf8195c1b9e63684c91/codex-rs/ext/skills/src/render.rs#L380-L405) · [轮流分配](https://github.com/openai/codex/blob/29eb79e9866b3262a777fdf8195c1b9e63684c91/codex-rs/ext/skills/src/render.rs#L469-L507) · [别名表开销](https://github.com/openai/codex/blob/29eb79e9866b3262a777fdf8195c1b9e63684c91/codex-rs/ext/skills/src/render.rs#L828-L855)
+
+**额外的 API 额度名称。** `mcp__openai_api_credit_promo` 不在 Accord 的发行清单中。相同名称见于当前宿主提供的 API 额度入口，历史运行时的具体注册来源和仅启用组出现的触发条件仍未取得。Codex 可分别渲染延迟发现的 MCP 命名空间和直接提交的工具定义，前者有自己的预算。r125 留下新增名称、实际定义及顺序，缺少目录标题与请求前的注册、连接就绪和暴露状态，故无法确认当时走的是哪一条目录生成路径。两个进程的启动、提交时点有先后，宿主动态注册或就绪时点可以造成差异，均未在该轮证实。账户资格和行为影响也仍未知。[直接工具定义](https://github.com/openai/codex/blob/29eb79e9866b3262a777fdf8195c1b9e63684c91/codex-rs/core/src/session/world_state.rs#L201-L215) · [延迟发现目录](https://github.com/openai/codex/blob/29eb79e9866b3262a777fdf8195c1b9e63684c91/codex-rs/core/src/session/world_state.rs#L389-L397) · [原生启动目录取样](https://github.com/openai/codex/blob/29eb79e9866b3262a777fdf8195c1b9e63684c91/codex-rs/codex-mcp/src/connection_manager/tool_catalog.rs#L314-L381)
+
+后续对照可随首轮请求保留目录标题、相关名称及被动启动状态。另记两组时点、可核的注册来源、连接就绪及暴露方式。主动查询 MCP 清单可能触发发现或复用连接，需标为观察者动作。r125 的业务轮次和成品沿原记录使用。[被动状态通知](https://github.com/openai/codex/blob/29eb79e9866b3262a777fdf8195c1b9e63684c91/codex-rs/app-server-protocol/src/protocol/common.rs#L2118) · [主动查询行为](https://github.com/openai/codex/blob/29eb79e9866b3262a777fdf8195c1b9e63684c91/codex-rs/app-server/src/request_processors/mcp_processor.rs#L410-L465)
+
+<a id="r129-builder-note-pair"></a>
+
+### r129 Claude 构建恢复说明对照（2026-11-20）
+
+本次整理实际需要合入开发架构的英文恢复说明。两组使用同一份已核构建故障、回滚、候选身份及严格校验事实。按关闭、启用的顺序各运行一轮。Windows Codex CLI 0.171.0、`gpt-6.2-sol`／low、只读沙箱和审批策略一致。已核固定的 30 个 Accord 3.3.18 成员，两组的 46 个共同本地 Skill 清单一致，Accord Skill／受信 Hook 分别为 0／0 与 5／6。预检的 Skill 查询及隔离选项用于两组，MCP 启动状态通过现有通知被动获得。
+
+0.171.0 将请求载荷保存为 Zstandard 分片。先用无凭据的本机回环响应验证：录制的同一二进制还原完整载荷，解出的请求与回环服务收到的 JSON 相同。真实任务再按原生线程、轮次和响应绑定请求。两组都引用预热响应，每组的预热输入与该次实际发送的输入数组逐项相同。共同消息及工具继续沿既有字段归一化和成对摘要口径比较。[Codex 0.171.0 追踪说明](https://github.com/openai/codex/blob/rust-v0.171.0/codex-rs/rollout-trace/README.md#bundle-layout)
+
+- 两组实际提交的 3 个命名空间、12 个工具定义及顺序一致。剔除启用组专属的两条 Accord 指导后，7 项共同输入有 6 项一致。余下一条开发者消息的 198 个共同 Skill 条目及顺序一致。启用组增加 5 个 Accord Skill，169 个共同简介缩短，29 个保持原文。
+- 启用组在同条消息多列 `mcp__accord_state`，提交前实际收到该服务的 `starting` 与 `ready`。两组正文都包含 OpenAI API 额度服务名称，公共工具定义一致。r125 的单侧名称差异未在本轮复现，历史触发条件仍不确定。
+- 隐去条件后按所给事实核对草稿。两组都交付了单段、字数合规的说明，正确涵盖构建顺序、同路径重试、变动产物的处置和严格校验范围。架构文档采用复核后的合稿。[合入的说明](../../docs/architecture.md#local-claude-code-candidate)
+
+| 观察值 | 关闭 Accord | 启用 Accord |
+| --- | --- | --- |
+| 业务轮次与成品 | 完成，111 词 | 完成，112 词 |
+| 业务耗时 | 7.404 秒 | 7.474 秒 |
+| 宿主报告 token（输入／输出／合计） | 23,511／155／23,666 | 26,466／156／26,622 |
+
+两组业务轮次的缓存输入都为零，均无主动工具调用和人工救援。预检到两组退出及请求取证共 19.063 秒，预检为 3.450 秒。完整产品回归在同机并行，耗时只用于记录本轮过程。两组 App Server 均正常退出，所属 Job 活跃进程为零，原配置摘要一致。成本差值与相当的成品质量可用于继续观察普通文案任务的负担。本轮保留有序取证摘要和两份成品，结论按当时输入和宿主条件引用。
+
 ### 2026-11-14 指导取回与资源交还再核
 
 沿下方两个不同线程的真实UI观察，继续核对发生问题之前实际送达的指导与公开读取。重新校验所选原生片段，并检索后一次业务及反馈两个限定回合的144条已完成命令事件和72条已完成MCP事件；不读取模型推理、不操作桌面或重放业务。这是读取覆盖与声明依据的复核，不能揭示模型内部注意或所有潜在来源。

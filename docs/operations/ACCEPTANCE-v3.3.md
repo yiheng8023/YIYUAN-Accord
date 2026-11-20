@@ -6,11 +6,25 @@
 
 3.3.18 阶段先沿正常安装和使用路径核对中英文、精确来源、实际入口及信任要求；接口说明与发布源码对应，历史记录保持原版本。发生本机 CLI 或模型变化时，核对受影响的输入、恢复、权限及工具环境。启用与未启用各核实际加载、共同条件和交付；共同目录或文件执行条件不同的预检结果保留各自范围。后续具体资格按当时主体和影响范围确定，已确认的缺陷按受影响正常路径与失败路径复验。
 
-Claude Code 本地候选核构建来源、实际插件和宿主版本、指导正文、取消确认、迟到结果、原轮终态及后续任务。只读链路已在受测 CLI 与 Windows Squirrel 本地 Code 观察。dev.2 的 CLI 有前台 Bash 写入中断、权限拒绝和同会话后续写入的原生与磁盘证据，Squirrel 已实测内建 `Write` 的允许、拒绝及同会话后续新任务。dev.3 已在隔离 CLI 核对完整 Skill 与随包元指导的实际读取。当前候选的桌面采用和进行中写入的中断效果仍需对应证据。跨入口接续需核实际同一任务、权限、结果及单一写者。启用收益仍用同宿主、同条件的实际启用差异判断。[当前候选观察](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-current-candidate) · [桌面写入观察](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-write) · [dev.3 复验](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-foundation-fallback)
+Claude Code 本地候选核构建来源、实际插件和宿主版本、指导正文、取消确认、迟到结果、原轮终态及后续任务。只读链路已在受测 CLI 与 Windows Squirrel 本地 Code 观察。dev.2 的 CLI 有前台 Bash 写入中断、权限拒绝和同会话后续写入的原生与磁盘证据，Squirrel 已实测内建 `Write` 的允许、拒绝及同会话后续新任务。dev.3 已在隔离 CLI 核对完整 Skill 与随包元指导的实际读取。dev.3 的受测 Squirrel 本地 Code 已核候选采用、执行中写入中断、到点后磁盘复核及取消后新任务。跨入口接续需核实际同一任务、权限、结果及单一写者。启用收益仍用同宿主、同条件的实际启用差异判断。[当前候选观察](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-current-candidate) · [桌面写入观察](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-write) · [dev.3 复验](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-foundation-fallback)
 
-r124 双语安装说明的两组业务轮次均完成，成品按同一任务要求匿名复核后均为部分通过。两组实际任务材料与选项一致。旧摘要未保留足以逐项比较的共同消息正文和工具定义，影响归因的部分按未知保留。保留每组成品与观察用量，合稿作为后续维护材料。新任务复验时核对实际请求中顶层以及 `additional_tools` 包装内的有序定义。[本轮原件范围](../../research/evaluations/accord-toggle-v1.md#release-source-pair-3318)
+r124 的两组成品、观察用量和证据缺口按原记录保留。r125 对新任务在原件可用时分别核对有序正文和实际工具定义。两组首轮工具定义及顺序一致，共同正文仍有宿主目录差异。盲审均为部分通过，合稿补齐了下一次实机所需的核验步骤。后续按实际请求判断共同条件，用量及成品差异随该前提使用。[r124 原件范围](../../research/evaluations/accord-toggle-v1.md#release-source-pair-3318) · [r125 对照](../../research/evaluations/accord-toggle-v1.md#desktop-preflight-pair-3318)
+
+dev.3 桌面实机前应分别读回有效的 Code 配置根和 Desktop 能力来源。带独立环境变量的子进程仍可能解析到当前用户的 Windows 已知文件夹。桌面试验沿已获授权的独立环境和预检卡取证，在实机分别记录取消回执、原轮终态、实际停止及磁盘后态。[隔离前提与预检卡](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-preflight-card)
+
+r126 已核标准测试用户的配置根和候选读回，桌面加载资格按交互会话实际安装版本、权限及来源另验。对照归因中，新增条目引起的共同简介缩短有同版宿主源码及分配函数夹具支持。额外的 API 额度名称仍需当时的目录来源与状态证据，继续按观察使用相关差值。[独立用户预检](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-windows-test-profile) · [来源复核](../../research/evaluations/accord-toggle-v1.md#r126-comparison-attribution)
+
+r127 已核独立 Windows 标准用户中的签名 Squirrel 安装及运行窗口。dev.3 Desktop 的 `/status`、项目有效信任、指导与按需读取仍按实际 Local Code 会话取证。Codex 的无指引文件原生首轮验证了受信任 Hook 的完整早期送达，保留宿主层级、覆盖范围和行为证据的独立判据。[独立用户安装](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-isolated-desktop-install) · [元指导送达](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#accord-foundation-without-agents)
+
+r128 实测独立 Windows 标准用户的签名 Squirrel `6.6395.1`，内置 Code `2.1.326`，Gateway 返回 `deepseek-flash`。已核工作区信任、候选来源、短启动指导和显式采用协调 Skill 后读取随包英文元指导。两条只读任务在同一会话完成，原始合成文件摘要保持一致。独立 CLI 2.1.329 对 dev.3 插件和市场的严格校验均通过。同会话的独立写入任务已核允许写入和权限拒绝，分别读回正确内容和文件缺席。前台写入已核执行中取消、进程退出、预定写入时间后文件缺席及取消后新任务完成。已核临时权限、登记、网关配置与进程的收尾。[本地会话实测](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-dev3-desktop-read)
 
 生命周期共用源码的本轮复验按两端实际产物逐字节核对，并用一个只改 Codex 专属段落的样本核实 Claude 的构建独立性。原生运行行为继续沿对应入口、包成员和实机记录判断。[构建复验范围](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#lifecycle-source-result)
+
+续核智谱时，隔离 CLI 2.1.329 和 Squirrel 6.28899.2 的本地 Code 2.1.328 均观测到 `glm-5.3-flash`、dev.3 启动 Hook 和原生只读。新版桌面首轮实际调用协调 Skill 并读回探针，英文元指导由同一会话的第二轮单项指令读回。本轮桌面结论覆盖所测入口、网关和显式指令下的只读行为。执行中取消、迟到写入及写入权限沿各自原测试取证。[智谱复验及路由来源](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-glm-flash-r128)
+
+r129 已核构建中途移动失败、回滚后的同路径重试、已变动内容留存和重建产物一致性。新版 Codex 对照的首轮实际工具定义、预热输入和被动 MCP 启动记录按各自原件复核。两组成品和用量用于所测文案任务的观察。纳入正式发行仍按当时的候选身份、影响范围和正式资格办理。[构建回归](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-candidate-publish-rollback) · [对照记录](../../research/evaluations/accord-toggle-v1.md#r129-builder-note-pair)
+
+历史证据的复验沿用原冻结提交和行为范围，Git 读取须绑定选定检出目录。首轮失败、复现条件和后续定向结果见[本地回归](PLAN-v3.3.md#r129-local-regression)。
 
 普通任务减负按同一任务的结果合看质量、返工、人工主动成本、耗时与报告用量。遇到实质风险的任务再核暂停、接续及错误后果。首轮消息字节数用于定位来源，机制回归用于核必须职责；净收益以相关的实际任务观察为依据。
 

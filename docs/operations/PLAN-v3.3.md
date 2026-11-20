@@ -1,10 +1,18 @@
 # 3.3 共识节点与当前计划
 
-节点：N33-20260909 · 修订：r124 · 2026-11-19。本文保存现行共识、结果关系与工序。当前计划和进度集中在[当前工作](#current-work)。历史过程及原件按下方索引查阅。
+节点：N33-20260909 · 修订：r129 · 2026-11-20。本文保存现行共识、结果关系与工序。当前计划和进度集中在[当前工作](#current-work)。历史过程及原件按下方索引查阅。
 
 <a id="current-work"></a>
 
-## 基于 3.3.18 的当前工作（2026-11-19）
+## 基于 3.3.18 的当前工作（2026-11-20）
+
+**r129 推进。** 修复 Claude 候选的发布中途失败回滚。Windows 与 Ubuntu 环境的故障注入确认同路径可重试及外部变动留存，重建候选的成员和市场清单与已实测 dev.3 一致。Codex CLI 0.171.0 的压缩请求分片先经无模型回环夹具校准，再用于新维护说明对照。两组实际工具定义一致，均交付可用草稿。当前两组都出现 API 额度名称，历史单侧差异按原条件保留。构建说明已采用核对后的文案，现行公开安装命令与 3.3.18 精确发行来源一致。[构建回归](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-candidate-publish-rollback) · [新版对照](../../research/evaluations/accord-toggle-v1.md#r129-builder-note-pair)
+
+<a id="r129-local-regression"></a>
+
+**r129 本地回归。** 首轮开发工作树执行 1,505 项，历史证据检查有 8 项失败。在常规环境下重跑原 8 项全部通过。把隔离夹具的 `GIT_DIR` 指向不存在的目录，复现了首项失败的完整错误列表。首轮调用环境未留存，具体触发来源仍不确定。历史证据校验已复用项目的 Git 读取隔离，明确按选定检出目录检查祖先关系、跟踪文件及内容。
+
+修复后，Windows 在同类干扰下通过原 8 项和新增的 Git 路由回归。Ubuntu WSL 通过新增回归。首轮全量结果和后续定向结果各自保留。正式资格仍按精确候选验收。
 
 **开发 CI。** `1726b95aeb15309ab18953d138dea52fb8969f98` 的 [CI #1076](https://github.com/yiheng8023/YIYUAN-Accord/actions/runs/44511069396) 首轮 10 项全部通过。最后一项于北京时间 2026-11-19 20:24:52 完成。八项 Python 矩阵均完成产品套件，另外两项分别通过 Ubuntu 和 macOS 原生生命周期核验。范围是 r123 开发提交。
 
@@ -12,15 +20,19 @@
 
 **CLI 权限与实际停止。** dev.2 在隔离目录验证了运行中的前台 Bash 写入。宿主确认中断和报告轮次终态后，写入进程仍短暂存活。实测进程退出后，首笔写入保留，后续提交未落盘。另核到宿主明确拒绝了受限写入，同一会话的新任务正常写入。结论限于该命令和观察区间。[中断和磁盘读回](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-cli-interrupted-write)
 
-**桌面 Code。** 以 Squirrel 作为 Windows 本地 Code 的日常适配和复验入口。Squirrel 6.6395.0 的实际内核为 2.1.326，已核只读任务的加载、停止、同会话续作和后续任务。`3.3.18-claude-dev.2` 完整送达 1,580 字节短指导，并在仅有公开中文元指导 `AGENTS.md` 的临时项目通过只读复验。新增内建 `Write` 实证，允许的写入读回正确，受限写入由宿主拒绝且未落盘，随后同一会话的新任务也正常写入。桌面写入进行中取消及迟到效果仍待单独取证。复用同版 MSIX 与 Squirrel 一致的 68 个界面资源。用户反馈或宿主变化影响实际加载、权限、文件操作或接续时，按具体 MSIX 入口专项复验。发布窗口随验收决定。[桌面只读实证](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-guidance) · [桌面写入实证](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-write) · [Windows 分发核查](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-windows-packaging)
+**桌面 Code。** 以 Squirrel 作为 Windows 本地 Code 的日常适配和复验入口。Squirrel 6.6395.0 的实际内核为 2.1.326，已核只读任务的加载、停止、同会话续作和后续任务。`3.3.18-claude-dev.2` 完整送达 1,580 字节短指导，并在仅有公开中文元指导 `AGENTS.md` 的临时项目通过只读复验。新增内建 `Write` 实证，允许的写入读回正确，受限写入由宿主拒绝且未落盘，随后同一会话的新任务也正常写入。本轮 dev.3 的写入执行中取消及迟到效果另有实测。复用同版 MSIX 与 Squirrel 一致的 68 个界面资源。用户反馈或宿主变化影响实际加载、权限、文件操作或接续时，按具体 MSIX 入口专项复验。发布窗口随验收决定。[桌面只读实证](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-guidance) · [桌面写入实证](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-write) · [Windows 分发核查](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-windows-packaging)
 
 **ChatGPT/Codex 宿主协作。** 当前聊天的 3.3.18 MCP 响应与本机缓存的 30 个精确成员已核。独立 CLI 0.170.0 的六次零模型输入诊断定位了 Windows 旧模式与现行权限配置的渲染差异。实际命令权限和已激活桌面按原生入口另验。[CLI 观察](../../research/reviews/2026-10-30-host-evolution-and-assets.md#2026-11-19-cli-01700-零模型输入诊断)
 
 **减负与持续纠偏。** 一次实际普通维护续轮送达 1,966 字节回执。按相同字段重算，3.3.17 为 2,169 字节，相差 203 字节。实际模型用量、经验是否赶在操作前采用、失误后是否成功换路，继续按真实任务的操作和结果核对。[普通续轮回执](../../research/reviews/2026-10-30-host-evolution-and-assets.md#codex-3.3.18-ordinary-input-receipt)
 
-**对照和传播备料。** 3.3.17 首用卡沿原版本与成本口径引用，现行首用说明对齐 3.3.18。以 3.3.18 实跑一组双语发行安装说明，双方完成，匿名复核均为部分通过。合成一份补齐缺口的双语维护稿。旧原件可确认相同任务和请求选项，以及启用组的两段额外指导。整项摘要无法复原共同消息及 `additional_tools` 定义。保留用量与耗时的观察值，下一次在新任务中分别核正文和有序工具定义。[首用卡原件](../../research/evaluations/accord-toggle-v1.md#first-use-card-readback) · [本轮观察](../../research/evaluations/accord-toggle-v1.md#release-source-pair-3318) · [双语维护稿](LAUNCH-v3.3.md#release-source-draft)
+**对照和传播备料。** 3.3.17 首用卡及 r124 双语发行安装说明沿各自原件引用。r125 以 3.3.18 实跑桌面预检卡，两组均完成，匿名复核均为部分通过，已合成维护稿。两组首轮实际请求的 3 个命名空间、12 个工具的定义及顺序一致。r126 核到启用新增的 5 个 Skill 参与宿主统一预算，可使共同简介变短。额外的 API 额度 MCP 名称未出自 Accord 的发行清单，历史触发条件仍未知。用量、耗时及成品差异保留为观察。[双语维护稿](LAUNCH-v3.3.md#release-source-draft) · [对照及来源复核](../../research/evaluations/accord-toggle-v1.md#r126-comparison-attribution) · [桌面预检卡](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-preflight-card)
 
-**dev.3 桌面验证准备。** 重建包与 r123 记录一致，独立 CLI 再次通过包和市场的严格校验。官方提供 Desktop 的 `CLAUDE_CONFIG_DIR` 入口。本机 Squirrel 另有独立的 Desktop MCP 配置查找路径。实测前需要读回 Code 配置根、Desktop 配置和实际加载来源。保留既有用户设置、工作区信任及适用管理策略，沿 dev.2 桌面和 dev.3 CLI 的原验证条件引用结果。[桌面隔离核查](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-desktop-isolation)
+**dev.3 桌面验证。** r126 已核准独立标准用户配置根、14 个候选成员和市场清单。r127 安装签名有效的 Squirrel 5.11492.5。r128 在该账户确认升级后实际运行签名有效的 6.6395.1。受信任的合成工作区已用内置 Code 2.1.326、隔离 Gateway 的 `deepseek-flash` 完成两条只读任务。原生记录核到 Accord 启动 Hook、显式采用完整协调 Skill 和成功读取精确 dev.3 候选包内的英文元指导。独立 CLI 2.1.329 对插件和市场的严格校验均通过。同会话的独立写入任务已核原生允许、拒绝和磁盘后态。前台写入执行中取消后，已核原生停止、实际进程退出、到点无迟到写入，以及同一会话成功启动并完成新的只读任务。临时配置、授权和试验进程均已核对收回。历史 Squirrel 6.6395.0 的结果沿原条件引用。[独立用户安装](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-isolated-desktop-install) · [本地会话实测](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-dev3-desktop-read)
+
+**元指导的实际来源。** 在无 `AGENTS.md` 的隔离 Codex 首轮中，已核发行版 3.3.18 通过受信任 Hook 在用户任务之前送达完整英文元指导及协调正文。Claude dev.3 已在隔离 CLI 和 Windows 本地 Code 验证短启动指导，以及显式采用协调 Skill 后按需读取随包英文元指导。现有用户级副本继续覆盖 Hook 未运行的入口，仓库指引承担其项目职责。[原生送达和作用域](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#accord-foundation-without-agents)
+
+**智谱接入复验。** 独立 Claude CLI 2.1.329 直连智谱，以 `glm-5.3-flash` 核 dev.3 启动 Hook 和原生只读。独立标准用户的 Squirrel 6.28899.2 从安装入口启动，实际本地 Code 内核为 2.1.328，经 CC Switch 4.0.36 返回同一模型。首轮收到 1,580 字节启动指导，实际调用 dev.3 协调 Skill，读回探针，漏读英文元指导。同一会话的单项补验实际读取了随包译文。两轮均正常结束，临时网关、插件登记、工作区授权及进程已核对收回。[智谱复验及路由来源](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-glm-flash-r128)
 
 **生命周期指导共用。** 按已同意的最小范围拆出共同正文与 Codex 专属源码，两端各自生成成品。Codex 生成结果与 3.3.18 的已发 Skill 一致，Claude dev.2 的 14 个成员和市场清单也逐一相同。单改 Codex 的专属文字时，Claude 的构建记录和成员保持一致。[实施与边界](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#lifecycle-source-result)
 
@@ -935,7 +947,7 @@ Accord 面向人与 AI 的长期协作，属于更广泛的人机协作愿景。
 
 项目开源，不以盈利为目标，以工业/商业生产级交付标准建设，追求平权、普惠与用户自主。中立首先是价值和治理独立：不绑定供应商，不以资本、赞助或生态利益扭曲评价或牺牲用户利益。商业能力可以按实际价值借用；选择应考虑可获得性、质量、总成本、隐私、可替换性和退出条件。世界级是全维度持续对标的志向，具体成熟度由证据确定。
 
-**3.3.18 的公开发行覆盖 ChatGPT/Codex 的适用入口。** 新宿主按实际入口及条件各自取证。Claude Code 已进入[独立本地候选](#current-work)，当前公开支持范围以对应发行记录为准。Pi、DeepSeek Harness、Z.ai ZCode 与 Google Antigravity 保持候选。产品名称统一为 YIYUAN Accord，通用设计保持供应商独立。历史包、验证代码和证据保留原版本与原用途。
+**3.3.18 的公开发行覆盖 ChatGPT/Codex 的适用入口。** 新宿主按实际入口及条件各自取证。Claude Code 已进入[独立本地候选](#current-work)，当前公开支持范围以对应发行记录为准。Pi、DeepSeek Harness、Z.ai ZCode、Google Antigravity 和 OpenCode 列入[未来宿主候选](#其它宿主候选)。产品名称统一为 YIYUAN Accord，通用设计保持供应商独立。历史包、验证代码和证据保留原版本与原用途。
 
 AI协作入口承担所绑定任务的交付责任。入口先按任务必要能力、结果及控制经过下述适用性判断，再确定范围与承诺；普通Chat的研究/论证/内容等独立用途按r38本版deferred、能力unknown，不由界面名判定永久只有辅助。未上架不能推断不能调用，品牌相同不能推断能力相同。3.3 不自动缩成 CLI，也不承诺所有尚未验证的 OpenAI 入口都可用。
 
@@ -1522,6 +1534,7 @@ W02持续承担完整入口处置，W04随受影响历史依赖纠偏，W06/W07�
 | DeepSeek Harness | [官方开发者预览](https://www.deepseek.com/harness/en/)和[源码](https://github.com/deepseek-ai/deepseek-harness)提供可组合插件路线；接口仍演进，先核稳定性、接入与退出成本，再决定具体支持。 |
 | ZCode | 本次按[Z.ai ZCode](https://github.com/zai-org/ZCode)及[官方Agent文档](https://zcode.z.ai/cn/docs/agents)理解；区分自有Agent、模型、插件/Skill/Hook与其它代理入口，不能按相似UI或组件名称推定兼容。 |
 | Google Antigravity | 已按用户要求列入后续候选；以[官方产品入口](https://www.antigravity.google/)为来源，分别核对2.0、CLI、SDK、IDE等形态的职责和接入条件，不以品牌相同或编辑器相似推定兼容。当前只登记候选，未安装、连接或实施适配。 |
+| OpenCode | 2026-11-20 按用户要求列入后续候选。若选定评估，按 CLI、Desktop 和 Web 的实际入口核对插件、Skill、权限与接续条件。[OpenCode 官方文档](https://opencode.ai/docs/) |
 
 2026-11-18 用户选定 Claude Code 先做只读可行性核查。入口、原生职责、历史材料和后续实证条件见[只读初查](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-code-read-only-feasibility)。交互式 CLI 为首个待证入口，实施、支持范围与交付版本待定。
 
