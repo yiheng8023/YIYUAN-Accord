@@ -6,11 +6,11 @@
 
 ## 基于 3.3.18 的当前工作（2026-11-20）
 
-**r131 动态适应。** 已用同一桌面 Code 内核核对仅切换 Accord 时首个任务请求的差异，也核了宿主设置相同、用户连续补充要求时的输入保留，以及设置变化、信号缺失和恢复时的暂停边界。桌面界面与内核分别取证。[本轮观察](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#r131-adaptation)
+**r131 动态适应。** 已用同一桌面 Code 内核核对启用与未启用时的指导投递，也核了宿主设置相同、用户连续补充要求时的输入保留，以及设置变化、信号缺失和恢复时的暂停边界。Squirrel 6.28899.2 的实际桌面会话另行核对。一条消息出现在三个请求中，产生前台答复的请求由回包编号和原生消息 ID 双重确认，含完整 dev.4 启动指导。真实模型的采用仍按各自受测任务判断。[本轮观察](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#r131-adaptation)
 
-**r130 入口修复。** 在隔离副本中，dev.3 的指导换一行即可让两份清单严格校验通过、六种入口却全部交付失败。共用源码现标明启动时需要的三段职责，构建器生成各宿主所用的正文。Claude dev.4 的默认六种输出与 dev.3 逐字节一致，Codex 协调 Skill 与 3.3.18 发行成员一致。原文和换行的 dev.4 各在独立 CLI 2.1.329 核到启动、恢复以及首个任务请求里的完整指导。下次本地桌面 Code 使用 dev.4 时核实际加载和首轮指导。写入、中断与迟到效果仍沿用各原受测版本的记录。[复现、回归与范围](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#entry-projection-result)
+**r130 入口修复。** 在隔离副本中，dev.3 的指导换一行即可让两份清单严格校验通过、六种入口却全部交付失败。共用源码现标明启动时需要的三段职责，构建器生成各宿主所用的正文。Claude dev.4 的默认六种输出与 dev.3 逐字节一致，Codex 协调 Skill 与 3.3.18 发行成员一致。原文和换行的 dev.4 各在独立 CLI 2.1.329 核到启动、恢复以及首个任务请求里的完整指导。写入、中断与迟到效果沿用各原受测版本的记录。[复现、回归与范围](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#entry-projection-result)
 
-**第三方插件管理。** CC Switch 4.0.36 新增插件和本地市场管理。下次做插件生命周期或启用对照时，可先用它核登记清单和配置目录，再核实际会话采用。下一次 Squirrel 本地 Code 复验仍按桌面入口单独取证。[可复用的操作与边界](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#cc-switch-plugin-management)
+**第三方插件管理。** CC Switch 4.0.36 新增插件和本地市场管理。做插件生命周期或启用对照时，可先用它核登记清单和配置目录，再核实际会话采用。[可复用的操作与边界](../../research/reviews/2026-11-19-multi-host-adapter-boundaries.md#cc-switch-plugin-management)
 
 **r129 推进。** 修复 Claude 候选的发布中途失败回滚。Windows 与 Ubuntu 环境的故障注入确认同路径可重试及外部变动留存，重建候选的成员和市场清单与已实测 dev.3 一致。Codex CLI 0.171.0 的压缩请求分片先经无模型回环夹具校准，再用于新维护说明对照。两组实际工具定义一致，均交付可用草稿。当前两组都出现 API 额度名称，历史单侧差异按原条件保留。构建说明已采用核对后的文案，现行公开安装命令与 3.3.18 精确发行来源一致。[构建回归](../../research/reviews/2026-09-28-plugin-eval-and-accord-comparison.md#claude-candidate-publish-rollback) · [新版对照](../../research/evaluations/accord-toggle-v1.md#r129-builder-note-pair)
 
