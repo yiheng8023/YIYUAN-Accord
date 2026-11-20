@@ -178,20 +178,7 @@ def write_new_projection(output, content):
         except OSError as error:
             if error.errno not in (errno.EPERM, errno.ENOSYS, errno.EOPNOTSUPP):
                 raise
-        # Some mounted filesystems support rename but not hard links. Reserve the
-        # name exclusively before replacement so two builders cannot overwrite it.
-        with output.open("xb") as reservation:
-            identity = os.fstat(reservation.fileno())
-            try:
-                staged.replace(output)
-            except OSError:
-                try:
-                    current = output.lstat()
-                except FileNotFoundError:
-                    current = None
-                if current is not None and samestat(identity, current) and current.st_size == 0:
-                    output.unlink()
-                raise
+            raise OSError(error.errno, "Select a destination filesystem that permits hard links", output) from error
 
 
 def build_codex_lifecycle(output):
@@ -345,8 +332,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     destination = parser.add_mutually_exclusive_group(required=True)
     destination.add_argument("--output", type=Path, help="A new local Claude marketplace directory")
-    destination.add_argument("--codex-lifecycle-output", type=Path, help="A new Codex lifecycle Skill file")
-    destination.add_argument("--codex-entry-output", type=Path, help="A new Codex coordination Skill file")
+    codex_output_help = "a new file; on POSIX use a directory that permits hard links"
+    destination.add_argument("--codex-lifecycle-output", type=Path, help=f"Render the lifecycle Skill to {codex_output_help}")
+    destination.add_argument("--codex-entry-output", type=Path, help=f"Render the coordination Skill to {codex_output_help}")
     args = parser.parse_args()
     try:
         if args.codex_entry_output is not None:

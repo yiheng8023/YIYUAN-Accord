@@ -1,6 +1,7 @@
 """Check the standalone Claude candidate's sources and native event contract."""
 
 from contextlib import contextmanager, redirect_stderr, redirect_stdout
+import errno
 from hashlib import sha256
 import io
 import json
@@ -163,6 +164,16 @@ class ClaudeCodeAdapterTests(unittest.TestCase):
         with patch.object(Path, "write_bytes", create_competing_output), self.assertRaises(FileExistsError):
             builder.write_new_projection(output, b"complete")
         self.assertEqual(b"other writer", output.read_bytes())
+
+    def test_unavailable_atomic_publication_leaves_the_destination_free_for_retry(self):
+        output = self.market.parent / "retry.md"
+        operation = ((Path, "rename") if builder.os.name == "nt" else (builder.os, "link"))
+        with patch.object(*operation, side_effect=OSError(errno.EPERM, "publication denied")):
+            with self.assertRaises(OSError):
+                builder.write_new_projection(output, b"complete")
+        self.assertFalse(output.exists())
+        builder.write_new_projection(output, b"complete")
+        self.assertEqual(b"complete", output.read_bytes())
 
     def test_codex_lifecycle_edit_leaves_claude_package_unchanged(self):
         source_root = self.copy_build_sources()
